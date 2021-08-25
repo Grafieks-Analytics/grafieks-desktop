@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QAbstractTableModel>
 #include <QSqlQuery>
 #include <QDebug>
 
@@ -15,14 +16,26 @@
 #include "../../statics.h"
 
 
-class ExcelDataModel : public QObject
+class ExcelDataModel : public QAbstractTableModel
 {
     Q_OBJECT
     QMap<int, QString> sheetNamesMap;
+
+    QHash<int, QByteArray> m_roleNames;
+    QStringList resultData;
+    int totalRowCount;
+    int totalColCount;
+
 public:
     explicit ExcelDataModel(QObject *parent = nullptr);
     Q_INVOKABLE void clearData();
     ~ExcelDataModel();
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex & = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
 
     Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
@@ -35,7 +48,7 @@ private:
     QStringList getTableListQAXObject();
 
 signals:
-    void columnListModelDataChanged(QStringList colData, QString options);
+    void columnListModelDataChanged(QString options);
 };
 
 #endif // EXCELDATAMODEL_H
