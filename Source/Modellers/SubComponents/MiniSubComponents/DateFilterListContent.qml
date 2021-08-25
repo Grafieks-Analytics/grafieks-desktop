@@ -147,32 +147,32 @@ Rectangle{
     Connections{
         target: CSVJsonDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ExcelDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ForwardOnlyDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
@@ -199,7 +199,7 @@ Rectangle{
         }
     }
 
-    function updateData(colData, options){
+    function updateData(options){
 
         if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             // Just to reset the data if the previous `colData` and the new `colData` are same

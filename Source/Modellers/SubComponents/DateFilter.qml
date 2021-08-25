@@ -82,42 +82,34 @@ Popup {
     }
 
     Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
-        }
-    }
-
-    Connections{
         target: CSVJsonDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ExcelDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ForwardOnlyDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
@@ -184,7 +176,7 @@ Popup {
         }
     }
 
-    function updateData(colData, options){
+    function updateData(options){
 
         var jsonOptions = JSON.parse(options)
 

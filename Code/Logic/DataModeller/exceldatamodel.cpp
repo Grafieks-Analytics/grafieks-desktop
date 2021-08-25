@@ -1,8 +1,8 @@
 #include "exceldatamodel.h"
 
-ExcelDataModel::ExcelDataModel(QObject *parent) : QObject(parent)
+ExcelDataModel::ExcelDataModel(QObject *parent) : QAbstractTableModel(parent)
 {
-
+    this->totalColCount = 1;
 }
 
 void ExcelDataModel::clearData()
@@ -15,36 +15,76 @@ ExcelDataModel::~ExcelDataModel()
 
 }
 
+int ExcelDataModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return this->totalRowCount;
+}
+
+int ExcelDataModel::columnCount(const QModelIndex &) const
+{
+    return this->totalColCount;
+}
+
+QVariant ExcelDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        return QString(this->m_roleNames[section]);
+    }
+    return QVariant();
+}
+
+QVariant ExcelDataModel::data(const QModelIndex &index, int role) const
+{
+    switch (role) {
+    case Qt::DisplayRole:
+        return this->resultData[index.row()];
+    default:
+        break;
+    }
+
+    return QVariant();
+}
+
+QHash<int, QByteArray> ExcelDataModel::roleNames() const
+{
+    return {{Qt::DisplayRole, "display"}};
+}
+
 void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 {
 
-    QStringList output;
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+tableName;
 
     QSqlQuery query(dbQueryString, dbExcel);
 
     while(query.next()){
-        output.append(query.value(0).toString());
+        this->resultData.append(query.value(0).toString());
     }
 
-    emit columnListModelDataChanged(output, options);
+    this->totalRowCount = this->resultData.length();
+    this->m_roleNames.insert(0, col.toUtf8());
+
+    emit columnListModelDataChanged(options);
 }
 
 void ExcelDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
-    QStringList output;
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+" FROM "+ tableName + " WHERE [" + col + "] LIKE %" + searchString + "%";
 
     QSqlQuery query(dbQueryString, dbExcel);
 
     while(query.next()){
-        output.append(query.value(0).toString());
+        this->resultData.append(query.value(0).toString());
     }
 
-    emit columnListModelDataChanged(output, options);
+    this->totalRowCount = this->resultData.length();
+    this->m_roleNames.insert(0, col.toUtf8());
+
+    emit columnListModelDataChanged(options);
 }
 
 QStringList ExcelDataModel::getTableList()

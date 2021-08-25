@@ -31,7 +31,7 @@ public:
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const override;
-    int rowCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent) const override;
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void callSql(QString tmpSql);
