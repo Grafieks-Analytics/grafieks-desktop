@@ -160,7 +160,7 @@ QStringList QueryDataModel::getData(QString queryString)
     QSqlDatabase queryDataDb = QSqlDatabase::database(conType);
     QSqlQuery query(queryString, queryDataDb);
 
-
+    this->resultData.clear();
     if(query.lastError().type() == QSqlError::NoError){
         while(query.next()){
             this->resultData.append(query.value(0).toString());
@@ -171,7 +171,6 @@ QStringList QueryDataModel::getData(QString queryString)
 
     output = this->resultData;
     this->totalRowCount = this->resultData.count();
-    this->resultData.clear();
     return output;
 
 }

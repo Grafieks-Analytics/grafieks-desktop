@@ -281,6 +281,7 @@ QStringList ForwardOnlyDataModel::getData(QString queryString)
     QSqlQuery query(queryString, forwardOnlyDb);
 
 
+    this->resultData.clear();
     if(query.lastError().type() == QSqlError::NoError){
         while(query.next()){
             this->resultData.append(query.value(0).toString());
@@ -292,6 +293,5 @@ QStringList ForwardOnlyDataModel::getData(QString queryString)
     out = this->resultData;
     this->totalRowCount = this->resultData.count();
     emit forwardColData(this->resultData);
-    this->resultData.clear();
     return out;
 }
