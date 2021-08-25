@@ -185,6 +185,8 @@ Column{
 
     function resizePaddingInner(value){
         d3PropertyConfig.paddingInner = value;
+        d3PropertyConfig.innerRadius = (1-value)*200;
+//        console.log("value"+value);
         reDrawChart();
     }
 
