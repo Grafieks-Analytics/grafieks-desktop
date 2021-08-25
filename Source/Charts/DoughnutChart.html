@@ -30,7 +30,7 @@
     <script>
         // var data = { a: 9, b: 20, c: 30, d: 8, e: 12, g: 45 };
 
-        var data = {
+        var data = [{
             Accessories: 938,
             Appliances: 1060,
             Art: 2756,
@@ -46,12 +46,69 @@
             Storage: 4638,
             Supplies: 132,
             Tables: 10230,
-        };
+        }];
+
+        var data = [{
+            "2020-01-01": 120,
+            "2020-02-01": 120,
+            "2020-03-01": 120,
+            "2020-04-01": 120,
+            
+            "2021-01-01": 1220,
+            "2021-02-02": -220,
+            "2021-03-03": -220,
+            "2021-04-01": -220,
+            
+        }]
+
+        function transformData(dataValues, dateFormat){
+            var isKey1Date = false;
+
+            if (isDateFormat(Object.keys(dataValues[0])[0])) {
+                isKey1Date = true;
+            }
+            
+            if(!isKey1Date){
+                return dataValues;
+            }
+            var json = {};
+            var uniqueKey = [];
+            Object.keys(dataValues[0]).forEach((d) => {
+                var key = getDateFormattedData(d, dateFormat);
+                if (!uniqueKey.includes(key)) {
+                    uniqueKey.push(key);
+                }
+
+                if (!json[key]) {
+                    json[key] = 0;
+                }
+
+                console.log(dataValues[0][d]);
+                json[key] += dataValues[0][d];
+            });
+
+            var jsonKeys = Object.keys(json).filter(d=>{
+                if(json[d] < 0){
+                    return false;
+                }
+                return true;
+            })
+
+            var finalJson = {};
+            jsonKeys.forEach(d=>{
+                finalJson[d] = json[d];
+            })
+
+            dataValues[0] = finalJson;
+            
+            return dataValues;
+        }
 
         function drawChart(data, plottingConfiguration = {}) {
             let {
                 d3colorPalette,
                 paddingInner,
+                dateFormat = defaultD3Config.dateFormat,
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig,
                 innerRadius,
@@ -79,11 +136,15 @@
             }
             let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus } = labelConfig;
+            
             d3.select("#legend").html("").style("padding", "");
 
             var translateSvg = 0;
             var translateSvgTop = 100;
 
+            var [data] = transformData(data,dateFormat);
+            
+            
             if (legendStatus) {
                 // d3.select("#legend").html("");
                 d3.select("#legend")
@@ -94,7 +155,7 @@
                     .style("position", "sticky");
                 d3.select("#legend")
                     .selectAll("div")
-                    .data(Object.keys(data))
+                    .data(Object.keys(dataValues))
                     .enter()
                     .append("div")
                     .html((d, i) => {

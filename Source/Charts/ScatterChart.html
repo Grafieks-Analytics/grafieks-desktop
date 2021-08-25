@@ -180,26 +180,27 @@
             categories,
         ];
 
+
+        // When only numericals are passed
+        // Send 
         data = [
             [
-                [2121, "1", "Nepal"],
-                [443, "2", "Nepal"],
-                [1121, "3", "India"],
-                [4243, "4", "India"],
-                [210, "5", "India"],
-                [4415, "6", "India"],
-                [2010, "7", "India"],
-                [222, "8", "India"],
-                [3112, "9", "India"],
-                [524, "10", "India"],
-                [6341, "11", "Bhutan"],
-                [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"],
-                [100, "14", "India"],
+                [0,0],      // This element is fixed
+                [-2121, -10], // Sum of population, sum of id
             ],
-            ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"],
+            ["population", "id"],
         ];
+
+        // when categorical is also passed with numerical
+        // data = [
+        //     [
+        //         [524, 10, "India"],         // Group them on the basis of categorical
+        //         [4712, "12", "Bhutan"],
+        //         [10, "13", "Bhutan"],
+        //     ],
+        //     ["population", "id", "country"],
+        //     ["Nepal", "India", "Bhutan"],
+        // ];
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
@@ -297,7 +298,12 @@
                 .attr("cy", function (d) {
                     return y(+d[1]);
                 })
-                .attr("r", 5)
+                .attr("r", function(d, i){
+                    if(i==0 && d.length == 2){
+                        return 0;
+                    }
+                    return 5
+                })
                 .style("fill", function (d) {
                     return color(d[2]);
                 })
