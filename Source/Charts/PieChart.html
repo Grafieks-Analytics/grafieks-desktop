@@ -76,7 +76,11 @@
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig,
                 innerRadius,
+                dataLabelfontSize = defaultD3Config.fontSize,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
             } = plottingConfiguration;
+            window.dataLabelfontSize = dataLabelfontSize;
+            window.dataLabelfontFamily = dataLabelfontFamily;
 
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -104,8 +108,8 @@
 
             var translateSvg = 0;
             var translateSvgTop = 100;
-             var xAxisLabel = data[1][0]
-            var yAxisLabel = data[1][1]
+            var xAxisLabel = data[1][0];
+            var yAxisLabel = data[1][1];
 
             if (legendStatus) {
                 // d3.select("#legend").html("");
@@ -361,13 +365,13 @@
                     d3.select(this)
                         // .select("path")
                         .transition()
-                        .duration(100)
+                        .duration(50)
                         .attr(
                             "d",
                             d3
                                 .arc()
                                 .innerRadius(0)
-                                .outerRadius(radius + 5)
+                                .outerRadius(radius + 20)
                         );
                     d3.select(this).style("opacity", 1);
                 })
@@ -400,7 +404,7 @@
                 .innerRadius(radius * 1.1)
                 .outerRadius(radius * 0.9);
             if (labelStatus) {
-                // Add the polylines between chart and labels:
+                // Add the polylines b etween chart and labels:
                 percentageValuePrev =
                     (data_ready[0].data.value / totalSum) * 100;
                 data_ready[0].showLabel = false;
@@ -444,6 +448,8 @@
                     .data(data_ready)
                     .enter()
                     .append("text")
+                    .attr("font-family", dataLabelfontFamily)
+                    .attr("font-size", dataLabelfontSize)
                     .text(function (d) {
                         console.log(d.data.key);
                         if (!d.showLabel) {

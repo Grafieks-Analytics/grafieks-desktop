@@ -1049,7 +1049,7 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth - 88,
+                    width = window.innerWidth - 200,
                     height =
                         window.innerHeight - margin.top - margin.bottom - 55;
 
@@ -1070,7 +1070,7 @@
                     .select("#my_dataviz")
                     .append("svg")
                     .attr("width", width)
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("height", height + margin.top + margin.bottom+10)
                     .append("g")
                     .attr(
                         "transform",
