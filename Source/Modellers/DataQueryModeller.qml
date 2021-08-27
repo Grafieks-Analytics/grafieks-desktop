@@ -1506,8 +1506,33 @@ Page {
             let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.fileUrl)
             console.log("FILEPATH", fileName)
             GeneralParamsModel.setExtractPath(fileName)
-            QueryModel.createTableTest()
-            QueryModel.insertTableTest()
+
+            switch(GeneralParamsModel.getDbClassification()){
+            case Constants.sqlType:
+                console.log("SQL")
+                QueryModel.saveExtractData()
+                break;
+
+            case Constants.forwardOnlyType:
+                console.log("FOWARD")
+                ForwardOnlyQueryModel.saveExtractData()
+                break;
+
+            case Constants.excelType:
+                console.log("EXCEL")
+                ExcelQueryModel.saveExtractData()
+                break;
+
+            case Constants.csvType:
+            case Constants.jsonType:
+                console.log("CSV")
+                CSVJsonQueryModel.saveExtractData()
+                break;
+
+            default:
+                console.log("DB Classification failed")
+                break;
+            }
         }
         onRejected: {
             console.log("file rejected")

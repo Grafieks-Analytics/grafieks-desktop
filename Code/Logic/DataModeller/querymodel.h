@@ -15,6 +15,8 @@
 #include "./Workers/setchartdataqueryworker.h"
 #include "../General/extractsmanager.h"
 
+#include "../../duckdb.hpp"
+
 
 class QueryModel : public QSqlQueryModel
 {
@@ -37,9 +39,7 @@ public:
     Q_INVOKABLE void callSql(QString tmpSql);
     Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
-
-    Q_INVOKABLE void createTableTest();
-    Q_INVOKABLE void insertTableTest();
+    Q_INVOKABLE void saveExtractData();
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
@@ -72,6 +72,7 @@ private:
     SetChartDataQueryWorker *setChartDataWorker;
     QSqlQueryModel queryModel;
     int maxRowCount;
+    QStringList columnStringTypes;
 
 };
 

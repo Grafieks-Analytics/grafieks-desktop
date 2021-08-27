@@ -17,7 +17,6 @@ void ExcelQueryModel::setQuery(QString query)
 
     this->generateRoleNames();
     this->setQueryResult();
-
 }
 
 void ExcelQueryModel::setPreviewQuery(int previewRowCount)
@@ -70,6 +69,11 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
     endResetModel();
     emit excelHeaderDataChanged(this->selectParams);
+}
+
+void ExcelQueryModel::saveExtractData()
+{
+
 }
 
 int ExcelQueryModel::rowCount(const QModelIndex &parent) const

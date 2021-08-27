@@ -22,6 +22,7 @@ public:
 
     Q_INVOKABLE void setQuery(QString query);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+    Q_INVOKABLE void saveExtractData();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;

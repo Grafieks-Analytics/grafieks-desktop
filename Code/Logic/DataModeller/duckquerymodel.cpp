@@ -39,6 +39,7 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
     QStringList list;
     int tmpRowCount = 0;
     int maxRowCount = 0;
+    int colCount = 0;
 
     auto result = duckCon->con.Query(this->query.toStdString());
     if(!result->error.empty()){
@@ -59,10 +60,10 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
         this->resultData.clear();
 
         for(int i = 0; i < maxRowCount; i++){
-            stdData = result->collection.GetRow(i);
+//            stdData = result->collection.GetRow(i);
 
-            for(auto data: stdData){
-                list << data.ToString().c_str();
+            for(int j = 0; j < colCount; j++){
+                list << result->collection.GetValue(j,i).ToString().c_str();
             }
             this->resultData.append(list);
             list.clear();
