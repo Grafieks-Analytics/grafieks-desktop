@@ -3,9 +3,13 @@
 
 #include <QObject>
 #include<QAbstractTableModel>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QSqlDatabase>
 
 #include "../../statics.h"
 #include "../../constants.h"
+#include "../../duckdb.hpp"
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
@@ -56,6 +60,9 @@ private:
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
     SetChartDataForwardOnlyWorker *setChartDataWorker;
+
+    DataType dataType;
+    QStringList columnStringTypes;
 
 signals:
         void chartDataChanged(QMap<int, QStringList*> chartData);

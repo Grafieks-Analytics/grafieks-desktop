@@ -97,7 +97,7 @@ void QueryModel::saveExtractData()
     for(int i = 0; i < record.count(); i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
-        createTableQuery += record.fieldName(i) + " " + type + ",";
+        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }
 
