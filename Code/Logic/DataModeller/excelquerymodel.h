@@ -31,6 +31,9 @@ class ExcelQueryModel : public QAbstractTableModel
     QStringList tableParams;
     QStringList whereParams;
 
+    DataType dataType;
+    QStringList columnStringTypes;
+
 public:
     explicit ExcelQueryModel(QObject *parent = nullptr);
 

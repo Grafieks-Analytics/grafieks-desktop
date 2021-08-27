@@ -87,7 +87,83 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
+    QString extractPath = Statics::extractPath;
+    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+    QStringList list;
 
+    QString connectionName = this->returnConnectionName();
+
+    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
+    QSqlQuery q(this->query, dbForward);
+    QSqlRecord record = q.record();
+    if(q.lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << q.lastError();
+    } else{
+
+        QString createTableQuery = "CREATE TABLE " + tableName + "(";
+
+        for(int i = 0; i < record.count(); i++){
+            QVariant fieldType = record.field(i).value();
+            QString type = dataType.qVariantType(fieldType.typeName());
+            createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
+            this->columnStringTypes.append(type);
+        }
+
+        createTableQuery.chop(1);
+        createTableQuery += ")";
+        qDebug() << createTableQuery;
+
+        auto createT = con.Query(createTableQuery.toStdString());
+        if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
+
+        duckdb::Appender appender(con, tableName.toStdString());
+
+
+
+        beginResetModel();
+        this->resultData.clear();
+
+        while(q.next()){
+
+            appender.BeginRow();
+            for(int i = 0; i < this->internalColCount; i++){
+                QString columnType = this->columnStringTypes.at(i);
+
+                if(columnType == "INTEGER"){
+                    appender.Append(q.value(i).toInt());
+                } else if(columnType == "BIGINT"){
+                    appender.Append(q.value(i).toLongLong());
+                }  else if(columnType == "FLOAT") {
+                    appender.Append(q.value(i).toFloat());
+                } else if(columnType == "DOUBLE") {
+                    appender.Append(q.value(i).toDouble());
+                } else if(columnType == "DATE"){
+                    QDate date = q.value(i).toDate();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    //                appender.Append(duckdb::Date::FromDate(year, month, day));
+                    //                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
+                } else if(columnType == "TIMESTAMP"){
+                    QDate date = q.value(i).toDate();
+                    QTime time = q.value(i).toDateTime().time();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                    //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
+                }else {
+                    appender.Append(q.value(i).toString().toUtf8().constData());
+                }
+            }
+
+            appender.EndRow();
+        }
+
+        appender.Close();
+    }
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
