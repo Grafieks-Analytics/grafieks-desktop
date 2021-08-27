@@ -17,6 +17,7 @@ class GeneralParamsModel : public QObject
 
     int m_menuType;
     int m_currentScreen;
+    QVariantMap changedHeaderTypes; // QMap<tableName.columnName, newColumnType>
 
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
@@ -43,6 +44,10 @@ public:
     //! Set Static Extracts Path
     Q_INVOKABLE void setExtractPath(QString extractsPath);
 
+    //! Change column types
+    Q_INVOKABLE void changeColumnTypes(QString columnName, QString tableName, QString newColumnType);
+    Q_INVOKABLE QVariantMap getChangedColumnTypes();
+
 public slots:
 
     //! Set the current highlighted left menu
@@ -56,6 +61,7 @@ signals:
     void menuTypeChanged(int menuType);
     void currentScreenChanged(int currentScreen);
     void hideSplash();
+    void colTypeChanged();
 };
 
 #endif // GENERALPARAMSMODEL_H

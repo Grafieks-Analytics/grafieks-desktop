@@ -145,11 +145,11 @@ QString DataType::variableType(QString inputVariable)
     // Check data type
     if(containsDigit){
         if(checkNumberType(inputVariable) == true){
-            variableType = "Number";
+            variableType = Constants::numericalType;
         } else if(checkDateTimeType(inputVariable) == true){
-            variableType = "Date";
+            variableType = Constants::dateType;
         } else {
-            variableType = "String";
+            variableType = Constants::categoricalType;
         }
     }
 

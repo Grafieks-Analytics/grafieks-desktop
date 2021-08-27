@@ -62,6 +62,22 @@ void GeneralParamsModel::setExtractPath(QString extractsPath)
     Statics::extractPath = extractsPath;
 }
 
+void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName, QString newColumnType)
+{
+
+    this->changedHeaderTypes.insert(tableName + "." + columnName, newColumnType);
+
+    qDebug() << this->changedHeaderTypes;
+
+    Statics::changedHeaderTypes = this->changedHeaderTypes;
+
+    emit colTypeChanged();
+}
+
+QVariantMap GeneralParamsModel::getChangedColumnTypes()
+{
+    return this->changedHeaderTypes;
+}
 
 void GeneralParamsModel::setMenuType(int menuType)
 {
