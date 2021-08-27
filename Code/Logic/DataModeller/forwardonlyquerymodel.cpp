@@ -85,6 +85,11 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
 }
 
+void ForwardOnlyQueryModel::saveExtractData()
+{
+
+}
+
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);

@@ -155,3 +155,50 @@ QString DataType::variableType(QString inputVariable)
 
     return variableType;
 }
+
+QString DataType::qVariantType(QString inputVariable)
+{
+    QString output;
+
+    QStringList intType;
+    QStringList bigIntType;
+    QStringList boolType;
+    QStringList dateType;
+    QStringList dateTimeType;
+    QStringList floatType;
+    QStringList doubleType;
+    QStringList blobType;
+
+    intType << "int" << "uint";
+    bigIntType << "qulonglong" << "qlonglong";
+    boolType << "bool";
+    dateType << "qdate";
+    dateTimeType << "qtime" << "qdatetime";
+    floatType << "float";
+    doubleType << "double";
+    blobType << "qdatastream";
+
+    inputVariable = inputVariable.toLower();
+
+    if(intType.contains(inputVariable)){
+        output = "INTEGER";
+    } else if(bigIntType.contains(inputVariable)) {
+        output = "BIGINT";
+    } else if(boolType.contains(inputVariable)) {
+        output = "BOOLEAN";
+    } else if(dateType.contains(inputVariable)) {
+        output = "DATE";
+    } else if(dateTimeType.contains(inputVariable)) {
+        output = "TIMESTAMP";
+    } else if(floatType.contains(inputVariable)) {
+        output = "FLOAT";
+    } else if(doubleType.contains(inputVariable)) {
+        output = "DOUBLE";
+    } else if(blobType.contains(inputVariable)) {
+       output = "BLOB";
+    } else {
+       output = "VARCHAR";
+    }
+
+    return output;
+}

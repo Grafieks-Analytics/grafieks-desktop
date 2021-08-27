@@ -73,53 +73,85 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     }
 }
 
-void QueryModel::createTableTest()
+void QueryModel::saveExtractData()
 {
-    QList<QByteArray> columnNames;
-    QVector<int> columnIntTypes;
-    QStringList columnStringTypes;
-    QString tableName;
+    QString extractPath = Statics::extractPath;
+    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
 
-    // 这是什么,学校,ab
-//    QString x = "这是什么";
-    QString x = "aa";
-    columnNames.append(x.toUtf8());
-//    x = "学校";
-    x = "ab";
-    columnNames.append(x.toUtf8());
-    x = "ac";
-    columnNames.append(x.toUtf8());
+    QStringList colInfo;
+    QVariant fieldType;
+    DataType dataType;
 
-    columnIntTypes.append(Constants::varcharIntType);
-    columnIntTypes.append(Constants::varcharIntType);
-//    columnIntTypes.append(Constants::dateIntType);
-    columnIntTypes.append(Constants::doubleIntType);
+    QStringList tableHeaders;
+    QMap<int, QStringList> sqlChartHeader;
+    QHash<int, QByteArray> roleNames;
 
-    columnStringTypes.append(Constants::varcharStringType);
-    columnStringTypes.append(Constants::varcharStringType);
-//    columnStringTypes.append(Constants::dateStringType);
-    columnStringTypes.append(Constants::doubleStringType);
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+    QSqlQuery query(this->tmpSql, dbMysql);
+    QSqlRecord record = query.record();
 
-    extractsManager.createTable(columnNames, columnIntTypes, columnStringTypes, "TAB1");
+    QString createTableQuery = "CREATE TABLE " + tableName + "(";
+
+    for(int i = 0; i < record.count(); i++){
+        QVariant fieldType = record.field(i).value();
+        QString type = dataType.qVariantType(fieldType.typeName());
+        createTableQuery += record.fieldName(i) + " " + type + ",";
+        this->columnStringTypes.append(type);
+    }
+
+    createTableQuery.chop(1);
+    createTableQuery += ")";
+    qDebug() << createTableQuery;
+
+    auto createT = con.Query(createTableQuery.toStdString());
+    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
+
+    duckdb::Appender appender(con, tableName.toStdString());
+
+
+    while(query.next()){
+        appender.BeginRow();
+        for(int i = 0; i < record.count(); i++){
+            QString columnType = this->columnStringTypes.at(i);
+
+            if(columnType == "INTEGER"){
+                appender.Append(query.value(i).toInt());
+            } else if(columnType == "BIGINT"){
+                appender.Append(query.value(i).toLongLong());
+            }  else if(columnType == "FLOAT") {
+                appender.Append(query.value(i).toFloat());
+            } else if(columnType == "DOUBLE") {
+                appender.Append(query.value(i).toDouble());
+            } else if(columnType == "DATE"){
+                QDate date = query.value(i).toDate();
+                int32_t year = date.year();
+                int32_t month = date.month();
+                int32_t day = date.day();
+//                appender.Append(duckdb::Date::FromDate(year, month, day));
+//                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
+            } else if(columnType == "TIMESTAMP"){
+                QDate date = query.value(i).toDate();
+                QTime time = query.value(i).toDateTime().time();
+                int32_t year = date.year();
+                int32_t month = date.month();
+                int32_t day = date.day();
+//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
+            }else {
+                appender.Append(query.value(i).toString().toUtf8().constData());
+            }
+
+
+        }
+        appender.EndRow();
+    }
+        appender.Close();
+
+    auto res = con.Query("SELECT * FROM grafieks_my");
+    res->Print();
 }
-
-void QueryModel::insertTableTest()
-{
-    // Query model section starts
-
-//     QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-//     QSqlQuery query("SELECT * FROM test_final", dbMysql);
-//     extractsManager.uploadQueryData(&query);
-
-    // Query model section ends
-
-    // CSV model starts
-     QFile file("C:\\Users\\chill\\Desktop\\ex.csv");
-     file.open(QFile::ReadOnly | QFile::Text);
-     extractsManager.uploadCSVData(&file);
-    // CSV model ends
-}
-
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {

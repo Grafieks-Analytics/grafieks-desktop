@@ -22,6 +22,179 @@ void CSVJsonQueryModel::setPreviewQuery(int previewRowCount)
     this->updateModelValues(previewRowCount);
 }
 
+void CSVJsonQueryModel::saveExtractData()
+{
+    QString extractPath = Statics::extractPath;
+    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    QString fileName       = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+    QFile file(Statics::csvJsonPath);
+    file.open(QFile::ReadOnly | QFile::Text);
+
+    QString delimiter = Statics::separator;
+    bool firstLine = true;
+    bool secondLine = false;
+    QVector<bool> truthList;
+    QVector<int> rejectIds;
+
+    this->resultData.clear();
+    this->headerDataPreview.clear();
+
+    beginResetModel();
+
+
+    while(!file.atEnd()){
+
+        const QByteArray line = file.readLine().simplified();
+        this->dataFinal = line.split(*delimiter.toStdString().c_str());
+
+        if(firstLine){
+
+            firstLine = false;
+            secondLine = true;
+
+            if (this->dataFinal.at(0).contains("\xEF\xBB\xBF")){
+                this->dataFinal[0] =  this->dataFinal.at(0).right(this->dataFinal.at(0).length() - 3);
+            }
+
+
+            for(int i = 0; i < this->dataFinal.length(); i++){
+                if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
+                    this->columnNamesMap.insert(i, this->dataFinal.at(i).toStdString().c_str());
+                    this->headerDataPreview.append(this->dataFinal.at(i).toStdString().c_str());
+                } else {
+                    rejectIds.append(i);
+                }
+            }
+
+        } else if(secondLine == true) {
+            secondLine = false;
+
+            QString createTableQuery = "CREATE TABLE " + fileName + "(";
+
+            for(int i = 0; i < this->dataFinal.length(); i++){
+                if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
+                    QString varType = dataType.variableType(this->dataFinal.at(i).toStdString().c_str());
+                    if(varType.toLower() == "string"){
+                        varType = "VARCHAR";
+                    } else if(varType.toLower() == "number"){
+                        varType = "INTEGER";
+                    } else {
+                        varType = "TIMESTAMP";
+                    }
+                    this->columnStringTypes.insert(i, varType);
+                    createTableQuery += "\"" + this->headerDataPreview.at(i) + "\" " + varType + ",";
+                }
+            }
+
+            createTableQuery.chop(1);
+            createTableQuery += ")";
+
+            auto createT = con.Query(createTableQuery.toStdString());
+            if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT" << createT->error.c_str();
+
+//            duckdb::Appender appender(con, fileName.toStdString());
+//            appender.BeginRow();
+//            for(int i = 0; i < this->dataFinal.length(); i++){
+//                if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
+//                    appender.Append(this->secondLineData.at(i));
+//                }
+//            }
+//            appender.EndRow();
+//            appender.Close();
+
+        }else {
+
+            duckdb::Appender appender(con, fileName.toStdString());
+
+            if(this->totalFiltersCount > 0){
+
+                if(categoricalFilter != nullptr)
+                    foreach(FilterCategoricalList *tmpCategoricalFilter, this->categoricalFilter->getFilters()){
+                        int key = this->columnNamesMap.key(tmpCategoricalFilter->columnName());
+                        bool returnVar = filteredValue(this->dataFinal.at(key), tmpCategoricalFilter->value(), tmpCategoricalFilter->slug());
+                        truthList.append(returnVar);
+                    }
+
+                if(numericalFilter != nullptr){
+                    foreach(FilterNumericalList *tmpNumericalFilter, this->numericalFilter->getFilters()){
+                        int key = this->columnNamesMap.key(tmpNumericalFilter->columnName());
+                        bool returnVar = filteredValue(this->dataFinal.at(key), tmpNumericalFilter->value(), tmpNumericalFilter->slug());
+                        truthList.append(returnVar);
+                    }
+                }
+
+                if(dateFilter != nullptr){
+                    foreach(FilterDateList *tmpDateFilter, this->dateFilter->getFilters()){
+                        int key = this->columnNamesMap.key(tmpDateFilter->columnName());
+                        bool returnVar = filteredValue(this->dataFinal.at(key), tmpDateFilter->value(), tmpDateFilter->slug());
+                        truthList.append(returnVar);
+                    }
+                }
+
+
+                if(!truthList.contains(false)){
+                    int i = 0;
+                    appender.BeginRow();
+
+                    foreach(QByteArray a, this->dataFinal){
+                        if(!rejectIds.contains(i)){
+
+                            if(this->columnStringTypes.value(i) == "INTEGER"){
+                                appender.Append(a.toInt());
+                            } else if(this->columnStringTypes.value(i) == "VARCHAR"){
+                                appender.Append(a.toStdString().c_str());
+                            }  else {
+                                qDebug() << Q_FUNC_INFO << a.toStdString().c_str() << "DATE insert error";
+                                appender.Append(a.toStdString().c_str());
+                            }
+                        }
+
+                        i++;
+                    }
+                    appender.EndRow();
+                }
+
+                truthList.clear();
+            } else {
+
+                int i = 0;
+
+                appender.BeginRow();
+                foreach(QByteArray a, this->dataFinal){
+                    if(!rejectIds.contains(i)){
+
+                        if(this->columnStringTypes.value(i) == "INTEGER"){
+                            appender.Append(a.toInt());
+                        } else if(this->columnStringTypes.value(i) == "VARCHAR"){
+                            appender.Append(a.toStdString().c_str());
+                        }  else {
+                            qDebug() << Q_FUNC_INFO << a.toStdString().c_str() << "DATE insert error";
+                            appender.Append(a.toStdString().c_str());
+                        }
+                    }
+                    i++;
+                }
+                appender.EndRow();
+
+            }
+
+            appender.Close();
+        }
+    }
+
+    auto res = con.Query("SELECT * FROM " + fileName.toStdString());
+    res->Print();
+
+    this->colCount = this->headerDataPreview.count();
+    this->previewRowCount = this->resultData.count();
+    file.close();
+}
+
 int CSVJsonQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);

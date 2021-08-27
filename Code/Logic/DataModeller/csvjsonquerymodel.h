@@ -10,6 +10,8 @@
 #include "../../constants.h"
 #include "../../statics.h"
 
+#include "../General/datatype.h"
+
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
@@ -21,6 +23,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
     QList<QByteArray> dataFinal;
+    QList<QByteArray> secondLineData;
     QStringList hideParams;
 
     QMap<int, QString> columnNamesMap;
@@ -30,12 +33,16 @@ class CSVJsonQueryModel : public QAbstractTableModel
     FilterNumericalListModel *numericalFilter;
     FilterDateListModel *dateFilter;
     int totalFiltersCount;
+    QMap<int, QString> columnStringTypes;
+
+    DataType dataType;
 
 public:
     explicit CSVJsonQueryModel(QObject *parent = nullptr);
 
     Q_INVOKABLE void setHideParams(QString hideParams);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+    Q_INVOKABLE void saveExtractData();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;

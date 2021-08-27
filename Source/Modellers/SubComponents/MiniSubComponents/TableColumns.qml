@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 
+import com.grafieks.singleton.constants 1.0
+
 import "../../../MainSubComponents"
 
 Item {
@@ -65,6 +67,10 @@ Item {
         }
     }
 
+    function changeDataType(colName, colType, tableName, changeToFormat){
+        console.log(colName, colType, tableName, changeToFormat)
+    }
+
 
 
     ListView{
@@ -96,7 +102,7 @@ Item {
                 width: 20
                 source : "/Images/icons/menu-button.png"
                 anchors.right: parent.right
-                anchors.leftMargin:  15
+                anchors.rightMargin:  -20
                 anchors.verticalCenter: tableImg.verticalCenter
                 visible: tableShowToggle
                 z:50
@@ -147,6 +153,8 @@ Item {
                                 leftPadding: 15
                                 text: qsTr("Categorical")
 
+                                onClicked: changeDataType(colName, colType, tableName, Constants.categoricalTab)
+
                             }
                             MenuSeparator{}
                             MenuItem {
@@ -154,6 +162,8 @@ Item {
                                 implicitHeight: 30
                                 leftPadding: 15
                                 text: qsTr("Numerical")
+
+                                onClicked: changeDataType(colName, colType, tableName, Constants.numericalTab)
                             }
                             MenuSeparator{
                                 padding: 0
@@ -164,6 +174,7 @@ Item {
                                 implicitHeight: 30
                                 leftPadding: 15
 
+                                onClicked: changeDataType(colName, colType, tableName, Constants.dateTab)
                             }
                         }
                     }
