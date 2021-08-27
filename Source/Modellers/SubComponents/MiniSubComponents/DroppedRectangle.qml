@@ -30,6 +30,8 @@ Item{
     property string tableNameProperty : ""
     property var hoverCrossIcon: false
 
+    property var changeColumnTypes : new Map()
+
 
     signal dragged(double x, double y);
     signal dropped(double x, double y);
@@ -67,6 +69,14 @@ Item{
         }
     }
 
+    Connections{
+        target: GeneralParamsModel
+
+        function onColTypeChanged(){
+            changedTypes()
+        }
+    }
+
 
 
     Component.onCompleted: {
@@ -74,6 +84,23 @@ Item{
         droppedRectangle.width = Constants.droppedRectBufferWidth
         columnListDroppedRect.width = Constants.droppedRectBufferWidth
 
+    }
+
+
+    function changedTypes(){
+        var changedVariableTypes = GeneralParamsModel.getChangedColumnTypes()
+        for (const [key, value] of Object.entries(changedVariableTypes)) {
+          console.log(key, value);
+            var prefix = newItem.name + "."
+
+            if(key.includes(prefix)){
+                let matchStrLength = prefix.length
+                newItem.changeColumnTypes.set(key.substr(matchStrLength), value)
+            }
+        }
+
+        // Call columns list to rerender in view
+        NewTableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
     }
 
 
@@ -98,7 +125,15 @@ Item{
             var regex = new RegExp("[.]" + item[0] + "$");
 
             if(!toHideCols.find(value => regex.test(value))){
-                displayColList.append({colName: item[0], colType: item[1]})
+                var columnType = ""
+                if(typeof newItem.changeColumnTypes.get(item[0]) !== "undefined"){
+                    columnType = newItem.changeColumnTypes.get(item[0])
+                } else {
+                    columnType = item[1]
+                }
+                console.log(columnType)
+
+                displayColList.append({colName: item[0], colType: columnType})
             }
         })
     }
@@ -190,23 +225,23 @@ Item{
                     anchors.verticalCenter: droppedRectangle.verticalCenter
                     z: 5
                 }
-//                Image{
-//                    id: columnMenuIcon
-//                    source : "/Images/icons/menu-button.png"
-//                    height: 30
-//                    width: 30
-//                    anchors.left: parent.left
-//                    anchors.leftMargin:  160
-//                    anchors.bottom: parent.bottom
-//                    anchors.bottomMargin: 1
-//                    anchors.verticalCenter: droppedRectangle.verticalCenter
-//                    z: 5
+                //                Image{
+                //                    id: columnMenuIcon
+                //                    source : "/Images/icons/menu-button.png"
+                //                    height: 30
+                //                    width: 30
+                //                    anchors.left: parent.left
+                //                    anchors.leftMargin:  160
+                //                    anchors.bottom: parent.bottom
+                //                    anchors.bottomMargin: 1
+                //                    anchors.verticalCenter: droppedRectangle.verticalCenter
+                //                    z: 5
 
-//                    MouseArea{
-//                        anchors.fill: parent
-//                        onClicked: editOptions.open()
-//                    }
-//                }
+                //                    MouseArea{
+                //                        anchors.fill: parent
+                //                        onClicked: editOptions.open()
+                //                    }
+                //                }
             }
             //            ToolSeparator{
             //                id: toolsep3
@@ -272,10 +307,10 @@ Item{
         //        scale: Constants.scaleTable
         //        x:Constants.newPosition+droppedRectangle.x
         //        y:Constants.droppedRectangle.y
-//        border.color: colors[droppedCount+1]
-         border.color: Constants.defaultDroppedRectangleColor
-                color: Constants.defaultDroppedRectangleColor
-//        color: colors[droppedCount+1]
+        //        border.color: colors[droppedCount+1]
+        border.color: Constants.defaultDroppedRectangleColor
+        color: Constants.defaultDroppedRectangleColor
+        //        color: colors[droppedCount+1]
 
         height: 30
 
@@ -350,8 +385,8 @@ Item{
 
 
     Rectangle{
-//        border.color: colors[droppedCount+1]
-         border.color:"#fdb462"
+        //        border.color: colors[droppedCount+1]
+        border.color:"#fdb462"
         anchors.top : droppedRectangle.bottom
         width: 200
         height: tableId.height

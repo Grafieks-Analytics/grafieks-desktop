@@ -15,6 +15,7 @@ public:
     static QString driverName;
     static QString extractPath;
     static QString csvJsonPath;
+    static QVariantMap changedHeaderTypes;
 
     // Mysql
     static QString myHost;

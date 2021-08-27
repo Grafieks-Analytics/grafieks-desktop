@@ -79,9 +79,9 @@ void CSVJsonQueryModel::saveExtractData()
             for(int i = 0; i < this->dataFinal.length(); i++){
                 if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
                     QString varType = dataType.variableType(this->dataFinal.at(i).toStdString().c_str());
-                    if(varType.toLower() == "string"){
+                    if(varType == Constants::categoricalType){
                         varType = "VARCHAR";
-                    } else if(varType.toLower() == "number"){
+                    } else if(varType == Constants::numericalType){
                         varType = "INTEGER";
                     } else {
                         varType = "TIMESTAMP";

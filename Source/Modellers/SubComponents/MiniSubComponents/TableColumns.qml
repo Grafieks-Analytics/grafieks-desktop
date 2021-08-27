@@ -69,6 +69,8 @@ Item {
 
     function changeDataType(colName, colType, tableName, changeToFormat){
         console.log(colName, colType, tableName, changeToFormat)
+
+        GeneralParamsModel.changeColumnTypes(colName, tableName, changeToFormat)
     }
 
 

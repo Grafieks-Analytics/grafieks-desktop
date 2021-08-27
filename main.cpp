@@ -80,6 +80,7 @@ int Statics::onlineStorageType;
 QString Statics::driverName;
 QString Statics::extractPath;
 QString Statics::csvJsonPath;
+QVariantMap Statics::changedHeaderTypes;
 
 QString Statics::myHost;
 QString Statics::myDb;
