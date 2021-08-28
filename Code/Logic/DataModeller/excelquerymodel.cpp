@@ -89,6 +89,7 @@ void ExcelQueryModel::saveExtractData()
 
     QSqlQuery query(this->query, conExcel);
     QSqlRecord record = query.record();
+    qDebug() << record;
 
     this->internalColCount = record.count();
 
@@ -97,13 +98,27 @@ void ExcelQueryModel::saveExtractData()
     for(int i = 0; i < this->internalColCount; i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
+
+        // lastIndexOf used here because the sheet name may itself contain `$` along with the $ used to name the excel sheet in sql query
+        QString checkFieldName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$")) + "." + record.fieldName(i);
+        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
+            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+
+            if(type == Constants::categoricalType){
+                type = "VARCHAR";
+            } else if(type == Constants::numericalType){
+                type = "INTEGER";
+            } else {
+                type = "TIMESTAMP";
+            }
+        }
+
         createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }
 
     createTableQuery.chop(1);
     createTableQuery += ")";
-    qDebug() << createTableQuery;
 
     auto createT = con.Query(createTableQuery.toStdString());
     if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";

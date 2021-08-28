@@ -461,8 +461,6 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
                 }
             }
 
-
-            qDebug() << "FInal headers" << this->dataFinal;
         } else {
 
             QString createTableQuery = "CREATE TABLE " + fileName + "(";
@@ -471,6 +469,14 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
                 if(!this->rejectIds.contains(i)){
                     QString varType = dataType.variableType(this->dataFinal.at(i).toStdString().c_str());
 
+                    // Check if the user has changed the column type from the Modeler screen
+                    // If so, set the users choice as default, else process the other condition
+                    QString checkFieldName = fileName + "." + this->columnNamesMap.value(i);
+
+                    if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
+                        varType = Statics::changedHeaderTypes.value(checkFieldName).toString();
+                    }
+
                     if(varType == Constants::categoricalType){
                         varType = "VARCHAR";
                     } else if(varType == Constants::numericalType){
@@ -478,6 +484,8 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
                     } else {
                         varType = "TIMESTAMP";
                     }
+
+
                     this->columnStringTypes.insert(i, varType);
                     createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + ",";
                 }
