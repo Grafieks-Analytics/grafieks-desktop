@@ -679,8 +679,8 @@
                     )
                     .attr("d", arc)
                     .on("mouseover mousemove", function (d, i) {
-                        var x_pos = d3.mouse(this)[0] + width / 2 + 20;
-                        var y_pos = d3.mouse(this)[1] + height / 2;
+                        var x_pos = d3.mouse(this)[0] + width / 2 - 20;
+                        var y_pos = d3.mouse(this)[1] + height / 2 - 20;
 
                         d3.select("#tooltip")
                             .style("left", x_pos + "px")
@@ -688,7 +688,7 @@
                             .style("display", "block")
                             .style("z-index", 1000)
                             .style("postion", "absolute")
-                            .text(d.data.name);
+                            .text(d.data.name + ":" + d.value);
 
                         d3.select(this)
                             .style("fill", d3Colors[0])
