@@ -23,7 +23,6 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
     QList<QByteArray> dataFinal;
-    QList<QByteArray> secondLineData;
     QStringList hideParams;
 
     QMap<int, QString> columnNamesMap;
@@ -34,6 +33,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     FilterDateListModel *dateFilter;
     int totalFiltersCount;
     QMap<int, QString> columnStringTypes;
+    QVector<int> rejectIds;
 
     DataType dataType;
 
@@ -59,6 +59,8 @@ public slots:
 private:
     bool filteredValue(QVariant currentValue, QString valueList, const QString slug);
     void updateModelValues(int previewRowCount = 0);
+    void appendExtractData(duckdb::Appender *appender);
+    void createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
 
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);

@@ -15,6 +15,10 @@
 #include "../General/querysplitter.h"
 #include "./Workers/setchartdataduckworker.h"
 
+#include "./filtercategoricallistmodel.h"
+#include "./filterdatelistmodel.h"
+#include "./filternumericallistmodel.h"
+
 class ExcelQueryModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -31,8 +35,15 @@ class ExcelQueryModel : public QAbstractTableModel
     QStringList tableParams;
     QStringList whereParams;
 
+    FilterCategoricalListModel *categoricalFilter;
+    FilterNumericalListModel *numericalFilter;
+    FilterDateListModel *dateFilter;
+    int totalFiltersCount;
+
     DataType dataType;
+    QStringList hideParams;
     QStringList columnStringTypes;
+    QVector<int> rejectIds;
 
 public:
     explicit ExcelQueryModel(QObject *parent = nullptr);

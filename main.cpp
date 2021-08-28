@@ -68,7 +68,6 @@
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
-#include "Code/Logic/General/extractsmanager.h"
 
 #include "Code/statics.h"
 

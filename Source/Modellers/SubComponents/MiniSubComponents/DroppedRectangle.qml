@@ -256,7 +256,7 @@ Item{
             Row{
 
                 anchors.right: parent.right
-                anchors.top: columnMenuIcon.bottom
+                anchors.top: columnIcon.bottom
                 //                anchors.topMargin: 50
                 anchors.rightMargin: -60
                 width: parent.width
