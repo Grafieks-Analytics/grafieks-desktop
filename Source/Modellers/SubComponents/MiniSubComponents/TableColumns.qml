@@ -172,17 +172,7 @@ Item {
 
                                 onClicked: changeDataType(colName, colType, tableName, Constants.numericalTab)
                             }
-                            MenuSeparator{
-                                padding: 0
-                            }
 
-                            MenuItem {
-                                text: qsTr("Date")
-                                implicitHeight: 30
-                                leftPadding: 15
-
-                                onClicked: changeDataType(colName, colType, tableName, Constants.dateTab)
-                            }
                         }
                     }
                 }

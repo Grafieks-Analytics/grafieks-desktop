@@ -39,6 +39,7 @@ Page {
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
+    property var flatFiles: [Constants.excelType, Constants.csvType, Constants.jsonType]
 
 
     // Dont delete this
@@ -71,6 +72,7 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onPostgresLoginStatus(status){
@@ -83,6 +85,7 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onAccessLoginStatus(status){
@@ -96,30 +99,35 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onMongoLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
 
@@ -127,12 +135,14 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
+                queryModellerTab.visible = false
             }
         }
 
@@ -140,6 +150,7 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = CSVJsonDataModel.getTableList()
+                queryModellerTab.visible = false
             }
         }
 
@@ -147,6 +158,7 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = CSVJsonDataModel.getTableList()
+                queryModellerTab.visible = false
             }
         }
     }
@@ -318,14 +330,18 @@ Page {
 
     function onCreateDashboardClicked(){
 
-        saveFilePrompt.open()
+        if(DSParamsModel.dsName !== ""){
+            saveFilePrompt.open()
 
-        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
 
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+            let currentDashboard = DashboardParamsModel.currentDashboard
+            ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
 
+        } else {
+            datasourceNameWarningModal.open();
+        }
     }
 
 
@@ -658,6 +674,13 @@ Page {
             dataQueryModellerStackview.pop()
             dataQueryModellerStackview.push("./SubComponents/DataModeller.qml")
         }
+    }
+
+    MessageDialog{
+        id: datasourceNameWarningModal
+        title: "Warning"
+        text: "Select a Datasource name"
+        icon: StandardIcon.Critical
     }
 
     MessageDialog{
@@ -1223,7 +1246,6 @@ Page {
 
                 TextField{
                     id: ds_name
-                    //                    text: "Data Source Name"
                     placeholderText: "Data Source Name"
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
