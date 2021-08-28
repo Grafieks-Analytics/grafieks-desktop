@@ -97,6 +97,20 @@ void QueryModel::saveExtractData()
     for(int i = 0; i < record.count(); i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
+
+        QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
+        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
+            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+
+            if(type == Constants::categoricalType){
+                type = "VARCHAR";
+            } else if(type == Constants::numericalType){
+                type = "INTEGER";
+            } else {
+                type = "TIMESTAMP";
+            }
+        }
+
         createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }

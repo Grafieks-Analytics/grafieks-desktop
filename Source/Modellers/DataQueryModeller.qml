@@ -333,7 +333,7 @@ Page {
         if(DSParamsModel.dsName !== ""){
             saveFilePrompt.open()
 
-            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            GeneralParamsModel.setCurrentScreen(ConstSSants.dashboardScreen)
             stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
 
             let currentDashboard = DashboardParamsModel.currentDashboard
