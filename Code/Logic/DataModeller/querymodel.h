@@ -13,7 +13,6 @@
 #include "../General/datatype.h"
 #include "./Workers/generaterolenamesqueryworker.h"
 #include "./Workers/setchartdataqueryworker.h"
-#include "../General/extractsmanager.h"
 
 #include "../../duckdb.hpp"
 
@@ -21,7 +20,6 @@
 class QueryModel : public QSqlQueryModel
 {
     Q_OBJECT
-    ExtractsManager extractsManager;
 
 
 public:

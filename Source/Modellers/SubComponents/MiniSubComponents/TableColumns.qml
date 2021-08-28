@@ -53,7 +53,12 @@ Item {
 
     function hideColumnSelection(state, colName, tableName){
 
-        var key = tableName + "." + colName
+        var key = ""
+        if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            key = "[" + tableName + "$]" + "." + "[" + colName + "]"
+        } else {
+            key = tableName + "." + colName
+        }
 
         // If key already exists, remove
         // Else insert into DSParamsModel.hideColumns

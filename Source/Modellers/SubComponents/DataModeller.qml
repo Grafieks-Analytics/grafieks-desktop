@@ -598,8 +598,13 @@ Item {
             DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
 
                 // Check if the column is unselected by a user
-                if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
-                    selectColumns += " " + item + ","
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                    if(hideColumns.indexOf(item) === -1)
+                        selectColumns += " " + item + ","
+                } else {
+                    if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
+                        selectColumns += " " + item + ","
+                }
             })
 
 
@@ -953,7 +958,7 @@ Item {
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
-        } else {
+        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
             ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
         }
     }

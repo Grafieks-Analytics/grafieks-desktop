@@ -131,7 +131,7 @@ bool DataType::checkDateTimeType(QString inputVariable)
 
 QString DataType::variableType(QString inputVariable)
 {
-    QString variableType = "String";
+    QString variableType = Constants::categoricalType;
     bool containsDigit = false;
 
     // Check if the string has a digit

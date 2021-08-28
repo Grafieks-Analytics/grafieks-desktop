@@ -97,7 +97,6 @@ SOURCES += \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
-    Code/Logic/General/extractsmanager.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/newtablecolumnsmodel.cpp \
     Code/Logic/General/querysplitter.cpp \
@@ -213,7 +212,6 @@ HEADERS += \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \
-    Code/Logic/General/extractsmanager.h \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/newtablecolumnsmodel.h \
     Code/Logic/General/querysplitter.h \
