@@ -30,6 +30,7 @@ const constants = {
 };
 
 const defaultD3Config = {
+    d3SequentialDefaultTheme: ["#ffffff", "#08306b"],
     d3ColorPalette: [
         "#1f77b4",
         "#ff7f0e",
@@ -64,7 +65,7 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "right",
     },
     defaultlabelConfig: {

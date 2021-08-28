@@ -21,8 +21,8 @@ function isDateFormat(date) {
     return false;
 }
 
-function arraySum(arr){
-    return arr.reduce((a, b) => a + b, 0)
+function arraySum(arr) {
+    return arr.reduce((a, b) => a + b, 0);
 }
 
 function isInMonth(value) {
@@ -200,6 +200,36 @@ function setLabel(
     }
 }
 
+function sortDatesArray(dates, dateFormat, isHorizontalGraph) {
+    var parseTime = d3.timeParse(dateFormat);
+    var newDataSet = dates.map((d) => {
+        return new Date(parseTime(d)).getTime();
+    });
+
+    dates = newDataSet.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(a) - new Date(b);
+    });
+
+    dates = dates.map((d) => {
+        var formattedDate = d3.timeFormat(dateFormat)(new Date(d));
+        return formattedDate;
+    });
+
+    if (dateFormat == "%d") {
+        dates = dates.sort(function (a, b) {
+            return a - b;
+        });
+    }
+
+    if (isHorizontalGraph) {
+        dates = dates.reverse();
+    }
+
+    return dates;
+}
+
 function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
     var parseTime = d3.timeParse(dateFormat);
     var dates = Object.keys(dateDataset);
@@ -309,21 +339,21 @@ function clearStyle() {
     console.log("clear");
 }
 
-function removeAxisTicks(axis = "xAxis", dataValues, range, options) {
+function removeAxisTicks(axis = "xAxis", dataValues, range, options = {}) {
     selector = ".x-axis text";
     range = range ? range : dataValues.length;
 
     const { chartTitle } = options;
-    
+
     if (axis === "yAxis") {
         selector = ".y-axis text";
     }
-    
+
     var dataLabels = [];
-    if(constants.chartTitles.waterfallChart == chartTitle){
-        dataLabels =  document.querySelectorAll('.bar text');
+    if (constants.chartTitles.waterfallChart == chartTitle) {
+        dataLabels = document.querySelectorAll(".bar text");
     }
-    
+
     // Remove Text in case they are large in number
     var allXAxisTexts = document.querySelectorAll(selector);
     for (var i = 0; i < allXAxisTexts.length - 1; i++) {
@@ -333,7 +363,7 @@ function removeAxisTicks(axis = "xAxis", dataValues, range, options) {
 
         if (i % Math.floor(range * 0.04) != 0) {
             allXAxisTexts[i].remove();
-            if(constants.chartTitles.waterfallChart == chartTitle){
+            if (constants.chartTitles.waterfallChart == chartTitle) {
                 dataLabels[i].remove();
             }
             continue;
