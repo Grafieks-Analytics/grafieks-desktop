@@ -53,6 +53,7 @@ signals:
     void sqlHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
+    void testSignal(duckdb::Connection * con);
 
 private:
     QHash<int, QByteArray> m_roleNames;

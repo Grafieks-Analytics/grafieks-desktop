@@ -15,6 +15,10 @@
 
 #include "jsoncons/json.hpp"
 #include "../../constants.h"
+#include "../../statics.h"
+
+#include "../../duckdb.hpp"
+
 using namespace jsoncons;
 
 class ChartsThread : public QObject
@@ -22,8 +26,8 @@ class ChartsThread : public QObject
     Q_OBJECT
     QMap<int, QStringList> newChartHeader;
     QMap<int, QString> headerMap;
-    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
-    QMap<int, QMap<int, QStringList>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
+//    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+//    QMap<int, QMap<int, QStringList>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
 
     int dashboardId;
     int reportId;
@@ -70,7 +74,7 @@ public slots:
     void getScatterChartValues();
     void getHeatMapChartValues();
 
-    void getSunburstChartValues(); // getTreeSunburstValues
+    void getSunburstChartValues(); // getTreeSunburstValues -****
     void getWaterfallChartValues(); // getLineAreaWaterfallValues
     void getGaugeChartValues(); // float
     void getSankeyChartValues();
@@ -78,8 +82,8 @@ public slots:
     void getTreeChartValues(); // getTreeSunburstValues
     void getTreeMapChartValues(); // getTreeSunburstValues
     void getKPIChartValues(); // float
-    void getTableChartValues();
-    void getPivotChartValues();
+    void getTableChartValues(); // getTablePivotValues
+    void getPivotChartValues(); // getTablePivotValues
     void getStackedAreaChartValues(); // getStackedBarAreaValues
     void getMultiLineChartValues();
 
