@@ -234,11 +234,7 @@
                     legendWidth = 0;
                 }
 
-                var width =
-                    window.innerWidth -
-                    margin.left -
-                    margin.right -
-                    legendWidth;
+                var width = window.innerWidth - margin.left - margin.right;
                 var height =
                     window.innerHeight -
                     margin.top -
@@ -273,7 +269,7 @@
                     } else {
                         topPosition = 0;
                     }
-                    rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                    rightPosition = "calc(50vw - 150" + "px)";
 
                     //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
                     var widthOld =
@@ -326,12 +322,17 @@
                                 .style("text-overflow", "ellipsis");
 
                             var legendWidth = legendElement.offsetWidth;
+                            width =
+                                window.innerWidth -
+                                margin.left -
+                                margin.right -
+                                legendWidth;
 
                             // margin.left += 100;
                             // width -= 100;
                             // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
 
-                            d3.select("#legend").attr("style", null);
+                            // d3.select("#legend").attr("style", null);
                             d3.select("#mainChartWindow").attr("style", null);
                             d3.select("#xAxisLabelId").style("bottom", 0);
 
@@ -339,7 +340,7 @@
 
                             d3.select("#mainChartWindow").style(
                                 "width",
-                                widthOld - legendWidth + yAxisWidth
+                                widthOld - legendWidth
                             );
                             d3.select("#mainChartWindow").style(
                                 "margin-left",
@@ -350,9 +351,10 @@
                             break;
                         case "top":
                             d3.select("#mainChartWindow").attr("style", null);
-                            margin.top += 50;
-                            height -= 50;
+                            // margin.top += 35;
+                            height -= 35;
                             y_pos_x_label = 57;
+                            var legendWidth = legendElement.offsetWidth;
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "10px")
@@ -369,6 +371,10 @@
                                 .style("overflow", "hidden")
                                 .style("text-overflow", "ellipsis");
                             d3.select("#xAxisLabelId").style("bottom", 0);
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                40 + "px"
+                            );
 
                             // d3.selectAll("#legend div").style(
                             //     "padding",
@@ -441,6 +447,11 @@
                                 0
                             );
                             d3.select("#xAxisLabelId").style("bottom", 0);
+                            width =
+                                window.innerWidth -
+                                margin.left -
+                                margin.right -
+                                legendWidth;
                     }
                 }
 
@@ -450,7 +461,10 @@
                     .selectAll("#my_dataviz")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right - 10)
-                    .attr("height", height + margin.bottom + topLegendMargin)
+                    .attr(
+                        "height",
+                        height + margin.bottom + topLegendMargin + 20
+                    )
                     .append("g")
                     .attr(
                         "transform",
@@ -461,7 +475,8 @@
                     .scaleBand()
                     .domain(_data.map((d) => d.label))
                     .range([0, width])
-                    .padding(0.2);
+                    .padding(paddingInner)
+                    .paddingInner(paddingInner);
 
                 y = d3.scaleLinear().range([height, 0]);
 
@@ -796,7 +811,7 @@
                     end: cumulativeValue,
                     start: 0,
                     class: "total",
-                    value:cumulativeValue
+                    value: cumulativeValue,
                 });
                 return data;
             }
