@@ -126,6 +126,9 @@ Column{
             case Constants.areaChartTitle:
                 switchChart(Constants.multipleAreaChartTitle)
                 break;
+            case Constants.horizontalAreaChartTitle:
+                switchChart(Constants.multipleHorizontalAreaChartTitle)
+                break;
             case Constants.lineChartTitle:
                 switchChart(Constants.multiLineChartTitle)
                 break;
@@ -137,6 +140,8 @@ Column{
                 d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
                 reDrawChart();
                 break;
+            default:
+                reDrawChart();
         }
 
         return;
@@ -180,6 +185,8 @@ Column{
 
     function resizePaddingInner(value){
         d3PropertyConfig.paddingInner = value;
+        d3PropertyConfig.innerRadius = (1-value)*200;
+//        console.log("value"+value);
         reDrawChart();
     }
 
