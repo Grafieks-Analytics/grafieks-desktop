@@ -1,4 +1,7 @@
 const constants = {
+    chartTitles:{
+        waterfallChart: "Waterfall Chart"
+    },
     redColor: "#E15759",
     yellowColor: "#EDC949",
     greenColor: "#59A14F",
@@ -50,6 +53,7 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
+    defaultMarkerStatus: false,
     chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,
     horizontalChartType: constants.chartType.STANDARD,
