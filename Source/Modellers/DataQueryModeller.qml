@@ -332,13 +332,6 @@ Page {
 
         if(DSParamsModel.dsName !== ""){
             saveFilePrompt.open()
-
-            GeneralParamsModel.setCurrentScreen(ConstSSants.dashboardScreen)
-            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-
-            let currentDashboard = DashboardParamsModel.currentDashboard
-            ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
-
         } else {
             datasourceNameWarningModal.open();
         }
@@ -679,7 +672,7 @@ Page {
     MessageDialog{
         id: datasourceNameWarningModal
         title: "Warning"
-        text: "Select a Datasource name"
+        text: "Datasource name is mandatory"
         icon: StandardIcon.Critical
     }
 
@@ -1555,6 +1548,12 @@ Page {
                 console.log("DB Classification failed")
                 break;
             }
+
+            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+            let currentDashboard = DashboardParamsModel.currentDashboard
+            ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
         }
         onRejected: {
             console.log("file rejected")

@@ -162,9 +162,12 @@ void QueryModel::saveExtractData()
         appender.EndRow();
     }
         appender.Close();
+        QMap<int, QStringList> x;
 
-    auto res = con.Query("SELECT * FROM grafieks_my");
-    res->Print();
+//    auto res = con.Query("SELECT * FROM grafieks_my");
+//    res->Print();
+        emit testSignal(&con);
+
 }
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
@@ -276,6 +279,7 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 {
     this->tableHeaders = tableHeaders;
     this->sqlChartHeader = sqlChartHeader;
+    qDebug() << "EMITTING" << this->tableHeaders;
 
     emit headerDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->sqlChartHeader);
