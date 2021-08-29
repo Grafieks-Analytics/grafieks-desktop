@@ -47,18 +47,35 @@
         </script>
         <script src="./Data/radar.js"></script>
         <script>
+            // var data = [
+            //     [
+            //         //iPhone
+            //         { axis: "Battery Life", value: 100 },
+            //         { axis: "Brand", value: 200 },
+            //         { axis: "Contract Cost", value: 300 },
+            //         { axis: "Design And Quality", value: 400 },
+            //         { axis: "Have Internet Connectivity", value: 200 },
+            //         { axis: "Large Screen", value: 800 },
+            //         { axis: "Price Of Device", value: 210 },
+            //         { axis: "To Be A Smartphone", value: 50 },
+            //     ],
+            // ];
             var data = [
                 [
-                    //iPhone
-                    { axis: "Battery Life", value: 100 },
-                    { axis: "Brand", value: 200 },
-                    { axis: "Contract Cost", value: 300 },
-                    { axis: "Design And Quality", value: 400 },
-                    { axis: "Have Internet Connectivity", value: 200 },
-                    { axis: "Large Screen", value: 800 },
-                    { axis: "Price Of Device", value: 210 },
-                    { axis: "To Be A Smartphone", value: 50 },
+                    {
+                        axis: "Furniture",
+                        value: 27550,
+                    },
+                    {
+                        axis: "Office Supplies",
+                        value: 13384,
+                    },
+                    {
+                        axis: "Technology",
+                        value: 9310,
+                    },
                 ],
+                ["Category", "Sales"],
             ];
 
             // Color Pallets - Set 3
@@ -114,7 +131,7 @@
 
             // drawChart(data);
             // window.addEventListener("resize", function () {
-            //     drawChart(data);
+            drawChart(data);
             // });
         </script>
     </body>
