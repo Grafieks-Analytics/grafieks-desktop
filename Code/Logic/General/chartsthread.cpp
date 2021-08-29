@@ -1358,9 +1358,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
 
     auto xDataList = con.Query(xQueryString.toStdString());
-    qDebug() <<xDataList->success << "X" << xQueryString;
     auto yDataList = con.Query(yQueryString.toStdString());
-     qDebug() <<yDataList->success << "Y" << yQueryString;
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -1368,8 +1366,6 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     int totalRows = xDataList->collection.Count();
     int totalXCols = xDataList->ColumnCount();
 
-
-    // STOP
 
 
     // Considering the measure as string here to avoid unwanted errors in wrong casting

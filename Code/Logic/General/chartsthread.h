@@ -74,7 +74,7 @@ public slots:
     void getScatterChartValues();
     void getHeatMapChartValues();
 
-    void getSunburstChartValues(); // getTreeSunburstValues -****
+    void getSunburstChartValues(); // getTreeSunburstValues
     void getWaterfallChartValues(); // getLineAreaWaterfallValues
     void getGaugeChartValues(); // float
     void getSankeyChartValues();
