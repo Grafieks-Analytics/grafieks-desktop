@@ -19,6 +19,7 @@
 
 #include "datatype.h"
 #include "../Connectors/duckcon.h"
+#include "../../duckdb.hpp"
 
 /*!
  * \class TableSchemaModel
@@ -39,6 +40,7 @@ public:
     explicit TableSchemaModel(QObject *parent = nullptr);
     explicit TableSchemaModel(DuckCon *duckCon, QObject *parent = nullptr);
     Q_INVOKABLE void showSchema(QString query = "");
+    Q_INVOKABLE void showSchemaForExtract();
     Q_INVOKABLE void clearSchema();
 
 signals:
@@ -52,6 +54,13 @@ private:
     QList<QStringList> allNumerical;
     QList<QStringList> allDates;
     QList<QStringList> allOthers;
+
+    QList<QStringList> extractAllList;
+    QList<QStringList> extractAllCategorical;
+    QList<QStringList> extractAllNumerical;
+    QList<QStringList> extractAllDates;
+    QList<QStringList> extractAllOthers;
+
     QStringList queriedColumnNames;
 
     void setHeaders(const QByteArray line, QString delimiter);

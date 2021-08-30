@@ -134,6 +134,8 @@ void ChartsThread::getBarChartValues()
     }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
+
+    qDebug() << queryString;
     auto dataList = con.Query(queryString.toStdString());
 
     QStringList xAxisData;
