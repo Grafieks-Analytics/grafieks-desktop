@@ -321,7 +321,6 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 {
     this->tableHeaders = tableHeaders;
     this->sqlChartHeader = sqlChartHeader;
-    qDebug() << "EMITTING" << this->tableHeaders;
 
     emit headerDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->sqlChartHeader);

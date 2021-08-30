@@ -1,15 +1,10 @@
 #include "tableschemamodel.h"
-#include "iostream"
+
 TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 {
 
 }
 
-TableSchemaModel::TableSchemaModel(DuckCon *duckCon, QObject *parent)
-{
-    Q_UNUSED(parent);
-    this->duckCon = duckCon;
-}
 
 /*!
  * \brief Accepts an SQL query parameter and emits a signal with list of information of individual column
@@ -479,24 +474,23 @@ void TableSchemaModel::showSchema(QString query)
     allOthers.clear();
     allList.clear();
 
-
 }
 
-void TableSchemaModel::showSchemaForExtract()
+void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
 {
     QStringList outputDataList;
 
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
+
 
     if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
     }
 
-    auto data = con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    qDebug() << "CRASHED HERE" << data->success;
     if(data->error.empty()){
         int totalRows = data->collection.Count();
 
@@ -524,12 +518,24 @@ void TableSchemaModel::showSchemaForExtract()
             }
 
             // Append all data type to allList as well
-            allList.append(outputDataList);
+            extractAllList.append(outputDataList);
 
             // Clear Stringlist for future
             outputDataList.clear();
         }
+    } else {
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
     }
+
+    emit extractSchemaObtained(extractAllList, extractAllCategorical, extractAllNumerical, extractAllDates, extractAllOthers);
+
+    // Clear all stringlist for new values
+
+    extractAllCategorical.clear();
+    extractAllNumerical.clear();
+    extractAllDates.clear();
+    extractAllOthers.clear();
+    extractAllList.clear();
 }
 
 void TableSchemaModel::clearSchema()

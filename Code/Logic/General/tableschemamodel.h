@@ -31,21 +31,22 @@ class TableSchemaModel : public QObject
     Q_OBJECT
     DataType dataType;
     QuerySplitter querySplitter;
-    DuckCon *duckCon;
 
     int csvHeaderLength;
     QList<QByteArray> csvHeaderDataFinal;
 
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
-    explicit TableSchemaModel(DuckCon *duckCon, QObject *parent = nullptr);
-    Q_INVOKABLE void showSchema(QString query = "");
-    Q_INVOKABLE void showSchemaForExtract();
+    Q_INVOKABLE void showSchema(QString query = ""); 
     Q_INVOKABLE void clearSchema();
 
 signals:
     void tableSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers, QStringList queriedColumnNames);
+    void extractSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers);
     void tableSchemaCleared();
+
+public slots:
+    void generateSchemaForExtract(duckdb::Connection *con);
 
 private:
 

@@ -281,6 +281,7 @@ int main(int argc, char *argv[])
     ExcelDataModel excelDataModel;
     CSVJsonDataModel csvJsonDataModel;
     CSVJsonQueryModel csvJsonQueryModel;
+    TableSchemaModel tableSchemaModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -312,7 +313,7 @@ int main(int argc, char *argv[])
 
     // Duck CRUD Model
     DuckCon *duckCon = new DuckCon();
-    TableSchemaModel tableSchemaModel(duckCon);
+
     NewTableColumnsModel newTableColumnsModel(duckCon);
     DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
     DuckQueryModel duckQueryModel(duckCon);
@@ -358,6 +359,11 @@ int main(int argc, char *argv[])
     QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
+
+    QObject::connect(&queryModel, &QueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
 
     // Charts
     //filterValuesChanged Headers for charts

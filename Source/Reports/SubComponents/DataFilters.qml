@@ -116,7 +116,7 @@ Popup {
         target: TableSchemaModel
 
         // Set the model of the `Add Button` in each tab
-        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
+        function onExtractSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
 
             categoricalModel.clear()
             numericalModel.clear()
