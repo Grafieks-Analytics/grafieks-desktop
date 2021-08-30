@@ -66,6 +66,8 @@ void CSVJsonQueryModel::saveExtractData()
 
     auto res = con.Query("SELECT * FROM " + fileName.toStdString());
     res->Print();
+
+    emit generateReports(&con);
 }
 
 int CSVJsonQueryModel::rowCount(const QModelIndex &parent) const

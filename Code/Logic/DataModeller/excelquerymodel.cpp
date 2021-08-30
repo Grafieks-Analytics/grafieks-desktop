@@ -173,6 +173,8 @@ void ExcelQueryModel::saveExtractData()
     auto res = con.Query("SELECT * FROM "+ fileName.toStdString());
     res->Print();
 
+    emit generateReports(&con);
+
 }
 
 int ExcelQueryModel::rowCount(const QModelIndex &parent) const

@@ -178,6 +178,8 @@ void ForwardOnlyQueryModel::saveExtractData()
 
         appender.Close();
     }
+
+    emit generateReports(&con);
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const

@@ -12,6 +12,7 @@
 #include "../Connectors/duckcon.h"
 
 #include "../General/datatype.h"
+#include "../../duckdb.hpp"
 #include "../General/querysplitter.h"
 #include "./Workers/setchartdataduckworker.h"
 
@@ -67,6 +68,7 @@ public slots:
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
 
+
 private:
     void generateRoleNames();
     void setQueryResult();
@@ -81,6 +83,7 @@ signals:
     void clearTablePreview();
     void errorSignal(QString errMsg);
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
+    void generateReports(duckdb::Connection *con);
 
 };
 

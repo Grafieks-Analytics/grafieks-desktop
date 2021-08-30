@@ -71,6 +71,7 @@ signals:
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
+    void generateReports(duckdb::Connection *con);
 
 
 

@@ -353,7 +353,11 @@ int main(int argc, char *argv[])
     // Reports
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &reportsDataModel, &ReportsDataModel::updateFilterData);
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &reportsDataModel, &ReportsDataModel::getReportId);
-    QObject::connect(&queryModel, &QueryModel::testSignal, &reportsDataModel, &ReportsDataModel::getTestData);
+
+    QObject::connect(&queryModel, &QueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumns);
 
     // Charts
     //filterValuesChanged Headers for charts

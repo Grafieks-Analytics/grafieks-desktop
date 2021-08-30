@@ -87,9 +87,52 @@ void QueryModel::saveExtractData()
     QStringList tableHeaders;
     QMap<int, QStringList> sqlChartHeader;
     QHash<int, QByteArray> roleNames;
+    QSqlDatabase connection;
 
-    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
-    QSqlQuery query(this->tmpSql, dbMysql);
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        connection = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        connection = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        break;
+    }
+
+    case Constants::sqliteIntType:{
+        connection = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        break;
+    }
+    case Constants::postgresIntType:{
+        connection = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+        connection = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        connection = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        break;
+    }
+
+    case Constants::mongoIntType:{
+        connection = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
+        break;
+    }
+
+    case Constants::accessIntType:{
+        connection = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
+        break;
+    }
+
+    }
+
+    QSqlQuery query(this->tmpSql, connection);
     QSqlRecord record = query.record();
 
     QString createTableQuery = "CREATE TABLE " + tableName + "(";
@@ -162,11 +205,10 @@ void QueryModel::saveExtractData()
         appender.EndRow();
     }
         appender.Close();
-        QMap<int, QStringList> x;
 
 //    auto res = con.Query("SELECT * FROM grafieks_my");
 //    res->Print();
-        emit testSignal(&con);
+        emit generateReports(&con);
 
 }
 

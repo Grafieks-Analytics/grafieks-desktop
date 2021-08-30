@@ -12,6 +12,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QElapsedTimer>
+#include <QFileInfo>
 
 #include "jsoncons/json.hpp"
 #include "../../constants.h"
