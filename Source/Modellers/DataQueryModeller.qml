@@ -12,8 +12,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
-//import Qt.labs.platform 1.1
-
 
 import com.grafieks.singleton.constants 1.0
 
@@ -1510,55 +1508,13 @@ Page {
 
     // Righthand Panel ends
 
-    FileDialog{
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveExtract{
         id: saveFilePrompt
-        title: "Save Extract As"
-        nameFilters: ["Grafieks Extract (*.gdx )"];
-        selectExisting : false
-
-        onAccepted: {
-
-            let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.fileUrl)
-            console.log("FILEPATH", fileName)
-            GeneralParamsModel.setExtractPath(fileName)
-
-            switch(GeneralParamsModel.getDbClassification()){
-            case Constants.sqlType:
-                console.log("SQL")
-                QueryModel.saveExtractData()
-                break;
-
-            case Constants.forwardOnlyType:
-                console.log("FOWARD")
-                ForwardOnlyQueryModel.saveExtractData()
-                break;
-
-            case Constants.excelType:
-                console.log("EXCEL")
-                ExcelQueryModel.saveExtractData()
-                break;
-
-            case Constants.csvType:
-            case Constants.jsonType:
-                console.log("CSV")
-                CSVJsonQueryModel.saveExtractData()
-                break;
-
-            default:
-                console.log("DB Classification failed")
-                break;
-            }
-
-            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-
-            let currentDashboard = DashboardParamsModel.currentDashboard
-            ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
-        }
-        onRejected: {
-            console.log("file rejected")
-        }
     }
+
+
 
     //Page Design Ends
     /***********************************************************************************************************************/
