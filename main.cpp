@@ -64,8 +64,6 @@
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
-#include "Code/Logic/General/qttest2.h"
-#include "Code/Logic/General/qttest.h"
 
 #include "Code/statics.h"
 
@@ -244,10 +242,6 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     // OBJECT INITIALIZATION STARTS
 
-    QtTest2 qttest2;
-    QtTest qttest;
-    //    qttest.calla();
-
     MysqlCon mysqlconnect;
     User User;
     ConnectorFilter connectorFilter;
@@ -386,7 +380,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ReportParamsModel", &reportParamsModel);
     engine.rootContext()->setContextProperty("ReportsDataModel", &reportsDataModel);
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);
-    engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &User);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
