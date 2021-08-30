@@ -155,7 +155,7 @@ ApplicationWindow {
         title: "Add New Datasource"
         folder: shortcuts.documents
         fileMode: FileDialog.OpenFile
-        nameFilters: ["Extract (*.gadse)", "Live (*.gads)"]
+        nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")"]
 
         onAccepted: {
             var x = DSParamsModel.readDatasource(file)
