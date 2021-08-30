@@ -32,7 +32,7 @@ Rectangle{
 
     Component.onCompleted: {
         console.log('Item Type',itemType, typeof(itemType));
-        axisRectangle.color = itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
+        axisRectangle.color = itemType && itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
         console.log('Index and Axis Name', itemIndexId, axisType, dateFormatValue);
 
         
@@ -61,11 +61,10 @@ Rectangle{
             var dateFormatModelValue = dateCalculations.get(i).dateFormat; 
             if(dateFormatModelValue === dateFormat){
                 return i;
-                break;
             }
         }
 
-        console.log('Error');
+        console.log('Error in Axis DroppedRectangle, Getting Index');
         return 0;
     }
 
