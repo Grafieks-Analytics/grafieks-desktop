@@ -565,9 +565,6 @@ Item{
                         }
                     }
                 }
-
-
-
             }
 
             // "Menu Dropdown" Ends

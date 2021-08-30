@@ -8,6 +8,7 @@ CSVJsonQueryModel::CSVJsonQueryModel(QObject *parent) : QAbstractTableModel(pare
 
 void CSVJsonQueryModel::setHideParams(QString hideParams)
 {
+    emit clearTablePreview();
     this->hideParams = hideParams.split(",");
     for(int i = 0; i < this->hideParams.length(); i++){
         if(this->hideParams.at(i).contains(".")){
@@ -249,12 +250,12 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     int readLine = 0;
     QVector<bool> truthList;
 
-    this->resultData.clear();
-    this->headerDataPreview.clear();
-    this->rejectIds.clear();
-
     beginResetModel();
 
+    this->resultData.clear();
+    this->columnNamesMap.clear();
+    this->headerDataPreview.clear();
+    this->rejectIds.clear();
 
     while(!file.atEnd()){
 
@@ -280,6 +281,9 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
         } else {
 
+            if(previewRowCount > 0){
+                if(readLine == previewRowCount) break;
+            }
 
             if(this->totalFiltersCount > 0){
 
@@ -322,7 +326,6 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 truthList.clear();
             } else {
 
-                if(readLine == previewRowCount) break;
 
                 QList<QByteArray> colData = line.split(*delimiter.toStdString().c_str());
                 QStringList x;
@@ -344,17 +347,13 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     file.close();
 
 
-    if(this->resultData.count() > 0){
-        qDebug() << "Row count" << this->resultData.count() << "Col count" << this->colCount;
-        qDebug() << "Total filters" << this->totalFiltersCount;
-        emit csvJsonHasData(true);
-    } else{
-        emit csvJsonHasData(false);
-    }
-    endResetModel();
+    this->resultData.count() > 0 ? emit csvJsonHasData(true) : emit csvJsonHasData(false);
+
 
     emit errorSignal("");
     emit csvJsonHeaderDataChanged(this->headerDataPreview);
+
+    endResetModel();
 }
 
 void CSVJsonQueryModel::appendExtractData(duckdb::Appender *appender)
