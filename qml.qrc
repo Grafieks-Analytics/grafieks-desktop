@@ -82,7 +82,6 @@
         <file>Source/MainSubComponents/CustomRadioDelegate.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedText.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedImage.qml</file>
-        <file>Source/Others/Test3.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinBox.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/ConnectingLine.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/DroppedRectangle.qml</file>
@@ -174,7 +173,6 @@
         <file>Source/Charts/Data/d3-scale-chromatic.v1.min.js</file>
         <file>Source/Charts/Data/d3DefaultConfig.js</file>
         <file>Source/Charts/LineChart.html</file>
-        <file>Source/Others/Table.qml</file>
         <file>Source/Others/TableTest.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LineTypePopup.qml</file>
         <file>Source/Charts/PieChart.html</file>
