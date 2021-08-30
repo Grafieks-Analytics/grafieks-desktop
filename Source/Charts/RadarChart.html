@@ -56,9 +56,27 @@
                     { axis: "Design And Quality", value: 400 },
                     { axis: "Have Internet Connectivity", value: 200 },
                     { axis: "Large Screen", value: 800 },
-                    { axis: "Price Of Device", value: 210 },
+                    { axis: "Price Of Device", value: 1210 },
                     { axis: "To Be A Smartphone", value: 50 },
                 ],
+            ];
+
+            data = [
+                [
+                    {
+                        axis: "Furniture",
+                        value: 27550,
+                    },
+                    {
+                        axis: "Office Supplies",
+                        value: 13384,
+                    },
+                    {
+                        axis: "Technology",
+                        value: 9310,
+                    },
+                ],
+                ["Category", "Sales"],
             ];
 
             // Color Pallets - Set 3
@@ -78,7 +96,7 @@
             ];
 
             function drawChart(data, plottingConfiguration = {}) {
-                var dataValues = data[0];
+                var dataValues = [data[0]];
 
                 let { d3colorPalette, paddingInner, markerShape, curveType } =
                     plottingConfiguration;
@@ -109,10 +127,10 @@
                     color: color,
                 };
                 //Call function to draw the Radar chart
-                RadarChart("#my_dataviz", data, radarChartOptions);
+                RadarChart("#my_dataviz", dataValues, radarChartOptions);
             }
 
-            // drawChart(data);
+            drawChart(data);
             // window.addEventListener("resize", function () {
             //     drawChart(data);
             // });
