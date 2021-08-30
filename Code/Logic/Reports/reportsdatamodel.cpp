@@ -659,7 +659,7 @@ void ReportsDataModel::getReportId(int reportId)
 
 }
 
-void ReportsDataModel::getTestData(duckdb::Connection *con)
+void ReportsDataModel::generateColumns(duckdb::Connection *con)
 {
 
     QMap<int, QStringList> chartHeader;
@@ -675,6 +675,10 @@ void ReportsDataModel::getTestData(duckdb::Connection *con)
     this->dateList.clear();
     this->newChartHeader.clear();
 
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
     auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
 
     if(data->error.empty()){

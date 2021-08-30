@@ -116,7 +116,6 @@ void ChartsThread::start()
 
 void ChartsThread::getBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -128,6 +127,11 @@ void ChartsThread::getBarChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -189,7 +193,6 @@ void ChartsThread::getStackedBarChartValues()
 
 void ChartsThread::getGroupedBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QVariantList tmpData;
@@ -214,6 +217,11 @@ void ChartsThread::getGroupedBarChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -292,7 +300,6 @@ void ChartsThread::getGroupedBarChartValues()
 
 void ChartsThread::getNewGroupedBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonArray axisDataArray;
@@ -309,6 +316,11 @@ void ChartsThread::getNewGroupedBarChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -404,7 +416,6 @@ void ChartsThread::getLineChartValues()
 
 void ChartsThread::getLineBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -417,6 +428,11 @@ void ChartsThread::getLineBarChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -483,7 +499,6 @@ void ChartsThread::getLineBarChartValues()
 
 void ChartsThread::getPieChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonObject obj;
@@ -497,6 +512,11 @@ void ChartsThread::getPieChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -546,7 +566,6 @@ void ChartsThread::getPieChartValues()
 
 void ChartsThread::getFunnelChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonArray axisDataArray;
@@ -559,6 +578,11 @@ void ChartsThread::getFunnelChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -622,7 +646,6 @@ void ChartsThread::getFunnelChartValues()
 void ChartsThread::getRadarChartValues()
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonArray axisDataArray;
@@ -636,6 +659,11 @@ void ChartsThread::getRadarChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -698,7 +726,6 @@ void ChartsThread::getRadarChartValues()
 
 void ChartsThread::getScatterChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QVariantList tmpData;
@@ -719,6 +746,11 @@ void ChartsThread::getScatterChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     qDebug() << xAxisColumn << yAxisColumn << xSplitKey << "Scatter";
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
@@ -802,7 +834,6 @@ void ChartsThread::getScatterChartValues()
 void ChartsThread::getHeatMapChartValues()
 {
 
-//    Q_ASSERT(!this->newChartHeader.empty());
     qDebug() << "HEATMAP" << xAxisColumn << yAxisColumn << xSplitKey;
 
     QJsonArray data;
@@ -824,6 +855,11 @@ void ChartsThread::getHeatMapChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -916,7 +952,6 @@ void ChartsThread::getWaterfallChartValues()
 
 void ChartsThread::getGaugeChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QStringList calculateColumnPointer;
 
@@ -925,6 +960,11 @@ void ChartsThread::getGaugeChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + calculateColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -953,7 +993,6 @@ void ChartsThread::getGaugeChartValues()
 
 void ChartsThread::getSankeyChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonObject dataObject;
@@ -972,6 +1011,11 @@ void ChartsThread::getSankeyChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     qDebug() << "Sankey" << sourceColumn << destinationColumn << measureColumn << "3 values expected";
     QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+tableName;
@@ -1066,7 +1110,6 @@ void ChartsThread::getTreeMapChartValues()
 
 void ChartsThread::getKPIChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
@@ -1075,6 +1118,11 @@ void ChartsThread::getKPIChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + calculateColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -1119,7 +1167,6 @@ void ChartsThread::getStackedAreaChartValues()
 void ChartsThread::getMultiLineChartValues()
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QVariantList tmpData;
@@ -1140,6 +1187,11 @@ void ChartsThread::getMultiLineChartValues()
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -1231,7 +1283,6 @@ void ChartsThread::getMultiLineChartValues()
 
 void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QString identifier)
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -1243,6 +1294,11 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -1315,7 +1371,6 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn, QString identifier)
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
     int pointerSize;
 
@@ -1345,6 +1400,11 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
@@ -1490,7 +1550,6 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
 
     QJsonArray data;
@@ -1505,6 +1564,11 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
     auto dataList = con.Query(queryString.toStdString());
@@ -1609,7 +1673,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
 void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn, QString identifier)
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QString masterKeyword;
@@ -1627,6 +1690,11 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){

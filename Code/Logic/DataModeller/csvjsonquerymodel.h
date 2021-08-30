@@ -65,6 +65,7 @@ private:
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);
     void csvJsonHasData(bool hasData);
+    void generateReports(duckdb::Connection *con);
 
 };
 
