@@ -40,21 +40,29 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
     int j = 0;
     tmpRowCount = 0;
-    while(query.next()){
-        for(int i = 0; i < this->internalColCount; i++){
-            list << query.value(i).toString();
+    if(query.lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << query.lastError();
+        emit errorSignal(query.lastError().text());
+    } else {
+        while(query.next()){
+            for(int i = 0; i < this->internalColCount; i++){
+                list << query.value(i).toString();
+            }
+            this->resultData.append(list);
+            list.clear();
+
+            tmpRowCount++;
+            j++;
         }
-        this->resultData.append(list);
-        list.clear();
 
-        tmpRowCount++;
-        j++;
-    }
 
-    if(previewRowCount > tmpRowCount){
-        maxRowCount = tmpRowCount;
-    } else{
-        maxRowCount = previewRowCount;
+        if(previewRowCount > tmpRowCount){
+            maxRowCount = tmpRowCount;
+        } else{
+            maxRowCount = previewRowCount;
+        }
+
+        emit errorSignal("");
     }
 
     this->previewRowCount = maxRowCount;
@@ -147,16 +155,16 @@ void ExcelQueryModel::saveExtractData()
                 int32_t year = date.year();
                 int32_t month = date.month();
                 int32_t day = date.day();
-//                appender.Append(duckdb::Date::FromDate(year, month, day));
-//                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
+                //                appender.Append(duckdb::Date::FromDate(year, month, day));
+                //                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
             } else if(columnType == "TIMESTAMP"){
                 QDate date = query.value(i).toDate();
                 QTime time = query.value(i).toDateTime().time();
                 int32_t year = date.year();
                 int32_t month = date.month();
                 int32_t day = date.day();
-//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
+                //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
             }else {
                 appender.Append(query.value(i).toString().toUtf8().constData());
             }

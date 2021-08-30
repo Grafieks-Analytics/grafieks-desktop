@@ -6,6 +6,7 @@
 #include <QSqlDatabase>
 #include <QSqlField>
 #include <QSqlRecord>
+#include <QSqlQueryModel>
 
 #include "../../statics.h"
 #include "../../constants.h"
