@@ -272,5 +272,6 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
         <file>Splash.qml</file>
         <file>Main.qml</file>
+        <file>Source/Modellers/SubComponents/SaveExtract.qml</file>
     </qresource>
 </RCC>
