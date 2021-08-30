@@ -482,6 +482,56 @@ void TableSchemaModel::showSchema(QString query)
 
 }
 
+void TableSchemaModel::showSchemaForExtract()
+{
+    QStringList outputDataList;
+
+    QString extractPath = Statics::extractPath;
+    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
+
+    auto data = con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    if(data->error.empty()){
+        int totalRows = data->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            QString fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldName = fieldName.trimmed();
+            QString fieldType = data->GetValue(2, i).ToString().c_str();
+
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldType);
+
+            outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+            // Output data according to Filter type
+
+            if(filterDataType == Constants::categoricalType){
+                extractAllCategorical.append(outputDataList);
+            } else if(filterDataType == Constants::numericalType){
+                extractAllNumerical.append(outputDataList);
+            } else if(filterDataType == Constants::dateType){
+                extractAllDates.append(outputDataList);
+            } else{
+                extractAllOthers.append(outputDataList);
+            }
+
+            // Append all data type to allList as well
+            allList.append(outputDataList);
+
+            // Clear Stringlist for future
+            outputDataList.clear();
+        }
+    }
+}
+
 void TableSchemaModel::clearSchema()
 {
     // Clear all stringlist for new values

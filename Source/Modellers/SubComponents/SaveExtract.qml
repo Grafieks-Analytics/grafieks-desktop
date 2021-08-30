@@ -17,13 +17,13 @@ FileDialog{
 
     onAccepted: {
 
-        let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.fileUrl)
+        let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.currentFile)
         console.log("FILEPATH", fileName)
         GeneralParamsModel.setExtractPath(fileName)
 
         switch(GeneralParamsModel.getDbClassification()){
         case Constants.sqlType:
-            console.log("SQL")
+            console.log("SQL save extract")
             QueryModel.saveExtractData()
             break;
 
