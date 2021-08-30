@@ -87,6 +87,34 @@ Item{
         }
     }
 
+    Connections{
+        target: ExcelQueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
+
+    Connections{
+        target: CSVJsonQueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = "Data fetched successfully"
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
