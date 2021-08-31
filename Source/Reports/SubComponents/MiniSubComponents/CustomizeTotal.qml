@@ -49,6 +49,18 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function showRowTotal(checkedStatus){
+        report_desiner_page.d3PropertyConfig['rowWiseGrandTotal'] = checkedStatus;
+        report_desiner_page.reDrawChart();
+    }
+    function showColumnTotal(checkedStatus){
+        report_desiner_page.d3PropertyConfig['columnWiseGrandTotal'] = checkedStatus;
+        report_desiner_page.reDrawChart();
+    }
+    function showSubTotal(checkedStatus){
+        report_desiner_page.d3PropertyConfig['subTotalVisible'] = checkedStatus;
+        report_desiner_page.reDrawChart();
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -108,18 +120,9 @@ Column{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showRowTotal(checked);
 
             }
-
-//            HorizontalLineTpl{
-//                id: linebar1
-//                line_color: Constants.darkThemeColor
-//                line_width: parent.width
-//                anchors.top: parent.bottom
-//                width: parent.width
-//                height: 4
-
-//            }
 
         }
 
@@ -243,6 +246,7 @@ Column{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showColumnTotal(checked);
 
             }
 
@@ -381,6 +385,7 @@ Column{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showSubTotal(checked);
 
             }
 
@@ -480,6 +485,21 @@ Column{
 
 
 
+    Rectangle{
+
+        height: 35
+        width: 150
+
+        CustomButton {
+            text: qsTr("Export Report")
+            anchors.left: parent.left
+            anchors.leftMargin: leftMargin
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: Constants.fontCategoryHeaderSmall
+            onClicked : report_desiner_page.exportPivotChart()
+        }
+
+    }
 
 
 
