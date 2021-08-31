@@ -26,6 +26,7 @@ class ReportsDataModel : public QObject
     int reportId;
 
     DataType dataType;
+    QStringList columnData;
 
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
@@ -33,7 +34,7 @@ public:
 
     Q_INVOKABLE void searchColumnNames(QString keyword);
     Q_INVOKABLE QStringList fetchColumnData(QString columnName, QString options = "");
-    Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
+    Q_INVOKABLE QStringList searchColumnData(QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void deleteReportData(int reportId, bool deleteAll = false);
