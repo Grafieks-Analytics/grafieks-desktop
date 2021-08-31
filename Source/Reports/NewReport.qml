@@ -263,6 +263,7 @@ Page {
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
         var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
         console.log(xAxisColumns, yAxisColumns)
@@ -376,6 +377,8 @@ Page {
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
+            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
@@ -404,6 +407,11 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.pivotTitle:
+            
+            dataValues = JSON.parse(dataValues);
+            dataValues.push([xAxisColumns,yAxisColumns,row3Columns]);
+            dataValues = JSON.stringify(dataValues);
+            
             console.log(chartTitle,"CLICKED")
             break;
         default:
@@ -682,7 +690,12 @@ Page {
             yAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
         }
     }
+    
+    function exportPivotChart(){
+        webEngineView.runJavaScript('exportToExcel()');
+    }
 
+    
     function clearValuesOnAddNewReport(){
         clearAllChartValues();
         switchChart(Constants.barChartTitle);
@@ -828,6 +841,9 @@ Page {
         case Constants.yAxisName:
             model = yAxisListModel;
             break;
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
         }
         if(!model){
             return [];
@@ -849,6 +865,9 @@ Page {
             break
         case Constants.yAxisName:
             model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = valuesListModel;
             break;
         }
         if(!model){
@@ -941,6 +960,16 @@ Page {
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+
+        if(chartTitle == Constants.pivotTitle){
+
+            if(xAxisColumns.length > 0 && yAxisColumns.length > 0  && row3Columns.length > 0){
+                console.log(xAxisColumns, row3Columns, yAxisColumns)
+                drawChart();
+            }
+            return;
+        }
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1164,6 +1193,23 @@ Page {
         return false;
     }
 
+    
+    function row3AxisDropEligible(itemName){
+        var row3Columns  = getAxisColumnNames(row3Columns);
+        const multiChart = true;
+        console.log()
+        // Check if condition more data pills can be added or not';
+        // Hard coded Value to 1;
+        // Please change it to variable
+        if(row3Columns.length === allowedYAxisDataPanes){
+            return false;
+        }
+        if(multiChart){
+            return true;
+        }
+        return false;
+    }
+
     function onDropAreaDropped(element,axis){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
@@ -1197,10 +1243,11 @@ Page {
             yAxisColumns.push(itemName);
 
         }else{
-            if(!yAxisDropEligible(itemName)){
+            if(!row3AxisDropEligible(itemName)){
                 return;
             }
-            valuesListModel.append({itemName: itemName});
+            console.log(itemType, 'Adding it to values?');
+            valuesListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat});
             valuesColumns.push(itemName);
         }
 
@@ -1248,6 +1295,7 @@ Page {
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
 
         if(webEngineView.loading){
             return;
@@ -1433,8 +1481,12 @@ Page {
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
+                console.log('row3Columns',row3Columns);
+                var row3ColumnsArray = Array.from(row3Columns);
+                // console.log([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3Columns);
                 //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
-                ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                ChartsModel.getPivotChartValues([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
+                // ChartsModel.getPivotChartValues(['Category','City'],'Sales','Sum');
                 break;
             }
             if(!dataValues){
@@ -1967,6 +2019,10 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
+                        itemType: droppedItemType
+                        itemIndexId: index
+                        axisType: Constants.row3Name
+                        dateFormatValue: dateFormat
                     }
                 }
 
@@ -2072,6 +2128,9 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
+                        itemType: droppedItemType
+                        itemIndexId: index
+                        axisType: Constants.row3Name
                     }
                 }
 

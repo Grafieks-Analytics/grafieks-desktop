@@ -26,6 +26,7 @@
         <style type="text/css">
             body {
                 font-size: 1.2em;
+                overflow: hidden;
             }
 
             .inner-table.upper-buttons {
@@ -33,7 +34,20 @@
             }
 
             .orb-container {
-                margin-left: 50px;
+                margin-left: 5px;
+                margin-right: 0px;
+            }
+
+            .custom-left-top-menu td {
+                padding: 10px;
+            }
+
+            .orb-toolbar{
+                display: none;
+            }
+
+            * {
+                border-radius: 0 !important;
             }
         </style>
     </head>
@@ -43,6 +57,63 @@
         <div id="export" style="padding: 7px"></div>
 
         <script type="text/javascript">
+            function setTopLeftColumnThemeColor(theme) {
+                var themeCss = "";
+                switch (theme) {
+                    case "flower":
+                        themeCss = `.custom-left-top-menu td{
+                            border-left: 0.5px solid #d3a4e3;
+                            border-top: 0.5px solid #d3a4e3;
+                        }`;
+                        break;
+                    case "black":
+                        themeCss = `.custom-left-top-menu td{
+                            border-left: 0.5px solid #7f7f7f;
+                            border-top: 0.5px solid #7f7f7f;
+                        }`;
+                        break;
+                    case "white":
+                        themeCss = `.custom-left-top-menu td{
+                        border-left: 0.5px solid #e6e6e6;
+                        border-top: 0.5px solid #e6e6e6;
+                    }`;
+                        break;
+                    case "red":
+                        themeCss = `.custom-left-top-menu td{
+                            border-left: 0.5px solid #e395a3;
+                            border-top: 0.5px solid #e395a3;
+                        }`;
+                        break;
+
+                    case "green":
+                        themeCss = `.custom-left-top-menu td{
+                            border-left: 0.5px solid #9fda8b;
+                            border-top: 0.5px solid #9fda8b;
+                        }`;
+                        break;
+
+                    case "orange":
+                        themeCss = `.custom-left-top-menu td{
+                                border-left: 0.5px solid #efb48c;
+                                border-top: 0.5px solid #efb48c;
+                            }`;
+                        break;
+                    default:
+                        themeCss = `.custom-left-top-menu td{
+                            border-left: 0.5px solid #addfee;
+                            border-top: 0.5px solid #addfee;
+                        }`;
+                }
+                var themeColor = document.getElementById("themeId");
+                if (themeColor) {
+                    themeColor.remove();
+                }
+                var themeStyleTag = document.createElement("style");
+                themeStyleTag.id = "themeId";
+                themeStyleTag.innerHTML = themeCss;
+                document.head.append(themeStyleTag);
+            }
+
             function refreshData() {
                 pgridwidget.refreshData(window.demo.data);
             }
@@ -52,60 +123,35 @@
             }
 
             function exportToExcel(anchor) {
-                anchor.href = orb.export(pgridwidget);
-                return true;
+                document.querySelector('.export-xls').click()
+                // anchor.href = orb.export(pgridwidget);
+                // return true;
             }
 
             function changeThemeColour(themeColor) {
-                pgridwidget.changeTheme(themeColor.toLowerCase());
+                config.theme = themeColor.toLowerCase();
+                drawChart(window.data);
             }
 
+            var data = [[["Henderson","Bookcases","Furniture","United States","Henderson",786],["Henderson","Chairs","Furniture","United States","Henderson",1464],["Los Angeles","Labels","Office Supplies","United States","Los Angeles",30],["Fort Lauderdale","Tables","Furniture","United States","Fort Lauderdale",1916],["Fort Lauderdale","Storage","Office Supplies","United States","Fort Lauderdale",44],["Los Angeles","Furnishings","Furniture","United States","Los Angeles",736],["Los Angeles","Art","Office Supplies","United States","Los Angeles",54],["Los Angeles","Phones","Technology","United States","Los Angeles",1962],["Los Angeles","Binders","Office Supplies","United States","Los Angeles",114],["Los Angeles","Appliances","Office Supplies","United States","Los Angeles",230],["Los Angeles","Tables","Furniture","United States","Los Angeles",3412],["Concord","Paper","Office Supplies","United States","Concord",32],["Seattle","Binders","Office Supplies","United States","Seattle",816],["Fort Worth","Appliances","Office Supplies","United States","Fort Worth",138],["Fort Worth","Binders","Office Supplies","United States","Fort Worth",6],["Madison","Storage","Office Supplies","United States","Madison",1332],["West Jordan","Storage","Office Supplies","United States","West Jordan",112],["San Francisco","Art","Office Supplies","United States","San Francisco",48],["San Francisco","Phones","Technology","United States","San Francisco",426],["San Francisco","Binders","Office Supplies","United States","San Francisco",148],["Fremont","Art","Office Supplies","United States","Fremont",38],["Fremont","Appliances","Office Supplies","United States","Fremont",120],["Philadelphia","Chairs","Furniture","United States","Philadelphia",142],["Orem","Tables","Furniture","United States","Orem",2090],["Philadelphia","Bookcases","Furniture","United States","Philadelphia",6166],["Philadelphia","Binders","Office Supplies","United States","Philadelphia",34],["Philadelphia","Furnishings","Furniture","United States","Philadelphia",248],["Philadelphia","Envelopes","Office Supplies","United States","Philadelphia",6],["Philadelphia","Art","Office Supplies","United States","Philadelphia",204],["Houston","Paper","Office Supplies","United States","Houston",58],["Richardson","Phones","Technology","United States","Richardson",2196],["Richardson","Furnishings","Furniture","United States","Richardson",382],["Houston","Envelopes","Office Supplies","United States","Houston",226],["Houston","Bookcases","Furniture","United States","Houston",1064],["Houston","Chairs","Furniture","United States","Houston",1626],["Houston","Phones","Technology","United States","Houston",742],["Naperville","Phones","Technology","United States","Naperville",294],["Los Angeles","Storage","Office Supplies","United States","Los Angeles",156],["Melbourne","Storage","Office Supplies","United States","Melbourne",192],["Eagan","Accessories","Technology","United States","Eagan",92],["Eagan","Binders","Office Supplies","United States","Eagan",34],["Westland","Storage","Office Supplies","United States","Westland",424],["Dover","Phones","Technology","United States","Dover",44],["New Albany","Binders","Office Supplies","United States","New Albany",76],["New Albany","Labels","Office Supplies","United States","New Albany",150],["New Albany","Furnishings","Furniture","United States","New Albany",12],["New Albany","Chairs","Furniture","United States","New Albany",180],["New York City","Fasteners","Office Supplies","United States","New York City",30],["New York City","Phones","Technology","United States","New York City",2060],["Troy","Storage","Office Supplies","United States","Troy",418],["Troy","Paper","Office Supplies","United States","Troy",94],["Troy","Chairs","Furniture","United States","Troy",638],["Troy","Binders","Office Supplies","United States","Troy",96],["Troy","Art","Office Supplies","United States","Troy",4],["Los Angeles","Accessories","Technology","United States","Los Angeles",28],["Los Angeles","Paper","Office Supplies","United States","Los Angeles",306],["Chicago","Chairs","Furniture","United States","Chicago",426],["Gilbert","Art","Office Supplies","United States","Gilbert",2226],["Gilbert","Phones","Technology","United States","Gilbert",336],["Springfield","Paper","Office Supplies","United States","Springfield",152],["New York City","Binders","Office Supplies","United States","New York City",10],["Jackson","Paper","Office Supplies","United States","Jackson",38],["Memphis","Chairs","Furniture","United States","Memphis",1664],["Memphis","Furnishings","Furniture","United States","Memphis",194],["Memphis","Storage","Office Supplies","United States","Memphis",146],["Houston","Binders","Office Supplies","United States","Houston",2],["Houston","Furnishings","Furniture","United States","Houston",58],["Houston","Storage","Office Supplies","United States","Houston",370],["Decatur","Appliances","Office Supplies","United States","Decatur",416],["Decatur","Binders","Office Supplies","United States","Decatur",34],["San Francisco","Storage","Office Supplies","United States","San Francisco",42],["Durham","Envelopes","Office Supplies","United States","Durham",402],["Chicago","Storage","Office Supplies","United States","Chicago",460],["Columbia","Chairs","Furniture","United States","Columbia",604],["Rochester","Labels","Office Supplies","United States","Rochester",12],["Minneapolis","Paper","Office Supplies","United States","Minneapolis",26],["Minneapolis","Furnishings","Furniture","United States","Minneapolis",106],["Minneapolis","Binders","Office Supplies","United States","Minneapolis",66],["Portland","Binders","Office Supplies","United States","Portland",12],["New York City","Furnishings","Furniture","United States","New York City",278],["Saint Paul","Appliances","Office Supplies","United States","Saint Paul",156],["Chicago","Paper","Office Supplies","United States","Chicago",130],["Chicago","Accessories","Technology","United States","Chicago",192],["Chicago","Binders","Office Supplies","United States","Chicago",4],["Rochester","Paper","Office Supplies","United States","Rochester",48],["Aurora","Accessories","Technology","United States","Aurora",478],["Aurora","Furnishings","Furniture","United States","Aurora",204],["Aurora","Binders","Office Supplies","United States","Aurora",74],["Charlotte","Accessories","Technology","United States","Charlotte",148],["Charlotte","Phones","Technology","United States","Charlotte",56],["Charlotte","Art","Office Supplies","United States","Charlotte",6],["Urbandale","Art","Office Supplies","United States","Urbandale",152],["Urbandale","Binders","Office Supplies","United States","Urbandale",54],["Columbus","Fasteners","Office Supplies","United States","Columbus",122],["Columbus","Envelopes","Office Supplies","United States","Columbus",270],["Columbus","Paper","Office Supplies","United States","Columbus",204],["Seattle","Tables","Furniture","United States","Seattle",1576],["Bristol","Binders","Office Supplies","United States","Bristol",316],["Wilmington","Furnishings","Furniture","United States","Wilmington",94],["Wilmington","Binders","Office Supplies","United States","Wilmington",62],["Wilmington","Storage","Office Supplies","United States","Wilmington",454],["Wilmington","Envelopes","Office Supplies","United States","Wilmington",230],["Wilmington","Phones","Technology","United States","Wilmington",136],["Bloomington","Tables","Furniture","United States","Bloomington",1236],["Phoenix","Binders","Office Supplies","United States","Phoenix",4],["Phoenix","Storage","Office Supplies","United States","Phoenix",488],["Los Angeles","Chairs","Furniture","United States","Los Angeles",162],["Columbus","Phones","Technology","United States","Columbus",120],["Roseville","Paper","Office Supplies","United States","Roseville",110],["Roseville","Art","Office Supplies","United States","Roseville",24],["Roseville","Fasteners","Office Supplies","United States","Roseville",8],["Roseville","Binders","Office Supplies","United States","Roseville",152],["Roseville","Supplies","Office Supplies","United States","Roseville",132],["Roseville","Furnishings","Furniture","United States","Roseville",86]],["","","","","",50244],["City","Sub_Category","Category","Country_Region","City","Sales"],[["City","Sub_Category"],["Category","Country_Region","City"],["Sales"]]]
+            
             var config = {
                 dataSource: window.demo.data,
                 canMoveFields: true,
                 dataHeadersLocation: "columns",
-                width: window.innerWidth - 100,
-                height: window.innerHeight - 40,
                 theme: "blue",
                 toolbar: {
-                    visible: false,
-                },
-                grandTotal: {
-                    rowsvisible: true,
-                    columnsvisible: true,
+                    visible: true,
                 },
                 subTotal: {
                     visible: true,
                     collapsed: false,
                     collapsible: false,
                 },
-                rowSettings: {
-                    subTotal: {
-                        visible: true,
-                        collapsed: false,
-                        collapsible: false,
-                    },
-                },
-                columnSettings: {
-                    subTotal: {
-                        visible: true,
-                        collapsed: false,
-                        collapsible: true,
-                    },
-                },
                 fields: [
                     {
                         name: "6",
                         caption: "Amount",
-                        dataSettings: {
-                            aggregateFunc: "sum",
-                            aggregateFuncName: "whatever",
-                            formatFunc: function (value) {
-                                return value
-                                    ? Number(value).toFixed(0) + " $"
-                                    : "";
-                            },
-                        },
                     },
                     {
                         name: "0",
@@ -118,16 +164,6 @@
                     {
                         name: "2",
                         caption: "Manufacturer",
-                        sort: {
-                            order: "asc",
-                        },
-                        rowSettings: {
-                            subTotal: {
-                                visible: true,
-                                collapsed: false,
-                                collapsible: false,
-                            },
-                        },
                     },
                     {
                         name: "3",
@@ -136,37 +172,326 @@
                     {
                         name: "4",
                         caption: "Category",
-                        sort: {
-                            order: "desc",
-                        },
                     },
                     {
                         name: "5",
                         caption: "Quantity",
-                        aggregateFunc: "sum",
                     },
                 ],
-                rows: ["Manufacturer", "Category"],
-                columns: ["Class"],
-                data: ["Quantity", "Amount"],
-                /*preFilters : {
-            'Class': { 'Matches': 'Regular' },
-            'Manufacturer': { 'Matches': /^a|^c/ },
-            'Category'    : { 'Does Not Match': 'D' },
-           // 'Amount'      : { '>':  40 },
-         //   'Quantity'    : [4, 8, 12]
-        }*/
             };
 
             var pgridwidget = new orb.pgridwidget(config);
 
             function drawChart(data, plotConfiguration = {}) {
+                window.data = data;
+                window.plotConfiguration = plotConfiguration || window.plotConfiguration;
+                var dataSource = data[0];
+
+                var fields = data[2].map((d, i) => {
+                    return { name: i.toString(), caption: d };
+                });
+
+                var [rows, columns, data] = data[3];
+
+                console.log(rows, columns, data);
+
                 var elem = document.getElementById("rr");
+                clearChart();
+
+                config = {
+                    ...config,
+                    width: window.innerWidth - 20,
+                    height: window.innerHeight + 40,
+                    dataSource,
+                    fields,
+                    grandTotal: {
+                        rowsvisible: !!plotConfiguration.rowWiseGrandTotal,
+                        columnsvisible:
+                            !!plotConfiguration.columnWiseGrandTotal,
+                    },
+                    subTotal: {
+                        visible: !!plotConfiguration.subTotalVisible,
+                        collapsed: false,
+                    },
+                    rows,
+                    columns,
+                    data,
+                };
+                
                 pgridwidget = new orb.pgridwidget(config);
                 pgridwidget.render(elem);
+
+                var { theme } = config;
+
+                setTopLeftColumnThemeColor(theme);
+                var outerTableBody = document.querySelector("table tbody");
+                var menuFieldDataRow0 = outerTableBody.children[1];
+                menuFieldDataRow0.style.display = "none";
+                var menuFieldDataRow = outerTableBody.children[2];
+                // time to clear it
+                var menuFieldDataFirstCloumn =
+                    menuFieldDataRow.firstElementChild;
+
+                var innerValues =
+                    menuFieldDataFirstCloumn.querySelectorAll("div");
+                var dataValues = [];
+                Array.from(innerValues).forEach((element) => {
+                    if (
+                        !element.innerText ||
+                        element.className.includes("drp-trgt")
+                    ) {
+                        return;
+                    }
+                    dataValues.push(element.innerText.trim());
+                });
+                var widthPercentage = (1 / dataValues.length) * 100;
+                var tableHtml = "";
+                dataValues.forEach((d) => {
+                    tableHtml +=
+                        "<td class='header-st' style='width: " +
+                        widthPercentage +
+                        "%'>" +
+                        d +
+                        "</td>";
+                });
+
+                tableHtml =
+                    "<table class='ord-" +
+                    theme +
+                    " custom-left-top-menu' style='width: 100%;'><tr class='orb'>" +
+                    tableHtml +
+                    "</tr></table>";
+
+                menuFieldDataFirstCloumn.innerHTML = tableHtml;
+
+                document.querySelector(".custom-left-top-menu").style.height =
+                    menuFieldDataFirstCloumn.clientHeight + 0.72 + "px";
+
+                var innerTableContainerColumns =
+                    document.querySelector(".columns-cntr");
+                var tableColumns = innerTableContainerColumns.firstElementChild;
+                var tableParentColumns =
+                    innerTableContainerColumns.parentElement;
+
+                var innerTableContainerData =
+                    document.querySelector(".data-cntr");
+                var tableData = innerTableContainerData.firstElementChild;
+                var tableParentData = innerTableContainerData.parentElement;
+
+                var columnWidth = innerTableContainerColumns.style.width;
+                columnWidth = columnWidth && columnWidth.replace("px", "");
+                
+                var customTopWidth= document.querySelector('.custom-left-top-menu tr').clientWidth;
+                
+                if ((+columnWidth + customTopWidth + 36) < window.innerWidth) {
+                    console.log('Setting widths!')
+                    innerTableContainerColumns.style.width = "100%";
+                    tableColumns.style.width = "100%";
+                    tableParentColumns.style.width = "100%";
+
+                    innerTableContainerData.style.width = "100%";
+                    tableData.style.width = "100%";
+                    tableParentData.style.width = "100%";
+                }
             }
 
-            drawChart();
+            var data = [
+                [
+                    ["Furniture", "Henderson", 2250],
+                    ["Office Supplies", "Los Angeles", 890],
+                    ["Furniture", "Fort Lauderdale", 1916],
+                    ["Office Supplies", "Fort Lauderdale", 44],
+                    ["Furniture", "Los Angeles", 4310],
+                    ["Technology", "Los Angeles", 1990],
+                    ["Office Supplies", "Concord", 32],
+                    ["Office Supplies", "Seattle", 816],
+                    ["Office Supplies", "Fort Worth", 144],
+                    ["Office Supplies", "Madison", 1332],
+                    ["Office Supplies", "West Jordan", 112],
+                    ["Office Supplies", "San Francisco", 238],
+                    ["Technology", "San Francisco", 426],
+                    ["Office Supplies", "Fremont", 158],
+                    ["Furniture", "Philadelphia", 6556],
+                    ["Furniture", "Orem", 2090],
+                    ["Office Supplies", "Philadelphia", 244],
+                    ["Office Supplies", "Houston", 656],
+                    ["Technology", "Richardson", 2196],
+                    ["Furniture", "Richardson", 382],
+                    ["Furniture", "Houston", 2748],
+                    ["Technology", "Houston", 742],
+                    ["Technology", "Naperville", 294],
+                    ["Office Supplies", "Melbourne", 192],
+                    ["Technology", "Eagan", 92],
+                    ["Office Supplies", "Eagan", 34],
+                    ["Office Supplies", "Westland", 424],
+                    ["Technology", "Dover", 44],
+                    ["Office Supplies", "New Albany", 226],
+                    ["Furniture", "New Albany", 192],
+                    ["Office Supplies", "New York City", 40],
+                    ["Technology", "New York City", 2060],
+                    ["Office Supplies", "Troy", 612],
+                    ["Furniture", "Troy", 638],
+                    ["Furniture", "Chicago", 426],
+                    ["Office Supplies", "Gilbert", 2226],
+                    ["Technology", "Gilbert", 336],
+                    ["Office Supplies", "Springfield", 152],
+                    ["Office Supplies", "Jackson", 38],
+                    ["Furniture", "Memphis", 1858],
+                    ["Office Supplies", "Memphis", 146],
+                    ["Office Supplies", "Decatur", 450],
+                    ["Office Supplies", "Durham", 402],
+                    ["Office Supplies", "Chicago", 594],
+                    ["Furniture", "Columbia", 604],
+                    ["Office Supplies", "Rochester", 60],
+                    ["Office Supplies", "Minneapolis", 92],
+                    ["Furniture", "Minneapolis", 106],
+                    ["Office Supplies", "Portland", 12],
+                    ["Furniture", "New York City", 278],
+                    ["Office Supplies", "Saint Paul", 156],
+                    ["Technology", "Chicago", 192],
+                    ["Technology", "Aurora", 478],
+                    ["Furniture", "Aurora", 204],
+                    ["Office Supplies", "Aurora", 74],
+                    ["Technology", "Charlotte", 204],
+                    ["Office Supplies", "Charlotte", 6],
+                    ["Office Supplies", "Urbandale", 206],
+                    ["Office Supplies", "Columbus", 596],
+                    ["Furniture", "Seattle", 1576],
+                    ["Office Supplies", "Bristol", 316],
+                    ["Furniture", "Wilmington", 94],
+                    ["Office Supplies", "Wilmington", 746],
+                    ["Technology", "Wilmington", 136],
+                    ["Furniture", "Bloomington", 1236],
+                    ["Office Supplies", "Phoenix", 492],
+                    ["Technology", "Columbus", 120],
+                    ["Office Supplies", "Roseville", 426],
+                    ["Furniture", "Roseville", 86],
+                ],
+                ["", "", 50244],
+                ["Category", "City", "Sales"],
+                [["Category"], ["City"], ["Sales"]],
+            ];
+
+            var data = [
+                [
+                    ["Furniture", "Bookcases", "Kentucky", 786],
+                    ["Furniture", "Chairs", "Kentucky", 1464],
+                    ["Office Supplies", "Labels", "California", 30],
+                    ["Furniture", "Tables", "Florida", 1916],
+                    ["Office Supplies", "Storage", "Florida", 236],
+                    ["Furniture", "Furnishings", "California", 822],
+                    ["Office Supplies", "Art", "California", 126],
+                    ["Technology", "Phones", "California", 2388],
+                    ["Office Supplies", "Binders", "California", 414],
+                    ["Office Supplies", "Appliances", "California", 230],
+                    ["Furniture", "Tables", "California", 3412],
+                    ["Office Supplies", "Paper", "North Carolina", 32],
+                    ["Office Supplies", "Binders", "Washington", 816],
+                    ["Office Supplies", "Appliances", "Texas", 138],
+                    ["Office Supplies", "Binders", "Texas", 8],
+                    ["Office Supplies", "Storage", "Wisconsin", 1332],
+                    ["Office Supplies", "Storage", "Utah", 112],
+                    ["Office Supplies", "Art", "Nebraska", 38],
+                    ["Office Supplies", "Appliances", "Nebraska", 120],
+                    ["Furniture", "Chairs", "Pennsylvania", 142],
+                    ["Furniture", "Tables", "Utah", 2090],
+                    ["Furniture", "Bookcases", "Pennsylvania", 6166],
+                    ["Office Supplies", "Binders", "Pennsylvania", 34],
+                    ["Furniture", "Furnishings", "Pennsylvania", 248],
+                    ["Office Supplies", "Envelopes", "Pennsylvania", 6],
+                    ["Office Supplies", "Art", "Pennsylvania", 204],
+                    ["Office Supplies", "Paper", "Texas", 58],
+                    ["Technology", "Phones", "Texas", 2938],
+                    ["Furniture", "Furnishings", "Texas", 440],
+                    ["Office Supplies", "Envelopes", "Texas", 226],
+                    ["Furniture", "Bookcases", "Texas", 1064],
+                    ["Furniture", "Chairs", "Texas", 1626],
+                    ["Technology", "Phones", "Illinois", 294],
+                    ["Office Supplies", "Storage", "California", 198],
+                    ["Technology", "Accessories", "Minnesota", 92],
+                    ["Office Supplies", "Binders", "Minnesota", 100],
+                    ["Office Supplies", "Storage", "Michigan", 424],
+                    ["Technology", "Phones", "Delaware", 180],
+                    ["Office Supplies", "Binders", "Indiana", 76],
+                    ["Office Supplies", "Labels", "Indiana", 150],
+                    ["Furniture", "Furnishings", "Indiana", 12],
+                    ["Furniture", "Chairs", "Indiana", 180],
+                    ["Office Supplies", "Fasteners", "New York", 30],
+                    ["Technology", "Phones", "New York", 2060],
+                    ["Office Supplies", "Storage", "New York", 418],
+                    ["Office Supplies", "Paper", "New York", 94],
+                    ["Furniture", "Chairs", "New York", 638],
+                    ["Office Supplies", "Binders", "New York", 106],
+                    ["Office Supplies", "Art", "New York", 4],
+                    ["Technology", "Accessories", "California", 28],
+                    ["Office Supplies", "Paper", "California", 416],
+                    ["Furniture", "Chairs", "Illinois", 426],
+                    ["Office Supplies", "Art", "Arizona", 2226],
+                    ["Technology", "Phones", "Arizona", 336],
+                    ["Office Supplies", "Paper", "Virginia", 152],
+                    ["Office Supplies", "Paper", "Michigan", 38],
+                    ["Furniture", "Chairs", "Tennessee", 1664],
+                    ["Furniture", "Furnishings", "Tennessee", 194],
+                    ["Office Supplies", "Storage", "Tennessee", 146],
+                    ["Office Supplies", "Storage", "Texas", 370],
+                    ["Office Supplies", "Appliances", "Alabama", 416],
+                    ["Office Supplies", "Binders", "Alabama", 34],
+                    ["Office Supplies", "Envelopes", "North Carolina", 402],
+                    ["Office Supplies", "Storage", "Illinois", 460],
+                    ["Furniture", "Chairs", "South Carolina", 604],
+                    ["Office Supplies", "Labels", "Minnesota", 12],
+                    ["Office Supplies", "Paper", "Minnesota", 74],
+                    ["Furniture", "Furnishings", "Minnesota", 106],
+                    ["Office Supplies", "Binders", "Oregon", 12],
+                    ["Furniture", "Furnishings", "New York", 278],
+                    ["Office Supplies", "Appliances", "Minnesota", 156],
+                    ["Office Supplies", "Paper", "Illinois", 130],
+                    ["Technology", "Accessories", "Illinois", 192],
+                    ["Office Supplies", "Binders", "Illinois", 4],
+                    ["Technology", "Accessories", "Colorado", 478],
+                    ["Furniture", "Furnishings", "Colorado", 204],
+                    ["Office Supplies", "Binders", "Colorado", 74],
+                    ["Technology", "Accessories", "North Carolina", 148],
+                    ["Technology", "Phones", "North Carolina", 56],
+                    ["Office Supplies", "Art", "North Carolina", 6],
+                    ["Office Supplies", "Art", "Iowa", 152],
+                    ["Office Supplies", "Binders", "Iowa", 54],
+                    ["Office Supplies", "Fasteners", "Ohio", 122],
+                    ["Office Supplies", "Envelopes", "Ohio", 270],
+                    ["Office Supplies", "Paper", "Ohio", 204],
+                    ["Furniture", "Tables", "Washington", 1576],
+                    ["Office Supplies", "Binders", "Tennessee", 316],
+                    ["Furniture", "Furnishings", "Delaware", 94],
+                    ["Office Supplies", "Binders", "Delaware", 62],
+                    ["Office Supplies", "Storage", "Delaware", 454],
+                    ["Office Supplies", "Envelopes", "Delaware", 230],
+                    ["Furniture", "Tables", "Illinois", 1236],
+                    ["Office Supplies", "Binders", "Arizona", 4],
+                    ["Office Supplies", "Storage", "Arizona", 488],
+                    ["Furniture", "Chairs", "California", 162],
+                    ["Technology", "Phones", "Ohio", 120],
+                    ["Office Supplies", "Fasteners", "California", 8],
+                    ["Office Supplies", "Supplies", "California", 132],
+                ],
+                ["", "", "", 50244],
+                ["Category", "Sub_Category", "State", "Sales"],
+                [["Category", "Sub_Category"], ["State"], ["Sales"]],
+            ];
+
+            // data = null;
+            
+            drawChart(data);
+
+            // window.addEventListener('resize',function(){
+            //     drawChart(data);
+            // })
+
+            function clearChart() {
+                var elem = document.getElementById("rr");
+                if (elem) {
+                    elem.innerHTML = "";
+                }
+            }
         </script>
     </body>
 </html>
