@@ -12,24 +12,45 @@ void ReportsDataModel::searchColumnNames(QString keyword)
 
 QStringList ReportsDataModel::fetchColumnData(QString columnName, QString options)
 {
-    // Fetch data here
-    int key = newChartHeader.key( columnName );
+    // Fetch data from duckdb
+    QString extractPath = Statics::extractPath;
+    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
 
-    //    QStringList columnDataPointer = *newChartData.value(key);
-    QStringList columnDataPointer = reportChartData.value(this->reportId).value(key);
-    emit columnDataChanged(columnDataPointer, options);
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
 
-    return columnDataPointer;
+    QString joiner = "\"";
+    QString query = "SELECT DISTINCT " + joiner + columnName + joiner + " FROM " + joiner + tableName + joiner;
+
+    auto data = con.Query(query.toStdString());
+
+    this->columnData.clear();
+
+    if(data->error.empty()){
+        int rows = data->collection.Count();
+
+        for(int i = 0; i < rows; i++){
+            QString fieldName =  data->GetValue(0, i).ToString().c_str();
+            fieldName = fieldName.trimmed();
+            this->columnData.append(fieldName);
+        }
+    } else {
+        qDebug() << Q_FUNC_INFO << data->error.c_str();
+    }
+
+    emit columnDataChanged(this->columnData, options);
+
+    return this->columnData;
 }
 
-QStringList ReportsDataModel::searchColumnData(QString columnName, QString keyword)
+QStringList ReportsDataModel::searchColumnData(QString keyword)
 {
     QStringList searchResults;
-    int key = newChartHeader.key( columnName );
-
-    QStringList columnDataPointer = *newChartData.value(key);
-    searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
-
+    searchResults = this->columnData.filter(keyword, Qt::CaseInsensitive);
     return searchResults;
 }
 
