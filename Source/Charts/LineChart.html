@@ -53,7 +53,6 @@
         <div id="legend"></div>
 
         <script>
-
             var dataset = [
                 [
                     ["Furniture", 741999.0625],
@@ -71,7 +70,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var lineStroke = 3;
             var {
                 initialCircleRadius,
                 initialBoxDimension,
@@ -79,7 +77,6 @@
                 onHoverBoxDimension,
                 defaultLineCurve,
             } = defaultD3Config;
-
 
             drawChart(dataset);
 
@@ -187,6 +184,8 @@
 
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
                 width = window.innerWidth - margin.left - margin.right - 20;
+
+                var lineStroke = (1-paddingInner)*4;
 
                 height =
                     window.innerHeight -
@@ -447,14 +446,14 @@
                 xScale = d3
                     .scaleBand()
                     .range([0, width])
-                    .padding(paddingInner)
+                    // .padding(paddingInner)
                     .domain(
                         dataValues.map(function (d) {
                             return d[0];
                         })
                     )
-                    .padding(paddingInner)
-                    .paddingInner(paddingInner);
+                    .padding(0.5)
+                    .paddingInner(0.5);
 
                 var minValue = d3.min(dataValues, function (d) {
                     return d[1];
@@ -924,7 +923,7 @@
                                     "</span>"
                                 );
                             });
-                            
+
                         var scrollVal =
                             document.querySelector("#my_dataviz").scrollLeft;
 
