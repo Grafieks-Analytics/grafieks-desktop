@@ -1049,7 +1049,7 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth - 88,
+                    width = window.innerWidth - 200,
                     height =
                         window.innerHeight - margin.top - margin.bottom - 55;
 
@@ -1070,7 +1070,7 @@
                     .select("#my_dataviz")
                     .append("svg")
                     .attr("width", width)
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("height", height + margin.top + margin.bottom + 10)
                     .append("g")
                     .attr(
                         "transform",
@@ -1573,6 +1573,24 @@
                                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                             );
                         }
+                        var shapeClass = ".marker-shape";
+                        d3.selectAll(shapeClass).style("opacity", 0.3);
+                        d3.select(this)
+                            .style("opacity", 1)
+                            .attr("r", onHoverCircleRadius)
+                            .attr("height", onHoverBoxDimension)
+                            .attr("width", onHoverBoxDimension)
+                            .attr("data-value-x", xValue)
+                            .attr("data-value-y", yValue.toFixed(2));
+                    })
+                    .on("mouseout", function () {
+                        d3.select("#tooltip").style("display", "none");
+                        var shapeClass = ".marker-shape";
+                        d3.selectAll(shapeClass)
+                            .style("opacity", 1)
+                            .attr("r", initialCircleRadius)
+                            .attr("height", initialBoxDimension)
+                            .attr("width", initialBoxDimension);
                     });
 
                 /*
@@ -1750,6 +1768,15 @@
                     setXaxisWidth();
                 }
 
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 8);
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
                 function setXaxisWidth() {
                     var allYAxisTicks =
                         document.querySelectorAll(".x-axis .tick");
@@ -1763,7 +1790,8 @@
                     }
 
                     extraHeightWorked = true;
-                    extraHeight = maxWidth < 55 ? maxWidth : 53;
+                    // extraHeight = maxWidth < 55 ? maxWidth : 53;
+                    extraHeight = maxWidth < 55 ? 100 : 53;
 
                     //     d3.select(".x-axis").attr("text-anchor", "right");
 

@@ -7,6 +7,7 @@
         <script src="./Data/d3DefaultConfig.js"></script>
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <title>Heatmap</title>
         <link rel="stylesheet" href="Data/general.css" />
     </head>
@@ -14,13 +15,13 @@
         <!-- Create a div where the graph will take place -->
         <div
             id="my_dataviz"
-            style="text-align: center; padding-top: 50px"
+            style="text-align: center;"
         ></div>
         <div id="tooltip"></div>
 
         <script>
             // Spectral color range
-            const d3colors = [
+            var d3colors = [
                 "#ffffff",
                 "#f7fbff",
                 "#f6faff",
@@ -280,10 +281,43 @@
                 "#08306b",
             ];
 
+            var d3colors = [
+                "#f7fbff",
+                "#9ecae1",
+                "#deebf7",
+                "#c6dbef",
+                "#6baed6",
+                "#4292c6",
+                "#2171b5",
+                "#08519c",
+                "#08306b",
+                "#f7fbff",
+                "#deebf7",
+                "#c6dbef",
+                "#9ecae1",
+                "#6baed6",
+                "#4292c6",
+                "#2171b5",
+                "#08519c",
+                "#08306b",
+                "#f7fbff",
+                "#deebf7",
+                "#c6dbef",
+                "#9ecae1",
+                "#6baed6",
+                "#4292c6",
+                "#2171b5",
+                "#08519c",
+                "#08306b",
+                "#f7fbff",
+                "#deebf7",
+                "#c6dbef",
+            ];
+
             // Labels of row and columns
             var myGroups = ["A", "B", "C"];
             var myVars = [
-                "v1",
+                "v1sjjjjjjjjjas das dsa",
                 "v2",
                 "v3",
                 "v4",
@@ -297,7 +331,7 @@
 
             var data = [
                 [
-                    ["A", "v1", "30"],
+                    ["A", "v1sjjjjjjjjjas das dsa", "30"],
                     ["A", "v3", "22"],
                     ["A", "v4", "14"],
                     ["A", "v5", "59"],
@@ -306,7 +340,7 @@
                     ["A", "v8", "20"],
                     ["A", "v9", "99"],
                     ["A", "v10", "66"],
-                    ["B", "v1", "37"],
+                    ["B", "v1sjjjjjjjjjas das dsa", "37"],
                     ["B", "v2", "50"],
                     ["B", "v3", "83"],
                     ["B", "v4", "74"],
@@ -315,7 +349,7 @@
                     ["B", "v8", "14"],
                     ["B", "v9", "6"],
                     ["B", "v10", "67"],
-                    ["C", "v1", "96"],
+                    ["C", "v1sjjjjjjjjjas das dsa", "96"],
                     ["C", "v2", "13"],
                     ["C", "v3", "98"],
                     ["C", "v4", "10"],
@@ -328,19 +362,103 @@
                 [myGroups, myVars],
             ];
 
-            function drawChart(data, plottingConfiguration = {}) {
-                var [dataValues, [myGroups, myVars]] = data;
+            function transformData(dataValue, dateFormat, dateFormat1) {
+                var dataValue = data[0];
+                var json = {};
+                var isKey1Date = false;
+                var isKey2Date = false;
 
-                let { d3colorPalette, paddingInner, markerShape, curveType } =
-                    plottingConfiguration;
-                if (!d3colorPalette) {
-                    d3colorPalette = defaultD3Config.d3ColorPalette;
+                if (isDateFormat(dataValue[0][0])) {
+                    isKey1Date = true;
                 }
-                d3Colors = d3colorPalette;
+                if (isDateFormat(dataValue[0][1])) {
+                    isKey2Date = true;
+                }
+
+                var uniqueKey1 = [];
+                var uniqueKey2 = [];
+
+                var response = [];
+
+                dataValue.forEach((d) => {
+                    var key1 = d[0];
+                    var key2 = d[1];
+
+                    if (isKey1Date) {
+                        key1 = getDateFormattedData(key1, dateFormat);
+                    }
+
+                    if (!json[key1]) {
+                        json[key1] = {};
+                    }
+
+                    if (isKey2Date) {
+                        key2 = getDateFormattedData(key2, dateFormat);
+                    }
+
+                    if (!json[key1][key2]) {
+                        json[key1][key2] = 0;
+                    }
+
+                    if (!uniqueKey1.includes(key1)) {
+                        uniqueKey1.push(key1);
+                    }
+
+                    if (!uniqueKey2.includes(key2)) {
+                        uniqueKey2.push(key2);
+                    }
+
+                    var value = d[2];
+                    json[key1][key2] += +value;
+                });
+
+                if (isKey1Date) {
+                    uniqueKey1 = sortDatesArray(uniqueKey1, dateFormat);
+                }
+                if (isKey2Date) {
+                    uniqueKey2 = sortDatesArray(uniqueKey2, dateFormat1);
+                }
+
+                console.log(json);
+                uniqueKey1.forEach((key1) => {
+                    console.log(key1);
+                    uniqueKey2.forEach((key2) => {
+                        console.log(json[key1][key2]);
+                        if (json[key1][key2]) {
+                            response.push([key1, key2, json[key1][key2]]);
+                        }
+                    });
+                });
+
+                console.log(response);
+
+                return [response, [uniqueKey1, uniqueKey2]];
+            }
+
+            function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
+                let {
+                    d3colorPalette:
+                        d3Colors = defaultD3Config.d3SequentialDefaultTheme,
+                    paddingInner,
+                    markerShape,
+                    curveType,
+                    dateFormat = defaultD3Config.dateFormat,
+                    dateFormat1 = defaultD3Config.dateFormat,
+                } = plottingConfiguration;
 
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
+
+                console.log({ dateFormat, dateFormat1 });
+                var [dataValues, [myGroups, myVars]] = transformData(
+                    data,
+                    dateFormat,
+                    dateFormat1
+                );
+
+                // var [dataValues, [myGroups, myVars]] = data;
 
                 // set the dimensions and margins of the graph
                 d3.selectAll("#my_dataviz").html("");
@@ -348,7 +466,7 @@
                     (width =
                         window.innerWidth - margin.left - margin.right - 20),
                     (height =
-                        window.innerHeight - margin.top - margin.bottom - 70);
+                        window.innerHeight - margin.top - margin.bottom - 20);
 
                 // var margin = { top: 30, right: 30, bottom: 30, left: 30 },
                 //     width = 1300 - margin.left - margin.right,
@@ -374,7 +492,10 @@
                     .padding(0);
                 svg.append("g")
                     .attr("class", "x-axis")
-                    .attr("transform", "translate(0," + height + ")")
+                    .attr(
+                        "transform",
+                        "translate(0," + height + ")"
+                    )
                     .call(d3.axisBottom(x).tickSizeOuter(0));
 
                 // Build Y scales and axis:
@@ -390,16 +511,13 @@
                 // Build color scale
                 var myColor = d3
                     .scaleLinear()
-                    .range([d3colors[0], d3colors[d3colors.length - 1]])
+                    .range([d3Colors[0], d3Colors[d3Colors.length - 1]])
                     .domain(
                         d3.extent(dataValues, function (d) {
                             return +d[2];
                         })
                     );
 
-                //Read the data
-                // d3.csv("Data/heatmap.csv", function (data) {
-                dataValues = data[0];
                 svg.selectAll()
                     .data(dataValues, function (d) {
                         return d[0] + ":" + d[1];
@@ -443,9 +561,57 @@
                         d3.select("#tooltip").style("display", "none");
                         d3.select(".heatmap" + i).style("fill", myColor(d[2]));
                     });
+
+                a = document.querySelectorAll(".x-axis text");
+                var textWidth = (a[0] && a[0].getBBox().height) || 20;
+                var barWidth = x.bandwidth();
+                console.log(barWidth);
+
+                removeAxisTicks("xAxis", dataValues, null);
+
+                for (var i = 0; i < a.length; i++) {
+                    if (i == 0 && barWidth < textWidth * 0.5) {
+                        a[i].setAttribute("dy", "1em");
+                        continue;
+                    }
+                    if (barWidth < textWidth * 0.5) {
+                        a[i].setAttribute("dy", "0.8em");
+                    }
+                }
+
+                if (barWidth < 50) {
+                    setXaxisWidth();
+                }
+
+                function setXaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".x-axis text");
+                    var maxWidth = 0;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick && tick.getBBox().width;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    extraHeightWorked = true;
+                    maxWidth = maxWidth < 60 ? maxWidth : 60;
+                    extraHeight = maxWidth;
+
+                    d3.select(".x-axis").attr("text-anchor", "right");
+                    d3.selectAll(".x-axis text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("dy", "0.3em")
+                        .attr("text-anchor", "end")
+                        // .attr("x", "-" + (maxWidth + 3))
+                        .attr("x", "-" + 20)
+                        // .attr("font-size", fontSize)
+                        .attr("y", "8");
+                }
             }
 
-            // drawChart(data);
+            drawChart(data);
         </script>
     </body>
 </html>
