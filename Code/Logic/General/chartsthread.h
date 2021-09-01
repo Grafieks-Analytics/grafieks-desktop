@@ -27,8 +27,8 @@ class ChartsThread : public QObject
     Q_OBJECT
     QMap<int, QStringList> newChartHeader;
     QMap<int, QString> headerMap;
-//    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
-//    QMap<int, QMap<int, QStringList>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
+    QString reportWhereConditions;
+    QString dashboardWhereConditions;
 
     int dashboardId;
     int reportId;
@@ -73,6 +73,7 @@ public slots:
     void getFunnelChartValues();
     void getRadarChartValues();
     void getScatterChartValues();
+
     void getHeatMapChartValues();
 
     void getSunburstChartValues(); // getTreeSunburstValues
@@ -96,8 +97,12 @@ public slots:
     void setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied = false); //void
 
     void receiveHeaders(QMap<int, QStringList> newChartHeader);
-    void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
+    void receiveReportData(QString whereConditions, int currentReportId);
     void receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId);
+
+private:
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryFunction(QString mainQuery);
+    QString getTableName();
 
 signals:
 

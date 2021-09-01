@@ -27,6 +27,7 @@ class ReportsDataModel : public QObject
 
     DataType dataType;
     QStringList columnData;
+    QString whereConditions;
 
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
@@ -49,7 +50,7 @@ public slots:
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
-    void reportDataChanged(QMap<int, QMap<int, QStringList>> reportChartData, int currentReportId);
+    void reportDataChanged(QString whereConditions, int currentReportId);
     void columnDataChanged(QStringList columnData, QString options);
 
 

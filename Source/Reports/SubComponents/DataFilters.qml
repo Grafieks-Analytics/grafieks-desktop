@@ -391,6 +391,7 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
+        console.log("APPLU CLICKED HERE")
 
         reDrawChart()
 
