@@ -62,6 +62,7 @@ signals:
     void currentScreenChanged(int currentScreen);
     void hideSplash();
     void colTypeChanged();
+    void showSaveExtractWaitPopup();
 };
 
 #endif // GENERALPARAMSMODEL_H

@@ -69,6 +69,7 @@ void CSVJsonQueryModel::saveExtractData()
     res->Print();
 
     emit generateReports(&con);
+    emit showSaveExtractWaitPopup();
 }
 
 int CSVJsonQueryModel::rowCount(const QModelIndex &parent) const

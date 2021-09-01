@@ -249,7 +249,6 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
             } else{
                 qDebug() << "ELSE CONDITION" << currentColumnRelation;
             }
-
         }
 
         this->filteredChartData.insert(i, tmpColData);
