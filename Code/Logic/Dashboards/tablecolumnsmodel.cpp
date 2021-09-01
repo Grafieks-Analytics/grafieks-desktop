@@ -259,7 +259,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
     // Chop trailing ' AND '
     whereConditions.chop(5);
     qDebug() << "Dashboard where conditions "<< whereConditions;
-    emit dashboardDataChanged(this->filteredChartData, dashboardId);
+    emit dashboardDataChanged(whereConditions, dashboardId);
 }
 
 void TableColumnsModel::receiveReportData(QMap<int, QMap<int, QStringList> > newChartData, int currentReportId)

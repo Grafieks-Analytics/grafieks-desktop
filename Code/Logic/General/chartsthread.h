@@ -25,7 +25,7 @@ using namespace jsoncons;
 class ChartsThread : public QObject
 {
     Q_OBJECT
-    QMap<int, QStringList> newChartHeader;
+    QMap<int, QStringList> newChartHeaderreportWhereConditions;
     QMap<int, QString> headerMap;
     QString reportWhereConditions;
     QString dashboardWhereConditions;
@@ -98,7 +98,7 @@ public slots:
 
     void receiveHeaders(QMap<int, QStringList> newChartHeader);
     void receiveReportData(QString whereConditions, int currentReportId);
-    void receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId);
+    void receiveDashboardData(QString whereConditions, int currentDashboardId);
 
 private:
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryFunction(QString mainQuery);

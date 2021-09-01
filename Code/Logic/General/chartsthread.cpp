@@ -1707,14 +1707,7 @@ void ChartsThread::setChartSource(QString sourceType, QVariant currentSelectedTy
 
 void ChartsThread::receiveHeaders(QMap<int, QStringList> newChartHeader)
 {
-    //    qDebug() << "HEADERS" << newChartHeader;
-    this->newChartHeader = newChartHeader;
 
-    QList<int> keyList = this->newChartHeader.keys();
-
-    foreach(int key, keyList){
-        headerMap.insert(key, this->newChartHeader.value(key).at(0));
-    }
 }
 
 void ChartsThread::receiveReportData(QString whereConditions, int currentReportId)
@@ -1725,10 +1718,10 @@ void ChartsThread::receiveReportData(QString whereConditions, int currentReportI
     this->reportWhereConditions.insert(currentReportId, whereConditions);
 }
 
-void ChartsThread::receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId)
+void ChartsThread::receiveDashboardData(QString whereConditions, int currentDashboardId)
 {
-    Q_UNUSED(newChartData);
     this->dashboardId = currentDashboardId;
+    this->dashboardWhereConditions = whereConditions;
     this->currentChartSource = this->chartSources.at(0); // dashboard
 }
 
