@@ -85,6 +85,7 @@ signals:
     void errorSignal(QString errMsg);
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void generateReports(duckdb::Connection *con);
+    void showSaveExtractWaitPopup();
 
 };
 

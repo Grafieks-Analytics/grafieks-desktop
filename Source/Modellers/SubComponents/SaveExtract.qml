@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQml 2.15
 import Qt.labs.platform 1.1
 
 import com.grafieks.singleton.constants 1.0
@@ -9,17 +10,26 @@ import com.grafieks.singleton.constants 1.0
 // Also, Qt.Labs.Platform creates a lot of conflict with default QtQuick.Controls in DataQueryModeller file
 
 FileDialog{
-    id: saveFilePrompt
+    id: saveFilePromptDialog
     title: "Save Extract As"
     nameFilters: ["Grafieks Extract (*."+ Constants.extractFileExt+" )"];
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName
 
+    Timer {
+        id: timer
+    }
+    function delay(delayTime) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.start();
+    }
+
     onAccepted: {
 
         let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.currentFile)
-        console.log("FILEPATH", fileName)
         GeneralParamsModel.setExtractPath(fileName)
+        delay(1000)
 
         switch(GeneralParamsModel.getDbClassification()){
         case Constants.sqlType:

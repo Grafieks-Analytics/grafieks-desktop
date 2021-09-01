@@ -1702,7 +1702,6 @@ void ChartsThread::setChartSource(QString sourceType, QVariant currentSelectedTy
         this->dashboardFilterApplied = false;
     }
 
-    qDebug() << "Typer CURR INFO" << this->currentChartSource << currentSelectedTypeId << this->dashboardFilterApplied;
 }
 
 void ChartsThread::receiveHeaders(QMap<int, QStringList> newChartHeader)

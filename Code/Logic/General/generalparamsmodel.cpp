@@ -60,6 +60,8 @@ int GeneralParamsModel::currentScreen() const
 void GeneralParamsModel::setExtractPath(QString extractsPath)
 {
     Statics::extractPath = extractsPath;
+    emit showSaveExtractWaitPopup();
+
 }
 
 void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName, QString newColumnType)

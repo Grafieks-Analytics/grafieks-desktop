@@ -185,6 +185,46 @@ Page {
         }
     }
 
+    Connections{
+        target: QueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: ExcelQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: CSVJsonQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: GeneralParamsModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(true)
+        }
+    }
+
 
 
     // Connection  Ends
@@ -499,6 +539,18 @@ Page {
             GithubDS.resetDatasource()
             break;
 
+        }
+    }
+
+
+    function saveExtractPopupFunction(signalType){
+
+        if(signalType === true){
+            saveExtractPopup.visible = true
+            saveExtractPopup.open()
+        } else {
+            saveExtractPopup.visible = false
+            saveExtractPopup.close()
         }
     }
 
@@ -1514,6 +1566,30 @@ Page {
         id: saveFilePrompt
     }
 
+
+    // Throbber or loading
+    // While the extract is being saved to a local file
+    Popup{
+        id: saveExtractPopup
+        width: 600
+        height: 400
+        modal: true
+        visible: false
+        x: parent.width/2 - 300
+        y: parent.height/2 - 300
+        closePolicy: Popup.NoAutoClose
+
+        BusyIndicatorTpl{
+            id: busyIndicator
+            anchors.centerIn: parent
+        }
+
+        Text{
+            text: "Creating extract. Please wait.."
+            anchors.top: busyIndicator.bottom
+            anchors.horizontalCenter: busyIndicator.horizontalCenter
+        }
+    }
 
 
     //Page Design Ends

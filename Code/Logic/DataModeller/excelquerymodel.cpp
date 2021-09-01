@@ -182,6 +182,7 @@ void ExcelQueryModel::saveExtractData()
     res->Print();
 
     emit generateReports(&con);
+    emit showSaveExtractWaitPopup();
 
 }
 

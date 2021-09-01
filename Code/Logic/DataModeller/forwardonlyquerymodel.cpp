@@ -180,6 +180,7 @@ void ForwardOnlyQueryModel::saveExtractData()
     }
 
     emit generateReports(&con);
+    emit showSaveExtractWaitPopup();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const

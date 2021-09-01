@@ -72,6 +72,7 @@ signals:
     void clearTablePreview();
     void errorSignal(QString errMsg);
     void generateReports(duckdb::Connection *con);
+    void showSaveExtractWaitPopup();
 
 
 
