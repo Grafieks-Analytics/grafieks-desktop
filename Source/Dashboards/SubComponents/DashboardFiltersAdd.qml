@@ -22,6 +22,7 @@ Item {
     }
 
     function addNewFilterColumns(){
+        console.log("chilec");
         TableColumnsModel.applyColumnVisibility(DashboardParamsModel.currentDashboard)
     }
 

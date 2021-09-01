@@ -163,7 +163,7 @@ void QueryModel::saveExtractData()
     qDebug() << createTableQuery;
 
     auto createT = con.Query(createTableQuery.toStdString());
-    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
+    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT" << createT->error.c_str();
 
     duckdb::Appender appender(con, tableName.toStdString());
 

@@ -490,7 +490,6 @@ void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
     }
 
     auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-    qDebug() << "CRASHED HERE" << data->success;
     if(data->error.empty()){
         int totalRows = data->collection.Count();
 

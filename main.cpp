@@ -347,6 +347,11 @@ int main(int argc, char *argv[])
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
 
+    QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumns);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumns);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumns);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumns);
+
     // Dashboards
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::filterValuesChanged, &tableColumnsModel, &TableColumnsModel::getFilterValues);

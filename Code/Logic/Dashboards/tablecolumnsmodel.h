@@ -3,9 +3,15 @@
 
 #include <QObject>
 #include <QMap>
+#include <QFileInfo>
+#include <QRegularExpression>
 #include <QDebug>
 
+#include "../General/datatype.h"
+
 #include "../../constants.h"
+#include "../../statics.h"
+#include "../../duckdb.hpp"
 
 class TableColumnsModel : public QObject
 {
@@ -21,6 +27,10 @@ class TableColumnsModel : public QObject
     QMap<int, QVariantMap> allColumnVisibleMap;         // dashboardId - <columnName - columnType>
     QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<QString, QString> columnTypes;
+    QStringList columnDataList;
+
+    DataType dataType;
+    int dashboardId;
 
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
@@ -45,6 +55,7 @@ public slots:
     void getChartHeader(QMap<int, QStringList> chartHeader);
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
     void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
+    void generateColumns(duckdb::Connection *con);
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
