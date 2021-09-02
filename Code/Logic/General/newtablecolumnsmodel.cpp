@@ -350,7 +350,7 @@ QList<QStringList> NewTableColumnsModel::detectHeaderTypes(const QByteArray line
     for(int i = 0; i < this->csvHeaderLength; i++){
 
         fieldName = this->csvHeaderDataFinal.at(i);
-        fieldType = dataType.variableType(QString(lineData.at(i)));
+        fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
 
         outputDataList << fieldName << fieldType;
 

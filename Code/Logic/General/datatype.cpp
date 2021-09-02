@@ -98,15 +98,17 @@ bool DataType::checkNumberType(QString inputVariable)
     return isNumber;
 }
 
-bool DataType::checkDateTimeType(QString inputVariable)
+QVariantList DataType::checkDateTimeType(QString inputVariable)
 {
+    QVariantList output;
     QStringList validDateFormats;
     bool isDate = false;
+    QString matchedFormat;
     // Formats refered from https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/~wDyssNBFPIG2jgx3fux3Q
 
     validDateFormats << "d.M.yy" << "d.M.yy H.mm" << "d.M.yyyy H.mm.ss"
                     << "d.M.yyyy H:mm:ss"
-                    << "dd-MM-yy" << "dd-MM-yy HH:mm" << "dd-MM-yyyy HH:mm:ss"
+                    << "dd-MM-yy" << "dd-MM-yy HH:mm" << "dd-MM-yyyy HH:mm:ss" << "dd-MM-yyyy"
                     << "dd.MM.yy" << "d. MMMM yyyy" << "ddd, d. MMMM yyyy" << "dd.MM.yyyy" << "dd.MM.yy HH:mm" << "d. MMMM yyyy HH:mm:ss z" << "dd.MM.yyyy HH:mm:ss" << "dd.MM.yy HH:mm:ss" << "dd.MM.yyyy HH:mm"
                     << "d-MMM-yyyy" << "dd/MM/yy h:mm A" << "d-MMM-yyyy h:mm:ss A"
                     << "dd MMMM yyyy" << "dddd, d MMMM yyyy" << "dd-MMM-yyyy" << "dd MMMM yyyy HH:mm:ss z" << "dd-MMM-yyyy HH:mm:ss"
@@ -123,16 +125,22 @@ bool DataType::checkDateTimeType(QString inputVariable)
         QDateTime convertedDateTime = QDateTime::fromString(inputVariable, format);
         if(convertedDateTime.isValid()){
             isDate = true;
+            matchedFormat = format;
             break;
         }
     }
-    return isDate;
+
+    output.append(isDate);
+    output.append(matchedFormat);
+    return output;
 }
 
-QString DataType::variableType(QString inputVariable)
+QStringList DataType::variableType(QString inputVariable)
 {
     QString variableType = Constants::categoricalType;
     bool containsDigit = false;
+    QString matchedFormat;
+    QStringList output;
 
     // Check if the string has a digit
     foreach(QChar stringChar, inputVariable){
@@ -146,14 +154,20 @@ QString DataType::variableType(QString inputVariable)
     if(containsDigit){
         if(checkNumberType(inputVariable) == true){
             variableType = Constants::numericalType;
-        } else if(checkDateTimeType(inputVariable) == true){
+            matchedFormat = "";
+        } else if(checkDateTimeType(inputVariable).at(0).toBool() == true){
             variableType = Constants::dateType;
+            matchedFormat = checkDateTimeType(inputVariable).at(1).toString();
         } else {
             variableType = Constants::categoricalType;
+            matchedFormat = "";
         }
     }
 
-    return variableType;
+    output.append(variableType);
+    output.append(matchedFormat);
+
+    return output;
 }
 
 QString DataType::qVariantType(QString inputVariable)

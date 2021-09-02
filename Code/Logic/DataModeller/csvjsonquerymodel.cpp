@@ -65,8 +65,8 @@ void CSVJsonQueryModel::saveExtractData()
     fileAppendData.close();
 
 
-//    auto res = con.Query("SELECT * FROM " + fileName.toStdString());
-//    res->Print();
+    auto res = con.Query("SELECT * FROM " + fileName.toStdString());
+    res->Print();
 
     emit generateReports(&con);
     emit showSaveExtractWaitPopup();
@@ -391,23 +391,38 @@ void CSVJsonQueryModel::appendExtractData(duckdb::Appender *appender)
 
 
         if(!truthList.contains(false)){
-            int i = 0;
             appender->BeginRow();
 
-            foreach(QByteArray a, this->dataFinal){
+            for(int i = 0; i < this->dataFinal.length(); i++){
                 if(!rejectIds.contains(i)){
 
+                    QByteArray a = this->dataFinal.at(i);
                     if(this->columnStringTypes.value(i) == "INTEGER"){
                         appender->Append(a.toInt());
+                    } else if(this->columnStringTypes.value(i) == "BIGINT"){
+                        appender->Append(a.toFloat());
+                    } else if(this->columnStringTypes.value(i) == "HUGEINT"){
+                        appender->Append(a.toDouble());
+                    } else if(this->columnStringTypes.value(i) == "FLOAT"){
+                        appender->Append(a.toFloat());
+                    } else if(this->columnStringTypes.value(i) == "DOUBLE"){
+                        appender->Append(a.toDouble());
                     } else if(this->columnStringTypes.value(i) == "VARCHAR"){
                         appender->Append(a.toStdString().c_str());
                     }  else {
-                        qDebug() << Q_FUNC_INFO << a.toStdString().c_str() << "DATE insert error";
-                        appender->Append(a.toStdString().c_str());
+                        QString dateTime = a.toStdString().c_str();
+                        QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
+
+                        QDate date = dateTimeVal.date();
+                        QTime time = dateTimeVal.time();
+                        int32_t year = date.year();
+                        int32_t month = date.month();
+                        int32_t day = date.day();
+
+                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
                     }
                 }
 
-                i++;
             }
             appender->EndRow();
         }
@@ -415,22 +430,38 @@ void CSVJsonQueryModel::appendExtractData(duckdb::Appender *appender)
         truthList.clear();
     } else {
 
-        int i = 0;
 
         appender->BeginRow();
-        foreach(QByteArray a, this->dataFinal){
-            if(!this->rejectIds.contains(i)){
+        for(int i = 0; i < this->dataFinal.length(); i++){
 
+
+            if(!this->rejectIds.contains(i)){
+                QByteArray a = this->dataFinal.at(i);
                 if(this->columnStringTypes.value(i) == "INTEGER"){
                     appender->Append(a.toInt());
+                } else if(this->columnStringTypes.value(i) == "BIGINT"){
+                    appender->Append(a.toFloat());
+                } else if(this->columnStringTypes.value(i) == "HUGEINT"){
+                    appender->Append(a.toDouble());
+                } else if(this->columnStringTypes.value(i) == "FLOAT"){
+                    appender->Append(a.toFloat());
+                } else if(this->columnStringTypes.value(i) == "DOUBLE"){
+                    appender->Append(a.toDouble());
                 } else if(this->columnStringTypes.value(i) == "VARCHAR"){
                     appender->Append(a.toStdString().c_str());
                 }  else {
-                    qDebug() << Q_FUNC_INFO << a.toStdString().c_str() << "DATE insert error";
-                    appender->Append(a.toStdString().c_str());
+                    QString dateTime = a.toStdString().c_str();
+                    QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
+
+                    QDate date = dateTimeVal.date();
+                    QTime time = dateTimeVal.time();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+
                 }
             }
-            i++;
         }
         appender->EndRow();
 
@@ -469,7 +500,9 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
 
             for(int i = 0; i < this->dataFinal.length(); i++){
                 if(!this->rejectIds.contains(i)){
-                    QString varType = dataType.variableType(this->dataFinal.at(i).toStdString().c_str());
+                    QString varType = dataType.variableType(this->dataFinal.at(i).toStdString().c_str()).at(0);
+                    QString matchedFormat = dataType.variableType(this->dataFinal.at(i).toStdString().c_str()).at(1);
+                    this->matchedDateFormats.insert(i, matchedFormat);
 
                     // Check if the user has changed the column type from the Modeler screen
                     // If so, set the users choice as default, else process the other condition
@@ -482,16 +515,30 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
                     if(varType == Constants::categoricalType){
                         varType = "VARCHAR";
                     } else if(varType == Constants::numericalType){
-                        varType = "INTEGER";
+                        QString dataLen = this->dataFinal.at(i).toStdString().c_str();
+
+                        if(dataLen.toLower().contains("e-") || dataLen.toLower().contains("e+") || dataLen.toLower().contains(".")){
+                            QString s = this->dataFinal.at(i).toStdString().c_str();
+                            varType = "DOUBLE";
+                        } else {
+                            if(dataLen.length() <= 10 && dataLen.toInt() < 2147483647){
+                                varType = "INTEGER";
+                            } else if(dataLen.length() <= 19 && dataLen.toLong() < 9223372036854775808) {
+                                varType = "BIGINT";
+                            } else {
+                                varType = "HUGEINT";
+                            }
+                        }
+
                     } else {
                         varType = "TIMESTAMP";
                     }
-
 
                     this->columnStringTypes.insert(i, varType);
                     createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + ",";
                 }
             }
+
 
             createTableQuery.chop(1);
             createTableQuery += ")";

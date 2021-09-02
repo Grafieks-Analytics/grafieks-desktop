@@ -2,6 +2,7 @@
 #define CREDENTIALS_H
 
 #include <QString>
+#include <QVariantMap>
 
 class Statics
 {

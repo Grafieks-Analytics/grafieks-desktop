@@ -148,7 +148,7 @@ void ForwardOnlyQueryModel::saveExtractData()
                 if(columnType == "INTEGER"){
                     appender.Append(q.value(i).toInt());
                 } else if(columnType == "BIGINT"){
-                    appender.Append(q.value(i).toLongLong());
+                    appender.Append(q.value(i).toDouble());
                 }  else if(columnType == "FLOAT") {
                     appender.Append(q.value(i).toFloat());
                 } else if(columnType == "DOUBLE") {

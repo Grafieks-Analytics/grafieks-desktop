@@ -97,7 +97,6 @@ void ExcelQueryModel::saveExtractData()
 
     QSqlQuery query(this->query, conExcel);
     QSqlRecord record = query.record();
-    qDebug() << record;
 
     this->internalColCount = record.count();
 
@@ -145,7 +144,7 @@ void ExcelQueryModel::saveExtractData()
             if(columnType == "INTEGER"){
                 appender.Append(query.value(i).toInt());
             } else if(columnType == "BIGINT"){
-                appender.Append(query.value(i).toLongLong());
+                appender.Append(query.value(i).toDouble());
             }  else if(columnType == "FLOAT") {
                 appender.Append(query.value(i).toFloat());
             } else if(columnType == "DOUBLE") {
