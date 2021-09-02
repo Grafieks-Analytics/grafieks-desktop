@@ -155,7 +155,7 @@ void ExcelQueryModel::saveExtractData()
                 int32_t year = date.year();
                 int32_t month = date.month();
                 int32_t day = date.day();
-                //                appender.Append(duckdb::Date::FromDate(year, month, day));
+                appender.Append(duckdb::Date::FromDate(year, month, day));
                 //                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
             } else if(columnType == "TIMESTAMP"){
                 QDate date = query.value(i).toDate();
@@ -163,7 +163,7 @@ void ExcelQueryModel::saveExtractData()
                 int32_t year = date.year();
                 int32_t month = date.month();
                 int32_t day = date.day();
-                //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
                 //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
             }else {
                 appender.Append(query.value(i).toString().toUtf8().constData());
@@ -178,8 +178,8 @@ void ExcelQueryModel::saveExtractData()
 
     appender.Close();
 
-    auto res = con.Query("SELECT * FROM "+ fileName.toStdString());
-    res->Print();
+//    auto res = con.Query("SELECT * FROM "+ fileName.toStdString());
+//    res->Print();
 
     emit generateReports(&con);
     emit showSaveExtractWaitPopup();
