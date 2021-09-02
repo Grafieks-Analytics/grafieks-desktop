@@ -64,10 +64,6 @@ void CSVJsonQueryModel::saveExtractData()
     appender.Close();
     fileAppendData.close();
 
-
-    auto res = con.Query("SELECT * FROM " + fileName.toStdString());
-    res->Print();
-
     emit generateReports(&con);
     emit showSaveExtractWaitPopup();
 }
