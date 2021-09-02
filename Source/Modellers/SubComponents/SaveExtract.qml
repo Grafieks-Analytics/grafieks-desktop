@@ -58,11 +58,6 @@ FileDialog{
             break;
         }
 
-        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
     }
     onRejected: {
         console.log("file rejected")

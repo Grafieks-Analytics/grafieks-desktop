@@ -20,6 +20,7 @@
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
+#include "../General/freelimitsmanager.h"
 
 class ExcelQueryModel : public QAbstractTableModel
 {
@@ -86,6 +87,7 @@ signals:
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void generateReports(duckdb::Connection *con);
     void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit);
 
 };
 

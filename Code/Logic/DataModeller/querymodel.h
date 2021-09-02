@@ -13,6 +13,7 @@
 #include "../General/datatype.h"
 #include "./Workers/generaterolenamesqueryworker.h"
 #include "./Workers/setchartdataqueryworker.h"
+#include "../General/freelimitsmanager.h"
 
 #include "../../duckdb.hpp"
 
@@ -55,6 +56,7 @@ signals:
     void errorSignal(QString errMsg);
     void generateReports(duckdb::Connection * con);
     void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit);
 
 private:
     QHash<int, QByteArray> m_roleNames;

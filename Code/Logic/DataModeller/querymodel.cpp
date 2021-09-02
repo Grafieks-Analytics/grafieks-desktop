@@ -167,6 +167,7 @@ void QueryModel::saveExtractData()
 
     duckdb::Appender appender(con, tableName.toStdString());
 
+    int lineCounter = 0;
 
     while(query.next()){
         appender.BeginRow();
@@ -201,8 +202,21 @@ void QueryModel::saveExtractData()
 
         }
         appender.EndRow();
+
+        lineCounter++;
+
+        if(lineCounter % Constants::flushExtractCount == 0){
+            appender.Flush();
+        }
     }
     appender.Close();
+
+    // Delete if the extract size is larger than the permissible limit
+    FreeLimitsManager freeLimitsManager;
+    bool deleted = freeLimitsManager.extractSizeLimit(extractPath);
+
+    if(deleted)
+        emit extractFileExceededLimit(deleted);
 
     emit generateReports(&con);
     emit showSaveExtractWaitPopup();
