@@ -204,8 +204,6 @@ void QueryModel::saveExtractData()
     }
     appender.Close();
 
-    //    auto res = con.Query("SELECT * FROM grafieks_my");
-    //    res->Print();
     emit generateReports(&con);
     emit showSaveExtractWaitPopup();
 
