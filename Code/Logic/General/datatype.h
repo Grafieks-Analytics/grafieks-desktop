@@ -23,7 +23,7 @@ public:
 
     //! Get variable type classification from value
     //! for extract data type
-    QString variableType(QString inputVariable);
+    QStringList variableType(QString inputVariable);
 
     //! Get variable type classification from QSqlRecord field type (QVariant)
     //! for extract data type
@@ -31,7 +31,7 @@ public:
 
 private:
     bool checkNumberType(QString inputVariable);
-    bool checkDateTimeType(QString inputVariable);
+    QVariantList checkDateTimeType(QString inputVariable);
 
 
 signals:

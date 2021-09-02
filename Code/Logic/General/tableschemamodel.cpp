@@ -576,7 +576,7 @@ QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByt
     for(int i = 0; i < this->csvHeaderLength; i++){
 
         fieldName = this->csvHeaderDataFinal.at(i);
-        fieldType = dataType.variableType(QString(lineData.at(i)));
+        fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
 
         // Get filter data type for QML
         QString filterDataType = dataType.dataType(fieldType);

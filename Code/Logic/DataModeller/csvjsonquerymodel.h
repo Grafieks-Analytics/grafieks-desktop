@@ -5,6 +5,7 @@
 #include <QAbstractTableModel>
 #include <QFile>
 #include <QDebug>
+#include <QString>
 
 #include "../../duckdb.hpp"
 #include "../../constants.h"
@@ -34,6 +35,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     int totalFiltersCount;
     QMap<int, QString> columnStringTypes;
     QVector<int> rejectIds;
+    QMap<int, QString> matchedDateFormats;
 
     DataType dataType;
 
