@@ -49,6 +49,7 @@ void CSVJsonQueryModel::saveExtractData()
     fileAppendData.open(QFile::ReadOnly | QFile::Text);
 
     duckdb::Appender appender(con, fileName.toStdString());
+    int lineCounter = 0;
     while(!fileAppendData.atEnd()){
 
         const QByteArray line = fileAppendData.readLine().simplified();
@@ -59,10 +60,22 @@ void CSVJsonQueryModel::saveExtractData()
             this->appendExtractData(&appender);
 
         ignoredFirstLine = false;
+        lineCounter++;
+
+        if(lineCounter%Constants::flushExtractCount == 0){
+            appender.Flush();
+        }
     }
 
     appender.Close();
     fileAppendData.close();
+
+    // Delete if the extract size is larger than the permissible limit
+    FreeLimitsManager freeLimitsManager;
+    bool deleted = freeLimitsManager.extractSizeLimit(extractPath);
+
+    if(deleted)
+        emit extractFileExceededLimit(deleted);
 
     emit generateReports(&con);
     emit showSaveExtractWaitPopup();

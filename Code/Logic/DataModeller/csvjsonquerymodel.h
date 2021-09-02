@@ -16,6 +16,7 @@
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
+#include "../General/freelimitsmanager.h"
 
 class CSVJsonQueryModel : public QAbstractTableModel
 {
@@ -38,6 +39,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QMap<int, QString> matchedDateFormats;
 
     DataType dataType;
+
 
 public:
     explicit CSVJsonQueryModel(QObject *parent = nullptr);
@@ -71,6 +73,7 @@ signals:
     void errorSignal(QString errMsg);
     void clearTablePreview();
     void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit);
 
 };
 

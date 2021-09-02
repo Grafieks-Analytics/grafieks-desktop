@@ -15,6 +15,7 @@
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
 #include "./Workers/setchartdataforwardonlyworker.h"
+#include "../General/freelimitsmanager.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
@@ -73,6 +74,7 @@ signals:
     void errorSignal(QString errMsg);
     void generateReports(duckdb::Connection *con);
     void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit);
 
 
 

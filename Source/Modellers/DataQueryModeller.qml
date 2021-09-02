@@ -191,6 +191,10 @@ Page {
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
         }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
     }
 
     Connections{
@@ -199,6 +203,10 @@ Page {
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
         }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
     }
 
     Connections{
@@ -206,6 +214,11 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
+
+        }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
         }
     }
 
@@ -215,11 +228,17 @@ Page {
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
         }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
     }
 
     Connections{
         target: GeneralParamsModel
 
+        // Prompt the popup to show the timer and throbber
+        // when extract is saved
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(true)
         }
@@ -554,6 +573,18 @@ Page {
         }
     }
 
+    function saveExtractLimit(freeLimit){
+        if(freeLimit){
+            freeLimitExtractWarning.open()
+        } else {
+            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+            let currentDashboard = DashboardParamsModel.currentDashboard
+            ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+        }
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -739,6 +770,47 @@ Page {
             dataQueryModellerStackview.push("./SubComponents/QueryModeller.qml")
         }
 
+    }
+
+    MessageDialog{
+        id: freeLimitExtractWarning
+        title: "Warning"
+        text: "Free users cannot create extracts more than 1 GB"
+        icon: StandardIcon.Critical
+
+    }
+
+
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveExtract{
+        id: saveFilePrompt
+    }
+
+
+    // Throbber or loading
+    // While the extract is being saved to a local file
+    Popup{
+        id: saveExtractPopup
+        width: 600
+        height: 400
+        modal: true
+        visible: false
+        x: parent.width/2 - 300
+        y: parent.height/2 - 300
+        closePolicy: Popup.NoAutoClose
+
+        BusyIndicatorTpl{
+            id: busyIndicator
+            anchors.centerIn: parent
+        }
+
+        Text{
+            text: "Creating extract. Please wait.."
+            anchors.top: busyIndicator.bottom
+            anchors.horizontalCenter: busyIndicator.horizontalCenter
+        }
     }
 
     ButtonGroup{
@@ -1559,37 +1631,6 @@ Page {
     }
 
     // Righthand Panel ends
-
-    // This is a component because it uses Qt.labs.Platform
-    // and this conflicts with the current file
-    SaveExtract{
-        id: saveFilePrompt
-    }
-
-
-    // Throbber or loading
-    // While the extract is being saved to a local file
-    Popup{
-        id: saveExtractPopup
-        width: 600
-        height: 400
-        modal: true
-        visible: false
-        x: parent.width/2 - 300
-        y: parent.height/2 - 300
-        closePolicy: Popup.NoAutoClose
-
-        BusyIndicatorTpl{
-            id: busyIndicator
-            anchors.centerIn: parent
-        }
-
-        Text{
-            text: "Creating extract. Please wait.."
-            anchors.top: busyIndicator.bottom
-            anchors.horizontalCenter: busyIndicator.horizontalCenter
-        }
-    }
 
 
     //Page Design Ends
