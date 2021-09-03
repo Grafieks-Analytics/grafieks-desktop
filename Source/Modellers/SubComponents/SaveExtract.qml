@@ -16,20 +16,10 @@ FileDialog{
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName
 
-    Timer {
-        id: timer
-    }
-    function delay(delayTime) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.start();
-    }
-
     onAccepted: {
 
         let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.currentFile)
         GeneralParamsModel.setExtractPath(fileName)
-        delay(1000)
 
         switch(GeneralParamsModel.getDbClassification()){
         case Constants.sqlType:

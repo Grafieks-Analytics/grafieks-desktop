@@ -75,152 +75,11 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
 void QueryModel::saveExtractData()
 {
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
+    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql);
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &QueryModel::deleteLater, Qt::QueuedConnection);
 
-    QStringList colInfo;
-    QVariant fieldType;
-    DataType dataType;
-
-    QStringList tableHeaders;
-    QMap<int, QStringList> sqlChartHeader;
-    QHash<int, QByteArray> roleNames;
-    QSqlDatabase connection;
-
-    switch(Statics::currentDbIntType){
-
-    case Constants::mysqlIntType:{
-        connection = QSqlDatabase::database(Constants::mysqlStrQueryType);
-        break;
-    }
-
-    case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::sqliteIntType:{
-        connection = QSqlDatabase::database(Constants::sqliteStrQueryType);
-        break;
-    }
-    case Constants::postgresIntType:{
-        connection = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::mssqlIntType:{
-        connection = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::oracleIntType:{
-        connection = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::mongoIntType:{
-        connection = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::accessIntType:{
-        connection = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
-        break;
-    }
-
-    }
-
-    QSqlQuery query(this->tmpSql, connection);
-    QSqlRecord record = query.record();
-
-    QString createTableQuery = "CREATE TABLE " + tableName + "(";
-
-    for(int i = 0; i < record.count(); i++){
-        QVariant fieldType = record.field(i).value();
-        QString type = dataType.qVariantType(fieldType.typeName());
-
-        QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
-
-            if(type == Constants::categoricalType){
-                type = "VARCHAR";
-            } else if(type == Constants::numericalType){
-                type = "INTEGER";
-            } else {
-                type = "TIMESTAMP";
-            }
-        }
-
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
-        this->columnStringTypes.append(type);
-    }
-
-    createTableQuery.chop(1);
-    createTableQuery += ")";
-    qDebug() << createTableQuery;
-
-    auto createT = con.Query(createTableQuery.toStdString());
-    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT" << createT->error.c_str();
-
-    duckdb::Appender appender(con, tableName.toStdString());
-
-    int lineCounter = 0;
-
-    while(query.next()){
-        appender.BeginRow();
-        for(int i = 0; i < record.count(); i++){
-            QString columnType = this->columnStringTypes.at(i);
-
-            if(columnType == "INTEGER"){
-                appender.Append(query.value(i).toInt());
-            } else if(columnType == "BIGINT"){
-                appender.Append(query.value(i).toDouble());
-            }  else if(columnType == "FLOAT") {
-                appender.Append(query.value(i).toFloat());
-            } else if(columnType == "DOUBLE") {
-                appender.Append(query.value(i).toDouble());
-            } else if(columnType == "DATE"){
-                QDate date = query.value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender.Append(duckdb::Date::FromDate(year, month, day));
-            } else if(columnType == "TIMESTAMP"){
-                QDate date = query.value(i).toDate();
-                QTime time = query.value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-            }else {
-                appender.Append(query.value(i).toString().toUtf8().constData());
-            }
-
-
-        }
-        appender.EndRow();
-
-        lineCounter++;
-
-        if(lineCounter % Constants::flushExtractCount == 0){
-            appender.Flush();
-        }
-    }
-    appender.Close();
-
-    // Delete if the extract size is larger than the permissible limit
-    // This goes using QTimer because, syncing files cannot be directly deleted
-    FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(100, &freeLimitsManager, &FreeLimitsManager::extractSizeLimit);
-
-    if(Statics::freeLimitExtractSizeExceeded == true){
-        emit generateReports(&con);
-        emit showSaveExtractWaitPopup();
-        Statics::freeLimitExtractSizeExceeded = false;
-    }
+    saveExtractQueryWorker->start();
 
 }
 
@@ -345,6 +204,22 @@ void QueryModel::slotSetChartData(bool success)
     }
 }
 
+void QueryModel::extractSaved(duckdb::Connection *con)
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    FreeLimitsManager freeLimitsManager;
+    QTimer::singleShot(100, this, &QueryModel::extractSizeLimit);
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        emit generateReports(con);
+        Statics::freeLimitExtractSizeExceeded = false;
+    }
+}
+
 void QueryModel::extractSizeLimit()
 {
     QString extractPath = Statics::extractPath;
@@ -363,9 +238,11 @@ void QueryModel::extractSizeLimit()
         if(!file.remove(extractPath)){
             qDebug() << Q_FUNC_INFO << file.errorString();
         } else {
-            emit extractFileExceededLimit(true);
             Statics::freeLimitExtractSizeExceeded = true;
         }
+        emit extractFileExceededLimit(true);
+    } else {
+        emit extractFileExceededLimit(false);
     }
 }
 
@@ -406,6 +283,7 @@ void QueryModel::executeQuery(QString &query, bool updateChartData)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
+        qDebug() << "MY QUERY" << query;
         if(updateChartData == true){
             this->setChartData();
         }
