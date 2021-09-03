@@ -71,14 +71,15 @@ void CSVJsonQueryModel::saveExtractData()
     fileAppendData.close();
 
     // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
     FreeLimitsManager freeLimitsManager;
-    bool deleted = freeLimitsManager.extractSizeLimit(extractPath);
+    QTimer::singleShot(100, this, &CSVJsonQueryModel::extractSizeLimit);
 
-    if(deleted)
-        emit extractFileExceededLimit(deleted);
-
-    emit generateReports(&con);
-    emit showSaveExtractWaitPopup();
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        emit generateReports(&con);
+        emit showSaveExtractWaitPopup();
+        Statics::freeLimitExtractSizeExceeded = false;
+    }
 }
 
 int CSVJsonQueryModel::rowCount(const QModelIndex &parent) const
@@ -548,7 +549,6 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
                 }
             }
 
-
             createTableQuery.chop(1);
             createTableQuery += ")";
 
@@ -557,5 +557,29 @@ void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::C
         }
 
         lineCount++;
+    }
+}
+
+void CSVJsonQueryModel::extractSizeLimit()
+{
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath)){
+            qDebug() << Q_FUNC_INFO << file.errorString();
+        } else {
+            emit extractFileExceededLimit(true);
+            Statics::freeLimitExtractSizeExceeded = true;
+        }
     }
 }

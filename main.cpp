@@ -80,6 +80,7 @@ QString Statics::driverName;
 QString Statics::extractPath;
 QString Statics::csvJsonPath;
 QVariantMap Statics::changedHeaderTypes;
+bool Statics::freeLimitExtractSizeExceeded;
 
 QString Statics::myHost;
 QString Statics::myDb;
@@ -245,6 +246,12 @@ int main(int argc, char *argv[])
     // Delete existing tmp folder storing dashboard files
     QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
     QDir(tmpFilePath).removeRecursively();
+
+    // Static initializations Ends
+    /***********************************************************************************************************************/
+    Statics::freeLimitExtractSizeExceeded = false;
+    /***********************************************************************************************************************/
+    // Static initializations Ends
 
     /***********************************************************************************************************************/
     // OBJECT INITIALIZATION STARTS

@@ -13,6 +13,10 @@ namespace Constants
     const QString DefaultBackgroundColor = "#FFFFFF";
     const int flushExtractCount = 100000;
 
+    // Free Limits
+    const int freeTierExtractLimit = 1024 * 1024 * 1024;
+//    const int freeTierExtractLimit = 1024 * 1024 * 2;
+
     // EXTRACTS (DuckDb) Data Type integer for switching
     const int varcharIntType = 0;
     const int boolIntType = 1;
