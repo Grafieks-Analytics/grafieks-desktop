@@ -15,6 +15,7 @@
 #include "./Workers/generaterolenamesqueryworker.h"
 #include "./Workers/setchartdataqueryworker.h"
 #include "../General/freelimitsmanager.h"
+#include "./Workers/saveextractqueryworker.h"
 
 #include "../../duckdb.hpp"
 
@@ -47,6 +48,7 @@ public slots:
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void slotSetChartData(bool success);
+    void extractSaved(duckdb::Connection *con);
 
 
 signals:
@@ -78,6 +80,8 @@ private:
     QSqlQueryModel queryModel;
     int maxRowCount;
     QStringList columnStringTypes;
+
+    QThread extractThread;
 
 };
 

@@ -39,6 +39,8 @@ Page {
     property int droppedCount: 0
     property var flatFiles: [Constants.excelType, Constants.csvType, Constants.jsonType]
 
+    property int timeElapsed : 0
+
 
     // Dont delete this
     ListModel{
@@ -564,6 +566,10 @@ Page {
 
     function saveExtractPopupFunction(signalType){
 
+        waitTimer.start()
+        console.log(waitTimer.objectName, "OJ NAME", waitTimer.running)
+//        waitTimer.start()
+
         if(signalType === true){
             saveExtractPopup.visible = true
             saveExtractPopup.open()
@@ -574,6 +580,11 @@ Page {
     }
 
     function saveExtractLimit(freeLimit){
+
+        timeElapsed = 0
+//        waitTimer.running = false
+        waitTimer.stop()
+
         if(freeLimit){
             freeLimitExtractWarning.open()
         } else {
@@ -582,6 +593,7 @@ Page {
 
             let currentDashboard = DashboardParamsModel.currentDashboard
             ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+
         }
     }
 
@@ -595,6 +607,8 @@ Page {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+
+
 
     DataFilters{
         id: datafilters
@@ -781,13 +795,22 @@ Page {
     }
 
 
-
     // This is a component because it uses Qt.labs.Platform
     // and this conflicts with the current file
     SaveExtract{
         id: saveFilePrompt
     }
 
+    Timer {
+        id: waitTimer
+        objectName: "Timer"
+        interval: 1000;
+        repeat: true
+        onTriggered: {
+            timeElapsed++
+            saveExtractPopup.timerText = "Time elapsed: " + timeElapsed + " seconds"
+        }
+    }
 
     // Throbber or loading
     // While the extract is being saved to a local file
@@ -801,15 +824,25 @@ Page {
         y: parent.height/2 - 300
         closePolicy: Popup.NoAutoClose
 
+        property alias timerText: timeText.text
+
         BusyIndicatorTpl{
             id: busyIndicator
             anchors.centerIn: parent
         }
 
         Text{
+            id: waitText
             text: "Creating extract. Please wait.."
             anchors.top: busyIndicator.bottom
             anchors.horizontalCenter: busyIndicator.horizontalCenter
+        }
+
+        Text{
+            id: timeText
+            text: "Time elapsed: 0 seconds"
+            anchors.top: waitText.bottom
+            anchors.horizontalCenter: waitText.horizontalCenter
         }
     }
 

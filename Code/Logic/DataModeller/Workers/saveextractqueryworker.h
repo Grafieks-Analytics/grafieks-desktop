@@ -5,19 +5,30 @@
 #include <QThread>
 #include <QSqlDatabase>
 #include <QSqlRecord>
+#include <QSqlField>
 #include <QSqlQuery>
 #include <QDebug>
 
-class saveExtractQueryWorker : public QThread
+#include "../../General/datatype.h"
+
+#include "../../../constants.h"
+#include "../../../statics.h"
+#include "../../../duckdb.hpp"
+
+class SaveExtractQueryWorker : public QThread
 {
     Q_OBJECT
+    QString tmpSql;
+    QStringList columnStringTypes;
+
 public:
-    explicit saveExtractQueryWorker();
+    explicit SaveExtractQueryWorker( QString tmpSql = "");
 
 protected:
     void run() override;
 
 signals:
+    void saveExtractComplete(duckdb::Connection *con);
 
 };
 

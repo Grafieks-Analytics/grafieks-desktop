@@ -58,6 +58,7 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/generaterolenamesduckworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataduckworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
@@ -175,6 +176,7 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/generaterolenamesduckworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
+    Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.h \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataduckworker.h \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
