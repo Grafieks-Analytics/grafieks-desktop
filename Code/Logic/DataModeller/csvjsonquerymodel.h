@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QString>
+#include <QTimer>
 
 #include "../../duckdb.hpp"
 #include "../../constants.h"
@@ -65,6 +66,7 @@ private:
     void updateModelValues(int previewRowCount = 0);
     void appendExtractData(duckdb::Appender *appender);
     void createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
+    void extractSizeLimit();
 
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);

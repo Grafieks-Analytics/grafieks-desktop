@@ -7,6 +7,7 @@
 #include <QSqlDatabase>
 #include <QObject>
 #include <QMap>
+#include <QTimer>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../constants.h"
@@ -47,6 +48,7 @@ public slots:
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void slotSetChartData(bool success);
 
+
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
@@ -62,6 +64,7 @@ private:
     QHash<int, QByteArray> m_roleNames;
     void generateRoleNames();
     void executeQuery(QString & query, bool updateChartData = true);
+    void extractSizeLimit();
 
     // Data variables for Charts
     QMap<int, QStringList*> sqlChartData;

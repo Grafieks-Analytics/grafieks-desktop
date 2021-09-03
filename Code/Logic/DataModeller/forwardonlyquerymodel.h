@@ -6,6 +6,7 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QSqlDatabase>
+#include <QTimer>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -45,6 +46,7 @@ private:
     QString returnConnectionName();
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
+    void extractSizeLimit();
 
 
     QHash<int, QByteArray> m_roleNames;

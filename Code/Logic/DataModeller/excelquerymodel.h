@@ -7,6 +7,7 @@
 #include <QSqlField>
 #include <QSqlRecord>
 #include <QSqlQueryModel>
+#include <QTimer>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -70,12 +71,12 @@ public slots:
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
 
-
 private:
     void generateRoleNames();
     void setQueryResult();
     QMap<QString, QString> returnColumnList(QString tableName);
     void setChartHeader(int index, QStringList colInfo);
+    void extractSizeLimit();
 
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);

@@ -6,13 +6,15 @@
 #include <QFileInfo>
 #include <QDebug>
 
+#include "../../statics.h"
+
 class FreeLimitsManager : public QObject
 {
     Q_OBJECT
 public:
     explicit FreeLimitsManager(QObject *parent = nullptr);
 
-    bool extractSizeLimit(QString extractPath);
+    void extractSizeLimit();
 
 signals:
 

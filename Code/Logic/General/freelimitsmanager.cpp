@@ -5,11 +5,11 @@ FreeLimitsManager::FreeLimitsManager(QObject *parent) : QObject(parent)
 
 }
 
-bool FreeLimitsManager::extractSizeLimit(QString extractPath)
+void FreeLimitsManager::extractSizeLimit()
 {
+    QString extractPath = Statics::extractPath;
     int size = 0;
     int maxFreeExtractSize = 1024; // This many bytes in a GB
-    bool deleted = false;
 
     QFileInfo fileInfo(extractPath);
     size = fileInfo.size();
@@ -21,8 +21,7 @@ bool FreeLimitsManager::extractSizeLimit(QString extractPath)
 
     if(size > maxFreeExtractSize){
         file.remove(extractPath);
-        deleted = true;
+        Statics::freeLimitExtractSizeExceeded = true;
     }
 
-    return deleted;
 }
