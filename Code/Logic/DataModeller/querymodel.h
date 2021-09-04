@@ -48,7 +48,7 @@ public slots:
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void slotSetChartData(bool success);
-    void extractSaved(duckdb::Connection *con);
+    void extractSaved();
 
 
 signals:
@@ -58,7 +58,7 @@ signals:
     void sqlHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports(duckdb::Connection * con);
+    void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
 

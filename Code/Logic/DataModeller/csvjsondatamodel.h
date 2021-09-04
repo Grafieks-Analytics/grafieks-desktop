@@ -8,7 +8,6 @@
 
 #include "../../statics.h"
 #include "../../constants.h"
-#include "../Connectors/duckcon.h"
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"

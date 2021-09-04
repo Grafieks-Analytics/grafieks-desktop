@@ -65,14 +65,6 @@ Rectangle{
     }
 
     Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
-        }
-    }
-
-    Connections{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){

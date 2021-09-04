@@ -5,11 +5,6 @@ NewTableColumnsModel::NewTableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
-NewTableColumnsModel::NewTableColumnsModel(DuckCon *duckCon, QObject *parent)
-{
-    Q_UNUSED(parent);
-    this->duckCon = duckCon;
-}
 
 /*!
  * \brief Accepts a tableName and displays all the columns

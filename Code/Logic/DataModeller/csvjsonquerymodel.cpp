@@ -82,7 +82,7 @@ void CSVJsonQueryModel::getAllFilters(FilterCategoricalListModel *categoricalFil
     this->updateModelValues(0);
 }
 
-void CSVJsonQueryModel::extractSaved(duckdb::Connection *con)
+void CSVJsonQueryModel::extractSaved()
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
@@ -93,8 +93,9 @@ void CSVJsonQueryModel::extractSaved(duckdb::Connection *con)
     emit showSaveExtractWaitPopup();
 
     if(Statics::freeLimitExtractSizeExceeded == true){
-        emit generateReports(con);
         Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 
@@ -234,8 +235,6 @@ void CSVJsonQueryModel::extractSizeLimit()
 
     size = fileInfo.size();
     fileInfo.close();
-
-    qDebug() << size << maxFreeExtractSize << "SIZES";
 
     QFile file(extractPath);
     if(size > maxFreeExtractSize){

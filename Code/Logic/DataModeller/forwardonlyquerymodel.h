@@ -41,7 +41,7 @@ public:
     Q_INVOKABLE void removeTmpChartData();
 
 public slots:
-    void extractSaved(duckdb::Connection *con);
+    void extractSaved();
 
 private:
     void generateRoleNames();
@@ -78,7 +78,7 @@ signals:
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports(duckdb::Connection *con);
+    void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
 

@@ -268,11 +268,19 @@ void TableColumnsModel::receiveReportData(QMap<int, QMap<int, QStringList> > new
 
 }
 
-void TableColumnsModel::generateColumns(duckdb::Connection *con)
+void TableColumnsModel::generateColumns()
 {
     // Fetch data from duckdb
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
+
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con1(db);
 
     // Clear existing chart headers data
     this->numericalList.clear();
@@ -280,11 +288,8 @@ void TableColumnsModel::generateColumns(duckdb::Connection *con)
     this->dateList.clear();
     this->newChartHeader.clear();
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+
+    auto data = con1.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
 
     if(data->error.empty()){
         int rows = data->collection.Count();

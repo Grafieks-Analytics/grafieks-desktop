@@ -45,7 +45,7 @@ protected:
     void run() override;
 
 signals:
-    void saveExtractComplete(duckdb::Connection *con);
+    void saveExtractComplete();
 
 };
 
