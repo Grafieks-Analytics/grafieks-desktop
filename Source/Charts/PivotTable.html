@@ -44,7 +44,7 @@
             }
 
             .orb-toolbar {
-                display: none;
+                /* display: none; */
             }
 
             * {
@@ -1067,7 +1067,7 @@
 
             var config = {
                 dataSource: window.demo.data,
-                canMoveFields: true,
+                canMoveFields: false,
                 dataHeadersLocation: "columns",
                 theme: "blue",
                 toolbar: {
@@ -1118,6 +1118,7 @@
                     plotConfiguration || window.plotConfiguration;
                 var dataSource = data[0];
 
+
                 var fields = data[2].map((d, i) => {
                     return { name: i.toString(), caption: d };
                 });
@@ -1136,13 +1137,13 @@
                     dataSource,
                     fields,
                     grandTotal: {
-                        rowsvisible: !!plotConfiguration.rowWiseGrandTotal,
-                        columnsvisible:
-                            !!plotConfiguration.columnWiseGrandTotal,
+                        rowsvisible: !plotConfiguration.rowWiseGrandTotal,
+                        columnsvisible: !plotConfiguration.columnWiseGrandTotal,
                     },
                     subTotal: {
-                        visible: !!plotConfiguration.subTotalVisible,
+                        visible: !plotConfiguration.subTotalVisible,
                         collapsed: false,
+                        collapsible: false,
                     },
                     rows,
                     columns,
@@ -1154,10 +1155,13 @@
 
                 var { theme } = config;
 
+
                 setTopLeftColumnThemeColor(theme);
+
                 var outerTableBody = document.querySelector("table tbody");
                 var menuFieldDataRow0 = outerTableBody.children[1];
                 menuFieldDataRow0.style.display = "none";
+
                 var menuFieldDataRow = outerTableBody.children[2];
                 // time to clear it
                 var menuFieldDataFirstCloumn =
@@ -1189,7 +1193,8 @@
 
                 dataValues.forEach((d, i) => {
                     tableHtml +=
-                        "<td class='header-st custom-tds' data-text='"+d+"' style='width: " +
+                        "<td class='header-st custom-tds' data-text='" + d +
+                        "' style='width: " +
                         widths[i] +
                         "px'>" +
                         d +
@@ -1205,10 +1210,10 @@
 
                 menuFieldDataFirstCloumn.innerHTML = tableHtml;
 
-                var tds = document.querySelectorAll('.custom-tds');
-                Array.from(tds).forEach(td=>{
+                var tds = document.querySelectorAll(".custom-tds");
+                Array.from(tds).forEach((td) => {
                     clipLetters(td);
-                })
+                });
                 
                 document.querySelector(".custom-left-top-menu").style.height =
                     menuFieldDataFirstCloumn.clientHeight + 0.72 + "px";
@@ -1241,6 +1246,29 @@
                     tableData.style.width = "100%";
                     tableParentData.style.width = "100%";
                 }
+
+                
+                /*  removing this for future reference
+                    This is an event listener to adust height of custom left top menu
+                
+                var toggleButtons = document.querySelectorAll('.orb-tgl-btn-down')
+                Array.from(toggleButtons).forEach(toggleButton=>{
+                    toggleButton.addEventListener('click',function(){
+                        var outerTableBody = document.querySelector("table tbody");
+                        var menuFieldDataRow = outerTableBody.children[2];
+                        var menuFieldDataFirstCloumn = menuFieldDataRow.children[1].firstElementChild;
+                        console.log(menuFieldDataFirstCloumn);
+                        setTimeout(function(){
+                            console.log({ height: menuFieldDataFirstCloumn.clientHeight });
+                            document.querySelector(".custom-left-top-menu").style.height =
+                            menuFieldDataFirstCloumn.clientHeight + 0.72 + "px";
+                        },100)
+
+                    })
+                })
+
+                */
+
             }
 
             var data = [
@@ -2511,30 +2539,58 @@
                     "Row_ID",
                 ],
                 [
-                    ["City", "Sub_Category", "Segment", "Product_Name"],
-                    ["Category"],
+                    ["City", "Segment"],
+                    ["Category","Sub_Category"],
                     ["Row_ID"],
                 ],
             ];
 
-            function clipLetters(td){
+            // data = [
+            //     [
+            //         ["City", "Nepal", "NepalState1", "Nepal", "a", 0],
+            //         ["City", "Nepal", "NepalState2", "Nepal", "b", 0],
+            //         ["Citya", "India", "Delhi", "India", "c", 0],
+            //         ["Cityb", "India", "Delhi", "India", "d", 0],
+            //         ["Cityb", "India", "Delhi", "India", "e", 0],
+            //         ["Guwahati", "India", "ssam", "India", "f", 0],
+            //         ["Guwahati", "India", "ssam", "India", "g", 0],
+            //         ["Capital", "India", "UP", "India", "h", 0],
+            //         ["Capital", "India", "UP", "India", "r", 0],
+            //         ["C1", "Bhutan", "Thimpu", "Bhutan", "g", 0],
+            //         ["C2", "Bhutan", "B1", "Bhutan", "j", 0],
+            //         ["Allahbad", "India", "UP", "India", "r", 0],
+            //     ],
+            //     ["", "", "", "", "", 0],
+            //     ["city", "country", "state", "country", "ward", "population"],
+            //     [
+            //         ["city", "country", "state"],
+            //         ["country", "ward"],
+            //         ["population"],
+            //     ],
+            // ];
+
+            function clipLetters(td) {
                 var width = td.style.width;
-                width = +width.substr(0,width.length-2);
+                width = +width.substr(0, width.length - 2);
                 var clientWidth = td.clientWidth;
-                console.log({ width, clientWidth })
-                if(clientWidth > width){
-                    console.log('Clipping..');
+                console.log({ width, clientWidth });
+                if (clientWidth > width) {
+                    console.log("Clipping..");
                     // single character width = total width / length of character
-                    var singleCharacterLength = clientWidth/td.innerText.length;
-                    var maxAllowedCharacters = parseInt(width/singleCharacterLength);
-                    
-                    var subString = td.getAttribute('data-text').substr(0, maxAllowedCharacters-4); 
+                    var singleCharacterLength = parseInt(clientWidth / td.innerText.length);
+                    var maxAllowedCharacters = parseInt(
+                        width / singleCharacterLength
+                    );
+
+                    var subString = td
+                        .getAttribute("data-text")
+                        .substr(0, maxAllowedCharacters - 4);
                     console.log(singleCharacterLength);
-                    subString += "..."
-                    td.innerText = subString; 
+                    subString += "...";
+                    td.innerText = subString;
                 }
             }
-            
+
             drawChart(data);
 
             // window.addEventListener('resize',function(){
