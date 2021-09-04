@@ -133,7 +133,19 @@ void SaveExtractQueryWorker::run()
             if(type == Constants::categoricalType){
                 type = "VARCHAR";
             } else if(type == Constants::numericalType){
-                type = "INTEGER";
+                QString dataLen = record.field(i).value().toString();
+
+                if(dataLen.toLower().contains("e-") || dataLen.toLower().contains("e+") || dataLen.toLower().contains(".")){
+                    type = "DOUBLE";
+                } else {
+                    if(dataLen.length() <= 10 && dataLen.toInt() < 2147483647){
+                        type = "INTEGER";
+                    } else if(dataLen.length() <= 19 && dataLen.toLong() < 9223372036854775808) {
+                        type = "BIGINT";
+                    } else {
+                        type = "HUGEINT";
+                    }
+                }
             } else {
                 type = "TIMESTAMP";
             }
@@ -180,8 +192,10 @@ void SaveExtractQueryWorker::run()
                 int32_t month = date.month();
                 int32_t day = date.day();
                 appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-            }else {
+            } else if(columnType == "VARCHAR") {
                 appender.Append(query.value(i).toString().toUtf8().constData());
+            } else {
+                qDebug() << "UNDETECTED" << query.value(i).toString().toUtf8().constData();
             }
 
 
@@ -196,8 +210,8 @@ void SaveExtractQueryWorker::run()
     }
     appender.Close();
 
-//    auto query1 = con.Query("SELECT * FROM "+ tableName.toStdString());
-//    query1->Print();
+    //    auto query1 = con.Query("SELECT * FROM "+ tableName.toStdString());
+    //    query1->Print();
 
     emit saveExtractComplete();
 }
