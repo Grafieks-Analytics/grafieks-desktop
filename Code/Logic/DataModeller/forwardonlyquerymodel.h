@@ -17,6 +17,7 @@
 #include "./Workers/generaterolenamesforwardonlyworker.h"
 #include "./Workers/setchartdataforwardonlyworker.h"
 #include "../General/freelimitsmanager.h"
+#include "./Workers/saveextractforwardonlyworker.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
@@ -38,6 +39,9 @@ public:
 
     Q_INVOKABLE void getQueryStats();
     Q_INVOKABLE void removeTmpChartData();
+
+public slots:
+    void extractSaved(duckdb::Connection *con);
 
 private:
     void generateRoleNames();

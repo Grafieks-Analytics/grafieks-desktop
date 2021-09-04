@@ -17,11 +17,21 @@
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
+#include "./filtercsvjson.h"
 #include "../General/freelimitsmanager.h"
+
+
+#include "./Workers/saveextractcsvjsonworker.h"
 
 class CSVJsonQueryModel : public QAbstractTableModel
 {
     Q_OBJECT
+    FilterCategoricalListModel *categoricalFilter;
+    FilterNumericalListModel *numericalFilter;
+    FilterDateListModel *dateFilter;
+    FilterCsvJson filterCsvJson;
+    DataType dataType;
+
     QStringList headerDataPreview;
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
@@ -31,16 +41,11 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QMap<int, QString> columnNamesMap;
     int previewRowCount;
     int colCount;
-    FilterCategoricalListModel *categoricalFilter;
-    FilterNumericalListModel *numericalFilter;
-    FilterDateListModel *dateFilter;
+
     int totalFiltersCount;
     QMap<int, QString> columnStringTypes;
     QVector<int> rejectIds;
     QMap<int, QString> matchedDateFormats;
-
-    DataType dataType;
-
 
 public:
     explicit CSVJsonQueryModel(QObject *parent = nullptr);
@@ -60,12 +65,11 @@ public:
 public slots:
     void receiveCsvJsonFilterQuery(QString query);
     void getAllFilters(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr);
+    void extractSaved(duckdb::Connection *con);
 
 private:
-    bool filteredValue(QVariant currentValue, QString valueList, const QString slug);
+
     void updateModelValues(int previewRowCount = 0);
-    void appendExtractData(duckdb::Appender *appender);
-    void createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
     void extractSizeLimit();
 
 signals:

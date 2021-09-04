@@ -102,6 +102,9 @@ public:
     // CSV
     static QString separator;
 
+    // Excel
+    static QString excelDb;
+
     // Dropbox
 };
 

@@ -33,7 +33,7 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
             // If correct credentials inserted once
 
             Statics::teradataHost = host;
-            Statics::teradataDb = db;
+            Statics::teradataDb = dbString;
             Statics::teradataPort = port;
             Statics::teradataUsername = username;
             Statics::teradataPassword = password;

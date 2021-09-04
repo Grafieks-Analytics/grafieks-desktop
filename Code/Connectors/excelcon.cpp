@@ -48,6 +48,8 @@ QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &fi
 
         } else{
 
+            Statics::excelDb = dbString;
+
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
         }

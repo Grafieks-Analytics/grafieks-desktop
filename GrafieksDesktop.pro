@@ -59,6 +59,8 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractexcelworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataduckworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
@@ -76,6 +78,7 @@ SOURCES += \
     Code/Logic/DataModeller/excelquerymodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
+    Code/Logic/DataModeller/filtercsvjson.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
     Code/Logic/DataModeller/filterdatelistmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
@@ -177,6 +180,8 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
     Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.h \
+    Code/Logic/DataModeller/Workers/saveextractexcelworker.h \
+    Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataduckworker.h \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
@@ -194,6 +199,7 @@ HEADERS += \
     Code/Logic/DataModeller/excelquerymodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
+    Code/Logic/DataModeller/filtercsvjson.h \
     Code/Logic/DataModeller/filterdatelist.h \
     Code/Logic/DataModeller/filterdatelistmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
