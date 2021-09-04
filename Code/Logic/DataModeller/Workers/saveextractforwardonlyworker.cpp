@@ -136,5 +136,5 @@ void SaveExtractForwardOnlyWorker::run()
         appender.Close();
     }
 
-    emit saveExtractComplete(&con);
+    emit saveExtractComplete();
 }

@@ -32,8 +32,6 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
-#include "Code/Logic/DataModeller/duckdatamodel.h"
-#include "Code/Logic/DataModeller/duckquerymodel.h"
 #include "Code/Logic/DataModeller/forwardonlydatamodel.h"
 #include "Code/Logic/DataModeller/forwardonlyquerymodel.h"
 #include "Code/Logic/DataModeller/newtablelistmodel.h"
@@ -42,7 +40,6 @@
 #include "Code/Logic/DataModeller/csvjsondatamodel.h"
 #include "Code/Logic/DataModeller/csvjsonquerymodel.h"
 
-#include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -153,10 +150,6 @@ QString Statics::teradataPassword;
 QString Statics::separator;
 
 QString Statics::excelDb;
-
-// DuckDB
-//duckdb::DuckDB duckDb(nullptr);
-//duckdb::Connection duckConnection(duckDb);
 
 /*! \mainpage Code Documentation
  *
@@ -321,12 +314,6 @@ int main(int argc, char *argv[])
     SchedulerModel schedulerModel;
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
-    // Duck CRUD Model
-//    DuckCon *duckCon = new DuckCon();
-
-//    NewTableColumnsModel newTableColumnsModel(duckCon);
-//    DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
-//    DuckQueryModel duckQueryModel(duckCon);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -336,24 +323,18 @@ int main(int argc, char *argv[])
     // For multi threaded signal and slots, they are written inside individual classes
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-//    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
-//    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvJsonQueryModel, &CSVJsonQueryModel::receiveCsvJsonFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
     // Data and headers for reports
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
-//    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
-//    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
 
     // Data and Headers for Dashboards
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
-//    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
-//    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
 
@@ -383,7 +364,6 @@ int main(int argc, char *argv[])
     // Charts
     //filterValuesChanged Headers for charts
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
-//    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
 
     // Data for charts
@@ -453,10 +433,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
-//    engine.rootContext()->setContextProperty("DuckCon", duckCon);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
-//    engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
-//    engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
     engine.rootContext()->setContextProperty("ChartsThread", &chartsThread);
     engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);

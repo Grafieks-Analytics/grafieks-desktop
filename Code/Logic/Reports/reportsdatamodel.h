@@ -46,7 +46,7 @@ public slots:
     void updateFilterData(QMap<int, QVariantMap> masterReportFilters, int reportId);
     void currentScreenChanged(int currentScreen);
     void getReportId(int reportId);
-    void generateColumns(duckdb::Connection *con);
+    void generateColumns();
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);

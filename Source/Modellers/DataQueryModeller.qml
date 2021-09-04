@@ -501,10 +501,7 @@ Page {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.removeTmpChartData()
             NewTableListModel.clearData()
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckQueryModel.removeTmpChartData()
-            DuckDataModel.clearData()
-        } else{
+        } else {
             ForwardOnlyQueryModel.removeTmpChartData()
             ForwardOnlyDataModel.clearData()
         }
@@ -567,8 +564,6 @@ Page {
     function saveExtractPopupFunction(signalType){
 
         waitTimer.start()
-        console.log(waitTimer.objectName, "OJ NAME", waitTimer.running)
-//        waitTimer.start()
 
         if(signalType === true){
             saveExtractPopup.visible = true
@@ -582,7 +577,6 @@ Page {
     function saveExtractLimit(freeLimit){
 
         timeElapsed = 0
-//        waitTimer.running = false
         waitTimer.stop()
 
         if(freeLimit){

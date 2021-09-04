@@ -104,6 +104,6 @@ void SaveExtractExcelWorker::run()
 
     appender.Close();
 
-    emit saveExtractComplete(&con);
+    emit saveExtractComplete();
 }
 

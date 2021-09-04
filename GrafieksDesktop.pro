@@ -43,7 +43,6 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
-    Code/Logic/Connectors/duckcon.cpp \
     Code/Logic/Connectors/duckthread.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
@@ -62,7 +61,6 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/saveextractexcelworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setchartdataduckworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.cpp \
@@ -72,8 +70,6 @@ SOURCES += \
     Code/Logic/DataModeller/csvjsonquerymodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
-    Code/Logic/DataModeller/duckdatamodel.cpp \
-    Code/Logic/DataModeller/duckquerymodel.cpp \
     Code/Logic/DataModeller/exceldatamodel.cpp \
     Code/Logic/DataModeller/excelquerymodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
@@ -164,7 +160,6 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
-    Code/Logic/Connectors/duckcon.h \
     Code/Logic/Connectors/duckthread.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
@@ -183,7 +178,6 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/saveextractexcelworker.h \
     Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
-    Code/Logic/DataModeller/Workers/setchartdataduckworker.h \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.h \
@@ -193,8 +187,6 @@ HEADERS += \
     Code/Logic/DataModeller/csvjsonquerymodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
-    Code/Logic/DataModeller/duckdatamodel.h \
-    Code/Logic/DataModeller/duckquerymodel.h \
     Code/Logic/DataModeller/exceldatamodel.h \
     Code/Logic/DataModeller/excelquerymodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \

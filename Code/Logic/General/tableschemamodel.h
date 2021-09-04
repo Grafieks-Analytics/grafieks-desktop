@@ -18,7 +18,6 @@
 #include "../../constants.h"
 
 #include "datatype.h"
-#include "../Connectors/duckcon.h"
 #include "../../duckdb.hpp"
 
 /*!
@@ -46,7 +45,7 @@ signals:
     void tableSchemaCleared();
 
 public slots:
-    void generateSchemaForExtract(duckdb::Connection *con);
+    void generateSchemaForExtract();
 
 private:
 

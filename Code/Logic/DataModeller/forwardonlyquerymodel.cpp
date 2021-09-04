@@ -147,7 +147,7 @@ void ForwardOnlyQueryModel::removeTmpChartData()
     emit forwardOnlyHasData(false);
 }
 
-void ForwardOnlyQueryModel::extractSaved(duckdb::Connection *con)
+void ForwardOnlyQueryModel::extractSaved()
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
@@ -158,8 +158,9 @@ void ForwardOnlyQueryModel::extractSaved(duckdb::Connection *con)
     emit showSaveExtractWaitPopup();
 
     if(Statics::freeLimitExtractSizeExceeded == true){
-        emit generateReports(con);
         Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 

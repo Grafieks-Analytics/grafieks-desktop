@@ -11,12 +11,10 @@
 
 #include "../../statics.h"
 #include "../../constants.h"
-#include "../Connectors/duckcon.h"
 
 #include "../General/datatype.h"
 #include "../../duckdb.hpp"
 #include "../General/querysplitter.h"
-#include "./Workers/setchartdataduckworker.h"
 
 #include "./Workers/saveextractexcelworker.h"
 #include "./filtercategoricallistmodel.h"
@@ -71,7 +69,7 @@ public slots:
     void receiveExcelFilterQuery(QString query);
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
-    void extractSaved(duckdb::Connection *con);
+    void extractSaved();
 
 private:
     void generateRoleNames();
@@ -88,7 +86,7 @@ signals:
     void clearTablePreview();
     void errorSignal(QString errMsg);
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
-    void generateReports(duckdb::Connection *con);
+    void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
 

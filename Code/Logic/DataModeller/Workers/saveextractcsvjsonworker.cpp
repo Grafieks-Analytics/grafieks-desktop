@@ -251,5 +251,5 @@ void SaveExtractCsvJsonWorker::run()
     appender.Close();
     fileAppendData.close();
 
-    emit saveExtractComplete(&con);
+    emit saveExtractComplete();
 }

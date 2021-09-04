@@ -65,7 +65,7 @@ public:
 public slots:
     void receiveCsvJsonFilterQuery(QString query);
     void getAllFilters(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr);
-    void extractSaved(duckdb::Connection *con);
+    void extractSaved();
 
 private:
 
@@ -75,7 +75,7 @@ private:
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);
     void csvJsonHasData(bool hasData);
-    void generateReports(duckdb::Connection *con);
+    void generateReports();
     void errorSignal(QString errMsg);
     void clearTablePreview();
     void showSaveExtractWaitPopup();

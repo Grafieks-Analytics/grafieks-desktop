@@ -199,7 +199,7 @@ void SaveExtractQueryWorker::run()
 //    auto query1 = con.Query("SELECT * FROM "+ tableName.toStdString());
 //    query1->Print();
 
-    emit saveExtractComplete(&con);
+    emit saveExtractComplete();
 }
 
 

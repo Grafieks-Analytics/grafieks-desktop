@@ -476,7 +476,7 @@ void TableSchemaModel::showSchema(QString query)
 
 }
 
-void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
+void TableSchemaModel::generateSchemaForExtract()
 {
     QStringList outputDataList;
 
@@ -489,7 +489,10 @@ void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
     }
 
-    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    auto data = con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
     if(data->error.empty()){
         int totalRows = data->collection.Count();
 
