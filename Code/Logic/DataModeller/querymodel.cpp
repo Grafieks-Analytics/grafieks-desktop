@@ -77,7 +77,7 @@ void QueryModel::saveExtractData()
 {
     SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql);
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
-    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &QueryModel::deleteLater, Qt::QueuedConnection);
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
 
     saveExtractQueryWorker->start();
 
@@ -210,7 +210,7 @@ void QueryModel::extractSaved(duckdb::Connection *con)
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(100, this, &QueryModel::extractSizeLimit);
+    QTimer::singleShot(1000, this, &QueryModel::extractSizeLimit);
 
     emit showSaveExtractWaitPopup();
 

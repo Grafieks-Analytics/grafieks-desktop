@@ -18,6 +18,7 @@
 #include "../General/querysplitter.h"
 #include "./Workers/setchartdataduckworker.h"
 
+#include "./Workers/saveextractexcelworker.h"
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
@@ -70,6 +71,7 @@ public slots:
     void receiveExcelFilterQuery(QString query);
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
+    void extractSaved(duckdb::Connection *con);
 
 private:
     void generateRoleNames();

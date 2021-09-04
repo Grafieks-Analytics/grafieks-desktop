@@ -25,61 +25,12 @@ void CSVJsonQueryModel::setPreviewQuery(int previewRowCount)
 
 void CSVJsonQueryModel::saveExtractData()
 {
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
 
-    QString fileName = QFileInfo(tableName).baseName().toLower();
-    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    SaveExtractCsvJsonWorker *saveExtractCsvJsonWorker = new SaveExtractCsvJsonWorker(this->categoricalFilter, this->numericalFilter, this->dateFilter, this->totalFiltersCount, this->hideParams);
+    connect(saveExtractCsvJsonWorker, &SaveExtractCsvJsonWorker::saveExtractComplete, this, &CSVJsonQueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveExtractCsvJsonWorker, &SaveExtractCsvJsonWorker::finished, saveExtractCsvJsonWorker, &SaveExtractCsvJsonWorker::deleteLater, Qt::QueuedConnection);
 
-    QString delimiter = Statics::separator;
-    bool ignoredFirstLine = true;
-
-    // Create Extract
-    QFile fileCreateExtract(Statics::csvJsonPath);
-    fileCreateExtract.open(QFile::ReadOnly | QFile::Text);
-
-    this->createExtractDb(&fileCreateExtract, fileName, con);
-
-    fileCreateExtract.close();
-
-    // Append data to Extract
-    QFile fileAppendData(Statics::csvJsonPath);
-    fileAppendData.open(QFile::ReadOnly | QFile::Text);
-
-    duckdb::Appender appender(con, fileName.toStdString());
-    int lineCounter = 0;
-    while(!fileAppendData.atEnd()){
-
-        const QByteArray line = fileAppendData.readLine().simplified();
-        this->dataFinal = line.split(*delimiter.toStdString().c_str());
-
-        // Ignore header data to be inserted
-        if(ignoredFirstLine == false)
-            this->appendExtractData(&appender);
-
-        ignoredFirstLine = false;
-        lineCounter++;
-
-        if(lineCounter%Constants::flushExtractCount == 0){
-            appender.Flush();
-        }
-    }
-
-    appender.Close();
-    fileAppendData.close();
-
-    // Delete if the extract size is larger than the permissible limit
-    // This goes using QTimer because, syncing files cannot be directly deleted
-    FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(100, this, &CSVJsonQueryModel::extractSizeLimit);
-
-    if(Statics::freeLimitExtractSizeExceeded == true){
-        emit generateReports(&con);
-        emit showSaveExtractWaitPopup();
-        Statics::freeLimitExtractSizeExceeded = false;
-    }
+    saveExtractCsvJsonWorker->start();
 }
 
 int CSVJsonQueryModel::rowCount(const QModelIndex &parent) const
@@ -131,125 +82,27 @@ void CSVJsonQueryModel::getAllFilters(FilterCategoricalListModel *categoricalFil
     this->updateModelValues(0);
 }
 
+void CSVJsonQueryModel::extractSaved(duckdb::Connection *con)
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    FreeLimitsManager freeLimitsManager;
+    QTimer::singleShot(1000, this, &CSVJsonQueryModel::extractSizeLimit);
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        emit generateReports(con);
+        Statics::freeLimitExtractSizeExceeded = false;
+    }
+}
+
 void CSVJsonQueryModel::receiveCsvJsonFilterQuery(QString query)
 {
     qDebug() << "CSV JSON QUERY" << query;
 }
 
-bool CSVJsonQueryModel::filteredValue(QVariant currentValue, QString valueList, const QString slug)
-{
-    // **************************** //
-    // Filter Relation Slugs
-    // Please do not change the order
-    // Defined in Constants.h
-
-    QVector<QString> relationSlugs;
-    relationSlugs.append(Constants::slugLikeRelation);  //0
-    relationSlugs.append(Constants::slugNotLikeRelation); //1
-    relationSlugs.append(Constants::slugInRelation); //
-    relationSlugs.append(Constants::slugEqualRelation); //3
-    relationSlugs.append(Constants::slugNotEqualRelation); //4
-    relationSlugs.append(Constants::slugBetweenRelation); //5
-    relationSlugs.append(Constants::slugGreaterThanRelation); //6
-    relationSlugs.append(Constants::slugSmallerThanRelation); //7
-    relationSlugs.append(Constants::slugSmallerThanEqualRelation); //8
-    relationSlugs.append(Constants::slugGreaterThanEqualRelation); //9
-    relationSlugs.append(Constants::slugContainingRelation); //10
-    relationSlugs.append(Constants::slugEndsWithRelation); //11
-    relationSlugs.append(Constants::slugDoesntStartWithRelation); //12
-    relationSlugs.append(Constants::slugDoesntEndWithRelation); //13
-
-    // Do not change the order
-
-    bool output = false;
-
-    //    qDebug() << currentValue << valueList << slug << "SWITCH";
-
-    switch(relationSlugs.indexOf(slug)){
-
-    case 0:
-        break;
-
-    case 1:
-        break;
-
-    case 2:{
-        QStringList selectedValues = valueList.split(",");
-        if(selectedValues.indexOf(currentValue.toString()) >= 0)
-            output = true;
-        break;
-    }
-
-    case 3:
-        if(currentValue.toString().toLower() == valueList.toLower())
-            output = true;
-        break;
-
-    case 4:
-        if(currentValue.toDouble() != valueList.toDouble())
-            output = true;
-        break;
-
-    case 5:
-        if(currentValue.toDouble() <= valueList.toDouble())
-            output = true;
-        break;
-
-    case 6:
-        if(currentValue.toDouble() > valueList.toDouble())
-            output = true;
-        break;
-
-    case 7:
-        if(currentValue.toDouble() < valueList.toDouble())
-            output = true;
-        break;
-
-    case 8:
-        if(currentValue.toDouble() <= valueList.toDouble())
-            output = true;
-        break;
-
-    case 9:
-        if(currentValue.toDouble() >= valueList.toDouble())
-            output = true;
-        break;
-
-    case 10:
-        valueList = valueList.left(valueList.length() - 1);
-        valueList = valueList.right(1);
-
-        if(currentValue.toString().contains(valueList, Qt::CaseInsensitive))
-            output = true;
-        break;
-
-    case 11:
-        valueList = valueList.right(1);
-
-        if(currentValue.toString().endsWith(valueList, Qt::CaseInsensitive))
-            output = true;
-        break;
-
-    case 12:
-        valueList = valueList.left(valueList.length() - 1);
-
-        if(!currentValue.toString().startsWith(valueList, Qt::CaseInsensitive))
-            output = true;
-        break;
-
-    case 13:
-        valueList = valueList.right(1);
-
-        if(!currentValue.toString().endsWith(valueList, Qt::CaseInsensitive))
-            output = true;
-        break;
-
-    default:
-        qDebug() << Q_FUNC_INFO << "Switch case not detected" << slug;
-    }
-
-    return output;
-}
 
 void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 {
@@ -301,14 +154,14 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 if(categoricalFilter != nullptr)
                     foreach(FilterCategoricalList *tmpCategoricalFilter, this->categoricalFilter->getFilters()){
                         int key = this->columnNamesMap.key(tmpCategoricalFilter->columnName());
-                        bool returnVar = filteredValue(this->dataFinal.at(key), tmpCategoricalFilter->value(), tmpCategoricalFilter->slug());
+                        bool returnVar = filterCsvJson.filteredValue(this->dataFinal.at(key), tmpCategoricalFilter->value(), tmpCategoricalFilter->slug());
                         truthList.append(returnVar);
                     }
 
                 if(numericalFilter != nullptr){
                     foreach(FilterNumericalList *tmpNumericalFilter, this->numericalFilter->getFilters()){
                         int key = this->columnNamesMap.key(tmpNumericalFilter->columnName());
-                        bool returnVar = filteredValue(this->dataFinal.at(key), tmpNumericalFilter->value(), tmpNumericalFilter->slug());
+                        bool returnVar = filterCsvJson.filteredValue(this->dataFinal.at(key), tmpNumericalFilter->value(), tmpNumericalFilter->slug());
                         truthList.append(returnVar);
                     }
                 }
@@ -316,7 +169,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 if(dateFilter != nullptr){
                     foreach(FilterDateList *tmpDateFilter, this->dateFilter->getFilters()){
                         int key = this->columnNamesMap.key(tmpDateFilter->columnName());
-                        bool returnVar = filteredValue(this->dataFinal.at(key), tmpDateFilter->value(), tmpDateFilter->slug());
+                        bool returnVar = filterCsvJson.filteredValue(this->dataFinal.at(key), tmpDateFilter->value(), tmpDateFilter->slug());
                         truthList.append(returnVar);
                     }
                 }
@@ -367,198 +220,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     endResetModel();
 }
 
-void CSVJsonQueryModel::appendExtractData(duckdb::Appender *appender)
-{
-    QVector<bool> truthList;
 
-    // Check if filters exist
-    // If filters exist, only insert the matched data
-    // Else insert any incoming data
-    if(this->totalFiltersCount > 0){
-
-        if(this->categoricalFilter != nullptr)
-            foreach(FilterCategoricalList *tmpCategoricalFilter, this->categoricalFilter->getFilters()){
-                int key = this->columnNamesMap.key(tmpCategoricalFilter->columnName());
-                bool returnVar = filteredValue(this->dataFinal.at(key), tmpCategoricalFilter->value(), tmpCategoricalFilter->slug());
-                truthList.append(returnVar);
-            }
-
-        if(this->numericalFilter != nullptr){
-            foreach(FilterNumericalList *tmpNumericalFilter, this->numericalFilter->getFilters()){
-                int key = this->columnNamesMap.key(tmpNumericalFilter->columnName());
-                bool returnVar = filteredValue(this->dataFinal.at(key), tmpNumericalFilter->value(), tmpNumericalFilter->slug());
-                truthList.append(returnVar);
-            }
-        }
-
-        if(this->dateFilter != nullptr){
-            foreach(FilterDateList *tmpDateFilter, this->dateFilter->getFilters()){
-                int key = this->columnNamesMap.key(tmpDateFilter->columnName());
-                bool returnVar = filteredValue(this->dataFinal.at(key), tmpDateFilter->value(), tmpDateFilter->slug());
-                truthList.append(returnVar);
-            }
-        }
-
-
-        if(!truthList.contains(false)){
-            appender->BeginRow();
-
-            for(int i = 0; i < this->dataFinal.length(); i++){
-                if(!rejectIds.contains(i)){
-
-                    QByteArray a = this->dataFinal.at(i);
-                    if(this->columnStringTypes.value(i) == "INTEGER"){
-                        appender->Append(a.toInt());
-                    } else if(this->columnStringTypes.value(i) == "BIGINT"){
-                        appender->Append(a.toFloat());
-                    } else if(this->columnStringTypes.value(i) == "HUGEINT"){
-                        appender->Append(a.toDouble());
-                    } else if(this->columnStringTypes.value(i) == "FLOAT"){
-                        appender->Append(a.toFloat());
-                    } else if(this->columnStringTypes.value(i) == "DOUBLE"){
-                        appender->Append(a.toDouble());
-                    } else if(this->columnStringTypes.value(i) == "VARCHAR"){
-                        appender->Append(a.toStdString().c_str());
-                    }  else {
-                        QString dateTime = a.toStdString().c_str();
-                        QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
-
-                        QDate date = dateTimeVal.date();
-                        QTime time = dateTimeVal.time();
-                        int32_t year = date.year();
-                        int32_t month = date.month();
-                        int32_t day = date.day();
-
-                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-                    }
-                }
-
-            }
-            appender->EndRow();
-        }
-
-        truthList.clear();
-    } else {
-
-
-        appender->BeginRow();
-        for(int i = 0; i < this->dataFinal.length(); i++){
-
-
-            if(!this->rejectIds.contains(i)){
-                QByteArray a = this->dataFinal.at(i);
-                if(this->columnStringTypes.value(i) == "INTEGER"){
-                    appender->Append(a.toInt());
-                } else if(this->columnStringTypes.value(i) == "BIGINT"){
-                    appender->Append(a.toFloat());
-                } else if(this->columnStringTypes.value(i) == "HUGEINT"){
-                    appender->Append(a.toDouble());
-                } else if(this->columnStringTypes.value(i) == "FLOAT"){
-                    appender->Append(a.toFloat());
-                } else if(this->columnStringTypes.value(i) == "DOUBLE"){
-                    appender->Append(a.toDouble());
-                } else if(this->columnStringTypes.value(i) == "VARCHAR"){
-                    appender->Append(a.toStdString().c_str());
-                }  else {
-                    QString dateTime = a.toStdString().c_str();
-                    QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
-
-                    QDate date = dateTimeVal.date();
-                    QTime time = dateTimeVal.time();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-
-                }
-            }
-        }
-        appender->EndRow();
-
-    }
-}
-
-void CSVJsonQueryModel::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
-{
-    QString delimiter = Statics::separator;
-
-    this->rejectIds.clear();
-
-    int lineCount = 0;
-    while(lineCount < 2){
-
-        const QByteArray line = file->readLine().simplified();
-        this->dataFinal = line.split(*delimiter.toStdString().c_str());
-
-        if(lineCount == 0){
-
-            if (this->dataFinal.at(0).contains("\xEF\xBB\xBF")){
-                this->dataFinal[0] =  this->dataFinal.at(0).right(this->dataFinal.at(0).length() - 3);
-            }
-
-            for(int i = 0; i < this->dataFinal.length(); i++){
-                if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
-                    this->columnNamesMap.insert(i, this->dataFinal.at(i).toStdString().c_str());
-                } else {
-                    this->rejectIds.append(i);
-                }
-            }
-
-        } else {
-
-            QString createTableQuery = "CREATE TABLE " + fileName + "(";
-
-            for(int i = 0; i < this->dataFinal.length(); i++){
-                if(!this->rejectIds.contains(i)){
-                    QString varType = dataType.variableType(this->dataFinal.at(i).toStdString().c_str()).at(0);
-                    QString matchedFormat = dataType.variableType(this->dataFinal.at(i).toStdString().c_str()).at(1);
-                    this->matchedDateFormats.insert(i, matchedFormat);
-
-                    // Check if the user has changed the column type from the Modeler screen
-                    // If so, set the users choice as default, else process the other condition
-                    QString checkFieldName = fileName + "." + this->columnNamesMap.value(i);
-
-                    if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-                        varType = Statics::changedHeaderTypes.value(checkFieldName).toString();
-                    }
-
-                    if(varType == Constants::categoricalType){
-                        varType = "VARCHAR";
-                    } else if(varType == Constants::numericalType){
-                        QString dataLen = this->dataFinal.at(i).toStdString().c_str();
-
-                        if(dataLen.toLower().contains("e-") || dataLen.toLower().contains("e+") || dataLen.toLower().contains(".")){
-                            QString s = this->dataFinal.at(i).toStdString().c_str();
-                            varType = "DOUBLE";
-                        } else {
-                            if(dataLen.length() <= 10 && dataLen.toInt() < 2147483647){
-                                varType = "INTEGER";
-                            } else if(dataLen.length() <= 19 && dataLen.toLong() < 9223372036854775808) {
-                                varType = "BIGINT";
-                            } else {
-                                varType = "HUGEINT";
-                            }
-                        }
-
-                    } else {
-                        varType = "TIMESTAMP";
-                    }
-
-                    this->columnStringTypes.insert(i, varType);
-                    createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + ",";
-                }
-            }
-
-            createTableQuery.chop(1);
-            createTableQuery += ")";
-
-            auto createT = con.Query(createTableQuery.toStdString());
-            if(!createT->success) qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
-        }
-
-        lineCount++;
-    }
-}
 
 void CSVJsonQueryModel::extractSizeLimit()
 {
@@ -573,13 +235,17 @@ void CSVJsonQueryModel::extractSizeLimit()
     size = fileInfo.size();
     fileInfo.close();
 
+    qDebug() << size << maxFreeExtractSize << "SIZES";
+
     QFile file(extractPath);
     if(size > maxFreeExtractSize){
         if(!file.remove(extractPath)){
             qDebug() << Q_FUNC_INFO << file.errorString();
         } else {
-            emit extractFileExceededLimit(true);
             Statics::freeLimitExtractSizeExceeded = true;
         }
+        emit extractFileExceededLimit(true);
+    } else {
+        emit extractFileExceededLimit(false);
     }
 }

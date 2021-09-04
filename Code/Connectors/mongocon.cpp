@@ -50,7 +50,7 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
             // If correct credentials inserted once
 
             Statics::mongoHost = host;
-            Statics::mongoDb = db;
+            Statics::mongoDb = dbString;
             Statics::mongoPort = port;
             Statics::mongoUsername = username;
             Statics::mongoPassword = password;

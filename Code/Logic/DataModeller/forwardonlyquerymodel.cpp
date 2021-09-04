@@ -87,113 +87,11 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-    QStringList list;
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
 
-    QString connectionName = this->returnConnectionName();
-
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    QSqlQuery q(this->query, dbForward);
-    QSqlRecord record = q.record();
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-    } else{
-
-        QString createTableQuery = "CREATE TABLE " + tableName + "(";
-
-        for(int i = 0; i < record.count(); i++){
-            QVariant fieldType = record.field(i).value();
-            QString type = dataType.qVariantType(fieldType.typeName());
-
-            QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-            if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-                type = Statics::changedHeaderTypes.value(checkFieldName).toString();
-
-                if(type == Constants::categoricalType){
-                    type = "VARCHAR";
-                } else if(type == Constants::numericalType){
-                    type = "INTEGER";
-                } else {
-                    type = "TIMESTAMP";
-                }
-            }
-
-            createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
-            this->columnStringTypes.append(type);
-        }
-
-        createTableQuery.chop(1);
-        createTableQuery += ")";
-        qDebug() << createTableQuery;
-
-        auto createT = con.Query(createTableQuery.toStdString());
-        if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
-
-        duckdb::Appender appender(con, tableName.toStdString());
-
-
-
-        beginResetModel();
-        this->resultData.clear();
-
-        int lineCounter = 0;
-        while(q.next()){
-
-            appender.BeginRow();
-            for(int i = 0; i < this->internalColCount; i++){
-                QString columnType = this->columnStringTypes.at(i);
-
-                if(columnType == "INTEGER"){
-                    appender.Append(q.value(i).toInt());
-                } else if(columnType == "BIGINT"){
-                    appender.Append(q.value(i).toDouble());
-                }  else if(columnType == "FLOAT") {
-                    appender.Append(q.value(i).toFloat());
-                } else if(columnType == "DOUBLE") {
-                    appender.Append(q.value(i).toDouble());
-                } else if(columnType == "DATE"){
-                    QDate date = q.value(i).toDate();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    appender.Append(duckdb::Date::FromDate(year, month, day));
-                } else if(columnType == "TIMESTAMP"){
-                    QDate date = q.value(i).toDate();
-                    QTime time = q.value(i).toDateTime().time();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-                }else {
-                    appender.Append(q.value(i).toString().toUtf8().constData());
-                }
-            }
-
-            appender.EndRow();
-
-            lineCounter++;
-
-            if(lineCounter % Constants::flushExtractCount == 0){
-                appender.Flush();
-            }
-        }
-
-        appender.Close();
-    }
-
-    // Delete if the extract size is larger than the permissible limit
-    // This goes using QTimer because, syncing files cannot be directly deleted
-    FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(100, &freeLimitsManager, &FreeLimitsManager::extractSizeLimit);
-
-    if(Statics::freeLimitExtractSizeExceeded == true){
-        emit generateReports(&con);
-        emit showSaveExtractWaitPopup();
-        Statics::freeLimitExtractSizeExceeded = false;
-    }
+    saveForwardOnlyWorker->start();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
@@ -249,6 +147,22 @@ void ForwardOnlyQueryModel::removeTmpChartData()
     emit forwardOnlyHasData(false);
 }
 
+void ForwardOnlyQueryModel::extractSaved(duckdb::Connection *con)
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    FreeLimitsManager freeLimitsManager;
+    QTimer::singleShot(1000, this, &ForwardOnlyQueryModel::extractSizeLimit);
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        emit generateReports(con);
+        Statics::freeLimitExtractSizeExceeded = false;
+    }
+}
+
 void ForwardOnlyQueryModel::generateRoleNames()
 {
 
@@ -269,7 +183,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
 void ForwardOnlyQueryModel::setQueryResult()
 {
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
@@ -347,9 +260,11 @@ void ForwardOnlyQueryModel::extractSizeLimit()
         if(!file.remove(extractPath)){
             qDebug() << Q_FUNC_INFO << file.errorString();
         } else {
-            emit extractFileExceededLimit(true);
             Statics::freeLimitExtractSizeExceeded = true;
         }
+        emit extractFileExceededLimit(true);
+    } else {
+        emit extractFileExceededLimit(false);
     }
 }
 
