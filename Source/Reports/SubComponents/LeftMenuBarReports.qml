@@ -267,6 +267,8 @@ Rectangle{
             title:"Pivot"
             xAxisLabelName: "Rows"
             yAxisLabelName: "Columns"
+            maxDropOnXAxis: 5
+            maxDropOnYAxis: 5
             themeVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Total"
         }
