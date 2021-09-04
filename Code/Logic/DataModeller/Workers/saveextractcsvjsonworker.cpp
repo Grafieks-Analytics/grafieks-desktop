@@ -251,7 +251,11 @@ void SaveExtractCsvJsonWorker::run()
         lineCounter++;
 
         if(lineCounter%Constants::flushExtractCount == 0){
-            appender.Flush();
+            try{
+                appender.Flush();
+            } catch(...){
+                qDebug() << "Something went wrong";
+            }
         }
     }
 

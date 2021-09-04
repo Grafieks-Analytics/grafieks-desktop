@@ -124,7 +124,7 @@ void ChartsThread::getBarChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -204,7 +204,7 @@ void ChartsThread::getGroupedBarChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
 
@@ -295,7 +295,7 @@ void ChartsThread::getNewGroupedBarChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -398,7 +398,7 @@ void ChartsThread::getLineBarChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -473,7 +473,7 @@ void ChartsThread::getPieChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -530,7 +530,7 @@ void ChartsThread::getFunnelChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -602,7 +602,7 @@ void ChartsThread::getRadarChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -680,7 +680,7 @@ void ChartsThread::getScatterChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -779,7 +779,7 @@ void ChartsThread::getHeatMapChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -875,7 +875,7 @@ void ChartsThread::getGaugeChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString =  "SELECT " + calculateColumn + " FROM "+tableName;
+    QString queryString =  "SELECT \"" + calculateColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
 
@@ -918,7 +918,7 @@ void ChartsThread::getSankeyChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -1015,7 +1015,7 @@ void ChartsThread::getKPIChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + calculateColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
 
@@ -1076,7 +1076,7 @@ void ChartsThread::getMultiLineChartValues()
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
 
@@ -1175,7 +1175,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
@@ -1274,13 +1274,13 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
-        xQueryString += xCols.toString() + ", ";
+        xQueryString += "\"" + xCols.toString() + "\", ";
     }
 
     xQueryString.chop(2);
     xQueryString += " FROM " + tableName;
 
-    QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + tableName;;
+    QString yQueryString =  "SELECT \"" + yAxisColumn + "\" FROM " + tableName;;
 
     auto xDataList = this->queryFunction(xQueryString);
     auto yDataList = this->queryFunction(yQueryString);
@@ -1425,7 +1425,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     // Fetch data from extract
     QString tableName = this->getTableName();
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
     auto dataList = this->queryFunction(queryString);
 
     // Order of QMap - xAxisCol, SplitKey, Value
@@ -1544,7 +1544,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
-        xQueryString += xCols.toString() + ", ";
+        xQueryString += "\"" + xCols.toString() + "\", ";
     }
 
     xQueryString.chop(2);
@@ -1552,7 +1552,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
     QString yQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
-        yQueryString += xCols.toString() + ", ";
+        yQueryString += "\"" + xCols.toString() + "\", ";
     }
 
     yQueryString.chop(2);
