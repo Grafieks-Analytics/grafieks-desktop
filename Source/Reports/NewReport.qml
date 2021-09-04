@@ -266,6 +266,10 @@ Page {
         var row3Columns = getAxisColumnNames(Constants.row3Name);
         var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
         console.log(xAxisColumns, yAxisColumns)
         colorData = [];
         switch(chartTitle){
@@ -880,6 +884,29 @@ Page {
         return columnsName;
     }
 
+    function getDataPaneAllDetails(axisName){
+         var model = null;
+        switch(axisName){
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsAllDetails = [];
+        for(var i=0; i< model.count; i++){
+            columnsAllDetails.push({ itemName: model.get(i).itemName, itemType: model.get(i).droppedItemType, dateFormat: model.get(i).dateFormat });
+        }
+        return columnsAllDetails;
+    }
+
     function clearAllChartValues(){
 
         // Not Setting ReportId to null
@@ -1297,6 +1324,11 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
 
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
+
         if(webEngineView.loading){
             return;
         }
@@ -1313,16 +1345,8 @@ Page {
 
         if(xAxisColumns.length && yAxisColumns.length){
 
-            var xAxisColumnNamesArray = [];
-            var i = 0; // itereator => By passing warning
-            for(i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(xAxisColumns[i]);
-            }
-            var yAxisColumnNamesArray = [];
-            for(i=0;i<yAxisColumns.length;i++){
-                yAxisColumnNamesArray.push(yAxisColumns[i]);
-            }
-
+            var xAxisColumnNamesArray = Array.from(xAxisColumns);
+            var yAxisColumnNamesArray = Array.from(yAxisColumns);
 
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
             var colorByColumnName = colorByData[0] && colorByData[0].columnName;
@@ -1483,10 +1507,23 @@ Page {
                 console.log("PIVOT CLICKED")
                 console.log('row3Columns',row3Columns);
                 var row3ColumnsArray = Array.from(row3Columns);
-                // console.log([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3Columns);
-                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
+                
+                // Temporary running function
                 ChartsModel.getPivotChartValues([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
-                // ChartsModel.getPivotChartValues(['Category','City'],'Sales','Sum');
+                
+                /*
+
+                // Change required 
+                // Group the dates according to date format and sum the values.
+                // Values can be multiple so we will have to sum all of the values
+                // Passing column name and type
+
+                var nonValueColumnNames = [ ...xAxisColumnDetails, ...yAxisColumnDetails ];
+                var valuesColumns = row3ColumnDetails;
+                ChartsModel.getPivotChartValues(nonValueColumnNames, valuesColumns,'Sum');
+
+                */
+                
                 break;
             }
             if(!dataValues){
