@@ -63,7 +63,7 @@ void SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                         appender->Append(a.toDouble());
                     } else if(this->columnStringTypes.value(i) == "VARCHAR"){
                         appender->Append(a.toStdString().c_str());
-                    }  else {
+                    } else if(this->columnStringTypes.value(i) == "TIMESTAMP"){
                         QString dateTime = a.toStdString().c_str();
                         QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
 
@@ -74,6 +74,8 @@ void SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                         int32_t day = date.day();
 
                         appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                    } else {
+                        qDebug() << a.toStdString().c_str();
                     }
                 }
 
@@ -103,7 +105,7 @@ void SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                     appender->Append(a.toDouble());
                 } else if(this->columnStringTypes.value(i) == "VARCHAR"){
                     appender->Append(a.toStdString().c_str());
-                }  else {
+                } else if(this->columnStringTypes.value(i) == "TIMESTAMP"){
                     QString dateTime = a.toStdString().c_str();
                     QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
 
@@ -114,6 +116,8 @@ void SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                     int32_t day = date.day();
                     appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
 
+                } else {
+                    qDebug() << a.toStdString().c_str();
                 }
             }
         }
@@ -196,8 +200,10 @@ void SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
             createTableQuery.chop(1);
             createTableQuery += ")";
 
+
             auto createT = con.Query(createTableQuery.toStdString());
             if(!createT->success) qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
+            qDebug() << createTableQuery << createT->success;
         }
 
         lineCount++;
@@ -237,8 +243,9 @@ void SaveExtractCsvJsonWorker::run()
         this->dataFinal = line.split(*delimiter.toStdString().c_str());
 
         // Ignore header data to be inserted
-        if(ignoredFirstLine == false)
+        if(ignoredFirstLine == false){
             this->appendExtractData(&appender);
+        }
 
         ignoredFirstLine = false;
         lineCounter++;
