@@ -37,7 +37,7 @@
         ];
 
         var data = {
-            name: "",
+            name: "category",
             size: 4000,
             children: [
                 {
@@ -169,7 +169,7 @@
             (i = 0), (duration = 750);
 
             // declares a tree layout and assigns the size
-            treemap = d3.tree().size([height, width]);
+            treemap = d3.tree().size([height+60, width]);
 
             // Assigns parent, children, height, depth
             root = d3.hierarchy(data, function (d) {
