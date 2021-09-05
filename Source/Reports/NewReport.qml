@@ -30,6 +30,7 @@ Page {
     property int editImageSize: 16
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
+    property bool row3Active: null
 
     property var maxDropOnXAxis: 1;
     property var maxDropOnYAxis: 1;
@@ -377,7 +378,7 @@ Page {
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
@@ -390,7 +391,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
@@ -453,6 +454,7 @@ Page {
         ReportParamsModel.xAxisActive = false;
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
+        row3Active = false;
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -692,6 +694,17 @@ Page {
             yAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
         }else{
             yAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+    
+    // Variable when drop is hovered on Y Axis
+    onRow3ActiveChanged: {
+        if(row3Active){
+            row3DropAreaRectangle.border.color = Constants.grafieksLightGreenColor;
+            row3DropAreaRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            row3DropAreaRectangle.border.color = "transparent";
+            row3DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
         }
     }
     
@@ -1232,8 +1245,11 @@ Page {
         return false;
     }
 
+    function allNumericalValues(data){
+        return true;
+    }
     
-    function row3AxisDropEligible(itemName){
+    function row3AxisDropEligible(itemName, itemType){
         var row3Columns  = getAxisColumnNames(row3Columns);
         const multiChart = true;
         console.log()
@@ -1243,6 +1259,9 @@ Page {
         if(row3Columns.length === allowedYAxisDataPanes){
             return false;
         }
+        // if(chartTitle == Constants.pivotTitle && itemType == "numerical"){
+        //     return false;
+        // }
         if(multiChart){
             return true;
         }
@@ -1251,6 +1270,7 @@ Page {
 
     function onDropAreaDropped(element,axis){
 
+        row3Active = null;
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
@@ -2065,6 +2085,7 @@ Page {
                 width: parent.width - row3Text.width - 4
                 anchors.left: row3Text.right
                 anchors.leftMargin: 1
+                border.color: "transparent"
 
                 DropArea{
                     id: row3DropArea

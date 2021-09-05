@@ -49,19 +49,25 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function showRowTotal(checkedStatus){
-        report_desiner_page.d3PropertyConfig['rowWiseGrandTotal'] = checkedStatus;
+    function toggleCellBorders(checkedStatus){
+        report_desiner_page.d3PropertyConfig['cellBorderStatus'] = checkedStatus;
         report_desiner_page.reDrawChart();
     }
-    function showColumnTotal(checkedStatus){
-        report_desiner_page.d3PropertyConfig['columnWiseGrandTotal'] = checkedStatus;
+    function toggleHoverStatus(checkedStatus){
+        report_desiner_page.d3PropertyConfig['hoverStatus'] = checkedStatus;
         report_desiner_page.reDrawChart();
     }
-    function showSubTotal(checkedStatus){
-        report_desiner_page.d3PropertyConfig['subTotalVisible'] = checkedStatus;
+    function toggleCompactStatus(checkedStatus){
+        report_desiner_page.d3PropertyConfig['compactStatus'] = checkedStatus;
+        report_desiner_page.reDrawChart();
+    }
+    function toggleRowAlternateStatus(checkedStatus){
+        console.log('Debug:: Alternate changed? ', checkedStatus);
+        report_desiner_page.d3PropertyConfig['rowAlternateStatus'] = checkedStatus;
         report_desiner_page.reDrawChart();
     }
 
+    
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -96,7 +102,7 @@ Column{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Row Total")
+                text: qsTr("Alternate Rows")
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -105,13 +111,13 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: true
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
-                onCheckedChanged: showRowTotal(checked);
+                onCheckedChanged: toggleRowAlternateStatus(checked);
 
             }
 
@@ -135,7 +141,89 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Grand Total")
+                text: qsTr("Cell Borders")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+
+                checked: true
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: toggleCellBorders(checked);
+
+            }
+
+        }
+
+    }
+
+
+    // Row Total Ends
+
+    
+
+
+    // Row Total Starts
+
+    Rectangle{
+
+        height: 35
+        width: 150
+
+        Rectangle{
+            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: qsTr("Hover Status")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+
+                checked: true
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: toggleHoverStatus(checked);
+
+            }
+
+        }
+
+    }
+
+
+    // Row Total Ends
+
+    
+
+
+    // Row Total Starts
+
+    Rectangle{
+
+        height: 35
+        width: 150
+
+        Rectangle{
+            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: qsTr("Compact Status")
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -150,7 +238,7 @@ Column{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
-                onCheckedChanged: showColumnTotal(checked);
+                onCheckedChanged: toggleCompactStatus(checked);
 
             }
 
@@ -160,6 +248,7 @@ Column{
 
 
     // Row Total Ends
+
 
 
 

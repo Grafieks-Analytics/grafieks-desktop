@@ -231,6 +231,8 @@ Rectangle{
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             title: "Tree Map"
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line"
         }
 //        ListElement{

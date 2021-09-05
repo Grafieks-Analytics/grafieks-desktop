@@ -547,6 +547,16 @@
                             <tbody></tbody>
                             <tfoot></tfoot>
                         </table>`;
+
+                    removeCellBorder();
+                    removeHoverBackground();
+                    removeRowAlternateColor();
+                    setCompact(false);
+                        
+            }
+            
+            function clearChart(){
+                init();
             }
             
             function drawChart(data, plotConfiguration = {}) {
@@ -579,10 +589,10 @@
                     addCellBorder();
                 }
 
-                if (!hoverStatus) {
-                    removeHoverBackground();
-                } else {
+                if (hoverStatus) {
                     addHoverBackground();
+                } else {
+                    removeHoverBackground();
                 }
 
                 if (rowAlternateStatus) {

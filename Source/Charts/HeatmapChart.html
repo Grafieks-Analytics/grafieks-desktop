@@ -393,6 +393,47 @@
                 [myGroups, myVars],
             ];
 
+            var data = [
+                [
+                    ["Furniture", "Bookcases", 8016],
+                    ["Furniture", "Chairs", 6906],
+                    ["Office Supplies", "Labels", 192],
+                    ["Furniture", "Tables", 10230],
+                    ["Office Supplies", "Storage", 4638],
+                    ["Furniture", "Furnishings", 2398],
+                    ["Office Supplies", "Art", 2756],
+                    ["Technology", "Phones", 8372],
+                    ["Office Supplies", "Binders", 2114],
+                    ["Office Supplies", "Appliances", 1060],
+                    ["Office Supplies", "Paper", 1198],
+                    ["Office Supplies", "Envelopes", 1134],
+                    ["Technology", "Accessories", 938],
+                    ["Office Supplies", "Fasteners", 160],
+                    ["Office Supplies", "Supplies", 132],
+                ],
+                [
+                    ["Furniture", "Office Supplies", "Technology"],
+                    [
+                        "Bookcases",
+                        "Chairs",
+                        "Labels",
+                        "Tables",
+                        "Storage",
+                        "Furnishings",
+                        "Art",
+                        "Phones",
+                        "Binders",
+                        "Appliances",
+                        "Paper",
+                        "Envelopes",
+                        "Accessories",
+                        "Fasteners",
+                        "Supplies",
+                    ],
+                ],
+                ['Category', ' SubCategory', 'Sales']
+            ];
+
             function transformData(dataValue, dateFormat, dateFormat1) {
                 var dataValue = data[0];
                 var json = {};
@@ -525,7 +566,7 @@
                     dateFormat,
                     dateFormat1
                 );
-                [xAxisLabel, yAxisLabel] = data[1];
+                [xAxisLabel, yAxisLabel, valueLabel] = data[2] || ["xAxisLabel","yAxisLabel","Value"];
                 console.log(data);
                 // var [dataValues, [myGroups, myVars]] = data;
 
@@ -917,7 +958,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    "xAxisLabel" +
+                                    xAxisLabel +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -925,7 +966,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    "xAxisLabel" +
+                                    yAxisLabel +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -933,7 +974,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    "yAxisLabel" +
+                                    valueLabel +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
