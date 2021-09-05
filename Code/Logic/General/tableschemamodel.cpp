@@ -505,7 +505,6 @@ void TableSchemaModel::generateSchemaForExtract()
 
 
             // Get filter data type for QML
-            qDebug() << fieldName << fieldType;
             QString filterDataType = dataType.dataType(fieldType);
 
             outputDataList << tableName << fieldName << fieldType << filterDataType;
@@ -579,25 +578,27 @@ QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByt
     QStringList outputDataList;
     QMap<QString, QList<QStringList>> allColumns;
 
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
     for(int i = 0; i < this->csvHeaderLength; i++){
 
         fieldName = this->csvHeaderDataFinal.at(i);
         fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
 
-        // Get filter data type for QML
-        QString filterDataType = dataType.dataType(fieldType);
-
-        outputDataList << tableName << fieldName << fieldType << filterDataType;
-
         // Output data according to Filter type
 
-        if(filterDataType == Constants::categoricalType){
+        if(fieldType == Constants::categoricalType){
+            outputDataList << fileName << fieldName << "VARCHAR" << fieldType;
             allCategorical.append(outputDataList);
-        } else if(filterDataType == Constants::numericalType){
+        } else if(fieldType == Constants::numericalType){
+            outputDataList << fileName << fieldName << "INTEGER" << fieldType;
             allNumerical.append(outputDataList);
-        } else if(filterDataType == Constants::dateType){
+        } else if(fieldType == Constants::dateType){
+            outputDataList << fileName << fieldName << "TIMESTAMP" << fieldType;
             allDates.append(outputDataList);
         } else{
+            outputDataList << fileName << fieldName << "UNDETECTED" << fieldType;
             allOthers.append(outputDataList);
         }
 
