@@ -79,19 +79,6 @@ Item {
     // Connections Starts
 
     Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "excel"
-            }
-        }
-
-
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         // Query joiner

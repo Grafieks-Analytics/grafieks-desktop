@@ -587,18 +587,15 @@ QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByt
         fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
 
         // Output data according to Filter type
+        outputDataList << fileName << fieldName << fieldType << fieldType;
 
         if(fieldType == Constants::categoricalType){
-            outputDataList << fileName << fieldName << "VARCHAR" << fieldType;
             allCategorical.append(outputDataList);
         } else if(fieldType == Constants::numericalType){
-            outputDataList << fileName << fieldName << "INTEGER" << fieldType;
             allNumerical.append(outputDataList);
         } else if(fieldType == Constants::dateType){
-            outputDataList << fileName << fieldName << "TIMESTAMP" << fieldType;
             allDates.append(outputDataList);
         } else{
-            outputDataList << fileName << fieldName << "UNDETECTED" << fieldType;
             allOthers.append(outputDataList);
         }
 

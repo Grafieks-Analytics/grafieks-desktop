@@ -41,29 +41,7 @@ Rectangle {
         }
 
     }
-    Connections{
-        target: DuckQueryModel
 
-        // This one is for table data
-        function onDuckHasData(hasData){
-            view.model = hasData === true? DuckQueryModel: ""
-            view.visible = hasData === true ? true: false
-
-        }
-
-        // This slot is for updating headers
-        // This is also returning an array of strings
-        function onDuckHeaderDataChanged(tableHeaders){
-            if(DSParamsModel.runCalled === true)
-                setHeaders(tableHeaders)
-        }
-
-        // Clear table
-        function onClearTablePreview(){
-            clearTable()
-        }
-
-    }
 
     Connections{
         target: CSVJsonQueryModel

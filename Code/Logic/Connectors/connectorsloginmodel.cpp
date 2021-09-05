@@ -153,18 +153,12 @@ void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
     response = jsoncon->JsonInstance(filename);
     this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);
     emit jsonLoginStatus(response, directLogin);
-
-    // Here the login signal will be handled from DuckCon Class
-    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
 {
     response = excelcon->ExcelInstance(filename);
     this->staticSetter(filename, Constants::duckType, Constants::excelIntType, NULL, directLogin);
-
-    // Here the login signal will be handled from DuckCon Class
-    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::sqlLogout()

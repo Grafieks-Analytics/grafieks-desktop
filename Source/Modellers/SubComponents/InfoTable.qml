@@ -74,20 +74,6 @@ Item{
     }
 
     Connections{
-        target: DuckQueryModel
-
-        function onErrorSignal(errMsg){
-            if(errMsg !== ""){
-                errorMsg = errMsg
-                queryUpdate.icon = StandardIcon.Critical
-            } else{
-                errorMsg = defaultMsg
-                queryUpdate.icon = StandardIcon.NoIcon
-            }
-        }
-    }
-
-    Connections{
         target: ExcelQueryModel
 
         function onErrorSignal(errMsg){

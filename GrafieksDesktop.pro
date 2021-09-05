@@ -54,7 +54,6 @@ SOURCES += \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
-    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.cpp \
@@ -171,7 +170,6 @@ HEADERS += \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
-    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
     Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.h \

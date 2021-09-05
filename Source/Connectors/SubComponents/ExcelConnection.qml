@@ -39,40 +39,6 @@ Popup {
     }
 
     Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-
-            mainTimer.stop()
-            mainTimer.running = false
-            busyindicator.running = false
-            displayTime.text = ""
-        }
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "excel"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         function onExcelLoginStatus(status, directLogin){
