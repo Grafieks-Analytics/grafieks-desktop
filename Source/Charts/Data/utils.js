@@ -383,6 +383,12 @@ function createBatches(array, chunk_size) {
     return Array(Math.ceil(array.length / chunk_size)).fill().map((_, index) => index * chunk_size).map(begin => array.slice(begin, begin + chunk_size));;
 }
 
+function sortArraysOfObjectByValue(array, valueKey){
+    return array.sort(function (a, b) {
+        return b[valueKey] - a[valueKey];
+    });
+}
+
 // Main
 // Open this function when in production
 (function () {
