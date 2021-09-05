@@ -283,7 +283,6 @@ void QueryModel::executeQuery(QString &query, bool updateChartData)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
-        qDebug() << "MY QUERY" << query;
         if(updateChartData == true){
             this->setChartData();
         }
