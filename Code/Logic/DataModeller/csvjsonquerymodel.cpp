@@ -193,7 +193,6 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                     i++;
                 }
                 this->resultData.append(x);
-
                 readLine++;
             }
         }
