@@ -154,14 +154,6 @@ void ForwardOnlyQueryModel::extractSaved()
 
     FreeLimitsManager freeLimitsManager;
     QTimer::singleShot(1000, this, &ForwardOnlyQueryModel::extractSizeLimit);
-
-    emit showSaveExtractWaitPopup();
-
-    if(Statics::freeLimitExtractSizeExceeded == true){
-        Statics::freeLimitExtractSizeExceeded = false;
-    } else {
-        emit generateReports();
-    }
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()
@@ -260,12 +252,19 @@ void ForwardOnlyQueryModel::extractSizeLimit()
     if(size > maxFreeExtractSize){
         if(!file.remove(extractPath)){
             qDebug() << Q_FUNC_INFO << file.errorString();
-        } else {
-            Statics::freeLimitExtractSizeExceeded = true;
         }
+        Statics::freeLimitExtractSizeExceeded = true;
         emit extractFileExceededLimit(true);
     } else {
         emit extractFileExceededLimit(false);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 

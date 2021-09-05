@@ -493,8 +493,10 @@ void TableSchemaModel::generateSchemaForExtract()
     duckdb::Connection con(db);
 
     auto data = con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+
     if(data->error.empty()){
         int totalRows = data->collection.Count();
+
 
         for(int i = 0; i < totalRows; i++){
             QString fieldName =  data->GetValue(1, i).ToString().c_str();
@@ -503,6 +505,7 @@ void TableSchemaModel::generateSchemaForExtract()
 
 
             // Get filter data type for QML
+            qDebug() << fieldName << fieldType;
             QString filterDataType = dataType.dataType(fieldType);
 
             outputDataList << tableName << fieldName << fieldType << filterDataType;

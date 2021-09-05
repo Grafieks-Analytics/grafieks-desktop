@@ -11,8 +11,9 @@ SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *c
 
 }
 
-void SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
+bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
 {
+    bool output = true;
     QVector<bool> truthList;
 
     // Check if filters exist
@@ -124,10 +125,12 @@ void SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
         appender->EndRow();
 
     }
+    return output;
 }
 
-void SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
+bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
 {
+    bool output = true;
     QString delimiter = Statics::separator;
 
     this->rejectIds.clear();
@@ -202,12 +205,17 @@ void SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
 
 
             auto createT = con.Query(createTableQuery.toStdString());
-            if(!createT->success) qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
+            if(!createT->success) {
+                output = false;
+                qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
+            }
             qDebug() << createTableQuery << createT->success;
         }
 
         lineCount++;
     }
+
+    return output;
 }
 
 void SaveExtractCsvJsonWorker::run()
@@ -227,40 +235,38 @@ void SaveExtractCsvJsonWorker::run()
     QFile fileCreateExtract(Statics::csvJsonPath);
     fileCreateExtract.open(QFile::ReadOnly | QFile::Text);
 
-    this->createExtractDb(&fileCreateExtract, fileName, con);
+    bool createDb = this->createExtractDb(&fileCreateExtract, fileName, con);
 
     fileCreateExtract.close();
 
     // Append data to Extract
-    QFile fileAppendData(Statics::csvJsonPath);
-    fileAppendData.open(QFile::ReadOnly | QFile::Text);
+    if(createDb){
+        QFile fileAppendData(Statics::csvJsonPath);
+        fileAppendData.open(QFile::ReadOnly | QFile::Text);
 
-    duckdb::Appender appender(con, fileName.toStdString());
-    int lineCounter = 0;
-    while(!fileAppendData.atEnd()){
+        duckdb::Appender appender(con, fileName.toStdString());
+        int lineCounter = 0;
+        while(!fileAppendData.atEnd()){
 
-        const QByteArray line = fileAppendData.readLine().simplified();
-        this->dataFinal = line.split(*delimiter.toStdString().c_str());
+            const QByteArray line = fileAppendData.readLine().simplified();
+            this->dataFinal = line.split(*delimiter.toStdString().c_str());
 
-        // Ignore header data to be inserted
-        if(ignoredFirstLine == false){
-            this->appendExtractData(&appender);
-        }
-
-        ignoredFirstLine = false;
-        lineCounter++;
-
-        if(lineCounter%Constants::flushExtractCount == 0){
-            try{
-                appender.Flush();
-            } catch(...){
-                qDebug() << "Something went wrong";
+            // Ignore header data to be inserted
+            if(ignoredFirstLine == false){
+                this->appendExtractData(&appender);
             }
-        }
-    }
 
-    appender.Close();
-    fileAppendData.close();
+            ignoredFirstLine = false;
+            lineCounter++;
+
+            if(lineCounter%Constants::flushExtractCount == 0)
+                    appender.Flush();
+        }
+
+        appender.Close();
+
+        fileAppendData.close();
+    }
 
     emit saveExtractComplete();
 }

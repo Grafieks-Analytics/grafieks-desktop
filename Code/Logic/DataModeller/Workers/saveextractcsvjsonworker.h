@@ -39,8 +39,8 @@ public:
     explicit SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr, int totalFiltersCount = 0, QStringList hideParams = QStringList());
 
 private:
-    void appendExtractData(duckdb::Appender *appender);
-    void createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
+    bool appendExtractData(duckdb::Appender *appender);
+    bool createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
 protected:
     void run() override;
 
