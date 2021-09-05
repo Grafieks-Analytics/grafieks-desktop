@@ -153,7 +153,7 @@ void ForwardOnlyQueryModel::extractSaved()
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(1000, this, &ForwardOnlyQueryModel::extractSizeLimit);
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()

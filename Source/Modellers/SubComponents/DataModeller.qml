@@ -583,25 +583,20 @@ Item {
             let finalQuery = ""
             let hideColumns = DSParamsModel.fetchHideColumns()
 
-            console.log(hideColumns, hideColumns.length, "hide columns")
-            if(hideColumns.length > 0){
-                DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
+            DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
 
-                    // Check if the column is unselected by a user
-                    if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-                        if(hideColumns.indexOf(item) === -1)
-                            selectColumns += " " + item + ","
-                    } else {
-                        if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
-                            selectColumns += " " + item + ","
-                    }
-                })
+                // Check if the column is unselected by a user
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                    if(hideColumns.indexOf(item) === -1)
+                        selectColumns += " " + item + ","
+                } else {
+                    if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
+                        selectColumns += " " + item + ","
+                }
+            })
 
-                let lastIndex = selectColumns.lastIndexOf(",");
-                selectColumns = selectColumns.substring(0, lastIndex);
-            } else {
-                selectColumns = " * "
-            }
+            let lastIndex = selectColumns.lastIndexOf(",");
+            selectColumns = selectColumns.substring(0, lastIndex);
 
 
             let forParams

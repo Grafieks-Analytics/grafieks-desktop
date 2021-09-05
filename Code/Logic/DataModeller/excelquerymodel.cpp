@@ -156,7 +156,7 @@ void ExcelQueryModel::extractSaved()
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(1000, this, &ExcelQueryModel::extractSizeLimit);
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ExcelQueryModel::extractSizeLimit);
 }
 
 void ExcelQueryModel::extractSizeLimit()

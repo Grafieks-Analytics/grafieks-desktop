@@ -16,6 +16,7 @@ namespace Constants
     // Free Limits
     const int freeTierExtractLimit = 1024 * 1024 * 1024;
 //    const int freeTierExtractLimit = 1024 * 1024 * 2;
+    const int timeDelayCheckExtractSize = 2000;
 
     // EXTRACTS (DuckDb) Data Type integer for switching
     const int varcharIntType = 0;
