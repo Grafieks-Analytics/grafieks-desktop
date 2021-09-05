@@ -211,14 +211,6 @@ void QueryModel::extractSaved()
 
     FreeLimitsManager freeLimitsManager;
     QTimer::singleShot(1000, this, &QueryModel::extractSizeLimit);
-
-    emit showSaveExtractWaitPopup();
-
-    if(Statics::freeLimitExtractSizeExceeded == true){
-        Statics::freeLimitExtractSizeExceeded = false;
-    } else {
-        emit generateReports();
-    }
 }
 
 void QueryModel::extractSizeLimit()
@@ -238,12 +230,19 @@ void QueryModel::extractSizeLimit()
     if(size > maxFreeExtractSize){
         if(!file.remove(extractPath)){
             qDebug() << Q_FUNC_INFO << file.errorString();
-        } else {
-            Statics::freeLimitExtractSizeExceeded = true;
         }
+        Statics::freeLimitExtractSizeExceeded = true;
         emit extractFileExceededLimit(true);
     } else {
         emit extractFileExceededLimit(false);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 

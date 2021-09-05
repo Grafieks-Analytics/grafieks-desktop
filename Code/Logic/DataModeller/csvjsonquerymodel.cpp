@@ -89,14 +89,6 @@ void CSVJsonQueryModel::extractSaved()
 
     FreeLimitsManager freeLimitsManager;
     QTimer::singleShot(1000, this, &CSVJsonQueryModel::extractSizeLimit);
-
-    emit showSaveExtractWaitPopup();
-
-    if(Statics::freeLimitExtractSizeExceeded == true){
-        Statics::freeLimitExtractSizeExceeded = false;
-    } else {
-        emit generateReports();
-    }
 }
 
 void CSVJsonQueryModel::receiveCsvJsonFilterQuery(QString query)
@@ -238,13 +230,20 @@ void CSVJsonQueryModel::extractSizeLimit()
 
     QFile file(extractPath);
     if(size > maxFreeExtractSize){
-        if(!file.remove(extractPath)){
+        if(!file.remove(extractPath))
             qDebug() << Q_FUNC_INFO << file.errorString();
-        } else {
-            Statics::freeLimitExtractSizeExceeded = true;
-        }
+
+        Statics::freeLimitExtractSizeExceeded = true;
         emit extractFileExceededLimit(true);
     } else {
         emit extractFileExceededLimit(false);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
