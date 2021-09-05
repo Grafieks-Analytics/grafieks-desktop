@@ -43,27 +43,6 @@ Popup {
     // Connection  Starts
 
     Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         function onExcelLoginStatus(status, directLogin){
