@@ -133,10 +133,62 @@
             ],
         };
 
+        var data = [
+            {
+                name: "Category",
+                children: [
+                    {
+                        children: [
+                            { children: [], name: "Bookcases", size: 8016 },
+                            { children: [], name: "Chairs", size: 6906 },
+                            { children: [], name: "Tables", size: 10230 },
+                            { children: [], name: "Furnishings", size: 2398 },
+                        ],
+                        name: "Furniture",
+                        size: 27550,
+                    },
+                    {
+                        children: [
+                            { children: [], name: "Labels", size: 192 },
+                            { children: [], name: "Storage", size: 4638 },
+                            { children: [], name: "Art", size: 2756 },
+                            { children: [], name: "Binders", size: 2114 },
+                            { children: [], name: "Appliances", size: 1060 },
+                            { children: [], name: "Paper", size: 1198 },
+                            { children: [], name: "Envelopes", size: 1134 },
+                            { children: [], name: "Fasteners", size: 160 },
+                            { children: [], name: "Supplies", size: 132 },
+                        ],
+                        name: "Office Supplies",
+                        size: 13384,
+                    },
+                    {
+                        children: [
+                            { children: [], name: "Phones", size: 8372 },
+                            { children: [], name: "Accessories", size: 938 },
+                        ],
+                        name: "Technology",
+                        size: 9310,
+                    },
+                ],
+            },
+            ["label1", "label2", "label3"],
+        ];
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
-            let { d3colorPalette, paddingInner, markerShape, curveType } =
-                plottingConfiguration;
+            var labels = data[1];
+            data = data[0];
+
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+                curveType,
+                dataLabelfontSize = defaultD3Config.fontSize,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
+            } = plottingConfiguration;
+            window.dataLabelfontSize = dataLabelfontSize;
+            window.dataLabelfontFamily = dataLabelfontFamily;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
@@ -149,7 +201,7 @@
             d3.selectAll("#my_dataviz").html("");
             (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
                 (width = window.innerWidth - margin.left - margin.right - 20),
-                (height = window.innerHeight - margin.top - margin.bottom - 20),
+                (height = window.innerHeight+360 - margin.top - margin.bottom - 20),
                 (color = d3.scaleOrdinal().range(d3Colors));
 
             // append the svg object to the body of the page
@@ -161,15 +213,16 @@
                 .attr("width", width + margin.right + margin.left)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
-                );
+                .attr("transform", "translate(" + 120 + "," + margin.top + ")");
+
+  
+
+         
 
             (i = 0), (duration = 750);
 
             // declares a tree layout and assigns the size
-            treemap = d3.tree().size([height+60, width]);
+            treemap = d3.tree().size([height + 60, width]);
 
             // Assigns parent, children, height, depth
             root = d3.hierarchy(data, function (d) {
@@ -181,8 +234,25 @@
             // Collapse after the second level
             // root.children.forEach(collapse);
             // root.each(collapse);
-
+          // lables
             update(root);
+            console.log(labels);
+            d3.selectAll("svg")
+                .append("g")
+                .attr("class", "labels")
+                .selectAll("text")
+                .data(labels)
+                .enter()
+                .append("text")
+                .attr("transform",(d, i) =>{
+                    var nodeWidth = document.querySelector(".node").getBBox().width
+                    return "translate(" + (nodeWidth-30 +( 180 * (i))) + "," + 20 + ")"
+                } )
+                .text((d) => {
+                    return d;
+                });
+
+          
         }
 
         // // Set the dimensions and margins of the diagram
@@ -247,16 +317,79 @@
                     var y_pos = d3.mouse(this.parentNode)[1] - margin.top;
 
                     d3.select("#tooltip")
-                        .style("left", x_pos + "px")
-                        .style("top", y_pos + "px")
+                        // .style("left", x_pos + "px")
+                        .style("top", y_pos + 10 + "px")
                         .style("display", "block")
                         .style("z-index", 1000)
                         .style("postion", "absolute")
-                        .text(
-                            d.data.name
-                                ? d.data.name + " : " + d.data.size
-                                : d.data.size
+                        // .text(
+                        //     d.data.name
+                        //         ? d.data.name + " : " + d.data.size
+                        //         : d.data.size
+                        // );
+                        .html(function () {
+                            var textValue = d.y0 - d.y1;
+                            if (d.y1 < 0) {
+                                textValue = d.y1 - d.y0;
+                            }
+
+                            return (
+                                "<div class='arrowTooltip'></div>" +
+                                "<span style='color:grey;''>" +
+                                "label1" +
+                                ":&nbsp;&nbsp;" +
+                                "</span>" +
+                                "<span style='float: right;'>" +
+                                d.data.name +
+                                "</span>" +
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                "label2" +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                d.data.size +
+                                "</span>"
+                            );
+                        });
+                    var scrollVal =
+                        document.querySelector("#my_dataviz").scrollLeft;
+
+                    if (
+                        x_pos - scrollVal >
+                        document.documentElement.clientWidth -
+                            document.querySelector("#tooltip").clientWidth -
+                            20
+                    ) {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos -
+                                scrollVal -
+                                document.querySelector("#tooltip").clientWidth +
+                                48 +
+                                "px"
                         );
+
+                        d3.select(".arrowTooltip")
+                            //  document.querySelector("#tooltip:before")
+                            // .style("height","50px";"width","50px";"background-color","red";")
+
+                            .attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                    } else {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos - scrollVal + 70 + "px"
+                        );
+
+                        d3.select(".arrowTooltip").attr(
+                            "style",
+                            "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                        );
+                    }
+
                     d3.select(this).style("fill", d3colors[1]);
                 })
                 .on("mouseout", function (d, i) {
@@ -282,8 +415,10 @@
                 .attr("stroke", "black")
                 .attr("stroke-width", 0)
                 .attr("fill", "black")
-                .attr("font-size", "10px")
-                .attr("font-family", "verdana");
+                .attr("font-family", dataLabelfontFamily)
+                .attr("font-size", dataLabelfontSize);
+            // .attr("font-size", "10px")
+            // .attr("font-family", "verdana");
 
             // UPDATE
             var nodeUpdate = nodeEnter.merge(node);
