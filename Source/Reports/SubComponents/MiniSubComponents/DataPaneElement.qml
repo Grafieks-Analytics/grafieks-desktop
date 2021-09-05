@@ -182,6 +182,7 @@ Rectangle{
                 ReportParamsModel.itemType = itemType;
                 ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));
                 ReportParamsModel.setYAxisActive(yAxisDropEligible(modelData));
+                report_desiner_page.row3Active = row3AxisDropEligible(modelData);
 
                 if(isDropEligible(itemType, modelData)){
                     ReportParamsModel.setColorByActive(true);
@@ -194,6 +195,7 @@ Rectangle{
                 ReportParamsModel.setXAxisActive(false);
                 ReportParamsModel.setYAxisActive(false);
                 ReportParamsModel.setColorByActive(false);
+                report_desiner_page.row3Active = false;
             }
 
             dataPaneListElement.Drag.drop();

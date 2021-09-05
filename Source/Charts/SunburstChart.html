@@ -4,6 +4,8 @@
         <script src="./Data/d3DefaultConfig.js"></script>
         <script src="Data/d3-scale-chromatic.v1.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
+        <script src="./Data/utils.js"></script>
+
         <title>Sunburst Chart</title>
 
         <style>
@@ -575,7 +577,7 @@
                 ],
             };
 
-            var data = {
+            var data = [{
                 name: "Category",
                 children: [
                     {
@@ -867,11 +869,12 @@
                         size: 9310,
                     },
                 ],
-            };
+            }];
 
-            function drawChart(root, plottingConfiguration = {}) {
-                window.data = root;
-                // root = { name: "", children: root };
+            function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
+                data = data[0]
+                // data = { name: "", children: data };
                 let {
                     d3colorPalette,
                     paddingInner,
@@ -960,12 +963,12 @@
                     )
                     .on("click", () => focusOn()); // Reset zoom on canvas click
 
-                root = d3.hierarchy(root);
-                root.sum((d) => d.size);
+                data = d3.hierarchy(data);
+                data.sum((d) => d.size);
 
                 const slice = svg
                     .selectAll("g.slice")
-                    .data(partition(root).descendants());
+                    .data(partition(data).descendants());
 
                 slice.exit().remove();
 
