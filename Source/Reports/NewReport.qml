@@ -983,7 +983,7 @@ Page {
     function reDrawChart(){
 
         checkHorizontalGraph();
-        console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
+        console.log('Debug::',chartTitle,': Colour By',colorByData, colorListModel.count, colorListModel)
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
@@ -997,6 +997,18 @@ Page {
             }
             return;
         }
+
+        
+        if(chartTitle == Constants.tableTitle){
+            console.log('Start plotting table chart')
+            if(xAxisColumns.length > 0 ){
+                console.log(xAxisColumns)
+                drawChart();
+            }
+            return;
+        }
+
+        
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1343,7 +1355,7 @@ Page {
         }
         */
 
-        if(xAxisColumns.length && yAxisColumns.length){
+        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && chartTitle == Constants.tableTitle)){
 
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);
@@ -1500,8 +1512,23 @@ Page {
                 ChartsModel.getKPIChartValues(xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
-                console.log("TABLE CLICKED")
-                ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
+                console.log("TABLE CLICKED");
+                var nonMeasures = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() != "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => d.itemName)
+                var measures = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() == "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d=> d.itemName)
+                console.log('Non Measues',JSON.stringify(nonMeasures))
+                console.log('Measures',JSON.stringify(measures))
+                
+                ChartsModel.getTableChartValues( nonMeasures , measures,'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
@@ -1531,6 +1558,9 @@ Page {
             }
 
             /*
+            After changing to signals and slots this code is not required and 
+            can be removed once confirmed that everything is copied to drawChartAfterReceivingSignal function
+            
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
             //            colorData = [];
@@ -2560,3 +2590,7 @@ Page {
 
     // Right Panel Ends
 }
+
+
+
+

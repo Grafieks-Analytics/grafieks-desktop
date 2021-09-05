@@ -204,7 +204,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: "Properties,Reference Line"
         }
         // ListElement{
         //     icon: "force_directed.png"
@@ -279,6 +279,7 @@ Rectangle{
             yAxisLabelName: "Columns"
             elementWidth: 30
             activeChart: false
+            maxDropOnXAxis: 5
             title:"Table"
             mainCustomizations: "Properties,Legend,Reference Line,Total"
         }
