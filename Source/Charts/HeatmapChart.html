@@ -651,7 +651,7 @@
                         .html((d, i) => {
                             console.log(d3Colors[1]);
                             return (
-                                '<div style="width: 35px; height: 400px; margin-top:2px;border-color:grey; background-image: linear-gradient(' +
+                                '<div style="width: 35px; height: 400px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
                                 d3Colors[0] +
                                 "," +
                                 d3Colors[1] +
@@ -703,6 +703,7 @@
                                 .style("right", "auto")
                                 // .style("bottom", "auto")
                                 .style("left", "0px")
+
                                 // .style("right", "5px")
                                 .style("display", "block")
                                 .style("max-height", "100vh")
@@ -747,13 +748,14 @@
                             y_pos_x_label = 57;
                             d3.select("#legend")
                                 .attr("style", null)
-                                .style("top", "10px")
+                                .style("top", "-170px")
                                 .style("right", rightPosition)
                                 .style("bottom", "auto")
                                 .style("left", "auto")
                                 .style("display", "flex")
                                 .style("max-width", "99vw")
                                 .style("overflow", "scroll")
+                                .style( "transform","rotate(-90deg)")
                                 .style("border", "none");
                             d3.selectAll("#legend div span")
                                 .style("max-width", "160px")
@@ -797,7 +799,8 @@
                                 .attr("style", null)
                                 .style("top", "auto")
                                 .style("right", rightPosition)
-                                .style("bottom", "0px")
+                                .style("bottom", "-170px")
+                                .style( "transform","rotate(-90deg)")
                                 // .style("left", margin.left + "px")
                                 .style("display", "flex")
                                 .style("max-width", "99vw")
