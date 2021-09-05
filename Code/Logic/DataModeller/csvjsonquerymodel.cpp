@@ -88,7 +88,7 @@ void CSVJsonQueryModel::extractSaved()
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(1000, this, &CSVJsonQueryModel::extractSizeLimit);
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &CSVJsonQueryModel::extractSizeLimit);
 }
 
 void CSVJsonQueryModel::receiveCsvJsonFilterQuery(QString query)
@@ -101,6 +101,10 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 {
     QFile file(Statics::csvJsonPath);
     file.open(QFile::ReadOnly | QFile::Text);
+
+    QString db = Statics::currentDbName;
+    db = QFileInfo(db).baseName().toLower();
+    db = db.remove(QRegularExpression("[^A-Za-z0-9]"));
 
     QString delimiter = Statics::separator;
     bool firstLine = true;
@@ -130,7 +134,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
             for(int i = 0; i < this->dataFinal.length(); i++){
                 if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
                     this->columnNamesMap.insert(i, this->dataFinal.at(i).toStdString().c_str());
-                    this->headerDataPreview.append(this->dataFinal.at(i).toStdString().c_str());
+                    this->headerDataPreview.append(db + "." + this->dataFinal.at(i).toStdString().c_str());
                 } else {
                     this->rejectIds.append(i);
                 }

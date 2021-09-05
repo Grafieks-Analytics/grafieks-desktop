@@ -210,7 +210,7 @@ void QueryModel::extractSaved()
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     FreeLimitsManager freeLimitsManager;
-    QTimer::singleShot(1000, this, &QueryModel::extractSizeLimit);
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
 }
 
 void QueryModel::extractSizeLimit()
