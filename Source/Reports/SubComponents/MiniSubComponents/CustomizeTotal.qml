@@ -128,7 +128,9 @@ Column{
 
     }
 
-
+/*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 35
@@ -213,7 +215,7 @@ Column{
 
 
     }
-
+*/
 
     // Row Total Ends
 
@@ -265,7 +267,9 @@ Column{
 
     }
 
-
+/*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 35
@@ -353,6 +357,7 @@ Column{
 
     }
 
+*/
 
     // Row Total Ends
 
@@ -395,6 +400,9 @@ Column{
 
     // Grand Total
 
+    /*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 50
@@ -480,6 +488,7 @@ Column{
 
     }
 
+    */
 
     // Row Total Ends
 
@@ -491,7 +500,7 @@ Column{
         width: 150
 
         CustomButton {
-            text: qsTr("Export Report")
+            textValue: qsTr("Export Report")
             anchors.left: parent.left
             anchors.leftMargin: leftMargin
             anchors.verticalCenter: parent.verticalCenter

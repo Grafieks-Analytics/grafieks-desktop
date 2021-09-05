@@ -282,5 +282,6 @@
         <file>Source/Charts/Data/icons.woff2</file>
         <file>Source/Charts/Data/semantic.min.css</file>
         <file>Source/Charts/Data/semantic.min.js</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
     </qresource>
 </RCC>

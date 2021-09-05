@@ -281,7 +281,7 @@ Rectangle{
             activeChart: false
             maxDropOnXAxis: 5
             title:"Table"
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
+            mainCustomizations: "Properties,Total,Table Customization"
         }
         ListElement{
             icon: "123.png"
