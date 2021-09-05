@@ -74,6 +74,14 @@ const defaultD3Config = {
     defaultGridConfig: {
         gridStatus: true,
     },
+
+    defaultTableChartConfig: {
+        defaultCellBorderStatus: true,
+        defaultCellHoverStatus: true,
+        defaultCompactStatus: false,
+        defaultRowAlternateStatus: true,
+        defaultBatchsize: 50
+    }
 };
 const markerShapeConfig = {
     circle: {

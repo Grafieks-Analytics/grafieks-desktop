@@ -272,5 +272,15 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
         <file>Splash.qml</file>
         <file>Main.qml</file>
+        <file>Source/Charts/Data/dataTables.semanticui.min.js</file>
+        <file>Source/Charts/Data/semantic-icons.css</file>
+        <file>Source/Charts/Data/dataTables.min.js</file>
+        <file>Source/Charts/Data/dataTables.semanticui.min.css</file>
+        <file>Source/Charts/Data/jquery-3.5.1.min.js</file>
+        <file>Source/Charts/Data/icons.ttf</file>
+        <file>Source/Charts/Data/icons.woff</file>
+        <file>Source/Charts/Data/icons.woff2</file>
+        <file>Source/Charts/Data/semantic.min.css</file>
+        <file>Source/Charts/Data/semantic.min.js</file>
     </qresource>
 </RCC>
