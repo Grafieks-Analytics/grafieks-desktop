@@ -10,7 +10,6 @@
 #include "filtercategoricallistmodel.h"
 #include "filterdatelistmodel.h"
 #include "filternumericallistmodel.h"
-#include "csvjsonquerymodel.h"
 
 #include "../General/querysplitter.h"
 #include "../../statics.h"

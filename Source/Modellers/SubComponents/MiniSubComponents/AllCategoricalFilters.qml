@@ -58,9 +58,16 @@ Rectangle{
     // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
 
+        var filterId = FilterCategoricalListModel.getFilterCategoricalListId(filterIndex)
+        DSParamsModel.removeJoinRelation(filterId)
+        DSParamsModel.removeJoinValue(filterId)
+        DSParamsModel.removeJoinRelationSlug(filterId)
+        DSParamsModel.removeExcludeMap(filterId)
+        DSParamsModel.removeIncludeNullMap(filterId)
+        DSParamsModel.removeSelectAllMap(filterId)
+        DSParamsModel.removeTmpSelectedValues(filterId)
+
         FilterCategoricalListModel.deleteFilter(filterIndex)
-        DSParamsModel.removeJoinRelation(filterIndex)
-        DSParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from categorical list clicked

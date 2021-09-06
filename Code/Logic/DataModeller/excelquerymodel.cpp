@@ -36,6 +36,7 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     this->internalColCount = record.count();
 
     beginResetModel();
+    emit clearTablePreview();
     this->resultData.clear();
 
     int j = 0;

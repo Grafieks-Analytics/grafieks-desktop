@@ -645,8 +645,6 @@ Rectangle{
                 onCheckStateChanged: {
                     onExcludeCheckedClicked(checked)
                 }
-
-
             }
         }
 

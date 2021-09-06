@@ -34,6 +34,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     int tmpRowCount = 0;
     int maxRowCount = 0;
 
+    emit clearTablePreview();
     QString connectionName = this->returnConnectionName();
 
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
