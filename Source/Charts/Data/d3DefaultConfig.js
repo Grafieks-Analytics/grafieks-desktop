@@ -65,11 +65,11 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "bottom",
     },
     defaultlabelConfig: {
-        labelStatus: false,
+        labelStatus: true,
     },
     defaultGridConfig: {
         gridStatus: true,
