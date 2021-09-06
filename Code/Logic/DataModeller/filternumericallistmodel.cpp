@@ -286,6 +286,11 @@ void FilterNumericalListModel::clearFilters()
     emit rowCountChanged();
 }
 
+int FilterNumericalListModel::getFilterNumericalListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
 QList<FilterNumericalList *> FilterNumericalListModel::getFilters()
 {
     return mFilter;

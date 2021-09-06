@@ -56,9 +56,18 @@ Rectangle{
 
     // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
+
+        var filterId = FilterDateListModel.getFilterDateListId(filterIndex)
+
+        DSParamsModel.removeJoinRelation(filterId)
+        DSParamsModel.removeJoinValue(filterId)
+        DSParamsModel.removeJoinRelationSlug(filterId)
+        DSParamsModel.removeExcludeMap(filterId)
+        DSParamsModel.removeIncludeNullMap(filterId)
+        DSParamsModel.removeSelectAllMap(filterId)
+        DSParamsModel.removeTmpSelectedValues(filterId)
+
         FilterDateListModel.deleteFilter(filterIndex)
-        DSParamsModel.removeJoinRelation(filterIndex)
-        DSParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from date list clicked

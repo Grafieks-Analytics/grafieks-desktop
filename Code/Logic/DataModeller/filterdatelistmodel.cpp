@@ -365,6 +365,11 @@ void FilterDateListModel::clearFilters()
     emit rowCountChanged();
 }
 
+int FilterDateListModel::getFilterDateListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
 QList<FilterDateList *> FilterDateListModel::getFilters()
 {
     return mFilter;

@@ -79,6 +79,7 @@ void CSVJsonQueryModel::getAllFilters(FilterCategoricalListModel *categoricalFil
     if(this->numericalFilter != nullptr) this->totalFiltersCount += numericalFilter->getFilters().count();
     if(this->dateFilter != nullptr) this->totalFiltersCount += dateFilter->getFilters().count();
 
+    emit clearTablePreview();
     this->updateModelValues(0);
 }
 
@@ -133,18 +134,18 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
             for(int i = 0; i < this->dataFinal.length(); i++){
                 if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
-                    this->columnNamesMap.insert(i, this->dataFinal.at(i).toStdString().c_str());
                     this->headerDataPreview.append(db + "." + this->dataFinal.at(i).toStdString().c_str());
                 } else {
                     this->rejectIds.append(i);
                 }
+                this->columnNamesMap.insert(i, this->dataFinal.at(i).toStdString().c_str());
             }
 
         } else {
 
-            if(previewRowCount > 0){
+            if(previewRowCount > 0)
                 if(readLine == previewRowCount) break;
-            }
+
 
             if(this->totalFiltersCount > 0){
 
@@ -176,12 +177,14 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                     QStringList x;
                     int i = 0;
                     foreach(QByteArray a, this->dataFinal){
-                        if(!this->rejectIds.contains(i))
-                            x.append(a.toStdString().c_str());
+                        if(!this->rejectIds.contains(i)){
+                            x.append(a.toStdString().c_str()); 
+                        }
 
                         i++;
                     }
                     this->resultData.append(x);
+                    readLine++;
                 }
 
                 truthList.clear();
@@ -192,8 +195,9 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 QStringList x;
                 int i = 0;
                 foreach(QByteArray a, colData){
-                    if(!this->rejectIds.contains(i))
+                    if(!this->rejectIds.contains(i)){
                         x.append(a.toStdString().c_str());
+                    }
                     i++;
                 }
                 this->resultData.append(x);

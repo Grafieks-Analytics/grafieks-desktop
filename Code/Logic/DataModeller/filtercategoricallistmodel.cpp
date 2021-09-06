@@ -277,6 +277,11 @@ void FilterCategoricalListModel::clearFilters()
     emit rowCountChanged();
 }
 
+int FilterCategoricalListModel::getFilterCategoricalListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
 QList<FilterCategoricalList *> FilterCategoricalListModel::getFilters()
 {
     return mFilter;

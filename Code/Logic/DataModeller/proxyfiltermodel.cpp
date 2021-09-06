@@ -1,8 +1,7 @@
 #include "proxyfiltermodel.h"
 
-ProxyFilterModel::ProxyFilterModel(QObject *parent) : QObject(parent)
+ProxyFilterModel::ProxyFilterModel( QObject *parent) : QObject(parent)
 {
-
 }
 
 void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel, FilterDateListModel *dateModel, FilterNumericalListModel *numericalModel)
@@ -21,8 +20,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     case Constants::jsonIntType:
     case Constants::csvIntType:{
 
-
-        CSVJsonQueryModel csvJsonQueryModel;
         emit sendModels(categoryModel, numericalModel, dateModel);
         break;
     }
