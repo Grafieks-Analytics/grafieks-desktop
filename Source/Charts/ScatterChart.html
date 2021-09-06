@@ -180,27 +180,26 @@
             categories,
         ];
 
-
         // When only numericals are passed
-        // Send 
+        // Send
         data = [
             [
-                [0,0],      // This element is fixed
-                [-2121, -10], // Sum of population, sum of id
+                [0, 0], // This element is fixed
+                [2121, 10], // Sum of population, sum of id
             ],
             ["population", "id"],
         ];
 
         // when categorical is also passed with numerical
-        // data = [
-        //     [
-        //         [524, 10, "India"],         // Group them on the basis of categorical
-        //         [4712, "12", "Bhutan"],
-        //         [10, "13", "Bhutan"],
-        //     ],
-        //     ["population", "id", "country"],
-        //     ["Nepal", "India", "Bhutan"],
-        // ];
+        data = [
+            [
+                [524, 10, "India"],         // Group them on the basis of categorical
+                [4712, "12", "Bhutan"],
+                [10, "13", "Bhutan"],
+            ],
+            ["population", "id", "country"],
+            ["Nepal", "India", "Bhutan"],
+        ];
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
@@ -244,16 +243,21 @@
 
             var dataValues = data[0];
 
+            var xRange = d3.extent(dataValues, function (d) {
+                        return +d[0];
+                    })
             // Add X axis
             var x = d3
                 .scaleLinear()
                 .domain(
-                    d3.extent(dataValues, function (d) {
-                        return +d[0];
-                    })
+                    xRange
                 )
-                .range([0, width]);
+                .range([0, width]).nice();
 
+            if(xRange[0] > 0){
+                xRange[0] = 0
+            }
+            
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x).tickSizeOuter(0))
@@ -265,15 +269,18 @@
             //     .style("stroke-width", "1")
             //     .call(make_x_gridlines().tickSize(-height).tickFormat(""));
 
+            var yRange = d3.extent(dataValues, function (d) {
+                return +d[1];
+            });
+
+            
+            if(yRange[0] > 0){
+                yRange[0] = 0
+            }
+            console.log(yRange);
+
             // Add Y axis
-            var y = d3
-                .scaleLinear()
-                .domain(
-                    d3.extent(dataValues, function (d) {
-                        return +d[1];
-                    })
-                )
-                .range([height, 0]);
+            var y = d3.scaleLinear().domain(yRange).range([height, 0]).nice();
             svg.append("g")
                 .call(d3.axisLeft(y).tickSizeOuter(0))
                 .attr("class", "y-axis");
@@ -298,11 +305,11 @@
                 .attr("cy", function (d) {
                     return y(+d[1]);
                 })
-                .attr("r", function(d, i){
-                    if(i==0 && d.length == 2){
+                .attr("r", function (d, i) {
+                    if (i == 0 && d.length == 2) {
                         return 0;
                     }
-                    return 5
+                    return 5;
                 })
                 .style("fill", function (d) {
                     return color(d[2]);
