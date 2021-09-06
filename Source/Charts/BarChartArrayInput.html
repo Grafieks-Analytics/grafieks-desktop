@@ -72,7 +72,7 @@
             // ];
 
             // prettier-ignore
-            var data = [[["NepalDist1 asd sasadas asd sads", "NepalDist2", "East", "West", "North", "South", "Bongaigaon", "Kokrajhar", "NOIDA", "Lucknow", "Thi1", "D1"], [2121, 443, 1121, 4243, 210, 4415, 2010, 222, -12, -624, 11053, 10]], ["district", "population"]];
+            var data = [[["NepalDist1 asd sasadas asd sads", "NepalDist2", "East", "West", "North", "South", "Bongaigaon", "Kokrajhar", "NOIDA", "Lucknow", "Thi1", "D1"], [2121.55, 443.636, 1121.89898, 4243.866549, 210.8744, 4415.963, 2010.6, 222.89, -12, -624, 11053, 10]], ["district", "population"]];
 
             // prettier-ignore
 
@@ -642,7 +642,7 @@
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
-                                    yValue +
+                                    Math.round(yValue) +
                                     "</span>"
                                 );
                             });
@@ -726,7 +726,7 @@
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent = dataset[i];
+                        label.textContent = Math.round(dataset[i]);
                     });
                 }
 
