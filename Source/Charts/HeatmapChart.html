@@ -549,78 +549,7 @@
                 const yAxisWidth =
                     document.querySelector("#yAxisDiv").clientWidth;
                 // append the svg object to the body of the page
-                var svg = d3
-                    .select("#my_dataviz")
-                    .append("svg")
-                    .attr("width", width + 0 + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                    .attr(
-                        "transform",
-                        "translate(" + 0 + "," + margin.top + ")"
-                    );
 
-                // Build X scales and axis:
-                var x = d3
-                    .scaleBand()
-                    .range([0, width])
-                    .domain(myGroups)
-                    .padding(0);
-                svg.append("g")
-                    .attr("class", "x-axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x).tickSizeOuter(0));
-
-                // Build Y scales and axis:
-                var y = d3
-                    .scaleBand()
-                    .range([height, 0])
-                    .domain(myVars)
-                    .padding(0.003);
-
-                // Build color scale
-                var myColor = d3
-                    .scaleLinear()
-                    .range([d3Colors[0], d3Colors[d3Colors.length - 1]])
-                    .domain(
-                        d3.extent(dataValues, function (d) {
-                            return +d[2];
-                        })
-                    );
-                // var yAxis = d3
-                //     .axisLeft(yScale)
-                //     .tickSize(0)
-                //     .ticks(yaxisTicks)
-                //     .tickFormat(d3.format(".2s"));
-                d3.select("#yAxisDiv")
-                    .append("svg")
-                    .attr("width", "72")
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g") //add group to leave margin for axis
-                    .attr(
-                        "transform",
-                        "translate(" +
-                            (margin.left + 11) +
-                            "," +
-                            margin.top +
-                            ")"
-                    )
-                    .append("g")
-                    .attr("class", "y-axis")
-                    // svg.append("g")
-                    //     .attr("class", "y-axis")
-                    .call(d3.axisLeft(y).tickSizeOuter(0))
-                    .call(y);
-
-                // d3.selectAll(".x-axis text")
-                //     .attr("font-size", xTickfontSize)
-                //     .attr("font-family", xTickfontFamily)
-                //     .attr("fill", xTickfontColor)
-                //     .attr("y", 8);
-                // d3.selectAll("#yAxisDiv text")
-                //     .attr("font-size", yTickfontSize)
-                //     .attr("font-family", yTickfontFamily)
-                //     .attr("fill", yTickfontColor);
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -651,7 +580,7 @@
                         .html((d, i) => {
                             console.log(d3Colors[1]);
                             return (
-                                '<div style="width: 35px; height: 400px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
+                                '<div style="width: 15px; height: 200px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
                                 d3Colors[0] +
                                 "," +
                                 d3Colors[1] +
@@ -744,18 +673,19 @@
                         case "top":
                             d3.select("#mainChartWindow").attr("style", null);
                             // margin.top += 50;
-                            height -= 50;
+                            height -= 70;
+                            width -= 2;
                             y_pos_x_label = 57;
                             d3.select("#legend")
                                 .attr("style", null)
-                                .style("top", "-170px")
+                                .style("top", "-90px")
                                 .style("right", rightPosition)
                                 .style("bottom", "auto")
                                 .style("left", "auto")
                                 .style("display", "flex")
                                 .style("max-width", "99vw")
                                 .style("overflow", "scroll")
-                                .style( "transform","rotate(-90deg)")
+                                .style("transform", "rotate(-90deg)")
                                 .style("border", "none");
                             d3.selectAll("#legend div span")
                                 .style("max-width", "160px")
@@ -799,8 +729,8 @@
                                 .attr("style", null)
                                 .style("top", "auto")
                                 .style("right", rightPosition)
-                                .style("bottom", "-170px")
-                                .style( "transform","rotate(-90deg)")
+                                .style("bottom", "-70px")
+                                .style("transform", "rotate(-90deg)")
                                 // .style("left", margin.left + "px")
                                 .style("display", "flex")
                                 .style("max-width", "99vw")
@@ -821,13 +751,14 @@
                         // For Right Legened
                         case "right":
                         default:
-                            // width -= 220;
+                            width -= 5;
+
                             // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
                             var legendWidth = legendElement.offsetWidth;
 
                             d3.select("#legend")
                                 .attr("style", null)
-                                .style("right", "0px")
+                                .style("right", "10px")
                                 .style("left", "auto")
                                 .style("position", "fixed")
                                 .style("top", topPosition)
@@ -868,6 +799,78 @@
                 }
 
                 // legends code ends
+                var svg = d3
+                    .select("#my_dataviz")
+                    .append("svg")
+                    .attr("width", width + 0 + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr(
+                        "transform",
+                        "translate(" + 0 + "," + margin.top + ")"
+                    );
+                // Build X scales and axis:
+                var x = d3
+                    .scaleBand()
+                    .range([0, width])
+                    .domain(myGroups)
+                    .padding(0);
+                svg.append("g")
+                    .attr("class", "x-axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x).tickSizeOuter(0));
+
+                // Build Y scales and axis:
+                var y = d3
+                    .scaleBand()
+                    .range([height, 0])
+                    .domain(myVars)
+                    .padding(0.003);
+
+                // Build color scale
+                var myColor = d3
+                    .scaleLinear()
+                    .range([d3Colors[0], d3Colors[d3Colors.length - 1]])
+                    .domain(
+                        d3.extent(dataValues, function (d) {
+                            return +d[2];
+                        })
+                    );
+                // var yAxis = d3
+                //     .axisLeft(yScale)
+                //     .tickSize(0)
+                //     .ticks(yaxisTicks)
+                //     .tickFormat(d3.format(".2s"));
+                d3.select("#yAxisDiv")
+                    .append("svg")
+                    .attr("width", "72")
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            (margin.left + 11) +
+                            "," +
+                            margin.top +
+                            ")"
+                    )
+                    .append("g")
+                    .attr("class", "y-axis")
+                    // svg.append("g")
+                    //     .attr("class", "y-axis")
+                    .call(d3.axisLeft(y).tickSizeOuter(0))
+                    .call(y);
+
+                // d3.selectAll(".x-axis text")
+                //     .attr("font-size", xTickfontSize)
+                //     .attr("font-family", xTickfontFamily)
+                //     .attr("fill", xTickfontColor)
+                //     .attr("y", 8);
+                // d3.selectAll("#yAxisDiv text")
+                //     .attr("font-size", yTickfontSize)
+                //     .attr("font-family", yTickfontFamily)
+                //     .attr("fill", yTickfontColor);
+
                 svg.selectAll()
                     .data(dataValues, function (d) {
                         return d[0] + ":" + d[1];
