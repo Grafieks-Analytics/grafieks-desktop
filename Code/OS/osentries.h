@@ -5,6 +5,8 @@
 #include <QSettings>
 #include <QDebug>
 
+#include "../statics.h"
+
 class OsEntries : public QObject
 {
     Q_OBJECT
