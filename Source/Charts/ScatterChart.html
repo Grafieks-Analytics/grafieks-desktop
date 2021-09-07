@@ -183,24 +183,24 @@
 
         // When only numericals are passed
         // Send 
-        data = [
-            [
-                [0,0],      // This element is fixed
-                [-2121, -10], // Sum of population, sum of id
-            ],
-            ["population", "id"],
-        ];
-
-        // when categorical is also passed with numerical
         // data = [
         //     [
-        //         [524, 10, "India"],         // Group them on the basis of categorical
-        //         [4712, "12", "Bhutan"],
-        //         [10, "13", "Bhutan"],
+        //         [0,0],      // This element is fixed
+        //         [-2121, -10], // Sum of population, sum of id
         //     ],
-        //     ["population", "id", "country"],
-        //     ["Nepal", "India", "Bhutan"],
+        //     ["population", "id"],
         // ];
+
+        // when categorical is also passed with numerical
+        data = [
+            [
+                [524, 10, "India"],         // Group them on the basis of categorical
+                [4712, "12", "Bhutan"],
+                [10, "13", "Bhutan"],
+            ],
+            ["population", "id", "country"],
+            ["Nepal", "India", "Bhutan"],
+        ];
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
