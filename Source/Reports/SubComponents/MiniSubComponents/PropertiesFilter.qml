@@ -196,7 +196,22 @@ Column{
            gridConfig['gridStatus'] = checked;
            d3PropertyConfig.gridConfig = gridConfig;
            reDrawChart();
-       }
+    }
+
+    function toggleDynamicheight(checked){
+        d3PropertyConfig.dynamicHeight = checked;
+        reDrawChart();
+    }
+
+    function updateBottomPinchValue(){
+        if(bottomPinchValue.text){
+            if(+bottomPinchValue.text < 0){
+                return;
+            }
+            d3PropertyConfig.bottomPinch = +bottomPinchValue.text;
+        }
+        reDrawChart();
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -596,6 +611,82 @@ Column{
 
     }
     // Gride Line Ends
+
+
+    // Gride Line starts
+    Rectangle{
+
+        height: 30
+        width: parent.width
+
+        Rectangle{
+
+            height: 20
+            width: parent.width
+
+            Text {
+                text: qsTr("Dynamic Height")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+
+                checked: false
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: toggleDynamicheight(checked);
+
+
+            }
+
+        }
+
+    }
+    // Gride Line Ends
+
+    Rectangle{
+
+        height: 40
+        width: parent.width
+
+        Rectangle{
+
+            height: 30
+            width: parent.width
+
+            Text {
+                text: qsTr("Bottom Pinch")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            TextField{
+                id: bottomPinchValue
+                height: 30
+                width: 30
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 10
+                anchors.top: parent.top
+                text: "1"
+                onTextChanged: updateBottomPinchValue()
+
+            }
+
+        }
+
+    }
+
+    
+
 
 
 

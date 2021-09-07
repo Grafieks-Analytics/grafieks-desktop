@@ -283,24 +283,16 @@ Rectangle{
             activeChart: false
             maxDropOnXAxis: 5
             title:"Table"
-            mainCustomizations: "Properties,Total,Table Customization"
+            mainCustomizations: "Total,Table Customization"
         }
         ListElement{
             icon: "123.png"
-            chartHtml:"bar.html"
+            chartHtml:"kpi.html"
             elementWidth: 30
             elementHeight: 20
             activeChart: false
             title:"KPI"
             mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "123.png"
-            chartHtml:"bar.html"
-            elementWidth: 30
-            elementHeight: 20
-            activeChart: false
-            title:"Line Bar"
         }
     }
 

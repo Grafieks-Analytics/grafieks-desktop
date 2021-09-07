@@ -88,52 +88,58 @@
             ];
 
             function drawChart(data, plottingConfiguration = {}) {
-                window.data = data;
+                try {
+                    window.data = data;
 
-                var [data, label] = data;
+                    var [data, label] = data;
 
-                data = sortArraysOfObjectByValue(data, "value");
-                data.forEach((d) => {
-                    d.label = d.label || d.key;
-                });
+                    data = sortArraysOfObjectByValue(data, "value");
+                    data.forEach((d) => {
+                        d.label = d.label || d.key;
+                    });
 
-                let { d3colorPalette = defaultD3Config.d3ColorPalette } =
-                    plottingConfiguration;
+                    let {
+                        d3colorPalette = defaultD3Config.d3ColorPalette,
+                        dynamicHeight = defaultD3Config.defaultDynamicHeight,
+                        bottomPinch = defaultD3Config.defaultBottomPinch,
+                    } = plottingConfiguration;
 
-                // documentation for options
-                // https://github.com/jakezatecky/d3-funnel/blob/master/README.md
+                    // documentation for options
+                    // https://github.com/jakezatecky/d3-funnel/blob/master/README.md
 
-                var colorValues =
-                    parseInt(data.length / d3colorPalette.length) + 1;
+                    var colorValues =
+                        parseInt(data.length / d3colorPalette.length) + 1;
 
-                for (var i = 0; i < colorValues; i++) {
-                    d3colorPalette.push(...d3colorPalette);
-                }
-
-                const options = {
-                    block: {
-                        dynamicHeight: false,
-                        minHeight: 15,
-                        fill: {
-                            scale: d3colorPalette,
-                        },
-                    },
-                    chart: {
-                        bottomPinch: 0,
-                        curve: {
-                            enabled: false,
-                        },
-                        width: window.innerWidth / 2,
-                        height: window.innerHeight - 50,
-                    },
-                    tooltip: {
-                        enabled: true
+                    for (var i = 0; i < colorValues; i++) {
+                        d3colorPalette.push(...d3colorPalette);
                     }
-                    
-                };
 
-                const chart = new D3Funnel("#my_dataviz");
-                chart.draw(data, options);
+                    const options = {
+                        block: {
+                            dynamicHeight,
+                            minHeight: 15,
+                            fill: {
+                                scale: d3colorPalette,
+                            },
+                        },
+                        chart: {
+                            bottomPinch: Math.min(bottomPinch, data.length),
+                            curve: {
+                                enabled: false,
+                            },
+                            width: window.innerWidth / 2,
+                            height: window.innerHeight - 50,
+                        },
+                        tooltip: {
+                            enabled: true,
+                        },
+                    };
+
+                    const chart = new D3Funnel("#my_dataviz");
+                    chart.draw(data, options);
+                } catch (error) {
+                    console.log(error);
+                }
             }
 
             drawChart(data);
