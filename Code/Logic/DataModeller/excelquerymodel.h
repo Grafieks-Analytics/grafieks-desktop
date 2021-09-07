@@ -20,7 +20,7 @@
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
-#include "../General/freelimitsmanager.h"
+#include "../FreeTier/freetierextractsmanager.h"
 
 class ExcelQueryModel : public QAbstractTableModel
 {

@@ -47,7 +47,6 @@ SOURCES += \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
-    Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
@@ -93,19 +92,25 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
-    Code/Logic/General/Workers/chartsworker.cpp \
+    Code/Logic/FreeTier/freetierchartsmanager.cpp \
+    Code/Logic/FreeTier/freetierconnectorsmanager.cpp \
+    Code/Logic/FreeTier/freetierextractsmanager.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
-    Code/Logic/General/freelimitsmanager.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/newtablecolumnsmodel.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Readers/extractprocessor.cpp \
+    Code/Logic/Readers/liveprocessor.cpp \
+    Code/Logic/Readers/workbookprocessor.cpp \
     Code/Logic/Reports/Workers/updatefilterdataworker.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
+    Code/OS/odbcdriversmodel.cpp \
+    Code/OS/osentries.cpp \
     main.cpp
 
 RESOURCES += \
@@ -163,7 +168,6 @@ HEADERS += \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \
-    Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
@@ -209,19 +213,25 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/General/Workers/chartsworker.h \
+    Code/Logic/FreeTier/freetierchartsmanager.h \
+    Code/Logic/FreeTier/freetierconnectorsmanager.h \
+    Code/Logic/FreeTier/freetierextractsmanager.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \
-    Code/Logic/General/freelimitsmanager.h \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/newtablecolumnsmodel.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Readers/extractprocessor.h \
+    Code/Logic/Readers/liveprocessor.h \
+    Code/Logic/Readers/workbookprocessor.h \
     Code/Logic/Reports/Workers/updatefilterdataworker.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
+    Code/OS/odbcdriversmodel.h \
+    Code/OS/osentries.h \
     Code/duckdb.hpp \
     Code/jsoncons/include/jsoncons/json.hpp \
     Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \

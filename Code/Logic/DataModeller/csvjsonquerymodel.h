@@ -18,7 +18,7 @@
 #include "./filterdatelistmodel.h"
 #include "./filternumericallistmodel.h"
 #include "./filtercsvjson.h"
-#include "../General/freelimitsmanager.h"
+#include "../FreeTier/freetierextractsmanager.h"
 
 
 #include "./Workers/saveextractcsvjsonworker.h"

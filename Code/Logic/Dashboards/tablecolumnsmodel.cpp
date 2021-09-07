@@ -268,7 +268,21 @@ void TableColumnsModel::receiveReportData(QMap<int, QMap<int, QStringList> > new
 
 }
 
-void TableColumnsModel::generateColumns()
+void TableColumnsModel::generateColumnsForExtract()
+{
+    QString extractPath = Statics::extractPath;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    this->generateColumns(&con);
+}
+
+void TableColumnsModel::generateColumnsForReader(duckdb::Connection *con)
+{
+    this->generateColumns(con);
+}
+
+void TableColumnsModel::generateColumns(duckdb::Connection *con)
 {
     // Fetch data from duckdb
     QString extractPath = Statics::extractPath;
@@ -279,9 +293,6 @@ void TableColumnsModel::generateColumns()
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
     }
 
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con1(db);
-
     // Clear existing chart headers data
     this->numericalList.clear();
     this->categoryList.clear();
@@ -289,7 +300,7 @@ void TableColumnsModel::generateColumns()
     this->newChartHeader.clear();
 
 
-    auto data = con1.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
 
     if(data->error.empty()){
         int rows = data->collection.Count();

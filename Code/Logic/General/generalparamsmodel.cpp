@@ -60,7 +60,8 @@ int GeneralParamsModel::currentScreen() const
 void GeneralParamsModel::setExtractPath(QString extractsPath)
 {
     Statics::extractPath = extractsPath;
-    emit showSaveExtractWaitPopup();
+    if(Statics::modeProcessReader == false)
+        emit showSaveExtractWaitPopup();
 
 }
 
@@ -79,6 +80,12 @@ void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName
 QVariantMap GeneralParamsModel::getChangedColumnTypes()
 {
     return this->changedHeaderTypes;
+}
+
+QString GeneralParamsModel::urlToFilePath(QUrl url)
+{
+    QString path = url.toLocalFile();
+    return path;
 }
 
 void GeneralParamsModel::setMenuType(int menuType)

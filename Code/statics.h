@@ -18,6 +18,7 @@ public:
     static QString csvJsonPath;
     static QVariantMap changedHeaderTypes;
     static bool freeLimitExtractSizeExceeded;
+    static bool modeProcessReader;
 
     // Mysql
     static QString myHost;

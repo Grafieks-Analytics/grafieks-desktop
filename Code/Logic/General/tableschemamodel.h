@@ -46,6 +46,7 @@ signals:
 
 public slots:
     void generateSchemaForExtract();
+    void generateSchemaForReader(duckdb::Connection *con);
 
 private:
 
@@ -65,6 +66,7 @@ private:
 
     void setHeaders(const QByteArray line, QString delimiter);
     QMap<QString, QList<QStringList>> detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName);
+    void extractSchema(duckdb::Connection *con);
 };
 
 #endif // TABLESCHEMAMODEL_H

@@ -1,20 +1,18 @@
-#include "freelimitsmanager.h"
+#include "freetierextractsmanager.h"
 
-FreeLimitsManager::FreeLimitsManager(QObject *parent) : QObject(parent)
+FreeTierExtractsManager::FreeTierExtractsManager(QObject *parent) : QObject(parent)
 {
 
 }
 
-void FreeLimitsManager::extractSizeLimit()
+void FreeTierExtractsManager::extractSizeLimit()
 {
     QString extractPath = Statics::extractPath;
     int size = 0;
-    int maxFreeExtractSize = 1024; // This many bytes in a GB
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
 
     QFileInfo fileInfo(extractPath);
     size = fileInfo.size();
-
-    qDebug() << size << maxFreeExtractSize << "SIZE SET";
 
     QFile file(extractPath);
     file.open(QFile::ReadOnly);
