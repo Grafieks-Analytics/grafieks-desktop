@@ -179,6 +179,7 @@
         <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
         <file>Source/Charts/DoughnutChart.html</file>
         <file>Source/Charts/ScatterChart.html</file>
+        <file>Source/Charts/KPI.html</file>
         <file>Source/Charts/TreeChart.html</file>
         <file>Source/MainSubComponents/VerticalLineTpl.qml</file>
         <file>Source/Charts/RadialTreeChart.html</file>

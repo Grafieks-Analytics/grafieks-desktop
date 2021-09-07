@@ -81,7 +81,9 @@ const defaultD3Config = {
         defaultCompactStatus: false,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50
-    }
+    },
+    defaultDynamicHeight: false,
+    defaultBottomPinch: 1
 };
 const markerShapeConfig = {
     circle: {

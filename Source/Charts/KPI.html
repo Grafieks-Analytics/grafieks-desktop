@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <style>
+            body {
+                font: 10px sans-serif;
+            }
+            .arc path {
+                stroke: #fff;
+            }
+        </style>
+
+        <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
+        <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+
+    </head>
+
+    <body>
+        <div id="my_dataviz" style="text-align: center"></div>
+        <div id="tooltip"></div>
+
+        <script>
+        function drawChart(data, plotConfiguration = {}){
+            document.getElementById('my_dataviz').innerHTML = data;
+        }
+        </script>
+    </body>
+</html>

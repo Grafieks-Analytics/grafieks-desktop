@@ -84,6 +84,14 @@ Item{
 //            ]
 //        }
 
+
+        ListElement {
+            categoryName: "Table Customization"
+            display: false
+            collapsed: false
+            subItems: []
+        }
+
         ListElement {
             categoryName: "Total"
             display: false
@@ -92,12 +100,6 @@ Item{
         }
         
 
-        ListElement {
-            categoryName: "Table Customization"
-            display: false
-            collapsed: false
-            subItems: []
-        }
 
     }
 

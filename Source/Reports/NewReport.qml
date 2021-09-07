@@ -365,10 +365,16 @@ Page {
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = dataValuesTemp[0].map(d=> d.key );
+            delete dataValuesTemp;
             break;
         case Constants.funnelChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = Object.keys(dataValuesTemp[0])
+            delete dataValuesTemp;
             break;
         case Constants.radarChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -1219,17 +1225,29 @@ Page {
         return false;
     }
 
-    function xAxisDropEligible(itemName){
+    function xAxisDropEligible(itemName, itemType){
+        console.log('Debug:: Item type',itemType)
         var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
         // Check if condition more data pills can be added or not';
         if(xAxisColumns.length === allowedXAxisDataPanes){
             return false;
         }
+
+        switch(chartTitle){
+            case Constants.tableTitle:
+                if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+        }
+        
+
         const multiChart = true;
         if(multiChart){
             return true;
         }
         return false;
+
+        
     }
 
     function yAxisDropEligible(itemName){
@@ -1252,16 +1270,13 @@ Page {
     function row3AxisDropEligible(itemName, itemType){
         var row3Columns  = getAxisColumnNames(row3Columns);
         const multiChart = true;
-        console.log()
         // Check if condition more data pills can be added or not';
-        // Hard coded Value to 1;
-        // Please change it to variable
         if(row3Columns.length === allowedYAxisDataPanes){
             return false;
         }
-        // if(chartTitle == Constants.pivotTitle && itemType == "numerical"){
-        //     return false;
-        // }
+        if(chartTitle == Constants.pivotTitle && itemType != "numerical"){
+            return false;
+        }
         if(multiChart){
             return true;
         }
@@ -1285,7 +1300,8 @@ Page {
 
         if(axis === Constants.xAxisName){
 
-            if(!xAxisDropEligible(itemName)){
+            if(!xAxisDropEligible(itemName, itemType)){
+                // Red color
                 return;
             }
 
@@ -1294,6 +1310,7 @@ Page {
 
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
+                // Red color
                 return;
             }
 
@@ -1302,7 +1319,8 @@ Page {
             yAxisColumns.push(itemName);
 
         }else{
-            if(!row3AxisDropEligible(itemName)){
+            if(!row3AxisDropEligible(itemName, itemType)){
+                // Red color
                 return;
             }
             console.log(itemType, 'Adding it to values?');
