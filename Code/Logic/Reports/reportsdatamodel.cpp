@@ -417,66 +417,19 @@ void ReportsDataModel::getReportId(int reportId)
 
 }
 
-void ReportsDataModel::generateColumns()
+void ReportsDataModel::generateColumnsForExtract()
 {
-
-    QMap<int, QStringList> chartHeader;
-    QMap<QString, QString> colTypeMap;
-
     // Fetch data from duckdb
     QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-    // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
-    this->newChartHeader.clear();
+    this->generateColumns(&con);
+}
 
-
-    auto data = con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-
-    if(data->error.empty()){
-        int rows = data->collection.Count();
-
-        for(int i = 0; i < rows; i++){
-            QString fieldName =  data->GetValue(1, i).ToString().c_str();
-            fieldName = fieldName.trimmed();
-            QString fieldType = data->GetValue(2, i).ToString().c_str();
-            colTypeMap.insert(fieldName, fieldType);
-
-
-            if(dataType.dataType(fieldType).contains(Constants::categoricalType)){
-                this->categoryList.append(fieldName);
-            } else if(dataType.dataType(fieldType).contains(Constants::numericalType)){
-                this->numericalList.append(fieldName);
-            } else if(dataType.dataType(fieldType).contains(Constants::dateType)){
-                this->dateList.append(fieldName);
-            } else{
-                qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   fieldName;
-            }
-
-            this->newChartHeader.insert(i, fieldName);
-        }
-    } else{
-        qWarning() << Q_FUNC_INFO << data->error.c_str();
-    }
-
-    // Update new data
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
-
+void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
+{
+    this->generateColumns(con);
 }
 
 QVariant ReportsDataModel::convertToDateFormatTimeFromString(QString stringDateFormat)
@@ -520,4 +473,60 @@ QVariant ReportsDataModel::convertToDateFormatTimeFromString(QString stringDateF
     }
 
     return out;
+}
+
+void ReportsDataModel::generateColumns(duckdb::Connection *con)
+{
+    QMap<int, QStringList> chartHeader;
+    QMap<QString, QString> colTypeMap;
+
+    // Fetch data from duckdb
+    QString tableName = Statics::currentDbName;
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
+
+    // Clear existing chart headers data
+    this->numericalList.clear();
+    this->categoryList.clear();
+    this->dateList.clear();
+    this->newChartHeader.clear();
+
+
+    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+
+    if(data->error.empty()){
+        int rows = data->collection.Count();
+
+        for(int i = 0; i < rows; i++){
+            QString fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldName = fieldName.trimmed();
+            QString fieldType = data->GetValue(2, i).ToString().c_str();
+            colTypeMap.insert(fieldName, fieldType);
+
+
+            if(dataType.dataType(fieldType).contains(Constants::categoricalType)){
+                this->categoryList.append(fieldName);
+            } else if(dataType.dataType(fieldType).contains(Constants::numericalType)){
+                this->numericalList.append(fieldName);
+            } else if(dataType.dataType(fieldType).contains(Constants::dateType)){
+                this->dateList.append(fieldName);
+            } else{
+                qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   fieldName;
+            }
+
+            this->newChartHeader.insert(i, fieldName);
+        }
+    } else{
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+    }
+
+    // Update new data
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }

@@ -268,7 +268,7 @@ Popup {
 
         onAccepted: {
             console.log(fileUrl)
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

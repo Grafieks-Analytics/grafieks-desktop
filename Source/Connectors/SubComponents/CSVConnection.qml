@@ -291,7 +291,7 @@ Popup {
 
         onAccepted: {
 
-            selectedFile = ConnectorsLoginModel.urlToFilePath(promptCSV.fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(promptCSV.fileUrl)
             csvFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

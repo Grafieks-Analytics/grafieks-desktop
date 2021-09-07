@@ -18,7 +18,7 @@ FileDialog{
 
     onAccepted: {
 
-        let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.currentFile)
+        let fileName = GeneralParamsModel.urlToFilePath(saveFilePrompt.currentFile)
         GeneralParamsModel.setExtractPath(fileName)
 
         switch(GeneralParamsModel.getDbClassification()){

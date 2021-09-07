@@ -47,7 +47,6 @@ ApplicationWindow {
 
 
 
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -69,7 +68,13 @@ ApplicationWindow {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: ExtractProcessor
 
+        function onExtractReaderProcessed(){
+            stacklayout_home.currentIndex = 6
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -81,7 +86,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
 
-
+        // Get Reader file
+        if(ExtractProcessor.receivedArgumentStatus() === true){
+            mainwindow.title = ExtractProcessor.processExtract()
+        }
 
         if(settings.value("user/profileId") > 0){
             var firstname = settings.value("user/firstname")
@@ -105,6 +113,10 @@ ApplicationWindow {
     function openDatasource(){
 
         dsOpenDialog.visible = true
+    }
+
+    function openReaderDialog(){
+        readerDialog.visible = true
     }
 
 
@@ -163,6 +175,21 @@ ApplicationWindow {
         }
     }
 
+    FileDialog {
+        id: readerDialog
+        title: "Select File"
+        folder: shortcuts.documents
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")"]
+
+        onAccepted: {
+            var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
+            console.log(readerFile)
+            ExtractProcessor.setArgumentsFromMenu(readerFile)
+
+        }
+    }
+
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -195,6 +222,8 @@ ApplicationWindow {
             MenuItem{
                 id: action_open
                 text: qsTr("Open")
+
+                onTriggered: openReaderDialog()
             }
 
             MenuSeparator{}

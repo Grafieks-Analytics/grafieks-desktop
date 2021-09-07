@@ -277,7 +277,7 @@ Popup {
 
         onAccepted: {
             console.log(fileUrl)
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             jsonFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

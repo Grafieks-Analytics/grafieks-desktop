@@ -225,6 +225,7 @@ Page {
         }
     }
 
+
     Connections{
         target: GeneralParamsModel
 

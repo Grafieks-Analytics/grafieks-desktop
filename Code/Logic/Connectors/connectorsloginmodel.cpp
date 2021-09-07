@@ -235,11 +235,6 @@ void ConnectorsLoginModel::sqlLogout()
     emit logout();
 }
 
-QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
-{
-    QString path = url.toLocalFile();
-    return path;
-}
 
 QString ConnectorsLoginModel::connectedDB() const
 {

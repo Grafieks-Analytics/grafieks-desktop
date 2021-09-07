@@ -16,7 +16,7 @@
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
 #include "./Workers/setchartdataforwardonlyworker.h"
-#include "../General/freelimitsmanager.h"
+#include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractforwardonlyworker.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel

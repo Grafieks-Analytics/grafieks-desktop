@@ -14,7 +14,7 @@
 #include "../General/datatype.h"
 #include "./Workers/generaterolenamesqueryworker.h"
 #include "./Workers/setchartdataqueryworker.h"
-#include "../General/freelimitsmanager.h"
+#include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractqueryworker.h"
 
 #include "../../duckdb.hpp"

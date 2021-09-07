@@ -50,7 +50,6 @@ public:
     Q_INVOKABLE void csvLogin(QString filename, bool directLogin, QString separator = ",");
     Q_INVOKABLE void jsonLogin(QString filename, bool directLogin);
     Q_INVOKABLE void excelLogin(QString filename, bool directLogin);
-    Q_INVOKABLE QString urlToFilePath(const QUrl &url);
 
     // ODBC
     Q_INVOKABLE void mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);

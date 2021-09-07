@@ -55,7 +55,8 @@ public slots:
     void getChartHeader(QMap<int, QStringList> chartHeader);
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
     void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
-    void generateColumns();
+    void generateColumnsForExtract();
+    void generateColumnsForReader(duckdb::Connection *con);
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
@@ -64,6 +65,9 @@ signals:
     void dashboardDataChanged(QString whereConditions, int currentDashboardId);
     void chartValuesChanged(int currentDashboardId);
 
+
+private:
+    void generateColumns(duckdb::Connection *con);
 
 };
 

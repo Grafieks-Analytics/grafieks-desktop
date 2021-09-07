@@ -13,10 +13,19 @@ namespace Constants
     const QString DefaultBackgroundColor = "#FFFFFF";
     const int flushExtractCount = 100000;
 
-    // Free Limits
-    const int freeTierExtractLimit = 1024 * 1024 * 1024;
+    // Master Extract Table
+    const QString masterExtractTable = "gahc_master_table";
+
+    // File extensions
+    const QString extractExt = "gadse";
+    const QString liveExt = "gads";
+    const QString workbookExt = "gawb";
+
+    // Free Tier Limits
+    const int freeTierExtractLimit = 1024 * 1024 * 1024; // 1GB limit
 //    const int freeTierExtractLimit = 1024 * 1024 * 2;
-    const int timeDelayCheckExtractSize = 2000;
+    const int timeDelayCheckExtractSize = 2000; // 2 seconds
+    const int freeTierExtractGrsLimit = 500 * 1024 * 1024; // 500 MB limit
 
     // EXTRACTS (DuckDb) Data Type integer for switching
     const int varcharIntType = 0;
