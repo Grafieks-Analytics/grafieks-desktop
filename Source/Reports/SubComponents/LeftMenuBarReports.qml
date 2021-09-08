@@ -204,7 +204,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line,dynamic height,bottom pinch"
+            subMenuCustomizations: "color by,tool tip,size,data label,dynamic height,bottom pinch"
         }
         ListElement{
             icon: "tree_chart.png"
