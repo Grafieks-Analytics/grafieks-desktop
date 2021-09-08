@@ -55,6 +55,7 @@ Page {
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
     property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
+    property var subMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
@@ -366,9 +367,9 @@ Page {
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
             console.log(chartTitle,"CLICKED");
-            var dataValuesTemp = dataValues && JSON.parse(dataValues);
-            colorData = dataValuesTemp[0].map(d=> d.key );
-            delete dataValuesTemp;
+//            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+//            colorData = dataValuesTemp[0].map(d=> d.key );
+//            delete dataValuesTemp;
             break;
         case Constants.funnelChartTitle:
             console.log(chartTitle,"CLICKED");
