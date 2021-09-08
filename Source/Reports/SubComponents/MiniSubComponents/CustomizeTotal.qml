@@ -16,6 +16,12 @@ Column{
 
     spacing: 4
 
+    
+    property var grandTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('grand total');
+    property var rowTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('row total');
+    property var subTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('sub total');
+    property var exportVisible:  !!report_desiner_page.subMenuCustomizationsAvailable.includes('export report');
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -100,6 +106,7 @@ Column{
 
         height: 35
         width: 150
+        visible: rowTotalVisible
 
         Rectangle{
             anchors.fill: parent
@@ -227,6 +234,7 @@ Column{
 
         height: 35
         width: 150
+        visible: grandTotalVisible
 
         Rectangle{
             anchors.fill: parent
@@ -370,6 +378,7 @@ Column{
 
         height: 35
         width: 150
+        visible: subTotalVisible
 
         Rectangle{
             anchors.fill: parent
@@ -498,6 +507,7 @@ Column{
 
         height: 35
         width: 150
+        visible: exportVisible
 
         CustomButton {
             textValue: qsTr("Export Report")
