@@ -162,6 +162,9 @@ Page {
         }
 
         function onReportIdChanged(reportIdValue){
+            // Todo
+            // Tag: Check
+            console.log('DEBUG::: Report id value',reportIdValue);
             if(!reportIdValue){
                 clearValuesOnAddNewReport();
             }
