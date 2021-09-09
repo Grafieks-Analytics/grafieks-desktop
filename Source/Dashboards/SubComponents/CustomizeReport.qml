@@ -27,7 +27,6 @@ Column{
         target: DashboardParamsModel
 
         function onCurrentReportChanged(reportId){
-            console.log("RECEIVED in customize report general")
             let dashboardId = DashboardParamsModel.currentDashboard
 
             //Show/Hide Report customize

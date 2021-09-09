@@ -397,17 +397,11 @@ int main(int argc, char *argv[])
     QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
 
     // Charts
-    //filterValuesChanged Headers for charts
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
-
     // Data for charts
-    QObject::connect(&reportsDataModel, &ReportsDataModel::reportDataChanged, &chartsThread, &ChartsThread::receiveReportData);
-    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardDataChanged, &chartsThread, &ChartsThread::receiveDashboardData);
-
+    QObject::connect(&reportsDataModel, &ReportsDataModel::reportWhereConditions, &chartsModel, &ChartsModel::receiveReportConditions);
+    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardWhereConditions, &chartsModel, &ChartsModel::receiveDashboardConditions);
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendModels, &csvJsonQueryModel, &CSVJsonQueryModel::getAllFilters);
-
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/

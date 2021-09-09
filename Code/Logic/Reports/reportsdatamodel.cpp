@@ -381,11 +381,11 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
                         <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
                        << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
         }
-
-        // Remove trailing ' AND '
-        this->whereConditions.chop(5);
-        emit reportDataChanged(this->whereConditions, reportId);
     }
+
+    // Remove trailing ' AND '
+    this->whereConditions.chop(5);
+    emit reportWhereConditions(this->whereConditions, reportId);
 }
 
 void ReportsDataModel::currentScreenChanged(int currentScreen)
@@ -413,7 +413,7 @@ void ReportsDataModel::getReportId(int reportId)
     }
     this->reportChartData.insert(this->reportId, copiedChartData);
 
-    emit reportDataChanged(this->whereConditions, this->reportId);
+    emit reportWhereConditions(this->whereConditions, this->reportId);
 
 }
 

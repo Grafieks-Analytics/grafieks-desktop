@@ -17,7 +17,7 @@ class ReportParamsModel: public QObject
     // Customize Report parameters
     QMap<int, QVariantMap> reportsMap;           // <<int reportId, reportObj>>
     QMap<int, QVariant> reportsData;
-    QMap<int, QVariant> dashboardReportInstances; // <[reportId: <reportObject>]>
+    QVariantMap dashboardReportInstances; // <[reportId: <reportObject>]>
 
     int reportIdsCounter = 0;
 
@@ -239,7 +239,7 @@ public:
     // Instances of dropped reports in dashboards
     Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,int reportId);
     Q_INVOKABLE QVariant getDashboardReportInstance(int reportId);
-    Q_INVOKABLE QMap<int, QVariant> getAllDashboardReportInstances();
+    Q_INVOKABLE QVariantMap getAllDashboardReportInstances();
 
     Q_INVOKABLE int generateNewReportId();
 

@@ -13,6 +13,8 @@ class ChartsModel : public QObject
     Q_OBJECT
     ChartsThread *chartsThread;
     QString threadName;
+    QMap<int, QString> reportWhereConditions;
+    QMap<int, QString> dashboardWhereConditions;
 
     QThread chartsThreadThread;
     QThread threadBarChartValues;
@@ -46,31 +48,31 @@ public:
     explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr);
     ~ChartsModel();
 
-    Q_INVOKABLE void getBarChartValues(QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getNewGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getAreaChartValues(QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getLineChartValues(QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getLineBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getPieChartValues( QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getFunnelChartValues( QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getRadarChartValues( QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getScatterChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getBarChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getStackedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getGroupedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getNewGroupedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getLineBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getPieChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getFunnelChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getRadarChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getScatterChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getHeatMapChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
-    Q_INVOKABLE void getSunburstChartValues(QVariantList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getGaugeChartValues(QString calculateColumn);
-    Q_INVOKABLE void getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn);
+    Q_INVOKABLE void getSunburstChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getWaterfallChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn);
+    Q_INVOKABLE void getSankeyChartValues(int reportId, int dashboardId, int chartSource,  QString sourceColumn, QString destinationColumn, QString measureColumn);
 
-    Q_INVOKABLE void getTreeChartValues( QVariantList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getTreeMapChartValues( QVariantList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getKPIChartValues( QString calculateColumn);
-    Q_INVOKABLE void getTableChartValues( QVariantList xAxisColumn, QVariantList yAxisColumn);
-    Q_INVOKABLE void getPivotChartValues( QVariantList xAxisColumn, QVariantList yAxisColumn);
-    Q_INVOKABLE void getStackedAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey );
-    Q_INVOKABLE void getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey );
+    Q_INVOKABLE void getTreeChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getTreeMapChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getKPIChartValues(int reportId, int dashboardId, int chartSource,   QString calculateColumn);
+    Q_INVOKABLE void getTableChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn);
+    Q_INVOKABLE void getPivotChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn);
+    Q_INVOKABLE void getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
 private:
     void callThread();
@@ -101,6 +103,8 @@ public slots:
     void slotStackedAreaChartValues(QString output);
     void slotMultiLineChartValues(QString output);
 
+    void receiveReportConditions(QString whereConditions, int currentReportId);
+    void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
 
 signals:
 

@@ -30,11 +30,7 @@ class ChartsThread : public QObject
     QString reportWhereConditions;
     QString dashboardWhereConditions;
 
-    int dashboardId;
-    int reportId;
-    QStringList chartSources;
-    QString currentChartSource;
-    bool dashboardFilterApplied;
+    int currentChartSource;
     QTime myTimer;
     QElapsedTimer myTimer2;
 
@@ -52,7 +48,7 @@ public:
     explicit ChartsThread(QObject *parent = nullptr);
     ~ChartsThread();
 
-    void methodSelector(QString functionName = "");
+    void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen);
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
@@ -93,12 +89,6 @@ public slots:
     void getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier = "");
     void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
     void getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn, QString identifier = "");
-
-    void setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied = false); //void
-
-    void receiveHeaders(QMap<int, QStringList> newChartHeader);
-    void receiveReportData(QString whereConditions, int currentReportId);
-    void receiveDashboardData(QString whereConditions, int currentDashboardId);
 
 private:
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryFunction(QString mainQuery);

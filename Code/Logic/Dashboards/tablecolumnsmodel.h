@@ -62,7 +62,7 @@ signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
     void columnNamesChanged(QStringList columnNames);
-    void dashboardDataChanged(QString whereConditions, int currentDashboardId);
+    void dashboardWhereConditions(QString whereConditions, int currentDashboardId);
     void chartValuesChanged(int currentDashboardId);
 
 

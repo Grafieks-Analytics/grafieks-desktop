@@ -1,9 +1,7 @@
 #include "chartsthread.h"
 
-ChartsThread::ChartsThread(QObject *parent) : QObject(parent), dashboardId(0), reportId(0), dashboardFilterApplied(false)
+ChartsThread::ChartsThread(QObject *parent) : QObject(parent)
 {
-    chartSources.append("dashboard");
-    chartSources.append("report");
 
     this->xAxisColumn = "";
     this->yAxisColumn = "";
@@ -20,8 +18,12 @@ ChartsThread::~ChartsThread()
 {
 }
 
-void ChartsThread::methodSelector(QString functionName)
+void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource)
 {
+    this->reportWhereConditions = reportWhereConditions;
+    this->dashboardWhereConditions = dashboardWhereConditions;
+    this->currentChartSource = chartSource;
+
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
     } else if(functionName == "getStackedBarChartValues"){
@@ -1688,42 +1690,6 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
 }
 
-void ChartsThread::setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied)
-{
-    if(sourceType == this->chartSources.at(0)){
-
-        this->currentChartSource = this->chartSources.at(0);
-        this->dashboardId = currentSelectedTypeId.toInt();
-        this->dashboardFilterApplied = dashboardFilterApplied;
-    } else {
-
-        this->currentChartSource = this->chartSources.at(1);
-        this->reportId = currentSelectedTypeId.toInt();
-        this->dashboardFilterApplied = false;
-    }
-
-}
-
-void ChartsThread::receiveHeaders(QMap<int, QStringList> newChartHeader)
-{
-
-}
-
-void ChartsThread::receiveReportData(QString whereConditions, int currentReportId)
-{
-    qDebug() << whereConditions << "WHERE CONDITIONS";
-    this->reportId = currentReportId;
-    this->currentChartSource = this->chartSources.at(1); // report
-    this->reportWhereConditions.insert(currentReportId, whereConditions);
-}
-
-void ChartsThread::receiveDashboardData(QString whereConditions, int currentDashboardId)
-{
-    this->dashboardId = currentDashboardId;
-    this->dashboardWhereConditions = whereConditions;
-    this->currentChartSource = this->chartSources.at(0); // dashboard
-}
-
 duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(QString mainQuery)
 {
     // Fetch data here
@@ -1735,7 +1701,7 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(
 
     // IF Reports
     // Else Dashboards
-    if(this->chartSources.at(1) == this->currentChartSource){
+    if(this->currentChartSource == Constants::reportScreen){
         if(this->reportWhereConditions.trimmed().length() > 0){
             queryString = mainQuery + " WHERE " + this->reportWhereConditions;
         } else {
@@ -1757,6 +1723,7 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(
     if(!dataList->error.empty())
         qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
 
+    qDebug() << Q_FUNC_INFO << "Chart query" <<queryString;
     return dataList;
 
 }

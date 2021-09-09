@@ -42,192 +42,192 @@ ChartsModel::~ChartsModel()
     chartsThreadThread.terminate();
 }
 
-void ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getBarChartValues");
+    chartsThread->methodSelector("getBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getStackedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getStackedBarChartValues");
+    chartsThread->methodSelector("getStackedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getGroupedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getGroupedBarChartValues");
+    chartsThread->methodSelector("getGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getNewGroupedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getNewGroupedBarChartValues");
+    chartsThread->methodSelector("getNewGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getAreaChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getAreaChartValues");
+    chartsThread->methodSelector("getAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getLineChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getLineChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getLineChartValues");
+    chartsThread->methodSelector("getLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getLineBarChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getLineBarChartValues");
+    chartsThread->methodSelector("getLineBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getPieChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getPieChartValues");
+    chartsThread->methodSelector("getPieChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getFunnelChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getFunnelChartValues");
+    chartsThread->methodSelector("getFunnelChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getRadarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getRadarChartValues");
+    chartsThread->methodSelector("getRadarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getScatterChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getScatterChartValues");
+    chartsThread->methodSelector("getScatterChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getHeatMapChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getHeatMapChartValues");
+    chartsThread->methodSelector("getHeatMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getSunburstChartValues(QVariantList xAxisColumn, QString yAxisColumn)
+void ChartsModel::getSunburstChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(nullString, yAxisColumn, nullString);
     chartsThread->setLists(xAxisColumn, nullList);
-    chartsThread->methodSelector("getSunburstChartValues");
+    chartsThread->methodSelector( "getSunburstChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisColumn)
+void ChartsModel::getWaterfallChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
-    chartsThread->methodSelector("getWaterfallChartValues");
+    chartsThread->methodSelector("getWaterfallChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getGaugeChartValues(QString calculateColumn)
+void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn)
 {
     this->callThread();
 
     chartsThread->setGaugeKpiDetails(calculateColumn);
-    chartsThread->methodSelector("getGaugeChartValues");
+    chartsThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn)
+void ChartsModel::getSankeyChartValues(int reportId, int dashboardId, int chartSource,  QString sourceColumn, QString destinationColumn, QString measureColumn)
 {
     this->callThread();
 
     chartsThread->setSankeyDetails(sourceColumn, destinationColumn, measureColumn);
-    chartsThread->methodSelector("getSankeyChartValues");
+    chartsThread->methodSelector("getSankeyChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getTreeChartValues(QVariantList xAxisColumn, QString yAxisColumn)
+void ChartsModel::getTreeChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(nullString, yAxisColumn, nullString);
     chartsThread->setLists(xAxisColumn, nullList);
-    chartsThread->methodSelector("getTreeChartValues");
+    chartsThread->methodSelector("getTreeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getTreeMapChartValues(QVariantList xAxisColumn, QString yAxisColumn)
+void ChartsModel::getTreeMapChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QString yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setAxes(nullString, yAxisColumn, nullString);
     chartsThread->setLists(xAxisColumn, nullList);
-    chartsThread->methodSelector("getTreeMapChartValues");
+    chartsThread->methodSelector("getTreeMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getKPIChartValues(QString calculateColumn)
+void ChartsModel::getKPIChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn)
 {
     this->callThread();
 
     chartsThread->setGaugeKpiDetails(calculateColumn);
-    chartsThread->methodSelector("getKPIChartValues");
+    chartsThread->methodSelector("getKPIChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getTableChartValues(QVariantList xAxisColumn, QVariantList yAxisColumn)
+void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setLists(xAxisColumn, yAxisColumn);
-    chartsThread->methodSelector("getTableChartValues");
+    chartsThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getPivotChartValues(QVariantList xAxisColumn, QVariantList yAxisColumn)
+void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn)
 {
     this->callThread();
 
     chartsThread->setLists(xAxisColumn, yAxisColumn);
-    chartsThread->methodSelector("getPivotChartValues");
+    chartsThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getStackedAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getStackedAreaChartValues");
+    chartsThread->methodSelector("getStackedAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
-void ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+void ChartsModel::getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
     qDebug() << "HERE";
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getMultiLineChartValues");
+    chartsThread->methodSelector("getMultiLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource);
 }
 
 void ChartsModel::callThread()
@@ -242,6 +242,7 @@ void ChartsModel::callThread()
 
 void ChartsModel::slotBarChartValues(QString output)
 {
+    qDebug() << "BAR" << output;
     emit signalBarChartValues(output);
     chartsThreadThread.quit();
 }
@@ -376,4 +377,14 @@ void ChartsModel::slotMultiLineChartValues(QString output)
 {
     emit signalMultiLineChartValues(output);
     chartsThreadThread.quit();
+}
+
+void ChartsModel::receiveReportConditions(QString whereConditions, int currentReportId)
+{
+    this->reportWhereConditions.insert(currentReportId, whereConditions);
+}
+
+void ChartsModel::receiveDashboardConditions(QString whereConditions, int currentDashboardId)
+{
+    this->dashboardWhereConditions.insert(currentDashboardId, whereConditions);
 }
