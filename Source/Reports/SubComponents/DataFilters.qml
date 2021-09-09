@@ -116,7 +116,7 @@ Popup {
         target: TableSchemaModel
 
         // Set the model of the `Add Button` in each tab
-        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
+        function onExtractSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
 
             categoricalModel.clear()
             numericalModel.clear()
@@ -229,13 +229,7 @@ Popup {
             "values" : ""
         }
 
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
-        } else{
-            ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
-        }
+        ReportsDataModel.fetchColumnData(colName, options)
 
         ReportParamsModel.setColName(colName)
         ReportParamsModel.setTableName(tableName)
@@ -397,6 +391,7 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
+        console.log("APPLU CLICKED HERE")
 
         reDrawChart()
 

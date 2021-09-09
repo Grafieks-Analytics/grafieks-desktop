@@ -98,9 +98,8 @@ Item {
             text: "Apply"
             onClicked: {
                 let currentDashboard = DashboardParamsModel.currentDashboard
-                ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+                DashboardParamsModel.applyFilterToDashboard(currentDashboard)
                 TableColumnsModel.redrawCharts(currentDashboard)
-                console.log("Apply dashboard filter here", currentDashboard, currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
             }
 
 

@@ -64,7 +64,7 @@ void GenerateRoleNamesForwardOnlyWorker::run()
                         roleNames.insert(i, fieldName.toUtf8());
                         this->forwardOnlyChartHeader.insert(i, colInfo);
 
-                        this->tableHeaders.append(fieldName);
+                        this->tableHeaders.append(tableName + "." + fieldName);
                         this->internalColCount++;
                         colInfo.clear();
                         i++;

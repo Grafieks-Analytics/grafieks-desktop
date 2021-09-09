@@ -459,7 +459,7 @@ Popup {
 
         onAccepted: {
 
-            fileName = ConnectorsLoginModel.urlToFilePath(promptAccess.fileUrl)
+            fileName = GeneralParamsModel.urlToFilePath(promptAccess.fileUrl)
             accessFileName.text = fileName.replace(/^.*[\\\/]/, '')
             console.log(fileUrl)
         }

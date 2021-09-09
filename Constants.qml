@@ -43,6 +43,9 @@ QtObject {
     property string duckType: "DUCK"
     property string sqlType: "SQL"
     property string forwardType: "FORWARD"
+    property string csvType: "CSV"
+    property string jsonType: "JSON"
+    property string excelType: "EXCEL"
 
     // ODBC Driver matching names
     property string mysqlOdbc: qsTr("mysql")

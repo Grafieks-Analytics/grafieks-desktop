@@ -2,10 +2,14 @@
 #define CREDENTIALS_H
 
 #include <QString>
+#include <QVariantMap>
 
 class Statics
 {
 public:
+
+    static QString tmpAppPath;
+    static QString tmpIconPath;
 
     static QString currentDbName;
     static int currentDbIntType;
@@ -13,6 +17,11 @@ public:
     static QString currentDbClassification;
     static int onlineStorageType;
     static QString driverName;
+    static QString extractPath;
+    static QString csvJsonPath;
+    static QVariantMap changedHeaderTypes;
+    static bool freeLimitExtractSizeExceeded;
+    static bool modeProcessReader;
 
     // Mysql
     static QString myHost;
@@ -96,6 +105,9 @@ public:
 
     // CSV
     static QString separator;
+
+    // Excel
+    static QString excelDb;
 
     // Dropbox
 };

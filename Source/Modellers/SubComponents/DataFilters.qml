@@ -149,26 +149,34 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: DuckDataModel
+        target: CSVJsonDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
+        }
+    }
+
+    Connections{
+        target: ExcelDataModel
+
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ForwardOnlyDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
@@ -191,7 +199,7 @@ Popup {
     }
 
 
-    function updateData(colData, values){
+    function updateData(values){
 
         if(DSParamsModel.section === Constants.categoricalTab){
 
@@ -250,12 +258,15 @@ Popup {
             "values" : ""
         }
 
+        console.log(colName, tableName, section, category)
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
-        } else{
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            CSVJsonDataModel.columnData(colName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
+        } else {
+            ExcelDataModel.columnData(colName, tableName, JSON.stringify(options))
         }
 
         DSParamsModel.setColName(colName)

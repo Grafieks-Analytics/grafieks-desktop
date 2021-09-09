@@ -1,15 +1,10 @@
 #include "tableschemamodel.h"
-#include "iostream"
+
 TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 {
 
 }
 
-TableSchemaModel::TableSchemaModel(DuckCon *duckCon, QObject *parent)
-{
-    Q_UNUSED(parent);
-    this->duckCon = duckCon;
-}
 
 /*!
  * \brief Accepts an SQL query parameter and emits a signal with list of information of individual column
@@ -386,27 +381,31 @@ void TableSchemaModel::showSchema(QString query)
         break;
     }
 
-    case Constants::excelIntType:
-    case Constants::csvIntType:
-    case Constants::jsonIntType:{
-
+    case Constants::excelIntType:{
         querySplitter.setQueryForClasses(query);
         QStringList tablesList = querySplitter.getJoinTables();
         QString mainTable = querySplitter.getMainTable();
         tablesList.push_back(mainTable);
 
-        for(QString tableName: tablesList){
-            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
-            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            if(data->error.empty()){
-                int rows = data->collection.Count();
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
 
-                for(int i = 0; i < rows; i++){
-                    QString fieldName =  data->GetValue(1, i).ToString().c_str();
-                    QString fieldType =  data->GetValue(2, i).ToString().c_str();
+        for(QString tableName: tablesList){
+
+            QString dbQueryString = "SELECT TOP 1 * FROM "+tableName;
+
+            QSqlQuery query(dbQueryString, dbExcel);
+            QSqlRecord record = query.record();
+
+            if(!record.isEmpty()){
+
+                for(int i=0; i < record.count(); i++){
+
+                    QString fieldName = record.fieldName(i).trimmed();
+                    QString fieldType = record.field(i).value().typeName();
 
                     // Get filter data type for QML
                     QString filterDataType = dataType.dataType(fieldType);
+
                     outputDataList << tableName << fieldName << fieldType << filterDataType;
 
                     // Output data according to Filter type
@@ -423,14 +422,39 @@ void TableSchemaModel::showSchema(QString query)
 
                     // Append all data type to allList as well
                     allList.append(outputDataList);
+
+                    // Clear Stringlist for future
                     outputDataList.clear();
                 }
-            }  else{
-                qWarning() << Q_FUNC_INFO << data->error.c_str();
             }
-
-            break;
         }
+        break;
+    }
+    case Constants::csvIntType:
+    case Constants::jsonIntType:{
+
+        QFile file(Statics::csvJsonPath);
+
+        if(!file.open(QFile::ReadOnly | QFile::Text)) {
+            qDebug() << "Cannot open file" << file.errorString();
+        } else {
+            int lineCounter = 0;
+            while(lineCounter < 2){
+                const QByteArray line = file.readLine().simplified();
+
+                if(lineCounter == 0){
+                    setHeaders(line, Statics::separator);
+                } else {
+                    QMap<QString, QList<QStringList>> allColumns = detectHeaderTypes(line, Statics::separator, Statics::currentDbName);
+                }
+                lineCounter++;
+            }
+        }
+
+        file.close();
+
+        break;
+
     }
 
     }
@@ -450,7 +474,20 @@ void TableSchemaModel::showSchema(QString query)
     allOthers.clear();
     allList.clear();
 
+}
 
+void TableSchemaModel::generateSchemaForExtract()
+{
+    QString extractPath = Statics::extractPath;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    this->extractSchema(&con);
+}
+
+void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
+{
+    this->extractSchema(con);
 }
 
 void TableSchemaModel::clearSchema()
@@ -466,4 +503,123 @@ void TableSchemaModel::clearSchema()
 
     emit tableSchemaCleared();
 
+}
+
+void TableSchemaModel::setHeaders(const QByteArray line, QString delimiter)
+{
+
+    this->csvHeaderDataFinal = line.split(*delimiter.toStdString().c_str());
+    this->csvHeaderLength = this->csvHeaderDataFinal.length();
+
+    if (this->csvHeaderDataFinal.at(0).contains("\xEF\xBB\xBF")){
+        this->csvHeaderDataFinal[0] =  this->csvHeaderDataFinal.at(0).right(this->csvHeaderDataFinal.at(0).length() - 3);
+    }
+}
+
+QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName)
+{
+    QList<QByteArray> lineData = line.split(*delimiter.toStdString().c_str());
+
+    QStringList output;
+    QString fieldName;
+    QString fieldType;
+    QStringList outputDataList;
+    QMap<QString, QList<QStringList>> allColumns;
+
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+    for(int i = 0; i < this->csvHeaderLength; i++){
+
+        fieldName = this->csvHeaderDataFinal.at(i);
+        fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
+
+        // Output data according to Filter type
+        outputDataList << fileName << fieldName << fieldType << fieldType;
+
+        if(fieldType == Constants::categoricalType){
+            allCategorical.append(outputDataList);
+        } else if(fieldType == Constants::numericalType){
+            allNumerical.append(outputDataList);
+        } else if(fieldType == Constants::dateType){
+            allDates.append(outputDataList);
+        } else{
+            allOthers.append(outputDataList);
+        }
+
+        // Append all data type to allList as well
+        allList.append(outputDataList);
+
+        // Clear Stringlist for future
+        outputDataList.clear();
+
+    }
+
+    allColumns.insert("categorical", allCategorical);
+    allColumns.insert("numerical", allNumerical);
+    allColumns.insert("dates", allDates);
+    allColumns.insert("others", allOthers);
+    allColumns.insert("allList", allList);
+
+    return allColumns;
+}
+
+void TableSchemaModel::extractSchema(duckdb::Connection *con)
+{
+    QStringList outputDataList;
+    QString tableName = Statics::currentDbName;
+
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    }
+
+    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+
+    if(data->error.empty()){
+        int totalRows = data->collection.Count();
+
+
+        for(int i = 0; i < totalRows; i++){
+            QString fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldName = fieldName.trimmed();
+            QString fieldType = data->GetValue(2, i).ToString().c_str();
+
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldType);
+
+            outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+            // Output data according to Filter type
+
+            if(filterDataType == Constants::categoricalType){
+                extractAllCategorical.append(outputDataList);
+            } else if(filterDataType == Constants::numericalType){
+                extractAllNumerical.append(outputDataList);
+            } else if(filterDataType == Constants::dateType){
+                extractAllDates.append(outputDataList);
+            } else{
+                extractAllOthers.append(outputDataList);
+            }
+
+            // Append all data type to allList as well
+            extractAllList.append(outputDataList);
+
+            // Clear Stringlist for future
+            outputDataList.clear();
+        }
+    } else {
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+    }
+
+    emit extractSchemaObtained(extractAllList, extractAllCategorical, extractAllNumerical, extractAllDates, extractAllOthers);
+
+    // Clear all stringlist for new values
+
+    extractAllCategorical.clear();
+    extractAllNumerical.clear();
+    extractAllDates.clear();
+    extractAllOthers.clear();
+    extractAllList.clear();
 }

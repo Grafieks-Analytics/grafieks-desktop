@@ -109,7 +109,7 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
             // If correct credentials inserted once
 
             Statics::myHost = host;
-            Statics::myDb = db;
+            Statics::myDb = dbString;
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;

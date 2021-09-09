@@ -30,14 +30,14 @@ QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &fi
 {
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
+
 
         // Sample Connection for Excel
-        // dbOdbc.setDatabaseName("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=C:\\Users\\vishal\\Desktop\\Book1.xlsx");
-
+        // dbOdbc.setDatabaseName("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=C:\\Users\\chill\\Desktop\\all.xls");
         QString dbString = "DRIVER={" + driver + "};DBQ="+ filepath;
 
-        QSqlDatabase dbExcelOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::excelOdbcStrType);
+        QSqlDatabase dbExcelOdbc = QSqlDatabase::addDatabase("QODBC", Constants::excelOdbcStrType);
 
         dbExcelOdbc.setDatabaseName(dbString);
         dbExcelOdbc.open();
@@ -47,6 +47,8 @@ QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &fi
             outputStatus.insert("msg", dbExcelOdbc.lastError().text());
 
         } else{
+
+            Statics::excelDb = dbString;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);

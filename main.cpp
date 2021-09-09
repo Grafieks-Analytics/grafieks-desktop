@@ -8,6 +8,8 @@
 #include <QFile>
 #include <QTextStream>
 #include <QtQml>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 #include <QtQml/QQmlApplicationEngine>
 
@@ -32,14 +34,14 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
-#include "Code/Logic/DataModeller/duckdatamodel.h"
-#include "Code/Logic/DataModeller/duckquerymodel.h"
 #include "Code/Logic/DataModeller/forwardonlydatamodel.h"
 #include "Code/Logic/DataModeller/forwardonlyquerymodel.h"
 #include "Code/Logic/DataModeller/newtablelistmodel.h"
+#include "Code/Logic/DataModeller/exceldatamodel.h"
+#include "Code/Logic/DataModeller/excelquerymodel.h"
+#include "Code/Logic/DataModeller/csvjsondatamodel.h"
+#include "Code/Logic/DataModeller/csvjsonquerymodel.h"
 
-#include "Code/Logic/Connectors/duckcon.h"
-#include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
 #include "Code/Logic/Connectors/driveds.h"
@@ -55,6 +57,10 @@
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 #include "Code/Logic/Dashboards/tablecolumnsmodel.h"
 
+#include "Code/Logic/Readers/extractprocessor.h"
+#include "Code/Logic/Readers/liveprocessor.h"
+#include "Code/Logic/Readers/workbookprocessor.h"
+
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/reportsdatamodel.h"
 
@@ -65,7 +71,13 @@
 #include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
 
+#include "Code/OS/odbcdriversmodel.h"
+#include "Code/OS/osentries.h"
+
 #include "Code/statics.h"
+
+QString Statics::tmpAppPath;
+QString Statics::tmpIconPath;
 
 QString Statics::currentDbName;
 int Statics::currentDbIntType;
@@ -73,6 +85,11 @@ QString Statics::currentDbStrType;
 QString Statics::currentDbClassification;
 int Statics::onlineStorageType;
 QString Statics::driverName;
+QString Statics::extractPath;
+QString Statics::csvJsonPath;
+QVariantMap Statics::changedHeaderTypes;
+bool Statics::freeLimitExtractSizeExceeded;
+bool Statics::modeProcessReader;
 
 QString Statics::myHost;
 QString Statics::myDb;
@@ -144,9 +161,7 @@ QString Statics::teradataPassword;
 
 QString Statics::separator;
 
-// DuckDB
-duckdb::DuckDB duckDb(nullptr);
-duckdb::Connection duckConnection(duckDb);
+QString Statics::excelDb;
 
 /*! \mainpage Code Documentation
  *
@@ -211,7 +226,6 @@ duckdb::Connection duckConnection(duckDb);
 
 int main(int argc, char *argv[])
 {
-
     // Application basic initialization
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
@@ -226,7 +240,16 @@ int main(int argc, char *argv[])
     QtWebEngine::initialize();
     QQuickStyle::setStyle("Default");
 
-    // Settings
+    // Static initializations Ends
+    /***********************************************************************************************************************/
+    Statics::freeLimitExtractSizeExceeded = false;
+    Statics::tmpAppPath = "C:\\Users\\chill\\Projects\\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug\\debug\\GrafieksDesktop.exe";
+    Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
+    /***********************************************************************************************************************/
+    // Static initializations Ends
+
+    // SETTINS STARTS
+    /***********************************************************************************************************************/
     QCoreApplication::setOrganizationName("Grafieks Limited");
     QCoreApplication::setOrganizationDomain("grafieks.com");
     QCoreApplication::setApplicationName("Grafieks");
@@ -238,6 +261,19 @@ int main(int argc, char *argv[])
     // Delete existing tmp folder storing dashboard files
     QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
     QDir(tmpFilePath).removeRecursively();
+
+    // Registry entries
+#ifdef Q_OS_WIN
+  OsEntries osEntries;
+  osEntries.witeToWindowsRegistry();
+#elif Q_OS_MACX
+  qDebug() << "Mac & Linux versions not supported yet";
+#else
+#error "We don't support that version yet..."
+#endif
+
+    /***********************************************************************************************************************/
+    // SETTINS ENDS
 
     /***********************************************************************************************************************/
     // OBJECT INITIALIZATION STARTS
@@ -270,6 +306,12 @@ int main(int argc, char *argv[])
     ForwardOnlyQueryModel forwardOnlyQueryModel;
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel;
+    ExcelQueryModel excelQueryModel;
+    ExcelDataModel excelDataModel;
+    CSVJsonDataModel csvJsonDataModel;
+    CSVJsonQueryModel csvJsonQueryModel;
+    TableSchemaModel tableSchemaModel;
+    NewTableColumnsModel newTableColumnsModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -299,12 +341,11 @@ int main(int argc, char *argv[])
     SchedulerModel schedulerModel;
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
-    // Duck CRUD Model
-    DuckCon *duckCon = new DuckCon();
-    TableSchemaModel tableSchemaModel(duckCon);
-    NewTableColumnsModel newTableColumnsModel(duckCon);
-    DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
-    DuckQueryModel duckQueryModel(duckCon);
+    // Processor model
+    ExtractProcessor extractProcessor(&generalParamsModel);
+    LiveProcessor liveProcessor(&generalParamsModel);
+    WorkbookProcessor workbookProcessor(&generalParamsModel);
+
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -314,25 +355,26 @@ int main(int argc, char *argv[])
     // For multi threaded signal and slots, they are written inside individual classes
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
-    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
-    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &duckQueryModel, &DuckQueryModel::receiveCsvFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvJsonQueryModel, &CSVJsonQueryModel::receiveCsvJsonFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
     // Data and headers for reports
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
 
     // Data and Headers for Dashboards
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
+
+    QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForReader);
 
     // Dashboards
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
@@ -342,16 +384,24 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &reportsDataModel, &ReportsDataModel::updateFilterData);
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &reportsDataModel, &ReportsDataModel::getReportId);
 
+    QObject::connect(&queryModel, &QueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
+
+    QObject::connect(&queryModel, &QueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
+
     // Charts
-    //filterValuesChanged Headers for charts
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
-
     // Data for charts
-    QObject::connect(&reportsDataModel, &ReportsDataModel::reportDataChanged, &chartsThread, &ChartsThread::receiveReportData);
-    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardDataChanged, &chartsThread, &ChartsThread::receiveDashboardData);
+    QObject::connect(&reportsDataModel, &ReportsDataModel::reportWhereConditions, &chartsModel, &ChartsModel::receiveReportConditions);
+    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardWhereConditions, &chartsModel, &ChartsModel::receiveDashboardConditions);
 
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendModels, &csvJsonQueryModel, &CSVJsonQueryModel::getAllFilters);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -412,19 +462,46 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
-    engine.rootContext()->setContextProperty("DuckCon", duckCon);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
-    engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
-    engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
     engine.rootContext()->setContextProperty("ChartsThread", &chartsThread);
     engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);
     engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
     engine.rootContext()->setContextProperty("NewTableListModel", &newTableListModel);
     engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
+    engine.rootContext()->setContextProperty("ExcelQueryModel", &excelQueryModel);
+    engine.rootContext()->setContextProperty("ExcelDataModel", &excelDataModel);
+    engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
+    engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
+    engine.rootContext()->setContextProperty("ExtractProcessor", &extractProcessor);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
+
+    // OPEN Extracts/Live/Workbook files STARTS
+    /***********************************************************************************************************************/
+
+    QStringList arguments = QCoreApplication::arguments();
+//    extractProcessor.setArguments2(arguments);
+    qDebug() << arguments << "ARGS";
+    if(arguments.length()>1){
+
+        QString fileToRead = arguments.at(1);
+        QFileInfo fi(fileToRead);
+        QString extension = fi.suffix();
+
+        if(extension == Constants::extractExt){
+            extractProcessor.setArgumentsByFile(fileToRead);
+        } else if(extension == Constants::liveExt){
+//            liveProcessor.setArguments(fileToRead);
+        } else if(extension == Constants::workbookExt){
+//            workbookProcessor.setArguments(fileToRead);
+        } else {
+            qDebug() << "Unknown file";
+        }
+    }
+    /***********************************************************************************************************************/
+    // OPEN Extracts/Live/Workbook files ENDS
 
     engine.load(QUrl(QStringLiteral("qrc:/Splash.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));

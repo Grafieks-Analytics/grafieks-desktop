@@ -62,18 +62,6 @@ TableView {
 
     }
 
-    Connections{
-        target: DuckQueryModel
-
-        function onDuckHasData(hasData){
-            dataPreviewResult.model = hasData === true? DuckQueryModel: ""
-            globalConType = Constants.duckType
-        }
-
-        function onDuckHeaderDataChanged(tableHeaders){
-            mainRepeater.model = tableHeaders
-        }
-    }
 
     Connections{
         target: ForwardOnlyQueryModel

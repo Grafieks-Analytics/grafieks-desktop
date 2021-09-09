@@ -1,20 +1,56 @@
 #include "forwardonlydatamodel.h"
 
-ForwardOnlyDataModel::ForwardOnlyDataModel(QObject *parent) : QObject(parent)
+ForwardOnlyDataModel::ForwardOnlyDataModel(QObject *parent) : QAbstractListModel(parent)
 {
-
+    this->totalColCount = 1;
 }
 
 void ForwardOnlyDataModel::clearData()
 {
     this->allColumns.clear();
-    this->colData.clear();
+    this->resultData.clear();
     this->tables.clear();
 }
 
 ForwardOnlyDataModel::~ForwardOnlyDataModel()
 {
 
+}
+
+int ForwardOnlyDataModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return this->totalRowCount;
+}
+
+int ForwardOnlyDataModel::columnCount(const QModelIndex &) const
+{
+    return this->totalColCount;
+}
+
+QVariant ForwardOnlyDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        return QString(this->m_roleNames[section]);
+    }
+    return QVariant();
+}
+
+QVariant ForwardOnlyDataModel::data(const QModelIndex &index, int role) const
+{
+    switch (role) {
+    case Qt::DisplayRole:
+        return this->resultData[index.row()];
+    default:
+        break;
+    }
+
+    return QVariant();
+}
+
+QHash<int, QByteArray> ForwardOnlyDataModel::roleNames() const
+{
+    return {{Qt::DisplayRole, "display"}};
 }
 
 void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString options)
@@ -24,7 +60,9 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString op
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
     output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
-    emit columnListModelDataChanged(output, options);
+
+    this->m_roleNames.insert(0, col.toUtf8());
+    emit columnListModelDataChanged(options);
 }
 
 void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
@@ -34,7 +72,7 @@ void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QStr
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
     output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
-    emit columnListModelDataChanged(output, options);
+    emit columnListModelDataChanged(options);
 }
 
 QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString moduleName, QString searchString)
@@ -243,16 +281,17 @@ QStringList ForwardOnlyDataModel::getData(QString queryString)
     QSqlQuery query(queryString, forwardOnlyDb);
 
 
+    this->resultData.clear();
     if(query.lastError().type() == QSqlError::NoError){
         while(query.next()){
-            this->colData.append(query.value(0).toString());
+            this->resultData.append(query.value(0).toString());
         }
     } else{
         qWarning() << Q_FUNC_INFO << query.lastError();
     }
 
-    out = this->colData;
-    emit forwardColData(this->colData);
-    this->colData.clear();
+    out = this->resultData;
+    this->totalRowCount = this->resultData.count();
+    emit forwardColData(this->resultData);
     return out;
 }
