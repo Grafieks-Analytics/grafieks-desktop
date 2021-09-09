@@ -130,10 +130,11 @@ public:
     Q_INVOKABLE void setColumnValueMap(int dashboardId, QString columnName, QString value);
     Q_INVOKABLE QStringList fetchColumnValueMap(int dashboardId, QString columnName);
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
+    Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
 
 //    Q_INVOKABLE void setSelectAll(bool status, QString columnName, int dashboardId);
 
-    Q_INVOKABLE bool ifFilterApplied(int dashboardId);
+//    Q_INVOKABLE bool ifFilterApplied(int dashboardId);
 
     // Customize Dashboard parameters
 

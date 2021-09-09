@@ -39,40 +39,6 @@ Popup {
     }
 
     Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-
-            mainTimer.stop()
-            mainTimer.running = false
-            busyindicator.running = false
-            displayTime.text = ""
-        }
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "excel"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         function onExcelLoginStatus(status, directLogin){
@@ -170,9 +136,6 @@ Popup {
 
     // Popup Header ends
 
-
-
-
     // Row1: Select excel starts
 
 
@@ -183,23 +146,6 @@ Popup {
         anchors.topMargin: 55
         anchors.left: parent.left
         anchors.leftMargin: 100
-
-
-
-        //        Rectangle{
-
-        //            id: label2
-        //            width:label_col
-        //            height: 40
-
-        //            Text{
-        //                text: "Excel"
-        //                anchors.left: parent.left
-        //                anchors.leftMargin:  10
-        //                font.pixelSize: Constants.fontCategoryHeader
-        //                anchors.verticalCenter: parent.verticalCenter
-        //            }
-        //        }
 
         Rectangle{
 
@@ -322,7 +268,7 @@ Popup {
 
         onAccepted: {
             console.log(fileUrl)
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

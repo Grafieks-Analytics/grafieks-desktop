@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
 
@@ -14,11 +15,25 @@ Item {
 
     property alias componentName: filterDataItemSingle.objectName
     property var modelContent: []
+    property bool master: false
+
+    ListModel{
+        id: listModel
+        dynamicRoles: true
+    }
+
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
         modelContent.unshift("Select All")
-        dataListView.model = modelContent
+
+        listModel.clear()
+        var i = 0;
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
+
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -62,10 +77,15 @@ Item {
     }
 
     function searchData(searchText){
-        console.log(searchText, componentName)
         modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
         modelContent.unshift("Select All")
-        dataListView.model = modelContent
+
+        listModel.clear()
+        var i = 0;
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
     }
 
     function filterClicked(){
@@ -87,11 +107,11 @@ Item {
         Row{
             CustomRadioButton{
                 ButtonGroup.group: buttonGroupSingleList
-                radio_text: modelData
-                radio_checked: index === 0 ? true : false
+                radio_text: model.name
+                radio_checked: model.index === 0 ? true : false
                 parent_dimension: 16
 
-                onCheckedChanged: onRadioSelect(modelData, checked)
+                onCheckedChanged: onRadioSelect(model.name, checked)
             }
         }
     }
@@ -199,7 +219,7 @@ Item {
         ListView{
             id: dataListView
             topMargin: 10
-
+            model: listModel
             leftMargin: 10
             height:150
             flickableDirection: Flickable.VerticalFlick

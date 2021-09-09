@@ -65,26 +65,34 @@ Rectangle{
     }
 
     Connections{
-        target: DuckDataModel
+        target: CSVJsonDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
+        }
+    }
+
+    Connections{
+        target: ExcelDataModel
+
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ForwardOnlyDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
@@ -112,15 +120,28 @@ Rectangle{
         }
     }
 
-    function updateData(colData, options){
+    function updateData(options){
 
         if(DSParamsModel.section === Constants.categoricalTab){
             // Just to reset the data if the previous `colData` and the new `colData` are same
             singleSelectCheckList.model = []
             multiSelectCheckList.model = []
 
-            singleSelectCheckList.model = colData
-            multiSelectCheckList.model  = colData
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType){
+                singleSelectCheckList.model = CSVJsonDataModel
+                multiSelectCheckList.model  = CSVJsonDataModel
+            } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
+                singleSelectCheckList.model = ExcelDataModel
+                multiSelectCheckList.model  = ExcelDataModel
+            } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType) {
+                singleSelectCheckList.model = QueryDataModel
+                multiSelectCheckList.model  = QueryDataModel
+            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardOnlyType) {
+                singleSelectCheckList.model = ForwardOnlyDataModel
+                multiSelectCheckList.model  = ForwardOnlyDataModel
+            } else {
+
+            }
 
             var jsonOptions = JSON.parse(options)
 
@@ -210,7 +231,15 @@ Rectangle{
 
             }
 
-            QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
+                ForwardOnlyDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                ExcelDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            } else {
+                CSVJsonDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            }
 
             if(DSParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){
@@ -616,8 +645,6 @@ Rectangle{
                 onCheckStateChanged: {
                     onExcludeCheckedClicked(checked)
                 }
-
-
             }
         }
 

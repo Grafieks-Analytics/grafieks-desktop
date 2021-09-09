@@ -204,6 +204,10 @@ QHash<int, QByteArray> FilterNumericalListModel::roleNames() const
 void FilterNumericalListModel::newFilter(int counter, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
+
     addFilterList(new FilterNumericalList(counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
 
@@ -221,6 +225,10 @@ void FilterNumericalListModel::deleteFilter(int FilterIndex)
 
 void FilterNumericalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
 
     beginResetModel();
     if(section != "")
@@ -275,8 +283,17 @@ void FilterNumericalListModel::clearFilters()
     beginResetModel();
     mFilter.clear();
     endResetModel();
-
     emit rowCountChanged();
+}
+
+int FilterNumericalListModel::getFilterNumericalListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
+QList<FilterNumericalList *> FilterNumericalListModel::getFilters()
+{
+    return mFilter;
 }
 
 
@@ -314,9 +331,16 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
 
     switch (Statics::currentDbIntType) {
 
-    case Constants::excelIntType:
+
     case Constants::jsonIntType:
     case Constants::csvIntType:{
+
+        // Directly send the object to ProxyFilter to process
+        // getFilters() function
+
+        break;
+    }
+    case Constants::excelIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
@@ -445,8 +469,11 @@ QString FilterNumericalListModel::getQueryJoiner()
 
     case Constants::jsonIntType:
     case Constants::csvIntType:
-    case Constants::excelIntType:
         joiner = "\"";
+        break;
+
+    case Constants::excelIntType:
+        joiner = "";
         break;
     }
 

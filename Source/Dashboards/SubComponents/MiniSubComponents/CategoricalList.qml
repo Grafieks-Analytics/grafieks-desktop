@@ -17,8 +17,6 @@ ListView {
     property var currentDashboardId: 0
 
     
-   
-
     Connections{
         target : TableColumnsModel
 

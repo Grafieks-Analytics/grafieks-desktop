@@ -10,8 +10,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #pragma once
 #define DUCKDB_AMALGAMATION 1
-#define DUCKDB_SOURCE_ID "8bc050d05"
-#define DUCKDB_VERSION "0.2.7"
+#define DUCKDB_SOURCE_ID "a8fd73b37"
+#define DUCKDB_VERSION "0.2.8"
 //===----------------------------------------------------------------------===//
 //                         DuckDB
 //
@@ -118,6 +118,7 @@ extern const column_t COLUMN_IDENTIFIER_ROW_ID;
 extern const row_t MAX_ROW_ID;
 
 extern const transaction_t TRANSACTION_ID_START;
+extern const transaction_t MAX_TRANSACTION_ID;
 extern const transaction_t MAXIMUM_QUERY_ID;
 extern const transaction_t NOT_DELETED_ID;
 
@@ -178,12 +179,6 @@ enum class ProfilerPrintFormat : uint8_t { NONE, QUERY_TREE, JSON, QUERY_TREE_OP
 //===----------------------------------------------------------------------===//
 
 
-
-#ifdef _WIN32
-#ifdef DUCKDB_MAIN_LIBRARY
-#include <windows.h>
-#endif
-#endif
 
 
 //===----------------------------------------------------------------------===//
@@ -247,6 +242,11 @@ T MinValue(T a, T b) {
 }
 
 template <typename T>
+T AbsValue(T a) {
+	return a < 0 ? -a : a;
+}
+
+template <typename T>
 const T Load(const_data_ptr_t ptr) {
 	T ret;
 	memcpy(&ret, ptr, sizeof(ret));
@@ -256,6 +256,19 @@ const T Load(const_data_ptr_t ptr) {
 template <typename T>
 void Store(const T val, data_ptr_t ptr) {
 	memcpy(ptr, (void *)&val, sizeof(val));
+}
+
+//! This assigns a shared pointer, but ONLY assigns if "target" is not equal to "source"
+//! If this is often the case, this manner of assignment is significantly faster (~20X faster)
+//! Since it avoids the need of an atomic incref/decref at the cost of a single pointer comparison
+//! Benchmark: https://gist.github.com/Mytherin/4db3faa8e233c4a9b874b21f62bb4b96
+//! If the shared pointers are not the same, the penalty is very low (on the order of 1%~ slower)
+//! This method should always be preferred if there is a (reasonable) chance that the pointers are the same
+template<class T>
+void AssignSharedPointer(shared_ptr<T> &target, const shared_ptr<T> &source) {
+	if (target.get() != source.get()) {
+		target = source;
+	}
 }
 
 } // namespace duckdb
@@ -293,22 +306,6 @@ void DuckDBAssertInternal(bool condition, const char *condition_name, const char
 #define D_ASSERT(condition) duckdb::DuckDBAssertInternal(bool(condition), #condition, __FILE__, __LINE__)
 
 #endif
-
-//===----------------------------------------------------------------------===//
-//                         DuckDB
-//
-// duckdb/common/vector.hpp
-//
-//
-//===----------------------------------------------------------------------===//
-
-
-
-#include <vector>
-
-namespace duckdb {
-using std::vector;
-}
 
 //===----------------------------------------------------------------------===//
 //                         DuckDB
@@ -516,6 +513,21 @@ single_thread_ptr<T> single_thread_make_shared(Args &&... args) {
 	return single_thread_ptr<T>(tmp_object, &(tmp_object->object));
 }
 } // namespace duckdb
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/vector.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+#include <vector>
+
+namespace duckdb {
+using std::vector;
+}
 
 
 
@@ -836,8 +848,6 @@ enum class PhysicalType : uint8_t {
 
 	// DuckDB Extensions
 	VARCHAR = 200, // our own string representation, different from STRING and LARGE_STRING above
-	POINTER = 202,
-	HASH = 203,
 	INT128 = 204, // 128-bit integers
 
 	/// Boolean as 1 bit, LSB bit-packed ordering
@@ -942,7 +952,6 @@ struct LogicalType {
 	DUCKDB_API string ToString() const;
 	DUCKDB_API bool IsIntegral() const;
 	DUCKDB_API bool IsNumeric() const;
-	DUCKDB_API bool IsMoreGenericThan(LogicalType &other) const;
 	DUCKDB_API hash_t Hash() const;
 
 	DUCKDB_API static LogicalType MaxLogicalType(const LogicalType &left, const LogicalType &right);
@@ -1052,21 +1061,28 @@ PhysicalType GetTypeId() {
 		return PhysicalType::UINT64;
 	} else if (std::is_same<T, hugeint_t>()) {
 		return PhysicalType::INT128;
-	} else if (std::is_same<T, uint64_t>()) {
-		return PhysicalType::HASH;
-	} else if (std::is_same<T, uintptr_t>()) {
-		return PhysicalType::POINTER;
+	} else if (std::is_same<T, date_t>()) {
+		return PhysicalType::DATE32;
+	} else if (std::is_same<T, dtime_t>()) {
+		return PhysicalType::TIME32;
+	} else if (std::is_same<T, timestamp_t>()) {
+		return PhysicalType::TIMESTAMP;
 	} else if (std::is_same<T, float>()) {
 		return PhysicalType::FLOAT;
 	} else if (std::is_same<T, double>()) {
 		return PhysicalType::DOUBLE;
-	} else if (std::is_same<T, const char *>() || std::is_same<T, char *>()) {
+	} else if (std::is_same<T, const char *>() || std::is_same<T, char *>() || std::is_same<T, string_t>()) {
 		return PhysicalType::VARCHAR;
 	} else if (std::is_same<T, interval_t>()) {
 		return PhysicalType::INTERVAL;
 	} else {
 		return PhysicalType::INVALID;
 	}
+}
+
+template<class T>
+bool TypeIsNumber() {
+	return std::is_integral<T>() || std::is_floating_point<T>() || std::is_same<T, hugeint_t>();
 }
 
 template <class T>
@@ -1147,6 +1163,7 @@ ExceptionFormatValue ExceptionFormatValue::CreateFormatValue(char *value);
 } // namespace duckdb
 
 
+
 #include <stdexcept>
 
 namespace duckdb {
@@ -1206,7 +1223,8 @@ enum class ExceptionType {
 	FATAL = 30, // Fatal exception: fatal exceptions are non-recoverable, and render the entire DB in an unusable state
 	INTERNAL =
 	    31, // Internal exception: exception that indicates something went wrong internally (i.e. bug in the code base)
-	INVALID_INPUT = 32 // Input or arguments error
+	INVALID_INPUT = 32, // Input or arguments error
+	OUT_OF_MEMORY = 33  // out of memory
 };
 
 class Exception : public std::exception {
@@ -1315,6 +1333,16 @@ public:
 	template <typename... Args>
 	explicit OutOfRangeException(const string &msg, Args... params)
 	    : OutOfRangeException(ConstructMessage(msg, params...)) {
+	}
+};
+
+class OutOfMemoryException : public Exception {
+public:
+	explicit OutOfMemoryException(const string &msg);
+
+	template <typename... Args>
+	explicit OutOfMemoryException(const string &msg, Args... params)
+	    : OutOfMemoryException(ConstructMessage(msg, params...)) {
 	}
 };
 
@@ -1586,6 +1614,8 @@ public:
 
 	void Clear();
 
+	void Resize(uint64_t bufsiz);
+
 	uint64_t AllocSize() {
 		return internal_size;
 	}
@@ -1599,6 +1629,12 @@ private:
 	//! The buffer that was actually malloc'd, i.e. the pointer that must be freed when the FileBuffer is destroyed
 	data_ptr_t malloced_buffer;
 	uint64_t malloced_size;
+
+private:
+	//! Sets malloced_size given the requested buffer size
+	void SetMallocedSize(uint64_t &bufsiz);
+	//! Constructs the Filebuffer object
+	void Construct(uint64_t bufsiz);
 };
 
 } // namespace duckdb
@@ -1651,6 +1687,25 @@ class ClientContext;
 class DatabaseInstance;
 class FileSystem;
 
+enum class FileType {
+	//! Regular file
+	FILE_TYPE_REGULAR,
+	//! Directory
+	FILE_TYPE_DIR,
+	//! FIFO named pipe
+	FILE_TYPE_FIFO,
+	//! Socket
+	FILE_TYPE_SOCKET,
+	//! Symbolic link
+	FILE_TYPE_LINK,
+	//! Block device
+	FILE_TYPE_BLOCKDEV,
+	//! Character device
+	FILE_TYPE_CHARDEV,
+	//! Unknown or invalid file handle
+	FILE_TYPE_INVALID,
+};
+
 struct FileHandle {
 public:
 	FileHandle(FileSystem &file_system, string path) : file_system(file_system), path(path) {
@@ -1673,6 +1728,7 @@ public:
 	bool CanSeek();
 	bool OnDiskFile();
 	idx_t GetFileSize();
+	FileType GetType();
 
 protected:
 	virtual void Close() = 0;
@@ -1729,6 +1785,8 @@ public:
 	virtual int64_t GetFileSize(FileHandle &handle);
 	//! Returns the file last modified time of a file handle, returns timespec with zero on all attributes on error
 	virtual time_t GetLastModifiedTime(FileHandle &handle);
+	//! Returns the file last modified time of a file handle, returns timespec with zero on all attributes on error
+	virtual FileType GetFileType(FileHandle &handle);
 	//! Truncate a file to a maximum size of new_size, new_size should be smaller than or equal to the current size of
 	//! the file
 	virtual void Truncate(FileHandle &handle, int64_t new_size);
@@ -1827,6 +1885,9 @@ public:
 	}
 	time_t GetLastModifiedTime(FileHandle &handle) override {
 		return handle.file_system.GetLastModifiedTime(handle);
+	}
+	FileType GetFileType(FileHandle &handle) override {
+		return handle.file_system.GetFileType(handle);
 	}
 
 	void Truncate(FileHandle &handle, int64_t new_size) override {
@@ -2003,6 +2064,31 @@ using std::bitset;
 //===----------------------------------------------------------------------===//
 //                         DuckDB
 //
+// duckdb/common/enums/vector_type.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+
+namespace duckdb {
+
+enum class VectorType : uint8_t {
+	FLAT_VECTOR,       // Flat vectors represent a standard uncompressed vector
+	CONSTANT_VECTOR,   // Constant vector represents a single constant
+	DICTIONARY_VECTOR, // Dictionary vector represents a selection vector on top of another vector
+	SEQUENCE_VECTOR    // Sequence vector represents a sequence with a start point and an increment
+};
+
+string VectorTypeToString(VectorType type);
+
+} // namespace duckdb
+
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
 // duckdb/common/types/selection_vector.hpp
 //
 //
@@ -2092,9 +2178,6 @@ public:
 		sel_vector = other.sel_vector;
 	}
 
-	bool empty() const {
-		return !sel_vector;
-	}
 	void set_index(idx_t idx, idx_t loc) {
 		sel_vector[idx] = loc;
 	}
@@ -2104,7 +2187,7 @@ public:
 		sel_vector[j] = tmp;
 	}
 	idx_t get_index(idx_t idx) const {
-		return sel_vector[idx];
+		return sel_vector ? sel_vector[idx] : idx;
 	}
 	sel_t *data() {
 		return sel_vector;
@@ -2126,831 +2209,39 @@ private:
 	buffer_ptr<SelectionData> selection_data;
 };
 
-} // namespace duckdb
-
-//===----------------------------------------------------------------------===//
-//                         DuckDB
-//
-// duckdb/common/types/value.hpp
-//
-//
-//===----------------------------------------------------------------------===//
-
-
-
-
-
-
-
-
-namespace duckdb {
-
-class Deserializer;
-class Serializer;
-
-//! The Value object holds a single arbitrary value of any type that can be
-//! stored in the database.
-class Value {
-	friend class Vector;
-
+class OptionalSelection {
 public:
-	//! Create an empty NULL value of the specified type
-	explicit Value(LogicalType type = LogicalType::SQLNULL);
-	//! Create an INTEGER value
-	Value(int32_t val); // NOLINT: Allow implicit conversion from `int32_t`
-	//! Create a BIGINT value
-	Value(int64_t val); // NOLINT: Allow implicit conversion from `int64_t`
-	//! Create a FLOAT value
-	Value(float val); // NOLINT: Allow implicit conversion from `float`
-	//! Create a DOUBLE value
-	Value(double val); // NOLINT: Allow implicit conversion from `double`
-	//! Create a VARCHAR value
-	Value(const char *val); // NOLINT: Allow implicit conversion from `const char *`
-	//! Create a NULL value
-	Value(std::nullptr_t val); // NOLINT: Allow implicit conversion from `nullptr_t`
-	//! Create a VARCHAR value
-	Value(string_t val); // NOLINT: Allow implicit conversion from `string_t`
-	//! Create a VARCHAR value
-	Value(string val); // NOLINT: Allow implicit conversion from `string`
+	explicit inline OptionalSelection(SelectionVector *sel_p) : sel(sel_p) {
 
-	const LogicalType &type() const {
-		return type_;
-	}
-
-	//! Create the lowest possible value of a given type (numeric only)
-	static Value MinimumValue(const LogicalType &type);
-	//! Create the highest possible value of a given type (numeric only)
-	static Value MaximumValue(const LogicalType &type);
-	//! Create a Numeric value of the specified type with the specified value
-	static Value Numeric(const LogicalType &type, int64_t value);
-	static Value Numeric(const LogicalType &type, hugeint_t value);
-
-	//! Create a tinyint Value from a specified value
-	static Value BOOLEAN(int8_t value);
-	//! Create a tinyint Value from a specified value
-	static Value TINYINT(int8_t value);
-	//! Create a smallint Value from a specified value
-	static Value SMALLINT(int16_t value);
-	//! Create an integer Value from a specified value
-	static Value INTEGER(int32_t value);
-	//! Create a bigint Value from a specified value
-	static Value BIGINT(int64_t value);
-	//! Create an unsigned tinyint Value from a specified value
-	static Value UTINYINT(uint8_t value);
-	//! Create an unsigned smallint Value from a specified value
-	static Value USMALLINT(uint16_t value);
-	//! Create an unsigned integer Value from a specified value
-	static Value UINTEGER(uint32_t value);
-	//! Create an unsigned bigint Value from a specified value
-	static Value UBIGINT(uint64_t value);
-	//! Create a hugeint Value from a specified value
-	static Value HUGEINT(hugeint_t value);
-	//! Create a hash Value from a specified value
-	static Value HASH(hash_t value);
-	//! Create a pointer Value from a specified value
-	static Value POINTER(uintptr_t value);
-	//! Create a date Value from a specified date
-	static Value DATE(date_t date);
-	//! Create a date Value from a specified date
-	static Value DATE(int32_t year, int32_t month, int32_t day);
-	//! Create a time Value from a specified time
-	static Value TIME(dtime_t time);
-	//! Create a time Value from a specified time
-	static Value TIME(int32_t hour, int32_t min, int32_t sec, int32_t micros);
-	//! Create a timestamp Value from a specified date/time combination
-	static Value TIMESTAMP(date_t date, dtime_t time);
-	//! Create a timestamp Value from a specified timestamp
-	static Value TIMESTAMP(timestamp_t timestamp);
-	static Value TimestampNs(timestamp_t timestamp);
-	static Value TimestampMs(timestamp_t timestamp);
-	static Value TimestampSec(timestamp_t timestamp);
-	//! Create a timestamp Value from a specified timestamp in separate values
-	static Value TIMESTAMP(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t min, int32_t sec,
-	                       int32_t micros);
-	static Value INTERVAL(int32_t months, int32_t days, int64_t micros);
-	static Value INTERVAL(interval_t interval);
-
-	// Decimal values
-	static Value DECIMAL(int16_t value, uint8_t width, uint8_t scale);
-	static Value DECIMAL(int32_t value, uint8_t width, uint8_t scale);
-	static Value DECIMAL(int64_t value, uint8_t width, uint8_t scale);
-	static Value DECIMAL(hugeint_t value, uint8_t width, uint8_t scale);
-	//! Create a float Value from a specified value
-	static Value FLOAT(float value);
-	//! Create a double Value from a specified value
-	static Value DOUBLE(double value);
-	//! Create a struct value with given list of entries
-	static Value STRUCT(child_list_t<Value> values);
-	//! Create a list value with the given entries
-	static Value LIST(vector<Value> values);
-	//! Creat a map value from a (key, value) pair
-	static Value MAP(Value key, Value value);
-
-	//! Create a blob Value from a data pointer and a length: no bytes are interpreted
-	static Value BLOB(const_data_ptr_t data, idx_t len);
-	//! Creates a blob by casting a specified string to a blob (i.e. interpreting \x characters)
-	static Value BLOB(const string &data);
-
-	template <class T>
-	T GetValue() const {
-		throw NotImplementedException("Unimplemented template type for Value::GetValue");
-	}
-	template <class T>
-	static Value CreateValue(T value) {
-		throw NotImplementedException("Unimplemented template type for Value::CreateValue");
-	}
-	// Returns the internal value. Unlike GetValue(), this method does not perform casting, and assumes T matches the
-	// type of the value. Only use this if you know what you are doing.
-	template <class T>
-	T &GetValueUnsafe() {
-		throw NotImplementedException("Unimplemented template type for Value::GetValueUnsafe");
-	}
-
-	//! Return a copy of this value
-	Value Copy() const {
-		return Value(*this);
-	}
-
-	//! Convert this value to a string
-	DUCKDB_API string ToString() const;
-
-	DUCKDB_API uintptr_t GetPointer() const;
-
-	//! Cast this value to another type
-	DUCKDB_API Value CastAs(const LogicalType &target_type, bool strict = false) const;
-	//! Tries to cast value to another type, throws exception if its not possible
-	DUCKDB_API bool TryCastAs(const LogicalType &target_type, bool strict = false);
-
-	//! Serializes a Value to a stand-alone binary blob
-	DUCKDB_API void Serialize(Serializer &serializer);
-	//! Deserializes a Value from a blob
-	DUCKDB_API static Value Deserialize(Deserializer &source);
-
-	//===--------------------------------------------------------------------===//
-	// Numeric Operators
-	//===--------------------------------------------------------------------===//
-	Value operator+(const Value &rhs) const;
-	Value operator-(const Value &rhs) const;
-	Value operator*(const Value &rhs) const;
-	Value operator/(const Value &rhs) const;
-	Value operator%(const Value &rhs) const;
-
-	//===--------------------------------------------------------------------===//
-	// Comparison Operators
-	//===--------------------------------------------------------------------===//
-	bool operator==(const Value &rhs) const;
-	bool operator!=(const Value &rhs) const;
-	bool operator<(const Value &rhs) const;
-	bool operator>(const Value &rhs) const;
-	bool operator<=(const Value &rhs) const;
-	bool operator>=(const Value &rhs) const;
-
-	bool operator==(const int64_t &rhs) const;
-	bool operator!=(const int64_t &rhs) const;
-	bool operator<(const int64_t &rhs) const;
-	bool operator>(const int64_t &rhs) const;
-	bool operator<=(const int64_t &rhs) const;
-	bool operator>=(const int64_t &rhs) const;
-
-	static bool FloatIsValid(float value);
-	static bool DoubleIsValid(double value);
-
-	template <class T>
-	static bool IsValid(T value) {
-		return true;
-	}
-
-	//! Returns true if the values are (approximately) equivalent. Note this is NOT the SQL equivalence. For this
-	//! function, NULL values are equivalent and floating point values that are close are equivalent.
-	static bool ValuesAreEqual(const Value &result_value, const Value &value);
-
-	friend std::ostream &operator<<(std::ostream &out, const Value &val) {
-		out << val.ToString();
-		return out;
-	}
-	void Print();
-
-private:
-	//! The logical of the value
-	LogicalType type_;
-
-public:
-	//! Whether or not the value is NULL
-	bool is_null;
-
-	//! The value of the object, if it is of a constant size Type
-	union Val {
-		int8_t boolean;
-		int8_t tinyint;
-		int16_t smallint;
-		int32_t integer;
-		int64_t bigint;
-		uint8_t utinyint;
-		uint16_t usmallint;
-		uint32_t uinteger;
-		uint64_t ubigint;
-		hugeint_t hugeint;
-		float float_;
-		double double_;
-		uintptr_t pointer;
-		uint64_t hash;
-		date_t date;
-		dtime_t time;
-		timestamp_t timestamp;
-		interval_t interval;
-	} value_;
-
-	//! The value of the object, if it is of a variable size type
-	string str_value;
-
-	vector<Value> struct_value;
-	vector<Value> list_value;
-
-private:
-	template <class T>
-	T GetValueInternal() const;
-	//! Templated helper function for casting
-	template <class DST, class OP>
-	static DST _cast(const Value &v);
-
-	//! Templated helper function for binary operations
-	template <class OP>
-	static void _templated_binary_operation(const Value &left, const Value &right, Value &result, bool ignore_null);
-
-	//! Templated helper function for boolean operations
-	template <class OP>
-	static bool _templated_boolean_operation(const Value &left, const Value &right);
-};
-
-template <>
-Value DUCKDB_API Value::CreateValue(bool value);
-template <>
-Value DUCKDB_API Value::CreateValue(uint8_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(uint16_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(uint32_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(uint64_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(int8_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(int16_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(int32_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(int64_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(hugeint_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(date_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(dtime_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(timestamp_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(const char *value);
-template <>
-Value DUCKDB_API Value::CreateValue(string value);
-template <>
-Value DUCKDB_API Value::CreateValue(string_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(float value);
-template <>
-Value DUCKDB_API Value::CreateValue(double value);
-template <>
-Value DUCKDB_API Value::CreateValue(interval_t value);
-template <>
-Value DUCKDB_API Value::CreateValue(Value value);
-
-template <>
-DUCKDB_API bool Value::GetValue() const;
-template <>
-DUCKDB_API int8_t Value::GetValue() const;
-template <>
-DUCKDB_API int16_t Value::GetValue() const;
-template <>
-DUCKDB_API int32_t Value::GetValue() const;
-template <>
-DUCKDB_API int64_t Value::GetValue() const;
-template <>
-DUCKDB_API uint8_t Value::GetValue() const;
-template <>
-DUCKDB_API uint16_t Value::GetValue() const;
-template <>
-DUCKDB_API uint32_t Value::GetValue() const;
-template <>
-DUCKDB_API uint64_t Value::GetValue() const;
-template <>
-DUCKDB_API hugeint_t Value::GetValue() const;
-template <>
-DUCKDB_API string Value::GetValue() const;
-template <>
-DUCKDB_API float Value::GetValue() const;
-template <>
-DUCKDB_API double Value::GetValue() const;
-template <>
-DUCKDB_API date_t Value::GetValue() const;
-template <>
-DUCKDB_API dtime_t Value::GetValue() const;
-template <>
-DUCKDB_API timestamp_t Value::GetValue() const;
-
-template <>
-DUCKDB_API int8_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API int16_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API int32_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API int64_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API hugeint_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API uint8_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API uint16_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API uint32_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API uint64_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API string &Value::GetValueUnsafe();
-template <>
-DUCKDB_API float &Value::GetValueUnsafe();
-template <>
-DUCKDB_API double &Value::GetValueUnsafe();
-template <>
-DUCKDB_API date_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API dtime_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API timestamp_t &Value::GetValueUnsafe();
-template <>
-DUCKDB_API interval_t &Value::GetValueUnsafe();
-
-template <>
-DUCKDB_API bool Value::IsValid(float value);
-template <>
-DUCKDB_API bool Value::IsValid(double value);
-
-} // namespace duckdb
-
-//===----------------------------------------------------------------------===//
-//                         DuckDB
-//
-// duckdb/common/enums/vector_type.hpp
-//
-//
-//===----------------------------------------------------------------------===//
-
-
-
-
-
-namespace duckdb {
-
-enum class VectorType : uint8_t {
-	FLAT_VECTOR,       // Flat vectors represent a standard uncompressed vector
-	CONSTANT_VECTOR,   // Constant vector represents a single constant
-	DICTIONARY_VECTOR, // Dictionary vector represents a selection vector on top of another vector
-	SEQUENCE_VECTOR    // Sequence vector represents a sequence with a start point and an increment
-};
-
-string VectorTypeToString(VectorType type);
-
-} // namespace duckdb
-
-//===----------------------------------------------------------------------===//
-//                         DuckDB
-//
-// duckdb/common/types/vector_buffer.hpp
-//
-//
-//===----------------------------------------------------------------------===//
-
-
-
-
-//===----------------------------------------------------------------------===//
-//                         DuckDB
-//
-// duckdb/common/types/string_heap.hpp
-//
-//
-//===----------------------------------------------------------------------===//
-
-
-
-
-
-
-namespace duckdb {
-//! A string heap is the owner of a set of strings, strings can be inserted into
-//! it On every insert, a pointer to the inserted string is returned The
-//! returned pointer will remain valid until the StringHeap is destroyed
-class StringHeap {
-public:
-	StringHeap();
-
-	void Destroy() {
-		tail = nullptr;
-		chunk = nullptr;
-	}
-
-	void Move(StringHeap &other) {
-		D_ASSERT(!other.chunk);
-		other.tail = tail;
-		other.chunk = move(chunk);
-		tail = nullptr;
-	}
-
-	//! Add a string to the string heap, returns a pointer to the string
-	string_t AddString(const char *data, idx_t len);
-	//! Add a string to the string heap, returns a pointer to the string
-	string_t AddString(const char *data);
-	//! Add a string to the string heap, returns a pointer to the string
-	string_t AddString(const string &data);
-	//! Add a string to the string heap, returns a pointer to the string
-	string_t AddString(const string_t &data);
-	//! Add a blob to the string heap; blobs can be non-valid UTF8
-	string_t AddBlob(const char *data, idx_t len);
-	//! Allocates space for an empty string of size "len" on the heap
-	string_t EmptyString(idx_t len);
-	//! Add all strings from a different string heap to this string heap
-	void MergeHeap(StringHeap &heap);
-
-private:
-	struct StringChunk {
-		explicit StringChunk(idx_t size) : current_position(0), maximum_size(size) {
-			data = unique_ptr<char[]>(new char[maximum_size]);
+		if (sel) {
+			vec.Initialize(sel->data());
+			sel = &vec;
 		}
-		~StringChunk() {
-			if (prev) {
-				auto current_prev = move(prev);
-				while (current_prev) {
-					current_prev = move(current_prev->prev);
-				}
-			}
-		}
+	}
 
-		unique_ptr<char[]> data;
-		idx_t current_position;
-		idx_t maximum_size;
-		unique_ptr<StringChunk> prev;
-	};
-	StringChunk *tail;
-	unique_ptr<StringChunk> chunk;
+	inline operator SelectionVector *() {
+		return sel;
+	}
+
+	inline void Append(idx_t &count, const idx_t idx) {
+		if (sel) {
+			sel->set_index(count, idx);
+		}
+		++count;
+	}
+
+	inline void Advance(idx_t completed) {
+		if (sel) {
+			sel->Initialize(sel->data() + completed);
+		}
+	}
+
+private:
+	SelectionVector *sel;
+	SelectionVector vec;
 };
 
 } // namespace duckdb
-
-//===----------------------------------------------------------------------===//
-//                         DuckDB
-//
-// duckdb/common/types/string_type.hpp
-//
-//
-//===----------------------------------------------------------------------===//
-
-
-
-
-
-
-#include <cstring>
-
-namespace duckdb {
-
-struct string_t {
-	friend struct StringComparisonOperators;
-	friend class StringSegment;
-
-public:
-	static constexpr idx_t PREFIX_LENGTH = 4 * sizeof(char);
-	static constexpr idx_t INLINE_LENGTH = 12;
-
-	string_t() = default;
-	explicit string_t(uint32_t len) {
-		value.inlined.length = len;
-	}
-	string_t(const char *data, uint32_t len) {
-		value.inlined.length = len;
-		D_ASSERT(data || GetSize() == 0);
-		if (IsInlined()) {
-			// zero initialize the prefix first
-			// this makes sure that strings with length smaller than 4 still have an equal prefix
-			memset(value.inlined.inlined, 0, INLINE_LENGTH);
-			if (GetSize() == 0) {
-				return;
-			}
-			// small string: inlined
-			/* Note: this appears to write out-of bounds on `prefix` if `length` > `PREFIX_LENGTH`
-			 but this is not the case because the `value_` union `inlined` char array directly
-			 follows it with 8 more chars to use for the string value.
-			 */
-			memcpy(value.inlined.inlined, data, GetSize());
-		} else {
-			// large string: store pointer
-			memcpy(value.pointer.prefix, data, PREFIX_LENGTH);
-			value.pointer.ptr = (char *)data;
-		}
-	}
-	string_t(const char *data) : string_t(data, strlen(data)) { // NOLINT: Allow implicit conversion from `const char*`
-	}
-	string_t(const string &value)
-	    : string_t(value.c_str(), value.size()) { // NOLINT: Allow implicit conversion from `const char*`
-	}
-
-	bool IsInlined() const {
-		return GetSize() <= INLINE_LENGTH;
-	}
-
-	//! this is unsafe since the string will not be terminated at the end
-	const char *GetDataUnsafe() const {
-		return IsInlined() ? (const char *)value.inlined.inlined : value.pointer.ptr;
-	}
-
-	char *GetDataWriteable() const {
-		return IsInlined() ? (char *)value.inlined.inlined : value.pointer.ptr;
-	}
-
-	const char *GetPrefix() const {
-		return value.pointer.prefix;
-	}
-
-	idx_t GetSize() const {
-		return value.inlined.length;
-	}
-
-	string GetString() const {
-		return string(GetDataUnsafe(), GetSize());
-	}
-
-	explicit operator string() const {
-		return GetString();
-	}
-
-	void Finalize() {
-		// set trailing NULL byte
-		auto dataptr = (char *)GetDataUnsafe();
-		if (GetSize() <= INLINE_LENGTH) {
-			// fill prefix with zeros if the length is smaller than the prefix length
-			for (idx_t i = GetSize(); i < INLINE_LENGTH; i++) {
-				value.inlined.inlined[i] = '\0';
-			}
-		} else {
-			// copy the data into the prefix
-			memcpy(value.pointer.prefix, dataptr, PREFIX_LENGTH);
-		}
-	}
-
-	void Verify();
-	void VerifyNull();
-	bool operator<(const string_t &r) const {
-		auto this_str = this->GetString();
-		auto r_str = r.GetString();
-		return this_str < r_str;
-	}
-
-private:
-	union {
-		struct {
-			uint32_t length;
-			char prefix[4];
-			char *ptr;
-		} pointer;
-		struct {
-			uint32_t length;
-			char inlined[12];
-		} inlined;
-	} value;
-};
-
-} // namespace duckdb
-
-
-
-namespace duckdb {
-
-class BufferHandle;
-class VectorBuffer;
-class Vector;
-class ChunkCollection;
-
-enum class VectorBufferType : uint8_t {
-	STANDARD_BUFFER,     // standard buffer, holds a single array of data
-	DICTIONARY_BUFFER,   // dictionary buffer, holds a selection vector
-	VECTOR_CHILD_BUFFER, // vector child buffer: holds another vector
-	STRING_BUFFER,       // string buffer, holds a string heap
-	STRUCT_BUFFER,       // struct buffer, holds a ordered mapping from name to child vector
-	LIST_BUFFER,         // list buffer, holds a single flatvector child
-	MANAGED_BUFFER,      // managed buffer, holds a buffer managed by the buffermanager
-	OPAQUE_BUFFER        // opaque buffer, can be created for example by the parquet reader
-};
-
-//! The VectorBuffer is a class used by the vector to hold its data
-class VectorBuffer {
-public:
-	explicit VectorBuffer(VectorBufferType type) : buffer_type(type) {
-	}
-	explicit VectorBuffer(idx_t data_size) : buffer_type(VectorBufferType::STANDARD_BUFFER) {
-		if (data_size > 0) {
-			data = unique_ptr<data_t[]>(new data_t[data_size]);
-		}
-	}
-	explicit VectorBuffer(VectorBufferType vectorBufferType, const LogicalType &type, VectorType vector_type)
-	    : vector_type(vector_type), type(type), buffer_type(vectorBufferType) {
-	}
-	virtual ~VectorBuffer() {
-	}
-	VectorBuffer() {
-	}
-
-	VectorBuffer(VectorType vectorType, const LogicalType &type, idx_t data_size)
-	    : vector_type(vectorType), type(type), buffer_type(VectorBufferType::STANDARD_BUFFER) {
-		if (data_size > 0) {
-			data = unique_ptr<data_t[]>(new data_t[data_size]);
-		}
-	}
-	VectorBuffer(VectorType vectorType, const LogicalType &type) : vector_type(vectorType), type(type) {
-	}
-
-	VectorBuffer(VectorType vectorType, idx_t data_size)
-	    : vector_type(vectorType), buffer_type(VectorBufferType::STANDARD_BUFFER) {
-		if (data_size > 0) {
-			data = unique_ptr<data_t[]>(new data_t[data_size]);
-		}
-	}
-
-	VectorBuffer(VectorType vectorType) : vector_type(vectorType) {
-	}
-
-public:
-	data_ptr_t GetData() {
-		return data.get();
-	}
-	void SetData(unique_ptr<data_t[]> new_data) {
-		data = move(new_data);
-	}
-
-	static buffer_ptr<VectorBuffer> CreateStandardVector(PhysicalType type);
-	static buffer_ptr<VectorBuffer> CreateConstantVector(PhysicalType type);
-	static buffer_ptr<VectorBuffer> CreateConstantVector(VectorType vectorType, const LogicalType &logicalType);
-	static buffer_ptr<VectorBuffer> CreateStandardVector(VectorType vectorType, const LogicalType &logicalType);
-	static buffer_ptr<VectorBuffer> CreateStandardVector(VectorType vectorType, PhysicalType type);
-
-	// Getters
-	inline VectorType GetVectorType() const {
-		return vector_type;
-	}
-	inline const LogicalType &GetType() const {
-		return type;
-	}
-	inline VectorBufferType GetBufferType() const {
-		return buffer_type;
-	}
-
-	// Setters
-	inline void SetVectorType(VectorType vector_type) {
-		this->vector_type = vector_type;
-	}
-	inline void SetType(const LogicalType &type) {
-		this->type = type;
-	}
-	inline void SetBufferType(VectorBufferType buffer_type) {
-		this->buffer_type = buffer_type;
-	}
-
-protected:
-	unique_ptr<data_t[]> data;
-	//! The vector type specifies how the data of the vector is physically stored (i.e. if it is a single repeated
-	//! constant, if it is compressed)
-	VectorType vector_type;
-	//! The type of the elements stored in the vector (e.g. integer, float)
-	LogicalType type;
-	VectorBufferType buffer_type;
-};
-
-//! The DictionaryBuffer holds a selection vector
-class DictionaryBuffer : public VectorBuffer {
-public:
-	explicit DictionaryBuffer(const SelectionVector &sel)
-	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER), sel_vector(sel) {
-	}
-	DictionaryBuffer(const SelectionVector &sel, const LogicalType &type, VectorType vector_type)
-	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER, type, vector_type), sel_vector(sel) {
-	}
-	explicit DictionaryBuffer(buffer_ptr<SelectionData> data)
-	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER), sel_vector(move(data)) {
-	}
-	explicit DictionaryBuffer(idx_t count = STANDARD_VECTOR_SIZE)
-	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER), sel_vector(count) {
-	}
-
-public:
-	DictionaryBuffer(buffer_ptr<SelectionData> data, LogicalType type, VectorType vector_type)
-	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER, type, vector_type), sel_vector(move(data)) {
-	}
-	const SelectionVector &GetSelVector() const {
-		return sel_vector;
-	}
-	SelectionVector &GetSelVector() {
-		return sel_vector;
-	}
-	void SetSelVector(const SelectionVector &vector) {
-		this->sel_vector.Initialize(vector);
-	}
-
-private:
-	SelectionVector sel_vector;
-};
-
-class VectorStringBuffer : public VectorBuffer {
-public:
-	VectorStringBuffer();
-
-public:
-	string_t AddString(const char *data, idx_t len) {
-		return heap.AddString(data, len);
-	}
-	string_t AddString(string_t data) {
-		return heap.AddString(data);
-	}
-	string_t AddBlob(string_t data) {
-		return heap.AddBlob(data.GetDataUnsafe(), data.GetSize());
-	}
-	string_t EmptyString(idx_t len) {
-		return heap.EmptyString(len);
-	}
-
-	void AddHeapReference(buffer_ptr<VectorBuffer> heap) {
-		references.push_back(move(heap));
-	}
-
-private:
-	//! The string heap of this buffer
-	StringHeap heap;
-	// References to additional vector buffers referenced by this string buffer
-	vector<buffer_ptr<VectorBuffer>> references;
-};
-
-class VectorStructBuffer : public VectorBuffer {
-public:
-	VectorStructBuffer();
-	~VectorStructBuffer() override;
-
-public:
-	const vector<unique_ptr<Vector>> &GetChildren() const {
-		return children;
-	}
-	vector<unique_ptr<Vector>> &GetChildren() {
-		return children;
-	}
-
-private:
-	//! child vectors used for nested data
-	vector<unique_ptr<Vector>> children;
-};
-
-class VectorListBuffer : public VectorBuffer {
-public:
-	VectorListBuffer();
-	~VectorListBuffer() override;
-
-public:
-	Vector &GetChild() {
-		return *child;
-	}
-	void SetChild(unique_ptr<Vector> new_child);
-
-	void Append(const Vector &to_append, idx_t to_append_size, idx_t source_offset = 0);
-	void Append(const Vector &to_append, const SelectionVector &sel, idx_t to_append_size, idx_t source_offset = 0);
-
-	void PushBack(Value &insert);
-
-	idx_t capacity = 0;
-	idx_t size = 0;
-
-private:
-	void Reserve(const Vector &to_append, idx_t to_reserve);
-
-	//! child vectors used for nested data
-	unique_ptr<Vector> child;
-};
-
-//! The ManagedVectorBuffer holds a buffer handle
-class ManagedVectorBuffer : public VectorBuffer {
-public:
-	explicit ManagedVectorBuffer(unique_ptr<BufferHandle> handle);
-	~ManagedVectorBuffer() override;
-
-private:
-	unique_ptr<BufferHandle> handle;
-};
-
-} // namespace duckdb
-
 
 //===----------------------------------------------------------------------===//
 //                         DuckDB
@@ -3250,6 +2541,767 @@ public:
 
 } // namespace duckdb
 
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/types/value.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+
+
+
+
+namespace duckdb {
+
+class Deserializer;
+class Serializer;
+
+//! The Value object holds a single arbitrary value of any type that can be
+//! stored in the database.
+class Value {
+	friend class Vector;
+
+public:
+	//! Create an empty NULL value of the specified type
+	explicit Value(LogicalType type = LogicalType::SQLNULL);
+	//! Create an INTEGER value
+	Value(int32_t val); // NOLINT: Allow implicit conversion from `int32_t`
+	//! Create a BIGINT value
+	Value(int64_t val); // NOLINT: Allow implicit conversion from `int64_t`
+	//! Create a FLOAT value
+	Value(float val); // NOLINT: Allow implicit conversion from `float`
+	//! Create a DOUBLE value
+	Value(double val); // NOLINT: Allow implicit conversion from `double`
+	//! Create a VARCHAR value
+	Value(const char *val); // NOLINT: Allow implicit conversion from `const char *`
+	//! Create a NULL value
+	Value(std::nullptr_t val); // NOLINT: Allow implicit conversion from `nullptr_t`
+	//! Create a VARCHAR value
+	Value(string_t val); // NOLINT: Allow implicit conversion from `string_t`
+	//! Create a VARCHAR value
+	Value(string val); // NOLINT: Allow implicit conversion from `string`
+
+	const LogicalType &type() const {
+		return type_;
+	}
+
+	//! Create the lowest possible value of a given type (numeric only)
+	static Value MinimumValue(const LogicalType &type);
+	//! Create the highest possible value of a given type (numeric only)
+	static Value MaximumValue(const LogicalType &type);
+	//! Create a Numeric value of the specified type with the specified value
+	static Value Numeric(const LogicalType &type, int64_t value);
+	static Value Numeric(const LogicalType &type, hugeint_t value);
+
+	//! Create a tinyint Value from a specified value
+	static Value BOOLEAN(int8_t value);
+	//! Create a tinyint Value from a specified value
+	static Value TINYINT(int8_t value);
+	//! Create a smallint Value from a specified value
+	static Value SMALLINT(int16_t value);
+	//! Create an integer Value from a specified value
+	static Value INTEGER(int32_t value);
+	//! Create a bigint Value from a specified value
+	static Value BIGINT(int64_t value);
+	//! Create an unsigned tinyint Value from a specified value
+	static Value UTINYINT(uint8_t value);
+	//! Create an unsigned smallint Value from a specified value
+	static Value USMALLINT(uint16_t value);
+	//! Create an unsigned integer Value from a specified value
+	static Value UINTEGER(uint32_t value);
+	//! Create an unsigned bigint Value from a specified value
+	static Value UBIGINT(uint64_t value);
+	//! Create a hugeint Value from a specified value
+	static Value HUGEINT(hugeint_t value);
+	//! Create a hash Value from a specified value
+	static Value HASH(hash_t value);
+	//! Create a pointer Value from a specified value
+	static Value POINTER(uintptr_t value);
+	//! Create a date Value from a specified date
+	static Value DATE(date_t date);
+	//! Create a date Value from a specified date
+	static Value DATE(int32_t year, int32_t month, int32_t day);
+	//! Create a time Value from a specified time
+	static Value TIME(dtime_t time);
+	//! Create a time Value from a specified time
+	static Value TIME(int32_t hour, int32_t min, int32_t sec, int32_t micros);
+	//! Create a timestamp Value from a specified date/time combination
+	static Value TIMESTAMP(date_t date, dtime_t time);
+	//! Create a timestamp Value from a specified timestamp
+	static Value TIMESTAMP(timestamp_t timestamp);
+	static Value TimestampNs(timestamp_t timestamp);
+	static Value TimestampMs(timestamp_t timestamp);
+	static Value TimestampSec(timestamp_t timestamp);
+	//! Create a timestamp Value from a specified timestamp in separate values
+	static Value TIMESTAMP(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t min, int32_t sec,
+	                       int32_t micros);
+	static Value INTERVAL(int32_t months, int32_t days, int64_t micros);
+	static Value INTERVAL(interval_t interval);
+
+	// Decimal values
+	static Value DECIMAL(int16_t value, uint8_t width, uint8_t scale);
+	static Value DECIMAL(int32_t value, uint8_t width, uint8_t scale);
+	static Value DECIMAL(int64_t value, uint8_t width, uint8_t scale);
+	static Value DECIMAL(hugeint_t value, uint8_t width, uint8_t scale);
+	//! Create a float Value from a specified value
+	static Value FLOAT(float value);
+	//! Create a double Value from a specified value
+	static Value DOUBLE(double value);
+	//! Create a struct value with given list of entries
+	static Value STRUCT(child_list_t<Value> values);
+	//! Create a list value with the given entries
+	static Value LIST(vector<Value> values);
+	//! Creat a map value from a (key, value) pair
+	static Value MAP(Value key, Value value);
+
+	//! Create a blob Value from a data pointer and a length: no bytes are interpreted
+	static Value BLOB(const_data_ptr_t data, idx_t len);
+	static Value BLOB_RAW(const string &data) {
+		return Value::BLOB((const_data_ptr_t)data.c_str(), data.size());
+	}
+	//! Creates a blob by casting a specified string to a blob (i.e. interpreting \x characters)
+	static Value BLOB(const string &data);
+
+	template <class T>
+	T GetValue() const {
+		throw NotImplementedException("Unimplemented template type for Value::GetValue");
+	}
+	template <class T>
+	static Value CreateValue(T value) {
+		throw NotImplementedException("Unimplemented template type for Value::CreateValue");
+	}
+	// Returns the internal value. Unlike GetValue(), this method does not perform casting, and assumes T matches the
+	// type of the value. Only use this if you know what you are doing.
+	template <class T>
+	T &GetValueUnsafe() {
+		throw NotImplementedException("Unimplemented template type for Value::GetValueUnsafe");
+	}
+
+	//! Return a copy of this value
+	Value Copy() const {
+		return Value(*this);
+	}
+
+	//! Convert this value to a string
+	DUCKDB_API string ToString() const;
+
+	DUCKDB_API uintptr_t GetPointer() const;
+
+	//! Cast this value to another type, throws exception if its not possible
+	DUCKDB_API Value CastAs(const LogicalType &target_type, bool strict = false) const;
+	//! Tries to cast this value to another type, and stores the result in "new_value"
+	DUCKDB_API bool TryCastAs(const LogicalType &target_type, Value &new_value, string *error_message,
+	                          bool strict = false) const;
+	//! Tries to cast this value to another type, and stores the result in THIS value again
+	DUCKDB_API bool TryCastAs(const LogicalType &target_type, bool strict = false);
+
+	//! Serializes a Value to a stand-alone binary blob
+	DUCKDB_API void Serialize(Serializer &serializer);
+	//! Deserializes a Value from a blob
+	DUCKDB_API static Value Deserialize(Deserializer &source);
+
+	//===--------------------------------------------------------------------===//
+	// Numeric Operators
+	//===--------------------------------------------------------------------===//
+	Value operator+(const Value &rhs) const;
+	Value operator-(const Value &rhs) const;
+	Value operator*(const Value &rhs) const;
+	Value operator/(const Value &rhs) const;
+	Value operator%(const Value &rhs) const;
+
+	//===--------------------------------------------------------------------===//
+	// Comparison Operators
+	//===--------------------------------------------------------------------===//
+	bool operator==(const Value &rhs) const;
+	bool operator!=(const Value &rhs) const;
+	bool operator<(const Value &rhs) const;
+	bool operator>(const Value &rhs) const;
+	bool operator<=(const Value &rhs) const;
+	bool operator>=(const Value &rhs) const;
+
+	bool operator==(const int64_t &rhs) const;
+	bool operator!=(const int64_t &rhs) const;
+	bool operator<(const int64_t &rhs) const;
+	bool operator>(const int64_t &rhs) const;
+	bool operator<=(const int64_t &rhs) const;
+	bool operator>=(const int64_t &rhs) const;
+
+	static bool FloatIsValid(float value);
+	static bool DoubleIsValid(double value);
+	static bool StringIsValid(const char *str, idx_t length);
+	static bool StringIsValid(const string &str) {
+		return StringIsValid(str.c_str(), str.size());
+	}
+
+	template <class T>
+	static bool IsValid(T value) {
+		return true;
+	}
+
+	//! Returns true if the values are (approximately) equivalent. Note this is NOT the SQL equivalence. For this
+	//! function, NULL values are equivalent and floating point values that are close are equivalent.
+	static bool ValuesAreEqual(const Value &result_value, const Value &value);
+
+	friend std::ostream &operator<<(std::ostream &out, const Value &val) {
+		out << val.ToString();
+		return out;
+	}
+	void Print() const;
+
+private:
+	//! The logical of the value
+	LogicalType type_;
+
+public:
+	//! Whether or not the value is NULL
+	bool is_null;
+
+	//! The value of the object, if it is of a constant size Type
+	union Val {
+		int8_t boolean;
+		int8_t tinyint;
+		int16_t smallint;
+		int32_t integer;
+		int64_t bigint;
+		uint8_t utinyint;
+		uint16_t usmallint;
+		uint32_t uinteger;
+		uint64_t ubigint;
+		hugeint_t hugeint;
+		float float_;
+		double double_;
+		uintptr_t pointer;
+		uint64_t hash;
+		date_t date;
+		dtime_t time;
+		timestamp_t timestamp;
+		interval_t interval;
+	} value_;
+
+	//! The value of the object, if it is of a variable size type
+	string str_value;
+
+	vector<Value> struct_value;
+	vector<Value> list_value;
+
+private:
+	template <class T>
+	T GetValueInternal() const;
+	//! Templated helper function for casting
+	template <class DST, class OP>
+	static DST _cast(const Value &v);
+
+	//! Templated helper function for binary operations
+	template <class OP>
+	static void _templated_binary_operation(const Value &left, const Value &right, Value &result, bool ignore_null);
+
+	//! Templated helper function for boolean operations
+	template <class OP>
+	static bool _templated_boolean_operation(const Value &left, const Value &right);
+};
+
+template <>
+Value DUCKDB_API Value::CreateValue(bool value);
+template <>
+Value DUCKDB_API Value::CreateValue(uint8_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(uint16_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(uint32_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(uint64_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(int8_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(int16_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(int32_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(int64_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(hugeint_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(date_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(dtime_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(timestamp_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(const char *value);
+template <>
+Value DUCKDB_API Value::CreateValue(string value);
+template <>
+Value DUCKDB_API Value::CreateValue(string_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(float value);
+template <>
+Value DUCKDB_API Value::CreateValue(double value);
+template <>
+Value DUCKDB_API Value::CreateValue(interval_t value);
+template <>
+Value DUCKDB_API Value::CreateValue(Value value);
+
+template <>
+DUCKDB_API bool Value::GetValue() const;
+template <>
+DUCKDB_API int8_t Value::GetValue() const;
+template <>
+DUCKDB_API int16_t Value::GetValue() const;
+template <>
+DUCKDB_API int32_t Value::GetValue() const;
+template <>
+DUCKDB_API int64_t Value::GetValue() const;
+template <>
+DUCKDB_API uint8_t Value::GetValue() const;
+template <>
+DUCKDB_API uint16_t Value::GetValue() const;
+template <>
+DUCKDB_API uint32_t Value::GetValue() const;
+template <>
+DUCKDB_API uint64_t Value::GetValue() const;
+template <>
+DUCKDB_API hugeint_t Value::GetValue() const;
+template <>
+DUCKDB_API string Value::GetValue() const;
+template <>
+DUCKDB_API float Value::GetValue() const;
+template <>
+DUCKDB_API double Value::GetValue() const;
+template <>
+DUCKDB_API date_t Value::GetValue() const;
+template <>
+DUCKDB_API dtime_t Value::GetValue() const;
+template <>
+DUCKDB_API timestamp_t Value::GetValue() const;
+template <>
+DUCKDB_API interval_t Value::GetValue() const;
+
+template <>
+DUCKDB_API int8_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API int16_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API int32_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API int64_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API hugeint_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API uint8_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API uint16_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API uint32_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API uint64_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API string &Value::GetValueUnsafe();
+template <>
+DUCKDB_API float &Value::GetValueUnsafe();
+template <>
+DUCKDB_API double &Value::GetValueUnsafe();
+template <>
+DUCKDB_API date_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API dtime_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API timestamp_t &Value::GetValueUnsafe();
+template <>
+DUCKDB_API interval_t &Value::GetValueUnsafe();
+
+template <>
+DUCKDB_API bool Value::IsValid(float value);
+template <>
+DUCKDB_API bool Value::IsValid(double value);
+
+} // namespace duckdb
+
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/types/vector_buffer.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/types/string_heap.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+
+
+namespace duckdb {
+//! A string heap is the owner of a set of strings, strings can be inserted into
+//! it On every insert, a pointer to the inserted string is returned The
+//! returned pointer will remain valid until the StringHeap is destroyed
+class StringHeap {
+public:
+	StringHeap();
+
+	void Destroy() {
+		tail = nullptr;
+		chunk = nullptr;
+	}
+
+	void Move(StringHeap &other) {
+		D_ASSERT(!other.chunk);
+		other.tail = tail;
+		other.chunk = move(chunk);
+		tail = nullptr;
+	}
+
+	//! Add a string to the string heap, returns a pointer to the string
+	string_t AddString(const char *data, idx_t len);
+	//! Add a string to the string heap, returns a pointer to the string
+	string_t AddString(const char *data);
+	//! Add a string to the string heap, returns a pointer to the string
+	string_t AddString(const string &data);
+	//! Add a string to the string heap, returns a pointer to the string
+	string_t AddString(const string_t &data);
+	//! Add a blob to the string heap; blobs can be non-valid UTF8
+	string_t AddBlob(const char *data, idx_t len);
+	//! Allocates space for an empty string of size "len" on the heap
+	string_t EmptyString(idx_t len);
+
+private:
+	struct StringChunk {
+		explicit StringChunk(idx_t size) : current_position(0), maximum_size(size) {
+			data = unique_ptr<char[]>(new char[maximum_size]);
+		}
+		~StringChunk() {
+			if (prev) {
+				auto current_prev = move(prev);
+				while (current_prev) {
+					current_prev = move(current_prev->prev);
+				}
+			}
+		}
+
+		unique_ptr<char[]> data;
+		idx_t current_position;
+		idx_t maximum_size;
+		unique_ptr<StringChunk> prev;
+	};
+	StringChunk *tail;
+	unique_ptr<StringChunk> chunk;
+};
+
+} // namespace duckdb
+
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/types/string_type.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+
+
+#include <cstring>
+
+namespace duckdb {
+
+struct string_t {
+	friend struct StringComparisonOperators;
+	friend class StringSegment;
+
+public:
+	static constexpr idx_t PREFIX_LENGTH = 4 * sizeof(char);
+	static constexpr idx_t INLINE_LENGTH = 12;
+
+	string_t() = default;
+	explicit string_t(uint32_t len) {
+		value.inlined.length = len;
+	}
+	string_t(const char *data, uint32_t len) {
+		value.inlined.length = len;
+		D_ASSERT(data || GetSize() == 0);
+		if (IsInlined()) {
+			// zero initialize the prefix first
+			// this makes sure that strings with length smaller than 4 still have an equal prefix
+			memset(value.inlined.inlined, 0, INLINE_LENGTH);
+			if (GetSize() == 0) {
+				return;
+			}
+			// small string: inlined
+			/* Note: this appears to write out-of bounds on `prefix` if `length` > `PREFIX_LENGTH`
+			 but this is not the case because the `value_` union `inlined` char array directly
+			 follows it with 8 more chars to use for the string value.
+			 */
+			memcpy(value.inlined.inlined, data, GetSize());
+		} else {
+			// large string: store pointer
+			memcpy(value.pointer.prefix, data, PREFIX_LENGTH);
+			value.pointer.ptr = (char *)data;
+		}
+	}
+	string_t(const char *data) : string_t(data, strlen(data)) { // NOLINT: Allow implicit conversion from `const char*`
+	}
+	string_t(const string &value)
+	    : string_t(value.c_str(), value.size()) { // NOLINT: Allow implicit conversion from `const char*`
+	}
+
+	bool IsInlined() const {
+		return GetSize() <= INLINE_LENGTH;
+	}
+
+	//! this is unsafe since the string will not be terminated at the end
+	const char *GetDataUnsafe() const {
+		return IsInlined() ? (const char *)value.inlined.inlined : value.pointer.ptr;
+	}
+
+	char *GetDataWriteable() const {
+		return IsInlined() ? (char *)value.inlined.inlined : value.pointer.ptr;
+	}
+
+	const char *GetPrefix() const {
+		return value.pointer.prefix;
+	}
+
+	idx_t GetSize() const {
+		return value.inlined.length;
+	}
+
+	string GetString() const {
+		return string(GetDataUnsafe(), GetSize());
+	}
+
+	explicit operator string() const {
+		return GetString();
+	}
+
+	void Finalize() {
+		// set trailing NULL byte
+		auto dataptr = (char *)GetDataUnsafe();
+		if (GetSize() <= INLINE_LENGTH) {
+			// fill prefix with zeros if the length is smaller than the prefix length
+			for (idx_t i = GetSize(); i < INLINE_LENGTH; i++) {
+				value.inlined.inlined[i] = '\0';
+			}
+		} else {
+			// copy the data into the prefix
+			memcpy(value.pointer.prefix, dataptr, PREFIX_LENGTH);
+		}
+	}
+
+	void Verify();
+	void VerifyNull();
+	bool operator<(const string_t &r) const {
+		auto this_str = this->GetString();
+		auto r_str = r.GetString();
+		return this_str < r_str;
+	}
+
+private:
+	union {
+		struct {
+			uint32_t length;
+			char prefix[4];
+			char *ptr;
+		} pointer;
+		struct {
+			uint32_t length;
+			char inlined[12];
+		} inlined;
+	} value;
+};
+
+} // namespace duckdb
+
+
+
+namespace duckdb {
+
+class BufferHandle;
+class VectorBuffer;
+class Vector;
+class ChunkCollection;
+
+enum class VectorBufferType : uint8_t {
+	STANDARD_BUFFER,     // standard buffer, holds a single array of data
+	DICTIONARY_BUFFER,   // dictionary buffer, holds a selection vector
+	VECTOR_CHILD_BUFFER, // vector child buffer: holds another vector
+	STRING_BUFFER,       // string buffer, holds a string heap
+	STRUCT_BUFFER,       // struct buffer, holds a ordered mapping from name to child vector
+	LIST_BUFFER,         // list buffer, holds a single flatvector child
+	MANAGED_BUFFER,      // managed buffer, holds a buffer managed by the buffermanager
+	OPAQUE_BUFFER        // opaque buffer, can be created for example by the parquet reader
+};
+
+//! The VectorBuffer is a class used by the vector to hold its data
+class VectorBuffer {
+public:
+	explicit VectorBuffer(VectorBufferType type) : buffer_type(type) {
+	}
+	explicit VectorBuffer(idx_t data_size) : buffer_type(VectorBufferType::STANDARD_BUFFER) {
+		if (data_size > 0) {
+			data = unique_ptr<data_t[]>(new data_t[data_size]);
+		}
+	}
+	explicit VectorBuffer(unique_ptr<data_t[]> data_p)
+	    : buffer_type(VectorBufferType::STANDARD_BUFFER), data(move(data_p)) {
+	}
+	virtual ~VectorBuffer() {
+	}
+	VectorBuffer() {
+	}
+
+public:
+	data_ptr_t GetData() {
+		return data.get();
+	}
+	void SetData(unique_ptr<data_t[]> new_data) {
+		data = move(new_data);
+	}
+
+	static buffer_ptr<VectorBuffer> CreateStandardVector(PhysicalType type, idx_t capacity = STANDARD_VECTOR_SIZE);
+	static buffer_ptr<VectorBuffer> CreateConstantVector(PhysicalType type);
+	static buffer_ptr<VectorBuffer> CreateConstantVector(const LogicalType &logical_type);
+	static buffer_ptr<VectorBuffer> CreateStandardVector(const LogicalType &logical_type,
+	                                                     idx_t capacity = STANDARD_VECTOR_SIZE);
+
+	inline VectorBufferType GetBufferType() const {
+		return buffer_type;
+	}
+
+protected:
+	VectorBufferType buffer_type;
+	unique_ptr<data_t[]> data;
+};
+
+//! The DictionaryBuffer holds a selection vector
+class DictionaryBuffer : public VectorBuffer {
+public:
+	explicit DictionaryBuffer(const SelectionVector &sel)
+	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER), sel_vector(sel) {
+	}
+	explicit DictionaryBuffer(buffer_ptr<SelectionData> data)
+	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER), sel_vector(move(data)) {
+	}
+	explicit DictionaryBuffer(idx_t count = STANDARD_VECTOR_SIZE)
+	    : VectorBuffer(VectorBufferType::DICTIONARY_BUFFER), sel_vector(count) {
+	}
+
+public:
+	const SelectionVector &GetSelVector() const {
+		return sel_vector;
+	}
+	SelectionVector &GetSelVector() {
+		return sel_vector;
+	}
+	void SetSelVector(const SelectionVector &vector) {
+		this->sel_vector.Initialize(vector);
+	}
+
+private:
+	SelectionVector sel_vector;
+};
+
+class VectorStringBuffer : public VectorBuffer {
+public:
+	VectorStringBuffer();
+
+public:
+	string_t AddString(const char *data, idx_t len) {
+		return heap.AddString(data, len);
+	}
+	string_t AddString(string_t data) {
+		return heap.AddString(data);
+	}
+	string_t AddBlob(string_t data) {
+		return heap.AddBlob(data.GetDataUnsafe(), data.GetSize());
+	}
+	string_t EmptyString(idx_t len) {
+		return heap.EmptyString(len);
+	}
+
+	void AddHeapReference(buffer_ptr<VectorBuffer> heap) {
+		references.push_back(move(heap));
+	}
+
+private:
+	//! The string heap of this buffer
+	StringHeap heap;
+	// References to additional vector buffers referenced by this string buffer
+	vector<buffer_ptr<VectorBuffer>> references;
+};
+
+class VectorStructBuffer : public VectorBuffer {
+public:
+	VectorStructBuffer();
+	VectorStructBuffer(const LogicalType &struct_type, idx_t capacity = STANDARD_VECTOR_SIZE);
+	~VectorStructBuffer() override;
+
+public:
+	const vector<unique_ptr<Vector>> &GetChildren() const {
+		return children;
+	}
+	vector<unique_ptr<Vector>> &GetChildren() {
+		return children;
+	}
+
+private:
+	//! child vectors used for nested data
+	vector<unique_ptr<Vector>> children;
+};
+
+class VectorListBuffer : public VectorBuffer {
+public:
+	VectorListBuffer(unique_ptr<Vector> vector, idx_t initial_capacity = STANDARD_VECTOR_SIZE);
+	VectorListBuffer(const LogicalType &list_type, idx_t initial_capacity = STANDARD_VECTOR_SIZE);
+	~VectorListBuffer() override;
+
+public:
+	Vector &GetChild() {
+		return *child;
+	}
+	void Reserve(idx_t to_reserve);
+
+	void Append(const Vector &to_append, idx_t to_append_size, idx_t source_offset = 0);
+	void Append(const Vector &to_append, const SelectionVector &sel, idx_t to_append_size, idx_t source_offset = 0);
+
+	void PushBack(Value &insert);
+
+	idx_t capacity = 0;
+	idx_t size = 0;
+
+private:
+	//! child vectors used for nested data
+	unique_ptr<Vector> child;
+};
+
+//! The ManagedVectorBuffer holds a buffer handle
+class ManagedVectorBuffer : public VectorBuffer {
+public:
+	explicit ManagedVectorBuffer(unique_ptr<BufferHandle> handle);
+	~ManagedVectorBuffer() override;
+
+private:
+	unique_ptr<BufferHandle> handle;
+};
+
+} // namespace duckdb
+
+
 
 namespace duckdb {
 
@@ -3257,8 +3309,10 @@ struct VectorData {
 	const SelectionVector *sel;
 	data_ptr_t data;
 	ValidityMask validity;
+	SelectionVector owned_sel;
 };
 
+class VectorCache;
 class VectorStructBuffer;
 class VectorListBuffer;
 class ChunkCollection;
@@ -3276,22 +3330,30 @@ class Vector {
 	friend struct SequenceVector;
 
 	friend class DataChunk;
+	friend class VectorCacheBuffer;
 
 public:
-	Vector();
+	//! Create a vector that references the other vector
+	explicit Vector(Vector &other);
+	//! Create a vector that slices another vector
+	explicit Vector(Vector &other, const SelectionVector &sel, idx_t count);
+	//! Create a vector that slices another vector starting from a specific offset
+	explicit Vector(Vector &other, idx_t offset);
 	//! Create a vector of size one holding the passed on value
 	explicit Vector(const Value &value);
 	//! Create an empty standard vector with a type, equivalent to calling Vector(type, true, false)
-	explicit Vector(const LogicalType &type);
+	explicit Vector(LogicalType type, idx_t capacity = STANDARD_VECTOR_SIZE);
+	//! Create an empty standard vector with a type, equivalent to calling Vector(type, true, false)
+	explicit Vector(const VectorCache &cache);
 	//! Create a non-owning vector that references the specified data
-	Vector(const LogicalType &type, data_ptr_t dataptr);
+	Vector(LogicalType type, data_ptr_t dataptr);
 	//! Create an owning vector that holds at most STANDARD_VECTOR_SIZE entries.
 	/*!
 	    Create a new vector
 	    If create_data is true, the vector will be an owning empty vector.
 	    If zero_data is true, the allocated data will be zero-initialized.
 	*/
-	Vector(const LogicalType &type, bool create_data, bool zero_data);
+	Vector(LogicalType type, bool create_data, bool zero_data, idx_t capacity = STANDARD_VECTOR_SIZE);
 	// implicit copying of Vectors is not allowed
 	Vector(const Vector &) = delete;
 	// but moving of vectors is allowed
@@ -3301,7 +3363,17 @@ public:
 	//! Create a vector that references the specified value.
 	void Reference(const Value &value);
 	//! Causes this vector to reference the data held by the other vector.
+	//! The type of the "other" vector should match the type of this vector
 	void Reference(Vector &other);
+	//! Reinterpret the data of the other vector as the type of this vector
+	//! Note that this takes the data of the other vector as-is and places it in this vector
+	//! Without changing the type of this vector
+	void Reinterpret(Vector &other);
+
+	//! Resets a vector from a vector cache.
+	//! This turns the vector back into an empty FlatVector with STANDARD_VECTOR_SIZE entries.
+	//! The VectorCache is used so this can be done without requiring any allocations.
+	void ResetFromCache(const VectorCache &cache);
 
 	//! Creates a reference to a slice of the other vector
 	void Slice(Vector &other, idx_t offset);
@@ -3314,7 +3386,7 @@ public:
 
 	//! Creates the data of this vector with the specified type. Any data that
 	//! is currently in the vector is destroyed.
-	void Initialize(const LogicalType &new_type = LogicalType(LogicalTypeId::INVALID), bool zero_data = false);
+	void Initialize(bool zero_data = false, idx_t capacity = STANDARD_VECTOR_SIZE);
 
 	//! Converts this Vector to a printable string representation
 	string ToString(idx_t count) const;
@@ -3358,13 +3430,10 @@ public:
 
 	// Getters
 	inline VectorType GetVectorType() const {
-		return buffer->GetVectorType();
+		return vector_type;
 	}
 	inline const LogicalType &GetType() const {
-		return buffer->GetType();
-	}
-	inline VectorBufferType GetBufferType() const {
-		return buffer->GetBufferType();
+		return type;
 	}
 	inline data_ptr_t GetData() {
 		return data;
@@ -3380,14 +3449,13 @@ public:
 
 	// Setters
 	DUCKDB_API void SetVectorType(VectorType vector_type);
-	inline void SetType(const LogicalType &type) {
-		buffer->SetType(type);
-	}
-	inline void SetBufferType(VectorBufferType buffer_type) {
-		buffer->SetBufferType(buffer_type);
-	}
 
 protected:
+	//! The vector type specifies how the data of the vector is physically stored (i.e. if it is a single repeated
+	//! constant, if it is compressed)
+	VectorType vector_type;
+	//! The type of the elements stored in the vector (e.g. integer, float)
+	LogicalType type;
 	//! A pointer to the data.
 	data_ptr_t data;
 	//! The validity mask of the vector
@@ -3402,7 +3470,7 @@ protected:
 //! The DictionaryBuffer holds a selection vector
 class VectorChildBuffer : public VectorBuffer {
 public:
-	VectorChildBuffer() : VectorBuffer(VectorBufferType::VECTOR_CHILD_BUFFER), data() {
+	VectorChildBuffer(Vector vector) : VectorBuffer(VectorBufferType::VECTOR_CHILD_BUFFER), data(move(vector)) {
 	}
 
 public:
@@ -3438,6 +3506,8 @@ struct ConstantVector {
 		return vector.validity;
 	}
 	DUCKDB_API static const SelectionVector *ZeroSelectionVector(idx_t count, SelectionVector &owned_sel);
+	//! Turns "vector" into a constant vector by referencing a value within the source vector
+	DUCKDB_API static void Reference(Vector &vector, Vector &source, idx_t position, idx_t count);
 
 	static const sel_t ZERO_VECTOR[STANDARD_VECTOR_SIZE];
 	static const SelectionVector ZERO_SELECTION_VECTOR;
@@ -3495,10 +3565,7 @@ struct FlatVector {
 		D_ASSERT(vector.GetVectorType() == VectorType::FLAT_VECTOR);
 		vector.validity.Initialize(new_validity);
 	}
-	static inline void SetNull(Vector &vector, idx_t idx, bool is_null) {
-		D_ASSERT(vector.GetVectorType() == VectorType::FLAT_VECTOR);
-		vector.validity.Set(idx, !is_null);
-	}
+	static void SetNull(Vector &vector, idx_t idx, bool is_null);
 	static inline bool IsNull(const Vector &vector, idx_t idx) {
 		D_ASSERT(vector.GetVectorType() == VectorType::FLAT_VECTOR);
 		return !vector.validity.RowIsValid(idx);
@@ -3509,17 +3576,26 @@ struct FlatVector {
 };
 
 struct ListVector {
+	static inline list_entry_t *GetData(Vector &v) {
+		if (v.GetVectorType() == VectorType::DICTIONARY_VECTOR) {
+			auto &child = DictionaryVector::Child(v);
+			return GetData(child);
+		}
+		return FlatVector::GetData<list_entry_t>(v);
+	}
+	//! Gets a reference to the underlying child-vector of a list
 	DUCKDB_API static const Vector &GetEntry(const Vector &vector);
+	//! Gets a reference to the underlying child-vector of a list
 	DUCKDB_API static Vector &GetEntry(Vector &vector);
+	//! Gets the total size of the underlying child-vector of a list
 	DUCKDB_API static idx_t GetListSize(const Vector &vector);
+	//! Sets the total size of the underlying child-vector of a list
 	DUCKDB_API static void SetListSize(Vector &vec, idx_t size);
-	DUCKDB_API static bool HasEntry(const Vector &vector);
-	DUCKDB_API static void SetEntry(Vector &vector, unique_ptr<Vector> entry);
+	DUCKDB_API static void Reserve(Vector &vec, idx_t required_capacity);
 	DUCKDB_API static void Append(Vector &target, const Vector &source, idx_t source_size, idx_t source_offset = 0);
 	DUCKDB_API static void Append(Vector &target, const Vector &source, const SelectionVector &sel, idx_t source_size,
 	                              idx_t source_offset = 0);
 	DUCKDB_API static void PushBack(Vector &target, Value &insert);
-	DUCKDB_API static void Initialize(Vector &vec);
 	DUCKDB_API static vector<idx_t> Search(Vector &list, Value &key, idx_t row);
 	DUCKDB_API static Value GetValuesFromOffsets(Vector &list, vector<idx_t> &offsets);
 	//! Share the entry of the other list vector
@@ -3529,6 +3605,9 @@ struct ListVector {
 struct StringVector {
 	//! Add a string to the string heap of the vector (auxiliary data)
 	DUCKDB_API static string_t AddString(Vector &vector, const char *data, idx_t len);
+	//! Add a string or a blob to the string heap of the vector (auxiliary data)
+	//! This function is the same as ::AddString, except the added data does not need to be valid UTF8
+	DUCKDB_API static string_t AddStringOrBlob(Vector &vector, const char *data, idx_t len);
 	//! Add a string to the string heap of the vector (auxiliary data)
 	DUCKDB_API static string_t AddString(Vector &vector, const char *data);
 	//! Add a string to the string heap of the vector (auxiliary data)
@@ -3592,6 +3671,7 @@ struct SequenceVector {
 struct ArrowArray;
 
 namespace duckdb {
+class VectorCache;
 
 //!  A Data Chunk represents a set of vectors.
 /*!
@@ -3615,6 +3695,7 @@ class DataChunk {
 public:
 	//! Creates an empty DataChunk
 	DataChunk();
+	~DataChunk();
 
 	//! The vectors owned by the DataChunk.
 	vector<Vector> data;
@@ -3626,9 +3707,9 @@ public:
 	DUCKDB_API idx_t ColumnCount() const {
 		return data.size();
 	}
-	void SetCardinality(idx_t count) {
+	void SetCardinality(idx_t count_p) {
 		D_ASSERT(count <= STANDARD_VECTOR_SIZE);
-		this->count = count;
+		this->count = count_p;
 	}
 	void SetCardinality(const DataChunk &other) {
 		this->count = other.size();
@@ -3639,6 +3720,8 @@ public:
 
 	//! Set the DataChunk to reference another data chunk
 	DUCKDB_API void Reference(DataChunk &chunk);
+	//! Set the DataChunk to own the data of data chunk, destroying the other chunk in the process
+	DUCKDB_API void Move(DataChunk &chunk);
 
 	//! Initializes the DataChunk with the specified types to an empty DataChunk
 	//! This will create one vector of the specified type for each LogicalType in the
@@ -3697,7 +3780,10 @@ public:
 	DUCKDB_API void ToArrowArray(ArrowArray *out_array);
 
 private:
+	//! The amount of tuples stored in the data chunk
 	idx_t count;
+	//! Vector caches, used to store data when ::Initialize is called
+	vector<VectorCache> vector_caches;
 };
 } // namespace duckdb
 
@@ -3757,10 +3843,19 @@ struct VectorOperations {
 	static void LessThan(Vector &A, Vector &B, Vector &result, idx_t count);
 	// result = A <= B
 	static void LessThanEquals(Vector &A, Vector &B, Vector &result, idx_t count);
+
 	// result = A != B with nulls being equal
 	static void DistinctFrom(Vector &left, Vector &right, Vector &result, idx_t count);
-	// result = A == B with nulls being equal
+	// result := A == B with nulls being equal
 	static void NotDistinctFrom(Vector &left, Vector &right, Vector &result, idx_t count);
+	// result := A > B with nulls being maximal
+	static void DistinctGreaterThan(Vector &left, Vector &right, Vector &result, idx_t count);
+	// result := A >= B with nulls being maximal
+	static void DistinctGreaterThanEquals(Vector &left, Vector &right, Vector &result, idx_t count);
+	// result := A < B with nulls being maximal
+	static void DistinctLessThan(Vector &left, Vector &right, Vector &result, idx_t count);
+	// result := A <= B with nulls being maximal
+	static void DistinctLessThanEquals(Vector &left, Vector &right, Vector &result, idx_t count);
 
 	//===--------------------------------------------------------------------===//
 	// Select Comparisons
@@ -3777,12 +3872,48 @@ struct VectorOperations {
 	                      SelectionVector *true_sel, SelectionVector *false_sel);
 	static idx_t LessThanEquals(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
 	                            SelectionVector *true_sel, SelectionVector *false_sel);
-	// result = A != B with nulls being equal
-	static idx_t SelectDistinctFrom(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
-	                                SelectionVector *true_sel, SelectionVector *false_sel);
-	// result = A == B with nulls being equal
-	static idx_t SelectNotDistinctFrom(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
-	                                   SelectionVector *true_sel, SelectionVector *false_sel);
+
+	// true := A != B with nulls being equal
+	static idx_t DistinctFrom(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
+	                          SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A == B with nulls being equal
+	static idx_t NotDistinctFrom(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
+	                             SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A > B with nulls being maximal
+	static idx_t DistinctGreaterThan(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
+	                                 SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A >= B with nulls being maximal
+	static idx_t DistinctGreaterThanEquals(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
+	                                       SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A < B with nulls being maximal
+	static idx_t DistinctLessThan(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
+	                              SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A <= B with nulls being maximal
+	static idx_t DistinctLessThanEquals(Vector &left, Vector &right, const SelectionVector *sel, idx_t count,
+	                                    SelectionVector *true_sel, SelectionVector *false_sel);
+
+	//===--------------------------------------------------------------------===//
+	// Nested Comparisons
+	//===--------------------------------------------------------------------===//
+	// true := A != B with nulls being equal, inputs selected
+	static idx_t NestedNotEquals(Vector &left, Vector &right, idx_t vcount, const SelectionVector &sel, idx_t count,
+	                             SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A == B with nulls being equal, inputs selected
+	static idx_t NestedEquals(Vector &left, Vector &right, idx_t vcount, const SelectionVector &sel, idx_t count,
+	                          SelectionVector *true_sel, SelectionVector *false_sel);
+
+	// true := A > B with nulls being maximal, inputs selected
+	static idx_t NestedGreaterThan(Vector &left, Vector &right, idx_t vcount, const SelectionVector &sel, idx_t count,
+	                               SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A >= B with nulls being maximal, inputs selected
+	static idx_t NestedGreaterThanEquals(Vector &left, Vector &right, idx_t vcount, const SelectionVector &sel,
+	                                     idx_t count, SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A < B with nulls being maximal, inputs selected
+	static idx_t NestedLessThan(Vector &left, Vector &right, idx_t vcount, const SelectionVector &sel, idx_t count,
+	                            SelectionVector *true_sel, SelectionVector *false_sel);
+	// true := A <= B with nulls being maximal, inputs selected
+	static idx_t NestedLessThanEquals(Vector &left, Vector &right, idx_t vcount, const SelectionVector &sel,
+	                                  idx_t count, SelectionVector *true_sel, SelectionVector *false_sel);
 
 	//===--------------------------------------------------------------------===//
 	// Hash functions
@@ -3803,7 +3934,11 @@ struct VectorOperations {
 	//===--------------------------------------------------------------------===//
 	// Helpers
 	//===--------------------------------------------------------------------===//
-	// Cast the data from the source type to the target type
+	//! Cast the data from the source type to the target type. Any elements that could not be converted are turned into
+	//! NULLs. If any elements cannot be converted, returns false and fills in the error_message. If no error message is
+	//! provided, an exception is thrown instead.
+	static bool TryCast(Vector &source, Vector &result, idx_t count, string *error_message, bool strict = false);
+	//! Cast the data from the source type to the target type. Throws an exception if the cast fails.
 	static void Cast(Vector &source, Vector &result, idx_t count, bool strict = false);
 
 	// Copy the data of <source> to the target vector
@@ -4480,33 +4615,42 @@ public:
 namespace duckdb {
 
 struct UnaryOperatorWrapper {
-	template <class FUNC, class OP, class INPUT_TYPE, class RESULT_TYPE>
-	static inline RESULT_TYPE Operation(FUNC fun, INPUT_TYPE input, ValidityMask &mask, idx_t idx) {
+	template <class OP, class INPUT_TYPE, class RESULT_TYPE>
+	static inline RESULT_TYPE Operation(INPUT_TYPE input, ValidityMask &mask, idx_t idx, void *dataptr) {
 		return OP::template Operation<INPUT_TYPE, RESULT_TYPE>(input);
-	}
-
-	static bool AddsNulls() {
-		return false;
 	}
 };
 
 struct UnaryLambdaWrapper {
-	template <class FUNC, class OP, class INPUT_TYPE, class RESULT_TYPE>
-	static inline RESULT_TYPE Operation(FUNC fun, INPUT_TYPE input, ValidityMask &mask, idx_t idx) {
-		return fun(input);
+	template <class FUNC, class INPUT_TYPE, class RESULT_TYPE>
+	static inline RESULT_TYPE Operation(INPUT_TYPE input, ValidityMask &mask, idx_t idx, void *dataptr) {
+		auto fun = (FUNC *)dataptr;
+		return (*fun)(input);
 	}
+};
 
-	static bool AddsNulls() {
-		return false;
+struct GenericUnaryWrapper {
+	template <class OP, class INPUT_TYPE, class RESULT_TYPE>
+	static inline RESULT_TYPE Operation(INPUT_TYPE input, ValidityMask &mask, idx_t idx, void *dataptr) {
+		return OP::template Operation<INPUT_TYPE, RESULT_TYPE>(input, mask, idx, dataptr);
+	}
+};
+
+template <class OP>
+struct UnaryStringOperator {
+	template <class INPUT_TYPE, class RESULT_TYPE>
+	static RESULT_TYPE Operation(INPUT_TYPE input, ValidityMask &mask, idx_t idx, void *dataptr) {
+		auto vector = (Vector *)dataptr;
+		return OP::template Operation<INPUT_TYPE, RESULT_TYPE>(input, *vector);
 	}
 };
 
 struct UnaryExecutor {
 private:
-	template <class INPUT_TYPE, class RESULT_TYPE, class OPWRAPPER, class OP, class FUNC>
+	template <class INPUT_TYPE, class RESULT_TYPE, class OPWRAPPER, class OP>
 	static inline void ExecuteLoop(INPUT_TYPE *__restrict ldata, RESULT_TYPE *__restrict result_data, idx_t count,
 	                               const SelectionVector *__restrict sel_vector, ValidityMask &mask,
-	                               ValidityMask &result_mask, FUNC fun) {
+	                               ValidityMask &result_mask, void *dataptr, bool adds_nulls) {
 		ASSERT_RESTRICT(ldata, ldata + count, result_data, result_data + count);
 
 		if (!mask.AllValid()) {
@@ -4514,28 +4658,31 @@ private:
 			for (idx_t i = 0; i < count; i++) {
 				auto idx = sel_vector->get_index(i);
 				if (mask.RowIsValidUnsafe(idx)) {
-					result_data[i] = OPWRAPPER::template Operation<FUNC, OP, INPUT_TYPE, RESULT_TYPE>(fun, ldata[idx],
-					                                                                                  result_mask, i);
+					result_data[i] =
+					    OPWRAPPER::template Operation<OP, INPUT_TYPE, RESULT_TYPE>(ldata[idx], result_mask, i, dataptr);
 				} else {
 					result_mask.SetInvalid(i);
 				}
 			}
 		} else {
+			if (adds_nulls) {
+				result_mask.EnsureWritable();
+			}
 			for (idx_t i = 0; i < count; i++) {
 				auto idx = sel_vector->get_index(i);
 				result_data[i] =
-				    OPWRAPPER::template Operation<FUNC, OP, INPUT_TYPE, RESULT_TYPE>(fun, ldata[idx], result_mask, i);
+				    OPWRAPPER::template Operation<OP, INPUT_TYPE, RESULT_TYPE>(ldata[idx], result_mask, i, dataptr);
 			}
 		}
 	}
 
-	template <class INPUT_TYPE, class RESULT_TYPE, class OPWRAPPER, class OP, class FUNC>
+	template <class INPUT_TYPE, class RESULT_TYPE, class OPWRAPPER, class OP>
 	static inline void ExecuteFlat(INPUT_TYPE *__restrict ldata, RESULT_TYPE *__restrict result_data, idx_t count,
-	                               ValidityMask &mask, ValidityMask &result_mask, FUNC fun) {
+	                               ValidityMask &mask, ValidityMask &result_mask, void *dataptr, bool adds_nulls) {
 		ASSERT_RESTRICT(ldata, ldata + count, result_data, result_data + count);
 
 		if (!mask.AllValid()) {
-			if (!OPWRAPPER::AddsNulls()) {
+			if (!adds_nulls) {
 				result_mask.Initialize(mask);
 			} else {
 				result_mask.Copy(mask, count);
@@ -4548,8 +4695,8 @@ private:
 				if (ValidityMask::AllValid(validity_entry)) {
 					// all valid: perform operation
 					for (; base_idx < next; base_idx++) {
-						result_data[base_idx] = OPWRAPPER::template Operation<FUNC, OP, INPUT_TYPE, RESULT_TYPE>(
-						    fun, ldata[base_idx], result_mask, base_idx);
+						result_data[base_idx] = OPWRAPPER::template Operation<OP, INPUT_TYPE, RESULT_TYPE>(
+						    ldata[base_idx], result_mask, base_idx, dataptr);
 					}
 				} else if (ValidityMask::NoneValid(validity_entry)) {
 					// nothing valid: skip all
@@ -4561,22 +4708,25 @@ private:
 					for (; base_idx < next; base_idx++) {
 						if (ValidityMask::RowIsValid(validity_entry, base_idx - start)) {
 							D_ASSERT(mask.RowIsValid(base_idx));
-							result_data[base_idx] = OPWRAPPER::template Operation<FUNC, OP, INPUT_TYPE, RESULT_TYPE>(
-							    fun, ldata[base_idx], result_mask, base_idx);
+							result_data[base_idx] = OPWRAPPER::template Operation<OP, INPUT_TYPE, RESULT_TYPE>(
+							    ldata[base_idx], result_mask, base_idx, dataptr);
 						}
 					}
 				}
 			}
 		} else {
+			if (adds_nulls) {
+				result_mask.EnsureWritable();
+			}
 			for (idx_t i = 0; i < count; i++) {
 				result_data[i] =
-				    OPWRAPPER::template Operation<FUNC, OP, INPUT_TYPE, RESULT_TYPE>(fun, ldata[i], result_mask, i);
+				    OPWRAPPER::template Operation<OP, INPUT_TYPE, RESULT_TYPE>(ldata[i], result_mask, i, dataptr);
 			}
 		}
 	}
 
-	template <class INPUT_TYPE, class RESULT_TYPE, class OPWRAPPER, class OP, class FUNC>
-	static inline void ExecuteStandard(Vector &input, Vector &result, idx_t count, FUNC fun) {
+	template <class INPUT_TYPE, class RESULT_TYPE, class OPWRAPPER, class OP>
+	static inline void ExecuteStandard(Vector &input, Vector &result, idx_t count, void *dataptr, bool adds_nulls) {
 		switch (input.GetVectorType()) {
 		case VectorType::CONSTANT_VECTOR: {
 			result.SetVectorType(VectorType::CONSTANT_VECTOR);
@@ -4587,8 +4737,8 @@ private:
 				ConstantVector::SetNull(result, true);
 			} else {
 				ConstantVector::SetNull(result, false);
-				*result_data = OPWRAPPER::template Operation<FUNC, OP, INPUT_TYPE, RESULT_TYPE>(
-				    fun, *ldata, ConstantVector::Validity(result), 0);
+				*result_data = OPWRAPPER::template Operation<OP, INPUT_TYPE, RESULT_TYPE>(
+				    *ldata, ConstantVector::Validity(result), 0, dataptr);
 			}
 			break;
 		}
@@ -4597,8 +4747,8 @@ private:
 			auto result_data = FlatVector::GetData<RESULT_TYPE>(result);
 			auto ldata = FlatVector::GetData<INPUT_TYPE>(input);
 
-			ExecuteFlat<INPUT_TYPE, RESULT_TYPE, OPWRAPPER, OP, FUNC>(
-			    ldata, result_data, count, FlatVector::Validity(input), FlatVector::Validity(result), fun);
+			ExecuteFlat<INPUT_TYPE, RESULT_TYPE, OPWRAPPER, OP>(ldata, result_data, count, FlatVector::Validity(input),
+			                                                    FlatVector::Validity(result), dataptr, adds_nulls);
 			break;
 		}
 		default: {
@@ -4609,22 +4759,33 @@ private:
 			auto result_data = FlatVector::GetData<RESULT_TYPE>(result);
 			auto ldata = (INPUT_TYPE *)vdata.data;
 
-			ExecuteLoop<INPUT_TYPE, RESULT_TYPE, OPWRAPPER, OP, FUNC>(
-			    ldata, result_data, count, vdata.sel, vdata.validity, FlatVector::Validity(result), fun);
+			ExecuteLoop<INPUT_TYPE, RESULT_TYPE, OPWRAPPER, OP>(ldata, result_data, count, vdata.sel, vdata.validity,
+			                                                    FlatVector::Validity(result), dataptr, adds_nulls);
 			break;
 		}
 		}
 	}
 
 public:
-	template <class INPUT_TYPE, class RESULT_TYPE, class OP, class OPWRAPPER = UnaryOperatorWrapper>
+	template <class INPUT_TYPE, class RESULT_TYPE, class OP>
 	static void Execute(Vector &input, Vector &result, idx_t count) {
-		ExecuteStandard<INPUT_TYPE, RESULT_TYPE, OPWRAPPER, OP, bool>(input, result, count, false);
+		ExecuteStandard<INPUT_TYPE, RESULT_TYPE, UnaryOperatorWrapper, OP>(input, result, count, nullptr, false);
 	}
 
 	template <class INPUT_TYPE, class RESULT_TYPE, class FUNC = std::function<RESULT_TYPE(INPUT_TYPE)>>
 	static void Execute(Vector &input, Vector &result, idx_t count, FUNC fun) {
-		ExecuteStandard<INPUT_TYPE, RESULT_TYPE, UnaryLambdaWrapper, bool, FUNC>(input, result, count, fun);
+		ExecuteStandard<INPUT_TYPE, RESULT_TYPE, UnaryLambdaWrapper, FUNC>(input, result, count, (void *)&fun, false);
+	}
+
+	template <class INPUT_TYPE, class RESULT_TYPE, class OP>
+	static void GenericExecute(Vector &input, Vector &result, idx_t count, void *dataptr, bool adds_nulls = false) {
+		ExecuteStandard<INPUT_TYPE, RESULT_TYPE, GenericUnaryWrapper, OP>(input, result, count, dataptr, adds_nulls);
+	}
+
+	template <class INPUT_TYPE, class RESULT_TYPE, class OP>
+	static void ExecuteString(Vector &input, Vector &result, idx_t count) {
+		UnaryExecutor::GenericExecute<string_t, string_t, UnaryStringOperator<OP>>(input, result, count,
+		                                                                           (void *)&result);
 	}
 };
 
@@ -4703,67 +4864,131 @@ template <class T>
 struct NumericLimits {
 	static T Minimum();
 	static T Maximum();
+	static bool IsSigned();
+	static idx_t Digits();
 };
 
 template <>
 struct NumericLimits<int8_t> {
 	static int8_t Minimum();
 	static int8_t Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 3;
+	}
 };
 template <>
 struct NumericLimits<int16_t> {
 	static int16_t Minimum();
 	static int16_t Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 5;
+	}
 };
 template <>
 struct NumericLimits<int32_t> {
 	static int32_t Minimum();
 	static int32_t Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 10;
+	}
 };
 template <>
 struct NumericLimits<int64_t> {
 	static int64_t Minimum();
 	static int64_t Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 19;
+	}
 };
 template <>
 struct NumericLimits<hugeint_t> {
 	static hugeint_t Minimum();
 	static hugeint_t Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 39;
+	}
 };
 template <>
 struct NumericLimits<uint8_t> {
 	static uint8_t Minimum();
 	static uint8_t Maximum();
+	static bool IsSigned() {
+		return false;
+	}
+	static idx_t Digits() {
+		return 3;
+	}
 };
 template <>
 struct NumericLimits<uint16_t> {
 	static uint16_t Minimum();
 	static uint16_t Maximum();
+	static bool IsSigned() {
+		return false;
+	}
+	static idx_t Digits() {
+		return 5;
+	}
 };
 template <>
 struct NumericLimits<uint32_t> {
 	static uint32_t Minimum();
 	static uint32_t Maximum();
+	static bool IsSigned() {
+		return false;
+	}
+	static idx_t Digits() {
+		return 10;
+	}
 };
 template <>
 struct NumericLimits<uint64_t> {
 	static uint64_t Minimum();
 	static uint64_t Maximum();
+	static bool IsSigned() {
+		return false;
+	}
+	static idx_t Digits() {
+		return 20;
+	}
 };
 template <>
 struct NumericLimits<float> {
 	static float Minimum();
 	static float Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 127;
+	}
 };
 template <>
 struct NumericLimits<double> {
 	static double Minimum();
 	static double Maximum();
+	static bool IsSigned() {
+		return true;
+	}
+	static idx_t Digits() {
+		return 250;
+	}
 };
-
-//! Returns the minimal type that guarantees an integer value from not
-//! overflowing
-PhysicalType MinimalType(int64_t value);
 
 } // namespace duckdb
 
@@ -4773,7 +4998,7 @@ namespace duckdb {
 
 struct RandomEngine {
 	std::mt19937 random_engine;
-	explicit RandomEngine(int64_t seed) {
+	RandomEngine(int64_t seed = -1) {
 		if (seed < 0) {
 			std::random_device rd;
 			random_engine.seed(rd());
@@ -5007,13 +5232,13 @@ enum class ExpressionType : uint8_t {
 	COMPARE_NOT_IN = 36,
 	// IS DISTINCT FROM operator
 	COMPARE_DISTINCT_FROM = 37,
-	// compare final boundary
 
 	COMPARE_BETWEEN = 38,
 	COMPARE_NOT_BETWEEN = 39,
-	COMPARE_BOUNDARY_END = COMPARE_NOT_BETWEEN,
 	// IS NOT DISTINCT FROM operator
 	COMPARE_NOT_DISTINCT_FROM = 40,
+	// compare final boundary
+	COMPARE_BOUNDARY_END = COMPARE_NOT_DISTINCT_FROM,
 
 	// -----------------------------
 	// Conjunction Operators
@@ -5055,6 +5280,7 @@ enum class ExpressionType : uint8_t {
 	WINDOW_LAST_VALUE = 131,
 	WINDOW_LEAD = 132,
 	WINDOW_LAG = 133,
+	WINDOW_NTH_VALUE = 134,
 
 	// -----------------------------
 	// Functions
@@ -5126,6 +5352,7 @@ enum class ExpressionClass : uint8_t {
 	COLLATE = 16,
 	LAMBDA = 17,
 	POSITIONAL_REFERENCE = 18,
+	BETWEEN = 19,
 	//===--------------------------------------------------------------------===//
 	// Bound Expressions
 	//===--------------------------------------------------------------------===//
@@ -5348,7 +5575,7 @@ struct FunctionData {
 	}
 
 	virtual unique_ptr<FunctionData> Copy() {
-		return make_unique<FunctionData>();
+		throw InternalException("Unimplemented copy for FunctionData");
 	};
 	virtual bool Equals(FunctionData &other) {
 		return true;
@@ -5365,9 +5592,6 @@ struct FunctionData {
 };
 
 struct TableFunctionData : public FunctionData {
-	unique_ptr<FunctionData> Copy() override {
-		throw NotImplementedException("Copy not required for table-producing function");
-	}
 	// used to pass on projections to table functions that support them. NB, can contain COLUMN_IDENTIFIER_ROW_ID
 	vector<idx_t> column_ids;
 };
@@ -5596,6 +5820,7 @@ private:
 
 
 
+
 namespace duckdb {
 
 //! The Hugeint class contains static operations for the INT128 type
@@ -5625,7 +5850,16 @@ public:
 	}
 
 	template <class T>
-	static hugeint_t Convert(T value);
+	static bool TryConvert(T value, hugeint_t &result);
+
+	template <class T>
+	static hugeint_t Convert(T value) {
+		hugeint_t result;
+		if (!TryConvert(value, result)) { // LCOV_EXCL_START
+			throw ValueOutOfRangeException(double(value), GetTypeId<T>(), GetTypeId<hugeint_t>());
+		} // LCOV_EXCL_STOP
+		return result;
+	}
 
 	static void NegateInPlace(hugeint_t &input) {
 		input.lower = NumericLimits<uint64_t>::Maximum() - input.lower + 1;
@@ -5716,25 +5950,26 @@ template <>
 bool Hugeint::TryCast(hugeint_t input, double &result);
 
 template <>
-hugeint_t Hugeint::Convert(int8_t value);
+bool Hugeint::TryConvert(int8_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(int16_t value);
+bool Hugeint::TryConvert(int16_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(int32_t value);
+bool Hugeint::TryConvert(int32_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(int64_t value);
+bool Hugeint::TryConvert(int64_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(uint8_t value);
+bool Hugeint::TryConvert(uint8_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(uint16_t value);
+bool Hugeint::TryConvert(uint16_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(uint32_t value);
+bool Hugeint::TryConvert(uint32_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(uint64_t value);
+bool Hugeint::TryConvert(uint64_t value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(float value);
+bool Hugeint::TryConvert(float value, hugeint_t &result);
 template <>
-hugeint_t Hugeint::Convert(double value);
+bool Hugeint::TryConvert(double value, hugeint_t &result);
+
 } // namespace duckdb
 
 //===----------------------------------------------------------------------===//
@@ -5780,12 +6015,15 @@ public:
 	//! Convert a string to an interval object
 	static bool FromString(const string &str, interval_t &result);
 	//! Convert a string to an interval object
-	static bool FromCString(const char *str, idx_t len, interval_t &result);
+	static bool FromCString(const char *str, idx_t len, interval_t &result, string *error_message, bool strict);
 	//! Convert an interval object to a string
 	static string ToString(interval_t date);
 
 	//! Get Interval in milliseconds
 	static int64_t GetMilli(interval_t val);
+
+	//! Get Interval in Nanoseconds
+	static int64_t GetNanoseconds(interval_t val);
 
 	//! Returns the difference between two timestamps
 	static interval_t GetDifference(timestamp_t timestamp_1, timestamp_t timestamp_2);
@@ -5831,20 +6069,6 @@ struct GreaterThanEquals {
 	}
 };
 
-struct DistinctFrom {
-	template <class T>
-	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
-		return ((left != right) && !left_null && !right_null) || (left_null != right_null);
-	}
-};
-
-struct NotDistinctFrom {
-	template <class T>
-	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
-		return ((left == right) && !left_null && !right_null) || (left_null && right_null);
-	}
-};
-
 struct LessThan {
 	template <class T>
 	static inline bool Operation(T left, T right) {
@@ -5857,6 +6081,54 @@ struct LessThanEquals {
 		return left <= right;
 	}
 };
+
+// Distinct semantics are from Postgres record sorting. NULL = NULL and not-NULL < NULL
+// Deferring to the non-distinct operations removes the need for further specialisation.
+// TODO: To reverse the semantics, swap left_null and right_null for comparisons
+struct DistinctFrom {
+	template <class T>
+	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
+		return (left_null != right_null) || (!left_null && !right_null && (left != right));
+	}
+};
+
+struct NotDistinctFrom {
+	template <class T>
+	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
+		return (left_null && right_null) || (!left_null && !right_null && (left == right));
+	}
+};
+
+struct DistinctGreaterThan {
+	template <class T>
+	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
+		return GreaterThan::Operation(left_null, right_null) ||
+		       (!left_null && !right_null && GreaterThan::Operation(left, right));
+	}
+};
+
+struct DistinctGreaterThanEquals {
+	template <class T>
+	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
+		return left_null || (!left_null && !right_null && GreaterThanEquals::Operation(left, right));
+	}
+};
+
+struct DistinctLessThan {
+	template <class T>
+	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
+		return LessThan::Operation(left_null, right_null) ||
+		       (!left_null && !right_null && LessThan::Operation(left, right));
+	}
+};
+
+struct DistinctLessThanEquals {
+	template <class T>
+	static inline bool Operation(T left, T right, bool left_null, bool right_null) {
+		return right_null || (!left_null && !right_null && LessThanEquals::Operation(left, right));
+	}
+};
+
 //===--------------------------------------------------------------------===//
 // Specialized Boolean Comparison Operators
 //===--------------------------------------------------------------------===//
@@ -5906,13 +6178,13 @@ inline bool NotEquals::Operation(string_t left, string_t right) {
 
 template <>
 inline bool NotDistinctFrom::Operation(string_t left, string_t right, bool left_null, bool right_null) {
-	return (StringComparisonOperators::EqualsOrNot<false>(left, right) && !left_null && !right_null) ||
-	       (left_null && right_null);
+	return (left_null && right_null) ||
+	       (!left_null && !right_null && StringComparisonOperators::EqualsOrNot<false>(left, right));
 }
 template <>
 inline bool DistinctFrom::Operation(string_t left, string_t right, bool left_null, bool right_null) {
-	return (StringComparisonOperators::EqualsOrNot<true>(left, right) && !left_null && !right_null) ||
-	       (left_null != right_null);
+	return (left_null != right_null) ||
+	       (!left_null && !right_null && StringComparisonOperators::EqualsOrNot<true>(left, right));
 }
 
 // compare up to shared length. if still the same, compare lengths
@@ -5973,11 +6245,11 @@ inline bool LessThanEquals::Operation(interval_t left, interval_t right) {
 
 template <>
 inline bool NotDistinctFrom::Operation(interval_t left, interval_t right, bool left_null, bool right_null) {
-	return (Interval::Equals(left, right) && !left_null && !right_null) || (left_null && right_null);
+	return (left_null && right_null) || (!left_null && !right_null && Interval::Equals(left, right));
 }
 template <>
 inline bool DistinctFrom::Operation(interval_t left, interval_t right, bool left_null, bool right_null) {
-	return (!Equals::Operation(left, right) && !left_null && !right_null) || (left_null != right_null);
+	return (left_null != right_null) || (!left_null && !right_null && !Equals::Operation(left, right));
 }
 inline bool operator<(const interval_t &lhs, const interval_t &rhs) {
 	return LessThan::Operation(lhs, rhs);
@@ -6016,6 +6288,8 @@ inline bool LessThanEquals::Operation(hugeint_t left, hugeint_t right) {
 
 
 namespace duckdb {
+struct SelectionVector;
+
 class Serializer;
 class Deserializer;
 class Vector;
@@ -6033,6 +6307,11 @@ public:
 
 public:
 	bool CanHaveNull();
+	bool CanHaveNoNull();
+
+	virtual bool IsConstant() {
+		return false;
+	}
 
 	static unique_ptr<BaseStatistics> CreateEmpty(LogicalType type);
 
@@ -6041,7 +6320,8 @@ public:
 	virtual void Serialize(Serializer &serializer);
 	static unique_ptr<BaseStatistics> Deserialize(Deserializer &source, LogicalType type);
 	//! Verify that a vector does not violate the statistics
-	virtual void Verify(Vector &vector, idx_t count);
+	virtual void Verify(Vector &vector, const SelectionVector &sel, idx_t count);
+	void Verify(Vector &vector, idx_t count);
 
 	virtual string ToString();
 };
@@ -6112,14 +6392,40 @@ public:
 		return !(*this == rhs);
 	}
 
+	bool Equal(const ScalarFunction &rhs) const {
+		// number of types
+		if (this->arguments.size() != rhs.arguments.size()) {
+			return false;
+		}
+		// argument types
+		for (idx_t i = 0; i < this->arguments.size(); ++i) {
+			if (this->arguments[i] != rhs.arguments[i]) {
+				return false;
+			}
+		}
+		// return type
+		if (this->return_type != rhs.return_type) {
+			return false;
+		}
+		// varargs
+		if (this->varargs != rhs.varargs) {
+			return false;
+		}
+
+		return true; // they are equal
+	}
+
 private:
 	bool CompareScalarFunctionT(const scalar_function_t other) const {
-		typedef void(funcTypeT)(DataChunk &, ExpressionState &, Vector &);
+		typedef void(scalar_function_ptr_t)(DataChunk &, ExpressionState &, Vector &);
 
-		funcTypeT **func_ptr = (funcTypeT **)function.template target<funcTypeT *>();
-		funcTypeT **other_ptr = (funcTypeT **)other.template target<funcTypeT *>();
+		auto func_ptr = (scalar_function_ptr_t **)function.template target<scalar_function_ptr_t *>();
+		auto other_ptr = (scalar_function_ptr_t **)other.template target<scalar_function_ptr_t *>();
 
 		// Case the functions were created from lambdas the target will return a nullptr
+		if (!func_ptr && !other_ptr) {
+			return true;
+		}
 		if (func_ptr == nullptr || other_ptr == nullptr) {
 			// scalar_function_t (std::functions) from lambdas cannot be compared
 			return false;
@@ -6184,7 +6490,7 @@ public:
 			function = &ScalarFunction::UnaryFunction<double, double, OP>;
 			break;
 		default:
-			throw NotImplementedException("Unimplemented type for GetScalarUnaryFunction");
+			throw InternalException("Unimplemented type for GetScalarUnaryFunction");
 		}
 		return function;
 	}
@@ -6227,7 +6533,7 @@ public:
 			function = &ScalarFunction::UnaryFunction<double, TR, OP>;
 			break;
 		default:
-			throw NotImplementedException("Unimplemented type for GetScalarUnaryFunctionFixedReturn");
+			throw InternalException("Unimplemented type for GetScalarUnaryFunctionFixedReturn");
 		}
 		return function;
 	}
@@ -6559,7 +6865,7 @@ public:
 	}
 
 	template <class STATE_TYPE, class RESULT_TYPE, class OP>
-	static void Finalize(Vector &states, FunctionData *bind_data, Vector &result, idx_t count) {
+	static void Finalize(Vector &states, FunctionData *bind_data, Vector &result, idx_t count, idx_t offset) {
 		if (states.GetVectorType() == VectorType::CONSTANT_VECTOR) {
 			result.SetVectorType(VectorType::CONSTANT_VECTOR);
 
@@ -6575,21 +6881,19 @@ public:
 			auto rdata = FlatVector::GetData<RESULT_TYPE>(result);
 			for (idx_t i = 0; i < count; i++) {
 				OP::template Finalize<RESULT_TYPE, STATE_TYPE>(result, bind_data, sdata[i], rdata,
-				                                               FlatVector::Validity(result), i);
+				                                               FlatVector::Validity(result), i + offset);
 			}
 		}
 	}
 
 	template <class STATE, class INPUT_TYPE, class RESULT_TYPE, class OP>
 	static void UnaryWindow(Vector &input, FunctionData *bind_data, data_ptr_t state, const FrameBounds &frame,
-	                        const FrameBounds &prev, Vector &result) {
+	                        const FrameBounds &prev, Vector &result, idx_t rid) {
 
 		auto idata = FlatVector::GetData<const INPUT_TYPE>(input) - MinValue(frame.first, prev.first);
 		const auto &ivalid = FlatVector::Validity(input);
-		auto rdata = ConstantVector::GetData<RESULT_TYPE>(result);
-		auto &rvalid = ConstantVector::Validity(result);
 		OP::template Window<STATE, INPUT_TYPE, RESULT_TYPE>(idata, ivalid, bind_data, (STATE *)state, frame, prev,
-		                                                    rdata, rvalid);
+		                                                    result, rid);
 	}
 
 	template <class STATE_TYPE, class OP>
@@ -6722,7 +7026,7 @@ typedef void (*aggregate_update_t)(Vector inputs[], FunctionData *bind_data, idx
 //! The type used for combining hashed aggregate states (optional)
 typedef void (*aggregate_combine_t)(Vector &state, Vector &combined, idx_t count);
 //! The type used for finalizing hashed aggregate function payloads
-typedef void (*aggregate_finalize_t)(Vector &state, FunctionData *bind_data, Vector &result, idx_t count);
+typedef void (*aggregate_finalize_t)(Vector &state, FunctionData *bind_data, Vector &result, idx_t count, idx_t offset);
 //! The type used for propagating statistics in aggregate functions (optional)
 typedef unique_ptr<BaseStatistics> (*aggregate_statistics_t)(ClientContext &context, BoundAggregateExpression &expr,
                                                              FunctionData *bind_data,
@@ -6741,7 +7045,7 @@ typedef void (*aggregate_simple_update_t)(Vector inputs[], FunctionData *bind_da
 //! The type used for updating complex windowed aggregate functions (optional)
 typedef std::pair<idx_t, idx_t> FrameBounds;
 typedef void (*aggregate_window_t)(Vector inputs[], FunctionData *bind_data, idx_t input_count, data_ptr_t state,
-                                   const FrameBounds &frame, const FrameBounds &prev, Vector &result);
+                                   const FrameBounds &frame, const FrameBounds &prev, Vector &result, idx_t offset);
 
 class AggregateFunction : public BaseScalarFunction {
 public:
@@ -6877,10 +7181,10 @@ public:
 
 	template <class STATE, class INPUT_TYPE, class RESULT_TYPE, class OP>
 	static void UnaryWindow(Vector inputs[], FunctionData *bind_data, idx_t input_count, data_ptr_t state,
-	                        const FrameBounds &frame, const FrameBounds &prev, Vector &result) {
+	                        const FrameBounds &frame, const FrameBounds &prev, Vector &result, idx_t rid) {
 		D_ASSERT(input_count == 1);
 		AggregateExecutor::UnaryWindow<STATE, INPUT_TYPE, RESULT_TYPE, OP>(inputs[0], bind_data, state, frame, prev,
-		                                                                   result);
+		                                                                   result, rid);
 	}
 
 	template <class STATE, class A_TYPE, class B_TYPE, class OP>
@@ -6903,8 +7207,8 @@ public:
 	}
 
 	template <class STATE, class RESULT_TYPE, class OP>
-	static void StateFinalize(Vector &states, FunctionData *bind_data, Vector &result, idx_t count) {
-		AggregateExecutor::Finalize<STATE, RESULT_TYPE, OP>(states, bind_data, result, count);
+	static void StateFinalize(Vector &states, FunctionData *bind_data, Vector &result, idx_t count, idx_t offset) {
+		AggregateExecutor::Finalize<STATE, RESULT_TYPE, OP>(states, bind_data, result, count, offset);
 	}
 
 	template <class STATE, class OP>
@@ -7036,11 +7340,20 @@ public:
 
 private:
 	//-------------------------------- Templated functions --------------------------------//
+	struct UnaryUDFExecutor {
+		template <class INPUT_TYPE, class RESULT_TYPE>
+		static RESULT_TYPE Operation(INPUT_TYPE input, ValidityMask &mask, idx_t idx, void *dataptr) {
+			typedef RESULT_TYPE (*unary_function_t)(INPUT_TYPE);
+			auto udf = (unary_function_t)dataptr;
+			return udf(input);
+		}
+	};
 
 	template <typename TR, typename TA>
 	static scalar_function_t CreateUnaryFunction(const string &name, TR (*udf_func)(TA)) {
 		scalar_function_t udf_function = [=](DataChunk &input, ExpressionState &state, Vector &result) -> void {
-			UnaryExecutor::Execute<TA, TR>(input.data[0], result, input.size(), udf_func);
+			UnaryExecutor::GenericExecute<TA, TR, UnaryUDFExecutor>(input.data[0], result, input.size(),
+			                                                        (void *)udf_func);
 		};
 		return udf_function;
 	}
@@ -7132,7 +7445,8 @@ private:
 		}
 
 		scalar_function_t udf_function = [=](DataChunk &input, ExpressionState &state, Vector &result) -> void {
-			UnaryExecutor::Execute<TA, TR>(input.data[0], result, input.size(), udf_func);
+			UnaryExecutor::GenericExecute<TA, TR, UnaryUDFExecutor>(input.data[0], result, input.size(),
+			                                                        (void *)udf_func);
 		};
 		return udf_function;
 	}
@@ -7348,6 +7662,9 @@ public:
 	//! Merge is like Append but messes up the order and destroys the other collection
 	DUCKDB_API void Merge(ChunkCollection &other);
 
+	//! Fuse adds new columns to the right of the collection
+	DUCKDB_API void Fuse(ChunkCollection &other);
+
 	DUCKDB_API void Verify();
 
 	//! Gets the value of the column at the specified index
@@ -7355,7 +7672,8 @@ public:
 	//! Sets the value of the column at the specified index
 	DUCKDB_API void SetValue(idx_t column, idx_t index, const Value &value);
 
-	DUCKDB_API vector<Value> GetRow(idx_t index);
+	//! Copy a single cell to a target vector
+	DUCKDB_API void CopyCell(idx_t column, idx_t index, Vector &target, idx_t target_offset);
 
 	DUCKDB_API string ToString() const {
 		return chunks.size() == 0 ? "ChunkCollection [ 0 ]"
@@ -7405,8 +7723,6 @@ public:
 	DUCKDB_API void Sort(vector<OrderType> &desc, vector<OrderByNullType> &null_order, idx_t result[]);
 	//! Reorders the rows in the collection according to the given indices.
 	DUCKDB_API void Reorder(idx_t order[]);
-
-	DUCKDB_API void MaterializeSortedChunk(DataChunk &target, idx_t order[], idx_t start_offset);
 
 	//! Returns true if the ChunkCollections are equivalent
 	DUCKDB_API bool Equals(ChunkCollection &other);
@@ -7487,6 +7803,7 @@ enum class StatementType : uint8_t {
 };
 
 string StatementTypeToString(StatementType type);
+bool StatementTypeReturnChanges(StatementType type);
 
 } // namespace duckdb
 
@@ -7550,7 +7867,7 @@ public:
 	DUCKDB_API bool TryFetch(unique_ptr<DataChunk> &result, string &error) {
 		try {
 			result = Fetch();
-			return true;
+			return success;
 		} catch (std::exception &ex) {
 			error = ex.what();
 			return false;
@@ -7789,9 +8106,6 @@ enum class JoinType : uint8_t {
 //! Convert join type to string
 string JoinTypeToString(JoinType type);
 
-//! True if join is left, full or right outer join
-bool IsOuterJoin(JoinType type);
-
 //! True if join is left or full outer join
 bool IsLeftOuterJoin(JoinType type);
 
@@ -7875,7 +8189,7 @@ public:
 
 public:
 	DUCKDB_API virtual const vector<ColumnDefinition> &Columns() = 0;
-	DUCKDB_API virtual unique_ptr<QueryNode> GetQueryNode() = 0;
+	DUCKDB_API virtual unique_ptr<QueryNode> GetQueryNode();
 	DUCKDB_API virtual BoundStatement Bind(Binder &binder);
 	DUCKDB_API virtual string GetAlias();
 
@@ -7955,7 +8269,7 @@ public:
 	//! Delete from a table, can only be used on a TableRelation
 	DUCKDB_API virtual void Delete(const string &condition = string());
 	//! Create a relation from calling a table in/out function on the input relation
-	DUCKDB_API shared_ptr<Relation> TableFunction(const std::string &fname, vector<Value> &values);
+	DUCKDB_API shared_ptr<Relation> TableFunction(const std::string &fname, vector<Value> values);
 
 public:
 	//! Whether or not the relation inherits column bindings from its child or not, only relevant for binding
@@ -8117,6 +8431,7 @@ namespace duckdb {
 class ClientContext;
 class DatabaseInstance;
 class DuckDB;
+class LogicalOperator;
 
 typedef void (*warning_callback)(std::string);
 
@@ -8180,6 +8495,8 @@ public:
 
 	//! Extract a set of SQL statements from a specific query
 	DUCKDB_API vector<unique_ptr<SQLStatement>> ExtractStatements(const string &query);
+	//! Extract the logical plan that corresponds to a query
+	DUCKDB_API unique_ptr<LogicalOperator> ExtractPlan(const string &query);
 
 	//! Appends a DataChunk to the specified table
 	DUCKDB_API void Append(TableDescription &description, DataChunk &chunk);
@@ -8352,6 +8669,7 @@ struct PrivateAllocatorData {
 
 typedef data_ptr_t (*allocate_function_ptr_t)(PrivateAllocatorData *private_data, idx_t size);
 typedef void (*free_function_ptr_t)(PrivateAllocatorData *private_data, data_ptr_t pointer, idx_t size);
+typedef data_ptr_t (*reallocate_function_ptr_t)(PrivateAllocatorData *private_data, data_ptr_t pointer, idx_t size);
 
 class AllocatedData {
 public:
@@ -8376,20 +8694,24 @@ class Allocator {
 public:
 	Allocator();
 	Allocator(allocate_function_ptr_t allocate_function_p, free_function_ptr_t free_function_p,
-	          unique_ptr<PrivateAllocatorData> private_data);
+	          reallocate_function_ptr_t reallocate_function_p, unique_ptr<PrivateAllocatorData> private_data);
 
 	data_ptr_t AllocateData(idx_t size);
 	void FreeData(data_ptr_t pointer, idx_t size);
+	data_ptr_t ReallocateData(data_ptr_t pointer, idx_t size);
 
 	unique_ptr<AllocatedData> Allocate(idx_t size) {
 		return make_unique<AllocatedData>(*this, AllocateData(size), size);
 	}
 
 	static data_ptr_t DefaultAllocate(PrivateAllocatorData *private_data, idx_t size) {
-		return new data_t[size];
+		return (data_ptr_t)malloc(size);
 	}
 	static void DefaultFree(PrivateAllocatorData *private_data, data_ptr_t pointer, idx_t size) {
-		delete[] pointer;
+		free(pointer);
+	}
+	static data_ptr_t DefaultReallocate(PrivateAllocatorData *private_data, data_ptr_t pointer, idx_t size) {
+		return (data_ptr_t)realloc(pointer, size);
 	}
 	static Allocator &Get(ClientContext &context);
 	static Allocator &Get(DatabaseInstance &db);
@@ -8401,6 +8723,7 @@ public:
 private:
 	allocate_function_ptr_t allocate_function;
 	free_function_ptr_t free_function;
+	reallocate_function_ptr_t reallocate_function;
 
 	unique_ptr<PrivateAllocatorData> private_data;
 };
@@ -8440,6 +8763,58 @@ struct ReplacementScan {
 	replacement_scan_t function;
 	void *data;
 };
+
+} // namespace duckdb
+
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/set.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+#include <set>
+
+namespace duckdb {
+using std::set;
+}
+
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/common/enums/optimizer_type.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+
+namespace duckdb {
+
+enum class OptimizerType : uint32_t {
+	INVALID = 0,
+	EXPRESSION_REWRITER,
+	FILTER_PULLUP,
+	FILTER_PUSHDOWN,
+	REGEX_RANGE,
+	IN_CLAUSE,
+	JOIN_ORDER,
+	DELIMINATOR,
+	UNUSED_COLUMNS,
+	STATISTICS_PROPAGATION,
+	COMMON_SUBEXPRESSIONS,
+	COMMON_AGGREGATE,
+	COLUMN_LIFETIME,
+	TOP_N,
+	REORDER_FILTER
+};
+
+string OptimizerTypeToString(OptimizerType type);
 
 } // namespace duckdb
 
@@ -8516,12 +8891,20 @@ public:
 	CheckpointAbort checkpoint_abort = CheckpointAbort::NO_ABORT;
 	//! Replacement table scans are automatically attempted when a table name cannot be found in the schema
 	vector<ReplacementScan> replacement_scans;
+	//! Initialize the database with the standard set of DuckDB functions
+	//! You should probably not touch this unless you know what you are doing
+	bool initialize_default_database = true;
+	//! The set of disabled optimizers (default empty)
+	set<OptimizerType> disabled_optimizers;
 
 public:
 	DUCKDB_API static DBConfig &GetConfig(ClientContext &context);
 	DUCKDB_API static DBConfig &GetConfig(DatabaseInstance &db);
 	DUCKDB_API static vector<ConfigurationOption> GetOptions();
+	DUCKDB_API static idx_t GetOptionCount();
 
+	//! Fetch an option by index. Returns a pointer to the option, or nullptr if out of range
+	DUCKDB_API static ConfigurationOption *GetOptionByIndex(idx_t index);
 	//! Fetch an option by name. Returns a pointer to the option, or nullptr if none exists.
 	DUCKDB_API static ConfigurationOption *GetOptionByName(const string &name);
 
@@ -8713,6 +9096,14 @@ typedef enum DUCKDB_TYPE {
 	DUCKDB_TYPE_INTEGER,
 	// int64_t
 	DUCKDB_TYPE_BIGINT,
+	// uint8_t
+	DUCKDB_TYPE_UTINYINT,
+	// uint16_t
+	DUCKDB_TYPE_USMALLINT,
+	// uint32_t
+	DUCKDB_TYPE_UINTEGER,
+	// uint64_t
+	DUCKDB_TYPE_UBIGINT,
 	// float
 	DUCKDB_TYPE_FLOAT,
 	// double
@@ -8749,7 +9140,7 @@ typedef struct {
 	int8_t hour;
 	int8_t min;
 	int8_t sec;
-	int16_t micros;
+	int32_t micros;
 } duckdb_time;
 
 typedef struct {
@@ -8783,31 +9174,65 @@ typedef struct {
 typedef struct {
 	idx_t column_count;
 	idx_t row_count;
+	idx_t rows_changed;
 	duckdb_column *columns;
 	char *error_message;
 } duckdb_result;
-
-// typedef struct {
-// 	void *data;
-// 	bool *nullmask;
-// } duckdb_column_data;
-
-// typedef struct {
-// 	int column_count;
-// 	int count;
-// 	duckdb_column_data *columns;
-// } duckdb_chunk;
 
 typedef void *duckdb_database;
 typedef void *duckdb_connection;
 typedef void *duckdb_prepared_statement;
 typedef void *duckdb_appender;
+typedef void *duckdb_arrow;
+typedef void *duckdb_config;
+// we don't need to spell out the schema/array in here
+// because it's a common interface, users can consume
+// the data in their own logic.
+typedef void *duckdb_arrow_schema;
+typedef void *duckdb_arrow_array;
 
 typedef enum { DuckDBSuccess = 0, DuckDBError = 1 } duckdb_state;
+
+//! query duckdb result as arrow data structure
+DUCKDB_API duckdb_state duckdb_query_arrow(duckdb_connection connection, const char *query, duckdb_arrow *out_result);
+//! get arrow schema
+DUCKDB_API duckdb_state duckdb_query_arrow_schema(duckdb_arrow result, duckdb_arrow_schema *out_schema);
+//! get arrow data array
+//! This function can be called multiple time to get next chunks, which will free the previous out_array.
+//! So consume the out_array before call this function again
+DUCKDB_API duckdb_state duckdb_query_arrow_array(duckdb_arrow result, duckdb_arrow_array *out_array);
+//! get arrow row count
+DUCKDB_API idx_t duckdb_arrow_row_count(duckdb_arrow result);
+//! get arrow column count
+DUCKDB_API idx_t duckdb_arrow_column_count(duckdb_arrow result);
+//! get arrow rows changed
+DUCKDB_API idx_t duckdb_arrow_rows_changed(duckdb_arrow result);
+//! get arrow error message
+DUCKDB_API const char *duckdb_query_arrow_error(duckdb_arrow result);
+//! Destroys the arrow result
+DUCKDB_API void duckdb_destroy_arrow(duckdb_arrow *result);
+
+//! Creates a DuckDB configuration object. The created object must be destroyed with duckdb_destroy_config.
+DUCKDB_API duckdb_state duckdb_create_config(duckdb_config *out_config);
+//! Returns the amount of config options available.
+//! Should not be called in a loop as it internally loops over all the options.
+DUCKDB_API size_t duckdb_config_count();
+//! Returns the config name and description for the config at the specified index
+//! The result MUST NOT be freed
+//! Returns failure if the index is out of range (i.e. >= duckdb_config_count)
+DUCKDB_API duckdb_state duckdb_get_config_flag(size_t index, const char **out_name, const char **out_description);
+//! Sets the specified config option for the configuration
+DUCKDB_API duckdb_state duckdb_set_config(duckdb_config config, const char *name, const char *option);
+//! Destroys a config object created with duckdb_create_config
+DUCKDB_API void duckdb_destroy_config(duckdb_config *config);
 
 //! Opens a database file at the given path (nullptr for in-memory). Returns DuckDBSuccess on success, or DuckDBError on
 //! failure. [OUT: database]
 DUCKDB_API duckdb_state duckdb_open(const char *path, duckdb_database *out_database);
+//! Opens a database file at the given path using the specified configuration
+//! If error is set the error will be reported
+DUCKDB_API duckdb_state duckdb_open_ext(const char *path, duckdb_database *out_database, duckdb_config config,
+                                        char **error);
 //! Closes the database.
 DUCKDB_API void duckdb_close(duckdb_database *database);
 
@@ -8870,6 +9295,7 @@ DUCKDB_API void duckdb_free(void *ptr);
 DUCKDB_API duckdb_state duckdb_prepare(duckdb_connection connection, const char *query,
                                        duckdb_prepared_statement *out_prepared_statement);
 
+DUCKDB_API const char *duckdb_prepare_error(duckdb_prepared_statement prepared_statement);
 DUCKDB_API duckdb_state duckdb_nparams(duckdb_prepared_statement prepared_statement, idx_t *nparams_out);
 
 //! binds parameters to prepared statement
@@ -8895,6 +9321,10 @@ DUCKDB_API duckdb_state duckdb_bind_null(duckdb_prepared_statement prepared_stat
 //! Executes the prepared statements with currently bound parameters
 DUCKDB_API duckdb_state duckdb_execute_prepared(duckdb_prepared_statement prepared_statement,
                                                 duckdb_result *out_result);
+
+//! Executes the prepared statements with currently bound parameters and return arrow result
+DUCKDB_API duckdb_state duckdb_execute_prepared_arrow(duckdb_prepared_statement prepared_statement,
+                                                      duckdb_arrow *out_result);
 
 //! Destroys the specified prepared statement descriptor
 DUCKDB_API void duckdb_destroy_prepare(duckdb_prepared_statement *prepared_statement);
@@ -8949,8 +9379,7 @@ DUCKDB_API duckdb_state duckdb_appender_destroy(duckdb_appender *appender);
 
 namespace duckdb {
 
-//! The Date class is a static class that holds helper functions for the Date
-//! type.
+//! The Date class is a static class that holds helper functions for the Date type.
 class Date {
 public:
 	static const string_t MONTH_NAMES[12];
@@ -8965,8 +9394,14 @@ public:
 	static const int8_t MONTH_PER_DAY_OF_YEAR[365];
 	static const int8_t LEAP_MONTH_PER_DAY_OF_YEAR[366];
 
-	constexpr static const int32_t MIN_YEAR = -290307;
-	constexpr static const int32_t MAX_YEAR = 294247;
+	// min date is 5877642-06-23 (BC) (-2^31)
+	constexpr static const int32_t DATE_MIN_YEAR = -5877641;
+	constexpr static const int32_t DATE_MIN_MONTH = 6;
+	constexpr static const int32_t DATE_MIN_DAY = 23;
+	// max date is 5881580-07-11 (2^31)
+	constexpr static const int32_t DATE_MAX_YEAR = 5881580;
+	constexpr static const int32_t DATE_MAX_MONTH = 7;
+	constexpr static const int32_t DATE_MAX_DAY = 11;
 	constexpr static const int32_t EPOCH_YEAR = 1970;
 
 	constexpr static const int32_t YEAR_INTERVAL = 400;
@@ -8990,6 +9425,7 @@ public:
 	static void Convert(date_t date, int32_t &out_year, int32_t &out_month, int32_t &out_day);
 	//! Create a Date object from a specified (year, month, day) combination
 	static date_t FromDate(int32_t year, int32_t month, int32_t day);
+	static bool TryFromDate(int32_t year, int32_t month, int32_t day, date_t &result);
 
 	//! Returns true if (year) is a leap year, and false otherwise
 	static bool IsLeapYear(int32_t year);
@@ -8997,6 +9433,9 @@ public:
 	//! Returns true if the specified (year, month, day) combination is a valid
 	//! date
 	static bool IsValid(int32_t year, int32_t month, int32_t day);
+
+	//! The max number of days in a month of a given year
+	static int32_t MonthDays(int32_t year, int32_t month);
 
 	//! Extract the epoch from the date (seconds since 1970-01-01)
 	static int64_t Epoch(date_t date);
@@ -9039,6 +9478,9 @@ public:
 
 	//! Helper function to parse two digits from a string (e.g. "30" -> 30, "03" -> 3, "3" -> 3)
 	static bool ParseDoubleDigit(const char *buf, idx_t len, idx_t &pos, int32_t &result);
+
+	static string ConversionError(const string &str);
+	static string ConversionError(string_t str);
 
 private:
 	static void ExtractYearOffset(int32_t &n, int32_t &year, int32_t &year_offset);
@@ -9130,6 +9572,63 @@ struct ArrowArrayStream {
 //===----------------------------------------------------------------------===//
 //                         DuckDB
 //
+// duckdb/common/types/blob.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+
+
+namespace duckdb {
+
+//! The Blob class is a static class that holds helper functions for the Blob type.
+class Blob {
+public:
+	// map of integer -> hex value
+	static constexpr const char *HEX_TABLE = "0123456789ABCDEF";
+	// reverse map of byte -> integer value, or -1 for invalid hex values
+	static const int HEX_MAP[256];
+	//! map of index -> base64 character
+	static constexpr const char *BASE64_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	//! padding character used in base64 encoding
+	static constexpr const char BASE64_PADDING = '=';
+
+public:
+	//! Returns the string size of a blob -> string conversion
+	static idx_t GetStringSize(string_t blob);
+	//! Converts a blob to a string, writing the output to the designated output string.
+	//! The string needs to have space for at least GetStringSize(blob) bytes.
+	static void ToString(string_t blob, char *output);
+	//! Convert a blob object to a string
+	static string ToString(string_t blob);
+
+	//! Returns the blob size of a string -> blob conversion
+	static bool TryGetBlobSize(string_t str, idx_t &result_size, string *error_message);
+	static idx_t GetBlobSize(string_t str);
+	//! Convert a string to a blob. This function should ONLY be called after calling GetBlobSize, since it does NOT
+	//! perform data validation.
+	static void ToBlob(string_t str, data_ptr_t output);
+	//! Convert a string object to a blob
+	static string ToBlob(string_t str);
+
+	// base 64 conversion functions
+	//! Returns the string size of a blob -> base64 conversion
+	static idx_t ToBase64Size(string_t blob);
+	//! Converts a blob to a base64 string, output should have space for at least ToBase64Size(blob) bytes
+	static void ToBase64(string_t blob, char *output);
+
+	//! Returns the string size of a base64 string -> blob conversion
+	static idx_t FromBase64Size(string_t str);
+	//! Converts a base64 string to a blob, output should have space for at least FromBase64Size(blob) bytes
+	static void FromBase64(string_t str, data_ptr_t output, idx_t output_size);
+};
+} // namespace duckdb
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
 // duckdb/common/types/decimal.hpp
 //
 //
@@ -9187,6 +9686,7 @@ class Timestamp {
 public:
 	//! Convert a string in the format "YYYY-MM-DD hh:mm:ss" to a timestamp object
 	static timestamp_t FromString(const string &str);
+	static bool TryConvertTimestamp(const char *str, idx_t len, timestamp_t &result);
 	static timestamp_t FromCString(const char *str, idx_t len);
 	//! Convert a date object to a string in the format "YYYY-MM-DD hh:mm:ss"
 	static string ToString(timestamp_t timestamp);
@@ -9196,6 +9696,8 @@ public:
 	static dtime_t GetTime(timestamp_t timestamp);
 	//! Create a Timestamp object from a specified (date, time) combination
 	static timestamp_t FromDatetime(date_t date, dtime_t time);
+	static bool TryFromDatetime(date_t date, dtime_t time, timestamp_t &result);
+
 	//! Extract the date and time from a given timestamp object
 	static void Convert(timestamp_t date, date_t &out_date, dtime_t &out_time);
 	//! Returns current timestamp
@@ -9220,6 +9722,9 @@ public:
 	static int64_t GetEpochNanoSeconds(timestamp_t timestamp);
 
 	static bool TryParseUTCOffset(const char *str, idx_t &pos, idx_t len, int &hour_offset, int &minute_offset);
+
+	static string ConversionError(const string &str);
+	static string ConversionError(string_t str);
 };
 } // namespace duckdb
 //===----------------------------------------------------------------------===//
@@ -9249,13 +9754,16 @@ public:
 	//! Convert a time object to a string in the format "hh:mm:ss"
 	static string ToString(dtime_t time);
 
-	static string Format(int32_t hour, int32_t minute, int32_t second, int32_t microseconds = 0);
-
 	static dtime_t FromTime(int32_t hour, int32_t minute, int32_t second, int32_t microseconds = 0);
 
-	static bool IsValidTime(int32_t hour, int32_t minute, int32_t second, int32_t microseconds = 0);
 	//! Extract the time from a given timestamp object
 	static void Convert(dtime_t time, int32_t &out_hour, int32_t &out_min, int32_t &out_sec, int32_t &out_micros);
+
+	static string ConversionError(const string &str);
+	static string ConversionError(string_t str);
+
+private:
+	static bool TryConvertInternal(const char *buf, idx_t len, idx_t &pos, dtime_t &result, bool strict);
 };
 
 } // namespace duckdb
@@ -9543,22 +10051,6 @@ public:
 	CatalogEntry(CatalogType type, Catalog *catalog, string name);
 	virtual ~CatalogEntry();
 
-	virtual unique_ptr<CatalogEntry> AlterEntry(ClientContext &context, AlterInfo *info) {
-		throw CatalogException("Unsupported alter type for catalog entry!");
-	}
-
-	virtual unique_ptr<CatalogEntry> Copy(ClientContext &context) {
-		throw CatalogException("Unsupported copy type for catalog entry!");
-	}
-	//! Sets the CatalogEntry as the new root entry (i.e. the newest entry) - this is called on a rollback to an
-	//! AlterEntry
-	virtual void SetAsRoot() {
-	}
-	//! Convert the catalog entry to a SQL string that can be used to re-construct the catalog entry
-	virtual string ToSQL() {
-		throw CatalogException("Unsupported catalog type for ToSQL()");
-	}
-
 	//! The oid of the entry
 	idx_t oid;
 	//! The type of this catalog entry
@@ -9581,6 +10073,18 @@ public:
 	unique_ptr<CatalogEntry> child;
 	//! Parent entry (the node that owns this node)
 	CatalogEntry *parent;
+
+public:
+	virtual unique_ptr<CatalogEntry> AlterEntry(ClientContext &context, AlterInfo *info);
+
+	virtual unique_ptr<CatalogEntry> Copy(ClientContext &context);
+
+	//! Sets the CatalogEntry as the new root entry (i.e. the newest entry)
+	// this is called on a rollback to an AlterEntry
+	virtual void SetAsRoot();
+
+	//! Convert the catalog entry to a SQL string that can be used to re-construct the catalog entry
+	virtual string ToSQL();
 };
 } // namespace duckdb
 
@@ -9700,12 +10204,8 @@ public:
 	static bool HasConflict(ClientContext &context, transaction_t timestamp);
 	static bool UseTimestamp(ClientContext &context, transaction_t timestamp);
 
-	idx_t GetEntryIndex(CatalogEntry *entry);
 	CatalogEntry *GetEntryFromIndex(idx_t index);
 	void UpdateTimestamp(CatalogEntry *entry, transaction_t timestamp);
-
-	//! Returns the root entry with the specified name regardless of transaction (or nullptr if there are none)
-	CatalogEntry *GetRootEntry(const string &name);
 
 private:
 	//! Given a root entry, gets the entry valid for this transaction
@@ -10162,9 +10662,6 @@ template <>
 TableCatalogEntry *Catalog::GetEntry(ClientContext &context, string schema_name, const string &name, bool if_exists,
                                      QueryErrorContext error_context);
 template <>
-ViewCatalogEntry *Catalog::GetEntry(ClientContext &context, string schema_name, const string &name, bool if_exists,
-                                    QueryErrorContext error_context);
-template <>
 SequenceCatalogEntry *Catalog::GetEntry(ClientContext &context, string schema_name, const string &name, bool if_exists,
                                         QueryErrorContext error_context);
 template <>
@@ -10205,17 +10702,14 @@ namespace duckdb {
 //===--------------------------------------------------------------------===//
 enum class PhysicalOperatorType : uint8_t {
 	INVALID,
-	LEAF,
 	ORDER_BY,
 	LIMIT,
 	TOP_N,
-	AGGREGATE,
 	WINDOW,
 	UNNEST,
 	SIMPLE_AGGREGATE,
 	HASH_GROUP_BY,
 	PERFECT_HASH_GROUP_BY,
-	SORT_GROUP_BY,
 	FILTER,
 	PROJECTION,
 	COPY_TO_FILE,
@@ -10229,8 +10723,6 @@ enum class PhysicalOperatorType : uint8_t {
 	CHUNK_SCAN,
 	RECURSIVE_CTE_SCAN,
 	DELIM_SCAN,
-	EXTERNAL_FILE_SCAN,
-	QUERY_DERIVED_SCAN,
 	EXPRESSION_SCAN,
 	// -----------------------------
 	// Joins
@@ -10252,10 +10744,8 @@ enum class PhysicalOperatorType : uint8_t {
 	// Updates
 	// -----------------------------
 	INSERT,
-	INSERT_SELECT,
 	DELETE_OPERATOR,
 	UPDATE,
-	EXPORT_EXTERNAL_FILE,
 
 	// -----------------------------
 	// Schema
@@ -10349,8 +10839,6 @@ public:
 	DataChunk child_chunk;
 	//! State of the child of this operator
 	unique_ptr<PhysicalOperatorState> child_state;
-	//! The initial chunk
-	DataChunk initial_chunk;
 };
 
 //! PhysicalOperator is the base class of the physical operators present in the
@@ -10397,10 +10885,6 @@ public:
 	virtual void InitializeChunk(DataChunk &chunk) {
 		auto &types = GetTypes();
 		chunk.Initialize(types);
-	}
-	virtual void InitializeChunkEmpty(DataChunk &chunk) {
-		auto &types = GetTypes();
-		chunk.InitializeEmpty(types);
 	}
 	//! Retrieves a chunk from this operator and stores it in the chunk
 	//! variable.
@@ -11043,12 +11527,15 @@ namespace duckdb {
 class Appender;
 class Catalog;
 class DatabaseInstance;
+class LogicalOperator;
 class PreparedStatementData;
 class Relation;
 class BufferedFileWriter;
 class QueryProfiler;
 class QueryProfilerHistory;
 class ClientContextLock;
+struct CreateScalarFunctionInfo;
+class ScalarFunctionCatalogEntry;
 
 //! The ClientContext holds information relevant to the current client session
 //! during execution
@@ -11094,6 +11581,8 @@ public:
 	bool force_parallelism = false;
 	//! Force index join independent of table cardinality, used for testing
 	bool force_index_join = false;
+	//! Force out-of-core computation for operators that support it, used for testing
+	bool force_external = false;
 	//! Maximum bits allowed for using a perfect hash table (i.e. the perfect HT can hold up to 2^perfect_ht_threshold
 	//! elements)
 	idx_t perfect_ht_threshold = 12;
@@ -11161,6 +11650,8 @@ public:
 
 	//! Parse statements from a query
 	DUCKDB_API vector<unique_ptr<SQLStatement>> ParseStatements(const string &query);
+	//! Extract the logical plan of a query
+	DUCKDB_API unique_ptr<LogicalOperator> ExtractPlan(const string &query);
 	void HandlePragmaStatements(vector<unique_ptr<SQLStatement>> &statements);
 
 	//! Runs a function with a valid transaction context, potentially starting a transaction if the context is in auto
@@ -11209,6 +11700,8 @@ private:
 	void LogQueryInternal(ClientContextLock &lock, const string &query);
 
 	unique_ptr<ClientContextLock> LockContext();
+
+	bool UpdateFunctionInfoFromEntry(ScalarFunctionCatalogEntry *existing_function, CreateScalarFunctionInfo *new_info);
 
 private:
 	//! The currently opened StreamQueryResult (if any)

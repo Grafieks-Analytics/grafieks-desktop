@@ -231,7 +231,11 @@ Page {
         id: postgresModal
     }
 
-    ExcelConnection{
+//    ExcelConnection{
+//        id: excelModal
+//    }
+
+    ExcelOdbcConnection{
         id: excelModal
     }
 

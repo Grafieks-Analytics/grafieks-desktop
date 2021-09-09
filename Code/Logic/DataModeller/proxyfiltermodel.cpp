@@ -1,8 +1,7 @@
 #include "proxyfiltermodel.h"
 
-ProxyFilterModel::ProxyFilterModel(QObject *parent) : QObject(parent)
+ProxyFilterModel::ProxyFilterModel( QObject *parent) : QObject(parent)
 {
-
 }
 
 void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel, FilterDateListModel *dateModel, FilterNumericalListModel *numericalModel)
@@ -19,8 +18,13 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     switch (Statics::currentDbIntType) {
 
     case Constants::jsonIntType:
-    case Constants::excelIntType:
     case Constants::csvIntType:{
+
+        emit sendModels(categoryModel, numericalModel, dateModel);
+        break;
+    }
+
+    case Constants::excelIntType: {
 
         if(categoryModel->rowCount() > 0){
             QString tempWhereConditions = categoryModel->callQueryModel();
@@ -54,9 +58,8 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
             newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
         }
 
+        emit sendExcelFilterQuery(newQuery);
 
-
-        emit sendCsvFilterQuery(newQuery);
         break;
     }
 
@@ -99,8 +102,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         emit sendFilterQuery(newQuery);
         break;
     }
-
-    qDebug() << Q_FUNC_INFO << "NEW QUERY" << newQuery;
 
 }
 

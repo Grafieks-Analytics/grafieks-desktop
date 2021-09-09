@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
 
@@ -13,11 +14,25 @@ Item{
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataSingleItem.objectName
     property var modelContent: []
+    property bool master: false
+
+    ListModel{
+        id: listModel
+        dynamicRoles: true
+    }
+
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
         modelContent.unshift("Select All")
         control.model = modelContent
+
+        var i = 0;
+        listModel.clear()
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -107,10 +122,9 @@ Item{
 
         ComboBox {
             id:control
+            model: listModel
             width: parent.width
             anchors.top : columnName.bottom
-
-
 
             indicator: Canvas {
                 id: canvas

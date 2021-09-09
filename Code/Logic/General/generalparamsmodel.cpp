@@ -57,6 +57,36 @@ int GeneralParamsModel::currentScreen() const
     return m_currentScreen;
 }
 
+void GeneralParamsModel::setExtractPath(QString extractsPath)
+{
+    Statics::extractPath = extractsPath;
+    if(Statics::modeProcessReader == false)
+        emit showSaveExtractWaitPopup();
+
+}
+
+void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName, QString newColumnType)
+{
+
+    this->changedHeaderTypes.insert(tableName + "." + columnName, newColumnType);
+
+    qDebug() << this->changedHeaderTypes;
+
+    Statics::changedHeaderTypes = this->changedHeaderTypes;
+
+    emit colTypeChanged();
+}
+
+QVariantMap GeneralParamsModel::getChangedColumnTypes()
+{
+    return this->changedHeaderTypes;
+}
+
+QString GeneralParamsModel::urlToFilePath(QUrl url)
+{
+    QString path = url.toLocalFile();
+    return path;
+}
 
 void GeneralParamsModel::setMenuType(int menuType)
 {

@@ -25,7 +25,7 @@ void GenerateRoleNamesQueryWorker::run()
         colInfo << this->queryModel->record().fieldName(i) << dataType.dataType(fieldType.typeName())  << this->queryModel->record().field(i).tableName();
 
         sqlChartHeader.insert(i, colInfo);
-        tableHeaders.append(this->queryModel->record().fieldName(i));
+        tableHeaders.append(this->queryModel->record().field(i).tableName() + "." + this->queryModel->record().fieldName(i));
         colInfo.clear();
     }
 

@@ -79,31 +79,6 @@ Item {
     // Connections Starts
 
     Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "excel"
-            }
-        }
-
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "csv"
-            }
-        }
-
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "json"
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         // Query joiner
@@ -174,12 +149,24 @@ Item {
 
         function onExcelLoginStatus(status){
             if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
+                DSParamsModel.setQueryJoiner("")
                 databaseType = "excel"
             }
         }
 
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "csv"
+            }
+        }
 
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "json"
+            }
+        }
     }
 
 
@@ -191,7 +178,15 @@ Item {
             if(moduleName === dataModellerItem.moduleName){
                 allColumns.forEach(function(item, index){
 
-                    let param = DSParamsModel.queryJoiner + tableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + item[0] + DSParamsModel.queryJoiner
+                    let param = ""
+                    if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                        param = "[" + tableName + "$]" + "." + "[" + item[0] + "]"
+                    } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
+
+                    } else {
+                        param = DSParamsModel.queryJoiner + tableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + item[0] + DSParamsModel.queryJoiner
+                    }
+
                     DSParamsModel.addToQuerySelectParamsList(param)
                 })
             }
@@ -357,7 +352,12 @@ Item {
 
         if(DSParamsModel.rectanglesSize() <= 0){
             DSParamsModel.setTmpSql("")
-            executeSql()
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                executeCsvJson("")
+            } else {
+                executeSql()
+            }
+
         } else{
             // Call to execute sql query for visual query designer
             DSParamsModel.executeModelerQuery();
@@ -462,7 +462,12 @@ Item {
             queryErrorModal.open();
 
             DSParamsModel.setTmpSql("")
-            executeSql()
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                executeCsvJson("")
+            } else {
+                executeSql()
+            }
+
         }
     }
 
@@ -537,14 +542,26 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        tmpJoinString += " " + DSParamsModel.queryJoiner + joinCurrentTableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner+ joinConditions[key][1] + DSParamsModel.queryJoiner + " = " + DSParamsModel.queryJoiner + joinCompareTableName + DSParamsModel.queryJoiner + "."  + DSParamsModel.queryJoiner + joinConditions[key][0] + DSParamsModel.queryJoiner+  " AND"
+                        if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                            tmpJoinString += " [" + joinCurrentTableName  + "$].[" +  joinConditions[key][1] + "] = [" + joinCompareTableName + "$].[" + joinConditions[key][0] + "] AND"
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
+
+                        }  else {
+                            tmpJoinString += " " + DSParamsModel.queryJoiner + joinCurrentTableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner+ joinConditions[key][1] + DSParamsModel.queryJoiner + " = " + DSParamsModel.queryJoiner + joinCompareTableName + DSParamsModel.queryJoiner + "."  + DSParamsModel.queryJoiner + joinConditions[key][0] + DSParamsModel.queryJoiner+  " AND"
+                        }
                     }
 
                     let lastIndex = tmpJoinString.lastIndexOf(" AND");
                     tmpJoinString = tmpJoinString.substring(0, lastIndex);
                     tmpJoinString += ")"
 
-                    joinString += " " + joinType + " " + DSParamsModel.queryJoiner + joinPrimaryJoinTable + DSParamsModel.queryJoiner + " ON " + tmpJoinString
+                    if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString
+                    } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
+
+                    }  else {
+                        joinString += " " + joinType + " " + DSParamsModel.queryJoiner + joinPrimaryJoinTable + DSParamsModel.queryJoiner + " ON " + tmpJoinString
+                    }
 
                     tmpJoinString = ""
                 })
@@ -565,24 +582,33 @@ Item {
             let selectColumns = ""
             let finalQuery = ""
             let hideColumns = DSParamsModel.fetchHideColumns()
+
             DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
 
                 // Check if the column is unselected by a user
-                if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
-                    selectColumns += " " + item + ","
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                    if(hideColumns.indexOf(item) === -1)
+                        selectColumns += " " + item + ","
+                } else {
+                    if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
+                        selectColumns += " " + item + ","
+                }
             })
-
-
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
+
             let forParams
             if(databaseType.match(/teradata/gi)){
-
                 forParams = DSParamsModel.queryJoiner + GeneralParamsModel.getCurrentDB() + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
 
-            } else{
+            } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
+                forParams = "[" + DSParamsModel.fetchExistingTables(firstRectId) + "$]"
+
+            } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
+
+            }  else{
                 forParams = DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
             }
 
@@ -591,7 +617,11 @@ Item {
             DSParamsModel.setTmpSql(finalQuery)
 
             // Function to Execute sql generated dynamically
-            executeSql()
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                executeCsvJson(selectColumns)
+            } else {
+                executeSql()
+            }
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
@@ -914,11 +944,15 @@ Item {
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-        } else{
+        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
         }
+    }
+
+    function executeCsvJson(selectParams){
+        CSVJsonQueryModel.setHideParams(DSParamsModel.fetchHideColumns())
     }
 
 
@@ -991,109 +1025,109 @@ Item {
 
 
 
-//    Column{
-//        id: button_options_group
-//        x:20
-//        y:10
-//        z: 10
+    //    Column{
+    //        id: button_options_group
+    //        x:20
+    //        y:10
+    //        z: 10
 
-//        Button{
-//            id: align_btn
-//            width: 30
-//            height: 30
+    //        Button{
+    //            id: align_btn
+    //            width: 30
+    //            height: 30
 
-//            Image{
-//                id: align_icon
-//                height: 22
-//                width: 22
+    //            Image{
+    //                id: align_icon
+    //                height: 22
+    //                width: 22
 
-//                source: "/Images/icons/align.png"
-//                anchors.centerIn: align_btn
-//                anchors.topMargin: 3
-//                anchors.leftMargin: 2
-//                horizontalAlignment: Image.AlignHCenter
-//                verticalAlignment: Image.AlignVCenter
+    //                source: "/Images/icons/align.png"
+    //                anchors.centerIn: align_btn
+    //                anchors.topMargin: 3
+    //                anchors.leftMargin: 2
+    //                horizontalAlignment: Image.AlignHCenter
+    //                verticalAlignment: Image.AlignVCenter
 
-//            }
+    //            }
 
-//            onClicked: onAlignBtnClicked()
-//            background: Rectangle {
-//                id: align_btn_background
-//                color:  align_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+    //            onClicked: onAlignBtnClicked()
+    //            background: Rectangle {
+    //                id: align_btn_background
+    //                color:  align_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
-//            }
+    //            }
 
-//            ToolTip.delay: Constants.tooltipShowTime
-//            ToolTip.timeout: Constants.tooltipHideTime
-//            ToolTip.visible: hovered
-//            ToolTip.text: qsTr("Restore original")
+    //            ToolTip.delay: Constants.tooltipShowTime
+    //            ToolTip.timeout: Constants.tooltipHideTime
+    //            ToolTip.visible: hovered
+    //            ToolTip.text: qsTr("Restore original")
 
-//        }
+    //        }
 
-//        Button{
-//            id:plus_icon_btn
-//            width: 30
-//            height: 30
-//            Image{
-//                id: plus_icon
-//                source: "/Images/icons/Plus_32.png"
-//                height: 25
-//                width: 25
-//                anchors.centerIn: plus_icon_btn
-//                anchors.topMargin: 3
-//                horizontalAlignment: Image.AlignHCenter
-//                verticalAlignment: Image.AlignVCenter
+    //        Button{
+    //            id:plus_icon_btn
+    //            width: 30
+    //            height: 30
+    //            Image{
+    //                id: plus_icon
+    //                source: "/Images/icons/Plus_32.png"
+    //                height: 25
+    //                width: 25
+    //                anchors.centerIn: plus_icon_btn
+    //                anchors.topMargin: 3
+    //                horizontalAlignment: Image.AlignHCenter
+    //                verticalAlignment: Image.AlignVCenter
 
-//            }
+    //            }
 
-//            background: Rectangle {
-//                id: plus_icon_btn_background
-//                color:  plus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+    //            background: Rectangle {
+    //                id: plus_icon_btn_background
+    //                color:  plus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
-//            }
-//            onClicked: onZoomInClicked()
+    //            }
+    //            onClicked: onZoomInClicked()
 
-//            ToolTip.delay: Constants.tooltipShowTime
-//            ToolTip.timeout: Constants.tooltipHideTime
-//            ToolTip.visible: hovered
-//            ToolTip.text: qsTr("Zoom in")
+    //            ToolTip.delay: Constants.tooltipShowTime
+    //            ToolTip.timeout: Constants.tooltipHideTime
+    //            ToolTip.visible: hovered
+    //            ToolTip.text: qsTr("Zoom in")
 
 
-//        }
+    //        }
 
-//        Button{
-//            id:minus_icon_btn
-//            width: 30
-//            height: 30
-//            Image{
-//                id: minus_icon
-//                source: "/Images/icons/zoom out.png"
-//                height: 20
-//                width: 20
-//                anchors.topMargin: 3
-//                anchors.leftMargin:3
-//                anchors.centerIn: minus_icon_btn
-//                anchors.top: minus_icon_btn.top
-//                horizontalAlignment: Image.AlignHCenter
-//                verticalAlignment: Image.AlignVCenter
+    //        Button{
+    //            id:minus_icon_btn
+    //            width: 30
+    //            height: 30
+    //            Image{
+    //                id: minus_icon
+    //                source: "/Images/icons/zoom out.png"
+    //                height: 20
+    //                width: 20
+    //                anchors.topMargin: 3
+    //                anchors.leftMargin:3
+    //                anchors.centerIn: minus_icon_btn
+    //                anchors.top: minus_icon_btn.top
+    //                horizontalAlignment: Image.AlignHCenter
+    //                verticalAlignment: Image.AlignVCenter
 
-//            }
+    //            }
 
-//            background: Rectangle {
-//                id: minus_icon_btn_background
-//                color:  minus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+    //            background: Rectangle {
+    //                id: minus_icon_btn_background
+    //                color:  minus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
-//            }
+    //            }
 
-//            onClicked: onZoomOutClicked()
+    //            onClicked: onZoomOutClicked()
 
-//            ToolTip.delay: Constants.tooltipShowTime
-//            ToolTip.timeout: Constants.tooltipHideTime
-//            ToolTip.visible: hovered
-//            ToolTip.text: qsTr("Zoom out")
-//        }
+    //            ToolTip.delay: Constants.tooltipShowTime
+    //            ToolTip.timeout: Constants.tooltipHideTime
+    //            ToolTip.visible: hovered
+    //            ToolTip.text: qsTr("Zoom out")
+    //        }
 
-//    }
+    //    }
     Rectangle{
         id:outer
         height: parent.height
