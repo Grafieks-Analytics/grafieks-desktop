@@ -28,17 +28,18 @@ Column{
 
         function onCurrentReportChanged(reportId){
             let dashboardId = DashboardParamsModel.currentDashboard
+            hideGeneral = true
 
             //Show/Hide Report customize
-            let reportType = DashboardParamsModel.getDashboardReportTypeMap(dashboardId, reportId)
+//            let reportType = DashboardParamsModel.getDashboardReportTypeMap(dashboardId, reportId)
 
-            if(reportType === Constants.reportTypeChart){
-                hideGeneral = true
-//                nestedModel.setProperty(0, "collapsed", false)
-            } else{
-                hideGeneral = false
-//                nestedModel.setProperty(0, "collapsed", true)
-            }
+//            if(reportType === Constants.reportTypeChart){
+//                hideGeneral = true
+////                nestedModel.setProperty(0, "collapsed", false)
+//            } else{
+//                hideGeneral = false
+////                nestedModel.setProperty(0, "collapsed", true)
+//            }
         }
 
     }

@@ -136,6 +136,7 @@ QVariantMap ReportParamsModel::getReportsList(){
     QList<int> keys = this->reportsData.keys();
 
     foreach(int key, keys){
+        qDebug() << "Reports Data" << this->reportsData.value(key);
         tmpReportsData.insert(QString::number(key), this->reportsData.value(key));
     }
     return tmpReportsData;
@@ -889,6 +890,8 @@ void ReportParamsModel::setCalculatedFieldPopupStatus(QString createFieldPopupSt
 
 void ReportParamsModel::setXAxisColumns(QString xAxisColumns)
 {
+
+    qDebug() << "XAXIS" << xAxisColumns;
     if (m_xAxisColumns == xAxisColumns)
         return;
 
@@ -1168,5 +1171,19 @@ void ReportParamsModel::setChartUrl(QString chartUrl)
 }
 
 int ReportParamsModel::generateNewReportId(){
-    return this->reportIdsCounter++;
+    this->reportIdsCounter++;
+    return this->reportIdsCounter;
 }
+
+void ReportParamsModel::clearReportsScreen()
+{
+    emit clearScreenSignal();
+}
+
+
+int ReportParamsModel::reportsCount()
+{
+    return this->reportIdsCounter;
+}
+
+

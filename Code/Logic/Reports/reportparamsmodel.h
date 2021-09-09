@@ -242,6 +242,8 @@ public:
     Q_INVOKABLE QVariantMap getAllDashboardReportInstances();
 
     Q_INVOKABLE int generateNewReportId();
+    Q_INVOKABLE void clearReportsScreen();
+    Q_INVOKABLE int reportsCount();
 
     QString editReportToggle() const;
 
@@ -330,6 +332,8 @@ signals:
     void categoricalFilterChanged(QVector<int> filterList);
     void dateFilterChanged(QVector<int> filterList);
     void numericalFilterChanged(QVector<int> filterList);
+
+    void clearScreenSignal();
 
 
 private:

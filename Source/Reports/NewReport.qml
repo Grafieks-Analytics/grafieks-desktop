@@ -48,7 +48,7 @@ Page {
     property string valuesLabelName: 'Values'
 
     property string reportChart:ReportParamsModel.chartType;
-    property string reportIdMain:ReportParamsModel.reportId;
+    property int reportIdMain:ReportParamsModel.reportId;
 
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
@@ -74,7 +74,7 @@ Page {
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
 
-    property var reportTitleName: null;
+    property var reportTitleName: "";
 
     // Flag for horizontal graph
     // Changes when numerical value is added on X axis
@@ -102,6 +102,10 @@ Page {
     // X Axis Bar => Used for all charts where 2 axis are requied
     ListModel{
         id: xAxisListModel
+
+        onCountChanged: {
+            console.log("AXIS NAMES Count changed",count)
+        }
     }
 
     // Y Axis Bar => Used for all charts where 2 axis are requied
@@ -150,9 +154,7 @@ Page {
                 setValuesOnEditReport(reportId);
             }else{
                 addReportButton.text = "Add";
-                var reportIdMain = generateReportId();
                 ReportParamsModel.setReportId(reportIdMain);
-                ReportParamsModel.addReport(reportIdMain);
                 
                 ReportParamsModel.setChartType(Constants.barChartTitle);
                 ReportParamsModel.setChartTitle(Constants.barChartTitle);
@@ -160,12 +162,16 @@ Page {
         }
 
         function onReportIdChanged(reportIdValue){
-//            if(!reportIdValue){
+            if(!reportIdValue){
                 clearValuesOnAddNewReport();
-//            }
+            }
             report_desiner_page.reportIdMain = reportIdValue;
-            console.log(reportIdValue, "UPDATED REPORT ID")
             ReportParamsModel.restoreMasterReportFilters(reportIdValue)
+        }
+
+        function onClearScreenSignal(){
+            clearValuesOnAddNewReport();
+            clearAllChartValues()
         }
 
     }
@@ -173,75 +179,96 @@ Page {
     Connections{
         target: ChartsModel
 
-        function onSignalBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
 
-        function onSignalStackedBarChartValues(output){
+        function onSignalStackedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalGroupedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalNewGroupedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalAreaChartValues(output, reportId, dashboardId, chartSource){
             drawChartAfterReceivingSignal(output);
         }
-        function onSignalGroupedBarChartValues(output){
+        function onSignalLineChartValues(output, reportId, dashboardId, chartSource){
             drawChartAfterReceivingSignal(output);
         }
-        function onSignalNewGroupedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalLineBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalAreaChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalPieChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalLineChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalFunnelChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalLineBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalRadarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalPieChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalScatterChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalFunnelChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalHeatMapChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalRadarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalSunburstChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalScatterChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalWaterfallChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalHeatMapChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalGaugeChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalSunburstChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalSankeyChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalWaterfallChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTreeChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalGaugeChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTreeMapChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalSankeyChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalKPIChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalTreeChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTableChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalTreeMapChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalPivotChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalKPIChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalStackedAreaChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalTableChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalPivotChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalStackedAreaChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalMultiLineChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalMultiLineChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                drawChartAfterReceivingSignal(output);
         }
     }
 
@@ -488,37 +515,37 @@ Page {
             allowedYAxisDataPanes = 2;
 
             switch(chartTitle){
-                case Constants.stackedBarChartTitle:
-                    console.log('Switching to horizontal stacked bar chart')
-                    switchChart(Constants.horizontalStackedBarChartTitle);
-                    break;
-                case Constants.barChartTitle:
-                    allowedYAxisDataPanes = 2;
-                    console.log('Switching to horizontal bar chart')
-                    switchChart(Constants.horizontalBarChartTitle);
-                    break;
-                case Constants.multiLineChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to multiple horizontal line chart')
-                    switchChart(Constants.horizontalMultiLineChartTitle);
-                    break;
-                case Constants.lineChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to horizontal line chart')
-                    switchChart(Constants.horizontalLineChartTitle);
-                    break;
-                case Constants.multipleAreaChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to multiple horizontal area chart')
-                    switchChart(Constants.multipleHorizontalAreaChartTitle);
-                    break;
-                case Constants.areaChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to horizontal area chart')
-                    switchChart(Constants.horizontalAreaChartTitle);
-                    break;
-                default:
-                    console.log('Missed condition in isHorizontalGraph change horizontal')
+            case Constants.stackedBarChartTitle:
+                console.log('Switching to horizontal stacked bar chart')
+                switchChart(Constants.horizontalStackedBarChartTitle);
+                break;
+            case Constants.barChartTitle:
+                allowedYAxisDataPanes = 2;
+                console.log('Switching to horizontal bar chart')
+                switchChart(Constants.horizontalBarChartTitle);
+                break;
+            case Constants.multiLineChartTitle:
+                allowedYAxisDataPanes = 1;
+                console.log('Switching to multiple horizontal line chart')
+                switchChart(Constants.horizontalMultiLineChartTitle);
+                break;
+            case Constants.lineChartTitle:
+                allowedYAxisDataPanes = 1;
+                console.log('Switching to horizontal line chart')
+                switchChart(Constants.horizontalLineChartTitle);
+                break;
+            case Constants.multipleAreaChartTitle:
+                allowedYAxisDataPanes = 1;
+                console.log('Switching to multiple horizontal area chart')
+                switchChart(Constants.multipleHorizontalAreaChartTitle);
+                break;
+            case Constants.areaChartTitle:
+                allowedYAxisDataPanes = 1;
+                console.log('Switching to horizontal area chart')
+                switchChart(Constants.horizontalAreaChartTitle);
+                break;
+            default:
+                console.log('Missed condition in isHorizontalGraph change horizontal')
             }
         }else{
 
@@ -527,36 +554,36 @@ Page {
             allowedYAxisDataPanes = 1;
 
             switch(chartTitle){
-                case Constants.horizontalBarChartTitle:
-                    console.log('Switching to bar chart')
-                    switchChart(Constants.barChartTitle);
-                    break;
-                case Constants.horizontalStackedBarChartTitle:
-                    console.log('Switching to stacked bar chart')
-                    switchChart(Constants.stackedBarChartTitle);
-                    break;
-                case Constants.horizontalLineChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to line chart')
-                    switchChart(Constants.lineChartTitle);
-                    break;
-                case Constants.horizontalMultiLineChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to multiple line chart')
-                    switchChart(Constants.multiLineChartTitle);
-                    break;
-                case Constants.horizontalAreaChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to line chart')
-                    switchChart(Constants.areaChartTitle);
-                    break;
-                case Constants.multipleHorizontalAreaChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to multiple line chart')
-                    switchChart(Constants.multipleAreaChartTitle);
-                    break;
-                default:
-                    console.log('Missed condition in isHorizontalGraph change veritcal')
+            case Constants.horizontalBarChartTitle:
+                console.log('Switching to bar chart')
+                switchChart(Constants.barChartTitle);
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                console.log('Switching to stacked bar chart')
+                switchChart(Constants.stackedBarChartTitle);
+                break;
+            case Constants.horizontalLineChartTitle:
+                allowedXAxisDataPanes = 1;
+                console.log('Switching to line chart')
+                switchChart(Constants.lineChartTitle);
+                break;
+            case Constants.horizontalMultiLineChartTitle:
+                allowedXAxisDataPanes = 1;
+                console.log('Switching to multiple line chart')
+                switchChart(Constants.multiLineChartTitle);
+                break;
+            case Constants.horizontalAreaChartTitle:
+                allowedXAxisDataPanes = 1;
+                console.log('Switching to line chart')
+                switchChart(Constants.areaChartTitle);
+                break;
+            case Constants.multipleHorizontalAreaChartTitle:
+                allowedXAxisDataPanes = 1;
+                console.log('Switching to multiple line chart')
+                switchChart(Constants.multipleAreaChartTitle);
+                break;
+            default:
+                console.log('Missed condition in isHorizontalGraph change veritcal')
 
             }
 
@@ -706,7 +733,7 @@ Page {
         ReportParamsModel.setLastDropped(null);
 
         // Setting the report title value to empty
-        report_title_text.text = "";
+//        report_title_text.text = "";
         report_desiner_page.reportIdMain = reportId;
 
         // Clear all the list models
@@ -888,11 +915,12 @@ Page {
         // Clear title
         // Clear Model
         // Set id to empty
-        ReportParamsModel.setReportTitle(null);
+        reportTitleName = ""
+        ReportParamsModel.setReportTitle(reportTitleName);
         ReportParamsModel.setLastDropped(null);
 
         report_title_text.text = "";
-        reportIdMain = "";
+        reportIdMain = 0;
 
         // Clear all the list models
         xAxisListModel.clear();
@@ -921,7 +949,6 @@ Page {
     // generate Report Id
     function generateReportId(){
         return ReportParamsModel.generateNewReportId();
-        // return new Date().getTime();
     }
 
     // Slot Function
@@ -1072,13 +1099,13 @@ Page {
         webEngineView.url = chartname;
     }
 
-    function addReport(){
+    function addReport(titleName){
 
         // Add report to dashboard
-        if(!reportIdMain){
+//        if(!reportIdMain){
             reportIdMain = generateReportId();
             ReportParamsModel.setReportId(reportIdMain);
-        }
+//        }
         
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
@@ -1094,13 +1121,14 @@ Page {
         // Check if report name exists or not
         // If name is not given add the name as Report "NUMBER"
         // Else is  not required (Case to set the value, because it is getting saved on key presses)
-        var reportList = ReportParamsModel.getReportsList();
-        if(!report_title_text.text || report_title_text.text == ""){
-            var numberOfReports = Object.keys(reportList).length;
-            numberOfReports = !numberOfReports ? 1 : numberOfReports;
+        if(typeof titleName === "undefined" || titleName.length <= 0){
+            var numberOfReports = ReportParamsModel.reportsCount();
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports));
+        } else {
+            ReportParamsModel.setReportTitle(titleName)
         }
 
+        console.log("ANY", chartTitle, JSON.stringify(d3PropertyConfig), report_desiner_page.chartUrl, Constants.xAxisName)
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
@@ -1227,7 +1255,6 @@ Page {
             if(!xAxisDropEligible(itemName)){
                 return;
             }
-
             xAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             xAxisColumns.push(itemName);
 
@@ -1541,8 +1568,8 @@ Page {
     }
 
 
-    function updateReportTitle(){
-        ReportParamsModel.setReportTitle(report_title_text.text);
+    function updateReportTitle(title){
+        reportTitleName = title
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -1619,7 +1646,6 @@ Page {
                 font.pixelSize: 14
                 verticalAlignment:TextEdit.AlignVCenter
                 Keys.onReturnPressed: report_title_text.focus = false
-                onTextChanged: updateReportTitle()
                 background: Rectangle{
                     color: "transparent"
                     border.color: "transparent"
@@ -2418,7 +2444,7 @@ Page {
                     height: parent.height
                     anchors.right: parent.right
                     width: parent.width/2-0.5
-                    onClicked: addReport()
+                    onClicked: addReport(report_title_text.text)
                     background: Rectangle {
                         color: Constants.grafieksLightGreenColor
                         opacity: parent.hovered ? 0.42 : 1
@@ -2432,7 +2458,7 @@ Page {
                     }
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: addReport()
+                        onClicked: addReport(report_title_text.text)
                     }
                 }
             }

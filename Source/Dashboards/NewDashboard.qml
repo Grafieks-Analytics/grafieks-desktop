@@ -208,6 +208,7 @@ Page {
 
     function createNewReport(){
         ReportParamsModel.setReportId(null);
+        ReportParamsModel.clearReportsScreen();
         // Setting Edit toggle to false
         // Signal event is added
         // If Edit Report is false =>  We clear the chart value
