@@ -43,8 +43,6 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
 
 QStringList TableColumnsModel::fetchColumnData(QString colName)
 {
-
-
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
     duckdb::DuckDB db(extractPath.toStdString());
@@ -57,6 +55,7 @@ QStringList TableColumnsModel::fetchColumnData(QString colName)
     auto dataList = con.Query(query.toStdString());
 
     int totalRows = dataList->collection.Count();
+    this->columnDataList.clear();
     for(int i = 0; i < totalRows; i++){
         this->columnDataList.append(dataList->GetValue(0, i).ToString().c_str());
     }
@@ -65,7 +64,25 @@ QStringList TableColumnsModel::fetchColumnData(QString colName)
 
 QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnName)
 {
-    return this->columnDataList.filter(keyword, Qt::CaseInsensitive);
+    QString extractPath = Statics::extractPath;
+    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+    QString query = "SELECT DISTINCT " + columnName + " FROM " + fileName + " WHERE " + columnName + " LIKE '%" + keyword + "%'";
+    auto dataList = con.Query(query.toStdString());
+    if(!dataList->success)
+        qDebug() << Q_FUNC_INFO << dataList->error.c_str();
+
+    int totalRows = dataList->collection.Count();
+    this->columnDataList.clear();
+    for(int i = 0; i < totalRows; i++){
+        this->columnDataList.append(dataList->GetValue(0, i).ToString().c_str());
+    }
+    return this->columnDataList;
 }
 
 void TableColumnsModel::searchColumnNames(int dashboardId, QString keyword)
@@ -158,7 +175,6 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 
 void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList> > columnValueMap, int dashboardId)
 {
-//    qDebug() << "FILTER SIGNAL RECEIVED" << showColumns << columnFilterType << columnIncludeExcludeMap << columnValueMap;
 
     QStringList equalRelationsList;
     QStringList betweenRelationList;
@@ -257,8 +273,8 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
     // Chop trailing ' AND '
     whereConditions.chop(5);
-    qDebug() << "Dashboard where conditions "<< whereConditions;
-    emit dashboardDataChanged(whereConditions, dashboardId);
+    qDebug() << "Dashboard where conditions " << whereConditions;
+    emit dashboardWhereConditions(whereConditions, dashboardId);
 }
 
 void TableColumnsModel::receiveReportData(QMap<int, QMap<int, QStringList> > newChartData, int currentReportId)

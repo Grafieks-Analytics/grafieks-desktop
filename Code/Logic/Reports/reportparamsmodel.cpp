@@ -66,15 +66,15 @@ QString ReportParamsModel::chartType() const
 }
 
 void ReportParamsModel::addDashboardReportInstance(QVariant newDroppedReportInstance, int reportId){
-    this->dashboardReportInstances.insert(reportId,newDroppedReportInstance);
+    this->dashboardReportInstances.insert(QString::number(reportId), newDroppedReportInstance);
 }
 
 
 QVariant ReportParamsModel::getDashboardReportInstance(int reportId){
-    return this->dashboardReportInstances.value(reportId);
+    return this->dashboardReportInstances.value(QString::number(reportId));
 }
 
-QMap<int, QVariant> ReportParamsModel::getAllDashboardReportInstances()
+QVariantMap ReportParamsModel::getAllDashboardReportInstances()
 {
     return this->dashboardReportInstances;
 }
@@ -111,6 +111,7 @@ QString ReportParamsModel::reportTitle() const
 void ReportParamsModel::addReport(int reportId)
 {
     QVariantMap tmp;
+    tmp.insert("reportId", reportId);
     tmp.insert("reportTitle",this->reportTitle());
     tmp.insert("d3PropertiesConfig",this->d3PropertiesConfig());
     tmp.insert("xAxisColumns", this->xAxisColumns() );
@@ -162,7 +163,7 @@ void ReportParamsModel::deleteReport(int reportId, bool allReports)
         // Customize Report parameters
         this->reportsMap.remove(reportId);
         this->reportsData.remove(reportId);
-        this->dashboardReportInstances.remove(reportId);
+        this->dashboardReportInstances.remove(QString::number(reportId));
 
         // Filter specific variables
         this->masterReportFilters.remove(reportId);
