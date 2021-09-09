@@ -88,6 +88,7 @@ Item{
             allReportsModel.clear();
             const reportListData = ReportParamsModel.getReportsList();
             for(let reportId in reportListData){
+                console.log("Reports Id", reportId)
                 allReportsModel.append({ reportName: reportListData[reportId], reportId: reportId })
             }
         }

@@ -16,6 +16,10 @@ class ChartsModel : public QObject
     QMap<int, QString> reportWhereConditions;
     QMap<int, QString> dashboardWhereConditions;
 
+    int currentReportId;
+    int currentDashboardId;
+    int currentChartSource;
+
     QThread chartsThreadThread;
     QThread threadBarChartValues;
     QThread threadStackedBarChartValues;
@@ -79,58 +83,58 @@ private:
 
 
 public slots:
-    void slotBarChartValues(QString output);
-    void slotStackedBarChartValues(QString output);
-    void slotGroupedBarChartValues(QString output);
-    void slotNewGroupedBarChartValues(QString output);
-    void slotAreaChartValues(QString output);
-    void slotLineChartValues(QString output);
-    void slotLineBarChartValues(QString output);
-    void slotPieChartValues(QString output);
-    void slotFunnelChartValues(QString output);
-    void slotRadarChartValues(QString output);
-    void slotScatterChartValues(QString output);
-    void slotHeatMapChartValues(QString output);
-    void slotSunburstChartValues(QString output);
-    void slotWaterfallChartValues(QString output);
-    void slotGaugeChartValues(float output);
-    void slotSankeyChartValues(QString output);
-    void slotTreeChartValues(QString output);
-    void slotTreeMapChartValues(QString output);
-    void slotKPIChartValues(float output);
-    void slotTableChartValues(QString output);
-    void slotPivotChartValues(QString output);
-    void slotStackedAreaChartValues(QString output);
-    void slotMultiLineChartValues(QString output);
+    void slotBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotStackedBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotGroupedBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotNewGroupedBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotAreaChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotLineChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotLineBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotPieChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotFunnelChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotRadarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotScatterChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotHeatMapChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotSunburstChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotWaterfallChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotGaugeChartValues(float output, int reportId, int dashboardId, int chartSource);
+    void slotSankeyChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotTreeChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotTreeMapChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotKPIChartValues(float output, int reportId, int dashboardId, int chartSource);
+    void slotTableChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotPivotChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotStackedAreaChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotMultiLineChartValues(QString output, int reportId, int dashboardId, int chartSource);
 
     void receiveReportConditions(QString whereConditions, int currentReportId);
     void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
 
 signals:
 
-    void signalBarChartValues(QString output);
-    void signalStackedBarChartValues(QString output);
-    void signalGroupedBarChartValues(QString output);
-    void signalNewGroupedBarChartValues(QString output);
-    void signalAreaChartValues(QString output);
-    void signalLineChartValues(QString output);
-    void signalLineBarChartValues(QString output);
-    void signalPieChartValues(QString output);
-    void signalFunnelChartValues(QString output);
-    void signalRadarChartValues(QString output);
-    void signalScatterChartValues(QString output);
-    void signalHeatMapChartValues(QString output);
-    void signalSunburstChartValues(QString output);
-    void signalWaterfallChartValues(QString output);
-    void signalGaugeChartValues(float output);
-    void signalSankeyChartValues(QString output);
-    void signalTreeChartValues(QString output);
-    void signalTreeMapChartValues(QString output);
-    void signalKPIChartValues(float output);
-    void signalTableChartValues(QString output);
-    void signalPivotChartValues(QString output);
-    void signalStackedAreaChartValues(QString output);
-    void signalMultiLineChartValues(QString output);
+    void signalBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalStackedBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalGroupedBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalNewGroupedBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalAreaChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalLineChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalLineBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalPieChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalFunnelChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalRadarChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalScatterChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalHeatMapChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalSunburstChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalWaterfallChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalGaugeChartValues(float output, int reportId, int dashboardId, int chartSource);
+    void signalSankeyChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalTreeChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalTreeMapChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalKPIChartValues(float output, int reportId, int dashboardId, int chartSource);
+    void signalTableChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalPivotChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalStackedAreaChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void signalMultiLineChartValues(QString output, int reportId, int dashboardId, int chartSource);
 
 
 };

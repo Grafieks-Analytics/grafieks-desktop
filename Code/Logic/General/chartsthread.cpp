@@ -18,11 +18,13 @@ ChartsThread::~ChartsThread()
 {
 }
 
-void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource)
+void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId)
 {
     this->reportWhereConditions = reportWhereConditions;
     this->dashboardWhereConditions = dashboardWhereConditions;
     this->currentChartSource = chartSource;
+    this->currentDashboardId = dashboardId;
+    this->currentReportId = reportId;
 
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
@@ -175,7 +177,7 @@ void ChartsThread::getBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson();
-    emit signalBarChartValues(strData);
+    emit signalBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getStackedBarChartValues()
@@ -279,7 +281,7 @@ void ChartsThread::getGroupedBarChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalGroupedBarChartValues(strData);
+    emit signalGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getNewGroupedBarChartValues()
@@ -376,7 +378,7 @@ void ChartsThread::getNewGroupedBarChartValues()
     QString strData = doc.toJson();
     qDebug() << doc;
 
-    emit signalNewGroupedBarChartValues(strData);
+    emit signalNewGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getAreaChartValues()
@@ -460,7 +462,7 @@ void ChartsThread::getLineBarChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalLineBarChartValues(strData);
+    emit signalLineBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getPieChartValues()
@@ -518,7 +520,7 @@ void ChartsThread::getPieChartValues()
     doc.setArray(data);
     QString strData = doc.toJson();
 
-    emit signalPieChartValues(strData);
+    emit signalPieChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getFunnelChartValues()
@@ -588,7 +590,7 @@ void ChartsThread::getFunnelChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalFunnelChartValues(strData);
+    emit signalFunnelChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getRadarChartValues()
@@ -660,7 +662,7 @@ void ChartsThread::getRadarChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalRadarChartValues(strData);
+    emit signalRadarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getScatterChartValues()
@@ -757,7 +759,7 @@ void ChartsThread::getScatterChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalScatterChartValues(strData);
+    emit signalScatterChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getHeatMapChartValues()
@@ -856,7 +858,7 @@ void ChartsThread::getHeatMapChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalHeatMapChartValues(strData);
+    emit signalHeatMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSunburstChartValues()
@@ -900,7 +902,7 @@ void ChartsThread::getGaugeChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalGaugeChartValues(output);
+    emit signalGaugeChartValues(output, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSankeyChartValues()
@@ -996,7 +998,7 @@ void ChartsThread::getSankeyChartValues()
     QJsonDocument doc(output);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
-    emit signalSankeyChartValues(strJson);
+    emit signalSankeyChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 
 }
 
@@ -1040,7 +1042,7 @@ void ChartsThread::getKPIChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalKPIChartValues(output);
+    emit signalKPIChartValues(output, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getTableChartValues()
@@ -1164,7 +1166,7 @@ void ChartsThread::getMultiLineChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalMultiLineChartValues(strData);
+    emit signalMultiLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QString identifier)
@@ -1233,13 +1235,13 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QString strData = doc.toJson();
 
     if(identifier == "getAreaChartValues"){
-        emit signalAreaChartValues(strData);
+        emit signalAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getLineChartValues"){
-        emit signalLineChartValues(strData);
+        emit signalLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getWaterfallChartValues"){
-        emit signalWaterfallChartValues(strData);
+        emit signalWaterfallChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalLineAreaWaterfallValues(strData);
+        emit signalLineAreaWaterfallValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 
 
@@ -1404,13 +1406,13 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     QJsonDocument doc(obj);
 
     if(identifier == "getSunburstChartValues"){
-        emit signalSunburstChartValues(s);
+        emit signalSunburstChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeChartValues"){
-        emit signalTreeChartValues(s);
+        emit signalTreeChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeMapChartValues"){
-        emit signalTreeMapChartValues(s);
+        emit signalTreeMapChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalTreeSunburstValues(s);
+        emit signalTreeSunburstValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 }
 
@@ -1519,11 +1521,11 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     qDebug() << doc;
 
     if(identifier == "getStackedBarChartValues"){
-        emit signalStackedBarChartValues(strData);
+        emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getStackedAreaChartValues") {
-        emit signalStackedAreaChartValues(strData);
+        emit signalStackedAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else{
-        emit signalStackedBarAreaValues(strData);
+        emit signalStackedBarAreaValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 
 }
@@ -1681,11 +1683,11 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QString strData = doc.toJson();
 
     if(identifier == "getTableChartValues"){
-        emit signalTableChartValues(strData);
+        emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getPivotChartValues"){
-        emit signalPivotChartValues(strData);
+        emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalTablePivotValues(strData);
+        emit signalTablePivotValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 
 }

@@ -1101,5 +1101,4 @@ void DashboardParamsModel::setDashboardReportMap(int reportId){
     QVector<int> dashboardReportMapList = dashboardReportMap.value(this->currentDashboard());
     dashboardReportMapList.append(reportId);
     this->dashboardReportMap.insert(this->currentDashboard(),dashboardReportMapList);
-    qDebug() << "Dashboard Report Model" << reportId << this->dashboardReportMap;
 }

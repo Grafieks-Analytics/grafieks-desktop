@@ -127,75 +127,97 @@ Item{
      Connections{
         target: ChartsModel
 
-        function onSignalBarChartValues(output){
+        function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === DashboardParamsModel.currentDashboard)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalStackedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === DashboardParamsModel.currentDashboard)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalGroupedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalNewGroupedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalAreaChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalLineChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalLineBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
+        }
+        function onSignalPieChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
             drawChartAfterReceivingSignal(output);
         }
-
-        function onSignalStackedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalFunnelChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalGroupedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalRadarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalNewGroupedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalScatterChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalAreaChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalHeatMapChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalLineChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalSunburstChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalLineBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalWaterfallChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalPieChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalGaugeChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalFunnelChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalSankeyChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalRadarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTreeChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalScatterChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTreeMapChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalHeatMapChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalKPIChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalSunburstChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTableChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalWaterfallChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalPivotChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalGaugeChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalStackedAreaChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
-        function onSignalSankeyChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalTreeChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalTreeMapChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalKPIChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalTableChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalPivotChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalStackedAreaChartValues(output){
-            drawChartAfterReceivingSignal(output);
-        }
-        function onSignalMultiLineChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalMultiLineChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
+                drawChartAfterReceivingSignal(output);
         }
     }
     // Connections Ends
@@ -495,6 +517,7 @@ Item{
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(reportId);
         reportName.text = reportProperties.reportTitle;
+        console.log("Chart title", reportProperties, reportProperties.reportTitle)
         drawChart(reportProperties);
     }
 
@@ -534,6 +557,7 @@ Item{
 
     function drawChart(reportProperties){
 
+        console.log("COLPP", JSON.stringify(reportProperties))
         // Check if chart is still loading or not.
         if(webEngineView.loading){
             console.log('Chart is still loading... Please wait')
@@ -563,7 +587,7 @@ Item{
 
         console.log("Okay, Now it's time to draw the chart")
 
-        console.log('Draw Chart X Column names',xAxisColumns);
+        console.log('Draw Chart X Column names',JSON.stringify(xAxisColumns));
         console.log('Draw Chart Y Column names',yAxisColumns);
         console.log('Chart Title', chartTitle);
         console.log('Chart Url', chartUrl);
