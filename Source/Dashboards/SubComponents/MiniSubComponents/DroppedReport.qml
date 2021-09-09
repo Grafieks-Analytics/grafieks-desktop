@@ -617,7 +617,7 @@ Item{
                     d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
                 }else{
                     delete d3PropertyConfig['options'];
-                    colorListModel.clear();
+                    // colorListModel.clear();
                     colorByData = [];
                 }
                 ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
@@ -628,7 +628,7 @@ Item{
                     d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
                 }else{
                     delete d3PropertyConfig['options'];
-                    colorListModel.clear();
+                    // colorListModel.clear();
                     colorByData = [];
 
                     ReportParamsModel.setItemType(null);
@@ -758,7 +758,7 @@ Item{
            return;
         }
 
-        webEngineView.runJavaScript('clearChart()');
+        webEngineView.runJavaScript('window.clearChart && clearChart()');
     }
 
     // Convert the graph to Standard
