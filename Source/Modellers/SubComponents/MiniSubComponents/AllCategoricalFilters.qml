@@ -58,9 +58,16 @@ Rectangle{
     // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
 
+        var filterId = FilterCategoricalListModel.getFilterCategoricalListId(filterIndex)
+        DSParamsModel.removeJoinRelation(filterId)
+        DSParamsModel.removeJoinValue(filterId)
+        DSParamsModel.removeJoinRelationSlug(filterId)
+        DSParamsModel.removeExcludeMap(filterId)
+        DSParamsModel.removeIncludeNullMap(filterId)
+        DSParamsModel.removeSelectAllMap(filterId)
+        DSParamsModel.removeTmpSelectedValues(filterId)
+
         FilterCategoricalListModel.deleteFilter(filterIndex)
-        DSParamsModel.removeJoinRelation(filterIndex)
-        DSParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from categorical list clicked
@@ -87,8 +94,10 @@ Rectangle{
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            CSVJsonDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        }  else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            ExcelDataModel.columnData(columnName, tableName, JSON.stringify(options))
         } else{
             ForwardOnlyDataModel.columnData(columnName, tableName, JSON.stringify(options))
         }

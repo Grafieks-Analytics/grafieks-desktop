@@ -276,7 +276,7 @@ Rectangle{
             elementWidth:30
             activeChart: false
             title:"Gauge Chart"
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: ""
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{

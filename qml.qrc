@@ -285,5 +285,6 @@
         <file>Source/Charts/Data/semantic.min.css</file>
         <file>Source/Charts/Data/semantic.min.js</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
+        <file>Source/Modellers/SubComponents/SaveExtract.qml</file>
     </qresource>
 </RCC>

@@ -1,0 +1,46 @@
+#include "extractprocessor.h"
+
+ExtractProcessor::ExtractProcessor(GeneralParamsModel *gpm, QObject *parent) : QObject(parent),
+    receivedArgument(false)
+{
+    this->generalParamsModel = gpm;
+}
+
+void ExtractProcessor::setArgumentsFromMenu(QString filePath)
+{
+    this->filePath = filePath;
+    this->processExtract();
+}
+
+void ExtractProcessor::setArgumentsByFile(QString filePath)
+{
+    this->filePath = filePath;
+    this->receivedArgument = true;
+}
+
+bool ExtractProcessor::receivedArgumentStatus()
+{
+    return this->receivedArgument;
+}
+
+
+void ExtractProcessor::processExtract()
+{
+    duckdb::DuckDB db(this->filePath.toStdString());
+    duckdb::Connection con(db);
+
+    QString queryString = "SELECT * from " + Constants::masterExtractTable;
+    auto masterDb = con.Query(queryString.toStdString());
+    QString tableName = masterDb->GetValue(0,0).ToString().c_str();
+
+    Statics::currentDbName = tableName;
+    Statics::modeProcessReader = true;
+
+    // For values refer to Constants.qml
+    this->generalParamsModel->setExtractPath(this->filePath);
+    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
+    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
+
+    emit generateReports(&con);
+    emit extractReaderProcessed();
+}

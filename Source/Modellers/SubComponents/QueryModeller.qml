@@ -66,8 +66,10 @@ Item{
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            CSVJsonQueryModel.setQuery(DSParamsModel.tmpSql)
+        }  else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
         } else{
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
         }

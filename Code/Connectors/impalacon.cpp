@@ -35,7 +35,7 @@ QVariantMap ImpalaCon::ImpalaOdbcInstance(const QString &driver, const QString &
             // If correct credentials inserted once
 
             Statics::impalaHost = host;
-            Statics::impalaDb = db;
+            Statics::impalaDb = dbString;
             Statics::impalaPort = port;
             Statics::impalaUsername = username;
             Statics::impalaPassword = password;
