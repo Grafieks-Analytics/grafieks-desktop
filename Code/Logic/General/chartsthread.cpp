@@ -850,8 +850,17 @@ void ChartsThread::getHeatMapChartValues()
     columns.append(QJsonArray::fromStringList(xAxisDataPointerPre));
     columns.append(QJsonArray::fromStringList(splitDataPointerPre));
 
+    QStringList inputKeys;
+    inputKeys.append(xAxisColumn);
+    inputKeys.append(yAxisColumn);
+    inputKeys.append(xSplitKey);
+
+    QJsonArray input = QJsonArray::fromStringList(inputKeys);
+
+
     data.append(colData);
     data.append(columns);
+    data.append(input);
 
     QJsonDocument doc;
     doc.setArray(data);
@@ -1329,6 +1338,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
                     tmpOutput["name"] = paramName.toStdString();
                     tmpOutput["size"] = measure;
                     tmpOutput["children"] = emptyJsonArray;
+                    tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
 
                     // Check if first element of json is already there
                     // If not, then add it according to the graph data
