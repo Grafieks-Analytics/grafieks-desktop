@@ -73,6 +73,16 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     }
 }
 
+void QueryModel::saveExtractData()
+{
+    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql);
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
+
+    saveExtractQueryWorker->start();
+
+}
+
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     this->removeTmpChartData();
@@ -191,6 +201,48 @@ void QueryModel::slotSetChartData(bool success)
 {
     if(success){
         emit chartDataChanged(setChartDataWorker->getSqlChartData());
+    }
+}
+
+void QueryModel::extractSaved()
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    FreeTierExtractsManager freeTierExtractsManager;
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
+}
+
+void QueryModel::extractSizeLimit()
+{
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath)){
+            qDebug() << Q_FUNC_INFO << file.errorString();
+        }
+        Statics::freeLimitExtractSizeExceeded = true;
+        emit extractFileExceededLimit(true);
+    } else {
+        emit extractFileExceededLimit(false);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 

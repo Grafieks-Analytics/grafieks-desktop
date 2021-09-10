@@ -32,7 +32,7 @@ QVariantMap AccessCon::AccessOdbcInstance(const QString &driver, const QString &
             // For automatic connection for other instances
             // If correct credentials inserted once
 
-            Statics::acDb = QUrl(db).toLocalFile();
+            Statics::acDb = dbString;
             Statics::acUsername = username;
             Statics::acPassword = password;
 

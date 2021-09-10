@@ -37,7 +37,7 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
             // If correct credentials inserted once
 
             Statics::snowflakeHost = host;
-            Statics::snowflakeDb = db;
+            Statics::snowflakeDb = dbString;
             Statics::snowflakePort = port;
             Statics::snowflakeUsername = username;
             Statics::snowflakePassword = password;

@@ -5,11 +5,6 @@ NewTableColumnsModel::NewTableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
-NewTableColumnsModel::NewTableColumnsModel(DuckCon *duckCon, QObject *parent)
-{
-    Q_UNUSED(parent);
-    this->duckCon = duckCon;
-}
 
 /*!
  * \brief Accepts a tableName and displays all the columns
@@ -261,17 +256,19 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
     }
 
 
-    case Constants::excelIntType:
-    case Constants::csvIntType:
-    case Constants::jsonIntType:{
+    case Constants::excelIntType:{
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
+        QString dbQueryString = "SELECT TOP 1 * FROM ["+tableName+"$]";
 
-        auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-        if(data->error.empty()){
-            int rows = data->collection.Count();
+        QSqlQuery query(dbQueryString, dbExcel);
+        QSqlRecord record = query.record();
 
-            for(int i = 0; i < rows; i++){
-                fieldName =  data->GetValue(1, i).ToString().c_str();
-                fieldType =  data->GetValue(2, i).ToString().c_str();
+        if(!record.isEmpty()){
+
+            for(int i=0; i < record.count(); i++){
+
+                fieldName = record.fieldName(i);
+                fieldType = record.field(i).value().typeName();
 
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldType);
@@ -279,11 +276,34 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
 
                 // Append all data type to allList as well
                 allColumns.append(outputDataList);
+
                 outputDataList.clear();
             }
-        }  else{
-            qWarning() << Q_FUNC_INFO << data->error.c_str();
         }
+        break;
+    }
+    case Constants::csvIntType:
+    case Constants::jsonIntType:{
+
+        QFile file(Statics::csvJsonPath);
+
+        if(!file.open(QFile::ReadOnly | QFile::Text)) {
+            qDebug() << "Cannot open file" << file.errorString();
+        } else {
+            int lineCounter = 0;
+            while(lineCounter < 2){
+                const QByteArray line = file.readLine().simplified();
+
+                if(lineCounter == 0){
+                    setHeaders(line, Statics::separator);
+                } else {
+                    allColumns = detectHeaderTypes(line, Statics::separator);
+                }
+                lineCounter++;
+            }
+        }
+
+        file.close();
 
         break;
     }
@@ -299,4 +319,40 @@ void NewTableColumnsModel::clearColumns()
     QString tableName = "";
     QString moduleName = "";
     emit columnListObtained(allColumns, tableName, moduleName);
+}
+
+void NewTableColumnsModel::setHeaders(const QByteArray line, QString delimiter)
+{
+    this->csvHeaderDataFinal = line.split(*delimiter.toStdString().c_str());
+    this->csvHeaderLength = this->csvHeaderDataFinal.length();
+
+    if (this->csvHeaderDataFinal.at(0).contains("\xEF\xBB\xBF")){
+        this->csvHeaderDataFinal[0] =  this->csvHeaderDataFinal.at(0).right(this->csvHeaderDataFinal.at(0).length() - 3);
+    }
+
+}
+
+QList<QStringList> NewTableColumnsModel::detectHeaderTypes(const QByteArray line, QString delimiter)
+{
+    QList<QByteArray> lineData = line.split(*delimiter.toStdString().c_str());
+
+    QStringList output;
+    QString fieldName;
+    QString fieldType;
+    QStringList outputDataList;
+    QList<QStringList> allColumns;
+
+    for(int i = 0; i < this->csvHeaderLength; i++){
+
+        fieldName = this->csvHeaderDataFinal.at(i);
+        fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
+
+        outputDataList << fieldName << fieldType;
+
+        // Append all data type to allList as well
+        allColumns.append(outputDataList);
+        outputDataList.clear();
+    }
+
+    return allColumns;
 }

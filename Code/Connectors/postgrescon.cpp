@@ -49,7 +49,7 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
             // If correct credentials inserted once
 
             Statics::postgresHost = host;
-            Statics::postgresDb = db;
+            Statics::postgresDb = dbString;
             Statics::postgresPort = port;
             Statics::postgresUsername = username;
             Statics::postgresPassword = password;

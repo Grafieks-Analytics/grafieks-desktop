@@ -12,10 +12,10 @@ QVariantMap CSVCon::CSVInstance(const QString &filepath)
 
     if (!file.open(QIODevice::ReadOnly)) {
 
-            outputStatus.insert("status", false);
-            outputStatus.insert("msg", file.errorString());
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", file.errorString());
 
-            file.close();
+        file.close();
     }
     else{
 

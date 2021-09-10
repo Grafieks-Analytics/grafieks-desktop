@@ -43,9 +43,12 @@ public:
     ~ExcelCon();
 
 public slots:
+    //! Deprecated. Will be removed in future version
+    //! Convert Excel sheets to csv and save as separate files with existing sheet names.
     void convertExcelToCsv();
 
 signals:
+    //! Deprecated. This signal and functionalites will be removed in the future
     void convertedExcelPaths(QStringList paths);
 
 };

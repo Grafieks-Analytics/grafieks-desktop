@@ -24,5 +24,8 @@ namespace Messages
     const int FILE_FORMAT_ERROR = 403;
     const int FILE_TOO_OLD = 406;
 
+    // Free user limit messages
+
+
 }
 #endif // MESSAGES_H

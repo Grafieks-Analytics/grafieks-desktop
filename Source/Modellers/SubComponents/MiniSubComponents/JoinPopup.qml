@@ -75,42 +75,6 @@ Rectangle{
 
     }
 
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                availableJoins = 4
-
-                leftJoinCol.visible = true
-                rightJoinCol.visible = true
-                innerJoinCol.visible = true
-                fullJoinCol.visible = true
-            }
-        }
-
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                availableJoins = 4
-
-                leftJoinCol.visible = true
-                rightJoinCol.visible = true
-                innerJoinCol.visible = true
-                fullJoinCol.visible = true
-            }
-        }
-
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                availableJoins = 4
-
-                leftJoinCol.visible = true
-                rightJoinCol.visible = true
-                innerJoinCol.visible = true
-                fullJoinCol.visible = true
-            }
-        }
-    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -198,7 +162,27 @@ Rectangle{
             }
         }
 
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                availableJoins = 4
 
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
     }
 
 

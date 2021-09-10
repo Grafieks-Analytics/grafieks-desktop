@@ -34,6 +34,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     int tmpRowCount = 0;
     int maxRowCount = 0;
 
+    emit clearTablePreview();
     QString connectionName = this->returnConnectionName();
 
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
@@ -83,6 +84,15 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     }
 
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+}
+
+void ForwardOnlyQueryModel::saveExtractData()
+{
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
+
+    saveForwardOnlyWorker->start();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
@@ -138,6 +148,15 @@ void ForwardOnlyQueryModel::removeTmpChartData()
     emit forwardOnlyHasData(false);
 }
 
+void ForwardOnlyQueryModel::extractSaved()
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    FreeTierExtractsManager freeTierExtractsManager;
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
+}
+
 void ForwardOnlyQueryModel::generateRoleNames()
 {
 
@@ -158,7 +177,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
 void ForwardOnlyQueryModel::setQueryResult()
 {
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
@@ -215,6 +233,39 @@ void ForwardOnlyQueryModel::slotSetChartData(bool success)
         this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
 
         emit chartDataChanged(this->forwardOnlyChartData);
+    }
+}
+
+void ForwardOnlyQueryModel::extractSizeLimit()
+{
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath)){
+            qDebug() << Q_FUNC_INFO << file.errorString();
+        }
+        Statics::freeLimitExtractSizeExceeded = true;
+        emit extractFileExceededLimit(true);
+    } else {
+        emit extractFileExceededLimit(false);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 

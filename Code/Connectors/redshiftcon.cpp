@@ -39,7 +39,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
             // If correct credentials inserted once
 
             Statics::redshiftHost = host;
-            Statics::redshiftDb = db;
+            Statics::redshiftDb = dbString;
             Statics::redshiftPort = port;
             Statics::redshiftUsername = username;
             Statics::redshiftPassword = password;

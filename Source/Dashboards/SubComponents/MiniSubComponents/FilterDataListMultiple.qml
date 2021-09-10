@@ -26,6 +26,7 @@ Item {
         modelContent.unshift("Select All")
 
         var i = 0;
+        listModel.clear()
         modelContent.forEach(item => {
                                  listModel.append({"name": item, "checked": true, "index": i})
                                  i++
@@ -49,8 +50,8 @@ Item {
 
     function onMultiSelectCheckboxSelected(modelData,checked, index){
 
+        console.log("MODAL ", modelData, checked, index)
         if(checked === true){
-
             // Start pushing the individual checked item in the array
             DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
 
@@ -75,10 +76,17 @@ Item {
     }
 
     function searchData(searchText){
-        console.log(searchText, componentName)
         modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
         modelContent.unshift("Select All")
-        dataListView.model = modelContent
+        console.log(modelContent)
+
+        listModel.clear()
+        var i = 0;
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
+
     }
 
     function filterClicked(){

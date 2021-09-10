@@ -192,8 +192,6 @@ Popup {
         // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
         ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId)
 
-
-
     }
 
     function manageFilters(mode, counter = 0, filterId = 0){

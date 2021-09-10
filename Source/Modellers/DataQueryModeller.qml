@@ -12,8 +12,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
-//import Qt.labs.platform 1.1
-
 
 import com.grafieks.singleton.constants 1.0
 
@@ -39,6 +37,9 @@ Page {
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
+    property var flatFiles: [Constants.excelType, Constants.csvType, Constants.jsonType]
+
+    property int timeElapsed : 0
 
 
     // Dont delete this
@@ -49,30 +50,6 @@ Page {
     /***********************************************************************************************************************/
     // Connection Starts
 
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -84,6 +61,7 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onPostgresLoginStatus(status){
@@ -96,6 +74,7 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onAccessLoginStatus(status){
@@ -109,30 +88,35 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onMongoLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
 
@@ -140,12 +124,30 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
+                queryModellerTab.visible = true
             }
         }
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = DuckDataModel.getTableList()
+                tableslist.model = ExcelDataModel.getTableList()
+                queryModellerTab.visible = false
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = CSVJsonDataModel.getTableList()
+                queryModellerTab.visible = false
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = CSVJsonDataModel.getTableList()
+                queryModellerTab.visible = false
             }
         }
     }
@@ -171,6 +173,66 @@ Page {
 
         function onRowCountChanged(){
             filterNumber.text = FilterCategoricalListModel.rowCount() + FilterDateListModel.rowCount() + FilterNumericalListModel.rowCount()
+        }
+    }
+
+    Connections{
+        target: QueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
+    }
+
+    Connections{
+        target: ExcelQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+
+        }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
+    }
+
+    Connections{
+        target: CSVJsonQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onExtractFileExceededLimit(freeLimit){
+            saveExtractLimit(freeLimit)
+        }
+    }
+
+
+    Connections{
+        target: GeneralParamsModel
+
+        // Prompt the popup to show the timer and throbber
+        // when extract is saved
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(true)
         }
     }
 
@@ -317,12 +379,11 @@ Page {
 
     function onCreateDashboardClicked(){
 
-        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
-
+        if(DSParamsModel.dsName !== ""){
+            saveFilePrompt.open()
+        } else {
+            datasourceNameWarningModal.open();
+        }
     }
 
 
@@ -342,8 +403,10 @@ Page {
     function searchTable(text){
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             tableslist.model = NewTableListModel.filterTableList(text)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            tableslist.model = DuckDataModel.filterTableList(text)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            tableslist.model = CSVJsonDataModel.filterTableList(text)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType){
+            tableslist.model = ExcelDataModel.filterTableList(text)
         } else{
             tableslist.model = ForwardOnlyDataModel.filterTableList(text)
         }
@@ -428,10 +491,7 @@ Page {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.removeTmpChartData()
             NewTableListModel.clearData()
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckQueryModel.removeTmpChartData()
-            DuckDataModel.clearData()
-        } else{
+        } else {
             ForwardOnlyQueryModel.removeTmpChartData()
             ForwardOnlyDataModel.clearData()
         }
@@ -490,6 +550,36 @@ Page {
         }
     }
 
+
+    function saveExtractPopupFunction(signalType){
+
+        waitTimer.start()
+
+        if(signalType === true){
+            saveExtractPopup.visible = true
+            saveExtractPopup.open()
+        } else {
+            saveExtractPopup.visible = false
+            saveExtractPopup.close()
+        }
+    }
+
+    function saveExtractLimit(freeLimit){
+
+        timeElapsed = 0
+        waitTimer.stop()
+
+        if(freeLimit){
+            freeLimitExtractWarning.open()
+        } else {
+            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+            let currentDashboard = DashboardParamsModel.currentDashboard
+
+        }
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -500,6 +590,8 @@ Page {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+
+
 
     DataFilters{
         id: datafilters
@@ -556,130 +648,17 @@ Page {
                 anchors.verticalCenter: tableImg.verticalCenter
                 visible: tableShowToggle
 
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: menuOptions.open()
+//                MouseArea{
+//                    anchors.fill: parent
+//                    onClicked: menuOptions.open()
 
-                }
+//                }
             }
 
 
 
 
-            Image {
-                id: toggleMenuIcon
-                height: 20
-                width: 20
-                source : "/Images/icons/menu-button.png"
-                anchors.right: parent.right
-                anchors.leftMargin:  15
-                anchors.verticalCenter: tableImg.verticalCenter
-                visible: tableShowToggle
-                z:50
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: menuOptions.open()
-                }
 
-
-            }
-
-
-            Row{
-
-                anchors.right: tableImg.right
-                anchors.top: toggleMenuIcon.bottom
-                anchors.rightMargin: -70
-                width: parent.width-30
-                height: 80
-
-                Item {
-                    id: name
-
-                    anchors.right:parent.right
-
-                    x: -menuOptions.width
-
-                    Menu{
-                        id: menuOptions
-                        background: Rectangle{
-                            implicitWidth: 200
-                            border.color: Constants.darkThemeColor
-                        }
-
-
-                        Menu{
-                            id: menuOptionsdsd
-                            title: qsTr("Convert Data To")
-
-                            background: Rectangle{
-                                implicitWidth: 180
-
-                                border.color: Constants.darkThemeColor
-                            }
-                            MenuItem {
-                                id:menuItem1
-                                implicitHeight: 30
-                                leftPadding: 15
-                                text: qsTr("Categorical")
-
-                            }
-                            MenuSeparator{}
-                            //                            ToolSeparator{
-                            //                                id: toolsep1
-                            //                                orientation: Qt.Horizontal
-                            //                                width: parent.width
-                            //                                anchors.top: menuItem1.bottom
-
-                            //                                contentItem: Rectangle {
-                            //                                    implicitWidth: parent.vertical ? 1 : 24
-                            //                                    implicitHeight: parent.vertical ? 24 : 1
-                            //                                    color: Constants.darkThemeColor
-                            //                                }
-
-                            //                            }
-                            MenuItem {
-                                id:menuItem2
-                                implicitHeight: 30
-                                leftPadding: 15
-                                text: qsTr("Numerical")
-                            }
-                            MenuSeparator{
-                                padding: 0
-                            }
-                            //                            ToolSeparator{
-                            //                                id: toolsep2
-                            //                                orientation: Qt.Horizontal
-                            //                                width: parent.width
-                            //                                anchors.top: menuItem2.bottom
-
-                            //                                contentItem: Rectangle {
-                            //                                    implicitWidth: parent.vertical ? 1 : 24
-                            //                                    implicitHeight: parent.vertical ? 24 : 1
-                            //                                    color: Constants.darkThemeColor
-                            //                                }
-
-                            //                            }
-                            MenuItem {
-                                text: qsTr("Date")
-                                implicitHeight: 30
-                                leftPadding: 15
-
-                            }
-                        }
-
-
-
-
-                        //                MenuItem {
-                        //                    text: qsTr("Delete")
-                        //                    onTriggered: destroyElement()
-                        //                }
-                    }
-                }
-
-
-            }
 
             TableColumns{
                 id: tablecolumnListView
@@ -769,6 +748,13 @@ Page {
     }
 
     MessageDialog{
+        id: datasourceNameWarningModal
+        title: "Warning"
+        text: "Datasource name is mandatory"
+        icon: StandardIcon.Critical
+    }
+
+    MessageDialog{
         id: dataRemovalWarningQueryModel
         title: "Warning"
         text: "Your diagram will be lost. Are you sure you want to proceed?"
@@ -781,6 +767,66 @@ Page {
             dataQueryModellerStackview.push("./SubComponents/QueryModeller.qml")
         }
 
+    }
+
+    MessageDialog{
+        id: freeLimitExtractWarning
+        title: "Warning"
+        text: "Free users cannot create extracts more than 1 GB"
+        icon: StandardIcon.Critical
+
+    }
+
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveExtract{
+        id: saveFilePrompt
+    }
+
+    Timer {
+        id: waitTimer
+        objectName: "Timer"
+        interval: 1000;
+        repeat: true
+        onTriggered: {
+            timeElapsed++
+            saveExtractPopup.timerText = "Time elapsed: " + timeElapsed + " seconds"
+        }
+    }
+
+    // Throbber or loading
+    // While the extract is being saved to a local file
+    Popup{
+        id: saveExtractPopup
+        width: 600
+        height: 400
+        modal: true
+        visible: false
+        x: parent.width/2 - 300
+        y: parent.height/2 - 300
+        closePolicy: Popup.NoAutoClose
+
+        property alias timerText: timeText.text
+
+        BusyIndicatorTpl{
+            id: busyIndicator
+            anchors.centerIn: parent
+        }
+
+        Text{
+            id: waitText
+            text: "Creating extract. Please wait.."
+            anchors.top: busyIndicator.bottom
+            anchors.horizontalCenter: busyIndicator.horizontalCenter
+        }
+
+        Text{
+            id: timeText
+            text: "Time elapsed: 0 seconds"
+            anchors.top: waitText.bottom
+            anchors.horizontalCenter: waitText.horizontalCenter
+        }
     }
 
     ButtonGroup{
@@ -1331,7 +1377,6 @@ Page {
 
                 TextField{
                     id: ds_name
-                    //                    text: "Data Source Name"
                     placeholderText: "Data Source Name"
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
@@ -1429,7 +1474,7 @@ Page {
                         id:searchTextBox
                         placeholderText: "Search"
                         selectByMouse: true
-                        width: parent.width - search_icon.width-8
+                        width: parent.width -8
                         height:30
                         cursorVisible: true
                         anchors.top: row_querymodeller_right_col.top
@@ -1602,6 +1647,7 @@ Page {
     }
 
     // Righthand Panel ends
+
 
     //Page Design Ends
     /***********************************************************************************************************************/
