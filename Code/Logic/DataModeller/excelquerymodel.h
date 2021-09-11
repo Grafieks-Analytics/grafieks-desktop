@@ -17,9 +17,6 @@
 #include "../General/querysplitter.h"
 
 #include "./Workers/saveextractexcelworker.h"
-#include "./filtercategoricallistmodel.h"
-#include "./filterdatelistmodel.h"
-#include "./filternumericallistmodel.h"
 #include "../FreeTier/freetierextractsmanager.h"
 
 class ExcelQueryModel : public QAbstractTableModel
@@ -38,16 +35,6 @@ class ExcelQueryModel : public QAbstractTableModel
     QStringList tableParams;
     QStringList whereParams;
 
-    FilterCategoricalListModel *categoricalFilter;
-    FilterNumericalListModel *numericalFilter;
-    FilterDateListModel *dateFilter;
-    int totalFiltersCount;
-
-    DataType dataType;
-    QStringList hideParams;
-    QStringList columnStringTypes;
-    QVector<int> rejectIds;
-
 public:
     explicit ExcelQueryModel(QObject *parent = nullptr);
 
@@ -62,25 +49,15 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void getQueryStats();
-    Q_INVOKABLE void removeTmpChartData();
-
 public slots:
     void receiveExcelFilterQuery(QString query);
-    void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
-    void slotSetChartData(bool success);
     void extractSaved();
 
 private:
     void generateRoleNames();
-    void setQueryResult();
-    QMap<QString, QString> returnColumnList(QString tableName);
-    void setChartHeader(int index, QStringList colInfo);
     void extractSizeLimit();
 
 signals:
-    void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void excelHeaderDataChanged(QStringList tableHeaders);
     void excelHasData(bool hasData);
     void clearTablePreview();

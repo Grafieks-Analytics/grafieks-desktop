@@ -5,10 +5,6 @@ CSVJsonDataModel::CSVJsonDataModel(QObject *parent) : QAbstractTableModel(parent
     this->totalColCount = 1;
 }
 
-void CSVJsonDataModel::clearData()
-{
-
-}
 
 CSVJsonDataModel::~CSVJsonDataModel()
 {

@@ -5,6 +5,7 @@
 #include <QDebug>
 
 #include "../General/generalparamsmodel.h"
+#include "../DataModeller/dsparamsmodel.h"
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -16,10 +17,12 @@ class ExtractProcessor : public QObject
     QString filePath;
     QString testFilePath;
     bool receivedArgument;
+
     GeneralParamsModel *generalParamsModel;
+    DSParamsModel *dsParamsModel;
 
 public:
-    explicit ExtractProcessor(GeneralParamsModel *gpm = nullptr, QObject *parent = nullptr);
+    explicit ExtractProcessor(GeneralParamsModel *gpm = nullptr, DSParamsModel *dsp = nullptr, QObject *parent = nullptr);
 
     Q_INVOKABLE void setArgumentsFromMenu(QString filePath);
     Q_INVOKABLE void setArgumentsByFile(QString filePath);
