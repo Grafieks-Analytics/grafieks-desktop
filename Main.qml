@@ -229,89 +229,97 @@ ApplicationWindow {
             MenuSeparator{}
 
             MenuItem{
-                id: action_sampledata
-                text: qsTr("SampleData")
-            }
-
-
-        }
-
-        Menu{
-            id: editMenu
-            title: qsTr("&Edit")
-
-
-            MenuItem{
-                id: action_undo
-                text: qsTr("Undo")
-            }
-
-            MenuItem{
-                id: action_redo
-                text: qsTr("Redo")
-            }
-
-            MenuSeparator{}
-
-            MenuItem{
-                id: action_cut
-                text: qsTr("Cut")
-            }
-
-            MenuItem{
-                id: action_copy
-                text: qsTr("Copy")
-            }
-
-            MenuItem{
-                id: action_paste
-                text: qsTr("Paste")
-            }
-
-            MenuItem{
-                id: action_delete
-                text: qsTr("Delete")
-            }
-
-
-        }
-
-        Menu {
-            id: dataMenu
-            title: qsTr("&Data")
-
-
-            MenuItem{
-                id: action_new_ds
-                text: qsTr("Add New Datasource")
-
-                onTriggered: openDatasource()
-            }
-
-            MenuSeparator{}
-
-            MenuItem{
                 id: action_save_ds
                 text: qsTr("Save Datasource")
 
                 onTriggered: saveDatasource()
             }
-            MenuItem{
-                id: action_refresh_ds
-                text: qsTr("Refresh Datasource")
-            }
-
-            MenuSeparator{}
 
             MenuItem{
-                id: action_export_ds_csv
-                text: qsTr("Export Datasource to CSV")
+                id: action_sampledata
+                text: qsTr("SampleData")
+                enabled: false
             }
-            MenuItem{
-                id: action_export_ds_excel
-                text: qsTr("Export Datasource to Excel")
-            }
+
+
         }
+
+//        Menu{
+//            id: editMenu
+//            title: qsTr("&Edit")
+
+
+//            MenuItem{
+//                id: action_undo
+//                text: qsTr("Undo")
+//            }
+
+//            MenuItem{
+//                id: action_redo
+//                text: qsTr("Redo")
+//            }
+
+//            MenuSeparator{}
+
+//            MenuItem{
+//                id: action_cut
+//                text: qsTr("Cut")
+//            }
+
+//            MenuItem{
+//                id: action_copy
+//                text: qsTr("Copy")
+//            }
+
+//            MenuItem{
+//                id: action_paste
+//                text: qsTr("Paste")
+//            }
+
+//            MenuItem{
+//                id: action_delete
+//                text: qsTr("Delete")
+//            }
+
+
+//        }
+
+//        Menu {
+//            id: dataMenu
+//            title: qsTr("&Data")
+
+
+//            MenuItem{
+//                id: action_new_ds
+//                text: qsTr("Add New Datasource")
+
+//                onTriggered: openDatasource()
+//            }
+
+//            MenuSeparator{}
+
+//            MenuItem{
+//                id: action_save_ds
+//                text: qsTr("Save Datasource")
+
+//                onTriggered: saveDatasource()
+//            }
+//            MenuItem{
+//                id: action_refresh_ds
+//                text: qsTr("Refresh Datasource")
+//            }
+
+//            MenuSeparator{}
+
+//            MenuItem{
+//                id: action_export_ds_csv
+//                text: qsTr("Export Datasource to CSV")
+//            }
+//            MenuItem{
+//                id: action_export_ds_excel
+//                text: qsTr("Export Datasource to Excel")
+//            }
+//        }
 
         Menu {
             id: serverMenu
@@ -321,6 +329,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_signin
                 text: Constants.signInText
+                enabled: false
 
                 onTriggered: {
                     if(typeof settings.value("user/sessionToken") !== "undefined"){
@@ -340,6 +349,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_publish_datasource
                 text: qsTr("Publish Datasource")
+                enabled: false
 
                 onTriggered: {
                     Datasources.setSourceType(Constants.liveDS)
@@ -372,10 +382,12 @@ ApplicationWindow {
             MenuSeparator{}
             MenuItem{
                 text: qsTr("Manage License")
+                enabled: false
             }
 
             MenuItem{
                 text: qsTr("Check for updates")
+                enabled: false
 
             }
 
@@ -385,12 +397,12 @@ ApplicationWindow {
                 text: qsTr("About")
             }
 
-            MenuItem{
-                text: qsTr("Test")
-                onTriggered: {
-                    stacklayout_home.currentIndex = 0
-                }
-            }
+//            MenuItem{
+//                text: qsTr("Test")
+//                onTriggered: {
+//                    stacklayout_home.currentIndex = 0
+//                }
+//            }
 
         }
 
