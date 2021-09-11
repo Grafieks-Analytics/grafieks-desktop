@@ -5,10 +5,6 @@ ExcelDataModel::ExcelDataModel(QObject *parent) : QAbstractTableModel(parent)
     this->totalColCount = 1;
 }
 
-void ExcelDataModel::clearData()
-{
-    this->sheetNamesMap.clear();
-}
 
 ExcelDataModel::~ExcelDataModel()
 {
@@ -109,12 +105,6 @@ QStringList ExcelDataModel::filterTableList(QString keyword)
     return output;
 }
 
-QString ExcelDataModel::getQueryJoiner()
-{
-    QString output;
-    output = "\"";
-    return output;
-}
 
 QStringList ExcelDataModel::getTableListQAXObject()
 {

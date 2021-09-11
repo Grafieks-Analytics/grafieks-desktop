@@ -61,8 +61,9 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.cpp \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
     Code/Logic/DataModeller/csvjsondatamodel.cpp \
     Code/Logic/DataModeller/csvjsonquerymodel.cpp \
@@ -182,8 +183,9 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.h \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
     Code/Logic/DataModeller/csvjsondatamodel.h \
     Code/Logic/DataModeller/csvjsonquerymodel.h \

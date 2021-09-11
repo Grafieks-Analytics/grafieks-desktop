@@ -358,18 +358,6 @@ int main(int argc, char *argv[])
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvJsonQueryModel, &CSVJsonQueryModel::receiveCsvJsonFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
-    // Data and headers for reports
-    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
-
-    // Data and Headers for Dashboards
-    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
-
     QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
     QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
