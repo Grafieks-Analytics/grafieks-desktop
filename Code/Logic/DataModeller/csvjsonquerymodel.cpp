@@ -96,6 +96,8 @@ void CSVJsonQueryModel::extractSaved()
 
 void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 {
+    emit clearTablePreview();
+
     QFile file(Statics::csvJsonPath);
     file.open(QFile::ReadOnly | QFile::Text);
 
