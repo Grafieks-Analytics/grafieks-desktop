@@ -69,6 +69,49 @@
             ["sub-category", "sales"],
         ];
 
+        function transformData(dataValues, dateFormat) {
+            var isKey1Date = false;
+
+            if (isDateFormat(Object.keys(dataValues[0])[0])) {
+                isKey1Date = true;
+            }
+
+            if (!isKey1Date) {
+                return dataValues;
+            }
+            var json = {};
+            var uniqueKey = [];
+            Object.keys(dataValues[0]).forEach((d) => {
+                var key = getDateFormattedData(d, dateFormat);
+                if (!uniqueKey.includes(key)) {
+                    uniqueKey.push(key);
+                }
+
+                if (!json[key]) {
+                    json[key] = 0;
+                }
+
+                console.log(dataValues[0][d]);
+                json[key] += dataValues[0][d];
+            });
+
+            var jsonKeys = Object.keys(json).filter((d) => {
+                if (json[d] < 0) {
+                    return false;
+                }
+                return true;
+            });
+
+            var finalJson = {};
+            jsonKeys.forEach((d) => {
+                finalJson[d] = json[d];
+            });
+
+            dataValues[0] = finalJson;
+
+            return dataValues;
+        }
+
         function drawChart(data, plottingConfiguration = {}) {
             let {
                 d3colorPalette,
@@ -77,10 +120,13 @@
                 labelConfig,
                 innerRadius,
                 dataLabelfontSize = defaultD3Config.fontSize,
+                dateFormat = defaultD3Config.dateFormat,
                 dataLabelfontFamily = defaultD3Config.fontFamily,
             } = plottingConfiguration;
             window.dataLabelfontSize = dataLabelfontSize;
             window.dataLabelfontFamily = dataLabelfontFamily;
+
+            var data = transformData(data, dateFormat);
 
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -427,7 +473,7 @@
                     .attr("stroke-width", 1)
                     .attr("points", function (d) {
                         if (!d.showLabel) {
-                            return [0, 0, 0];
+                            return [[0,0], [0,0],[0,0] ];
                         }
                         var posA = outerArc.centroid(d); // line insertion in the slice
                         // posA[1]= outerArc.centroid(d)[1]-20;

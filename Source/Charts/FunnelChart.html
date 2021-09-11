@@ -8,171 +8,220 @@
                 stroke: #fff;
             }
         </style>
+
         <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-        <script src="Data/funnel.js"></script>
+        <script src="./Data/d3-funnel.min.js"></script>
 
-        <link rel="stylesheet" href="Data/general.css" />
-
-        <title>Funnel Chart</title>
+        <style>
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+                min-width: fit-content;
+                max-width: max-content;
+                padding: 8px;
+            }
+        </style>
     </head>
+
     <body>
-        <div
-            id="my_dataviz"
-            style="text-align: center; padding-top: 50px"
-        ></div>
+        <div id="my_dataviz" style="text-align: center; margin-top: 40px"></div>
         <div id="tooltip"></div>
+
         <script>
-            // Color Pallets - Set 3
-            const d3colors = [
-                "#8DD3C9",
-                "#FFFFAA",
-                "#B8BED6",
-                "#F98171",
-                "#78B5D1",
-                "#FFB15B",
-                "#B4E061",
-                "#FDCDE5",
-                "#DAD9D4",
-                "#BD7FBE",
-                "#CDE9C1",
-                "#FFEA77",
-            ];
-
             var data = [
-                { key: "Leads1", value: "70" },
-                { key: "Leads32", value: "175" },
-                { key: "Leads12", value: "105" },
-                { key: "Phone Calls", value: "61" },
-                { key: "Leads23", value: "135" },
-                { key: "Pitches", value: "46" },
-                { key: "Negotiations", value: "29" },
-                { key: "Final Closure", value: "15" },
+                [
+                    {
+                        key: "Bookcases",
+                        value: 8016,
+                    },
+                    {
+                        key: "Chairs",
+                        value: 6906,
+                    },
+                    {
+                        key: "Labels",
+                        value: 192,
+                    },
+                    {
+                        key: "Tables",
+                        value: 10230,
+                    },
+                    {
+                        key: "Storage",
+                        value: 4638,
+                    },
+                    {
+                        key: "Furnishings",
+                        value: 2398,
+                    },
+                    {
+                        key: "Art",
+                        value: 2756,
+                    },
+                    {
+                        key: "Phones",
+                        value: 8372,
+                    },
+                    {
+                        key: "Binders",
+                        value: 2114,
+                    },
+                    {
+                        key: "Appliances",
+                        value: 1060,
+                    },
+                    {
+                        key: "Paper",
+                        value: 1198,
+                    },
+                    {
+                        key: "Envelopes",
+                        value: 1134,
+                    },
+                    {
+                        key: "Accessories",
+                        value: 938,
+                    },
+                    {
+                        key: "Fasteners",
+                        value: 160,
+                    },
+                    {
+                        key: "Supplies",
+                        value: 132,
+                    },
+                ],
+                ["Sub_Category", "Sales"],
             ];
 
-            function drawChart(root, plottingConfiguration = {}) {
-                window.data = root[0];
-                let { d3colorPalette, paddingInner, markerShape, curveType } =
-                    plottingConfiguration;
-                if (!d3colorPalette) {
-                    d3colorPalette = defaultD3Config.d3ColorPalette;
+            function drawChart(data, plottingConfiguration = {}) {
+                try {
+                    window.data = data;
+
+                    var [data, label] = data;
+
+                    data = sortArraysOfObjectByValue(data, "value");
+                    data.forEach((d) => {
+                        d.label = d.label || d.key;
+                    });
+
+                    let {
+                        d3colorPalette = defaultD3Config.d3ColorPalette,
+                        dynamicHeight = defaultD3Config.defaultDynamicHeight,
+                        bottomPinch = defaultD3Config.defaultBottomPinch,
+                        labelConfig = defaultD3Config.defaultlabelConfig,
+                        dataLabelfontSize = defaultD3Config.fontSize,
+                        dataLabelfontFamily = defaultD3Config.fontFamily,
+                    } = plottingConfiguration;
+                    let { labelStatus } = labelConfig;
+                    window.dataLabelfontSize = dataLabelfontSize;
+                    window.dataLabelfontFamily = dataLabelfontFamily;
+
+                    // documentation for options
+                    // https://github.com/jakezatecky/d3-funnel/blob/master/README.md
+
+                    var colorValues =
+                        parseInt(data.length / d3colorPalette.length) + 1;
+
+                    for (var i = 0; i < colorValues; i++) {
+                        d3colorPalette.push(...d3colorPalette);
+                    }
+
+                    const options = {
+                        block: {
+                            dynamicHeight,
+                            minHeight: 15,
+                            fill: {
+                                scale: d3colorPalette,
+                            },
+                        },
+                        chart: {
+                            bottomPinch: Math.min(bottomPinch, data.length),
+                            curve: {
+                                enabled: false,
+                            },
+                            width: window.innerWidth / 2,
+                            height: window.innerHeight - 80,
+                        },
+                        tooltip: {
+                            enabled: false,
+                        },
+                        label: {
+                            enabled: labelStatus,
+                            fill: "black",
+                            fontSize: dataLabelfontSize,
+                            fontFamily: dataLabelfontFamily,
+                        },
+                    };
+
+                    const chart = new D3Funnel("#my_dataviz");
+
+                    chart.draw(data, options);
+                    //  const note = document.querySelector(".d3-funnel-tooltip");
+                    // note.style.backgroundColor = "yellow";
+                    // document.querySelector("d3-funnel-tooltip")
+                    var funnelSvg = document.querySelectorAll("svg g");
+                    funnelSvg.forEach((e) => {
+                        e.addEventListener("mouseout", (event) => {
+                            d3.select("#tooltip")
+                                .style("display", "none");
+                                // .html("");
+                        });
+                        e.addEventListener("mousemove", (event) => {
+                            // console.log(event.target);
+                            // console.log(
+                            //     e.querySelector("text tspan").innerHTML
+                            // );
+                            var value = e.querySelector("text tspan").innerHTML;
+                            var valueTooltip = value.split(":");
+
+                            console.log(event.clientX);
+                            d3.select("#tooltip")
+                                .style("position", "absolute")
+                                .style("left", event.clientX +20+ "px")
+                                .style("top", event.clientY - 30 + "px")
+                                .style("display", "block")
+                                .style("pointer-events", "none")
+                                .style("background-color", "white")
+                                .html(function () {
+                                    return (
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        label[0] +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        valueTooltip[0] +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        label[1] +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        valueTooltip[1] +
+                                        "</span>"
+                                    );
+                                });
+                            d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        });
+                    });
+
+                    // abg.forEach((e) => {
+                    //     e.addEventListener("mouseover", (event) => {
+                    //         console.log(e.querySelector("text"));
+                    //         console.log(event);
+                    //     });
+                    // });
+                } catch (error) {
+                    console.log(error);
                 }
-                d3Colors = d3colorPalette;
-
-                if (!paddingInner) {
-                    paddingInner = defaultD3Config.defaultPaddingInner;
-                }
-
-                console.log();
-                d3.selectAll("#my_dataviz").html("");
-                (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
-                    (width =
-                        window.innerWidth - margin.left - margin.right - 20),
-                    (height =
-                        window.innerHeight - margin.top - margin.bottom - 20);
-
-                var width = 700,
-                    height = 450,
-                    radius = Math.min(width, height) / 2;
-
-                console.log(d3colors);
-                // var color = d3.scale.ordinal().range(d3colors);
-                var color = d3.scaleOrdinal().range(d3Colors);
-
-                var svg = d3
-                    .select("#my_dataviz")
-                    .append("svg")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .append("g");
-                var funnel = d3
-                    .funnel()
-                    .size([width, height])
-                    .mouth([100, 100])
-                    .value(function (d) {
-                        return d.value;
-                    });
-
-                var line = d3
-                    .line()
-                    .x(function (d, i) {
-                        return d.x;
-                    })
-                    .y(function (d, i) {
-                        return d.y;
-                    })
-                    .curve(d3.curveLinear);
-
-                var g = svg
-                    .selectAll(".funnel-group")
-                    .data(funnel(data))
-                    .enter()
-                    .append("g")
-                    .attr("class", "funnel-group");
-
-                g.append("path")
-                    .attr("d", function (d) {
-                        return line(d.coordinates);
-                    })
-                    .style("fill", function (d) {
-                        return color(d.key);
-                    })
-                    .attr("class", function (d, i) {
-                        return "funnel";
-                    })
-                    .on("mousemove", function (d, i) {
-                        var x_pos = d3.mouse(this)[0] + 300;
-                        var y_pos = d3.mouse(this)[1];
-
-                        d3.select("#tooltip")
-                            .style("left", x_pos + "px")
-                            .style("top", y_pos + "px")
-                            .style("display", "block")
-                            .style("z-index", 1000)
-                            .style("postion", "absolute")
-                            .html(
-                                "Sales Process: " +
-                                    d.key +
-                                    "<br/>Value: " +
-                                    d.value
-                            );
-                        d3.selectAll(".funnel").style("opacity", 0.3);
-                        d3.select(this).style("opacity", 1).attr("r", 10);
-                    })
-                    .on("mouseout", function (d, i) {
-                        d3.select("#tooltip").style("display", "none");
-                        d3.selectAll(".funnel").style("opacity", 1);
-                    });
-
-                g.append("text").attr({
-                    y: function (d, i) {
-                        if (d.coordinates.length === 4) {
-                            return (
-                                (d.coordinates[0].y - d.coordinates[1].y) / 2 +
-                                d.coordinates[1].y +
-                                5
-                            );
-                        } else {
-                            return (
-                                (d.coordinates[0].y + d.coordinates[1].y) / 2 +
-                                10
-                            );
-                        }
-                    },
-                    x: function (d, i) {
-                        return width / 2;
-                    },
-                });
-
-                console.log(g);
-
-                d3.select("body")
-                    .append("table")
-                    .attr({
-                        id: "footer",
-                        width: width + "px",
-                    });
             }
 
             drawChart(data);

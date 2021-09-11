@@ -82,7 +82,6 @@
         <file>Source/MainSubComponents/CustomRadioDelegate.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedText.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedImage.qml</file>
-        <file>Source/Others/Test3.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinBox.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/ConnectingLine.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/DroppedRectangle.qml</file>
@@ -174,13 +173,13 @@
         <file>Source/Charts/Data/d3-scale-chromatic.v1.min.js</file>
         <file>Source/Charts/Data/d3DefaultConfig.js</file>
         <file>Source/Charts/LineChart.html</file>
-        <file>Source/Others/Table.qml</file>
         <file>Source/Others/TableTest.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LineTypePopup.qml</file>
         <file>Source/Charts/PieChart.html</file>
         <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
         <file>Source/Charts/DoughnutChart.html</file>
         <file>Source/Charts/ScatterChart.html</file>
+        <file>Source/Charts/KPI.html</file>
         <file>Source/Charts/TreeChart.html</file>
         <file>Source/MainSubComponents/VerticalLineTpl.qml</file>
         <file>Source/Charts/RadialTreeChart.html</file>
@@ -191,6 +190,7 @@
         <file>Source/Charts/RadarChart.html</file>
         <file>Source/Charts/Data/d3.v5.min.js</file>
         <file>Source/Charts/Data/funnel.js</file>
+        <file>Source/Charts/Data/d3-funnel.min.js</file>
         <file>Source/Charts/Data/radar.js</file>
         <file>Source/Charts/GeoChart.html</file>
         <file>Source/Charts/Data/d3-geo-projection.v2.min.js</file>
@@ -274,5 +274,16 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
         <file>Splash.qml</file>
         <file>Main.qml</file>
+        <file>Source/Charts/Data/dataTables.semanticui.min.js</file>
+        <file>Source/Charts/Data/semantic-icons.css</file>
+        <file>Source/Charts/Data/dataTables.min.js</file>
+        <file>Source/Charts/Data/dataTables.semanticui.min.css</file>
+        <file>Source/Charts/Data/jquery-3.5.1.min.js</file>
+        <file>Source/Charts/Data/icons.ttf</file>
+        <file>Source/Charts/Data/icons.woff</file>
+        <file>Source/Charts/Data/icons.woff2</file>
+        <file>Source/Charts/Data/semantic.min.css</file>
+        <file>Source/Charts/Data/semantic.min.js</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
     </qresource>
 </RCC>

@@ -72,7 +72,8 @@ Rectangle{
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
         }
         ListElement{
-            icon: "combination_chart.png"
+            // icon: "combination_chart.png"
+            icon: "combination_grey.png"
             activeChart: false
             chartHtml:"bar.html"
             title:"Combination - Coming Soon"
@@ -204,7 +205,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: "Properties,Reference Line"
         }
         // ListElement{
         //     icon: "force_directed.png"
@@ -214,7 +215,8 @@ Rectangle{
         //     mainCustomizations: "Properties,Legend,Reference Line"
         // }
         ListElement{
-            icon: "sankey.png"
+            // icon: "sankey.png"
+            icon: "sankey_grey.png"
             chartHtml:"SankeyChart.html"
             elementHeight: 24
             activeChart: false
@@ -222,15 +224,19 @@ Rectangle{
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
             mainCustomizations: "Properties,Legend,Reference Line"
+
         }
         ListElement{
-            icon: "tree_map.png"
+            // icon: "tree_map.png"
+            icon: "treemap_grey.png"
             chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             title: "Tree Map"
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line"
         }
 //        ListElement{
@@ -240,7 +246,8 @@ Rectangle{
 //            title:"Condegram"
 //        }
         ListElement{
-            icon: "map.png"
+            // icon: "map.png"
+            icon: "geo_grey.png"
             chartHtml:"GeoChart.html"
             elementHeight: 22
             elementWidth:40
@@ -250,6 +257,13 @@ Rectangle{
             title:"Map - Coming Soon"
             mainCustomizations: "Properties,Legend"
             nonClickable: true
+//            MouseArea {
+
+//                    propagateComposedEvents: false
+
+//                    onClicked: mouse.accepted = false;
+
+//                }
         }
         ListElement{
             icon: "gauge_chart.png"
@@ -279,25 +293,18 @@ Rectangle{
             yAxisLabelName: "Columns"
             elementWidth: 30
             activeChart: false
+            maxDropOnXAxis: 5
             title:"Table"
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
+            mainCustomizations: "Total,Table Customization"
         }
         ListElement{
             icon: "123.png"
-            chartHtml:"bar.html"
+            chartHtml:"kpi.html"
             elementWidth: 30
             elementHeight: 20
             activeChart: false
             title:"KPI"
             mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "123.png"
-            chartHtml:"bar.html"
-            elementWidth: 30
-            elementHeight: 20
-            activeChart: false
-            title:"Line Bar"
         }
     }
 
@@ -358,6 +365,8 @@ Rectangle{
     }
 
     function getChart(chartHtml,index,chartTitle,mainCustomizations){
+        // TODO:return
+        [Constants.barChartTitle]
         report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.chartTitle = chartTitle;
 
