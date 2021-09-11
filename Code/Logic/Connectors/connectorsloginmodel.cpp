@@ -155,10 +155,15 @@ void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
     emit jsonLoginStatus(response, directLogin);
 }
 
-void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
+void ConnectorsLoginModel::excelLogin(QStringList driversList, QString filename)
 {
-    response = excelcon->ExcelInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::excelIntType, NULL, directLogin);
+    // Try with driver at 0 position only for the time being
+    // Later we will loop for other drivers, if the earlier fails
+    // Till its sure that we cant login with any of the drivers, if it fails
+
+    response = excelcon->ExcelOdbcInstance(driversList.at(0), filename);
+    this->staticSetter(filename, Constants::excelType, Constants::excelIntType, Constants::excelOdbcStrType, false, driversList.at(0));
+    emit excelLoginStatus(response, true);
 }
 
 void ConnectorsLoginModel::sqlLogout()
@@ -276,13 +281,6 @@ void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, 
     Statics::currentDbIntType = intType;
     Statics::currentDbStrType = strType;
     Statics::driverName = driverName;
-
-//    if(classification == Constants::duckType){
-//        QFileInfo fi(dbName);
-//        dbName = fi.baseName();
-
-//        emit sendDbName(Statics::currentDbName, directLogin, this->response);
-//    }
 
     this->setConnectedDB(dbName);
     emit dSSelected(true);
