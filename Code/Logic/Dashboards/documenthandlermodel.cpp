@@ -97,7 +97,7 @@ void DocumentHandlerModel::saveTmpFile(const QString filename)
 
         QUrl filePath = tmpFilePath + filename;
 
-        QString localPath = filePath.toEncoded();
+        QString localPath = filePath.toString();
         if (!localPath.endsWith(ext))
             localPath += ext;
         QFile f(localPath);
