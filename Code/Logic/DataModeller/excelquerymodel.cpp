@@ -9,14 +9,7 @@ void ExcelQueryModel::setQuery(QString query)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
-    this->removeTmpChartData();
     this->query = query;
-    querySplitter.setQueryForClasses(this->query);
-
-    this->selectParams = querySplitter.getSelectParams();
-
-    this->generateRoleNames();
-    this->setQueryResult();
 }
 
 void ExcelQueryModel::setPreviewQuery(int previewRowCount)
@@ -25,6 +18,10 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     int tmpRowCount = 0;
     int maxRowCount = 0;
     QString finalSqlInterPart;
+
+    querySplitter.setQueryForClasses(this->query);
+    this->selectParams = querySplitter.getSelectParams();
+    this->generateRoleNames();
 
     QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
 
@@ -126,30 +123,11 @@ QHash<int, QByteArray> ExcelQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ExcelQueryModel::getQueryStats()
-{
-
-}
-
-void ExcelQueryModel::removeTmpChartData()
-{
-
-}
-
 void ExcelQueryModel::receiveExcelFilterQuery(QString query)
 {
     this->query = query;
 }
 
-void ExcelQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount)
-{
-
-}
-
-void ExcelQueryModel::slotSetChartData(bool success)
-{
-
-}
 
 void ExcelQueryModel::extractSaved()
 {
@@ -221,19 +199,3 @@ void ExcelQueryModel::generateRoleNames()
     emit signalGenerateRoleNames(tableHeaders, sqlChartHeader);
 }
 
-
-void ExcelQueryModel::setQueryResult()
-{
-
-}
-
-QMap<QString, QString> ExcelQueryModel::returnColumnList(QString tableName)
-{
-    QMap<QString, QString> output;
-    return output;
-}
-
-void ExcelQueryModel::setChartHeader(int index, QStringList colInfo)
-{
-
-}

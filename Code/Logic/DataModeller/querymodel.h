@@ -4,6 +4,7 @@
 #include <QSqlQueryModel>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlQueryModel>
 #include <QSqlDatabase>
 #include <QObject>
 #include <QMap>
@@ -38,22 +39,18 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void callSql(QString tmpSql);
-    Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
-    void setChartData();
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
-    void slotSetChartData(bool success);
+//    void slotSetChartData(bool success);
     void extractSaved();
 
 
 signals:
-    void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void headerDataChanged(QStringList tableHeaders);
     void sqlHasData(bool hasData);
     void clearTablePreview();
@@ -65,7 +62,7 @@ signals:
 private:
     QHash<int, QByteArray> m_roleNames;
     void generateRoleNames();
-    void executeQuery(QString & query, bool updateChartData = true);
+    void executeQuery(QString & query);
     void extractSizeLimit();
 
     // Data variables for Charts

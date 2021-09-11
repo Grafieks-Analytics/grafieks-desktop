@@ -489,10 +489,8 @@ Page {
 
     function disconnectDS(){
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            QueryModel.removeTmpChartData()
             NewTableListModel.clearData()
         } else {
-            ForwardOnlyQueryModel.removeTmpChartData()
             ForwardOnlyDataModel.clearData()
         }
 

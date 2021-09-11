@@ -143,8 +143,6 @@ void ForwardOnlyQueryModel::removeTmpChartData()
     this->tableHeaders.clear();
 
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
-    emit chartDataChanged(this->forwardOnlyChartData);
     emit forwardOnlyHasData(false);
 }
 
@@ -171,7 +169,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
     // Emit signals for reports
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 
 }
 
@@ -222,8 +219,12 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     this->m_roleNames = roleNames;
     this->internalColCount = internalColCount;
 
+    qDebug() << "TAB 1" << tableHeaders;
+    qDebug() << "TAB 2" << forwardOnlyChartHeader;
+    qDebug() << "TAB 3" << roleNames;
+    qDebug() << "TAB 4" << internalColCount;
+
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 }
 
 void ForwardOnlyQueryModel::slotSetChartData(bool success)
@@ -232,7 +233,6 @@ void ForwardOnlyQueryModel::slotSetChartData(bool success)
         this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
         this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
 
-        emit chartDataChanged(this->forwardOnlyChartData);
     }
 }
 

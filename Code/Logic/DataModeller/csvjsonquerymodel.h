@@ -61,7 +61,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
 
-
 public slots:
     void receiveCsvJsonFilterQuery(QString query);
     void getAllFilters(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr);

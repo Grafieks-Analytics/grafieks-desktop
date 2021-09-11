@@ -14,12 +14,6 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    if(previewRowCount > this->tmpRowCount){
-        this->maxRowCount = this->tmpRowCount;
-    } else{
-        this->maxRowCount = previewRowCount;
-    }
-
     QString finalSql;
 
     switch (Statics::currentDbIntType) {
@@ -35,7 +29,7 @@ void QueryModel::setPreviewQuery(int previewRowCount)
             finalSql = this->tmpSql.toLower();
         }
 
-        finalSql += " limit " + QString::number(maxRowCount);
+        finalSql += " limit " + QString::number(previewRowCount);
         break;
     }
 
@@ -49,11 +43,11 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
         if(this->tmpSql.toLower().contains(" top ", Qt::CaseInsensitive)){
             finalSqlInterPart = this->tmpSql.toLower().split(" top ").last();
-            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart.section(' ', 1);
+            finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart.section(' ', 1);
 
         } else{
             finalSqlInterPart = this->tmpSql.toLower().section(' ', 1);
-            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart;
+            finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart;
         }
         break;
     }
@@ -62,9 +56,7 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     // For custom preview count
     this->resetPreviewCount = true;
 
-    this->executeQuery(finalSql, false);
-
-    qDebug() << "ROW COUNT" <<QSqlQueryModel::rowCount() << maxRowCount;
+    this->executeQuery(finalSql);
 
     if(QSqlQueryModel::rowCount() > 0){
         emit sqlHasData(true);
@@ -85,7 +77,6 @@ void QueryModel::saveExtractData()
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
-    this->removeTmpChartData();
 
     QSqlQueryModel::setQuery(query, db);
 
@@ -93,6 +84,8 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
+
+        this->maxRowCount = QSqlQueryModel::rowCount();
 
         if(this->resetPreviewCount == false){
             this->tmpRowCount = QSqlQueryModel::rowCount();
@@ -106,8 +99,6 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 
 void QueryModel::setQuery(const QSqlQuery &query)
 {
-
-    this->removeTmpChartData();
 
     QSqlQueryModel::setQuery(query);
 
@@ -161,32 +152,8 @@ void QueryModel::callSql(QString tmpSql)
 
     // For custom preview count
     this->resetPreviewCount = false;
-
     this->tmpSql = tmpSql.simplified();
-    this->executeQuery(this->tmpSql, true);
 }
-
-void QueryModel::removeTmpChartData()
-{
-    this->sqlChartData.clear();
-    this->sqlChartHeader.clear();
-    this->tableHeaders.clear();
-
-    emit sqlHasData(false);
-    emit headerDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->sqlChartHeader);
-}
-
-void QueryModel::setChartData()
-{
-    this->setChartDataWorker = new SetChartDataQueryWorker(this, this->tmpRowCount, this->tmpColCount);
-    connect(setChartDataWorker, &SetChartDataQueryWorker::signalSetChartData, this, &QueryModel::slotSetChartData, Qt::QueuedConnection);
-    connect(setChartDataWorker, &SetChartDataQueryWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-    setChartDataWorker->setObjectName("Grafieks Query Chart Data");
-    setChartDataWorker->start(QThread::InheritPriority);
-
-}
-
 
 void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader)
 {
@@ -194,15 +161,8 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
     this->sqlChartHeader = sqlChartHeader;
 
     emit headerDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
-void QueryModel::slotSetChartData(bool success)
-{
-    if(success){
-        emit chartDataChanged(setChartDataWorker->getSqlChartData());
-    }
-}
 
 void QueryModel::extractSaved()
 {
@@ -256,7 +216,7 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
     this->resetPreviewCount = false;
 
     this->tmpSql = filteredQuery;
-    this->executeQuery(this->tmpSql, true);
+    this->executeQuery(this->tmpSql);
 }
 
 void QueryModel::generateRoleNames()
@@ -269,7 +229,7 @@ void QueryModel::generateRoleNames()
     generateRoleNameWorker->start();
 }
 
-void QueryModel::executeQuery(QString &query, bool updateChartData)
+void QueryModel::executeQuery(QString &query)
 {
 
     // For Databases which only allow Forward Only queries
@@ -283,66 +243,47 @@ void QueryModel::executeQuery(QString &query, bool updateChartData)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
-        if(updateChartData == true){
-            this->setChartData();
-        }
-
         break;
     }
 
     case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         this->setQuery(query, dbMysqlOdbc);
-        if(updateChartData == true){
-            this->setChartData();
-        }
         break;
     }
 
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
         this->setQuery(query, dbSqlite);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
     case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbPostgres);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::mssqlIntType:{
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery(query, dbMssql);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::oracleIntType:{
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
         this->setQuery(query, dbOracle);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::mongoIntType:{
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         this->setQuery(query, dbMongo);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::accessIntType:{
         QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
         this->setQuery(query, dbAccess);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 

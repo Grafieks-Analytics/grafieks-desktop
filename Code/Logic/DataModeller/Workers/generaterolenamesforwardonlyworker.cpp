@@ -57,7 +57,7 @@ void GenerateRoleNamesForwardOnlyWorker::run()
                     int i = 0;
 
                     while(q.next()){
-                        fieldName = q.value(0).toString().trimmed();
+                        fieldName = q.value(0).toString().trimmed().toStdString().c_str();
                         fieldType = q.value(1).toString().trimmed();
                         colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
