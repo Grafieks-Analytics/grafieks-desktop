@@ -342,8 +342,8 @@ int main(int argc, char *argv[])
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
     // Processor model
-    ExtractProcessor extractProcessor(&generalParamsModel);
-    LiveProcessor liveProcessor(&generalParamsModel);
+    ExtractProcessor extractProcessor(&generalParamsModel, &dsParamsModel);
+    LiveProcessor liveProcessor(&generalParamsModel, &dsParamsModel);
     WorkbookProcessor workbookProcessor(&generalParamsModel);
 
 
