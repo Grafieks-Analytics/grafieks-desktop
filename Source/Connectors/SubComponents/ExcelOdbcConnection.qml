@@ -103,9 +103,6 @@ Popup {
         popup.visible = false
     }
 
-    function connectToExcel(){
-        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-    }
 
     function handleExcel(excelFileName){
 

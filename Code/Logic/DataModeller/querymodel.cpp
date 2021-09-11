@@ -23,10 +23,10 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     case Constants::sqliteIntType:
     case Constants::postgresIntType:
     case Constants::mongoIntType:{
-        if(this->tmpSql.toLower().contains(" limit ", Qt::CaseInsensitive)){
-            finalSql = this->tmpSql.toLower().split(" limit ").first();
+        if(this->tmpSql.contains(" limit ", Qt::CaseInsensitive)){
+            finalSql = this->tmpSql.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
         } else{
-            finalSql = this->tmpSql.toLower();
+            finalSql = this->tmpSql;
         }
 
         finalSql += " limit " + QString::number(previewRowCount);
@@ -41,12 +41,12 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
         QString finalSqlInterPart;
 
-        if(this->tmpSql.toLower().contains(" top ", Qt::CaseInsensitive)){
-            finalSqlInterPart = this->tmpSql.toLower().split(" top ").last();
+        if(this->tmpSql.contains(" top ", Qt::CaseInsensitive)){
+            finalSqlInterPart = this->tmpSql.split(" top ", Qt::KeepEmptyParts, Qt::CaseInsensitive).last();
             finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart.section(' ', 1);
 
         } else{
-            finalSqlInterPart = this->tmpSql.toLower().section(' ', 1);
+            finalSqlInterPart = this->tmpSql.section(' ', 1);
             finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart;
         }
         break;

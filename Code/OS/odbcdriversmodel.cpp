@@ -5,7 +5,7 @@ ODBCDriversModel::ODBCDriversModel(QObject *parent) : QObject(parent)
 
 }
 
-void ODBCDriversModel::fetchOdbcDrivers(const QString &db)
+QStringList ODBCDriversModel::fetchOdbcDrivers(const QString &db)
 {
 
 #ifdef Q_OS_WIN
@@ -19,6 +19,7 @@ void ODBCDriversModel::fetchOdbcDrivers(const QString &db)
     QStringList filteredDrivers = ODBCDrivers.filter(db, Qt::CaseInsensitive);
 
     emit availableDrivers(filteredDrivers, db);
+    return filteredDrivers;
 }
 
 QStringList ODBCDriversModel::fetchWindowsODBCDrivers()

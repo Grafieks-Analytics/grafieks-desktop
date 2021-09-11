@@ -60,6 +60,7 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+
     Connections{
         target: DriveDS
 
@@ -90,11 +91,12 @@ Popup {
         function onFileDownloaded(filePath, fileType){
 
             if(fileType === "csv"){
-                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+                ConnectorsLoginModel.csvLogin(filePath, true, ",")
             } else if(fileType === "excel"){
-                ConnectorsLoginModel.excelLogin(filePath, false)
+                var drivers = ODBCDriversModel.fetchOdbcDrivers(Constants.excelType)
+                ConnectorsLoginModel.excelLogin(drivers, filePath)
             } else if(fileType === "json"){
-                ConnectorsLoginModel.jsonLogin(filePath, false)
+                ConnectorsLoginModel.jsonLogin(filePath, true)
             }
         }
     }
@@ -104,7 +106,7 @@ Popup {
 
         function onExcelLoginStatus(status, directLogin){
 
-            if(directLogin === false){
+            if(directLogin === true){
                 if(status.status === true){
                     popup.visible = false
                     stacklayout_home.currentIndex = 5
@@ -124,7 +126,7 @@ Popup {
 
         function onCsvLoginStatus(status, directLogin){
 
-            if(directLogin === false){
+            if(directLogin === true){
                 if(status.status === true){
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
@@ -145,7 +147,7 @@ Popup {
 
         function onJsonLoginStatus(status, directLogin){
 
-            if(directLogin === false){
+            if(directLogin === true){
                 if(status.status === true){
                     popup.visible = false
                     stacklayout_home.currentIndex = 5

@@ -265,6 +265,9 @@ Page {
 
             // Finally set a parameter in DSParamsModel
             DSParamsModel.setCurrentTab(Constants.dataModellerTab)
+
+            // Enable filter button
+            filter_btn.visible = true
         }
     }
 
@@ -339,6 +342,9 @@ Page {
 
             // Finally set a parameter in DSParamsModel
             DSParamsModel.setCurrentTab(Constants.queryModellerTab)
+
+            // Disable filter options
+            filter_btn.visible = false
         }
 
     }
@@ -1072,35 +1078,12 @@ Page {
 
             // Filter button ends
 
-
-
-            // Live radio button starts
-
-
-            CustomRadioButton{
-                id: radio_live
-                radio_text: qsTr("Live")
-                radio_checked: true
-                parent_dimension: 16
-                ButtonGroup.group: memoryType
-                onCheckedChanged: onLiveSelected()
-
-                ToolTip.delay:Constants.tooltipShowTime
-                ToolTip.timeout: Constants.tooltipHideTime
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Save datasource for a live connection")
-            }
-
-            // Live radio button ends
-
-
-
             // In memory radio button starts
 
             CustomRadioButton{
                 id: radio_memory
                 radio_text: qsTr("In Memory")
-                radio_checked: false
+                radio_checked: true
                 parent_dimension: 16
 
                 ButtonGroup.group: memoryType
@@ -1113,6 +1096,27 @@ Page {
             }
 
             // In memory radio button ends
+
+            // Live radio button starts
+
+
+            CustomRadioButton{
+                id: radio_live
+                radio_text: qsTr("Live")
+                radio_checked: true
+                enabled: false
+                visible: false
+                parent_dimension: 16
+                ButtonGroup.group: memoryType
+                onCheckedChanged: onLiveSelected()
+
+                ToolTip.delay:Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Save datasource for a live connection")
+            }
+
+            // Live radio button ends
         }
 
     }
