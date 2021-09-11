@@ -420,6 +420,7 @@ void DropboxDS::saveFile()
         file.close();
 
         if(this->extension.contains("xls") || this->extension.contains("xlsx")){
+            qDebug() << "Downloaded excel";
             emit fileDownloaded(fileName, "excel");
 
         } else if(this->extension.contains("csv")){
