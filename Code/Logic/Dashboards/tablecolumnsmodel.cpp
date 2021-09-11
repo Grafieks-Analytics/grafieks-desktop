@@ -124,54 +124,6 @@ void TableColumnsModel::deleteDashboard(int dashboardId, bool deleteAll)
     }
 }
 
-void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
-{
-    this->newChartData = chartData;
-}
-
-void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
-{
-
-    this->chartHeaderDetails = chartHeader;
-
-    // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
-    this->newChartHeader.clear();
-    this->columnTypes.clear();
-
-    QStringList tmpVisibleColumnList;
-
-    // Update new data
-    foreach(auto key, chartHeader.keys()){
-
-        QString fullColumnName = chartHeader.value(key).at(0);
-
-        if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(fullColumnName);
-            this->columnTypes.insert(fullColumnName, Constants::categoricalType);
-        } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(fullColumnName);
-            this->columnTypes.insert(fullColumnName, Constants::numericalType);
-        } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(fullColumnName);
-            this->columnTypes.insert(fullColumnName, Constants::dateType);
-        } else{
-            qDebug() << "OTHER UNDETECTED FIELD TYPE" << chartHeader.value(key).at(0);
-        }
-
-        this->newChartHeader.insert(key, fullColumnName);
-    }
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-
-    int currentDashboard = 0;
-    emit sendFilteredColumn(currentDashboard, this->categoryList, this->numericalList, this->dateList);
-
-}
 
 void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList> > columnValueMap, int dashboardId)
 {

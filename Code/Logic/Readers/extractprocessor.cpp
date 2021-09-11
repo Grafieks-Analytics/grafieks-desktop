@@ -1,9 +1,10 @@
 #include "extractprocessor.h"
 
-ExtractProcessor::ExtractProcessor(GeneralParamsModel *gpm, QObject *parent) : QObject(parent),
+ExtractProcessor::ExtractProcessor(GeneralParamsModel *gpm, DSParamsModel *dsp, QObject *parent) : QObject(parent),
     receivedArgument(false)
 {
     this->generalParamsModel = gpm;
+    this->dsParamsModel = dsp;
 }
 
 void ExtractProcessor::setArgumentsFromMenu(QString filePath)
@@ -35,6 +36,9 @@ void ExtractProcessor::processExtract()
 
     Statics::currentDbName = tableName;
     Statics::modeProcessReader = true;
+
+    // Set datasource name
+    this->dsParamsModel->setDsName(Statics::currentDbName);
 
     // For values refer to Constants.qml
     this->generalParamsModel->setExtractPath(this->filePath);
