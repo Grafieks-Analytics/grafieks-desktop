@@ -35,7 +35,6 @@ public:
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const override;
-    int rowCount(const QModelIndex &parent) const override;
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void callSql(QString tmpSql);
@@ -46,7 +45,6 @@ public slots:
     void receiveFilterQuery(QString & filteredQuery);
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
-//    void slotSetChartData(bool success);
     void extractSaved();
 
 
@@ -72,10 +70,8 @@ private:
     int tmpRowCount;
     int tmpColCount;
     QString tmpSql;
-    bool resetPreviewCount;
     SetChartDataQueryWorker *setChartDataWorker;
     QSqlQueryModel queryModel;
-    int maxRowCount;
     QStringList columnStringTypes;
 
     QThread extractThread;

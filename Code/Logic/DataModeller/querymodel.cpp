@@ -1,7 +1,7 @@
 #include "querymodel.h"
 
 
-QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), resetPreviewCount(false), setChartDataWorker(nullptr)
+QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
 {
 }
 
@@ -53,16 +53,7 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     }
     }
 
-    // For custom preview count
-    this->resetPreviewCount = true;
-
     this->executeQuery(finalSql);
-
-    if(QSqlQueryModel::rowCount() > 0){
-        emit sqlHasData(true);
-    } else{
-        emit sqlHasData(false);
-    }
 }
 
 void QueryModel::saveExtractData()
@@ -77,7 +68,6 @@ void QueryModel::saveExtractData()
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
-
     QSqlQueryModel::setQuery(query, db);
 
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
@@ -85,12 +75,8 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
-        this->maxRowCount = QSqlQueryModel::rowCount();
-
-        if(this->resetPreviewCount == false){
-            this->tmpRowCount = QSqlQueryModel::rowCount();
-            this->tmpColCount = QSqlQueryModel::columnCount();
-        }
+        this->tmpRowCount = QSqlQueryModel::rowCount();
+        this->tmpColCount = QSqlQueryModel::columnCount();
 
         generateRoleNames();
         emit errorSignal("");
@@ -107,10 +93,8 @@ void QueryModel::setQuery(const QSqlQuery &query)
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
-        if(this->resetPreviewCount == false){
-            this->tmpRowCount = QSqlQueryModel::rowCount();
-            this->tmpColCount = QSqlQueryModel::columnCount();
-        }
+        this->tmpRowCount = QSqlQueryModel::rowCount();
+        this->tmpColCount = QSqlQueryModel::columnCount();
 
         generateRoleNames();
         emit errorSignal("");
@@ -133,12 +117,6 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
-int QueryModel::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return this->maxRowCount;
-}
-
 
 QHash<int, QByteArray> QueryModel::roleNames() const
 {
@@ -150,8 +128,6 @@ void QueryModel::callSql(QString tmpSql)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    // For custom preview count
-    this->resetPreviewCount = false;
     this->tmpSql = tmpSql.simplified();
 }
 
@@ -160,7 +136,14 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
     this->tableHeaders = tableHeaders;
     this->sqlChartHeader = sqlChartHeader;
 
+    if(QSqlQueryModel::rowCount() > 0){
+        emit sqlHasData(true);
+    } else{
+        emit sqlHasData(false);
+    }
+
     emit headerDataChanged(this->tableHeaders);
+
 }
 
 
@@ -212,11 +195,7 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    // For custom preview count
-    this->resetPreviewCount = false;
-
-    this->tmpSql = filteredQuery;
-    this->executeQuery(this->tmpSql);
+    this->tmpSql = filteredQuery.simplified();
 }
 
 void QueryModel::generateRoleNames()

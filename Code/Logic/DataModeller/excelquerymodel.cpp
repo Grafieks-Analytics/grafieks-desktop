@@ -126,6 +126,7 @@ QHash<int, QByteArray> ExcelQueryModel::roleNames() const
 void ExcelQueryModel::receiveExcelFilterQuery(QString query)
 {
     this->query = query;
+    emit clearTablePreview();
 }
 
 
