@@ -70,8 +70,8 @@ void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QStr
     QStringList output;
     QString joiner = this->getQueryJoiner();
 
-//    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
+//    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE UPPER(" + col + ") LIKE UPPER('%"+searchString+"%')");
+    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE UPPER(" + joiner + col + joiner + ") LIKE UPPER('%"+searchString+"%')");
     emit columnListModelDataChanged(options);
 }
 
