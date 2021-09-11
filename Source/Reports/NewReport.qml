@@ -30,6 +30,7 @@ Page {
     property int editImageSize: 16
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
+    property bool row3Active: null
 
     property var maxDropOnXAxis: 1;
     property var maxDropOnYAxis: 1;
@@ -266,6 +267,10 @@ Page {
         var row3Columns = getAxisColumnNames(Constants.row3Name);
         var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
         console.log(xAxisColumns, yAxisColumns)
         colorData = [];
         switch(chartTitle){
@@ -360,10 +365,16 @@ Page {
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = dataValuesTemp[0].map(d=> d.key );
+            delete dataValuesTemp;
             break;
         case Constants.funnelChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = Object.keys(dataValuesTemp[0])
+            delete dataValuesTemp;
             break;
         case Constants.radarChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -373,7 +384,7 @@ Page {
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
@@ -386,7 +397,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
@@ -449,6 +460,7 @@ Page {
         ReportParamsModel.xAxisActive = false;
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
+        row3Active = false;
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -691,6 +703,17 @@ Page {
         }
     }
     
+    // Variable when drop is hovered on Y Axis
+    onRow3ActiveChanged: {
+        if(row3Active){
+            row3DropAreaRectangle.border.color = Constants.grafieksLightGreenColor;
+            row3DropAreaRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            row3DropAreaRectangle.border.color = "transparent";
+            row3DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+    
     function exportPivotChart(){
         webEngineView.runJavaScript('exportToExcel()');
     }
@@ -880,6 +903,29 @@ Page {
         return columnsName;
     }
 
+    function getDataPaneAllDetails(axisName){
+         var model = null;
+        switch(axisName){
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsAllDetails = [];
+        for(var i=0; i< model.count; i++){
+            columnsAllDetails.push({ itemName: model.get(i).itemName, itemType: model.get(i).droppedItemType, dateFormat: model.get(i).dateFormat });
+        }
+        return columnsAllDetails;
+    }
+
     function clearAllChartValues(){
 
         // Not Setting ReportId to null
@@ -956,7 +1002,7 @@ Page {
     function reDrawChart(){
 
         checkHorizontalGraph();
-        console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
+        console.log('Debug::',chartTitle,': Colour By',colorByData, colorListModel.count, colorListModel)
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
@@ -970,6 +1016,18 @@ Page {
             }
             return;
         }
+
+        
+        if(chartTitle == Constants.tableTitle){
+            console.log('Start plotting table chart')
+            if(xAxisColumns.length > 0 ){
+                console.log(xAxisColumns)
+                drawChart();
+            }
+            return;
+        }
+
+        
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1167,17 +1225,29 @@ Page {
         return false;
     }
 
-    function xAxisDropEligible(itemName){
+    function xAxisDropEligible(itemName, itemType){
+        console.log('Debug:: Item type',itemType)
         var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
         // Check if condition more data pills can be added or not';
         if(xAxisColumns.length === allowedXAxisDataPanes){
             return false;
         }
+
+        switch(chartTitle){
+            case Constants.tableTitle:
+                if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+        }
+        
+
         const multiChart = true;
         if(multiChart){
             return true;
         }
         return false;
+
+        
     }
 
     function yAxisDropEligible(itemName){
@@ -1193,15 +1263,18 @@ Page {
         return false;
     }
 
+    function allNumericalValues(data){
+        return true;
+    }
     
-    function row3AxisDropEligible(itemName){
+    function row3AxisDropEligible(itemName, itemType){
         var row3Columns  = getAxisColumnNames(row3Columns);
         const multiChart = true;
-        console.log()
         // Check if condition more data pills can be added or not';
-        // Hard coded Value to 1;
-        // Please change it to variable
         if(row3Columns.length === allowedYAxisDataPanes){
+            return false;
+        }
+        if(chartTitle == Constants.pivotTitle && itemType != "numerical"){
             return false;
         }
         if(multiChart){
@@ -1212,6 +1285,7 @@ Page {
 
     function onDropAreaDropped(element,axis){
 
+        row3Active = null;
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
@@ -1226,7 +1300,8 @@ Page {
 
         if(axis === Constants.xAxisName){
 
-            if(!xAxisDropEligible(itemName)){
+            if(!xAxisDropEligible(itemName, itemType)){
+                // Red color
                 return;
             }
 
@@ -1235,6 +1310,7 @@ Page {
 
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
+                // Red color
                 return;
             }
 
@@ -1243,7 +1319,8 @@ Page {
             yAxisColumns.push(itemName);
 
         }else{
-            if(!row3AxisDropEligible(itemName)){
+            if(!row3AxisDropEligible(itemName, itemType)){
+                // Red color
                 return;
             }
             console.log(itemType, 'Adding it to values?');
@@ -1297,6 +1374,11 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
 
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
+
         if(webEngineView.loading){
             return;
         }
@@ -1311,18 +1393,10 @@ Page {
         }
         */
 
-        if(xAxisColumns.length && yAxisColumns.length){
+        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && chartTitle == Constants.tableTitle)){
 
-            var xAxisColumnNamesArray = [];
-            var i = 0; // itereator => By passing warning
-            for(i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(xAxisColumns[i]);
-            }
-            var yAxisColumnNamesArray = [];
-            for(i=0;i<yAxisColumns.length;i++){
-                yAxisColumnNamesArray.push(yAxisColumns[i]);
-            }
-
+            var xAxisColumnNamesArray = Array.from(xAxisColumns);
+            var yAxisColumnNamesArray = Array.from(yAxisColumns);
 
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
             var colorByColumnName = colorByData[0] && colorByData[0].columnName;
@@ -1476,17 +1550,45 @@ Page {
                 ChartsModel.getKPIChartValues(xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
-                console.log("TABLE CLICKED")
-                ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
+                console.log("TABLE CLICKED");
+                var nonMeasures = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() != "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => d.itemName)
+                var measures = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() == "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d=> d.itemName)
+                console.log('Non Measues',JSON.stringify(nonMeasures))
+                console.log('Measures',JSON.stringify(measures))
+                
+                ChartsModel.getTableChartValues( nonMeasures , measures,'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
                 console.log('row3Columns',row3Columns);
                 var row3ColumnsArray = Array.from(row3Columns);
-                // console.log([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3Columns);
-                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
+                
+                // Temporary running function
                 ChartsModel.getPivotChartValues([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
-                // ChartsModel.getPivotChartValues(['Category','City'],'Sales','Sum');
+                
+                /*
+
+                // Change required 
+                // Group the dates according to date format and sum the values.
+                // Values can be multiple so we will have to sum all of the values
+                // Passing column name and type
+
+                var nonValueColumnNames = [ ...xAxisColumnDetails, ...yAxisColumnDetails ];
+                var valuesColumns = row3ColumnDetails;
+                ChartsModel.getPivotChartValues(nonValueColumnNames, valuesColumns,'Sum');
+
+                */
+                
                 break;
             }
             if(!dataValues){
@@ -1494,6 +1596,9 @@ Page {
             }
 
             /*
+            After changing to signals and slots this code is not required and 
+            can be removed once confirmed that everything is copied to drawChartAfterReceivingSignal function
+            
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
             //            colorData = [];
@@ -1998,6 +2103,7 @@ Page {
                 width: parent.width - row3Text.width - 4
                 anchors.left: row3Text.right
                 anchors.leftMargin: 1
+                border.color: "transparent"
 
                 DropArea{
                     id: row3DropArea
@@ -2523,3 +2629,7 @@ Page {
 
     // Right Panel Ends
 }
+
+
+
+

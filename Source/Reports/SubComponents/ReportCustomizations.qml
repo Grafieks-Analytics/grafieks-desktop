@@ -84,12 +84,22 @@ Item{
 //            ]
 //        }
 
+
+        ListElement {
+            categoryName: "Table Customization"
+            display: false
+            collapsed: false
+            subItems: []
+        }
+
         ListElement {
             categoryName: "Total"
             display: false
             collapsed: false
             subItems: []
         }
+        
+
 
     }
 
@@ -223,6 +233,12 @@ Item{
         id: totalComponent
         CustomizeTotal{}
     }
+    
+
+    Component{
+        id: tableCustomizationComponent
+        TableCustomization{}
+    }
 
     Component {
         id: subItemColumnDelegate
@@ -344,15 +360,16 @@ Item{
                         if(collapsed)
                             return null
 
-                        console.log('Debug',categoryName.toLowerCase());
+                        console.log('Debug:: Addidng left side menus',categoryName.toLowerCase());
                         switch(categoryName.toLowerCase()){
                             case "properties": return propertiesComponent
                             case "reference line": return referenceLineComponent
                             case "axis size": return chartsSizing
                             case "legend": return legendComponent
                             case "total": return totalComponent
+                            case "table customization": return tableCustomizationComponent
                             default:
-                                console.log('Debug',categoryName.toLowerCase())
+                                console.log('Debug:: Report Customization:',categoryName.toLowerCase())
                         }
 
                   

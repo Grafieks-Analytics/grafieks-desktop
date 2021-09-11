@@ -65,8 +65,8 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
-        legendPosition: "bottom",
+        legendStatus: false,
+        legendPosition: "right",
     },
     defaultlabelConfig: {
         labelStatus: true,
@@ -74,6 +74,16 @@ const defaultD3Config = {
     defaultGridConfig: {
         gridStatus: true,
     },
+
+    defaultTableChartConfig: {
+        defaultCellBorderStatus: true,
+        defaultCellHoverStatus: true,
+        defaultCompactStatus: false,
+        defaultRowAlternateStatus: true,
+        defaultBatchsize: 50
+    },
+    defaultDynamicHeight: false,
+    defaultBottomPinch: 1
 };
 const markerShapeConfig = {
     circle: {

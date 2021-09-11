@@ -393,6 +393,47 @@
                 [myGroups, myVars],
             ];
 
+            var data = [
+                [
+                    ["Furniture", "Bookcases", 8016],
+                    ["Furniture", "Chairs", 6906],
+                    ["Office Supplies", "Labels", 192],
+                    ["Furniture", "Tables", 10230],
+                    ["Office Supplies", "Storage", 4638],
+                    ["Furniture", "Furnishings", 2398],
+                    ["Office Supplies", "Art", 2756],
+                    ["Technology", "Phones", 8372],
+                    ["Office Supplies", "Binders", 2114],
+                    ["Office Supplies", "Appliances", 1060],
+                    ["Office Supplies", "Paper", 1198],
+                    ["Office Supplies", "Envelopes", 1134],
+                    ["Technology", "Accessories", 938],
+                    ["Office Supplies", "Fasteners", 160],
+                    ["Office Supplies", "Supplies", 132],
+                ],
+                [
+                    ["Furniture", "Office Supplies", "Technology"],
+                    [
+                        "Bookcases",
+                        "Chairs",
+                        "Labels",
+                        "Tables",
+                        "Storage",
+                        "Furnishings",
+                        "Art",
+                        "Phones",
+                        "Binders",
+                        "Appliances",
+                        "Paper",
+                        "Envelopes",
+                        "Accessories",
+                        "Fasteners",
+                        "Supplies",
+                    ],
+                ],
+                ["Category", " SubCategory", "Sales"],
+            ];
+
             function transformData(dataValue, dateFormat, dateFormat1) {
                 var dataValue = data[0];
                 var json = {};
@@ -514,7 +555,6 @@
                 window.yLabelfontColor = yLabelfontColor;
                 window.xTickfontColor = xTickfontColor;
                 window.yTickfontColor = yTickfontColor;
-                let { labelStatus } = labelConfig;
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
@@ -525,15 +565,20 @@
                     dateFormat,
                     dateFormat1
                 );
-                [xAxisLabel, yAxisLabel] = data[1];
+                [xAxisLabel, yAxisLabel, valueLabel] = data[2] || [
+                    "xAxisLabel",
+                    "yAxisLabel",
+                    "Value",
+                ];
                 console.log(data);
                 // var [dataValues, [myGroups, myVars]] = data;
+                let { legendStatus, legendPosition } = legendConfig;
+                let { gridStatus } = gridConfig;
+                let { labelStatus } = labelConfig;
 
                 // set the dimensions and margins of the graph
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
-
-                let { legendStatus, legendPosition } = legendConfig;
 
                 d3.select("#xAxisLabelId").style("bottom", 0);
                 (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
@@ -579,14 +624,16 @@
                         // })
                         .html((d, i) => {
                             console.log(d3Colors[1]);
-                            return (
-                                '<div style="width: 15px; height: 200px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
-                                d3Colors[0] +
-                                "," +
-                                d3Colors[1] +
-                                // d3Colors[i % d3Colors.length] +
-                                ');"> </div>'
-                            );
+                            if (1) {
+                                return (
+                                    '<div style="width: 15px; height: 200px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
+                                    d3Colors[0] +
+                                    "," +
+                                    d3Colors[1] +
+                                    // d3Colors[i % d3Colors.length] +
+                                    ');"> </div>'
+                                );
+                            }
                         })
                         .style("display", "flex")
                         .style("padding", "2px");
@@ -889,7 +936,8 @@
                         return myColor(d[2]);
                     })
                     .style("stroke-width", 0.5)
-                    .style("stroke", "grey")
+                    // TODO:
+                    .style("stroke", gridStatus ? "grey" : "none")
                     .attr("class", function (d, i) {
                         return "heatmap" + i;
                     })
@@ -920,7 +968,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    "xAxisLabel" +
+                                    xAxisLabel +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -928,7 +976,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    "xAxisLabel" +
+                                    yAxisLabel +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -936,7 +984,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    "yAxisLabel" +
+                                    valueLabel +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
@@ -1020,7 +1068,7 @@
                 //         "transform",
                 //         "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
                 //     );
-                if (1) {
+                if (labelStatus) {
                     //    var boxClasses = document.querySelectorAll("[class^='heatmap']");
 
                     //    Array.from(boxClasses).forEach(boxClass =>{
@@ -1036,6 +1084,8 @@
                         })
                         .enter()
                         .append("text")
+                        .attr("font-family", dataLabelfontFamily)
+                        .attr("font-size", dataLabelfontSize)
                         .text(function (d) {
                             return d[2];
                         })
