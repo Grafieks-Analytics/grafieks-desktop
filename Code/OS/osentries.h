@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QCoreApplication>
 #include <QDebug>
 
 #include "../statics.h"

@@ -76,7 +76,6 @@
 
 #include "Code/statics.h"
 
-QString Statics::tmpAppPath;
 QString Statics::tmpIconPath;
 
 QString Statics::currentDbName;
@@ -243,7 +242,6 @@ int main(int argc, char *argv[])
     // Static initializations Ends
     /***********************************************************************************************************************/
     Statics::freeLimitExtractSizeExceeded = false;
-    Statics::tmpAppPath = "C:\\Users\\chill\\Projects\\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug\\debug\\GrafieksDesktop.exe";
     Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
     /***********************************************************************************************************************/
     // Static initializations Ends
