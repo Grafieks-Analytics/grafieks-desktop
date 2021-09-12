@@ -71,6 +71,7 @@ public slots:
     void getFunnelChartValues();
     void getRadarChartValues();
     void getScatterChartValues();
+    void getScatterChartNumericalValues();
 
     void getHeatMapChartValues();
 

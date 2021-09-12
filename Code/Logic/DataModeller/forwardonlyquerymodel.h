@@ -15,7 +15,6 @@
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
-#include "./Workers/setchartdataforwardonlyworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractforwardonlyworker.h"
 
@@ -37,20 +36,14 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void getQueryStats();
-    Q_INVOKABLE void removeTmpChartData();
-
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
     void extractSaved();
 
 private:
     void generateRoleNames();
-    void setQueryResult();
-    void setChartHeader(int index, QStringList colInfo);
     QString returnConnectionName();
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
-    void slotSetChartData(bool success);
     void extractSizeLimit();
 
 
@@ -68,7 +61,6 @@ private:
     QMap<int, QStringList*> forwardOnlyChartData;
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
-    SetChartDataForwardOnlyWorker *setChartDataWorker;
 
     DataType dataType;
     QStringList columnStringTypes;

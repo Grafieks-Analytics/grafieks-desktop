@@ -762,10 +762,13 @@ void ChartsThread::getScatterChartValues()
     emit signalScatterChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
-void ChartsThread::getHeatMapChartValues()
+void ChartsThread::getScatterChartNumericalValues()
 {
 
-    qDebug() << "HEATMAP" << xAxisColumn << yAxisColumn << xSplitKey;
+}
+
+void ChartsThread::getHeatMapChartValues()
+{
 
     QJsonArray data;
     QVariantList tmpData;

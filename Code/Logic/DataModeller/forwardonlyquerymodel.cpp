@@ -1,6 +1,6 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent), setChartDataWorker(nullptr)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent)
 {
 }
 
@@ -15,8 +15,6 @@ void ForwardOnlyQueryModel::setQuery(QString query)
 
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
-
-    this->removeTmpChartData();
 
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
@@ -83,20 +81,6 @@ QHash<int, QByteArray> ForwardOnlyQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ForwardOnlyQueryModel::getQueryStats()
-{
-    // TBD
-}
-
-void ForwardOnlyQueryModel::removeTmpChartData()
-{
-    this->forwardOnlyChartHeader.clear();
-    this->forwardOnlyChartData.clear();
-    this->tableHeaders.clear();
-
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit forwardOnlyHasData(false);
-}
 
 void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
 {
@@ -130,24 +114,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
     // Emit signals for reports
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
 
-}
-
-void ForwardOnlyQueryModel::setQueryResult()
-{
-    QString connectionName = this->returnConnectionName();
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-
-    this->setChartDataWorker = new SetChartDataForwardOnlyWorker(&dbForward, this->query, this->internalColCount);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
-    setChartDataWorker->start(QThread::InheritPriority);
-}
-
-
-void ForwardOnlyQueryModel::setChartHeader(int index, QStringList colInfo)
-{
-    this->forwardOnlyChartHeader.insert(index, colInfo);
 }
 
 QString ForwardOnlyQueryModel::returnConnectionName()
@@ -225,14 +191,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     emit errorSignal("");
 }
 
-void ForwardOnlyQueryModel::slotSetChartData(bool success)
-{
-    if(success){
-        this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
-        this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
-
-    }
-}
 
 void ForwardOnlyQueryModel::extractSizeLimit()
 {
