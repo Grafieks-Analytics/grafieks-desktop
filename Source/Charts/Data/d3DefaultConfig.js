@@ -83,7 +83,26 @@ const defaultD3Config = {
         defaultBatchsize: 50
     },
     defaultDynamicHeight: false,
-    defaultBottomPinch: 1
+    defaultBottomPinch: 1,
+    defaultKPIStyling:{
+        value: {
+            fontSize: 12,
+            color: "#000",
+            bold: false,
+            italic: false,
+            underline: false,
+            fontFamily: "Arial"
+        },
+        label:{
+            fontSize: 12,
+            color: "#000",
+            bold: false,
+            italic: false,
+            underline: false,
+            fontFamily: "Arial"
+        }
+
+    }
 };
 const markerShapeConfig = {
     circle: {

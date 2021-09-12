@@ -437,12 +437,22 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            console.log('Debug:::dataValues',dataValues);
+            var greenValue = input1Field.text;
+            var yellowValue = input2Field.text;
+            var redValue = input3Field.text;
+            console.log('Gauge Data',greenValue, yellowValue, redValue);
+            dataValues = [[dataValues, +greenValue, +redValue, +yellowValue], xAxisColumns[0]];
+            dataValues = JSON.stringify(dataValues);
+            console.log('Debug:::dataValues',dataValues);
             break;
         case Constants.sankeyChartTitle:
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.kpiTitle:
+            dataValues = [dataValues, xAxisColumns[0]];
+            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.tableTitle:
@@ -698,6 +708,12 @@ Page {
             yAxisVisible =  false
             row3Visible =  false
             break;
+        case Constants.kpiTitle:
+            yAxisVisible = false
+            xAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         default:
             xAxisVisible = true
             yAxisVisible = true
@@ -896,6 +912,7 @@ Page {
         case Constants.yAxisName:
             model = yAxisListModel;
             break;
+        case Constants.gaugePointerLabel:
         case Constants.row3Name:
             model = valuesListModel;
             break;
@@ -1040,6 +1057,10 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
 
+        if(chartTitle == Constants.gaugeChartTitle && isGaugeChart()){
+            drawChart();
+        }
+
         if(chartTitle == Constants.pivotTitle){
 
             if(xAxisColumns.length > 0 && yAxisColumns.length > 0  && row3Columns.length > 0){
@@ -1050,8 +1071,8 @@ Page {
         }
 
         
-        if(chartTitle == Constants.tableTitle){
-            console.log('Start plotting table chart')
+        if(chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle){
+            console.log('Start plotting ',chartTitle,'chart')
             if(xAxisColumns.length > 0 ){
                 console.log(xAxisColumns)
                 drawChart();
@@ -1327,7 +1348,6 @@ Page {
 
         var itemName = ReportParamsModel.itemName;
 
-        var valuesColumns = [];
 
         if(axis === Constants.xAxisName){
 
@@ -1348,14 +1368,21 @@ Page {
             yAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             yAxisColumns.push(itemName);
 
-        }else{
+        }else if(axis == Constants.row3Name){
             if(!row3AxisDropEligible(itemName, itemType)){
                 // Red color
                 return;
             }
             console.log(itemType, 'Adding it to values?');
             valuesListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat});
-            valuesColumns.push(itemName);
+        }else{
+            // Gauge
+            if(!row3AxisDropEligible(itemName, itemType)){
+                return;
+            }
+            console.log(itemType, 'Adding for gauge?');
+            valuesListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat});
+            
         }
 
 
@@ -1398,6 +1425,18 @@ Page {
         reDrawChart();
     }
 
+    function isNumber(number){
+        return !!(number && number.trim() && !isNaN(number.trim().replace(/,/g,''))) 
+    }
+
+    function isGaugeChart(){
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+        if(row3Columns.length && isNumber(input1Field.text) && isNumber(input2Field.text) && isNumber(input3Field.text)){
+            return true;
+        }
+        return false;
+    }
+
     function drawChart(){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
@@ -1423,7 +1462,7 @@ Page {
         }
         */
 
-        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && chartTitle == Constants.tableTitle)){
+        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || (chartTitle == Constants.gaugeChartTitle && isGaugeChart())) {
 
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);
@@ -1568,8 +1607,10 @@ Page {
                 console.log('Waterfall Data values',dataValues);
                 break;
             case Constants.gaugeChartTitle:
+                var row3ColumnsArray = Array.from(row3Columns);
                 console.log("GAUGE CLICKED")
-                ChartsModel.getGaugeChartValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log('row3ColumnsArray',row3ColumnsArray)
+                ChartsModel.getGaugeChartValues(reportIdMain, 0, Constants.reportScreen, row3ColumnsArray[0] ,'Sum');
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
@@ -1607,6 +1648,22 @@ Page {
                 ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
                 
                 /*
+
+                [
+                    {
+                        itemName: "Order Date",
+                        itemType: "Date"
+                        dateFormat: "%Y",
+                        qtDateFormat: "YYYY"
+                    }
+                    {
+                        itemName: "Order Date",
+                        itemType: "Categorical"
+                        dateFormat: "%Y",
+                        qtDateFormat: "YYYY"
+                    }
+                ]
+
 
                 // Change required 
                 // Group the dates according to date format and sum the values.
@@ -2317,17 +2374,19 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
 
                     TextEdit {
+                        // Green Input
+                        id: input1Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: reDrawChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2387,11 +2446,13 @@ Page {
                     anchors.centerIn: parent
 
                     TextEdit {
+                        id: input2Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: reDrawChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2455,11 +2516,13 @@ Page {
                     anchors.centerIn: parent
 
                     TextEdit {
+                        id: input3Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: reDrawChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }

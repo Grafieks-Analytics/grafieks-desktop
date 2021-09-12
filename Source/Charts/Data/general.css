@@ -100,3 +100,7 @@ body {
   position: fixed;
   background: #fff;
 }
+
+.text-center{
+  text-align: center;
+}
