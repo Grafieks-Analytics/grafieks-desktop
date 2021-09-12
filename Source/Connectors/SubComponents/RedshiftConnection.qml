@@ -101,7 +101,7 @@ Popup {
     }
 
     function connectToRedshift(){
-        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "redshift-cluster-1.cahcrqdskrvh.ap-south-1.redshift.amazonaws.com", database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "18.142.18.19", database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS

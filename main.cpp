@@ -76,6 +76,7 @@
 
 #include "Code/statics.h"
 
+int Statics::isFreeTier;
 QString Statics::tmpIconPath;
 
 QString Statics::currentDbName;
@@ -242,6 +243,7 @@ int main(int argc, char *argv[])
     // Static initializations Ends
     /***********************************************************************************************************************/
     Statics::freeLimitExtractSizeExceeded = false;
+    Statics::isFreeTier = 1; // 1 = true (Free Tier); 0 = false (Pro)
     Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
     /***********************************************************************************************************************/
     // Static initializations Ends
