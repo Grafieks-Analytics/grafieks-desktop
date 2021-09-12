@@ -41,6 +41,7 @@ public:
     Q_INVOKABLE void removeTmpChartData();
 
 public slots:
+    void receiveFilterQuery(QString & filteredQuery);
     void extractSaved();
 
 private:

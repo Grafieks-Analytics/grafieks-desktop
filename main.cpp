@@ -355,6 +355,7 @@ int main(int argc, char *argv[])
     // For multi threaded signal and slots, they are written inside individual classes
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &forwardOnlyQueryModel, &ForwardOnlyQueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
     QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);

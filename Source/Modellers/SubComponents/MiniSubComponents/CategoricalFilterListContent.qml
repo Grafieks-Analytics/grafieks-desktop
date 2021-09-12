@@ -127,6 +127,7 @@ Rectangle{
             singleSelectCheckList.model = []
             multiSelectCheckList.model = []
 
+            console.log(GeneralParamsModel.getDbClassification() , "TYPER")
             if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType){
                 singleSelectCheckList.model = CSVJsonDataModel
                 multiSelectCheckList.model  = CSVJsonDataModel
@@ -136,11 +137,11 @@ Rectangle{
             } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType) {
                 singleSelectCheckList.model = QueryDataModel
                 multiSelectCheckList.model  = QueryDataModel
-            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardOnlyType) {
+            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType) {
                 singleSelectCheckList.model = ForwardOnlyDataModel
                 multiSelectCheckList.model  = ForwardOnlyDataModel
             } else {
-
+console.log("Else type")
             }
 
             var jsonOptions = JSON.parse(options)
