@@ -16,6 +16,12 @@ Column{
 
     spacing: 4
 
+    
+    property var grandTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('grand total');
+    property var rowTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('row total');
+    property var subTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('sub total');
+    property var exportVisible:  !!report_desiner_page.subMenuCustomizationsAvailable.includes('export report');
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -100,6 +106,7 @@ Column{
 
         height: 35
         width: 150
+        visible: rowTotalVisible
 
         Rectangle{
             anchors.fill: parent
@@ -128,7 +135,9 @@ Column{
 
     }
 
-
+/*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 35
@@ -213,7 +222,7 @@ Column{
 
 
     }
-
+*/
 
     // Row Total Ends
 
@@ -225,6 +234,7 @@ Column{
 
         height: 35
         width: 150
+        visible: grandTotalVisible
 
         Rectangle{
             anchors.fill: parent
@@ -265,7 +275,9 @@ Column{
 
     }
 
-
+/*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 35
@@ -353,6 +365,7 @@ Column{
 
     }
 
+*/
 
     // Row Total Ends
 
@@ -365,6 +378,7 @@ Column{
 
         height: 35
         width: 150
+        visible: subTotalVisible
 
         Rectangle{
             anchors.fill: parent
@@ -395,6 +409,9 @@ Column{
 
     // Grand Total
 
+    /*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 50
@@ -480,6 +497,7 @@ Column{
 
     }
 
+    */
 
     // Row Total Ends
 
@@ -489,9 +507,10 @@ Column{
 
         height: 35
         width: 150
+        visible: exportVisible
 
         CustomButton {
-            text: qsTr("Export Report")
+            textValue: qsTr("Export Report")
             anchors.left: parent.left
             anchors.leftMargin: leftMargin
             anchors.verticalCenter: parent.verticalCenter

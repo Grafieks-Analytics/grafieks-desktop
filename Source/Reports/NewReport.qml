@@ -30,6 +30,7 @@ Page {
     property int editImageSize: 16
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
+    property bool row3Active: null
 
     property var maxDropOnXAxis: 1;
     property var maxDropOnYAxis: 1;
@@ -54,6 +55,7 @@ Page {
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
     property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
+    property var subMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
@@ -162,6 +164,9 @@ Page {
         }
 
         function onReportIdChanged(reportIdValue){
+            // Todo
+            // Tag: Check
+            console.log('DEBUG::: Report id value',reportIdValue);
             if(!reportIdValue){
                 clearValuesOnAddNewReport();
             }
@@ -293,6 +298,10 @@ Page {
         var row3Columns = getAxisColumnNames(Constants.row3Name);
         var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
         console.log(xAxisColumns, yAxisColumns)
         colorData = [];
         switch(chartTitle){
@@ -387,10 +396,16 @@ Page {
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+//            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+//            colorData = dataValuesTemp[0].map(d=> d.key );
+//            delete dataValuesTemp;
             break;
         case Constants.funnelChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = Object.keys(dataValuesTemp[0])
+            delete dataValuesTemp;
             break;
         case Constants.radarChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -400,7 +415,7 @@ Page {
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
@@ -413,7 +428,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
@@ -422,12 +437,22 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            console.log('Debug:::dataValues',dataValues);
+            var greenValue = input1Field.text;
+            var yellowValue = input2Field.text;
+            var redValue = input3Field.text;
+            console.log('Gauge Data',greenValue, yellowValue, redValue);
+            dataValues = [[+greenValue, +yellowValue, +redValue, dataValues], row3Columns[0]];
+            dataValues = JSON.stringify(dataValues);
+            console.log('Debug:::dataValues',dataValues);
             break;
         case Constants.sankeyChartTitle:
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.kpiTitle:
+            dataValues = [dataValues, xAxisColumns[0]];
+            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.tableTitle:
@@ -476,6 +501,7 @@ Page {
         ReportParamsModel.xAxisActive = false;
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
+        row3Active = false;
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -682,6 +708,12 @@ Page {
             yAxisVisible =  false
             row3Visible =  false
             break;
+        case Constants.kpiTitle:
+            yAxisVisible = false
+            xAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         default:
             xAxisVisible = true
             yAxisVisible = true
@@ -718,6 +750,17 @@ Page {
         }
     }
     
+    // Variable when drop is hovered on Y Axis
+    onRow3ActiveChanged: {
+        if(row3Active){
+            row3DropAreaRectangle.border.color = Constants.grafieksLightGreenColor;
+            row3DropAreaRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            row3DropAreaRectangle.border.color = "transparent";
+            row3DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+    
     function exportPivotChart(){
         webEngineView.runJavaScript('exportToExcel()');
     }
@@ -725,7 +768,7 @@ Page {
     
     function clearValuesOnAddNewReport(){
         clearAllChartValues();
-        switchChart(Constants.barChartTitle);
+        // switchChart(Constants.barChartTitle);
     }
 
     function setValuesOnEditReport(reportId){
@@ -773,6 +816,7 @@ Page {
     // On Edit Redraw the updated chart
     function reDrawDashboardChart(reportId){
         let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
+        console.log(reportInstance);
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
         var reportUrl = reportInstance.getChartUrl();
 
@@ -868,6 +912,7 @@ Page {
         case Constants.yAxisName:
             model = yAxisListModel;
             break;
+        case Constants.gaugePointerLabel:
         case Constants.row3Name:
             model = valuesListModel;
             break;
@@ -905,6 +950,29 @@ Page {
             columnsName.push(model.get(i).itemName);
         }
         return columnsName;
+    }
+
+    function getDataPaneAllDetails(axisName){
+         var model = null;
+        switch(axisName){
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsAllDetails = [];
+        for(var i=0; i< model.count; i++){
+            columnsAllDetails.push({ itemName: model.get(i).itemName, itemType: model.get(i).droppedItemType, dateFormat: model.get(i).dateFormat });
+        }
+        return columnsAllDetails;
     }
 
     function clearAllChartValues(){
@@ -983,11 +1051,15 @@ Page {
     function reDrawChart(){
 
         checkHorizontalGraph();
-        console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
+        console.log('Debug::',chartTitle,': Colour By',colorByData, colorListModel.count, colorListModel)
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
+
+        if(chartTitle == Constants.gaugeChartTitle && isGaugeChart()){
+            drawChart();
+        }
 
         if(chartTitle == Constants.pivotTitle){
 
@@ -997,6 +1069,18 @@ Page {
             }
             return;
         }
+
+        
+        if(chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle){
+            console.log('Start plotting ',chartTitle,'chart')
+            if(xAxisColumns.length > 0 ){
+                console.log(xAxisColumns)
+                drawChart();
+            }
+            return;
+        }
+
+        
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1193,17 +1277,29 @@ Page {
         return false;
     }
 
-    function xAxisDropEligible(itemName){
+    function xAxisDropEligible(itemName, itemType){
+        console.log('Debug:: Item type',itemType)
         var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
         // Check if condition more data pills can be added or not';
         if(xAxisColumns.length === allowedXAxisDataPanes){
             return false;
         }
+
+        switch(chartTitle){
+            case Constants.tableTitle:
+                if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+        }
+        
+
         const multiChart = true;
         if(multiChart){
             return true;
         }
         return false;
+
+        
     }
 
     function yAxisDropEligible(itemName){
@@ -1219,15 +1315,18 @@ Page {
         return false;
     }
 
+    function allNumericalValues(data){
+        return true;
+    }
     
-    function row3AxisDropEligible(itemName){
+    function row3AxisDropEligible(itemName, itemType){
         var row3Columns  = getAxisColumnNames(row3Columns);
         const multiChart = true;
-        console.log()
         // Check if condition more data pills can be added or not';
-        // Hard coded Value to 1;
-        // Please change it to variable
         if(row3Columns.length === allowedYAxisDataPanes){
+            return false;
+        }
+        if(chartTitle == Constants.pivotTitle && itemType != "numerical"){
             return false;
         }
         if(multiChart){
@@ -1238,6 +1337,7 @@ Page {
 
     function onDropAreaDropped(element,axis){
 
+        row3Active = null;
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
@@ -1248,11 +1348,11 @@ Page {
 
         var itemName = ReportParamsModel.itemName;
 
-        var valuesColumns = [];
 
         if(axis === Constants.xAxisName){
 
-            if(!xAxisDropEligible(itemName)){
+            if(!xAxisDropEligible(itemName, itemType)){
+                // Red color
                 return;
             }
             xAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
@@ -1260,6 +1360,7 @@ Page {
 
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
+                // Red color
                 return;
             }
 
@@ -1267,13 +1368,21 @@ Page {
             yAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             yAxisColumns.push(itemName);
 
-        }else{
-            if(!row3AxisDropEligible(itemName)){
+        }else if(axis == Constants.row3Name){
+            if(!row3AxisDropEligible(itemName, itemType)){
+                // Red color
                 return;
             }
             console.log(itemType, 'Adding it to values?');
             valuesListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat});
-            valuesColumns.push(itemName);
+        }else{
+            // Gauge
+            if(!row3AxisDropEligible(itemName, itemType)){
+                return;
+            }
+            console.log(itemType, 'Adding for gauge?');
+            valuesListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat});
+            
         }
 
 
@@ -1316,11 +1425,28 @@ Page {
         reDrawChart();
     }
 
+    function isNumber(number){
+        return !!(number && number.trim() && !isNaN(number.trim().replace(/,/g,''))) 
+    }
+
+    function isGaugeChart(){
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+        if(row3Columns.length && isNumber(input1Field.text) && isNumber(input2Field.text) && isNumber(input3Field.text)){
+            return true;
+        }
+        return false;
+    }
+
     function drawChart(){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
+
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
 
         if(webEngineView.loading){
             return;
@@ -1336,18 +1462,10 @@ Page {
         }
         */
 
-        if(xAxisColumns.length && yAxisColumns.length){
+        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || (chartTitle == Constants.gaugeChartTitle && isGaugeChart())) {
 
-            var xAxisColumnNamesArray = [];
-            var i = 0; // itereator => By passing warning
-            for(i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(xAxisColumns[i]);
-            }
-            var yAxisColumnNamesArray = [];
-            for(i=0;i<yAxisColumns.length;i++){
-                yAxisColumnNamesArray.push(yAxisColumns[i]);
-            }
-
+            var xAxisColumnNamesArray = Array.from(xAxisColumns);
+            var yAxisColumnNamesArray = Array.from(yAxisColumns);
 
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
             var colorByColumnName = colorByData[0] && colorByData[0].columnName;
@@ -1489,8 +1607,10 @@ Page {
                 console.log('Waterfall Data values',dataValues);
                 break;
             case Constants.gaugeChartTitle:
+                var row3ColumnsArray = Array.from(row3Columns);
                 console.log("GAUGE CLICKED")
-                ChartsModel.getGaugeChartValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log('row3ColumnsArray',row3ColumnsArray)
+                ChartsModel.getGaugeChartValues(reportIdMain, 0, Constants.reportScreen, row3ColumnsArray[0] ,'Sum');
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
@@ -1501,17 +1621,61 @@ Page {
                 ChartsModel.getKPIChartValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
-                console.log("TABLE CLICKED")
-                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen,  ["state", "city", "district"], ["population", "id"],'Sum');
+                console.log("TABLE CLICKED");
+                var nonMeasures = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() != "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => d.itemName)
+                var measures = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() == "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d=> d.itemName)
+                console.log('Non Measues',JSON.stringify(nonMeasures))
+                console.log('Measures',JSON.stringify(measures))
+                
+                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures,'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
                 console.log('row3Columns',row3Columns);
                 var row3ColumnsArray = Array.from(row3Columns);
-                // console.log([...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3Columns);
-                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
-                ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen,  [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
-                // ChartsModel.getPivotChartValues(['Category','City'],'Sales','Sum');
+                
+                // Temporary running function
+                ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
+                
+                /*
+
+                [
+                    {
+                        itemName: "Order Date",
+                        itemType: "Date"
+                        dateFormat: "%Y",
+                        qtDateFormat: "YYYY"
+                    }
+                    {
+                        itemName: "Order Date",
+                        itemType: "Categorical"
+                        dateFormat: "%Y",
+                        qtDateFormat: "YYYY"
+                    }
+                ]
+
+
+                // Change required 
+                // Group the dates according to date format and sum the values.
+                // Values can be multiple so we will have to sum all of the values
+                // Passing column name and type
+
+                var nonValueColumnNames = [ ...xAxisColumnDetails, ...yAxisColumnDetails ];
+                var valuesColumns = row3ColumnDetails;
+                ChartsModel.getPivotChartValues(nonValueColumnNames, valuesColumns,'Sum');
+
+                */
+                
                 break;
             }
             if(!dataValues){
@@ -1519,6 +1683,9 @@ Page {
             }
 
             /*
+            After changing to signals and slots this code is not required and 
+            can be removed once confirmed that everything is copied to drawChartAfterReceivingSignal function
+            
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
             //            colorData = [];
@@ -2022,6 +2189,7 @@ Page {
                 width: parent.width - row3Text.width - 4
                 anchors.left: row3Text.right
                 anchors.leftMargin: 1
+                border.color: "transparent"
 
                 DropArea{
                     id: row3DropArea
@@ -2206,17 +2374,19 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
 
                     TextEdit {
+                        // Green Input
+                        id: input1Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: reDrawChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2276,11 +2446,13 @@ Page {
                     anchors.centerIn: parent
 
                     TextEdit {
+                        id: input2Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: reDrawChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2344,11 +2516,13 @@ Page {
                     anchors.centerIn: parent
 
                     TextEdit {
+                        id: input3Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: reDrawChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2547,3 +2721,7 @@ Page {
 
     // Right Panel Ends
 }
+
+
+
+

@@ -21,6 +21,19 @@ Column{
     spacing: 4
     z: 10
 
+    property var tooltipVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('tool tip');
+    property var colorByComponentVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('color by');
+    property var sizeVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('size');
+    property var markerShapeVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('marker shape');
+    property var dataLabelVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('data label');
+    property var gridLineVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('grid line');
+    property var dynamicheightVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('dynamic height');
+    property var bottomPinchVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('bottom pinch');
+
+    // Needs to be updated
+    property var pivotThemeVisible2: !!report_desiner_page.subMenuCustomizationsAvailable.includes('pivot theme');
+    property var lineTypeVisible2: !!report_desiner_page.subMenuCustomizationsAvailable.includes('line type');
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -117,31 +130,31 @@ Column{
         ReportParamsModel.setLastDropped(itemType);
 
         switch(report_desiner_page.chartTitle){
-            case Constants.barChartTitle:
-                switchChart(Constants.stackedBarChartTitle)
-                break;
-            case Constants.horizontalBarChartTitle:
-                switchChart(Constants.horizontalStackedBarChartTitle)
-                break;
-            case Constants.areaChartTitle:
-                switchChart(Constants.multipleAreaChartTitle)
-                break;
-            case Constants.horizontalAreaChartTitle:
-                switchChart(Constants.multipleHorizontalAreaChartTitle)
-                break;
-            case Constants.lineChartTitle:
-                switchChart(Constants.multiLineChartTitle)
-                break;
-            case Constants.horizontalLineChartTitle:
-                switchChart(Constants.horizontalMultiLineChartTitle)
-            case Constants.horizontalBarGroupedChartTitle:
-            case Constants.groupBarChartTitle:
-                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
-                d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
-                reDrawChart();
-                break;
-            default:
-                reDrawChart();
+        case Constants.barChartTitle:
+            switchChart(Constants.stackedBarChartTitle)
+            break;
+        case Constants.horizontalBarChartTitle:
+            switchChart(Constants.horizontalStackedBarChartTitle)
+            break;
+        case Constants.areaChartTitle:
+            switchChart(Constants.multipleAreaChartTitle)
+            break;
+        case Constants.horizontalAreaChartTitle:
+            switchChart(Constants.multipleHorizontalAreaChartTitle)
+            break;
+        case Constants.lineChartTitle:
+            switchChart(Constants.multiLineChartTitle)
+            break;
+        case Constants.horizontalLineChartTitle:
+            switchChart(Constants.horizontalMultiLineChartTitle)
+        case Constants.horizontalBarGroupedChartTitle:
+        case Constants.groupBarChartTitle:
+            var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
+            d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
+            reDrawChart();
+            break;
+        default:
+            reDrawChart();
         }
 
         return;
@@ -186,17 +199,32 @@ Column{
     function resizePaddingInner(value){
         d3PropertyConfig.paddingInner = value;
         d3PropertyConfig.innerRadius = (1-value)*200;
-//        console.log("value"+value);
+        //        console.log("value"+value);
         reDrawChart();
     }
 
 
     function showGrid(checked){
-           var gridConfig = d3PropertyConfig.gridConfig || {};
-           gridConfig['gridStatus'] = checked;
-           d3PropertyConfig.gridConfig = gridConfig;
-           reDrawChart();
-       }
+        var gridConfig = d3PropertyConfig.gridConfig || {};
+        gridConfig['gridStatus'] = checked;
+        d3PropertyConfig.gridConfig = gridConfig;
+        reDrawChart();
+    }
+
+    function toggleDynamicheight(checked){
+        d3PropertyConfig.dynamicHeight = checked;
+        reDrawChart();
+    }
+
+    function updateBottomPinchValue(){
+        if(bottomPinchValue.text){
+            if(+bottomPinchValue.text < 0){
+                return;
+            }
+            d3PropertyConfig.bottomPinch = +bottomPinchValue.text;
+        }
+        reDrawChart();
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -224,6 +252,7 @@ Column{
     Rectangle {
         id: colorByComponent
         height: allParameter.height + colorByText.height + 2*colorListTopMargin
+        visible: colorByComponentVisible
         width: 150
         Text {
             id: colorByText
@@ -300,13 +329,13 @@ Column{
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
                     MouseArea{
-                        anchors.fill: parent                        
+                        anchors.fill: parent
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         onClicked: (mouse.button & Qt.RightButton) ? colorByOptions.visible = true : null
                     }
                 }
             }
-             // list view ends!
+            // list view ends!
 
 
         }
@@ -322,6 +351,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: tooltipVisible
 
         Rectangle{
             anchors.fill: parent
@@ -358,6 +388,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: sizeVisible
 
 
         Rectangle{
@@ -399,6 +430,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: markerShapeVisible
 
         Rectangle{
             anchors.fill: parent
@@ -441,6 +473,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: dataLabelVisible
 
         Rectangle{
             anchors.fill: parent
@@ -481,7 +514,7 @@ Column{
 
         height: 20
         width: parent.width
-        visible: report_desiner_page.lineTypeChartVisible
+        visible: lineTypeVisible2
 
         Rectangle{
             anchors.fill: parent
@@ -522,7 +555,7 @@ Column{
 
         height: 20
         width: parent.width
-        visible: pivotThemeVisible
+        visible: pivotThemeVisible2
 
         Rectangle{
             anchors.fill: parent
@@ -565,6 +598,8 @@ Column{
 
         height: 30
         width: parent.width
+        
+        visible: gridLineVisible
 
         Rectangle{
 
@@ -598,40 +633,120 @@ Column{
     // Gride Line Ends
 
 
+    // Dynamic height starts
+    Rectangle{
+
+        height: 30
+        width: parent.width
+        visible: dynamicheightVisible
+
+        Rectangle{
+
+            height: 20
+            width: parent.width
+
+            Text {
+                text: qsTr("Dynamic Height")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+
+                checked: false
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: toggleDynamicheight(checked);
+
+
+            }
+
+        }
+
+    }
+    // Dynamic height Ends
+
+
+    // Bottom Pinch
+    Rectangle{
+
+        height: 40
+        width: parent.width
+        visible: bottomPinchVisible
+
+        Rectangle{
+
+            height: 30
+            width: parent.width
+
+            Text {
+                text: qsTr("Bottom Pinch")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            TextField{
+                id: bottomPinchValue
+                height: 30
+                width: 30
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 10
+                anchors.top: parent.top
+                text: "1"
+                onTextChanged: updateBottomPinchValue()
+
+            }
+
+        }
+
+    }
+
+    
+
+
+
 
     // Merge Axis starts
-//    Rectangle{
+    //    Rectangle{
 
-//        height: 30
-//        width: parent.width
+    //        height: 30
+    //        width: parent.width
 
-//        Rectangle{
+    //        Rectangle{
 
-//            height: 20
-//            width: parent.width
+    //            height: 20
+    //            width: parent.width
 
-//            Text {
-//                text: qsTr("Merge Axis")
-//                anchors.left: parent.left
-//                anchors.leftMargin: leftMargin
-//                anchors.verticalCenter: parent.verticalCenter
-//                font.pixelSize: Constants.fontCategoryHeaderSmall
-//            }
+    //            Text {
+    //                text: qsTr("Merge Axis")
+    //                anchors.left: parent.left
+    //                anchors.leftMargin: leftMargin
+    //                anchors.verticalCenter: parent.verticalCenter
+    //                font.pixelSize: Constants.fontCategoryHeaderSmall
+    //            }
 
-//            CheckBoxTpl{
+    //            CheckBoxTpl{
 
-//                checked: false
-//                parent_dimension: editImageSize - 2
-//                anchors.right: parent.right
-//                anchors.verticalCenter: parent.verticalCenter
-//                anchors.rightMargin: 5
-//                anchors.top: parent.top
+    //                checked: false
+    //                parent_dimension: editImageSize - 2
+    //                anchors.right: parent.right
+    //                anchors.verticalCenter: parent.verticalCenter
+    //                anchors.rightMargin: 5
+    //                anchors.top: parent.top
 
-//            }
+    //            }
 
-//        }
+    //        }
 
-//    }
+    //    }
     // Merge Axis Ends
 
 

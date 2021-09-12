@@ -128,6 +128,8 @@
         <file>Source/Reports/SubComponents/CalculatedFieldPopup.qml</file>
         <file>Source/Reports/SubComponents/ToolTipPopup.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LabelPopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/KPIDataValuePopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/KPIDataLabelPopup.qml</file>
         <file>Source/Reports/SubComponents/DataFilters.qml</file>
         <file>Source/Reports/SubComponents/CategoricalFilter.qml</file>
         <file>Source/Reports/SubComponents/DateFilter.qml</file>
@@ -179,6 +181,7 @@
         <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
         <file>Source/Charts/DoughnutChart.html</file>
         <file>Source/Charts/ScatterChart.html</file>
+        <file>Source/Charts/KPI.html</file>
         <file>Source/Charts/TreeChart.html</file>
         <file>Source/MainSubComponents/VerticalLineTpl.qml</file>
         <file>Source/Charts/RadialTreeChart.html</file>
@@ -189,6 +192,7 @@
         <file>Source/Charts/RadarChart.html</file>
         <file>Source/Charts/Data/d3.v5.min.js</file>
         <file>Source/Charts/Data/funnel.js</file>
+        <file>Source/Charts/Data/d3-funnel.min.js</file>
         <file>Source/Charts/Data/radar.js</file>
         <file>Source/Charts/GeoChart.html</file>
         <file>Source/Charts/Data/d3-geo-projection.v2.min.js</file>
@@ -272,6 +276,18 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
         <file>Splash.qml</file>
         <file>Main.qml</file>
+        <file>Source/Charts/Data/dataTables.semanticui.min.js</file>
+        <file>Source/Charts/Data/semantic-icons.css</file>
+        <file>Source/Charts/Data/dataTables.min.js</file>
+        <file>Source/Charts/Data/dataTables.semanticui.min.css</file>
+        <file>Source/Charts/Data/jquery-3.5.1.min.js</file>
+        <file>Source/Charts/Data/icons.ttf</file>
+        <file>Source/Charts/Data/icons.woff</file>
+        <file>Source/Charts/Data/icons.woff2</file>
+        <file>Source/Charts/Data/semantic.min.css</file>
+        <file>Source/Charts/Data/semantic.min.js</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/KPICustomization.qml</file>
         <file>Source/Modellers/SubComponents/SaveExtract.qml</file>
     </qresource>
 </RCC>
