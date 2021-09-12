@@ -443,7 +443,7 @@ Page {
             var yellowValue = input2Field.text;
             var redValue = input3Field.text;
             console.log('Gauge Data',greenValue, yellowValue, redValue);
-            dataValues = [[dataValues, +greenValue, +redValue, +yellowValue], xAxisColumns[0]];
+            dataValues = [[+greenValue, +yellowValue, +redValue, dataValues], xAxisColumns[0]];
             dataValues = JSON.stringify(dataValues);
             console.log('Debug:::dataValues',dataValues);
             break;
