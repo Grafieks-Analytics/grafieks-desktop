@@ -181,5 +181,15 @@
         <file>Images/icons/reports/Oranges.png</file>
         <file>Images/icons/reports/Purples.png</file>
         <file>Images/icons/reports/Reds.png</file>
+        <file>Images/icons/box-free.png</file>
+        <file>Images/icons/github-free.png</file>
+        <file>Images/icons/grs-free.png</file>
+        <file>Images/icons/hive-free.png</file>
+        <file>Images/icons/impala-free.png</file>
+        <file>Images/icons/json-free.png</file>
+        <file>Images/icons/mongodb-free.png</file>
+        <file>Images/icons/oracle-free.png</file>
+        <file>Images/icons/snowflake-free.png</file>
+        <file>Images/icons/teradata-free.png</file>
     </qresource>
 </RCC>
