@@ -8,7 +8,9 @@ class Statics
 {
 public:
 
+    static int isFreeTier;
     static QString tmpIconPath;
+
 
     static QString currentDbName;
     static int currentDbIntType;

@@ -14,25 +14,55 @@ void GenerateRoleNamesForwardOnlyWorker::run()
     DataType dataType;
     QStringList colInfo, tablesList, output;
     QMap<QString, QString> colTypeMap;
+    QSqlDatabase connection;
 
-    qDebug() << Statics::driverName << Statics::teradataHost << Statics::teradataPort << Statics::teradataHost << Statics::teradataUsername << Statics::teradataPassword;
+    switch(Statics::currentDbIntType){
 
-    QString dbString = "DRIVER={" + Statics::driverName + "};" + "DBCName=" + Statics::teradataHost + ";Tusted_Connection=True";
+    case Constants::redshiftIntType:{
 
-    this->dbForward2 = QSqlDatabase::addDatabase("QODBC", "RoleNameThread");
+        connection = QSqlDatabase::addDatabase("QODBC", "redshiftQ");
 
-    this->dbForward2.setDatabaseName(dbString);
-    this->dbForward2.setPort(Statics::teradataPort);
-    this->dbForward2.setHostName(Statics::teradataHost);
-    this->dbForward2.setUserName(Statics::teradataUsername);
-    this->dbForward2.setPassword(Statics::teradataPassword);
+        connection.setDatabaseName(Statics::redshiftDb);
+        connection.setPort(Statics::redshiftPort);
+        connection.setHostName(Statics::redshiftHost);
+        connection.setUserName(Statics::redshiftUsername);
+        connection.setPassword(Statics::redshiftPassword);
+        connection.open();
+        qDebug() << connection.isOpen() << connection.lastError();
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+
+        connection = QSqlDatabase::addDatabase("QODBC", "snowflakeQ");
+
+        connection.setDatabaseName(Statics::snowflakeDb);
+        connection.setPort(Statics::snowflakePort);
+        connection.setHostName(Statics::snowflakeHost);
+        connection.setUserName(Statics::snowflakeUsername);
+        connection.setPassword(Statics::snowflakePassword);
+        connection.open();
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        connection = QSqlDatabase::addDatabase("QODBC", "teradataQ");
+
+        connection.setDatabaseName(Statics::teradataHost);
+        connection.setPort(Statics::teradataPort);
+        connection.setHostName(Statics::teradataHost);
+        connection.setUserName(Statics::teradataUsername);
+        connection.setPassword(Statics::teradataPassword);
+        connection.open();
+        break;
+    }
+    }
 
 
-    if(!this->dbForward2.open()){
-        qDebug() << this->dbForward2.lastError().text();
+    if(!connection.isOpen()){
+        qDebug() << connection.lastError().text();
     } else{
-
-        //    QSqlDatabase dbForward = QSqlDatabase::database("RoleNameThread");
 
         roleNames.clear();
         this->tableHeaders.clear();
@@ -49,9 +79,7 @@ void GenerateRoleNamesForwardOnlyWorker::run()
             foreach(QString tableName, tablesList){
 
                 QString conQuery = this->returnDatatypeQuery(tableName);
-                QString conName = this->returnConnectionName();
-
-                QSqlQuery q(conQuery, this->dbForward2);
+                QSqlQuery q(conQuery, connection);
 
                 if(q.lastError().type() == QSqlError::NoError){
                     int i = 0;
@@ -98,7 +126,7 @@ void GenerateRoleNamesForwardOnlyWorker::run()
                         tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
 
                         if(tmpTableName != tableName){
-                            colTypeMap = this->returnColumnList(tableName, dbForward2);
+                            colTypeMap = this->returnColumnList(tableName, connection);
                         }
 
                         if(fieldName.contains(tableName)){
@@ -119,7 +147,7 @@ void GenerateRoleNamesForwardOnlyWorker::run()
                 } else{
 
                     if(tmpTableName != tablesList.at(0)){
-                        colTypeMap = this->returnColumnList(tablesList.at(0), dbForward2);
+                        colTypeMap = this->returnColumnList(tablesList.at(0), connection);
                     }
                     tmpTableName = tablesList.at(0);
 
@@ -141,8 +169,6 @@ void GenerateRoleNamesForwardOnlyWorker::run()
             }
 
         }
-
-        qDebug() << "READY TO EMIT SIGNAL";
         emit signalGenerateRoleNames(this->tableHeaders, this->forwardOnlyChartHeader, this->roleNames, this->internalColCount);
     }
 }
@@ -173,39 +199,12 @@ QString GenerateRoleNamesForwardOnlyWorker::returnDatatypeQuery(QString tableNam
     return colListQuery;
 }
 
-QString GenerateRoleNamesForwardOnlyWorker::returnConnectionName()
+QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QString tableName, QSqlDatabase connection)
 {
-
-    QString conType;
-
-    switch(Statics::currentDbIntType){
-
-    case Constants::redshiftIntType:
-        conType = Constants::redshiftOdbcStrType;
-        break;
-
-    case Constants::snowflakeIntType:
-        conType = Constants::snowflakeOdbcStrType;
-        break;
-
-    case Constants::teradataIntType:
-        conType = Constants::teradataOdbcStrType;
-        break;
-    }
-
-    return conType;
-}
-
-QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QString tableName, QSqlDatabase dbForward)
-{
-
     QString conQuery = this->returnDatatypeQuery(tableName);
-    QString conName = this->returnConnectionName();
     QMap<QString, QString>colTypeMap;
 
-
-    qDebug() << this->returnConnectionName() << "DB NAME";;
-    QSqlQuery q(conQuery, dbForward);
+    QSqlQuery q(conQuery, connection);
 
     if(q.lastError().type() == QSqlError::NoError){
         while(q.next()){
@@ -214,22 +213,8 @@ QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QStr
             colTypeMap.insert(fieldName, fieldType);
         }
     } else{
-        qWarning() << Q_FUNC_INFO << q.lastError() << conName;
+        qWarning() << Q_FUNC_INFO << q.lastError() << connection;
     }
 
     return colTypeMap;
-}
-
-void GenerateRoleNamesForwardOnlyWorker::newConnection()
-{
-    QString dbString = "DRIVER={" + Statics::driverName + "};" + "DBCName=" + Statics::teradataHost + ";Tusted_Connection=True";
-
-    QSqlDatabase dbTeradataOdbcRoleName = QSqlDatabase::addDatabase("QODBC", Constants::teradataOdbcStrType + "RoleName");
-
-    dbTeradataOdbcRoleName.setDatabaseName(dbString);
-    dbTeradataOdbcRoleName.setPort(Statics::teradataPort);
-    dbTeradataOdbcRoleName.setHostName(Statics::teradataHost);
-    dbTeradataOdbcRoleName.setUserName(Statics::teradataUsername);
-    dbTeradataOdbcRoleName.setPassword(Statics::teradataPassword);
-    dbTeradataOdbcRoleName.open();
 }
