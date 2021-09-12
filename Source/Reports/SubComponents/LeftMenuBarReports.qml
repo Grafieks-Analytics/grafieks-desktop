@@ -311,7 +311,8 @@ Rectangle{
             elementHeight: 20
             activeChart: false
             title:"KPI"
-            mainCustomizations: "Properties,Legend,Reference Line"
+            xAxisLabelName: "Values"
+            mainCustomizations: "KPI Customization"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
     }

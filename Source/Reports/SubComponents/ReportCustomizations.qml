@@ -98,8 +98,16 @@ Item{
             collapsed: false
             subItems: []
         }
-        
 
+        
+        ListElement {
+            categoryName: "KPI Customization"
+            display: false
+            collapsed: false
+            subItems: []
+        }
+
+        
 
     }
 
@@ -239,6 +247,11 @@ Item{
         id: tableCustomizationComponent
         TableCustomization{}
     }
+    
+    Component{
+        id: kpiCustomizationComponent
+        KPICustomization{}
+    }
 
     Component {
         id: subItemColumnDelegate
@@ -368,6 +381,7 @@ Item{
                             case "legend": return legendComponent
                             case "total": return totalComponent
                             case "table customization": return tableCustomizationComponent
+                            case "kpi customization": return kpiCustomizationComponent
                             default:
                                 console.log('Debug:: Report Customization:',categoryName.toLowerCase())
                         }
