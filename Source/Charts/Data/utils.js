@@ -262,6 +262,10 @@ function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
 }
 
 function clearChart() {
+    if(!window.d3){
+        console.log('d3 not available skipping')
+        return;    
+    }
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
     d3.selectAll("#xAxisDiv").html("");
@@ -331,6 +335,10 @@ function setXAxisTicksDistance(distanceValue = "1em") {
 }
 
 function clearStyle() {
+    if(!window.d3){
+        console.log('d3 not available skipping')
+        return;    
+    }
     d3.selectAll("#xAxisDiv").attr("style", null);
     d3.selectAll("#xAxisLabelId").attr("style", null);
     d3.selectAll("#my_dataviz").attr("style", null);
@@ -369,6 +377,16 @@ function removeAxisTicks(axis = "xAxis", dataValues, range, options = {}) {
             continue;
         }
     }
+}
+
+function createBatches(array, chunk_size) {
+    return Array(Math.ceil(array.length / chunk_size)).fill().map((_, index) => index * chunk_size).map(begin => array.slice(begin, begin + chunk_size));;
+}
+
+function sortArraysOfObjectByValue(array, valueKey){
+    return array.sort(function (a, b) {
+        return b[valueKey] - a[valueKey];
+    });
 }
 
 // Main

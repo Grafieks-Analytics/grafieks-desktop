@@ -672,7 +672,7 @@
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent = dataValues[i][1];
+                        label.textContent =  Math.round(dataValues[i][1]);
                     });
                 }
                 d3.select(".axis.label path").remove();
@@ -919,7 +919,7 @@
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
-                                    yValue.toFixed(2) +
+                                     Math.round(yValue) +
                                     "</span>"
                                 );
                             });

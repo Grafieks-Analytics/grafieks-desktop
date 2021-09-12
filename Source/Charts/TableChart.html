@@ -4,254 +4,693 @@
     <head>
         <meta charset="utf-8" />
         <title>Table</title>
-        <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
 
-        <script src="./Data/d3.v4.min.js"></script>
-        <link rel="stylesheet" href="Data/general.css" />
-        <link rel="stylesheet" href="Data/dataTables.min.css" />
         <script src="./Data/jquery-3.5.1.min.js"></script>
         <script src="./Data/dataTables.min.js"></script>
-        <script src="./Data/ColReorderWithResize.js"></script>
+
+        <script src="./Data/dataTables.semanticui.min.js"></script>
+        <script src="./Data/semantic.min.js"></script>
+
+        <link rel="stylesheet" href="Data/semantic.min.css" />
+        <link rel="stylesheet" href="Data/semantic-icons.css" />
+        <link rel="stylesheet" href="Data/dataTables.semanticui.min.css" />
+        <script src="./Data/d3DefaultConfig.js"></script>
+
+        <script src="./Data/utils.js"></script>
 
         <style>
-            table {
-                font-family: arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
+            .dataTables_scrollBody {
+                height: auto !important;
             }
 
-            td,
             th {
-                border: 1px solid #ccc;
-                text-align: left;
-                padding: 8px;
-            }
-
-            tr:nth-child(even) {
-                background-color: #eee;
-            }
-
-            td:hover {
-                background-color: #d9d9d9;
+                text-transform: capitalize !important;
             }
         </style>
     </head>
 
     <body>
-        <div id="my_div"></div>
-
-        <table id="tableChart" style="display: none; width: 100%">
-            <!-- <thead>
-                <th>Company</th>
-                <th>Contact</th>
-                <th>Country</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland Mendel</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland Mendel</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland Mendel</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
-            </tbody> -->
-        </table>
+        <div id="my_dataviz" style="padding: 10px">
+            
+        </div>
 
         <script>
+            
             var data = [
                 [
-                    ["Abhishek", 600],
-                    ["Hirak", 20],
-                    ["Abhishek 2", 300],
-                    ["Chilarai", 400],
-                    ["Hirak 4", 550],
-                    ["Ravi", 800],
+                    [
+                        "Tiger Nixon",
+                        "System Architect",
+                        "Edinburgh",
+                        "61",
+                        "2011/04/25",
+                        "$320,800",
+                    ],
+                    [
+                        "Garrett Winters",
+                        "Accountant",
+                        "Tokyo",
+                        "63",
+                        "2011/07/25",
+                        "$170,750",
+                    ],
+                    [
+                        "Ashton Cox",
+                        "Junior Technical Author",
+                        "San Francisco",
+                        "66",
+                        "2009/01/12",
+                        "$86,000",
+                    ],
+                    [
+                        "Cedric Kelly",
+                        "Senior Javascript Developer",
+                        "Edinburgh",
+                        "22",
+                        "2012/03/29",
+                        "$433,060",
+                    ],
+                    [
+                        "Airi Satou",
+                        "Accountant",
+                        "Tokyo",
+                        "33",
+                        "2008/11/28",
+                        "$162,700",
+                    ],
+                    [
+                        "Brielle Williamson",
+                        "Integration Specialist",
+                        "New York",
+                        "61",
+                        "2012/12/02",
+                        "$372,000",
+                    ],
+                    [
+                        "Herrod Chandler",
+                        "Sales Assistant",
+                        "San Francisco",
+                        "59",
+                        "2012/08/06",
+                        "$137,500",
+                    ],
+                    [
+                        "Rhona Davidson",
+                        "Integration Specialist",
+                        "Tokyo",
+                        "55",
+                        "2010/10/14",
+                        "$327,900",
+                    ],
+                    [
+                        "Colleen Hurst",
+                        "Javascript Developer",
+                        "San Francisco",
+                        "39",
+                        "2009/09/15",
+                        "$205,500",
+                    ],
+                    [
+                        "Sonya Frost",
+                        "Software Engineer",
+                        "Edinburgh",
+                        "23",
+                        "2008/12/13",
+                        "$103,600",
+                    ],
+                    [
+                        "Jena Gaines",
+                        "Office Manager",
+                        "London",
+                        "30",
+                        "2008/12/19",
+                        "$90,560",
+                    ],
+                    [
+                        "Quinn Flynn",
+                        "Support Lead",
+                        "Edinburgh",
+                        "22",
+                        "2013/03/03",
+                        "$342,000",
+                    ],
+                    [
+                        "Charde Marshall",
+                        "Regional Director",
+                        "San Francisco",
+                        "36",
+                        "2008/10/16",
+                        "$470,600",
+                    ],
+                    [
+                        "Haley Kennedy",
+                        "Senior Marketing Designer",
+                        "London",
+                        "43",
+                        "2012/12/18",
+                        "$313,500",
+                    ],
+                    [
+                        "Tatyana Fitzpatrick",
+                        "Regional Director",
+                        "London",
+                        "19",
+                        "2010/03/17",
+                        "$385,750",
+                    ],
+                    [
+                        "Michael Silva",
+                        "Marketing Designer",
+                        "London",
+                        "66",
+                        "2012/11/27",
+                        "$198,500",
+                    ],
+                    [
+                        "Paul Byrd",
+                        "Chief Financial Officer (CFO)",
+                        "New York",
+                        "64",
+                        "2010/06/09",
+                        "$725,000",
+                    ],
+                    [
+                        "Gloria Little",
+                        "Systems Administrator",
+                        "New York",
+                        "59",
+                        "2009/04/10",
+                        "$237,500",
+                    ],
+                    [
+                        "Bradley Greer",
+                        "Software Engineer",
+                        "London",
+                        "41",
+                        "2012/10/13",
+                        "$132,000",
+                    ],
+                    [
+                        "Dai Rios",
+                        "Personnel Lead",
+                        "Edinburgh",
+                        "35",
+                        "2012/09/26",
+                        "$217,500",
+                    ],
+                    [
+                        "Jenette Caldwell",
+                        "Development Lead",
+                        "New York",
+                        "30",
+                        "2011/09/03",
+                        "$345,000",
+                    ],
+                    [
+                        "Yuri Berry",
+                        "Chief Marketing Officer (CMO)",
+                        "New York",
+                        "40",
+                        "2009/06/25",
+                        "$675,000",
+                    ],
+                    [
+                        "Caesar Vance",
+                        "Pre-Sales Support",
+                        "New York",
+                        "21",
+                        "2011/12/12",
+                        "$106,450",
+                    ],
+                    [
+                        "Doris Wilder",
+                        "Sales Assistant",
+                        "Sydney",
+                        "23",
+                        "2010/09/20",
+                        "$85,600",
+                    ],
+                    [
+                        "Angelica Ramos",
+                        "Chief Executive Officer (CEO)",
+                        "London",
+                        "47",
+                        "2009/10/09",
+                        "$1,200,000",
+                    ],
+                    [
+                        "Gavin Joyce",
+                        "Developer",
+                        "Edinburgh",
+                        "42",
+                        "2010/12/22",
+                        "$92,575",
+                    ],
+                    [
+                        "Jennifer Chang",
+                        "Regional Director",
+                        "Singapore",
+                        "28",
+                        "2010/11/14",
+                        "$357,650",
+                    ],
+                    [
+                        "Brenden Wagner",
+                        "Software Engineer",
+                        "San Francisco",
+                        "28",
+                        "2011/06/07",
+                        "$206,850",
+                    ],
+                    [
+                        "Fiona Green",
+                        "Chief Operating Officer (COO)",
+                        "San Francisco",
+                        "48",
+                        "2010/03/11",
+                        "$850,000",
+                    ],
+                    [
+                        "Shou Itou",
+                        "Regional Marketing",
+                        "Tokyo",
+                        "20",
+                        "2011/08/14",
+                        "$163,000",
+                    ],
+                    [
+                        "Michelle House",
+                        "Integration Specialist",
+                        "Sydney",
+                        "37",
+                        "2011/06/02",
+                        "$95,400",
+                    ],
+                    [
+                        "Suki Burks",
+                        "Developer",
+                        "London",
+                        "53",
+                        "2009/10/22",
+                        "$114,500",
+                    ],
+                    [
+                        "Prescott Bartlett",
+                        "Technical Author",
+                        "London",
+                        "27",
+                        "2011/05/07",
+                        "$145,000",
+                    ],
+                    [
+                        "Gavin Cortez",
+                        "Team Leader",
+                        "San Francisco",
+                        "22",
+                        "2008/10/26",
+                        "$235,500",
+                    ],
+                    [
+                        "Martena Mccray",
+                        "Post-Sales support",
+                        "Edinburgh",
+                        "46",
+                        "2011/03/09",
+                        "$324,050",
+                    ],
+                    [
+                        "Unity Butler",
+                        "Marketing Designer",
+                        "San Francisco",
+                        "47",
+                        "2009/12/09",
+                        "$85,675",
+                    ],
+                    [
+                        "Howard Hatfield",
+                        "Office Manager",
+                        "San Francisco",
+                        "51",
+                        "2008/12/16",
+                        "$164,500",
+                    ],
+                    [
+                        "Hope Fuentes",
+                        "Secretary",
+                        "San Francisco",
+                        "41",
+                        "2010/02/12",
+                        "$109,850",
+                    ],
+                    [
+                        "Vivian Harrell",
+                        "Financial Controller",
+                        "San Francisco",
+                        "62",
+                        "2009/02/14",
+                        "$452,500",
+                    ],
+                    [
+                        "Timothy Mooney",
+                        "Office Manager",
+                        "London",
+                        "37",
+                        "2008/12/11",
+                        "$136,200",
+                    ],
+                    [
+                        "Jackson Bradshaw",
+                        "Director",
+                        "New York",
+                        "65",
+                        "2008/09/26",
+                        "$645,750",
+                    ],
+                    [
+                        "Olivia Liang",
+                        "Support Engineer",
+                        "Singapore",
+                        "64",
+                        "2011/02/03",
+                        "$234,500",
+                    ],
+                    [
+                        "Bruno Nash",
+                        "Software Engineer",
+                        "London",
+                        "38",
+                        "2011/05/03",
+                        "$163,500",
+                    ],
+                    [
+                        "Sakura Yamamoto",
+                        "Support Engineer",
+                        "Tokyo",
+                        "37",
+                        "2009/08/19",
+                        "$139,575",
+                    ],
+                    [
+                        "Thor Walton",
+                        "Developer",
+                        "New York",
+                        "61",
+                        "2013/08/11",
+                        "$98,540",
+                    ],
+                    [
+                        "Finn Camacho",
+                        "Support Engineer",
+                        "San Francisco",
+                        "47",
+                        "2009/07/07",
+                        "$87,500",
+                    ],
+                    [
+                        "Serge Baldwin",
+                        "Data Coordinator",
+                        "Singapore",
+                        "64",
+                        "2012/04/09",
+                        "$138,575",
+                    ],
+                    [
+                        "Zenaida Frank",
+                        "Software Engineer",
+                        "New York",
+                        "63",
+                        "2010/01/04",
+                        "$125,250",
+                    ],
+                    [
+                        "Zorita Serrano",
+                        "Software Engineer",
+                        "San Francisco",
+                        "56",
+                        "2012/06/01",
+                        "$115,000",
+                    ],
+                    [
+                        "Jennifer Acosta",
+                        "Junior Javascript Developer",
+                        "Edinburgh",
+                        "43",
+                        "2013/02/01",
+                        "$75,650",
+                    ],
+                    [
+                        "Cara Stevens",
+                        "Sales Assistant",
+                        "New York",
+                        "46",
+                        "2011/12/06",
+                        "$145,600",
+                    ],
+                    [
+                        "Hermione Butler",
+                        "Regional Director",
+                        "London",
+                        "47",
+                        "2011/03/21",
+                        "$356,250",
+                    ],
+                    [
+                        "Lael Greer",
+                        "Systems Administrator",
+                        "London",
+                        "21",
+                        "2009/02/27",
+                        "$103,500",
+                    ],
+                    [
+                        "Jonas Alexander",
+                        "Developer",
+                        "San Francisco",
+                        "30",
+                        "2010/07/14",
+                        "$86,500",
+                    ],
+                    [
+                        "Shad Decker",
+                        "Regional Director",
+                        "Edinburgh",
+                        "51",
+                        "2008/11/13",
+                        "$183,000",
+                    ],
+                    [
+                        "Michael Bruce",
+                        "Javascript Developer",
+                        "Singapore",
+                        "29",
+                        "2011/06/27",
+                        "$183,000",
+                    ],
+                    [
+                        "Donna Snider",
+                        "Customer Support",
+                        "New York",
+                        "27",
+                        "2011/01/25",
+                        "$112,000",
+                    ],
                 ],
-                ["", 4000],
-                ["name", "value"],
+                ["", "", "", "", "", "$ 4000"],
+                ["name", "position", "office", "age", "Start Date", "Salary"],
             ];
-
-            d3.selectAll("#tableChart").append("thead");
-            d3.selectAll("#tableChart").append("tbody");
-            const [dataValues, totals, headings] = data;
-
-            var theadingRow = document.createElement("tr");
-
-            headings.forEach((d, i) => {
-                console.log(d);
-                var trRowData = d;
-                var th = document.createElement("th");
-                th.innerText = d;
-                theadingRow.appendChild(th);
-            });
-
-            d3.select("#tableChat thead").append(theadingRow);
-
-            dataValues.forEach((d, i) => {
+            function generateNewTr(row, type = "td") {
                 var tr = document.createElement("tr");
-                var trRowData = d;
-                trRowData.forEach((rowData, rowIndex) => {
-                    console.log(rowData);
-                    var td = document.createElement("td");
-                    td.innerText = rowData;
+                var rowValues = Object.values(row);
+                for (var i = 0; i < rowValues.length; i++) {
+                    var td = document.createElement(type);
+                    td.innerText = rowValues[i];
                     tr.appendChild(td);
-                });
-                document.querySelector("#tableChart tbody").appendChild(tr);
-            });
+                }
+                return tr;
+            }
 
-            $(document).ready(function () {
-                $("#tableChart").css("display", "");
-                $("#tableChart").DataTable({
-                    paging: false,
+            function addNewRow(table) {
+                var tr = document.createElement("tr");
+                for (var i = 0; i < 3; i++) {
+                    var td = document.createElement("td");
+                    td.innerText = "Test" + i;
+                    tr.appendChild(td);
+                }
+                table.row.add(tr);
+            }
+
+            function addHeader() {
+                var table = document.querySelector("thead");
+                table.appendChild(generateNewTr(window.data[2], "th"));
+            }
+
+            function addFooter() {
+                var table = document.querySelector("tfoot");
+                table.appendChild(generateNewTr(window.data[1], "th"));
+            }
+
+            function getColumnNamesConfigArray(data) {
+                return data.map((d) => ({ data: d }));
+            }
+
+            function setCompact(compactStatus) {
+                if (compactStatus) {
+                    document.querySelector("table").classList.add("compact");
+                } else {
+                    document.querySelector("table").classList.remove("compact");
+                }
+            }
+
+            function init(){
+                document.querySelector("#my_dataviz").innerHTML = `<table id="example" class="ui celled table" style="width: 100%">
+                            <thead></thead>
+                            <tbody></tbody>
+                            <tfoot></tfoot>
+                        </table>`;
+
+                    removeCellBorder();
+                    removeHoverBackground();
+                    removeRowAlternateColor();
+                    setCompact(false);
+                        
+            }
+            
+            function clearChart(){
+                init();
+            }
+            
+            function drawChart(data, plotConfiguration = {}) {
+                window.data = data;
+                if(window.tableInstance){
+                    tableInstance.destroy();
+                }
+                init();
+                let {
+                    defaultCellBorderStatus,
+                    defaultCellHoverStatus,
+                    defaultCompactStatus,
+                    defaultRowAlternateStatus,
+                    defaultBatchsize
+                } = defaultD3Config.defaultTableChartConfig;
+                let {
+                    cellBorderStatus = defaultCellBorderStatus,
+                    hoverStatus = defaultCellHoverStatus,
+                    compactStatus = defaultCompactStatus,
+                    rowAlternateStatus = defaultRowAlternateStatus,
+                    batchSize = defaultBatchsize
+                } = plotConfiguration;
+
+                addHeader();
+                addFooter();
+
+                if (!cellBorderStatus) {
+                    removeCellBorder();
+                } else {
+                    addCellBorder();
+                }
+
+                if (hoverStatus) {
+                    addHoverBackground();
+                } else {
+                    removeHoverBackground();
+                }
+
+                if (rowAlternateStatus) {
+                    addRowAlternateColor();
+                } else {
+                    removeRowAlternateColor();
+                }
+
+                setCompact(compactStatus);
+
+                window.dataTableValues = createBatches(data[0], batchSize);
+                window.counter = 0;
+
+                window.tableInstance = $("#example").DataTable({
+                    scrollY: "calc(100vh - 180px)",
                     bPaginate: false,
-                    bFilter: false,
+                    scroller: {
+                        loadingIndicator: true,
+                    },
+                    scroller: true,
+                    deferRender: true,
+                    data: window.dataTableValues[window.counter++],
                     bInfo: false,
-                    sDom: "Rlfrtip",
                 });
-            });
+
+                setLazyLoadHandler();
+            }
+
+            // drawChart(data);
+
+            function updateTable() {
+                addDataToRow();
+            }
+
+            function addCellBorder() {
+                document.querySelector("#cellBorderStyle") &&
+                    document.querySelector("#cellBorderStyle").remove();
+            }
+
+            function removeCellBorder() {
+                addCellBorder();
+                var styleTag = document.createElement("style");
+                styleTag.id = "cellBorderStyle";
+                styleTag.innerHTML = " td{ border: 0 !important; }";
+                document.head.appendChild(styleTag);
+            }
+
+            function removeHoverBackground() {
+                document.querySelector("#cellHoverStyle") &&
+                    document.querySelector("#cellHoverStyle").remove();
+            }
+
+            function addHoverBackground() {
+                var styleTag = document.createElement("style");
+                styleTag.id = "cellHoverStyle";
+                styleTag.innerHTML =
+                    "td:hover { background-color: #d9d9d988; }";
+                document.head.appendChild(styleTag);
+            }
+
+            function removeRowAlternateColor() {
+                document.querySelector("#alternateRow") &&
+                    document.querySelector("#alternateRow").remove();
+            }
+
+            function addRowAlternateColor() {
+                var styleTag = document.createElement("style");
+                styleTag.id = "alternateRow";
+                styleTag.innerHTML =
+                    "tr:nth-child(even) { background-color: #d9d9d933; }";
+                document.head.appendChild(styleTag);
+            }
+
+            function setLazyLoadHandler() {
+                var tableScrollBody = document.querySelector(
+                    ".dataTables_scrollBody"
+                );
+                tableScrollBody.addEventListener("scroll", function (event) {
+                    var element = event.target;
+                    if (!window.dataTableValues[window.counter]) {
+                        return;
+                    }
+                    if (
+                        element.scrollTop + element.clientHeight + 100 >
+                        element.scrollHeight
+                    ) {
+                        console.log("Adding new data");
+                        window.scrollBarPosition = Math.abs(
+                            element.clientHeight - element.scrollTop
+                        );
+                        updateTable();
+                    }
+                });
+            }
+
+            function addDataToRow() {
+                tableInstance.rows.add(window.dataTableValues[window.counter++]).draw();
+            }
         </script>
     </body>
 </html>

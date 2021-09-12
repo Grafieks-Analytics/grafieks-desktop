@@ -67,7 +67,7 @@
         // var data = [[["India", "India", 2564], ["India", "China", 0], ["India", "Bhutan", 0], ["India", "Nepal", 0], ["India", "NA", 0], ["India", "Australia", 0], ["India", "NZ", 0], ["China", "India", 0], ["China", "China", 7462], ["China", "Bhutan", 0], ["China", "Nepal", 0], ["China", "NA", 0], ["China", "Australia", 0], ["China", "NZ", 0], ["Bhutan", "India", 0], ["Bhutan", "China", 0], ["Bhutan", "Bhutan", 4243], ["Bhutan", "Nepal", 0], ["Bhutan", "NA", 0], ["Bhutan", "Australia", 0], ["Bhutan", "NZ", 0], ["Nepal", "India", 0], ["Nepal", "China", 0], ["Nepal", "Bhutan", 0], ["Nepal", "Nepal", 6857], ["Nepal", "NA", 0], ["Nepal", "Australia", 0], ["Nepal", "NZ", 0], ["NA", "India", 0], ["NA", "China", 0], ["NA", "Bhutan", 0], ["NA", "Nepal", 0], ["NA", "NA", 3736], ["NA", "Australia", 0], ["NA", "NZ", 0], ["Australia", "India", 0], ["Australia", "China", 0], ["Australia", "Bhutan", 0], ["Australia", "Nepal", 0], ["Australia", "NA", 0], ["Australia", "Australia", 4712], ["Australia", "NZ", 0], ["NZ", "India", 0], ["NZ", "China", 0], ["NZ", "Bhutan", 0], ["NZ", "Nepal", 0], ["NZ", "NA", 0], [
         var data = [
             [
-                ["Bookcases", "Furniture", 8016],
+                ["Bookcases", "Furniture", 801.216],
                 ["Bookcases", "Office Supplies", 0],
                 ["Bookcases", "Technology", 0],
                 ["Chairs", "Furniture", 6906],
@@ -135,7 +135,7 @@
 
         var data = [
             [
-                ["Furniture", "2019-11-08", 2250],
+                ["Furniture", "2019-11-08", 2250.555],
                 ["Furniture", "2019-06-12", 94],
                 ["Furniture", "2018-10-11", 1916],
                 ["Furniture", "2017-06-09", 3510],
@@ -303,7 +303,7 @@
                 ["Technology", "2020-05-28", 0],
                 ["Technology", "2020-10-26", 0],
                 ["Technology", "2019-04-05", 0],
-                ["Technology", "2019-09-17", 148],
+                ["Technology", "2019-09-17", 14.12],
                 ["Technology", "2018-01-31", 0],
                 ["Technology", "2020-11-06", 0],
                 ["Technology", "2020-11-09", 0],
@@ -1052,9 +1052,8 @@
                     })
                     .attr("font-family", dataLabelfontFamily)
                     .attr("font-size", dataLabelfontSize)
-
                     .text(function (d) {
-                        return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;
+                        return Math.round(d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0);
                     });
             }
             d3.selectAll("#yAxisDiv text")
