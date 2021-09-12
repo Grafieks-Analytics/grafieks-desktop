@@ -47,6 +47,7 @@ Rectangle{
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "area.png"
@@ -59,6 +60,7 @@ Rectangle{
             maxDropOnXAxis: 1
             maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "line_chart.png"
@@ -70,9 +72,11 @@ Rectangle{
             maxDropOnYAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
         }
         ListElement{
-            icon: "combination_chart.png"
+            // icon: "combination_chart.png"
+            icon: "combination_grey.png"
             activeChart: false
             chartHtml:"bar.html"
             title:"Combination - Coming Soon"
@@ -81,6 +85,7 @@ Rectangle{
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
             nonClickable: true
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "heatmap.png"
@@ -92,6 +97,7 @@ Rectangle{
             yAxisVisible: true
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "scatter_plot.png"
@@ -101,6 +107,7 @@ Rectangle{
             yAxisVisible: true
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "waterfall.png"
@@ -112,6 +119,7 @@ Rectangle{
             maxDropOnYAxis: 1
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "pie_chart.png"
@@ -125,6 +133,7 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label"
         }
         ListElement{
             icon: "donut.png"
@@ -138,6 +147,7 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label"
         }
         ListElement{
             icon: "radar.png"
@@ -149,6 +159,7 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "sunburst.png"
@@ -162,6 +173,7 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label"
         }
 //        ListElement{
 //            icon: "nightingales_rose.png"
@@ -193,6 +205,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,dynamic height,bottom pinch"
         }
         ListElement{
             icon: "tree_chart.png"
@@ -204,7 +217,8 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: "Properties,Reference Line"
+            subMenuCustomizations: "tool tip,size,data label,grid line"
         }
         // ListElement{
         //     icon: "force_directed.png"
@@ -214,7 +228,8 @@ Rectangle{
         //     mainCustomizations: "Properties,Legend,Reference Line"
         // }
         ListElement{
-            icon: "sankey.png"
+            // icon: "sankey.png"
+            icon: "sankey_grey.png"
             chartHtml:"SankeyChart.html"
             elementHeight: 24
             activeChart: false
@@ -222,16 +237,21 @@ Rectangle{
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
-            icon: "tree_map.png"
+            // icon: "tree_map.png"
+            icon: "treemap_grey.png"
             chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             title: "Tree Map"
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label"
         }
 //        ListElement{
 //            icon: "condegram.png"
@@ -240,7 +260,8 @@ Rectangle{
 //            title:"Condegram"
 //        }
         ListElement{
-            icon: "map.png"
+            // icon: "map.png"
+            icon: "geo_grey.png"
             chartHtml:"GeoChart.html"
             elementHeight: 22
             elementWidth:40
@@ -250,6 +271,7 @@ Rectangle{
             title:"Map - Coming Soon"
             mainCustomizations: "Properties,Legend"
             nonClickable: true
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "gauge_chart.png"
@@ -258,7 +280,8 @@ Rectangle{
             elementWidth:30
             activeChart: false
             title:"Gauge Chart"
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: ""
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "pivot.png"
@@ -271,6 +294,7 @@ Rectangle{
             maxDropOnYAxis: 5
             themeVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Total"
+            subMenuCustomizations: "tool tip,size,data label,grid line,pivot theme,grand total,row total,sub total"
         }
         ListElement{
             icon: "table.png"
@@ -279,25 +303,21 @@ Rectangle{
             yAxisLabelName: "Columns"
             elementWidth: 30
             activeChart: false
+            maxDropOnXAxis: 5
             title:"Table"
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
+            mainCustomizations: "Total,Table Customization"
+            subMenuCustomizations: "tool tip,size,data label,grid line,grand total"
         }
         ListElement{
             icon: "123.png"
-            chartHtml:"bar.html"
+            chartHtml:"KPI.html"
             elementWidth: 30
             elementHeight: 20
             activeChart: false
             title:"KPI"
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "123.png"
-            chartHtml:"bar.html"
-            elementWidth: 30
-            elementHeight: 20
-            activeChart: false
-            title:"Line Bar"
+            xAxisLabelName: "Values"
+            mainCustomizations: "KPI Customization"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
     }
 
@@ -357,11 +377,12 @@ Rectangle{
         allowedYAxisDataPanes = 1;
     }
 
-    function getChart(chartHtml,index,chartTitle,mainCustomizations){
+    function getChart(chartHtml,index,chartTitle,mainCustomizations, subMenuCustomizations=""){
         report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.chartTitle = chartTitle;
 
         report_desiner_page.customizationsAvailable = mainCustomizations;
+        report_desiner_page.subMenuCustomizationsAvailable = subMenuCustomizations;
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
@@ -510,7 +531,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  getChart(chartHtml,index,title,mainCustomizations)
+                    onClicked:  getChart(chartHtml,index,title,mainCustomizations,subMenuCustomizations)
                     onEntered: displayToolTipVisible=true
                     onExited: displayToolTipVisible=false
                 }

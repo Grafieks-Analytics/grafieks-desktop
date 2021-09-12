@@ -65,15 +65,44 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
-        legendPosition: "bottom",
+        legendStatus: false,
+        legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: false,
+        labelStatus: true,
     },
     defaultGridConfig: {
         gridStatus: true,
     },
+
+    defaultTableChartConfig: {
+        defaultCellBorderStatus: true,
+        defaultCellHoverStatus: true,
+        defaultCompactStatus: false,
+        defaultRowAlternateStatus: true,
+        defaultBatchsize: 50
+    },
+    defaultDynamicHeight: false,
+    defaultBottomPinch: 1,
+    defaultKPIStyling:{
+        value: {
+            fontSize: 12,
+            color: "#000",
+            bold: false,
+            italic: false,
+            underline: false,
+            fontFamily: "Arial"
+        },
+        label:{
+            fontSize: 12,
+            color: "#000",
+            bold: false,
+            italic: false,
+            underline: false,
+            fontFamily: "Arial"
+        }
+
+    }
 };
 const markerShapeConfig = {
     circle: {
