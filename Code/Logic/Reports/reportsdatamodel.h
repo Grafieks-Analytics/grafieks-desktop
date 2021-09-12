@@ -41,8 +41,6 @@ public:
     Q_INVOKABLE void deleteReportData(int reportId, bool deleteAll = false);
 
 public slots:
-    void getChartData(QMap<int, QStringList*> chartData);
-    void getChartHeader(QMap<int, QStringList> chartHeader);
     void updateFilterData(QMap<int, QVariantMap> masterReportFilters, int reportId);
     void currentScreenChanged(int currentScreen);
     void getReportId(int reportId);

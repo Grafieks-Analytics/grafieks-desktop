@@ -31,7 +31,6 @@ private:
 
 signals:
     void sendFilterQuery(QString &filteredQuery);
-    void sendCsvFilterQuery(QString &filteredQuery);
     void sendExcelFilterQuery(QString &filteredQuery);
     void sendModels(FilterCategoricalListModel *categoryModel, FilterNumericalListModel * numericalModel, FilterDateListModel *dateModel);
 

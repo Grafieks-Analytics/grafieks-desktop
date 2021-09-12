@@ -5,10 +5,6 @@ ExcelDataModel::ExcelDataModel(QObject *parent) : QAbstractTableModel(parent)
     this->totalColCount = 1;
 }
 
-void ExcelDataModel::clearData()
-{
-    this->sheetNamesMap.clear();
-}
 
 ExcelDataModel::~ExcelDataModel()
 {
@@ -109,17 +105,12 @@ QStringList ExcelDataModel::filterTableList(QString keyword)
     return output;
 }
 
-QString ExcelDataModel::getQueryJoiner()
-{
-    QString output;
-    output = "\"";
-    return output;
-}
 
 QStringList ExcelDataModel::getTableListQAXObject()
 {
     QStringList output;
     QString excelPath = Statics::currentDbName;
+    qDebug() << excelPath << Q_FUNC_INFO;
     this->sheetNamesMap.clear();
 
     /* When pApplication is destructed, all its related child objects will be cleaned up, a kind of scope pointer */
@@ -157,5 +148,6 @@ QStringList ExcelDataModel::getTableListQAXObject()
     workbook->dynamicCall("Close()");
     excel->dynamicCall("Quit()");
 
+    qDebug() << output;
     return output;
 }

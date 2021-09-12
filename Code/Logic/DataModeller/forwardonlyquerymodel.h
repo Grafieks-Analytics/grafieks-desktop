@@ -72,8 +72,7 @@ private:
     QStringList columnStringTypes;
 
 signals:
-        void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
+
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
