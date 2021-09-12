@@ -58,8 +58,8 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
         addConnector(new Connector("Oracle","/Images/icons/oracle-free.png","rdbms", false));
         addConnector(new Connector("ODBC","/Images/icons/Db - 60.png","rdbms", false));
         addConnector(new Connector("Snowflake","/Images/icons/snowflake-free.png","rdbms", false));
-        addConnector(new Connector("Sqlite","/Images/icons/74_sqlite-icon_a6ac860586.png","rdbms", false));
-        addConnector(new Connector("Sql Server","/Images/icons/microsoft-sql-server.png","rdbms", false));
+        addConnector(new Connector("Sqlite","/Images/icons/74_sqlite-icon_a6ac860586.png","rdbms", true));
+        addConnector(new Connector("Sql Server","/Images/icons/microsoft-sql-server.png","rdbms", true));
         addConnector(new Connector("Teradata","/Images/icons/Db - 60.png","rdbms", false));
         addConnector(new Connector("CSV","/Images/icons/16_csv.png","file", true));
         addConnector(new Connector("Impala","/Images/icons/impala-free.png","rdbms", false));
