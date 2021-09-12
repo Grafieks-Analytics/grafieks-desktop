@@ -14,10 +14,20 @@
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <script src="./Data/d3-funnel.min.js"></script>
+
+        <style>
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+                min-width: fit-content;
+                max-width: max-content;
+                padding: 8px;
+            }
+        </style>
     </head>
 
     <body>
-        <div id="my_dataviz" style="text-align: center"></div>
+        <div id="my_dataviz" style="text-align: center; margin-top: 40px"></div>
         <div id="tooltip"></div>
 
         <script>
@@ -104,7 +114,13 @@
                         d3colorPalette = defaultD3Config.d3ColorPalette,
                         dynamicHeight = defaultD3Config.defaultDynamicHeight,
                         bottomPinch = defaultD3Config.defaultBottomPinch,
+                        labelConfig = defaultD3Config.defaultlabelConfig,
+                        dataLabelfontSize = defaultD3Config.fontSize,
+                        dataLabelfontFamily = defaultD3Config.fontFamily,
                     } = plottingConfiguration;
+                    let { labelStatus } = labelConfig;
+                    window.dataLabelfontSize = dataLabelfontSize;
+                    window.dataLabelfontFamily = dataLabelfontFamily;
 
                     // documentation for options
                     // https://github.com/jakezatecky/d3-funnel/blob/master/README.md
@@ -132,14 +148,79 @@
                                 enabled: false,
                             },
                             width: window.innerWidth / 2,
-                            height: window.innerHeight - 50,
+                            height: window.innerHeight - 80,
                         },
                         tooltip: {
-                            enabled: true,
+                            enabled: false,
+                        },
+                        label: {
+                            enabled: labelStatus,
+                            fill: "black",
+                            fontSize: dataLabelfontSize,
+                            fontFamily: dataLabelfontFamily,
                         },
                     };
 
                     chart.draw(data, options);
+                    //  const note = document.querySelector(".d3-funnel-tooltip");
+                    // note.style.backgroundColor = "yellow";
+                    // document.querySelector("d3-funnel-tooltip")
+                    var funnelSvg = document.querySelectorAll("svg g");
+                    funnelSvg.forEach((e) => {
+                        e.addEventListener("mouseout", (event) => {
+                            d3.select("#tooltip")
+                                .style("display", "none");
+                                // .html("");
+                        });
+                        e.addEventListener("mousemove", (event) => {
+                            // console.log(event.target);
+                            // console.log(
+                            //     e.querySelector("text tspan").innerHTML
+                            // );
+                            var value = e.querySelector("text tspan").innerHTML;
+                            var valueTooltip = value.split(":");
+
+                            console.log(event.clientX);
+                            d3.select("#tooltip")
+                                .style("position", "absolute")
+                                .style("left", event.clientX +20+ "px")
+                                .style("top", event.clientY - 30 + "px")
+                                .style("display", "block")
+                                .style("pointer-events", "none")
+                                .style("background-color", "white")
+                                .html(function () {
+                                    return (
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        label[0] +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        valueTooltip[0] +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        label[1] +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        valueTooltip[1] +
+                                        "</span>"
+                                    );
+                                });
+                            d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        });
+                    });
+
+                    // abg.forEach((e) => {
+                    //     e.addEventListener("mouseover", (event) => {
+                    //         console.log(e.querySelector("text"));
+                    //         console.log(event);
+                    //     });
+                    // });
                 } catch (error) {
                     console.log(error);
                 }

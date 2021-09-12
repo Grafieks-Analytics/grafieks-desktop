@@ -75,7 +75,8 @@ Rectangle{
             subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
         }
         ListElement{
-            icon: "combination_chart.png"
+            // icon: "combination_chart.png"
+            icon: "combination_grey.png"
             activeChart: false
             chartHtml:"bar.html"
             title:"Combination - Coming Soon"
@@ -227,7 +228,8 @@ Rectangle{
         //     mainCustomizations: "Properties,Legend,Reference Line"
         // }
         ListElement{
-            icon: "sankey.png"
+            // icon: "sankey.png"
+            icon: "sankey_grey.png"
             chartHtml:"SankeyChart.html"
             elementHeight: 24
             activeChart: false
@@ -238,7 +240,8 @@ Rectangle{
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
-            icon: "tree_map.png"
+            // icon: "tree_map.png"
+            icon: "treemap_grey.png"
             chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
@@ -257,7 +260,8 @@ Rectangle{
 //            title:"Condegram"
 //        }
         ListElement{
-            icon: "map.png"
+            // icon: "map.png"
+            icon: "geo_grey.png"
             chartHtml:"GeoChart.html"
             elementHeight: 22
             elementWidth:40

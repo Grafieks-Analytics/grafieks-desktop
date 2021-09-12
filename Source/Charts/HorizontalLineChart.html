@@ -37,7 +37,7 @@
 
             #xAxisLabelId {
                 position: fixed;
-                bottom: 20px;
+                bottom: 5px;
                 /* z-index: -1; */
                 height: 20px;
                 margin-left: 40px;
@@ -232,11 +232,13 @@
                     yLabelfontSize = defaultD3Config.fontSize,
                     xTickfontSize = defaultD3Config.fontSize,
                     yTickfontSize = defaultD3Config.fontSize,
+                    dataLabelfontSize = defaultD3Config.fontSize,
                     // font family
                     xLabelfontFamily = defaultD3Config.fontFamily,
                     yLabelfontFamily = defaultD3Config.fontFamily,
                     xTickfontFamily = defaultD3Config.fontFamily,
                     yTickfontFamily = defaultD3Config.fontFamily,
+                    dataLabelfontFamily = defaultD3Config.fontFamily,
                     // font color
                     xLabelfontColor = defaultD3Config.fontColor,
                     yLabelfontColor = defaultD3Config.fontColor,
@@ -252,11 +254,13 @@
                 window.yLabelfontSize = yLabelfontSize;
                 window.xTickfontSize = xTickfontSize;
                 window.yTickfontSize = yTickfontSize;
+                window.dataLabelfontSize = dataLabelfontSize;
 
                 window.xLabelfontFamily = xLabelfontFamily;
                 window.yLabelfontFamily = yLabelfontFamily;
                 window.xTickfontFamily = xTickfontFamily;
                 window.yTickfontFamily = yTickfontFamily;
+                window.dataLabelfontFamily = dataLabelfontFamily;
 
                 window.xLabelfontColor = xLabelfontColor;
                 window.yLabelfontColor = yLabelfontColor;
@@ -707,7 +711,37 @@
                 if (markerStatus) {
                     drawMarker(filledStatus, markerShape);
                 }
+                var yAxis = d3.axisLeft(yScale);
+                if (labelStatus) {
+                    svg.append("g")
+                        .call(yAxis.tickSize(0))
+                        .attr("class", "axis label")
+                        // .attr("font-family", xDataLabelfontFamily)
+                        .attr("font-family", dataLabelfontFamily)
+                        .attr("font-size", dataLabelfontSize);
+                    d3.select(".axis.label path").remove();
+                    // .attr("transform", "translate(0,0)");
+                    var labelSelector =
+                        document.querySelectorAll(".axis.label text");
 
+                    labelSelector.forEach((label, i) => {
+                        var labelValue = label.textContent;
+
+                        var labelYPosition = xScale(dataValues[i][1]);
+                        // console.log(dataset[i]);
+                        label.setAttribute("x", labelYPosition + 100);
+                        label.setAttribute("y", 10);
+                        // label.setAttribute("y", function (d) {
+                        //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
+                        //     console.log({height})
+                        //     return 10;
+                        // })
+                        //  label.textContent = textColumn2[1];
+                        label.textContent = Math.round(dataValues[i][1]);
+                    });
+                }
+
+                d3.select(".axis.label path").remove();
                 setYaxisWidth();
 
                 // var barWidth = document.querySelector(".bar").getBBox().width;
@@ -780,6 +814,18 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
+                 // axis setting starts
+
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 8);
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
+                // axis setting ends
 
                 var a = document.querySelectorAll(".y-axis text");
                 for (var i = 0; i < a.length; i++) {
@@ -811,7 +857,7 @@
                     d3
                         .select("#xAxisLabelId")
                         .append("svg")
-                        .attr("width", window.innerWidth, "height", 150)
+                        .attr("width", window.innerWidth, "height",80)
                 );
 
                 function setYaxisWidth() {
