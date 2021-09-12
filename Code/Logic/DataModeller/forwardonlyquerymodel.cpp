@@ -98,6 +98,14 @@ void ForwardOnlyQueryModel::removeTmpChartData()
     emit forwardOnlyHasData(false);
 }
 
+void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
+{
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
+    this->query = filteredQuery.simplified();
+}
+
 void ForwardOnlyQueryModel::extractSaved()
 {
     // Delete if the extract size is larger than the permissible limit
@@ -112,7 +120,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    qDebug() << dbForward.isOpen() << dbForward.isOpenError() << Q_FUNC_INFO;
 
     GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(this->query, &querySplitter);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::signalGenerateRoleNames, this, &ForwardOnlyQueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
@@ -175,11 +182,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     this->m_roleNames = roleNames;
     this->internalColCount = internalColCount;
 
-    qDebug() << "TAB 1" << tableHeaders;
-    qDebug() << "TAB 2" << forwardOnlyChartHeader;
-    qDebug() << "TAB 3" << roleNames;
-    qDebug() << "TAB 4" << internalColCount;
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->finalSql, dbForward);
@@ -209,8 +211,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
         }
 
         this->previewRowCount = totalRowCount;
-
-        qDebug() << Q_FUNC_INFO<< totalRowCount << this->internalColCount << this->resultData ;
 
         endResetModel();
     }
