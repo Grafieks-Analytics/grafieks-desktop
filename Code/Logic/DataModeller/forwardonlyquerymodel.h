@@ -60,6 +60,7 @@ private:
     int previewRowCount;
 
     QString query;
+    QString finalSql;
     QuerySplitter querySplitter;
 
     // Data variables for Charts
