@@ -838,7 +838,7 @@
                                     return yScale(d.value) - 8;
                                 })
                                 .text(function (d) {
-                                    return d.value;
+                                    return  Math.round(d.value);
                                 })
                                 .attr("font-family", dataLabelfontFamily)
                                 .attr("font-size", dataLabelfontSize)

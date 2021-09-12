@@ -136,43 +136,47 @@
         var data = [
             {
                 name: "Category",
+                size: 20,
                 children: [
                     {
                         children: [
-                            { children: [], name: "Bookcases", size: 8016 },
-                            { children: [], name: "Chairs", size: 6906 },
-                            { children: [], name: "Tables", size: 10230 },
-                            { children: [], name: "Furnishings", size: 2398 },
+                            { children: [], name: "Bookcases", size: 8016, label: "Sub Category" },
+                            { children: [], name: "Chairs", size: 6906, label: "Sub Category" },
+                            { children: [], name: "Tables", size: 10230 , label: "Sub Category"},
+                            { children: [], name: "Furnishings", size: 2398, label: "Sub Category" },
                         ],
                         name: "Furniture",
                         size: 27550,
+                        label: "Category"
                     },
                     {
                         children: [
-                            { children: [], name: "Labels", size: 192 },
-                            { children: [], name: "Storage", size: 4638 },
-                            { children: [], name: "Art", size: 2756 },
-                            { children: [], name: "Binders", size: 2114 },
-                            { children: [], name: "Appliances", size: 1060 },
-                            { children: [], name: "Paper", size: 1198 },
-                            { children: [], name: "Envelopes", size: 1134 },
-                            { children: [], name: "Fasteners", size: 160 },
-                            { children: [], name: "Supplies", size: 132 },
+                            { children: [], name: "Labels", size: 192, label: "Sub Category" },
+                            { children: [], name: "Storage", size: 4638, label: "Sub Category" },
+                            { children: [], name: "Art", size: 2756, label: "Sub Category" },
+                            { children: [], name: "Binders", size: 2114, label: "Sub Category" },
+                            { children: [], name: "Appliances", size: 1060 , label: "Sub Category"},
+                            { children: [], name: "Paper", size: 1198, label: "Sub Category" },
+                            { children: [], name: "Envelopes", size: 1134, label: "Sub Category" },
+                            { children: [], name: "Fasteners", size: 160, label: "Sub Category" },
+                            { children: [], name: "Supplies", size: 132 , label: "Sub Category"},
                         ],
                         name: "Office Supplies",
                         size: 13384,
+                        label: "Category"
                     },
                     {
                         children: [
-                            { children: [], name: "Phones", size: 8372 },
-                            { children: [], name: "Accessories", size: 938 },
+                            { children: [], name: "Phones", size: 8372, label: "Sub Category" },
+                            { children: [], name: "Accessories", size: 938, label: "Sub Category" },
                         ],
                         name: "Technology",
                         size: 9310,
+                        label: "Category"
                     },
                 ],
             },
-            ["label1", "label2", "label3"],
+            ["Category", "SubCategory"],
         ];
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
