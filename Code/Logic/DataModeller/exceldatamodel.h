@@ -28,7 +28,6 @@ class ExcelDataModel : public QAbstractTableModel
 
 public:
     explicit ExcelDataModel(QObject *parent = nullptr);
-    Q_INVOKABLE void clearData();
     ~ExcelDataModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -44,7 +43,6 @@ public:
     Q_INVOKABLE QStringList filterTableList(QString keyword);
 
 private:
-    QString getQueryJoiner();
     QStringList getTableListQAXObject();
 
 signals:

@@ -74,6 +74,7 @@ void CSVJsonQueryModel::getAllFilters(FilterCategoricalListModel *categoricalFil
     this->categoricalFilter = categoricalFilter;
     this->numericalFilter = numericalFilter;
     this->dateFilter = dateFilter;
+    this->totalFiltersCount = 0;
 
     if(this->categoricalFilter != nullptr) this->totalFiltersCount += categoricalFilter->getFilters().count();
     if(this->numericalFilter != nullptr) this->totalFiltersCount += numericalFilter->getFilters().count();
@@ -92,14 +93,11 @@ void CSVJsonQueryModel::extractSaved()
     QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &CSVJsonQueryModel::extractSizeLimit);
 }
 
-void CSVJsonQueryModel::receiveCsvJsonFilterQuery(QString query)
-{
-    qDebug() << "CSV JSON QUERY" << query;
-}
-
 
 void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 {
+    emit clearTablePreview();
+
     QFile file(Statics::csvJsonPath);
     file.open(QFile::ReadOnly | QFile::Text);
 
@@ -172,7 +170,6 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                     }
                 }
 
-
                 if(!truthList.contains(false)){
                     QStringList x;
                     int i = 0;
@@ -183,6 +180,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
                         i++;
                     }
+
                     this->resultData.append(x);
                     readLine++;
                 }
@@ -210,14 +208,12 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     this->previewRowCount = this->resultData.count();
     file.close();
 
-
     this->resultData.count() > 0 ? emit csvJsonHasData(true) : emit csvJsonHasData(false);
 
+    endResetModel();
 
     emit errorSignal("");
     emit csvJsonHeaderDataChanged(this->headerDataPreview);
-
-    endResetModel();
 }
 
 
