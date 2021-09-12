@@ -44,26 +44,26 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
     case 1:
     default:{
         addConnector(new Connector("Amazon Redshift","/Images/icons/aws-redshift-logo.png","rdbms", true));
-        addConnector(new Connector("Apache Hive","/Images/icons/hive.png","rdbms", false));
-        addConnector(new Connector("Box","/Images/icons/box.png","cloud", false));
+        addConnector(new Connector("Apache Hive","/Images/icons/hive-free.png","rdbms", false));
+        addConnector(new Connector("Box","/Images/icons/box-free.png","cloud", false));
         addConnector(new Connector("Dropbox","/Images/icons/dropbox-2.png","cloud", true));
-        addConnector(new Connector("Github","/Images/icons/github-1.png","online", false));
+        addConnector(new Connector("Github","/Images/icons/github-free.png","online", false));
         addConnector(new Connector("Google Drive","/Images/icons/drive.png","cloud", true));
         addConnector(new Connector("Google Sheets","/Images/icons/16_google-sheets_1b1915a4b0.png","online", true));
-        addConnector(new Connector("GRS","/Images/icons/GRS.png","grs", false));
+        addConnector(new Connector("GRS","/Images/icons/grs-free.png","grs", false));
         addConnector(new Connector("JSON","/Images/icons/json-icon.png","file", true));
         addConnector(new Connector("Microsoft Access","/Images/icons/microsoft-access-1.png","rdbms", true));
         addConnector(new Connector("Microsoft Excel","/Images/icons/microsoft-excel-2013.png","file", true));
         addConnector(new Connector("Mysql","/Images/icons/mysql-6.png","rdbms", true));
-        addConnector(new Connector("Oracle","/Images/icons/oracle-icon.png","rdbms", false));
+        addConnector(new Connector("Oracle","/Images/icons/oracle-free.png","rdbms", false));
         addConnector(new Connector("ODBC","/Images/icons/Db - 60.png","rdbms", false));
-        addConnector(new Connector("Snowflake","/Images/icons/20_snowflake-icon_a4ed1ae266.png","rdbms", false));
+        addConnector(new Connector("Snowflake","/Images/icons/snowflake-free.png","rdbms", false));
         addConnector(new Connector("Sqlite","/Images/icons/74_sqlite-icon_a6ac860586.png","rdbms", false));
         addConnector(new Connector("Sql Server","/Images/icons/microsoft-sql-server.png","rdbms", false));
         addConnector(new Connector("Teradata","/Images/icons/Db - 60.png","rdbms", false));
         addConnector(new Connector("CSV","/Images/icons/16_csv.png","file", true));
-        addConnector(new Connector("Impala","/Images/icons/impala.png","rdbms", false));
-        addConnector(new Connector("MongoDB","/Images/icons/mongodb.png","nosql", false));
+        addConnector(new Connector("Impala","/Images/icons/impala-free.png","rdbms", false));
+        addConnector(new Connector("MongoDB","/Images/icons/mongodb-free.png","nosql", false));
         addConnector(new Connector("Postgres","/Images/icons/postgres.png","rdbms", true));
     }
     }

@@ -30,10 +30,8 @@ protected:
 
 private:
     QString returnDatatypeQuery(QString tableName);
-    QString returnConnectionName();
     QMap<QString, QString> returnColumnList(QString tableName, QSqlDatabase dbForward);
 
-    void newConnection();
 signals:
 
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);

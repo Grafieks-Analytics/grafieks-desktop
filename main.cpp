@@ -470,7 +470,6 @@ int main(int argc, char *argv[])
 
     QStringList arguments = QCoreApplication::arguments();
 //    extractProcessor.setArguments2(arguments);
-    qDebug() << arguments << "ARGS";
     if(arguments.length()>1){
 
         QString fileToRead = arguments.at(1);
