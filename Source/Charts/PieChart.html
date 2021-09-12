@@ -473,7 +473,7 @@
                     .attr("stroke-width", 1)
                     .attr("points", function (d) {
                         if (!d.showLabel) {
-                            return [0, 0, 0];
+                            return [[0,0], [0,0],[0,0] ];
                         }
                         var posA = outerArc.centroid(d); // line insertion in the slice
                         // posA[1]= outerArc.centroid(d)[1]-20;
