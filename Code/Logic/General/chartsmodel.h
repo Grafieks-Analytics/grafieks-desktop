@@ -32,6 +32,7 @@ class ChartsModel : public QObject
     QThread threadFunnelChartValues;
     QThread threadRadarChartValues;
     QThread threadScatterChartValues;
+    QThread threadScatterChartNumericalValues;
     QThread threadHeatMapChartValues;
     QThread threadSunburstChartValues;
     QThread threadWaterfallChartValues;
@@ -63,6 +64,7 @@ public:
     Q_INVOKABLE void getFunnelChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getRadarChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getScatterChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getScatterChartNumericalValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getHeatMapChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
     Q_INVOKABLE void getSunburstChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QString yAxisColumn);
@@ -73,8 +75,8 @@ public:
     Q_INVOKABLE void getTreeChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getTreeMapChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getKPIChartValues(int reportId, int dashboardId, int chartSource,   QString calculateColumn);
-    Q_INVOKABLE void getTableChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn);
-    Q_INVOKABLE void getPivotChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn);
+    Q_INVOKABLE void getTableChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters);
+    Q_INVOKABLE void getPivotChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters);
     Q_INVOKABLE void getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE void getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
@@ -94,6 +96,7 @@ public slots:
     void slotFunnelChartValues(QString output, int reportId, int dashboardId, int chartSource);
     void slotRadarChartValues(QString output, int reportId, int dashboardId, int chartSource);
     void slotScatterChartValues(QString output, int reportId, int dashboardId, int chartSource);
+    void slotScatterChartNumericalValues(QString output, int reportId, int dashboardId, int chartSource);
     void slotHeatMapChartValues(QString output, int reportId, int dashboardId, int chartSource);
     void slotSunburstChartValues(QString output, int reportId, int dashboardId, int chartSource);
     void slotWaterfallChartValues(QString output, int reportId, int dashboardId, int chartSource);
