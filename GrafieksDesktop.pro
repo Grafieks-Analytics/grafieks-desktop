@@ -59,7 +59,6 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/saveextractexcelworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
@@ -181,7 +180,6 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/saveextractexcelworker.h \
     Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
-    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
