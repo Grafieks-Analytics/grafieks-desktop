@@ -45,6 +45,7 @@ class ChartsThread : public QObject
     QString destinationColumn;
     QString measureColumn;
     QString calculateColumn;
+    QJsonArray dateConversionOptions;
 
 public:
     explicit ChartsThread(QObject *parent = nullptr);
@@ -55,6 +56,7 @@ public:
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
     void setGaugeKpiDetails(QString &calculateColumn);
+    void setTablePivotDateConversionOptions(QString dateConversionOptions);
 
 public slots:
 
@@ -71,6 +73,7 @@ public slots:
     void getFunnelChartValues();
     void getRadarChartValues();
     void getScatterChartValues();
+    void getScatterChartNumericalValues();
 
     void getHeatMapChartValues();
 
@@ -109,14 +112,15 @@ signals:
     void signalFunnelChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalRadarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalScatterChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalScatterChartNumericalValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalHeatMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalSunburstChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalWaterfallChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalGaugeChartValues(float output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalGaugeChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalSankeyChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTreeChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTreeMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalKPIChartValues(float output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalKPIChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTableChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalPivotChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalStackedAreaChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
