@@ -581,7 +581,6 @@ Page {
                 width:height
                 anchors.centerIn: parent
                 enabled: isEnabled
-                onSourceChanged: console.log(name, isEnabled)
 
                 MouseArea{
                     anchors.fill: parent
