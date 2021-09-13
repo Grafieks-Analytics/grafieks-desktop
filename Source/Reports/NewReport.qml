@@ -1577,6 +1577,8 @@ Page {
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED");
+//                ChartsModel.getScatterChartNumericalValues(reportIdMain, 0, Constants.reportScreen,  "Sales", "Profit");
+
                 if(!colorByColumnName){
                     break;
                 }

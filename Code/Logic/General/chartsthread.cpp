@@ -48,6 +48,8 @@ void ChartsThread::methodSelector(QString functionName, QString reportWhereCondi
         this->getRadarChartValues();
     } else if(functionName == "getScatterChartValues"){
         this->getScatterChartValues();
+    } else if(functionName == "getScatterChartNumericalValues"){
+        this->getScatterChartNumericalValues();
     } else if(functionName == "getHeatMapChartValues"){
         this->getHeatMapChartValues();
     } else if(functionName == "getSunburstChartValues"){
@@ -111,6 +113,11 @@ void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationC
 void ChartsThread::setGaugeKpiDetails(QString &calculateColumn)
 {
     this->calculateColumn = calculateColumn;
+}
+
+void ChartsThread::setTablePivotDateConversionOptions(QString dateConversionOptions)
+{
+    this->dateConversionOptions = QJsonDocument::fromJson(dateConversionOptions.toUtf8()).object();
 }
 
 void ChartsThread::start()
@@ -764,7 +771,41 @@ void ChartsThread::getScatterChartValues()
 
 void ChartsThread::getScatterChartNumericalValues()
 {
+    QJsonArray data;
+    QJsonArray colData;
+    QVariantList tmpData;
 
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT SUM(\"" + xAxisColumn + "\"), SUM(\"" + yAxisColumn + "\") FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
+
+    QString xAxisValue = dataList->GetValue(0, 0).ToString().c_str();
+    QString yAxisValue = dataList->GetValue(1, 0).ToString().c_str();
+
+    tmpData.append(0);
+    tmpData.append(0);
+    colData.append(QJsonArray::fromVariantList(tmpData));
+
+    tmpData.clear();
+    tmpData.append(xAxisValue);
+    tmpData.append(yAxisValue);
+
+    colData.append(QJsonArray::fromVariantList(tmpData));
+
+    QStringList colNames;
+    colNames.append(xAxisColumn);
+    colNames.append(yAxisColumn);
+
+    data.append(colData);
+    data.append(QJsonArray::fromStringList(colNames));
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson();
+
+    emit signalScatterChartNumericalValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getHeatMapChartValues()

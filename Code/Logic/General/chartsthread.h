@@ -45,6 +45,7 @@ class ChartsThread : public QObject
     QString destinationColumn;
     QString measureColumn;
     QString calculateColumn;
+    QJsonObject dateConversionOptions;
 
 public:
     explicit ChartsThread(QObject *parent = nullptr);
@@ -55,6 +56,7 @@ public:
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
     void setGaugeKpiDetails(QString &calculateColumn);
+    void setTablePivotDateConversionOptions(QString dateConversionOptions);
 
 public slots:
 
@@ -110,6 +112,7 @@ signals:
     void signalFunnelChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalRadarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalScatterChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalScatterChartNumericalValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalHeatMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalSunburstChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalWaterfallChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
