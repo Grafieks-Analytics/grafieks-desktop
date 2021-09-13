@@ -439,7 +439,7 @@ void ChartsModel::slotWaterfallChartValues(QString output, int reportId, int das
     chartsThreadThread.quit();
 }
 
-void ChartsModel::slotGaugeChartValues(float output, int reportId, int dashboardId, int chartSource)
+void ChartsModel::slotGaugeChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {
     emit signalGaugeChartValues(output,reportId, dashboardId, chartSource);
     chartsThreadThread.quit();
@@ -463,7 +463,7 @@ void ChartsModel::slotTreeMapChartValues(QString output, int reportId, int dashb
     chartsThreadThread.quit();
 }
 
-void ChartsModel::slotKPIChartValues(float output, int reportId, int dashboardId, int chartSource)
+void ChartsModel::slotKPIChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {
     emit signalKPIChartValues(output,reportId, dashboardId, chartSource);
     chartsThreadThread.quit();

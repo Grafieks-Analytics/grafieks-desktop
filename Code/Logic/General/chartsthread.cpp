@@ -955,7 +955,19 @@ void ChartsThread::getGaugeChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalGaugeChartValues(output, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    QVariantList cols;
+    cols.append(output);
+    cols.append(calculateColumn);
+
+    QJsonArray data;
+    data.append(QJsonArray::fromVariantList(cols));
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson();
+
+    emit signalGaugeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSankeyChartValues()
@@ -1095,7 +1107,19 @@ void ChartsThread::getKPIChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalKPIChartValues(output, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    QVariantList cols;
+    cols.append(output);
+    cols.append(calculateColumn);
+
+    QJsonArray data;
+    data.append(QJsonArray::fromVariantList(cols));
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson();
+
+    emit signalKPIChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getTableChartValues()
