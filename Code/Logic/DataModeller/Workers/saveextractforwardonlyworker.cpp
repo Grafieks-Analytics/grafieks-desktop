@@ -13,6 +13,7 @@ void SaveExtractForwardOnlyWorker::run()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
     QStringList list;
+    int colCount;
 
     QSqlDatabase dbForward;
 
@@ -54,13 +55,15 @@ void SaveExtractForwardOnlyWorker::run()
 
     QSqlQuery q(this->query, dbForward);
     QSqlRecord record = q.record();
+    colCount = record.count();
+
     if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
     } else{
 
         QString createTableQuery = "CREATE TABLE " + tableName + "(";
 
-        for(int i = 0; i < record.count(); i++){
+        for(int i = 0; i < colCount; i++){
             QVariant fieldType = record.field(i).value();
             QString type = dataType.qVariantType(fieldType.typeName());
 
@@ -124,7 +127,7 @@ void SaveExtractForwardOnlyWorker::run()
         while(q.next()){
 
             appender.BeginRow();
-            for(int i = 0; i < this->internalColCount; i++){
+            for(int i = 0; i < colCount; i++){
                 QString columnType = this->columnStringTypes.at(i);
 
                 if(columnType == "INTEGER"){

@@ -1,6 +1,6 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent), setChartDataWorker(nullptr)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent)
 {
 }
 
@@ -15,8 +15,6 @@ void ForwardOnlyQueryModel::setQuery(QString query)
 
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
-
-    this->removeTmpChartData();
 
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
@@ -83,19 +81,13 @@ QHash<int, QByteArray> ForwardOnlyQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ForwardOnlyQueryModel::getQueryStats()
-{
-    // TBD
-}
 
-void ForwardOnlyQueryModel::removeTmpChartData()
+void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
 {
-    this->forwardOnlyChartHeader.clear();
-    this->forwardOnlyChartData.clear();
-    this->tableHeaders.clear();
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
 
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit forwardOnlyHasData(false);
+    this->query = filteredQuery.simplified();
 }
 
 void ForwardOnlyQueryModel::extractSaved()
@@ -112,7 +104,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    qDebug() << dbForward.isOpen() << dbForward.isOpenError() << Q_FUNC_INFO;
 
     GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(this->query, &querySplitter);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::signalGenerateRoleNames, this, &ForwardOnlyQueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
@@ -123,24 +114,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
     // Emit signals for reports
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
 
-}
-
-void ForwardOnlyQueryModel::setQueryResult()
-{
-    QString connectionName = this->returnConnectionName();
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-
-    this->setChartDataWorker = new SetChartDataForwardOnlyWorker(&dbForward, this->query, this->internalColCount);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
-    setChartDataWorker->start(QThread::InheritPriority);
-}
-
-
-void ForwardOnlyQueryModel::setChartHeader(int index, QStringList colInfo)
-{
-    this->forwardOnlyChartHeader.insert(index, colInfo);
 }
 
 QString ForwardOnlyQueryModel::returnConnectionName()
@@ -175,11 +148,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     this->m_roleNames = roleNames;
     this->internalColCount = internalColCount;
 
-    qDebug() << "TAB 1" << tableHeaders;
-    qDebug() << "TAB 2" << forwardOnlyChartHeader;
-    qDebug() << "TAB 3" << roleNames;
-    qDebug() << "TAB 4" << internalColCount;
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->finalSql, dbForward);
@@ -210,8 +178,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
 
         this->previewRowCount = totalRowCount;
 
-        qDebug() << Q_FUNC_INFO<< totalRowCount << this->internalColCount << this->resultData ;
-
         endResetModel();
     }
 
@@ -225,14 +191,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     emit errorSignal("");
 }
 
-void ForwardOnlyQueryModel::slotSetChartData(bool success)
-{
-    if(success){
-        this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
-        this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
-
-    }
-}
 
 void ForwardOnlyQueryModel::extractSizeLimit()
 {
