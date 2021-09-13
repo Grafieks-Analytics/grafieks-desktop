@@ -214,7 +214,7 @@ Rectangle{
             activeChart: false
             title:"Tree Chart"
             maxDropOnYAxis: 1
-            disabled:true
+     
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             yAxisVisible: false
@@ -248,6 +248,7 @@ Rectangle{
             chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
+            disabled:true
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             title: "Tree Map"
