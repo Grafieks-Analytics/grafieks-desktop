@@ -205,7 +205,7 @@
             d3.selectAll("#my_dataviz").html("");
             (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
                 (width = window.innerWidth - margin.left - margin.right - 20),
-                (height = window.innerHeight+360 - margin.top - margin.bottom - 20),
+                (height = window.innerHeight- margin.top - margin.bottom - 20),
                 (color = d3.scaleOrdinal().range(d3Colors));
 
             // append the svg object to the body of the page
@@ -250,7 +250,7 @@
                 .append("text")
                 .attr("transform",(d, i) =>{
                     var nodeWidth = document.querySelector(".node").getBBox().width
-                    return "translate(" + (nodeWidth-30 +( 180 * (i))) + "," + 20 + ")"
+                    return "translate(" + (nodeWidth-30 +( 180 * (i+1))+45) + "," + 20 + ")"
                 } )
                 .text((d) => {
                     return d;
