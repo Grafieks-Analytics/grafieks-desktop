@@ -116,11 +116,11 @@ signals:
     void signalHeatMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalSunburstChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalWaterfallChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalGaugeChartValues(float output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalGaugeChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalSankeyChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTreeChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTreeMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalKPIChartValues(float output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalKPIChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTableChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalPivotChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalStackedAreaChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
