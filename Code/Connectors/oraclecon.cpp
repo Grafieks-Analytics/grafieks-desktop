@@ -35,7 +35,7 @@ QVariantMap OracleCon::OracleOdbcInstance(const QString &driver, const QString &
             // If correct credentials inserted once
 
             Statics::oracleHost = host;
-            Statics::oracleDb = db;
+            Statics::oracleDb = dbString;
             Statics::oraclePort = port;
             Statics::oracleUsername = username;
             Statics::oraclePassword = password;

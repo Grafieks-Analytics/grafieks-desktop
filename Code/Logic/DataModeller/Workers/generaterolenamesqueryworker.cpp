@@ -13,6 +13,8 @@ void GenerateRoleNamesQueryWorker::run()
     QStringList colInfo;
     QVariant fieldType;
     DataType dataType;
+    QString tableName;
+    QString fieldName;
 
     QStringList tableHeaders;
     QMap<int, QStringList> sqlChartHeader;
@@ -22,10 +24,13 @@ void GenerateRoleNamesQueryWorker::run()
 
         roleNames.insert(Qt::UserRole + i + 1, this->queryModel->record().fieldName(i).toUtf8());
         fieldType = this->queryModel->record().field(i).value();
-        colInfo << this->queryModel->record().fieldName(i) << dataType.dataType(fieldType.typeName())  << this->queryModel->record().field(i).tableName();
+        tableName = this->queryModel->record().field(i).tableName().toStdString().c_str();
+        fieldName = this->queryModel->record().fieldName(i).toStdString().c_str();
+        colInfo << fieldName << dataType.dataType(fieldType.typeName())  << tableName ;
 
         sqlChartHeader.insert(i, colInfo);
-        tableHeaders.append(this->queryModel->record().fieldName(i));
+
+        tableHeaders.append(tableName + "." + fieldName);
         colInfo.clear();
     }
 

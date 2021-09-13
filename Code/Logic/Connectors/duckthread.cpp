@@ -52,18 +52,20 @@ void DuckThread::processCsv()
     table = fileName;
 
     csvdb = "'" + csvFile + "'";
-    Statics::currentDbName = fileName;
-    std::unique_ptr<duckdb::MaterializedQueryResult> res = con->Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+//    Statics::currentDbName = fileName;
+//    std::unique_ptr<duckdb::MaterializedQueryResult> res = con->Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
-    if(res->error.empty() == false){
-        this->errorStatus = true;
-        qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
-    } else{
-        this->tables.append(table);
-        res.release();
-    }
+//    if(res->error.empty() == false){
+//        this->errorStatus = true;
+//        qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
+//    } else{
+//        this->tables.append(table);
+//        res.release();
+//    }
 
-    emit processingFinished(this->fileType, this->errorStatus, this->tables);
+    QStringList dbs;
+    dbs.append(db);
+    emit processingFinished(this->fileType, this->errorStatus, dbs);
 }
 
 void DuckThread::processExcel()

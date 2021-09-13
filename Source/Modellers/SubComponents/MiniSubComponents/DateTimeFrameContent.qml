@@ -72,26 +72,34 @@ Rectangle{
     }
 
     Connections{
-        target: DuckDataModel
+        target: CSVJsonDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
+        }
+    }
+
+    Connections{
+        target: ExcelDataModel
+
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: ForwardOnlyDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onColumnListModelDataChanged(values){
+            updateData(values)
         }
     }
 
@@ -139,7 +147,7 @@ Rectangle{
         }
     }
 
-    function updateData(colData, options, searchMode){
+    function updateData(options, searchMode){
 
         if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainTimeFrameType ){
 

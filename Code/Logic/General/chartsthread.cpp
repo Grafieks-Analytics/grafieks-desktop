@@ -1,9 +1,7 @@
 #include "chartsthread.h"
 
-ChartsThread::ChartsThread(QObject *parent) : QObject(parent), dashboardId(0), reportId(0), dashboardFilterApplied(false)
+ChartsThread::ChartsThread(QObject *parent) : QObject(parent)
 {
-    chartSources.append("dashboard");
-    chartSources.append("report");
 
     this->xAxisColumn = "";
     this->yAxisColumn = "";
@@ -20,10 +18,16 @@ ChartsThread::~ChartsThread()
 {
 }
 
-void ChartsThread::methodSelector(QString functionName)
+void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId)
 {
+    this->reportWhereConditions = reportWhereConditions;
+    this->dashboardWhereConditions = dashboardWhereConditions;
+    this->currentChartSource = chartSource;
+    this->currentDashboardId = dashboardId;
+    this->currentReportId = reportId;
+
     if(functionName == "getBarChartValues"){
-       this->getBarChartValues();
+        this->getBarChartValues();
     } else if(functionName == "getStackedBarChartValues"){
         this->getStackedBarChartValues();
     } else if(functionName == "getGroupedBarChartValues"){
@@ -116,30 +120,27 @@ void ChartsThread::start()
 
 void ChartsThread::getBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data here
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-
-    } else{
-        *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
-    }
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
 
     int index;
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+    }
 
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -176,7 +177,7 @@ void ChartsThread::getBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson();
-    emit signalBarChartValues(strData);
+    emit signalBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getStackedBarChartValues()
@@ -187,7 +188,6 @@ void ChartsThread::getStackedBarChartValues()
 
 void ChartsThread::getGroupedBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QVariantList tmpData;
@@ -206,39 +206,36 @@ void ChartsThread::getGroupedBarChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    // Fetch data here
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-    int splitKey = this->headerMap.key( xSplitKey );
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    int splitIndex;
+    QJsonArray colData;
+    int xIndex;
 
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-        *splitDataPointer = this->dashboardChartData.value(this->dashboardId).value(splitKey);
+    int totalRows = dataList->collection.Count();
 
-        // To pre-populate json array
-        xAxisDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(xKey));
-        splitDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(splitKey));
-
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-        *splitDataPointer = this->reportChartData.value(this->reportId).value(splitKey);
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
         // To pre-populate json array
-        xAxisDataPointerPre = (this->reportChartData.value(this->reportId).value(xKey));
-        splitDataPointerPre = (this->reportChartData.value(this->reportId).value(splitKey));
+        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
+        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
     }
+
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
 
-    int xIndex;
-    int splitIndex;
-    QJsonArray colData;
+
 
     // Pre - Populate the json array
     try{
@@ -284,12 +281,11 @@ void ChartsThread::getGroupedBarChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalGroupedBarChartValues(strData);
+    emit signalGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getNewGroupedBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonArray axisDataArray;
@@ -301,33 +297,29 @@ void ChartsThread::getNewGroupedBarChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitKeyDataPointer(new QStringList);
 
-    // Fetch data here
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-    int splitKey = this->headerMap.key( xSplitKey );
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    QJsonObject obj;
+    int index;
 
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-        *splitKeyDataPointer = this->dashboardChartData.value(this->dashboardId).value(splitKey);
+    int totalRows = dataList->collection.Count();
 
-        reportChartDataVar = this->dashboardChartData.value(this->dashboardId).value(splitKey);
-        reportChartDataVar.removeDuplicates();
-        uniqueSplitKeyData = reportChartDataVar;
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        splitKeyDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-        *splitKeyDataPointer = this->reportChartData.value(this->reportId).value(splitKey);
 
-        reportChartDataVar = this->reportChartData.value(this->reportId).value(splitKey);
+        reportChartDataVar.append(dataList->GetValue(2, i).ToString().c_str());
         reportChartDataVar.removeDuplicates();
         uniqueSplitKeyData = reportChartDataVar;
     }
-
-    QJsonObject obj;
-    int index;
 
     try{
         qint64 nanoSec;
@@ -369,16 +361,16 @@ void ChartsThread::getNewGroupedBarChartValues()
     xAxisDataPointer->removeDuplicates();
     columns.append(QJsonArray::fromStringList(*xAxisDataPointer));
 
-//    QJsonArray categories;
-//    xAxisDataPointer->removeDuplicates();
-//    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
+    //    QJsonArray categories;
+    //    xAxisDataPointer->removeDuplicates();
+    //    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
 
     QJsonArray categories;
     xAxisDataPointer->removeDuplicates();
     categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
 
     data.append(columns);
-//    data.append(categories);
+    //    data.append(categories);
 
     QJsonDocument doc;
     doc.setArray(data);
@@ -386,7 +378,7 @@ void ChartsThread::getNewGroupedBarChartValues()
     QString strData = doc.toJson();
     qDebug() << doc;
 
-    emit signalNewGroupedBarChartValues(strData);
+    emit signalNewGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getAreaChartValues()
@@ -401,7 +393,6 @@ void ChartsThread::getLineChartValues()
 
 void ChartsThread::getLineBarChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -409,27 +400,25 @@ void ChartsThread::getLineBarChartValues()
     QScopedPointer<QStringList> yBarAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yLineAxisDataPointer(new QStringList);
 
-    // Fetch data here
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yBarKey = this->headerMap.key( yAxisColumn );
-    int yLineKey = this->headerMap.key( xSplitKey );
-
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yBarAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yBarKey);
-        *yLineAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yLineKey);
-
-    } else{
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yBarAxisDataPointer = this->reportChartData.value(this->reportId).value(yBarKey);
-        *yLineAxisDataPointer = this->reportChartData.value(this->reportId).value(yLineKey);
-    }
-
+    QStringList xAxisData;
+    QVariantList yAxisData;
     QVariantList tmpData;
-    int index;
     QJsonArray colData;
+    int index;
+
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yBarAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        yLineAxisDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+
+    }
 
     // Add data
     try{
@@ -473,12 +462,11 @@ void ChartsThread::getLineBarChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalLineBarChartValues(strData);
+    emit signalLineBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getPieChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonObject obj;
@@ -487,18 +475,22 @@ void ChartsThread::getPieChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
 
-    // Fetch data here
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QVariantList tmpData;
+    QJsonArray colData;
 
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
+    int totalRows = dataList->collection.Count();
 
-    } else{
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+
     }
 
     try{
@@ -528,12 +520,11 @@ void ChartsThread::getPieChartValues()
     doc.setArray(data);
     QString strData = doc.toJson();
 
-    emit signalPieChartValues(strData);
+    emit signalPieChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getFunnelChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonArray axisDataArray;
@@ -541,25 +532,25 @@ void ChartsThread::getFunnelChartValues()
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data here
-
-
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-    }
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
     QStringList yAxisData;
-
+    QVariantList tmpData;
+    QJsonArray colData;
     QJsonObject obj;
     int index;
+
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+
+    }
 
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -599,13 +590,12 @@ void ChartsThread::getFunnelChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalFunnelChartValues(strData);
+    emit signalFunnelChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getRadarChartValues()
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonArray axisDataArray;
@@ -614,24 +604,25 @@ void ChartsThread::getRadarChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
 
-    // Fetch data here
-
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-    } else {
-        *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
-    }
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
     QStringList xAxisData;
     QStringList yAxisData;
-
+    QVariantList tmpData;
+    QJsonArray colData;
     QJsonObject obj;
     int index;
+
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+
+    }
 
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -671,12 +662,11 @@ void ChartsThread::getRadarChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalRadarChartValues(strData);
+    emit signalRadarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getScatterChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QVariantList tmpData;
@@ -692,36 +682,33 @@ void ChartsThread::getScatterChartValues()
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data here
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-    int splitKey = this->headerMap.key( xSplitKey );
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    int index;
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-        *splitDataPointer = this->dashboardChartData.value(this->dashboardId).value(splitKey);
+    int totalRows = dataList->collection.Count();
 
-        // To pre-populate json array
-        xAxisDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(xKey));
-        splitDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(splitKey));
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-        *splitDataPointer = this->reportChartData.value(this->reportId).value(splitKey);
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
         // To pre-populate json array
-        xAxisDataPointerPre = (this->reportChartData.value(this->reportId).value(xKey));
-        splitDataPointerPre = (this->reportChartData.value(this->reportId).value(splitKey));
+        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
+        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
     }
+
+
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
-
-    int index;
-    QJsonArray colData;
 
 
     // Populate the actual data
@@ -772,12 +759,13 @@ void ChartsThread::getScatterChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalScatterChartValues(strData);
+    emit signalScatterChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getHeatMapChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
+
+    qDebug() << "HEATMAP" << xAxisColumn << yAxisColumn << xSplitKey;
 
     QJsonArray data;
     QVariantList tmpData;
@@ -793,38 +781,31 @@ void ChartsThread::getHeatMapChartValues()
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data here
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-    int splitKey = this->headerMap.key( xSplitKey );
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    int index;
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
+    int totalRows = dataList->collection.Count();
 
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-        *splitDataPointer = this->dashboardChartData.value(this->dashboardId).value(splitKey);
-
-        // To pre-populate json array
-        xAxisDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(xKey));
-        splitDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(splitKey));
-    } else {
-
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-        *splitDataPointer = this->reportChartData.value(this->reportId).value(splitKey);
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
         // To pre-populate json array
-        xAxisDataPointerPre = (this->reportChartData.value(this->reportId).value(xKey));
-        splitDataPointerPre = (this->reportChartData.value(this->reportId).value(splitKey));
+        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
+        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
     }
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
-
-    int index;
-    QJsonArray colData;
 
 
     // Populate the actual data
@@ -869,15 +850,24 @@ void ChartsThread::getHeatMapChartValues()
     columns.append(QJsonArray::fromStringList(xAxisDataPointerPre));
     columns.append(QJsonArray::fromStringList(splitDataPointerPre));
 
+    QStringList inputKeys;
+    inputKeys.append(xAxisColumn);
+    inputKeys.append(yAxisColumn);
+    inputKeys.append(xSplitKey);
+
+    QJsonArray input = QJsonArray::fromStringList(inputKeys);
+
+
     data.append(colData);
     data.append(columns);
+    data.append(input);
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson();
 
-    emit signalHeatMapChartValues(strData);
+    emit signalHeatMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSunburstChartValues()
@@ -893,17 +883,24 @@ void ChartsThread::getWaterfallChartValues()
 
 void ChartsThread::getGaugeChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QStringList calculateColumnPointer;
-    int calculateColumnKey = this->headerMap.key( calculateColumn );
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        calculateColumnPointer = this->dashboardChartData.value(this->dashboardId).value(calculateColumnKey);
-    } else {
-        calculateColumnPointer = this->reportChartData.value(this->reportId).value(calculateColumnKey);
-    }
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString =  "SELECT \"" + calculateColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
+
+
+    QStringList xAxisData;
+    QVariantList yAxisData;
+
     float output = 0.0;
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        calculateColumnPointer.append(dataList->GetValue(0, i).ToString().c_str());
+    }
 
     try{
         for(int i = 0; i < calculateColumnPointer.length(); i++){
@@ -914,12 +911,11 @@ void ChartsThread::getGaugeChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalGaugeChartValues(output);
+    emit signalGaugeChartValues(output, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSankeyChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QJsonObject dataObject;
@@ -933,30 +929,29 @@ void ChartsThread::getSankeyChartValues()
     QScopedPointer<QStringList> measureDataPointer(new QStringList);
     QString keyword;
 
-    // Fetch data here
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    int sourceKey = this->headerMap.key( sourceColumn );
-    int destinationKey = this->headerMap.key( destinationColumn );
-    int measureKey = this->headerMap.key( measureColumn );
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    int index;
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
+    int totalRows = dataList->collection.Count();
 
-        *sourceDataPointer = this->dashboardChartData.value(this->dashboardId).value(sourceKey);
-        *destinationDataPointer = this->dashboardChartData.value(this->dashboardId).value(destinationKey);
-        *measureDataPointer = this->dashboardChartData.value(this->dashboardId).value(measureKey);
+    for(int i = 0; i < totalRows; i++){
+        sourceDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        destinationDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        measureDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
-    } else {
-        *sourceDataPointer = this->reportChartData.value(this->reportId).value(sourceKey);
-        *destinationDataPointer = this->reportChartData.value(this->reportId).value(destinationKey);
-        *measureDataPointer = this->reportChartData.value(this->reportId).value(measureKey);
     }
 
     QStringList combinedList;
     combinedList.append(*sourceDataPointer);
     combinedList.append(*destinationDataPointer);
     combinedList.removeDuplicates();
-
-    int index;
 
     // Master nodes list
     try{
@@ -1012,7 +1007,7 @@ void ChartsThread::getSankeyChartValues()
     QJsonDocument doc(output);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
-    emit signalSankeyChartValues(strJson);
+    emit signalSankeyChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 
 }
 
@@ -1028,17 +1023,24 @@ void ChartsThread::getTreeMapChartValues()
 
 void ChartsThread::getKPIChartValues()
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
-    int calculateColumnKey = this->headerMap.key( calculateColumn );
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *calculateColumnPointer = this->dashboardChartData.value(this->dashboardId).value(calculateColumnKey);
-    } else {
-        *calculateColumnPointer = this->reportChartData.value(this->reportId).value(calculateColumnKey);
-    }
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
+
+
+    QStringList xAxisData;
+    QVariantList yAxisData;
+
     float output = 0.0;
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        calculateColumnPointer->append(dataList->GetValue(0, i).ToString().c_str());
+    }
 
     try{
         for(int i = 0; i < calculateColumnPointer->length(); i++){
@@ -1049,7 +1051,7 @@ void ChartsThread::getKPIChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalKPIChartValues(output);
+    emit signalKPIChartValues(output, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getTableChartValues()
@@ -1070,7 +1072,6 @@ void ChartsThread::getStackedAreaChartValues()
 void ChartsThread::getMultiLineChartValues()
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QVariantList tmpData;
@@ -1086,35 +1087,33 @@ void ChartsThread::getMultiLineChartValues()
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data here
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-    int splitKey = this->headerMap.key( xSplitKey );
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-        *splitDataPointer = this->dashboardChartData.value(this->dashboardId).value(splitKey);
+
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    int index;
+
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
         // To pre-populate json array
-        xAxisDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(xKey));
-        splitDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(splitKey));
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-        *splitDataPointer = this->reportChartData.value(this->reportId).value(splitKey);
-
-        // To pre-populate json array
-        xAxisDataPointerPre = (this->reportChartData.value(this->reportId).value(xKey));
-        splitDataPointerPre = (this->reportChartData.value(this->reportId).value(splitKey));
+        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
+        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
     }
+
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
-
-    int index;
-    QJsonArray colData;
 
     // Pre - Populate the json array
     try{
@@ -1176,34 +1175,36 @@ void ChartsThread::getMultiLineChartValues()
 
     QString strData = doc.toJson();
 
-    emit signalMultiLineChartValues(strData);
+    emit signalMultiLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QString identifier)
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data here
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
 
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-    }
-
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    QJsonObject obj;
     QVariantList tmpData;
     int index;
-    QJsonArray colData;
+
+    int totalRows = dataList->collection.Count();
+
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+    }
+
 
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -1243,13 +1244,13 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QString strData = doc.toJson();
 
     if(identifier == "getAreaChartValues"){
-        emit signalAreaChartValues(strData);
+        emit signalAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getLineChartValues"){
-        emit signalLineChartValues(strData);
+        emit signalLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getWaterfallChartValues"){
-        emit signalWaterfallChartValues(strData);
+        emit signalWaterfallChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalLineAreaWaterfallValues(strData);
+        emit signalLineAreaWaterfallValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 
 
@@ -1258,7 +1259,6 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn, QString identifier)
 {
 
-    Q_ASSERT(!this->newChartHeader.empty());
 
     int pointerSize;
 
@@ -1279,57 +1279,47 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     // if there is an exact match with the hash, then it exists. Else create a new hash
     QScopedPointer<QStringList> masterHash(new QStringList);
 
+    // Fetch data from extract
+    QString tableName = this->getTableName();
 
-    int yKeyLoop = 0;
     QString paramName = "";
     QString hashKeyword = "";
 
-    // Fetch data here
-    int xKey ;
-    xKey = this->headerMap.key( xAxisColumn.at(0).toString() );
-
-    int yKey = this->headerMap.key( yAxisColumn );
-
-    // Group name operations
-    QVector<int> groupKeyValues;
-    int groupKeySize = xAxisColumn.length();
-
-    for(int i = 0; i < groupKeySize; i++){
-        groupKeyValues.append(this->headerMap.key(xAxisColumn.at(i).toString()));
+    QString xQueryString =  "SELECT ";
+    foreach(QVariant xCols, xAxisColumn){
+        xQueryString += "\"" + xCols.toString() + "\", ";
     }
 
-    int totalData;
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-        totalData = (this->dashboardChartData.value(this->dashboardId).value(xKey)).length();
-    } else {
-        totalData = (this->reportChartData.value(this->reportId).value(xKey)).length();
-    }
+    xQueryString.chop(2);
+    xQueryString += " FROM " + tableName;
+
+    QString yQueryString =  "SELECT \"" + yAxisColumn + "\" FROM " + tableName;;
+
+    auto xDataList = this->queryFunction(xQueryString);
+    auto yDataList = this->queryFunction(yQueryString);
+
+    QStringList xAxisData;
+    QVariantList yAxisData;
+
+    int totalRows = xDataList->collection.Count();
+    int totalXCols = xDataList->ColumnCount();
+
 
 
     // Considering the measure as string here to avoid unwanted errors in wrong casting
     // The front in javascript can easily handle this
 
     try{
-        for(int i = 0; i < totalData; i++){
+        for(int i = 0; i < totalRows; i++){
 
-            if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-                measure = (this->dashboardChartData.value(this->dashboardId).value(yKey)).at(i).toFloat();
-            } else {
-                measure = (this->reportChartData.value(this->reportId).value(yKey)).at(i).toFloat();
-            }
+            measure = yDataList->GetValue<float>(0, i);
 
             json tmpOutput;
             pastHashKeyword.clear();
 
-            for(int j = 0; j < groupKeySize; j++){
+            for(int j = 0; j < totalXCols; j++){
 
-                yKeyLoop = this->headerMap.key( xAxisColumn.at(j).toString());
-
-                if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-                    paramName = this->dashboardChartData.value(this->dashboardId).value(yKeyLoop).at(i);
-                } else {
-                    paramName = this->reportChartData.value(this->reportId).value(yKeyLoop).at(i);
-                }
+                paramName = xDataList->GetValue(j, i).ToString().c_str();
 
                 // Generate unique hash to strings to be stored in master hash
                 if( j == 0){
@@ -1348,6 +1338,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
                     tmpOutput["name"] = paramName.toStdString();
                     tmpOutput["size"] = measure;
                     tmpOutput["children"] = emptyJsonArray;
+                    tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
 
                     // Check if first element of json is already there
                     // If not, then add it according to the graph data
@@ -1425,21 +1416,18 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     QJsonDocument doc(obj);
 
     if(identifier == "getSunburstChartValues"){
-        emit signalSunburstChartValues(s);
+        emit signalSunburstChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeChartValues"){
-        emit signalTreeChartValues(s);
+        emit signalTreeChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeMapChartValues"){
-        emit signalTreeMapChartValues(s);
+        emit signalTreeMapChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalTreeSunburstValues(s);
+        emit signalTreeSunburstValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 }
 
 void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
 {
-
-    Q_ASSERT(!this->newChartHeader.empty());
-
 
     QJsonArray data;
     QVariantList tmpData;
@@ -1449,6 +1437,11 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+    auto dataList = this->queryFunction(queryString);
+
     // Order of QMap - xAxisCol, SplitKey, Value
     QStringList masterKeywordList;
     QString masterKeyword;
@@ -1457,29 +1450,16 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     // Fetch data here
 
+    int totalRows = dataList->collection.Count();
 
-    int xKey = this->headerMap.key( xAxisColumn );
-    int yKey = this->headerMap.key( yAxisColumn );
-    int splitKey = this->headerMap.key( xSplitKey );
-
-    if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-
-        *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
-        *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);
-        *splitDataPointer = this->dashboardChartData.value(this->dashboardId).value(splitKey);
+    for(int i = 0; i < totalRows; i++){
+        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
         // To pre-populate json array
-        xAxisDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(xKey));
-        splitDataPointerPre = (this->dashboardChartData.value(this->dashboardId).value(splitKey));
-
-    } else {
-        *xAxisDataPointer = this->reportChartData.value(this->reportId).value(xKey);
-        *yAxisDataPointer = this->reportChartData.value(this->reportId).value(yKey);
-        *splitDataPointer = this->reportChartData.value(this->reportId).value(splitKey);
-
-        // To pre-populate json array
-        xAxisDataPointerPre = (this->reportChartData.value(this->reportId).value(xKey));
-        splitDataPointerPre = (this->reportChartData.value(this->reportId).value(splitKey));
+        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
+        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
     }
 
     // Fetch unique xAxisData & splitter
@@ -1551,18 +1531,17 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     qDebug() << doc;
 
     if(identifier == "getStackedBarChartValues"){
-        emit signalStackedBarChartValues(strData);
+        emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getStackedAreaChartValues") {
-        emit signalStackedAreaChartValues(strData);
+        emit signalStackedAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else{
-        emit signalStackedBarAreaValues(strData);
+        emit signalStackedBarAreaValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 
 }
 
 void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn, QString identifier)
 {
-    Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
     QString masterKeyword;
@@ -1573,26 +1552,55 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
 
-    // Fetch data here
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+
+
+    QString xQueryString =  "SELECT ";
+    foreach(QVariant xCols, xAxisColumn){
+        xQueryString += "\"" + xCols.toString() + "\", ";
+    }
+
+    xQueryString.chop(2);
+    xQueryString += " FROM " + tableName;
+
+    QString yQueryString =  "SELECT ";
+    foreach(QVariant xCols, xAxisColumn){
+        yQueryString += "\"" + xCols.toString() + "\", ";
+    }
+
+    yQueryString.chop(2);
+    yQueryString += " FROM " + tableName;
+
+    auto xDataList = this->queryFunction(xQueryString);
+    auto yDataList = this->queryFunction(yQueryString);
+
+
+    QStringList xAxisData;
+    QStringList yAxisData;
+
+    QVariantList tmpData;
+    QJsonArray colData;
+    int index;
+
+    QJsonArray columns;
     QVector<int> xKey;
     QVector<int> yKey;
-
     int xAxisLength;
     int yAxisLength;
+
+    int totalRows = xDataList->collection.Count();
 
     xAxisLength = xAxisColumn.length();
     yAxisLength = yAxisColumn.length();
 
-    QJsonArray columns;
-
     try{
         for(int i = 0; i < xAxisLength; i++){
-            xKey.append(this->headerMap.key( xAxisColumn.at(i).toString()));
-            if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-                xAxisDataPointer->insert(i, this->dashboardChartData.value(this->dashboardId).value(xKey.at(i)));
-            } else {
-                xAxisDataPointer->insert(i, this->reportChartData.value(this->reportId).value(xKey.at(i)));
-            }
+            QStringList data;
+            for(int j = 0; j < totalRows; j++)
+                data.append(xDataList->GetValue(i, j).ToString().c_str());
+
+            xAxisDataPointer->insert(i, data);
 
             // Append to output columns -- all x axis names
             columns.append(xAxisColumn.at(i).toString());
@@ -1603,12 +1611,11 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
     try{
         for(int i = 0; i < yAxisLength; i++){
-            yKey.append(this->headerMap.key( yAxisColumn.at(i).toString()));
-            if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
-                yAxisDataPointer->insert(i, this->dashboardChartData.value(this->dashboardId).value(yKey.at(i)));
-            } else {
-                yAxisDataPointer->insert(i, this->reportChartData.value(this->reportId).value(yKey.at(i)));
-            }
+            QStringList data;
+            for(int j = 0; j < totalRows; j++)
+                data.append(yDataList->GetValue(i, j).ToString().c_str());
+
+            yAxisDataPointer->insert(i, data);
 
             // Append to output columns -- all y axis names
             columns.append(yAxisColumn.at(i).toString());
@@ -1616,13 +1623,6 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     } catch(std::exception &e){
         qWarning() << Q_FUNC_INFO << e.what();
     }
-
-    QStringList xAxisData;
-    QStringList yAxisData;
-    int index;
-
-    QVariantList tmpData;
-    QJsonArray colData;
 
 
     // Actual values
@@ -1693,56 +1693,61 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QString strData = doc.toJson();
 
     if(identifier == "getTableChartValues"){
-        emit signalTableChartValues(strData);
+        emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getPivotChartValues"){
-        emit signalPivotChartValues(strData);
+        emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalTablePivotValues(strData);
+        emit signalTablePivotValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 
 }
 
-void ChartsThread::setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied)
+duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(QString mainQuery)
 {
-    if(sourceType == this->chartSources.at(0)){
+    // Fetch data here
+    QString queryString;
+    QString extractPath = Statics::extractPath;
 
-        this->currentChartSource = this->chartSources.at(0);
-        this->dashboardId = currentSelectedTypeId.toInt();
-        this->dashboardFilterApplied = dashboardFilterApplied;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    // IF Reports
+    // Else Dashboards
+    if(this->currentChartSource == Constants::reportScreen){
+        if(this->reportWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
     } else {
-
-        this->currentChartSource = this->chartSources.at(1);
-        this->reportId = currentSelectedTypeId.toInt();
-        this->dashboardFilterApplied = false;
+        if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString =mainQuery + " WHERE " + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
+            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + " WHERE " + this->dashboardWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
     }
 
-    qDebug() << "Typer CURR INFO" << this->currentChartSource << currentSelectedTypeId << this->dashboardFilterApplied;
+    auto dataList = con.Query(queryString.toStdString());
+    if(!dataList->error.empty())
+        qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
+
+    qDebug() << Q_FUNC_INFO << "Chart query" <<queryString;
+    return dataList;
+
 }
 
-void ChartsThread::receiveHeaders(QMap<int, QStringList> newChartHeader)
+QString ChartsThread::getTableName()
 {
-//    qDebug() << "HEADERS" << newChartHeader;
-    this->newChartHeader = newChartHeader;
+    QString tableName = Statics::currentDbName;
 
-    QList<int> keyList = this->newChartHeader.keys();
-
-    foreach(int key, keyList){
-        headerMap.insert(key, this->newChartHeader.value(key).at(0));
+    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+        tableName = QFileInfo(tableName).baseName().toLower();
+        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
     }
-}
 
-void ChartsThread::receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId)
-{
-//    qDebug() << "REPORT DATA" << newChartData;
-    this->reportChartData = newChartData;
-    this->reportId = currentReportId;
-    this->currentChartSource = this->chartSources.at(1); // report
-}
-
-void ChartsThread::receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId)
-{
-//    qDebug() << "DASHBOARD DATA" << newChartData;
-    this->dashboardChartData = newChartData;
-    this->dashboardId = currentDashboardId;
-    this->currentChartSource = this->chartSources.at(0); // dashboard
+    return tableName;
 }

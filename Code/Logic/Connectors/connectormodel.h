@@ -6,6 +6,7 @@
 #include <QDebug>
 
 #include "connector.h"
+#include "../../statics.h"
 
 /*!
  * \brief Sets the Connector screen data to view in QtQuick
@@ -29,12 +30,13 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     void addConnector( Connector *connector);
-    Q_INVOKABLE void addConnector(const QString & name, const QString & imageLink, const QString & category);
+    Q_INVOKABLE void addConnector(const QString & name, const QString & imageLink, const QString & category, const bool &isEnabled);
 
     enum ConnectorRoles{
         NameRole = Qt::UserRole + 1,
         ImageLinkRole,
-        CategoryRole
+        CategoryRole,
+        IsEnabledRole
     };
 
 signals:

@@ -218,6 +218,10 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 void FilterDateListModel::newFilter(int counter, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, QString actualValue, bool includeNull, bool exclude )
 {
     qDebug() << actualValue << "Actual value request";
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
     addFilterList(new FilterDateList(counter, dateFormatId, section, category, subcategory, tableName, colName, relation, slug, val, actualValue, includeNull, exclude, this));
     emit rowCountChanged();
 
@@ -235,6 +239,10 @@ void FilterDateListModel::deleteFilter(int FilterIndex)
 
 void FilterDateListModel::updateFilter(int FilterIndex, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, QString actualValue, bool includeNull, bool exclude)
 {
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
 
     beginResetModel();
     if(section != "")
@@ -345,8 +353,6 @@ QString FilterDateListModel::callQueryModel()
 
     }
 
-
-
     return newWhereConditions;
 }
 
@@ -357,6 +363,16 @@ void FilterDateListModel::clearFilters()
     endResetModel();
 
     emit rowCountChanged();
+}
+
+int FilterDateListModel::getFilterDateListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
+QList<FilterDateList *> FilterDateListModel::getFilters()
+{
+    return mFilter;
 }
 
 
@@ -394,9 +410,17 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
     switch (Statics::currentDbIntType) {
 
-    case Constants::jsonIntType:
     case Constants::excelIntType:
     case Constants::csvIntType:{
+
+        // Directly send the object to ProxyFilter to process
+        // getFilters() function
+
+        break;
+
+    }
+
+    case Constants::jsonIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
@@ -426,8 +450,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 concetantedCondition.append("'" + individualCondition + "'");
             }
 
-
-
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
@@ -438,7 +460,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
         break;
     }
     default:
-
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
@@ -498,7 +519,7 @@ QString FilterDateListModel::getQueryJoiner()
         break;
 
     case Constants::postgresIntType:
-        joiner = "`";
+        joiner = "\"";
         break;
 
     case Constants::oracleIntType:
@@ -530,8 +551,11 @@ QString FilterDateListModel::getQueryJoiner()
 
     case Constants::jsonIntType:
     case Constants::csvIntType:
-    case Constants::excelIntType:
         joiner = "\"";
+        break;
+
+    case Constants::excelIntType:
+        joiner = "";
         break;
     }
 

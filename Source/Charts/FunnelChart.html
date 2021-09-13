@@ -98,10 +98,12 @@
                 ["Sub_Category", "Sales"],
             ];
 
+            var chart = new D3Funnel("#my_dataviz");
+
             function drawChart(data, plottingConfiguration = {}) {
                 try {
                     window.data = data;
-
+                    clearChart();
                     var [data, label] = data;
 
                     data = sortArraysOfObjectByValue(data, "value");
@@ -130,7 +132,9 @@
                         parseInt(data.length / d3colorPalette.length) + 1;
 
                     for (var i = 0; i < colorValues; i++) {
-                        d3colorPalette.push(...d3colorPalette);
+                        if(d3colorPalette.length < data.length){
+                            d3colorPalette.push(...d3colorPalette);
+                        }
                     }
 
                     const options = {
@@ -159,8 +163,6 @@
                             fontFamily: dataLabelfontFamily,
                         },
                     };
-
-                    const chart = new D3Funnel("#my_dataviz");
 
                     chart.draw(data, options);
                     //  const note = document.querySelector(".d3-funnel-tooltip");

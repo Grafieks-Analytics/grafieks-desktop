@@ -21,68 +21,30 @@ void ForwardOnlyQueryModel::setQuery(QString query)
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
 
-
-    this->generateRoleNames();
-    this->setQueryResult();
-
 }
 
 void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 {
-    // Tmp
-    QStringList list;
-    int tmpRowCount = 0;
-    int maxRowCount = 0;
+    emit clearTablePreview();
 
-    QString connectionName = this->returnConnectionName();
-
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-        emit errorSignal(q.lastError().text());
+    if(this->query.contains(" limit ", Qt::CaseInsensitive)){
+        this->finalSql = this->query.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
     } else{
-
-
-        tmpRowCount = this->internalRowCount;
-        if(previewRowCount > tmpRowCount){
-            maxRowCount = tmpRowCount;
-        } else{
-            maxRowCount = previewRowCount;
-        }
-        this->previewRowCount = maxRowCount;
-
-        beginResetModel();
-        this->resultData.clear();
-
-        int totalRowCount = 0;
-        while(q.next() && totalRowCount < maxRowCount){
-
-            try{
-                for(int i = 0; i < this->internalColCount; i++){
-                    list << q.value(i).toString();
-                }
-                this->resultData.append(list);
-            } catch(std::exception &e){
-                qWarning() << Q_FUNC_INFO << e.what();
-            }
-
-            list.clear();
-            totalRowCount++;
-        }
-
-        if(this->internalRowCount > 0){
-            emit forwardOnlyHasData(true);
-
-        } else{
-            emit forwardOnlyHasData(false);
-        }
-
-        emit errorSignal("");
-        endResetModel();
+        this->finalSql = this->query;
     }
 
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+    this->finalSql += " limit " + QString::number(previewRowCount);
+    this->generateRoleNames();
+
+}
+
+void ForwardOnlyQueryModel::saveExtractData()
+{
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
+
+    saveForwardOnlyWorker->start();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
@@ -133,9 +95,16 @@ void ForwardOnlyQueryModel::removeTmpChartData()
     this->tableHeaders.clear();
 
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
-    emit chartDataChanged(this->forwardOnlyChartData);
     emit forwardOnlyHasData(false);
+}
+
+void ForwardOnlyQueryModel::extractSaved()
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    FreeTierExtractsManager freeTierExtractsManager;
+    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()
@@ -143,6 +112,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
+    qDebug() << dbForward.isOpen() << dbForward.isOpenError() << Q_FUNC_INFO;
 
     GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(this->query, &querySplitter);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::signalGenerateRoleNames, this, &ForwardOnlyQueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
@@ -152,13 +122,11 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
     // Emit signals for reports
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 
 }
 
 void ForwardOnlyQueryModel::setQueryResult()
 {
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
@@ -199,13 +167,62 @@ QString ForwardOnlyQueryModel::returnConnectionName()
 
 void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &forwardOnlyChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount)
 {
+
+    QStringList list;
+
     this->tableHeaders = tableHeaders;
     this->forwardOnlyChartHeader = forwardOnlyChartHeader;
     this->m_roleNames = roleNames;
     this->internalColCount = internalColCount;
 
+    qDebug() << "TAB 1" << tableHeaders;
+    qDebug() << "TAB 2" << forwardOnlyChartHeader;
+    qDebug() << "TAB 3" << roleNames;
+    qDebug() << "TAB 4" << internalColCount;
+
+    QString connectionName = this->returnConnectionName();
+    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
+    QSqlQuery q(this->finalSql, dbForward);
+
+    if(q.lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << q.lastError();
+        emit errorSignal(q.lastError().text());
+    } else{
+
+        beginResetModel();
+        this->resultData.clear();
+
+        int totalRowCount = 0;
+        while(q.next()){
+
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
+                    list << q.value(i).toString();
+                }
+                this->resultData.append(list);
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+            list.clear();
+            totalRowCount++;
+        }
+
+        this->previewRowCount = totalRowCount;
+
+        qDebug() << Q_FUNC_INFO<< totalRowCount << this->internalColCount << this->resultData ;
+
+        endResetModel();
+    }
+
+    if(this->previewRowCount > 0){
+        emit forwardOnlyHasData(true);
+    } else{
+        emit forwardOnlyHasData(false);
+    }
+
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
+    emit errorSignal("");
 }
 
 void ForwardOnlyQueryModel::slotSetChartData(bool success)
@@ -214,7 +231,39 @@ void ForwardOnlyQueryModel::slotSetChartData(bool success)
         this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
         this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
 
-        emit chartDataChanged(this->forwardOnlyChartData);
+    }
+}
+
+void ForwardOnlyQueryModel::extractSizeLimit()
+{
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath)){
+            qDebug() << Q_FUNC_INFO << file.errorString();
+        }
+        Statics::freeLimitExtractSizeExceeded = true;
+        emit extractFileExceededLimit(true);
+    } else {
+        emit extractFileExceededLimit(false);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateReports();
     }
 }
 

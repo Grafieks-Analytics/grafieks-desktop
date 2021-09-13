@@ -47,7 +47,6 @@ ApplicationWindow {
 
 
 
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -69,7 +68,13 @@ ApplicationWindow {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: ExtractProcessor
 
+        function onExtractReaderProcessed(){
+            stacklayout_home.currentIndex = 6
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -81,7 +86,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
 
-
+        // Get Reader file
+        if(ExtractProcessor.receivedArgumentStatus() === true){
+            mainwindow.title = ExtractProcessor.processExtract()
+        }
 
         if(settings.value("user/profileId") > 0){
             var firstname = settings.value("user/firstname")
@@ -105,6 +113,10 @@ ApplicationWindow {
     function openDatasource(){
 
         dsOpenDialog.visible = true
+    }
+
+    function openReaderDialog(){
+        readerDialog.visible = true
     }
 
 
@@ -155,10 +167,25 @@ ApplicationWindow {
         title: "Add New Datasource"
         folder: shortcuts.documents
         fileMode: FileDialog.OpenFile
-        nameFilters: ["Extract (*.gadse)", "Live (*.gads)"]
+        nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")"]
 
         onAccepted: {
             var x = DSParamsModel.readDatasource(file)
+
+        }
+    }
+
+    FileDialog {
+        id: readerDialog
+        title: "Select File"
+        folder: shortcuts.documents
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")"]
+
+        onAccepted: {
+            var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
+            console.log(readerFile)
+            ExtractProcessor.setArgumentsFromMenu(readerFile)
 
         }
     }
@@ -195,68 +222,8 @@ ApplicationWindow {
             MenuItem{
                 id: action_open
                 text: qsTr("Open")
-            }
 
-            MenuSeparator{}
-
-            MenuItem{
-                id: action_sampledata
-                text: qsTr("SampleData")
-            }
-
-
-        }
-
-        Menu{
-            id: editMenu
-            title: qsTr("&Edit")
-
-
-            MenuItem{
-                id: action_undo
-                text: qsTr("Undo")
-            }
-
-            MenuItem{
-                id: action_redo
-                text: qsTr("Redo")
-            }
-
-            MenuSeparator{}
-
-            MenuItem{
-                id: action_cut
-                text: qsTr("Cut")
-            }
-
-            MenuItem{
-                id: action_copy
-                text: qsTr("Copy")
-            }
-
-            MenuItem{
-                id: action_paste
-                text: qsTr("Paste")
-            }
-
-            MenuItem{
-                id: action_delete
-                text: qsTr("Delete")
-            }
-
-
-        }
-
-        Menu {
-            id: dataMenu
-            title: qsTr("&Data")
-
-
-            MenuItem{
-                id: action_new_ds
-                text: qsTr("Add New Datasource")
-
-                onTriggered: openDatasource()
+                onTriggered: openReaderDialog()
             }
 
             MenuSeparator{}
@@ -267,22 +234,92 @@ ApplicationWindow {
 
                 onTriggered: saveDatasource()
             }
-            MenuItem{
-                id: action_refresh_ds
-                text: qsTr("Refresh Datasource")
-            }
-
-            MenuSeparator{}
 
             MenuItem{
-                id: action_export_ds_csv
-                text: qsTr("Export Datasource to CSV")
+                id: action_sampledata
+                text: qsTr("SampleData")
+                enabled: false
             }
-            MenuItem{
-                id: action_export_ds_excel
-                text: qsTr("Export Datasource to Excel")
-            }
+
+
         }
+
+//        Menu{
+//            id: editMenu
+//            title: qsTr("&Edit")
+
+
+//            MenuItem{
+//                id: action_undo
+//                text: qsTr("Undo")
+//            }
+
+//            MenuItem{
+//                id: action_redo
+//                text: qsTr("Redo")
+//            }
+
+//            MenuSeparator{}
+
+//            MenuItem{
+//                id: action_cut
+//                text: qsTr("Cut")
+//            }
+
+//            MenuItem{
+//                id: action_copy
+//                text: qsTr("Copy")
+//            }
+
+//            MenuItem{
+//                id: action_paste
+//                text: qsTr("Paste")
+//            }
+
+//            MenuItem{
+//                id: action_delete
+//                text: qsTr("Delete")
+//            }
+
+
+//        }
+
+//        Menu {
+//            id: dataMenu
+//            title: qsTr("&Data")
+
+
+//            MenuItem{
+//                id: action_new_ds
+//                text: qsTr("Add New Datasource")
+
+//                onTriggered: openDatasource()
+//            }
+
+//            MenuSeparator{}
+
+//            MenuItem{
+//                id: action_save_ds
+//                text: qsTr("Save Datasource")
+
+//                onTriggered: saveDatasource()
+//            }
+//            MenuItem{
+//                id: action_refresh_ds
+//                text: qsTr("Refresh Datasource")
+//            }
+
+//            MenuSeparator{}
+
+//            MenuItem{
+//                id: action_export_ds_csv
+//                text: qsTr("Export Datasource to CSV")
+//            }
+//            MenuItem{
+//                id: action_export_ds_excel
+//                text: qsTr("Export Datasource to Excel")
+//            }
+//        }
 
         Menu {
             id: serverMenu
@@ -292,6 +329,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_signin
                 text: Constants.signInText
+                enabled: false
 
                 onTriggered: {
                     if(typeof settings.value("user/sessionToken") !== "undefined"){
@@ -311,6 +349,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_publish_datasource
                 text: qsTr("Publish Datasource")
+                enabled: false
 
                 onTriggered: {
                     Datasources.setSourceType(Constants.liveDS)
@@ -343,10 +382,12 @@ ApplicationWindow {
             MenuSeparator{}
             MenuItem{
                 text: qsTr("Manage License")
+                enabled: false
             }
 
             MenuItem{
                 text: qsTr("Check for updates")
+                enabled: false
 
             }
 
@@ -356,12 +397,12 @@ ApplicationWindow {
                 text: qsTr("About")
             }
 
-            MenuItem{
-                text: qsTr("Test")
-                onTriggered: {
-                    stacklayout_home.currentIndex = 0
-                }
-            }
+//            MenuItem{
+//                text: qsTr("Test")
+//                onTriggered: {
+//                    stacklayout_home.currentIndex = 0
+//                }
+//            }
 
         }
 

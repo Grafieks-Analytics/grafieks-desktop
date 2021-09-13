@@ -133,39 +133,37 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString u
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
     response = excelcon->ExcelOdbcInstance(driver, filename);
-    this->staticSetter(filename, Constants::sqlType, Constants::excelIntType, Constants::excelOdbcStrType, false, driver);
+    this->staticSetter(filename, Constants::excelType, Constants::excelIntType, Constants::excelOdbcStrType, false, driver);
     emit excelLoginStatus(response, true);
 }
 
 void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString separator)
 {
+    Statics::csvJsonPath = filename;
     response = csvcon->CSVInstance(filename);
+
     Statics::separator = separator;
 
-    this->staticSetter(filename, Constants::duckType, Constants::csvIntType, NULL, directLogin);
-//    emit csvLoginStatus(response, directLogin);
-
-    // Here the login signal will be handled from DuckCon Class
-    // As we are using multithreaded signal and slot
+    this->staticSetter(filename, Constants::csvType, Constants::csvIntType, NULL, directLogin);
+    emit csvLoginStatus(response, directLogin);
 }
 
 void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 {
     response = jsoncon->JsonInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::jsonIntType, NULL, directLogin);
-//    emit jsonLoginStatus(response, directLogin);
-
-    // Here the login signal will be handled from DuckCon Class
-    // As we are using multithreaded signal and slot
+    this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);
+    emit jsonLoginStatus(response, directLogin);
 }
 
-void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
+void ConnectorsLoginModel::excelLogin(QStringList driversList, QString filename)
 {
-    response = excelcon->ExcelInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::excelIntType, NULL, directLogin);
+    // Try with driver at 0 position only for the time being
+    // Later we will loop for other drivers, if the earlier fails
+    // Till its sure that we cant login with any of the drivers, if it fails
 
-    // Here the login signal will be handled from DuckCon Class
-    // As we are using multithreaded signal and slot
+    response = excelcon->ExcelOdbcInstance(driversList.at(0), filename);
+    this->staticSetter(filename, Constants::excelType, Constants::excelIntType, Constants::excelOdbcStrType, false, driversList.at(0));
+    emit excelLoginStatus(response, true);
 }
 
 void ConnectorsLoginModel::sqlLogout()
@@ -242,11 +240,6 @@ void ConnectorsLoginModel::sqlLogout()
     emit logout();
 }
 
-QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
-{
-    QString path = url.toLocalFile();
-    return path;
-}
 
 QString ConnectorsLoginModel::connectedDB() const
 {
@@ -288,13 +281,6 @@ void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, 
     Statics::currentDbIntType = intType;
     Statics::currentDbStrType = strType;
     Statics::driverName = driverName;
-
-    if(classification == Constants::duckType){
-        QFileInfo fi(dbName);
-        dbName = fi.baseName();
-
-        emit sendDbName(Statics::currentDbName, directLogin, this->response);
-    }
 
     this->setConnectedDB(dbName);
     emit dSSelected(true);
