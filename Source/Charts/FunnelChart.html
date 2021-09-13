@@ -29,6 +29,7 @@
     <body>
         <div id="my_dataviz" style="text-align: center; margin-top: 40px"></div>
         <div id="tooltip"></div>
+        <div id="legend"></div>
 
         <script>
             var data = [
@@ -113,10 +114,12 @@
                         dynamicHeight = defaultD3Config.defaultDynamicHeight,
                         bottomPinch = defaultD3Config.defaultBottomPinch,
                         labelConfig = defaultD3Config.defaultlabelConfig,
+                        legendConfig = defaultD3Config.defaultLegendConfig,
                         dataLabelfontSize = defaultD3Config.fontSize,
                         dataLabelfontFamily = defaultD3Config.fontFamily,
                     } = plottingConfiguration;
                     let { labelStatus } = labelConfig;
+                    let { legendStatus, legendPosition } = legendConfig;
                     window.dataLabelfontSize = dataLabelfontSize;
                     window.dataLabelfontFamily = dataLabelfontFamily;
 
@@ -166,9 +169,8 @@
                     var funnelSvg = document.querySelectorAll("svg g");
                     funnelSvg.forEach((e) => {
                         e.addEventListener("mouseout", (event) => {
-                            d3.select("#tooltip")
-                                .style("display", "none");
-                                // .html("");
+                            d3.select("#tooltip").style("display", "none");
+                            // .html("");
                         });
                         e.addEventListener("mousemove", (event) => {
                             // console.log(event.target);
@@ -178,10 +180,10 @@
                             var value = e.querySelector("text tspan").innerHTML;
                             var valueTooltip = value.split(":");
 
-                            console.log(event.clientX);
+                            // console.log(event.clientX);
                             d3.select("#tooltip")
                                 .style("position", "absolute")
-                                .style("left", event.clientX +20+ "px")
+                                .style("left", event.clientX + 20 + "px")
                                 .style("top", event.clientY - 30 + "px")
                                 .style("display", "block")
                                 .style("pointer-events", "none")
