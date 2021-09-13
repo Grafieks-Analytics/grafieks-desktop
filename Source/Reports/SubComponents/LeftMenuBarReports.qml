@@ -79,6 +79,7 @@ Rectangle{
             title:"Combination - Coming Soon"
             yAxisVisible: true
             maxDropOnXAxis: 1
+            disabled:true
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
             nonClickable: true
@@ -220,6 +221,7 @@ Rectangle{
             chartHtml:"SankeyChart.html"
             elementHeight: 24
             activeChart: false
+            disabled:true
             title:"Sankey"
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
@@ -352,9 +354,11 @@ Rectangle{
             var maxDropOnXAxis = allCharts.get(i).maxDropOnXAxis;
             var maxDropOnYAxis = allCharts.get(i).maxDropOnYAxis;
 
+           var disabled = !!allCharts.get(i).disabled;
             allChartsMapping[chartTitle] = {
                 'maxDropOnXAxis': maxDropOnXAxis || -1,
                 'maxDropOnYAxis': maxDropOnYAxis || -1,
+                disabled
             };
 
         }
@@ -364,9 +368,10 @@ Rectangle{
         allowedYAxisDataPanes = 1;
     }
 
-    function getChart(chartHtml,index,chartTitle,mainCustomizations){
-        // TODO:return
-        [Constants.barChartTitle]
+   function getChart(chartHtml,index,chartTitle,mainCustomizations, subMenuCustomizations=""){
+        if(allChartsMapping[chartTitle].disabled){
+            return
+        }
         report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.chartTitle = chartTitle;
 
