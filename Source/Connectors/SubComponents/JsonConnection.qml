@@ -46,18 +46,6 @@ Popup {
             selectedFile = ""
             jsonFileName.text = ""
         }
-    }
-
-    Connections{
-        target: DuckCon
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "json"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
 
         function onJsonLoginStatus(status, directLogin){
 
@@ -81,6 +69,7 @@ Popup {
             displayTime.text = ""
         }
     }
+
 
     function handleJson(jsonFileName){
 
@@ -288,7 +277,7 @@ Popup {
 
         onAccepted: {
             console.log(fileUrl)
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             jsonFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

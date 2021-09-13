@@ -231,7 +231,11 @@ Page {
         id: postgresModal
     }
 
-    ExcelConnection{
+    //    ExcelConnection{
+    //        id: excelModal
+    //    }
+
+    ExcelOdbcConnection{
         id: excelModal
     }
 
@@ -553,7 +557,6 @@ Page {
         id: grid1
 
         anchors.top: tabbar.bottom
-//        anchors.topMargin: 60
         anchors.left: left_menubar.right
         width: selectconn_page.width-50
         height: parent.height-300
@@ -562,7 +565,7 @@ Page {
         cellHeight: 130
         clip: true
         interactive: true
-         ScrollBar.vertical: ScrollBar{}
+        ScrollBar.vertical: ScrollBar{}
 
 
         delegate : Rectangle{
@@ -577,11 +580,13 @@ Page {
                 height:60
                 width:height
                 anchors.centerIn: parent
-
+                enabled: isEnabled
+                onSourceChanged: console.log(name, isEnabled)
 
                 MouseArea{
                     anchors.fill: parent
                     onClicked: selectAuthorization(name)
+                    enabled: isEnabled
 
                 }
             }
@@ -593,11 +598,13 @@ Page {
                 anchors.top: imageId.bottom
                 anchors.topMargin: 10
                 anchors.horizontalCenter: imageId.horizontalCenter
+                enabled: isEnabled
 
                 MouseArea{
                     anchors.fill: parent
 
                     onClicked: selectAuthorization(name)
+                    enabled: isEnabled
                 }
             }
         }

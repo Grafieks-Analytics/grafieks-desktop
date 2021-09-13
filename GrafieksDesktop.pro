@@ -43,33 +43,37 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
-    Code/Logic/Connectors/duckcon.cpp \
     Code/Logic/Connectors/duckthread.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
-    Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
-    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setchartdataduckworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractexcelworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.cpp \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
+    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
+    Code/Logic/DataModeller/csvjsondatamodel.cpp \
+    Code/Logic/DataModeller/csvjsonquerymodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
-    Code/Logic/DataModeller/duckdatamodel.cpp \
-    Code/Logic/DataModeller/duckquerymodel.cpp \
+    Code/Logic/DataModeller/exceldatamodel.cpp \
+    Code/Logic/DataModeller/excelquerymodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
+    Code/Logic/DataModeller/filtercsvjson.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
     Code/Logic/DataModeller/filterdatelistmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
@@ -89,7 +93,9 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
-    Code/Logic/General/Workers/chartsworker.cpp \
+    Code/Logic/FreeTier/freetierchartsmanager.cpp \
+    Code/Logic/FreeTier/freetierconnectorsmanager.cpp \
+    Code/Logic/FreeTier/freetierextractsmanager.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
@@ -98,9 +104,14 @@ SOURCES += \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Readers/extractprocessor.cpp \
+    Code/Logic/Readers/liveprocessor.cpp \
+    Code/Logic/Readers/workbookprocessor.cpp \
     Code/Logic/Reports/Workers/updatefilterdataworker.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
+    Code/OS/odbcdriversmodel.cpp \
+    Code/OS/osentries.cpp \
     main.cpp
 
 RESOURCES += \
@@ -154,33 +165,37 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
-    Code/Logic/Connectors/duckcon.h \
     Code/Logic/Connectors/duckthread.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \
-    Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
-    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
-    Code/Logic/DataModeller/Workers/setchartdataduckworker.h \
+    Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.h \
+    Code/Logic/DataModeller/Workers/saveextractexcelworker.h \
+    Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.h \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
+    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
+    Code/Logic/DataModeller/csvjsondatamodel.h \
+    Code/Logic/DataModeller/csvjsonquerymodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
-    Code/Logic/DataModeller/duckdatamodel.h \
-    Code/Logic/DataModeller/duckquerymodel.h \
+    Code/Logic/DataModeller/exceldatamodel.h \
+    Code/Logic/DataModeller/excelquerymodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
+    Code/Logic/DataModeller/filtercsvjson.h \
     Code/Logic/DataModeller/filterdatelist.h \
     Code/Logic/DataModeller/filterdatelistmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
@@ -200,7 +215,9 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/General/Workers/chartsworker.h \
+    Code/Logic/FreeTier/freetierchartsmanager.h \
+    Code/Logic/FreeTier/freetierconnectorsmanager.h \
+    Code/Logic/FreeTier/freetierextractsmanager.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \
@@ -209,9 +226,14 @@ HEADERS += \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Readers/extractprocessor.h \
+    Code/Logic/Readers/liveprocessor.h \
+    Code/Logic/Readers/workbookprocessor.h \
     Code/Logic/Reports/Workers/updatefilterdataworker.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
+    Code/OS/odbcdriversmodel.h \
+    Code/OS/osentries.h \
     Code/duckdb.hpp \
     Code/jsoncons/include/jsoncons/json.hpp \
     Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \

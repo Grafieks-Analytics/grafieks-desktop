@@ -203,6 +203,11 @@ QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
 
 void FilterCategoricalListModel::newFilter(int counter, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
+
     addFilterList(new FilterCategoricalList(counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
 }
@@ -218,6 +223,11 @@ void FilterCategoricalListModel::deleteFilter(int FilterIndex)
 
 void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
+
     beginResetModel();
     if(section != "")
         mFilter[FilterIndex]->setSection(section);
@@ -267,6 +277,16 @@ void FilterCategoricalListModel::clearFilters()
     emit rowCountChanged();
 }
 
+int FilterCategoricalListModel::getFilterCategoricalListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
+QList<FilterCategoricalList *> FilterCategoricalListModel::getFilters()
+{
+    return mFilter;
+}
+
 
 void FilterCategoricalListModel::addFilterList(FilterCategoricalList *filter)
 {
@@ -298,12 +318,21 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
     int localCounter = 0;
     QString joiner = this->getQueryJoiner();
 
+
     // If there are several relations involved
     switch(Statics::currentDbIntType){
 
-    case Constants::excelIntType:
+
     case Constants::jsonIntType:
     case Constants::csvIntType:{
+
+        // Directly send the object to ProxyFilter to process
+        // getFilters() function
+
+        break;
+    }
+
+    case Constants::excelIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
@@ -401,7 +430,7 @@ QString FilterCategoricalListModel::getQueryJoiner()
         break;
 
     case Constants::postgresIntType:
-        joiner = "`";
+        joiner = "\"";
         break;
 
     case Constants::oracleIntType:
@@ -433,8 +462,10 @@ QString FilterCategoricalListModel::getQueryJoiner()
 
     case Constants::jsonIntType:
     case Constants::csvIntType:
-    case Constants::excelIntType:
         joiner = "\"";
+        break;
+    case Constants::excelIntType:
+        joiner = "";
         break;
     }
 

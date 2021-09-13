@@ -11,6 +11,49 @@ namespace Constants
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
+    const int flushExtractCount = 100000;
+
+    // Master Extract Table
+    const QString masterExtractTable = "gahc_master_table";
+
+    // File extensions
+    const QString extractExt = "gadse";
+    const QString liveExt = "gads";
+    const QString workbookExt = "gawb";
+
+    // Free Tier Limits
+    const int freeTierExtractLimit = 1024 * 1024 * 1024; // 1GB limit
+//    const int freeTierExtractLimit = 1024 * 1024 * 2;
+    const int timeDelayCheckExtractSize = 2000; // 2 seconds
+    const int freeTierExtractGrsLimit = 500 * 1024 * 1024; // 500 MB limit
+
+    // EXTRACTS (DuckDb) Data Type integer for switching
+    const int varcharIntType = 0;
+    const int boolIntType = 1;
+    const int dateIntType = 2;
+    const int dateTimeIntType = 3;
+    const int blobIntType = 4;
+    const int tinyIntIntType = 5;
+    const int smallIntIntType = 6;
+    const int intIntType = 7;
+    const int bigIntIntType = 8;
+    const int hugeIntIntType = 9;
+    const int realIntType = 10;
+    const int doubleIntType = 11;
+
+    // Extracts (DuckDB) Data Type names
+    const QString varcharStringType = "VARCHAR";
+    const QString boolStringType = "BOOL";
+    const QString dateStringType = "DATE";
+    const QString dateTimeStringType = "DATETIME";
+    const QString blobStringType = "BLOB";
+    const QString tinyIntIStringType = "TINYINT";
+    const QString smallIntStringType = "SMALLINT";
+    const QString intStringType = "INTEGER";
+    const QString bigIntStringType = "BIGINT";
+    const QString hugeIntStringType = "HUGEINT";
+    const QString realStringType = "REAL";
+    const QString doubleStringType = "DOUBLE";
 
 
     // Datasource type int
@@ -40,6 +83,9 @@ namespace Constants
     const QString sqlType = "SQL";
     const QString duckType = "DUCK";
     const QString forwardType = "FORWARD";
+    const QString excelType = "EXCEL";
+    const QString csvType = "CSV";
+    const QString jsonType = "JSON";
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";
@@ -108,26 +154,32 @@ namespace Constants
     const QString dateSubMonth = "month";
     const QString dateSubDay = "day";
 
+    // **************************** //
     // Filter Relation Slugs
-    const QString slugLikeRelation = "Like";
-    const QString slugNotLikeRelation = "Not Like";
-    const QString slugInRelation = "In";
-    const QString slugEqualRelation = "Equal";
-    const QString slugNotEqualRelation = "Not Equal";
-    const QString slugBetweenRelation = "Between";
+    // Please do not change the order
+    // Used in bool CsvJsonQueryModel::filteredValue()
+
+    const QString slugLikeRelation = "Like"; //0
+    const QString slugNotLikeRelation = "Not Like"; //1
+    const QString slugInRelation = "In"; //2
+    const QString slugEqualRelation = "Equal"; //3
+    const QString slugNotEqualRelation = "Not Equal"; //4
+    const QString slugBetweenRelation = "Between"; //5
 //    const QString slugSmallerThanRelation = "Less Than";
-    const QString slugGreaterThanRelation = "Greater Than";
+    const QString slugGreaterThanRelation = "Greater Than"; //6
 //    const QString slugSmallerThanEqualRelation = "";
 //    const QString slugGreaterThanEqualRelation = "Greater Than Equal To";
 
-    const QString slugSmallerThanRelation = "Smaller Than";
-    const QString slugSmallerThanEqualRelation = "Equal or Smaller Than";
-    const QString slugGreaterThanEqualRelation = "Equal or Greater Than";
+    const QString slugSmallerThanRelation = "Smaller Than"; //7
+    const QString slugSmallerThanEqualRelation = "Equal or Smaller Than"; //8
+    const QString slugGreaterThanEqualRelation = "Equal or Greater Than"; //9
 
-    const QString slugContainingRelation = "Containing";
-    const QString slugEndsWithRelation = "Ends With";
-    const QString slugDoesntStartWithRelation = "Doesnt Start With";
-    const QString slugDoesntEndWithRelation = "Doesnt End With";
+    const QString slugContainingRelation = "Containing"; //10
+    const QString slugEndsWithRelation = "Ends With"; //11
+    const QString slugDoesntStartWithRelation = "Doesnt Start With"; // 12
+    const QString slugDoesntEndWithRelation = "Doesnt End With"; //13
+
+    // ***************************//
 
     // DSParams Settings
     const QString defaultTabSection = categoricalType;

@@ -1002,6 +1002,8 @@
 
                     markerShape = defaultD3Config.defaultMarkerShape,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+
+                    filledStatus = false,
                 } = plottingConfiguration;
 
                 window.xLabelfontSize = xLabelfontSize;
@@ -1423,175 +1425,194 @@
                     return value;
                 };
 
-                svg.selectAll(".dot")
-                    .data(dataValues)
-                    .enter()
-                    .append(markerShape)
-                    .attr("stroke", function (d) {
-                        return color(d[1]);
-                    })
-                    .attr("class", markerShape)
-                    .attr("class", "marker-shape")
-                    .attr(
-                        "transform",
-                        "translate(" +
-                            (markerShape == constants.markerShapes.RECT
-                                ? 0 - 2.8
-                                : 0) +
-                            "," +
-                            -2.8 +
-                            ")"
-                    )
-                    .attr("fill", function (d) {
-                        return color(d[1]);
-                    })
-                    .attr(
-                        markerShapeConfig[markerShape] &&
-                            markerShapeConfig[markerShape].xPositionAttrName,
-                        function (d, i) {
-                            this.setAttribute("data-value-x", d[0]);
-                            this.setAttribute("data-value-x1", d[1]);
+                var fill = "#ffffff";
 
-                            this.setAttribute("data-value-y", d[2]);
+                if (!markerShape) {
+                    markerShape = defaultD3Config.defaultMarkerShape;
+                }
 
-                            return x(d[0]) + x.bandwidth() / 2;
-                        }
-                    )
-                    .attr(
-                        markerShapeConfig[markerShape] &&
-                            markerShapeConfig[markerShape].yPositionAttrName,
-                        function (d) {
-                            console.log(d[2]);
-                            return y(d[2]);
-                        }
-                    )
-                    .attr("r", initialCircleRadius)
-                    .attr("height", initialBoxDimension)
-                    .attr("width", initialBoxDimension)
-                    .attr("points", function (d, i) {
-                        var x1 = x(d[0]);
-                        return x1;
-                    })
-                    .on("mouseout", function (d, i) {
-                        d3.select("#tooltip").style("display", "none");
-                        d3.selectAll(".bar").style("opacity", 1);
-                    })
-                    .on("mousemove", function (d, i) {
-                        var x_pos = d3.mouse(this)[0];
-                        var y_pos = d3.mouse(this)[1];
+                if (markerStatus) {
+                    svg.selectAll(".dot")
+                        .data(dataValues)
+                        .enter()
+                        .append(markerShape)
+                        .attr("stroke", function (d) {
+                            return color(d[1]);
+                        })
+                        .attr("class", markerShape)
+                        .attr("class", "marker-shape")
+                        .attr(
+                            "transform",
+                            "translate(" +
+                                (markerShape == constants.markerShapes.RECT
+                                    ? 0 - 2.8
+                                    : 0) +
+                                "," +
+                                (markerShape == constants.markerShapes.RECT
+                                    ? 0 - 2.8
+                                    : 0) +
+                                ")"
+                        )
+                        .attr("fill", function (d) {
+                            if (filledStatus) {
+                                initialCircleRadius = 3;
+                                fill = color(d[1]);
+                            }
+                            return fill;
+                        })
+                        .attr(
+                            markerShapeConfig[markerShape] &&
+                                markerShapeConfig[markerShape]
+                                    .xPositionAttrName,
+                            function (d, i) {
+                                this.setAttribute("data-value-x", d[0]);
+                                this.setAttribute("data-value-x1", d[1]);
 
-                        const xValue = dateformatValue(d[0]);
-                        const xValue1 = dateformatValue(d[1]);
-                        const yValue = d[2];
+                                this.setAttribute("data-value-y", d[2]);
 
-                        d3.select("#tooltip")
-                            // .style("left", x_pos + "px")
-                            // .style("top", y_pos - 20 + "px")
-                            .style("top", y_pos - 20 + "px")
-                            .style("display", "block")
-                            // .html(xValue + ", " + yValue.toFixed(2));
-                            // .html(function () {
-                            //     var textValue = d.y0 - d.y1;
-                            //     if (d.y1 < 0) {
-                            //         textValue = d.y1 - d.y0;
-                            //     }
+                                return x(d[0]) + x.bandwidth() / 2;
+                            }
+                        )
+                        .attr(
+                            markerShapeConfig[markerShape] &&
+                                markerShapeConfig[markerShape]
+                                    .yPositionAttrName,
+                            function (d) {
+                                console.log(d[2]);
+                                return y(d[2]);
+                            }
+                        )
+                        .attr("r", initialCircleRadius)
+                        .attr("height", initialBoxDimension)
+                        .attr("width", initialBoxDimension)
+                        .attr("points", function (d, i) {
+                            var x1 = x(d[0]);
+                            return x1;
+                        })
+                        .on("mouseout", function (d, i) {
+                            d3.select("#tooltip").style("display", "none");
+                            d3.selectAll(".bar").style("opacity", 1);
+                        })
+                        .on("mousemove", function (d, i) {
+                            var x_pos = d3.mouse(this)[0];
+                            var y_pos = d3.mouse(this)[1];
 
-                            //     return (
-                            //         "<div class='arrowTooltip'></div>" +
-                            //         Math.round(yValue) +
-                            //         "</div>"
-                            //     );
-                            // });
-                            .html(function () {
-                                var textValue = d.y0 - d.y1;
-                                if (d.y1 < 0) {
-                                    textValue = d.y1 - d.y0;
-                                }
+                            const xValue = dateformatValue(d[0]);
+                            const xValue1 = dateformatValue(d[1]);
+                            const yValue = d[2];
 
-                                return (
-                                    "<div class='arrowTooltip'></div>" +
-                                    "<span style='color:grey;''>" +
-                                    xAxisLabel +
-                                    ":&nbsp;&nbsp;" +
-                                    "</span>" +
-                                    "<span style='float: right;'>" +
-                                    xValue +
-                                    "</span>" +
-                                    "<br/> <br/>" +
-                                    "<span style='color:grey;''>" +
-                                    colorData +
-                                    ":&nbsp;&nbsp;" +
-                                    "</span>" +
-                                    "<span style='float: right;'>" +
-                                    xValue1 +
-                                    "</span>" +
-                                    "<br/> <br/>" +
-                                    "<span style='color:grey;''>" +
-                                    yAxisLabel +
-                                    ":" +
-                                    "</span>" +
-                                    "<span style='float: right;margin-left: 15px;'>" +
-                                    Math.round(yValue) +
-                                    "</span>"
-                                );
-                            });
-                        var scrollVal =
-                            document.querySelector("#my_dataviz").scrollLeft;
+                            d3.select("#tooltip")
+                                // .style("left", x_pos + "px")
+                                // .style("top", y_pos - 20 + "px")
+                                .style("top", y_pos - 20 + "px")
+                                .style("display", "block")
+                                // .html(xValue + ", " + yValue.toFixed(2));
+                                // .html(function () {
+                                //     var textValue = d.y0 - d.y1;
+                                //     if (d.y1 < 0) {
+                                //         textValue = d.y1 - d.y0;
+                                //     }
 
-                        if (
-                            x_pos - scrollVal >
-                            document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth -
-                                20
-                        ) {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos -
-                                    scrollVal -
+                                //     return (
+                                //         "<div class='arrowTooltip'></div>" +
+                                //         Math.round(yValue) +
+                                //         "</div>"
+                                //     );
+                                // });
+                                .html(function () {
+                                    var textValue = d.y0 - d.y1;
+                                    if (d.y1 < 0) {
+                                        textValue = d.y1 - d.y0;
+                                    }
+
+                                    return (
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        xAxisLabel +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        xValue +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        colorData +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        xValue1 +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        yAxisLabel +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        Math.round(yValue) +
+                                        "</span>"
+                                    );
+                                });
+                            var scrollVal =
+                                document.querySelector(
+                                    "#my_dataviz"
+                                ).scrollLeft;
+
+                            if (
+                                x_pos - scrollVal >
+                                document.documentElement.clientWidth -
                                     document.querySelector("#tooltip")
-                                        .clientWidth +
-                                    58 +
-                                    "px"
-                            );
-
-                            d3.select(".arrowTooltip")
-                                //  document.querySelector("#tooltip:before")
-                                // .style("height","50px";"width","50px";"background-color","red";")
-
-                                .attr(
-                                    "style",
-                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                        .clientWidth -
+                                    20
+                            ) {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    x_pos -
+                                        scrollVal -
+                                        document.querySelector("#tooltip")
+                                            .clientWidth +
+                                        58 +
+                                        "px"
                                 );
-                        } else {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos - scrollVal + 80 + "px"
-                            );
 
-                            d3.select(".arrowTooltip").attr(
-                                "style",
-                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
-                            );
-                        }
-                        var shapeClass = ".marker-shape";
-                        d3.selectAll(shapeClass).style("opacity", 0.3);
-                        d3.select(this)
-                            .style("opacity", 1)
-                            .attr("r", onHoverCircleRadius)
-                            .attr("height", onHoverBoxDimension)
-                            .attr("width", onHoverBoxDimension)
-                            .attr("data-value-x", xValue)
-                            .attr("data-value-y", yValue.toFixed(2));
-                    })
-                    .on("mouseout", function () {
-                        d3.select("#tooltip").style("display", "none");
-                        var shapeClass = ".marker-shape";
-                        d3.selectAll(shapeClass)
-                            .style("opacity", 1)
-                            .attr("r", initialCircleRadius)
-                            .attr("height", initialBoxDimension)
-                            .attr("width", initialBoxDimension);
-                    });
+                                d3.select(".arrowTooltip")
+                                    //  document.querySelector("#tooltip:before")
+                                    // .style("height","50px";"width","50px";"background-color","red";")
+
+                                    .attr(
+                                        "style",
+                                        "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                    );
+                            } else {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    x_pos - scrollVal + 80 + "px"
+                                );
+
+                                d3.select(".arrowTooltip").attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                            }
+                            var shapeClass = ".marker-shape";
+                            d3.selectAll(shapeClass).style("opacity", 0.3);
+                            d3.select(this)
+                                .style("opacity", 1)
+                                .attr("r", onHoverCircleRadius)
+                                .attr("height", onHoverBoxDimension)
+                                .attr("width", onHoverBoxDimension)
+                                .attr("data-value-x", xValue)
+                                .attr("data-value-y", yValue.toFixed(2));
+                        })
+                        .on("mouseout", function () {
+                            d3.select("#tooltip").style("display", "none");
+                            var shapeClass = ".marker-shape";
+                            d3.selectAll(shapeClass)
+                                .style("opacity", 1)
+                                .attr("r", initialCircleRadius)
+                                .attr("height", initialBoxDimension)
+                                .attr("width", initialBoxDimension);
+                        });
+                }
 
                 /*
                             var mouseG = svg

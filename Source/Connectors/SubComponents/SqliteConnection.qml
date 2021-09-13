@@ -197,7 +197,7 @@ Popup {
         nameFilters: ["Sqlite files (*.sqlite *.db)"];
 
         onAccepted: {
-            sqliteFileName.text = ConnectorsLoginModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')
+            sqliteFileName.text = GeneralParamsModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')
             selectedFile = fileUrl
         }
         onRejected: {

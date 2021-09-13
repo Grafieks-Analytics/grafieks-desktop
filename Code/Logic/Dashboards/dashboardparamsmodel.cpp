@@ -589,8 +589,6 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
 
     valueMap.insert(columnName, values);
     this->columnValueMap.insert(dashboardId, valueMap);
-
-    emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 
 QStringList DashboardParamsModel::fetchColumnValueMap(int dashboardId, QString columnName)
@@ -615,9 +613,16 @@ void DashboardParamsModel::deleteColumnValueMap(int dashboardId, QString columnN
         valueMap.insert(columnName, values);
         this->columnValueMap.insert(dashboardId, valueMap);
     } else {
-        this->columnValueMap.remove(dashboardId);
-    }
+        QMap<QString, QStringList> tmpColMap = this->columnValueMap.value(dashboardId);
+        tmpColMap.remove(columnName);
+        this->columnValueMap.insert(dashboardId, tmpColMap);
 
+    }
+}
+
+void DashboardParamsModel::applyFilterToDashboard(int dashboardId)
+{
+    qDebug() << this->showColumns << this->columnFilterType << this->columnValueMap;
     emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 
@@ -625,7 +630,6 @@ void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardNa
 {
 
     this->dashboardName.insert(dashboardId, dashboardName);
-
     emit dashboardNameChanged(dashboardId, dashboardName);
 }
 
@@ -865,10 +869,10 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int widgetId)
 //    emit selectAllChanged(status, columnName, dashboardId);
 //}
 
-bool DashboardParamsModel::ifFilterApplied(int dashboardId)
-{
-    return this->columnValueMap.value(dashboardId).size() > 0 ? true: false;
-}
+//bool DashboardParamsModel::ifFilterApplied(int dashboardId)
+//{
+//    return this->columnValueMap.value(dashboardId).size() > 0 ? true: false;
+//}
 
 void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
 {
@@ -1019,7 +1023,6 @@ void DashboardParamsModel::setCurrentReport(int currentReport)
         return;
 
     m_currentReport = currentReport;
-    qDebug() << "CHANGED" << currentReport;
     emit currentReportChanged(m_currentReport);
 }
 
@@ -1098,5 +1101,4 @@ void DashboardParamsModel::setDashboardReportMap(int reportId){
     QVector<int> dashboardReportMapList = dashboardReportMap.value(this->currentDashboard());
     dashboardReportMapList.append(reportId);
     this->dashboardReportMap.insert(this->currentDashboard(),dashboardReportMapList);
-    qDebug() << "Dashboard Report Model" << reportId << this->dashboardReportMap;
 }

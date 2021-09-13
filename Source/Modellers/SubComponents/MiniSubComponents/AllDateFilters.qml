@@ -56,9 +56,18 @@ Rectangle{
 
     // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
+
+        var filterId = FilterDateListModel.getFilterDateListId(filterIndex)
+
+        DSParamsModel.removeJoinRelation(filterId)
+        DSParamsModel.removeJoinValue(filterId)
+        DSParamsModel.removeJoinRelationSlug(filterId)
+        DSParamsModel.removeExcludeMap(filterId)
+        DSParamsModel.removeIncludeNullMap(filterId)
+        DSParamsModel.removeSelectAllMap(filterId)
+        DSParamsModel.removeTmpSelectedValues(filterId)
+
         FilterDateListModel.deleteFilter(filterIndex)
-        DSParamsModel.removeJoinRelation(filterIndex)
-        DSParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from date list clicked
@@ -84,8 +93,10 @@ Rectangle{
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            CSVJsonDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        }  else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            ExcelDataModel.columnData(columnName, tableName, JSON.stringify(options))
         } else{
             ForwardOnlyDataModel.columnData(columnName, tableName, JSON.stringify(options))
         }

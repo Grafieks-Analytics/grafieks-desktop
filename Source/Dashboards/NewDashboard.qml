@@ -208,6 +208,7 @@ Page {
 
     function createNewReport(){
         ReportParamsModel.setReportId(null);
+        ReportParamsModel.clearReportsScreen();
         // Setting Edit toggle to false
         // Signal event is added
         // If Edit Report is false =>  We clear the chart value
@@ -215,7 +216,6 @@ Page {
         GeneralParamsModel.setCurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
         console.log("REP ID", ReportParamsModel.reportId)
-        ChartsThread.setChartSource("report", ReportParamsModel.reportId)
 
     }
 

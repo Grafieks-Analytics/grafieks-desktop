@@ -3,14 +3,21 @@
 
 #include <QObject>
 #include<QAbstractTableModel>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QSqlDatabase>
+#include <QTimer>
 
 #include "../../statics.h"
 #include "../../constants.h"
+#include "../../duckdb.hpp"
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
 #include "./Workers/setchartdataforwardonlyworker.h"
+#include "../FreeTier/freetierextractsmanager.h"
+#include "./Workers/saveextractforwardonlyworker.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
@@ -22,6 +29,7 @@ public:
 
     Q_INVOKABLE void setQuery(QString query);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+    Q_INVOKABLE void saveExtractData();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;
@@ -32,6 +40,9 @@ public:
     Q_INVOKABLE void getQueryStats();
     Q_INVOKABLE void removeTmpChartData();
 
+public slots:
+    void extractSaved();
+
 private:
     void generateRoleNames();
     void setQueryResult();
@@ -39,6 +50,7 @@ private:
     QString returnConnectionName();
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
+    void extractSizeLimit();
 
 
     QHash<int, QByteArray> m_roleNames;
@@ -48,6 +60,7 @@ private:
     int previewRowCount;
 
     QString query;
+    QString finalSql;
     QuerySplitter querySplitter;
 
     // Data variables for Charts
@@ -56,13 +69,18 @@ private:
     QStringList tableHeaders;
     SetChartDataForwardOnlyWorker *setChartDataWorker;
 
+    DataType dataType;
+    QStringList columnStringTypes;
+
 signals:
-        void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
+
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
+    void generateReports();
+    void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit);
 
 
 

@@ -41,21 +41,49 @@ Rectangle {
         }
 
     }
+
+
     Connections{
-        target: DuckQueryModel
+        target: CSVJsonQueryModel
 
         // This one is for table data
-        function onDuckHasData(hasData){
-            view.model = hasData === true? DuckQueryModel: ""
+        function onCsvJsonHasData(hasData){
+            view.model = hasData === true? CSVJsonQueryModel: ""
             view.visible = hasData === true ? true: false
 
         }
 
         // This slot is for updating headers
         // This is also returning an array of strings
-        function onDuckHeaderDataChanged(tableHeaders){
+        function onCsvJsonHeaderDataChanged(tableHeaders){
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
+            console.log("TABLE HEADERS", tableHeaders)
+        }
+
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
+        }
+
+    }
+
+    Connections{
+        target: ExcelQueryModel
+
+        // This one is for table data
+        function onExcelHasData(hasData){
+            view.model = hasData === true? ExcelQueryModel: ""
+            view.visible = hasData === true ? true: false
+
+        }
+
+        // This slot is for updating headers
+        // This is also returning an array of strings
+        function onExcelHeaderDataChanged(tableHeaders){
+            if(DSParamsModel.runCalled === true)
+                setHeaders(tableHeaders)
+            console.log("TABLE HEADERS", tableHeaders)
         }
 
         // Clear table
@@ -90,6 +118,7 @@ Rectangle {
     function setHeaders(tableHeaders){
         if(tableHeaders.length > 0){
             roleNames = tableHeaders
+            newObject = []
 
             for(var i=0; i<roleNames.length; i++){
                 var role  = roleNames[i]
@@ -173,13 +202,18 @@ Rectangle {
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
+                    // text: modelData
                     onObjectNameChanged: {
                         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
                             textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
                         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                             textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
-                        } else{
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
                             textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                            textItem1.text = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
+                        } else {
+                            textItem1.text = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
                         }
                     }
 

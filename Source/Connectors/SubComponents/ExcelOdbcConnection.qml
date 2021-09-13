@@ -27,30 +27,20 @@ Popup {
     padding: 0
     property int label_col : 135
 
+    property var selectedFile: ""
+    property var startTime: 0
+
+    onClosed: {
+        mainTimer.stop()
+        mainTimer.running = false
+        busyindicator.running = false
+
+        displayTime.text = ""
+    }
+
 
     /***********************************************************************************************************************/
     // Connection  Starts
-
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-        }
-    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -90,21 +80,11 @@ Popup {
                     excelOdbcModalError.visible = false
 
                     control.model = driversList
-                    server.readOnly = false
-                    port.readOnly = false
-                    database.readOnly = false
-                    username.readOnly = false
-                    password.readOnly = false
                 } else{
                     popup.visible = false
                     excelOdbcModalError.visible = true
 
                     control.model = ["No Drivers"]
-                    server.readOnly = true
-                    port.readOnly = true
-                    database.readOnly = true
-                    username.readOnly = true
-                    password.readOnly = true
                 }
             }
         }
@@ -123,8 +103,21 @@ Popup {
         popup.visible = false
     }
 
-    function connectToExcel(){
-        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
+
+    function handleExcel(excelFileName){
+
+        if(excelFileName !== ""){
+            startTime = new Date().getTime().toString()
+//            busyindicator.running = true
+            mainTimer.running = true
+            mainTimer.start()
+            displayTime.text = ""
+
+            ConnectorsLoginModel.excelOdbcLogin(control.currentText, excelFileName)
+        } else {
+            msg_dialog.text = "No file selected"
+            msg_dialog.visible = true
+        }
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -229,7 +222,6 @@ Popup {
             id: control
             model: ["First", "Second", "Third","fourth"]
 
-
             delegate: ItemDelegate {
                 width: control.width
                 contentItem: Text {
@@ -311,238 +303,97 @@ Popup {
 
     // Row1: Enter server address ends
 
-    // Row2: Enter database name starts
+    // Row2: Select excel starts
 
-    Row{
+
+    Column{
 
         id: row2
         anchors.top: row1.bottom
-        anchors.topMargin: 15
+        anchors.topMargin: 55
         anchors.left: parent.left
-        anchors.leftMargin: 1
+        anchors.leftMargin: 100
 
         Rectangle{
 
             id: label3
             width:label_col
             height: 40
-            Text{
-                text: "Server"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
+            y:40
+
+            Button{
+                id : file_btn
+
+                anchors.left: parent.left
+                anchors.leftMargin:  10
+                text: "Select Excel file"
+                onClicked: promptExcel.open();
             }
         }
 
-        TextField{
-            id: server
-            maximumLength: 45
-            selectByMouse: true
-            anchors.verticalCenter: parent.verticalCenter
-            height: 40
-            width: 200
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 200
-            }
-        }
-        Rectangle{
-
-            id: labelPort
-            width: 40
-            height: 40
-
-            Text{
-                text: "Port"
-                leftPadding: 10
-                anchors.left: server.right
-                anchors.rightMargin: 20
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-        TextField{
-            id: port
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            selectByMouse: true
-            height: 40
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 160
-
-            }
-        }
-
-    }
-
-    // Row2: Enter database name ends
-
-    // Row3: Enter port number starts
-
-
-    Row{
-
-        id: row3
-        anchors.top: row2.bottom
-        anchors.topMargin: 15
-        anchors.left: parent.left
-        anchors.leftMargin: 1
-
-        Rectangle{
-
-            id: label2
-            width:label_col
-            height: 40
-
-            Text{
-                text: "Database"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: database
-            maximumLength: 45
-            selectByMouse: true
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-            height: 40
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 400
-
-            }
-        }
-
-    }
-
-
-    // Row3: Enter port number ends
-
-    // Row 4: Enter user name starts
-
-    Row{
-
-        id: row4
-        anchors.top: row3.bottom
-        anchors.topMargin: 15
-        anchors.left: parent.left
-        anchors.leftMargin: 1
 
         Rectangle{
 
             id: label4
             width:label_col
             height: 40
-
             Text{
-                text: "Username"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: Constants.fontCategoryHeader
+                id: excelFileName
+                anchors.left: parent.left
+                anchors.leftMargin:  10
                 anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: username
-            maximumLength: 45
-            selectByMouse: true
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-            height: 40
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 400
-
+                text:""
             }
         }
 
     }
 
-    // Row 4: Enter user name ends
 
-    // Row 5: Enter password starts
+    // Row2: Select excel ends
 
-    Row{
-
-        id: row5
-        anchors.top: row4.bottom
-        anchors.topMargin: 15
-        anchors.left: parent.left
-        anchors.leftMargin: 1
-
-        Rectangle{
-
-            id: label5
-            width:label_col
-            height: 40
-
-            Text{
-                text: "Password"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: password
-            maximumLength: 45
-            selectByMouse: true
-            echoMode: "Password"
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-            height: 40
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 400
-
-            }
-        }
-
-    }
-
-    // Row 5: Enter password ends
-
-    // Row 6: Action Button starts
+    // Row 3: Action Button starts
 
     Row{
 
-        id: row6
-        anchors.top: row5.bottom
+        id: row3
+        anchors.top: row2.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col
         //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
+
+        Text{
+            id: displayTime
+            anchors.right: busyindicator.left
+            anchors.rightMargin: 10
+
+            Timer {
+                id: mainTimer
+                interval: 1000;
+                running: false;
+                repeat: true
+                onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
+            }
+        }
+
+        BusyIndicatorTpl {
+            id: busyindicator
+            running: false
+            anchors.right: btn_cancel.left
+            anchors.rightMargin: 10
+        }
 
         CustomButton{
 
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            onClicked: connectToExcel()
+            onClicked: handleExcel(selectedFile)
         }
 
     }
-    // Row 6: Action Button ends
-
+    // Row 3: Action Button ends
 
 
     // Page Design Ends
@@ -553,6 +404,23 @@ Popup {
         visible: false
         title: "Excel Driver missing"
         text: qsTr("You don't have Excel driver. Download Microsoft Excel to enable this")
+
+    }
+
+    // Select Excel file
+    FileDialog{
+        id: promptExcel
+        title: "Select a file"
+        nameFilters: ["Excel files (*.xls *.xlsx)"];
+
+
+        onAccepted: {
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
+            excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
 
     }
 
