@@ -45,7 +45,7 @@ class ChartsThread : public QObject
     QString destinationColumn;
     QString measureColumn;
     QString calculateColumn;
-    QJsonObject dateConversionOptions;
+    QJsonArray dateConversionOptions;
 
 public:
     explicit ChartsThread(QObject *parent = nullptr);

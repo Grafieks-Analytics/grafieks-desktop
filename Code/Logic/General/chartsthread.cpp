@@ -117,7 +117,7 @@ void ChartsThread::setGaugeKpiDetails(QString &calculateColumn)
 
 void ChartsThread::setTablePivotDateConversionOptions(QString dateConversionOptions)
 {
-    this->dateConversionOptions = QJsonDocument::fromJson(dateConversionOptions.toUtf8()).object();
+    this->dateConversionOptions = QJsonDocument::fromJson(dateConversionOptions.toUtf8()).array();
 }
 
 void ChartsThread::start()
@@ -1591,10 +1591,24 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QString masterKeyword;
     QVariantList masterTotal;
     QVariantList masterOutput;
+    QMap<QString, QMap<QString, QString>> dateConversionParams;
 
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+
+    // Process date conversions, if any
+    foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
+
+        QMap<QString, QString> itemDetails;
+        QJsonObject dateConversionObj = dateConversionValue.toObject();
+
+        itemDetails.insert("separator", dateConversionObj.value("separator").toString());
+        itemDetails.insert("formats", dateConversionObj.value("dateFormat").toString());
+
+        QString columnName = dateConversionObj.value("itemName").toString();
+        dateConversionParams.insert(columnName, itemDetails);
+    }
 
     // Fetch data from extract
     QString tableName = this->getTableName();
@@ -1638,11 +1652,40 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     xAxisLength = xAxisColumn.length();
     yAxisLength = yAxisColumn.length();
 
+    // Fetch data from db
     try{
         for(int i = 0; i < xAxisLength; i++){
             QStringList data;
-            for(int j = 0; j < totalRows; j++)
-                data.append(xDataList->GetValue(i, j).ToString().c_str());
+            for(int j = 0; j < totalRows; j++){
+
+                QString columnName = xAxisColumn.at(i).toString();
+                QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                if(dateConversionParams.contains(columnName)){
+
+                    QString convertedDate;
+                    QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                    foreach(QString format, list){
+                        QDateTime dateTime = QDateTime::fromString(xDataList->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
+
+                        if(format.toLower() == "day"){
+                            convertedDate += QString::number(dateTime.date().day()) + separator;
+                        } else if(format.toLower() == "month"){
+                            convertedDate += QString::number(dateTime.date().month())  + separator;
+                        } else {
+                            convertedDate += QString::number(dateTime.date().year())  + separator;
+                        }
+                    }
+
+                    convertedDate.chop(separator.length());
+                    data.append(convertedDate);
+
+                } else {
+                    data.append(xDataList->GetValue(i, j).ToString().c_str());
+                }
+            }
 
             xAxisDataPointer->insert(i, data);
 
@@ -1668,7 +1711,6 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-
     // Actual values
     try{
         for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
@@ -1678,6 +1720,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
             for(int j = 0; j < xAxisLength; j++){
                 masterKeyword.append(xAxisDataPointer->value(j).at(i));
+//                qDebug() << xAxisDataPointer->value(j).at(i);
             }
 
 
