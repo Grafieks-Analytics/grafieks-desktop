@@ -1481,16 +1481,30 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     obj.insert("children", d.array());
 
 
-    QJsonDocument doc(obj);
+    QStringList colStringList;
+    foreach(QVariant xCol, xAxisColumn){
+        colStringList.append(xCol.toString());
+    }
+    colStringList.append(yAxisColumn);
+
+    QJsonArray cols;
+    cols.append(obj);
+    cols.append(QJsonArray::fromStringList(colStringList));
+
+
+    QJsonDocument doc;
+    doc.setArray(cols);
+
+    QString strData = doc.toJson();
 
     if(identifier == "getSunburstChartValues"){
-        emit signalSunburstChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        emit signalSunburstChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeChartValues"){
-        emit signalTreeChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        emit signalTreeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeMapChartValues"){
-        emit signalTreeMapChartValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        emit signalTreeMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else {
-        emit signalTreeSunburstValues(s, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        emit signalTreeSunburstValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 }
 

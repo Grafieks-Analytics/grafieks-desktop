@@ -105,6 +105,10 @@ ApplicationWindow {
 
     }
 
+    function openNewApplication(){
+        GeneralParamsModel.openNewGrafieksInstance();
+    }
+
     function saveDatasource(){
 
         dsSaveDialog.visible = true
@@ -217,6 +221,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_new
                 text: qsTr("New")
+                onTriggered: openNewApplication()
             }
 
             MenuItem{

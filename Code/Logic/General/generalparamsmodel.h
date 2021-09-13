@@ -7,6 +7,7 @@
 #include <QTextDocument>
 #include <QDebug>
 #include <QUrl>
+#include <QProcess>
 
 #include "../../statics.h"
 
@@ -27,6 +28,7 @@ public:
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
+    Q_INVOKABLE void openNewGrafieksInstance();
 
     Q_INVOKABLE int getOnlineStorageType();
 
