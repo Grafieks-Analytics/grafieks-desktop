@@ -415,6 +415,8 @@ Page {
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
+            console.log("testdata",dataValues)
+            
             dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
             dataValues = JSON.stringify(dataValues);
             break;

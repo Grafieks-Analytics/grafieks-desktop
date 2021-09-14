@@ -14,7 +14,7 @@ Popup {
     property int shapeHeight: 20
 
     width: 160
-    height: 200
+    height: 220
     x: 10
     modal: false
     visible: false
@@ -95,6 +95,33 @@ Popup {
         labelConfig['labelStatus'] = checked;
         d3PropertyConfig.labelConfig = labelConfig;
         reDrawChart();
+    }
+      function openColorDialog(dialogName){
+        switch(dialogName){
+        case "dataLabel": dataLabeleDialog.open();
+            break;
+        case "xAxisTickMark": xAxisTickMarkColorDialog.open();
+            break;
+        case "yAxisLegend": yAxisLegendColorDialog.open();
+            break;
+        case "yAxisTickMark": yAxisTickMarkColorDialog.open();
+            break;
+        }
+    }
+
+      ColorDialog{
+        id: dataLabeleDialog
+
+        onColorChanged:{
+
+             Constants.defaultDataLabelColor =  dataLabeleDialog.color;
+
+//            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
+            d3PropertyConfig.dataLabelColor = dataLabeleDialog.color+"";
+            // d3PropertyConfig.dataLabelColor = "";
+            reDrawChart();
+        }
+
     }
 
 
@@ -232,19 +259,9 @@ Popup {
                 CustomComboBox{
                     id: fontSizescombo
                     height: 500
-//                    model: fontSizes
 
-//                    Component.onCompleted: {
-//                        //                                                let fontFamilies = Qt.fontFamilies();
-//                        //                                                for(let i=0; i<fontFamilies.length;i++){
-//                        //                                                    fonts.append({"fontName": fontFamilies[i]});
-//                        //                                                }
-//                        fontSizescombo.model = fontSizes;
-
-//                        fontSizescombo.currentIndex = 4;
-//                    }
                     onCurrentValueChanged: {
-                        //                           console.log("labelfont"+fontSizes.currentValue)
+              
                         d3PropertyConfig.dataLabelfontSize=fontSizescombo.currentValue;
                         reDrawChart();
                     }
@@ -262,6 +279,25 @@ Popup {
                 }
 
             }
+               Row{
+                                width: parent.width
+                                Text {
+                                    text: qsTr("Font Color: ")
+                                    width: 110
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                Rectangle {
+                                    color: Constants.defaultDataLabelColor
+                                    border.color: Constants.borderBlueColor
+                                    width: 20
+                                    height: 20
+                                    MouseArea{
+                                        anchors.fill: parent
+                                        onClicked: openColorDialog("dataLabel");
+                                    }
+
+                                }
+                            }
 
         }
 
