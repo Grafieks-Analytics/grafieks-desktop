@@ -11,6 +11,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTime>
+#include <QDateTime>
+#include <QRegularExpression>
 #include <QElapsedTimer>
 #include <QFileInfo>
 
