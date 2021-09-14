@@ -30,6 +30,14 @@ QString GeneralParamsModel::getCurrentDB()
     return Statics::currentDbName;
 }
 
+void GeneralParamsModel::openNewGrafieksInstance()
+{
+    QString appPath = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
+    appPath.replace("/", "\\");
+
+    QProcess::startDetached(appPath);
+}
+
 int GeneralParamsModel::getOnlineStorageType()
 {
     return Statics::onlineStorageType;
