@@ -22,6 +22,7 @@ ChartsModel::ChartsModel(QObject *parent, ChartsThread *chartsThread) : QObject(
     connect(this->chartsThread, &ChartsThread::signalFunnelChartValues, this, &ChartsModel::slotFunnelChartValues, Qt::QueuedConnection);
     connect(this->chartsThread, &ChartsThread::signalRadarChartValues, this, &ChartsModel::slotRadarChartValues, Qt::QueuedConnection);
     connect(this->chartsThread, &ChartsThread::signalScatterChartValues, this, &ChartsModel::slotScatterChartValues, Qt::QueuedConnection);
+    connect(this->chartsThread, &ChartsThread::signalScatterChartNumericalValues, this, &ChartsModel::slotScatterChartNumericalValues, Qt::QueuedConnection);
     connect(this->chartsThread, &ChartsThread::signalHeatMapChartValues, this, &ChartsModel::slotHeatMapChartValues, Qt::QueuedConnection);
     connect(this->chartsThread, &ChartsThread::signalSunburstChartValues, this, &ChartsModel::slotSunburstChartValues, Qt::QueuedConnection);
     connect(this->chartsThread, &ChartsThread::signalWaterfallChartValues, this, &ChartsModel::slotWaterfallChartValues, Qt::QueuedConnection);
@@ -176,6 +177,18 @@ void ChartsModel::getScatterChartValues(int reportId, int dashboardId, int chart
     chartsThread->methodSelector("getScatterChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
 }
 
+void ChartsModel::getScatterChartNumericalValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn)
+{
+    this->callThread();
+
+    this->currentReportId = reportId;
+    this->currentDashboardId = dashboardId;
+    this->currentChartSource = chartSource;
+
+    chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+    chartsThread->methodSelector("getScatterChartNumericalValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
+}
+
 void ChartsModel::getHeatMapChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
@@ -275,7 +288,7 @@ void ChartsModel::getKPIChartValues(int reportId, int dashboardId, int chartSour
     chartsThread->methodSelector("getKPIChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
 }
 
-void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn)
+void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters)
 {
     this->callThread();
 
@@ -284,10 +297,11 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
     this->currentChartSource = chartSource;
 
     chartsThread->setLists(xAxisColumn, yAxisColumn);
+    chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
     chartsThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
 }
 
-void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn)
+void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters)
 {
     this->callThread();
 
@@ -296,6 +310,7 @@ void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSo
     this->currentChartSource = chartSource;
 
     chartsThread->setLists(xAxisColumn, yAxisColumn);
+    chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
     chartsThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
 }
 
@@ -400,6 +415,12 @@ void ChartsModel::slotScatterChartValues(QString output, int reportId, int dashb
     chartsThreadThread.quit();
 }
 
+void ChartsModel::slotScatterChartNumericalValues(QString output, int reportId, int dashboardId, int chartSource)
+{
+    emit signalScatterChartValues(output,reportId, dashboardId, chartSource);
+    chartsThreadThread.quit();
+}
+
 void ChartsModel::slotHeatMapChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {
     emit signalHeatMapChartValues(output,reportId, dashboardId, chartSource);
@@ -418,7 +439,7 @@ void ChartsModel::slotWaterfallChartValues(QString output, int reportId, int das
     chartsThreadThread.quit();
 }
 
-void ChartsModel::slotGaugeChartValues(float output, int reportId, int dashboardId, int chartSource)
+void ChartsModel::slotGaugeChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {
     emit signalGaugeChartValues(output,reportId, dashboardId, chartSource);
     chartsThreadThread.quit();
@@ -442,7 +463,7 @@ void ChartsModel::slotTreeMapChartValues(QString output, int reportId, int dashb
     chartsThreadThread.quit();
 }
 
-void ChartsModel::slotKPIChartValues(float output, int reportId, int dashboardId, int chartSource)
+void ChartsModel::slotKPIChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {
     emit signalKPIChartValues(output,reportId, dashboardId, chartSource);
     chartsThreadThread.quit();

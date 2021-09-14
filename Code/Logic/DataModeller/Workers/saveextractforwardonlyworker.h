@@ -9,6 +9,7 @@
 #include <QSqlField>
 #include <QSqlError>
 #include <QDebug>
+#include <QDate>
 
 #include "../../General/datatype.h"
 

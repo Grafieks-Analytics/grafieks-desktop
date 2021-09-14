@@ -1,6 +1,6 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent), setChartDataWorker(nullptr)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent)
 {
 }
 
@@ -16,74 +16,24 @@ void ForwardOnlyQueryModel::setQuery(QString query)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    this->removeTmpChartData();
-
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
-
-
-    this->generateRoleNames();
-    this->setQueryResult();
 
 }
 
 void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 {
-    // Tmp
-    QStringList list;
-    int tmpRowCount = 0;
-    int maxRowCount = 0;
-
     emit clearTablePreview();
-    QString connectionName = this->returnConnectionName();
 
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-        emit errorSignal(q.lastError().text());
+    if(this->query.contains(" limit ", Qt::CaseInsensitive)){
+        this->finalSql = this->query.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
     } else{
-
-
-        tmpRowCount = this->internalRowCount;
-        if(previewRowCount > tmpRowCount){
-            maxRowCount = tmpRowCount;
-        } else{
-            maxRowCount = previewRowCount;
-        }
-        this->previewRowCount = maxRowCount;
-
-        beginResetModel();
-        this->resultData.clear();
-
-        int totalRowCount = 0;
-        while(q.next() && totalRowCount < maxRowCount){
-
-            try{
-                for(int i = 0; i < this->internalColCount; i++){
-                    list << q.value(i).toString();
-                }
-                this->resultData.append(list);
-            } catch(std::exception &e){
-                qWarning() << Q_FUNC_INFO << e.what();
-            }
-
-            list.clear();
-            totalRowCount++;
-        }
-
-        if(this->internalRowCount > 0){
-            emit forwardOnlyHasData(true);
-
-        } else{
-            emit forwardOnlyHasData(false);
-        }
-
-        emit errorSignal("");
-        endResetModel();
+        this->finalSql = this->query;
     }
 
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+    this->finalSql += " limit " + QString::number(previewRowCount);
+    this->generateRoleNames();
+
 }
 
 void ForwardOnlyQueryModel::saveExtractData()
@@ -131,19 +81,13 @@ QHash<int, QByteArray> ForwardOnlyQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ForwardOnlyQueryModel::getQueryStats()
-{
-    // TBD
-}
 
-void ForwardOnlyQueryModel::removeTmpChartData()
+void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
 {
-    this->forwardOnlyChartHeader.clear();
-    this->forwardOnlyChartData.clear();
-    this->tableHeaders.clear();
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
 
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit forwardOnlyHasData(false);
+    this->query = filteredQuery.simplified();
 }
 
 void ForwardOnlyQueryModel::extractSaved()
@@ -172,24 +116,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
 }
 
-void ForwardOnlyQueryModel::setQueryResult()
-{
-    QString connectionName = this->returnConnectionName();
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-
-    this->setChartDataWorker = new SetChartDataForwardOnlyWorker(&dbForward, this->query, this->internalColCount);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
-    setChartDataWorker->start(QThread::InheritPriority);
-}
-
-
-void ForwardOnlyQueryModel::setChartHeader(int index, QStringList colInfo)
-{
-    this->forwardOnlyChartHeader.insert(index, colInfo);
-}
-
 QString ForwardOnlyQueryModel::returnConnectionName()
 {
     QString conType;
@@ -214,27 +140,57 @@ QString ForwardOnlyQueryModel::returnConnectionName()
 
 void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &forwardOnlyChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount)
 {
+
+    QStringList list;
+
     this->tableHeaders = tableHeaders;
     this->forwardOnlyChartHeader = forwardOnlyChartHeader;
     this->m_roleNames = roleNames;
     this->internalColCount = internalColCount;
 
-    qDebug() << "TAB 1" << tableHeaders;
-    qDebug() << "TAB 2" << forwardOnlyChartHeader;
-    qDebug() << "TAB 3" << roleNames;
-    qDebug() << "TAB 4" << internalColCount;
+    QString connectionName = this->returnConnectionName();
+    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
+    QSqlQuery q(this->finalSql, dbForward);
+
+    if(q.lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << q.lastError();
+        emit errorSignal(q.lastError().text());
+    } else{
+
+        beginResetModel();
+        this->resultData.clear();
+
+        int totalRowCount = 0;
+        while(q.next()){
+
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
+                    list << q.value(i).toString();
+                }
+                this->resultData.append(list);
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+            list.clear();
+            totalRowCount++;
+        }
+
+        this->previewRowCount = totalRowCount;
+
+        endResetModel();
+    }
+
+    if(this->previewRowCount > 0){
+        emit forwardOnlyHasData(true);
+    } else{
+        emit forwardOnlyHasData(false);
+    }
 
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+    emit errorSignal("");
 }
 
-void ForwardOnlyQueryModel::slotSetChartData(bool success)
-{
-    if(success){
-        this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
-        this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
-
-    }
-}
 
 void ForwardOnlyQueryModel::extractSizeLimit()
 {

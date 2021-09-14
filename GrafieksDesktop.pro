@@ -50,6 +50,7 @@ SOURCES += \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
+    Code/Logic/Dashboards/Workers/saveworkbookworker.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
@@ -59,7 +60,6 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/saveextractexcelworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
@@ -172,6 +172,7 @@ HEADERS += \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
+    Code/Logic/Dashboards/Workers/saveworkbookworker.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
@@ -181,7 +182,6 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/saveextractexcelworker.h \
     Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
-    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \

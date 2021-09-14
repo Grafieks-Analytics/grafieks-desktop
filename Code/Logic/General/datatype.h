@@ -2,6 +2,8 @@
 #define DATATYPE_H
 
 #include <QObject>
+#include <QDate>
+#include <QDateTime>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"

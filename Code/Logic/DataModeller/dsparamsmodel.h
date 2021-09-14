@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QElapsedTimer>
 #include <QFileInfo>
+#include <QDataStream>
 
 #include "../../constants.h"
 #include "../../Messages.h"

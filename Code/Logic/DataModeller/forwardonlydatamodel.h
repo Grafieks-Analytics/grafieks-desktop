@@ -53,7 +53,6 @@ private:
 public slots:
 
 signals:
-    void forwardColData(QStringList resultData);
     void forwardColumnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
     void columnListModelDataChanged(QString options);
 
