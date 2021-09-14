@@ -76,7 +76,6 @@
 
 #include "Code/statics.h"
 
-QString Statics::tmpAppPath;
 QString Statics::tmpIconPath;
 
 QString Statics::currentDbName;
@@ -243,7 +242,6 @@ int main(int argc, char *argv[])
     // Static initializations Ends
     /***********************************************************************************************************************/
     Statics::freeLimitExtractSizeExceeded = false;
-    Statics::tmpAppPath = "D:\\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug\\debug\\GrafieksDesktop.exe";
     Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
     /***********************************************************************************************************************/
     // Static initializations Ends
@@ -342,8 +340,8 @@ int main(int argc, char *argv[])
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
     // Processor model
-    ExtractProcessor extractProcessor(&generalParamsModel);
-    LiveProcessor liveProcessor(&generalParamsModel);
+    ExtractProcessor extractProcessor(&generalParamsModel, &dsParamsModel);
+    LiveProcessor liveProcessor(&generalParamsModel, &dsParamsModel);
     WorkbookProcessor workbookProcessor(&generalParamsModel);
 
 
@@ -355,20 +353,7 @@ int main(int argc, char *argv[])
     // For multi threaded signal and slots, they are written inside individual classes
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvJsonQueryModel, &CSVJsonQueryModel::receiveCsvJsonFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
-
-    // Data and headers for reports
-    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
-
-    // Data and Headers for Dashboards
-    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
 
     QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
     QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);

@@ -8,7 +8,6 @@ class Statics
 {
 public:
 
-    static QString tmpAppPath;
     static QString tmpIconPath;
 
     static QString currentDbName;

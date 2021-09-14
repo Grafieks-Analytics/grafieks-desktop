@@ -4,22 +4,19 @@
 #include <QObject>
 #include <QAbstractTableModel>
 #include <QFile>
+#include <QFileInfo>
 #include <QDebug>
 
 #include "../../statics.h"
 #include "../../constants.h"
 
-#include "../General/datatype.h"
 #include "../General/querysplitter.h"
 
 class CSVJsonDataModel : public QAbstractTableModel
 {
     Q_OBJECT
-    int headerLength;
     QStringList masterResultData;
     QList<QByteArray> headerDataFinal;
-
-    DataType dataType;
     QString fileName;
 
     QHash<int, QByteArray> m_roleNames;
@@ -29,7 +26,6 @@ class CSVJsonDataModel : public QAbstractTableModel
 
 public:
     explicit CSVJsonDataModel(QObject *parent = nullptr);
-    Q_INVOKABLE void clearData();
     ~CSVJsonDataModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -46,7 +42,6 @@ public:
 private:
 
 signals:
-    void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
     void columnListModelDataChanged(QString options = "");
 
 };

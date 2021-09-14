@@ -80,43 +80,7 @@ void ReportsDataModel::deleteReportData(int reportId, bool deleteAll)
     }
 }
 
-void ReportsDataModel::getChartData(QMap<int, QStringList *> chartData)
-{
-    this->newChartData = chartData;
-}
 
-void ReportsDataModel::getChartHeader(QMap<int, QStringList> chartHeader)
-{
-
-    // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
-    this->newChartHeader.clear();
-
-    // Update new data
-    foreach(auto key, chartHeader.keys()){
-
-        QString fullColumnName = chartHeader.value(key).at(0);
-
-        if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(fullColumnName);
-        } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(fullColumnName);
-        } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(fullColumnName);
-        } else{
-            qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
-        }
-
-        this->newChartHeader.insert(key, fullColumnName);
-    }
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
-}
 
 void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, int reportId)
 {
