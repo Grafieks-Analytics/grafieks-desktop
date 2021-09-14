@@ -50,6 +50,7 @@ SOURCES += \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
+    Code/Logic/Dashboards/Workers/saveworkbookworker.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
@@ -171,6 +172,7 @@ HEADERS += \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
+    Code/Logic/Dashboards/Workers/saveworkbookworker.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \

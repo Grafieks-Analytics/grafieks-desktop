@@ -7,6 +7,8 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QSqlQuery>
+#include <QDate>
+#include <QDateTime>
 #include <QDebug>
 
 #include "../../General/datatype.h"
