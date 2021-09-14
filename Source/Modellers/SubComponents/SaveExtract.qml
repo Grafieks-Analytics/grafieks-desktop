@@ -27,7 +27,7 @@ FileDialog{
             QueryModel.saveExtractData()
             break;
 
-        case Constants.forwardOnlyType:
+        case Constants.forwardType:
             console.log("FOWARD")
             ForwardOnlyQueryModel.saveExtractData()
             break;

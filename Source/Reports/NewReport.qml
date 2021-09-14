@@ -1598,6 +1598,8 @@ Page {
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED");
+//                ChartsModel.getScatterChartNumericalValues(reportIdMain, 0, Constants.reportScreen,  "Sales", "Profit");
+
                 if(!colorByColumnName){
                     break;
                 }
@@ -1658,7 +1660,8 @@ Page {
                 console.log('Non Measues',JSON.stringify(nonMeasures))
                 console.log('Measures',JSON.stringify(measures))
                 
-                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures,'Sum');
+                var dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
+                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures, dateConversionOptions);
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")

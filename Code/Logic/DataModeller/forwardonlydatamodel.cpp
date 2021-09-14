@@ -292,6 +292,5 @@ QStringList ForwardOnlyDataModel::getData(QString queryString)
 
     out = this->resultData;
     this->totalRowCount = this->resultData.count();
-    emit forwardColData(this->resultData);
     return out;
 }
