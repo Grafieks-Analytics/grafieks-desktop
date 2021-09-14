@@ -96,6 +96,9 @@ Popup {
         ListElement{
             size: 48
         }
+        ListElement{
+            size: 60
+        }
     }
 
 
