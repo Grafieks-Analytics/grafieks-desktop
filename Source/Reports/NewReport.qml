@@ -172,23 +172,24 @@ Page {
 
                 // When New Report is added we clear all the fields -> So if multiple line/bar is changed then we have to revert it.
                 // We can also handle this from dropped page :think:
-                console.log('This is a new report!. Please handle the charts in this section here');
-                console.log(chartTitle);
+                
+                // console.log('This is a new report!. Please handle the charts in this section here');
+                // console.log(chartTitle);
 
-                switch(chartTitle){
-                    case Constants.horizontalStackedBarChartTitle:
-                    case Constants.stackedBarChartTitle:
-                        switchChart(Constants.barChartTitle);
-                        break;
-                    case Constants.multipleHorizontalAreaChartTitle:
-                    case Constants.multipleAreaChartTitle:
-                        switchChart(Constants.areaChartTitle);
-                        break;
-                    case Constants.horizontalMultiLineChartTitle:
-                    case Constants.multiLineChartTitle:
-                        switchChart(Constants.lineChartTitle);
-                        break;
-                }
+                // switch(chartTitle){
+                //     case Constants.horizontalStackedBarChartTitle:
+                //     case Constants.stackedBarChartTitle:
+                //         switchChart(Constants.barChartTitle);
+                //         break;
+                //     case Constants.multipleHorizontalAreaChartTitle:
+                //     case Constants.multipleAreaChartTitle:
+                //         switchChart(Constants.areaChartTitle);
+                //         break;
+                //     case Constants.horizontalMultiLineChartTitle:
+                //     case Constants.multiLineChartTitle:
+                //         switchChart(Constants.lineChartTitle);
+                //         break;
+                // }
                 
             }
             report_desiner_page.reportIdMain = reportIdValue;
@@ -789,7 +790,7 @@ Page {
     
     function clearValuesOnAddNewReport(){
         clearAllChartValues();
-        // switchChart(Constants.barChartTitle);
+        switchChart(Constants.barChartTitle);
     }
 
     function setValuesOnEditReport(reportId){
