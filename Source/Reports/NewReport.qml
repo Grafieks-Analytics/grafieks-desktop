@@ -1599,12 +1599,14 @@ Page {
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED");
-//                ChartsModel.getScatterChartNumericalValues(reportIdMain, 0, Constants.reportScreen,  "Sales", "Profit");
-
                 if(!colorByColumnName){
+                    ChartsModel.getScatterChartNumericalValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0], yAxisColumns[0]);
                     break;
                 }
-                ChartsModel.getScatterChartValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                // profit category sales
+                // sales profit category
+                // profit sales category  
+                ChartsModel.getScatterChartValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0], yAxisColumns[0], colorByColumnName);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
