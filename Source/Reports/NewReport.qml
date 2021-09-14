@@ -169,6 +169,27 @@ Page {
             console.log('DEBUG::: Report id value',reportIdValue);
             if(!reportIdValue){
                 clearValuesOnAddNewReport();
+
+                // When New Report is added we clear all the fields -> So if multiple line/bar is changed then we have to revert it.
+                // We can also handle this from dropped page :think:
+                console.log('This is a new report!. Please handle the charts in this section here');
+                console.log(chartTitle);
+
+                switch(chartTitle){
+                    case Constants.horizontalStackedBarChartTitle:
+                    case Constants.stackedBarChartTitle:
+                        switchChart(Constants.barChartTitle);
+                        break;
+                    case Constants.multipleHorizontalAreaChartTitle:
+                    case Constants.multipleAreaChartTitle:
+                        switchChart(Constants.areaChartTitle);
+                        break;
+                    case Constants.horizontalMultiLineChartTitle:
+                    case Constants.multiLineChartTitle:
+                        switchChart(Constants.lineChartTitle);
+                        break;
+                }
+                
             }
             report_desiner_page.reportIdMain = reportIdValue;
             ReportParamsModel.restoreMasterReportFilters(reportIdValue)
@@ -1186,10 +1207,10 @@ Page {
     function addReport(titleName){
 
         // Add report to dashboard
-//        if(!reportIdMain){
+       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
             reportIdMain = generateReportId();
             ReportParamsModel.setReportId(reportIdMain);
-//        }
+       }
         
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
@@ -2618,7 +2639,6 @@ Page {
                     height: parent.height
                     anchors.right: parent.right
                     width: parent.width/2-0.5
-                    onClicked: addReport(report_title_text.text)
                     background: Rectangle {
                         color: Constants.grafieksLightGreenColor
                         opacity: parent.hovered ? 0.42 : 1
