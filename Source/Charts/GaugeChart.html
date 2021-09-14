@@ -60,7 +60,7 @@
                     transitionMs: 750,
 
                     majorTicks: 3,
-                    labelFormat: d3.format(",g"),
+                    labelFormat: d3.format(".1s"),
                     labelInset: 10,
 
                     arcColorFn: d3.interpolateHsl(
@@ -207,6 +207,17 @@
                             var ratio = scale(d);
                             var newAngle = config.minAngle + ratio * range;
                             console.log(d, ratio, newAngle);
+                            if (!i) {
+                                this.setAttribute('x',config.labelInset - r + 60)
+                                this.setAttribute('y',25)
+                                // this.setAttribute('tick-position', 'start')
+                                return null;
+                            }
+                            if(i == ticks.length - 1){
+                                this.setAttribute('x',config.labelInset + r)
+                                this.setAttribute('tick-position', 'end')
+                                return null;
+                            }
                             return (
                                 "rotate(" +
                                 newAngle +
@@ -217,6 +228,18 @@
                         })
                         .text(config.labelFormat);
 
+                    var endTicks = document.querySelectorAll('[tick-position]');
+                    endTicks.forEach(tick=>{
+                        console.log(tick);
+                        if(tick.getAttribute('tick-position') == "end"){
+                            var xPositon = +tick.getAttribute('x');
+                            var width = tick.getBBox().width;
+                            tick.setAttribute('x',xPositon - width - 60)
+                            tick.setAttribute('y',25)
+
+                        }
+                    })
+                        
                     var lineData = [
                         [config.pointerWidth / 2, 0],
                         [0, -pointerHeadLength],
@@ -249,7 +272,7 @@
                     var label = window.data[1];
                     d3.select("#x")
                         .html(numberFormat(newValue) + "<br>" + label)
-                        .style("margin-top", "-" + (gaugeSize / 2 - 20 + "px"));
+                        .style("margin-top", "-" + ((gaugeSize / 2 + 7) + "px"));
                     if (newConfiguration !== undefined) {
                         configure(newConfiguration);
                     }
@@ -297,7 +320,7 @@
                 updateReadings(readingValue);
             }
 
-            var data = [[50244, 12000, 1000, 2000], ["Label"]];
+            var data = [[50044, 12000, 1000, 2000], ["Label"]];
             drawChart(data);
         </script>
     </body>
