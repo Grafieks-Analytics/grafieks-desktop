@@ -11,6 +11,7 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QThread>
+#include <QRegularExpression>
 
 #include "../../duckdb.hpp"
 #include "../../statics.h"
