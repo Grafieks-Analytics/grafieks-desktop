@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QThread>
+#include <QDateTime>
+#include <QDate>
 #include <QDebug>
 
 #include "../../General/datatype.h"
