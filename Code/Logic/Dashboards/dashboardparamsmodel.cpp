@@ -1102,3 +1102,223 @@ void DashboardParamsModel::setDashboardReportMap(int reportId){
     dashboardReportMapList.append(reportId);
     this->dashboardReportMap.insert(this->currentDashboard(),dashboardReportMapList);
 }
+
+void DashboardParamsModel::saveDashboard()
+{
+    QJsonObject dashboardParamsObject;
+
+    //    // Dashboard Report Mapping
+    //x    QMap<int, QVector<int>> dashboardWidgetsMap; // <dashboardId, <widgetId>>
+    //x    QMap<int, QMap<int, int>> dashboardWidgetsZorder; // <dashboardId, <widgetId, zId>>
+    //x    QMap<int, QMap<int, QVariantList>> dashboardWidgetCoordinates; // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
+    //x    QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
+    //x    QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
+
+    //x    QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
+
+
+    //    // Filter parameters
+    //x    QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
+    //x    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
+    //x    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
+    //x    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
+    //x    QMap<int, QMap<QString, QStringList>> columnValueMap;      // dashboardId - <Column name - value list>
+
+
+    //    // Customize Dashboard parameters
+    //x    QMap<int, QString> dashboardName;
+    //x    QMap<int, QString> dashboardBackgroundColor;
+    //x    QMap<int, int> dashboardOpacity;
+    //x    QMap<int, bool> dashboardGrid;
+    //x    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
+
+
+    //    // Customize Report parameters
+    //    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
+    //    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
+    //    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
+    //    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
+
+    QList<int> dashboardIds = this->dashboardReportMap.keys();
+
+    QJsonObject dashboardWidgetsMapObj;
+    QJsonObject dashboardWidgetsZorderObj;
+    QJsonObject dashboardWidgetCoordinatesObj;
+    QJsonObject dashboardWidgetTypeMapObj;
+    QJsonObject dashboardWidgetUrlObj;
+    QJsonObject dashboardReportMapObj;
+    QJsonObject showColumnsObj;
+
+    QJsonObject columnAliasMapObj;
+    QJsonObject columnFilterTypeObj;
+    QJsonObject columnIncludeExcludeMapObj;
+    QJsonObject columnValueMapObj;
+
+    QJsonObject dashboardNameObj;
+    QJsonObject dashboardBackgroundColorObj;
+    QJsonObject dashboardOpacityObj;
+    QJsonObject dashboardGridObj;
+    QJsonObject dashboardCanvasDimensionsObj;
+
+    //    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
+    //    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
+    //    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
+    //    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
+    QJsonObject reportNameObj;
+    QJsonObject reportBackgroundColorObj;
+    QJsonObject reportLineColorObj;
+    QJsonObject reportOpacityObj;
+
+    foreach(int dashboardId, dashboardIds){
+
+        // dashboardWidgetsMap
+        QVariantList dashboardWidgetsMapList;
+        foreach(int widgetId, this->dashboardWidgetsMap.value(dashboardId))
+            dashboardWidgetsMapList.append(widgetId);
+
+        dashboardWidgetsMapObj.insert(QString::number(dashboardId), QJsonArray::fromVariantList(dashboardWidgetsMapList));
+
+        // dashboardWidgetsZorder
+        QJsonObject dashboardWidgetsZorderTmpObj;
+        foreach(int widgetId, this->dashboardWidgetsZorder.value(dashboardId).keys())
+            dashboardWidgetsZorderTmpObj.insert(QString::number(widgetId), this->dashboardWidgetsZorder.value(dashboardId).value(widgetId));
+
+        dashboardWidgetsZorderObj.insert(QString::number(dashboardId), dashboardWidgetsZorderTmpObj);
+
+        // dashboardWidgetCoordinates
+        QJsonObject dashboardWidgetCoordinatesTmpObj;
+        foreach(int widgetId, this->dashboardWidgetCoordinates.value(dashboardId).keys())
+            dashboardWidgetCoordinatesTmpObj.insert(QString::number(widgetId), QJsonArray::fromVariantList(this->dashboardWidgetCoordinates.value(dashboardId).value(widgetId)));
+
+        dashboardWidgetCoordinatesObj.insert(QString::number(dashboardId), dashboardWidgetCoordinatesTmpObj);
+
+        // dashboardWidgetTypeMap
+        QJsonObject dashboardWidgetTypeMapTmpObj;
+        foreach(int widgetId, this->dashboardWidgetTypeMap.value(dashboardId).keys())
+            dashboardWidgetTypeMapTmpObj.insert(QString::number(widgetId), this->dashboardWidgetTypeMap.value(dashboardId).value(widgetId));
+
+        dashboardWidgetTypeMapObj.insert(QString::number(dashboardId), dashboardWidgetTypeMapTmpObj);
+
+        // dashboardWidgetUrl
+        QJsonObject dashboardWidgetUrlTmpObj;
+        foreach(int widgetId, this->dashboardWidgetUrl.value(dashboardId).keys())
+            dashboardWidgetUrlTmpObj.insert(QString::number(widgetId), this->dashboardWidgetUrl.value(dashboardId).value(widgetId).toString());
+
+        dashboardWidgetUrlObj.insert(QString::number(dashboardId), dashboardWidgetUrlTmpObj);
+
+        // dashboardReportMap
+        QVariantList dashboardReportMapList;
+        foreach(int reportId, this->dashboardReportMap.value(dashboardId))
+            dashboardReportMapList.append(reportId);
+
+        dashboardReportMapObj.insert(QString::number(dashboardId), QJsonArray::fromVariantList(dashboardReportMapList));
+
+        // showColumns
+        showColumnsObj.insert(QString::number(dashboardId), QJsonArray::fromStringList(this->showColumns.value(dashboardId)));
+
+        // columnAliasMap
+        QJsonObject columnAliasMapTmpObj;
+        foreach(QString columnName, this->columnAliasMap.value(dashboardId).keys())
+            columnAliasMapTmpObj.insert(columnName, this->columnAliasMap.value(dashboardId).value(columnName).toString());
+
+        columnAliasMapObj.insert(QString::number(dashboardId), columnAliasMapTmpObj);
+
+        // columnFilterType
+        QJsonObject columnFilterTypeTmpObj;
+        foreach(QString columnName, this->columnFilterType.value(dashboardId).keys())
+            columnFilterTypeTmpObj.insert(columnName, this->columnFilterType.value(dashboardId).value(columnName).toString());
+
+        columnFilterTypeObj.insert(QString::number(dashboardId), columnFilterTypeTmpObj);
+
+        // columnIncludeExcludeMap
+        QJsonObject columnIncludeExcludeMapTmpObj;
+        foreach(QString columnName, this->columnIncludeExcludeMap.value(dashboardId).keys())
+            columnIncludeExcludeMapTmpObj.insert(columnName, this->columnIncludeExcludeMap.value(dashboardId).value(columnName).toString());
+
+        columnFilterTypeObj.insert(QString::number(dashboardId), columnIncludeExcludeMapTmpObj);
+
+
+        // columnValueMap
+        QJsonObject columnValueMapTmpObj;
+        foreach(QString columnName, this->columnValueMap.value(dashboardId).keys())
+            columnValueMapTmpObj.insert(columnName, QJsonArray::fromStringList(this->columnValueMap.value(dashboardId).value(columnName)));
+
+        columnValueMapObj.insert(QString::number(dashboardId), columnValueMapTmpObj);
+
+        // dashboardName
+        dashboardNameObj.insert(QString::number(dashboardId), this->dashboardName.value(dashboardId));
+
+        // dashboardBackgroundColor
+        dashboardBackgroundColorObj.insert(QString::number(dashboardId), this->dashboardBackgroundColor.value(dashboardId));
+
+        // dashboardOpacity
+        dashboardOpacityObj.insert(QString::number(dashboardId), this->dashboardOpacity.value(dashboardId));
+
+        // dashboardGrid
+        dashboardGridObj.insert(QString::number(dashboardId), this->dashboardGrid.value(dashboardId));
+
+        // dashboardCanvasDimensions
+        dashboardCanvasDimensionsObj.insert(QString::number(dashboardId), QJsonArray::fromVariantList(this->dashboardCanvasDimensions.value(dashboardId)));
+
+        // reportName
+        QJsonObject reportNameTmpObj;
+        foreach(int widgetId, this->reportName.value(dashboardId).keys())
+            reportNameTmpObj.insert(QString::number(widgetId), this->reportName.value(dashboardId).value(widgetId));
+
+        reportNameObj.insert(QString::number(dashboardId), reportNameTmpObj);
+
+        // reportBackgroundColor
+        QJsonObject reportBackgroundColorTmpObj;
+        foreach(int widgetId, this->reportBackgroundColor.value(dashboardId).keys())
+            reportBackgroundColorTmpObj.insert(QString::number(widgetId), this->reportBackgroundColor.value(dashboardId).value(widgetId));
+
+        reportBackgroundColorObj.insert(QString::number(dashboardId), reportBackgroundColorTmpObj);
+
+        // reportLineColor
+        QJsonObject reportLineColorTmpObj;
+        foreach(int widgetId, this->reportLineColor.value(dashboardId).keys())
+            reportLineColorTmpObj.insert(QString::number(widgetId), this->reportLineColor.value(dashboardId).value(widgetId));
+
+        reportLineColorObj.insert(QString::number(dashboardId), reportLineColorTmpObj);
+
+        // reportOpacity
+        QJsonObject reportOpacityTmpObj;
+        foreach(int widgetId, this->reportOpacity.value(dashboardId).keys())
+            reportOpacityTmpObj.insert(QString::number(widgetId), this->reportOpacity.value(dashboardId).value(widgetId));
+
+        reportOpacityObj.insert(QString::number(dashboardId), reportOpacityTmpObj);
+
+    }
+
+
+    // Final Object
+    dashboardParamsObject.insert("dashboardWidgetsMap", dashboardWidgetsMapObj);
+    dashboardParamsObject.insert("dashboardWidgetsZorder", dashboardWidgetsZorderObj);
+    dashboardParamsObject.insert("dashboardWidgetCoordinates", dashboardWidgetCoordinatesObj);
+    dashboardParamsObject.insert("dashboardWidgetTypeMap", dashboardWidgetTypeMapObj);
+    dashboardParamsObject.insert("dashboardWidgetUrl", dashboardWidgetUrlObj);
+    dashboardParamsObject.insert("dashboardReportMap", dashboardReportMapObj);
+    dashboardParamsObject.insert("showColumns", showColumnsObj);
+
+    dashboardParamsObject.insert("columnAliasMap", columnAliasMapObj);
+    dashboardParamsObject.insert("columnFilterType", columnFilterTypeObj);
+    dashboardParamsObject.insert("columnIncludeExcludeMap", columnIncludeExcludeMapObj);
+    dashboardParamsObject.insert("columnValueMap", columnValueMapObj);
+
+    dashboardParamsObject.insert("dashboardName", dashboardNameObj);
+    dashboardParamsObject.insert("dashboardBackgroundColor", dashboardBackgroundColorObj);
+    dashboardParamsObject.insert("dashboardOpacity", dashboardOpacityObj);
+    dashboardParamsObject.insert("dashboardGrid", dashboardGridObj);
+    dashboardParamsObject.insert("dashboardCanvasDimensions", dashboardCanvasDimensionsObj);
+
+    dashboardParamsObject.insert("reportName", reportNameObj);
+    dashboardParamsObject.insert("reportBackgroundColor", reportBackgroundColorObj);
+    dashboardParamsObject.insert("reportLineColor", reportLineColorObj);
+    dashboardParamsObject.insert("reportOpacity", reportOpacityObj);
+
+
+    QJsonDocument dashboardParamsDocument(dashboardParamsObject);
+    QString strJson(dashboardParamsDocument.toJson(QJsonDocument::Compact));
+
+    qDebug() << dashboardParamsDocument;
+}

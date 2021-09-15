@@ -8,6 +8,9 @@
 #include <QCoreApplication>
 #include <QtCore/QFileInfo>
 #include <QDir>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QDebug>
 
 #include "../../constants.h"
@@ -170,8 +173,8 @@ public:
     // Save and read files
 
     Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
-
     Q_INVOKABLE void setDashboardReportMap(int reportId);
+    Q_INVOKABLE void saveDashboard();
 
     // General
     QString lastContainerType() const;

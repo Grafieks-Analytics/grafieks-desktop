@@ -84,6 +84,163 @@ QString ReportParamsModel::editReportToggle() const
     return m_editReportToggle;
 }
 
+void ReportParamsModel::saveReport()
+{
+
+// Herein lies the issue
+//(*)    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
+
+
+    QJsonObject reportsMapObj;
+    QJsonObject reportsDataObj;
+    QJsonObject dashboardReportInstancesObj;
+
+    QJsonObject masterReportFiltersObj;
+
+    QVariantList categoricalFiltersList;
+    QVariantList dateFiltersList;
+    QVariantList numericalFiltersList;
+
+    QJsonObject filterColumnMapObj;
+    QJsonObject filterValueMapObj;
+    QJsonObject filterRelationMapObj;
+    QJsonObject filterSlugMapObj;
+    QJsonObject includeExcludeMapObj;
+    QJsonObject includeNullMapObj;
+    QJsonObject selectAllMapObj;
+    QJsonObject filterSectionMapObj;
+    QJsonObject filterCategoryMapObj;
+    QJsonObject filterSubCategoryMapObj;
+
+    QVariantList tmpSelectedValuesList;
+    QVariantList tmpFilterIndexList;
+    QJsonObject dateFormatMapObj;
+    QJsonObject actualDateValuesObj;
+
+
+//    qDebug() << "masterReportFilters" <<this->masterReportFilters;
+
+    QList<int> reportIds = this->reportsData.keys();
+    QList<int> filterIds = this->filterColumnMap.keys();
+
+    foreach(int reportId, reportIds){
+
+        // reportsMap
+        QJsonObject reportsMapTmpObj;
+        foreach(QString param, this->reportsMap.value(reportId).keys())
+            reportsMapTmpObj.insert(param, this->reportsMap.value(reportId).value(param).toString());
+
+        reportsMapObj.insert(QString::number(reportId), reportsMapTmpObj);
+
+        // reportsData
+        reportsDataObj.insert(QString::number(reportId), this->reportsData.value(reportId).toString());
+
+        // dashboardReportInstances
+        dashboardReportInstancesObj.insert(QString::number(reportId), this->dashboardReportInstances.value(QString::number(reportId)).toString());
+
+        // masterReportFilters
+        QJsonObject masterReportFiltersTmpObj;
+        foreach(int filterId, this->masterReportFilters.value(reportId).keys()){
+
+            QJsonObject masterReportFiltersChildTmpObj;
+            foreach(QVariant filterKey, this->masterReportFilters.value(reportId).value(filterId)){
+                masterReportFiltersChildTmpObj.insert(filterKey.toString(), this->masterReportFilters.value(reportId).value(filterId).value(filterKey.toString()).toString());
+            }
+            masterReportFiltersObj.insert(QString::number(filterId), masterReportFiltersChildTmpObj);
+        }
+
+    }
+
+    // categoricalFilters;
+    foreach(int categoricalFilterId, this->categoricalFilters){
+        categoricalFiltersList.append(categoricalFilterId);
+    }
+
+    // dateFilters
+    foreach(int dateFilterId, this->dateFilters){
+        dateFiltersList.append(dateFilterId);
+    }
+
+    // numericalFilters
+    foreach(int numericalFilterId, this->numericalFilters){
+        numericalFiltersList.append(numericalFilterId);
+    }
+
+
+    foreach(int filterId, filterIds){
+
+        // filterColumnMap
+        filterColumnMapObj.insert(QString::number(filterId), QJsonArray::fromStringList(this->filterColumnMap.value(filterId)));
+
+        // filterValueMap
+        filterValueMapObj.insert(QString::number(filterId), QJsonArray::fromVariantList(this->filterValueMap.value(filterId)));
+
+        // filterRelationMap
+        filterRelationMapObj.insert(QString::number(filterId), this->filterRelationMap.value(filterId));
+
+        // filterSlugMap
+        filterSlugMapObj.insert(QString::number(filterId), this->filterSlugMap.value(filterId));
+
+        // includeExcludeMap
+        includeExcludeMapObj.insert(QString::number(filterId), this->includeExcludeMap.value(filterId));
+
+        // includeNullMap
+        includeNullMapObj.insert(QString::number(filterId), this->includeNullMap.value(filterId));
+
+        // selectAllMap
+        selectAllMapObj.insert(QString::number(filterId), this->selectAllMap.value(filterId));
+
+        // filterSectionMap
+        filterSectionMapObj.insert(QString::number(filterId), this->filterSectionMap.value(filterId));
+
+        // filterCategoryMap
+        filterCategoryMapObj.insert(QString::number(filterId), this->filterCategoryMap.value(filterId));
+
+        // filterSubCategoryMap
+        filterSubCategoryMapObj.insert(QString::number(filterId), this->filterSubCategoryMap.value(filterId));
+
+        // dateFormatMap
+        dateFormatMapObj.insert(QString::number(filterId), this->dateFormatMap.value(filterId));
+
+        // actualDateValues
+        actualDateValuesObj.insert(QString::number(filterId), QJsonArray::fromStringList(this->actualDateValues.value(filterId)));
+    }
+
+    QJsonObject finalObj;
+    finalObj.insert("reportIdsCounter", reportIdsCounter);
+
+    finalObj.insert("reportsMap", reportsMapObj);
+    finalObj.insert("reportsData", reportsDataObj);
+    finalObj.insert("dashboardReportInstances", dashboardReportInstancesObj);
+
+    finalObj.insert("masterReportFilters", masterReportFiltersObj);
+
+    finalObj.insert("categoricalFiltersList", QJsonArray::fromVariantList(categoricalFiltersList));
+    finalObj.insert("dateFiltersList", QJsonArray::fromVariantList(dateFiltersList));
+    finalObj.insert("numericalFiltersList", QJsonArray::fromVariantList(numericalFiltersList));
+
+    finalObj.insert("filterColumnMap", filterColumnMapObj);
+    finalObj.insert("filterValueMap", filterValueMapObj);
+    finalObj.insert("filterRelationMap", filterRelationMapObj);
+    finalObj.insert("filterSlugMap", filterSlugMapObj);
+    finalObj.insert("includeExcludeMap", includeExcludeMapObj);
+    finalObj.insert("includeNullMap", includeNullMapObj);
+    finalObj.insert("selectAllMap", selectAllMapObj);
+    finalObj.insert("filterSectionMap", filterSectionMapObj);
+    finalObj.insert("filterCategoryMap", filterCategoryMapObj);
+    finalObj.insert("filterSubCategoryMap", filterSubCategoryMapObj);
+
+    finalObj.insert("tmpSelectedValues", QJsonArray::fromStringList(tmpSelectedValues));
+    finalObj.insert("tmpFilterIndexList", QJsonArray::fromVariantList(tmpFilterIndexList));
+    finalObj.insert("dateFormatMap", dateFormatMapObj);
+    finalObj.insert("actualDateValues", actualDateValuesObj);
+
+    QJsonDocument reportParamsDocument(finalObj);
+    QString strJson(reportParamsDocument.toJson());
+
+    qDebug() << reportParamsDocument;
+}
+
 QString ReportParamsModel::chartTitle() const
 {
     return m_chartTitle;
