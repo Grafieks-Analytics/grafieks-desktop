@@ -239,6 +239,7 @@ Item{
         var chartTitle = reportProperties.chartTitle;
         var chartUrl = reportProperties.chartUrl;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var optionalParams = JSON.parse(reportProperties.optionalConfig);
         
         if(standardChart){
             d3PropertyConfig.chartType = "Standard";
@@ -252,6 +253,7 @@ Item{
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
 
         console.log(xAxisColumns, yAxisColumns)
         var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
@@ -271,7 +273,6 @@ Item{
             break;
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
-            // colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
             dataValues = dataValues && JSON.parse(dataValues);
             dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
             colorData = dataValues[1] || [];
@@ -283,7 +284,6 @@ Item{
             dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
-            // colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
             break;
         case Constants.horizontalBarGroupedChartTitle:
             var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
@@ -295,8 +295,6 @@ Item{
             }
             dataValues = JSON.parse(dataValues);
             dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            // console.log(dataValues);
-
             dataValues = JSON.stringify(dataValues);
             
             break;
@@ -313,13 +311,12 @@ Item{
             
             dataValues = JSON.parse(dataValues);
             dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            // console.log(dataValues);
-
             dataValues = JSON.stringify(dataValues);
 
             console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
             break;
         case Constants.areaChartTitle:
+            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.stackedAreaChartTitle:
@@ -333,9 +330,20 @@ Item{
             console.log(chartTitle,"CLICKED")
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
+        case Constants.stackedAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            dataValues = JSON.parse(dataValues);
+            dataValues[1].splice(1,0,colorByColumnName);
+            colorData = (dataValues && dataValues[1]) || [];
+            dataValues = JSON.stringify(dataValues);
+            break;
+        case Constants.multipleHorizontalAreaChartTitle:
+        case Constants.horizontalMultiLineChartTitle:
+            dataValues = JSON.parse(dataValues);
+            dataValues[1].splice(1,0,colorByColumnName);
+            colorData = (dataValues && dataValues[1]) || [];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
@@ -352,34 +360,57 @@ Item{
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
+            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log('Debug:: datavalues',dataValues);
+            console.log(chartTitle,"CLICKED");
             break;
         case Constants.sunburstChartTitle:
+            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
+            dataValues = JSON.stringify(dataValues);
+            console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.waterfallChartTitle:
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED")
+            console.log(chartTitle,"CLICKED");
+            var { greenValue, yellowValue, redValue } = optionalParams[Constants.gaugeChartTitle];
+            console.log('Gauge values',greenValue, yellowValue, redValue)
+            var oldDataValues = JSON.parse(dataValues)[0];
+            dataValues = [[+greenValue, +yellowValue, +redValue, oldDataValues[0]], oldDataValues[1]];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.sankeyChartTitle:
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.kpiTitle:
+            dataValues = JSON.parse(dataValues);
+            dataValues = dataValues[0];
+            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.tableTitle:
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.pivotTitle:
+            
+            dataValues = JSON.parse(dataValues);
+            dataValues.push([xAxisColumns,yAxisColumns,row3Columns]);
+            dataValues = JSON.stringify(dataValues);
+            
             console.log(chartTitle,"CLICKED")
             break;
+        default:
+            console.log(chartTitle,"Clicked, but is a missed case")
         }
         if(!dataValues){
             return;
@@ -517,8 +548,22 @@ Item{
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(reportId);
         reportName.text = reportProperties.reportTitle;
-        console.log("Chart title", reportProperties, reportProperties.reportTitle)
+        console.log("Chart title", reportProperties, reportProperties.reportTitle);   
         drawChart(reportProperties);
+    }
+
+    function isGaugeChart(){
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        const optionalConfig = JSON.parse(reportProperties.optionalConfig);
+        const gaugeChartOptions = optionalConfig[Constants.gaugeChartTitle];
+        console.log('Gauge options', JSON.stringify(gaugeChartOptions));
+        var { yellowValue, redValue, yellowValue } = gaugeChartOptions;
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+        console.log(row3Columns.length);
+        if(row3Columns.length && yellowValue && redValue && yellowValue){
+            return true;
+        }
+        return false;
     }
 
     
@@ -538,6 +583,9 @@ Item{
         case Constants.yAxisName:
             var yAxisListModel = JSON.parse(reportProperties.yAxisColumns);
             model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = JSON.parse(reportProperties.row3Columns || "[]");
             break;
         }
         if(!model){
@@ -584,6 +632,7 @@ Item{
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
 
         console.log("Okay, Now it's time to draw the chart")
 
@@ -593,13 +642,15 @@ Item{
         console.log('Chart Url', chartUrl);
         console.log('d3PropertiesConfig', JSON.stringify(d3PropertyConfig))
 
+
         if(xAxisColumns.length===0 && yAxisColumns.length === 0){
             // set everything to default
             // Can add any default case here
             isHorizontalGraph = false;
         }
 
-        if(xAxisColumns.length && yAxisColumns.length){
+
+        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || (chartTitle == Constants.gaugeChartTitle && isGaugeChart())) {
 
             var xAxisColumnNamesArray = [];
             var i = 0; // itereator => By passing warning
@@ -735,7 +786,8 @@ Item{
                 break;
             case Constants.gaugeChartTitle:
                 console.log("GAUGE CLICKED")
-                ChartsModel.getGaugeChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
+                var row3ColumnsArray = Array.from(row3Columns);
+                ChartsModel.getGaugeChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, row3ColumnsArray[0] ,'Sum');
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
