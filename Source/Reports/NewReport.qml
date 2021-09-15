@@ -832,6 +832,7 @@ Page {
         report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
 
+        switchChart(reportProperties.chartTitle)
         reDrawChart();
     }
 
