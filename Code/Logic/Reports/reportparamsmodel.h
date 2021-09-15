@@ -5,6 +5,9 @@
 #include <QMap>
 #include <QVariantMap>
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 #include "../../constants.h"
 #include "../../Messages.h"
@@ -246,6 +249,7 @@ public:
     Q_INVOKABLE int reportsCount();
 
     QString editReportToggle() const;
+    Q_INVOKABLE void saveReport();
 
 public slots:
 

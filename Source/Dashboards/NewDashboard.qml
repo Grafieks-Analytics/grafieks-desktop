@@ -253,6 +253,13 @@ Page {
         dashboardList.contentX = 0;
     }
 
+    function onPublishDataSourceClicked(){
+        DashboardParamsModel.saveDashboard()
+
+        // Test Save reports
+        ReportParamsModel.saveReport();
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
