@@ -4,6 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
         <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
 
         <!-- D3.js -->
@@ -89,11 +90,41 @@
                         value: 13384,
                     },
                     {
+                        axis: "Test 2",
+                        value: 0,
+                    },
+                    {
+                        axis: "Test 3",
+                        value: -13384,
+                    },
+                    {
                         axis: "Technology",
-                        value: 9310,
+                        value: -20000,
+                    },
+                    {
+                        axis: "Technology",
+                        value: -27000,
                     },
                 ],
                 ["Category", "Sales"],
+            ];
+
+            data = [
+                [
+                    {
+                        axis: "Furniture",
+                        value: -3636,
+                    },
+                    {
+                        axis: "Office Supplies",
+                        value: 2010,
+                    },
+                    {
+                        axis: "Technology",
+                        value: 1362,
+                    },
+                ],
+                ["Category", "Profit"],
             ];
 
             // Color Pallets - Set 3
@@ -134,23 +165,32 @@
 
                 var color = d3.scale.ordinal().range(d3Colors);
 
+                radius = Math.min(width/2, height/2);
+
+                if(window.innerWidth < 700 || window.innerHeight < 700){
+                    radius = Math.min(width, height)
+                }
+
+                if(radius < 0){
+                    radius = 2;
+                }
+
+                
                 var radarChartOptions = {
                     w: width,
                     h: height,
                     margin: margin,
-                    maxValue: 0.5,
-                    levels: 5,
+                    maxValue: 0,
+                    levels: 6,
                     roundStrokes: true,
                     color: color,
+                    radius
                 };
                 //Call function to draw the Radar chart
                 RadarChart("#my_dataviz", dataValues, radarChartOptions);
             }
 
             drawChart(data);
-            // window.addEventListener("resize", function () {
-            drawChart(data);
-            // });
         </script>
     </body>
 </html>
