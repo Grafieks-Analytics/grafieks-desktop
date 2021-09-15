@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     QCoreApplication::setOrganizationName("Grafieks Limited");
     QCoreApplication::setOrganizationDomain("grafieks.com");
-    QCoreApplication::setApplicationName("Grafieks");
+    QCoreApplication::setApplicationName(Constants::appName);
 
     // Random session token for tmp file writing purposes
     QSettings settings;

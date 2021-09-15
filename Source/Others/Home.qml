@@ -32,7 +32,7 @@ Page {
         leftPadding: 160
 
         Text{
-            text:"Welcome to Grafieks Desktop"
+            text:"Welcome to " + GeneralParamsModel.getAppInfo().APP_NAME
             color:"#707070"
             font.pointSize: Constants.fontHeader
         }
@@ -43,7 +43,7 @@ Page {
 
         Text{
 
-            text:"Grafieks Desktop is a graphical user interface for data connectors, data modeller,
+            text: GeneralParamsModel.getAppInfo().APP_NAME + " is a graphical user interface for data connectors, data modeller,
 SQL query builder, report builder and dashboard designer."
             color:"#707070"
             font.pointSize: Constants.fontReading

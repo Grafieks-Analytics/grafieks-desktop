@@ -219,18 +219,14 @@ bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
     // Create a master table to refer the name of actual extract tableName
     // while running an extract later on
 
-    QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR)";
-    QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "')";
-    QString tableSelectQuery = "SELECT * FROM " + Constants::masterExtractTable;
+    QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
+    QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
     auto x = con.Query(tableCreateQuery.toStdString());
     if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
     auto z = con.Query(tableInserQuery.toStdString());
     if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
-    auto y = con.Query(tableSelectQuery.toStdString());
-    y->Print();
-    qDebug() << y->GetValue(0,0).ToString().c_str();
 
     return output;
 }
