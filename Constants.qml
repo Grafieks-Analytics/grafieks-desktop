@@ -340,6 +340,21 @@ QtObject {
     property string multipleHorizontalAreaChartTitle: "Multiple Horizontal Area Chart"
     property string multipleHorizontalAreaChartUrl: "HorizontalMultipleAreaChart.html"
 
+    property string pieChartUrl:"PieChart.html";
+    property string donutChartUrl:"DoughnutChart.html";
+    property string radarChartUrl:"RadarChart.html";
+    property string sunburstChartUrl:"SunburstChart.html";
+
+    property string funnelChartUrl:"FunnelChart.html";
+    property string treeChartUrl: "TreeChart.html";
+    property string sankeyChartUrl: "SankeyChart.html";
+
+    property string gaugeChartUrl: "GaugeChart.html";
+    property string pivotTableUrl: "PivotTable.html";
+    property string tableChartUrl: "TableChart.html";
+    property string kpiChartUrl : "KPI.html";
+
+    
 
 
     // Charts ends

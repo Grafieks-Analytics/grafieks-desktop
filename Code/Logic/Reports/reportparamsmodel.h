@@ -63,7 +63,9 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
     Q_PROPERTY(QString xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
+    Q_PROPERTY(QString row3Columns READ row3Columns WRITE setRow3Columns NOTIFY row3ColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
+    Q_PROPERTY(QString optionalConfig READ optionalConfig WRITE setOptionalConfig NOTIFY optionalConfigChanged)
     Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
     Q_PROPERTY(QString editReportToggle READ editReportToggle WRITE setEditReportToggle NOTIFY editReportToggleChanged)
 
@@ -247,6 +249,10 @@ public:
 
     QString editReportToggle() const;
 
+    QString optionalConfig() const;
+
+    QString row3Columns() const;
+
 public slots:
 
     // General properties
@@ -285,6 +291,9 @@ public slots:
 
 
     void setEditReportToggle(QString editReportToggle);
+    void setOptionalConfig(QString optionalConfig);
+
+    void setRow3Columns(QString row3Columns);
 
 signals:
     // General properties
@@ -336,9 +345,15 @@ signals:
     void clearScreenSignal();
 
 
+    void optionalConfigChanged(QString optionalConfig);
+
+    void row3ColumnsChanged(QString row3Columns);
+
 private:
 
     QVariantMap insertMasterFilters(int filterId);
     void restoreMasterFilters(int filterId, QVariantMap filterData);
+    QString m_optionalConfig;
+    QString m_row3Columns;
 };
 #endif // REPORTPARAMSMODEL_H
