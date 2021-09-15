@@ -84,6 +84,16 @@ QString ReportParamsModel::editReportToggle() const
     return m_editReportToggle;
 }
 
+QString ReportParamsModel::optionalConfig() const
+{
+    return m_optionalConfig;
+}
+
+QString ReportParamsModel::row3Columns() const
+{
+    return m_row3Columns;
+}
+
 QString ReportParamsModel::chartTitle() const
 {
     return m_chartTitle;
@@ -116,10 +126,12 @@ void ReportParamsModel::addReport(int reportId)
     tmp.insert("d3PropertiesConfig",this->d3PropertiesConfig());
     tmp.insert("xAxisColumns", this->xAxisColumns() );
     tmp.insert("yAxisColumns", this->yAxisColumns() );
+    tmp.insert("row3Columns", this->row3Columns() );
     tmp.insert("chartUrl", this->chartUrl() );
     tmp.insert("chartType", this->chartType() );
     tmp.insert("chartTitle", this->chartTitle() );
     tmp.insert("colorByDataColoumns",this->colorByDataColoumns());
+    tmp.insert("optionalConfig",this->optionalConfig());
 
     this->reportsMap.insert(reportId,tmp);
     this->reportsData.insert(reportId,this->reportTitle());
@@ -1066,6 +1078,24 @@ void ReportParamsModel::setEditReportToggle(QString editReportToggle)
 
     m_editReportToggle = editReportToggle;
     emit editReportToggleChanged(m_editReportToggle);
+}
+
+void ReportParamsModel::setOptionalConfig(QString optionalConfig)
+{
+    if (m_optionalConfig == optionalConfig)
+        return;
+
+    m_optionalConfig = optionalConfig;
+    emit optionalConfigChanged(m_optionalConfig);
+}
+
+void ReportParamsModel::setRow3Columns(QString row3Columns)
+{
+    if (m_row3Columns == row3Columns)
+        return;
+
+    m_row3Columns = row3Columns;
+    emit row3ColumnsChanged(m_row3Columns);
 }
 
 QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
