@@ -677,6 +677,7 @@ void ChartsThread::getScatterChartValues()
 
     QJsonArray data;
     QVariantList tmpData;
+    float xAxisTmpData;
     float yAxisTmpData;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
@@ -722,26 +723,28 @@ void ChartsThread::getScatterChartValues()
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
-            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+            masterKeyword = splitDataPointer->at(i);
             tmpData.clear();
+            xAxisTmpData = 0.0;
             yAxisTmpData = 0.0;
 
             if(!uniqueHashKeywords->contains(masterKeyword)){
                 uniqueHashKeywords->append(masterKeyword);
 
+                tmpData.append(xAxisDataPointer->at(i).toFloat());
                 tmpData.append(yAxisDataPointer->at(i).toFloat());
                 tmpData.append(splitDataPointer->at(i));
-                tmpData.append(xAxisDataPointer->at(i));
 
                 colData.append(QJsonArray::fromVariantList(tmpData));
             } else{
 
                 index = uniqueHashKeywords->indexOf(masterKeyword);
-                yAxisTmpData =  colData.at(index).toArray().at(0).toDouble() + yAxisDataPointer->at(i).toDouble();
+                xAxisTmpData =  colData.at(index).toArray().at(0).toDouble() + xAxisDataPointer->at(i).toDouble();
+                yAxisTmpData =  colData.at(index).toArray().at(1).toDouble() + yAxisDataPointer->at(i).toDouble();
 
+                tmpData.append(xAxisTmpData);
                 tmpData.append(yAxisTmpData);
                 tmpData.append(splitDataPointer->at(i));
-                tmpData.append(xAxisDataPointer->at(i));
 
                 colData.replace(index, QJsonArray::fromVariantList(tmpData));
             }
@@ -751,14 +754,15 @@ void ChartsThread::getScatterChartValues()
     }
 
     QJsonArray columns;
+    columns.append(xAxisColumn);
     columns.append(yAxisColumn);
     columns.append(xSplitKey);
-    columns.append(xAxisColumn);
+
 
 
     data.append(colData);
     data.append(columns);
-    data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+    data.append(QJsonArray::fromStringList(splitDataPointerPre));
 
 
     QJsonDocument doc;
@@ -1651,6 +1655,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     // Fetch data from extract
     QString tableName = this->getTableName();
 
+    qDebug() << xAxisColumn << yAxisColumn << "MISSING COLs";
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
@@ -1661,7 +1666,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     xQueryString += " FROM " + tableName;
 
     QString yQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumn){
+    foreach(QVariant xCols, yAxisColumn){
         yQueryString += "\"" + xCols.toString() + "\", ";
     }
 

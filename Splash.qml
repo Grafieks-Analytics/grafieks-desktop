@@ -43,7 +43,7 @@ Window {
             anchors.top:splashImage.bottom
             anchors.topMargin: 20
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Grafieks Desktop v1.0")
+            text: qsTr(GeneralParamsModel.getAppInfo().APP_NAME + " v" + GeneralParamsModel.getAppInfo().APP_VERSION)
             font.pointSize: Constants.fontCategoryHeaderSmall
             color: Constants.grafieksGreen
         }
