@@ -1009,6 +1009,10 @@
                     .attr("font-family", xTickfontFamily)
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
 
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
