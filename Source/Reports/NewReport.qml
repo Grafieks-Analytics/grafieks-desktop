@@ -61,6 +61,14 @@ Page {
     // In draw chart we take out these config; If config is empty => We have default config for it.
     property var d3PropertyConfig: ({});
 
+    // This object will contain all the extra param models 
+    /*
+        {
+            chartName: { param1: value1, param2: value2 }
+        }
+    */
+    property var optionalParams: ({});
+
     property var lastPickedDataPaneElementProperties: ({});
     property var reportDataPanes: ({});  // Report Data Panes Object
 
@@ -343,7 +351,6 @@ Page {
             dataValues = dataValues && JSON.parse(dataValues);
             dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
             colorData = dataValues[1] || [];
-            console.log(dataValues);
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.stackedBarChartTitle:
@@ -388,6 +395,7 @@ Page {
             break;
         case Constants.areaChartTitle:
             console.log(chartTitle,"CLICKED")
+            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.horizontalAreaChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -461,13 +469,12 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED");
-            console.log('Debug:::dataValues',dataValues);
             var greenValue = input1Field.text;
             var yellowValue = input2Field.text;
             var redValue = input3Field.text;
-            console.log('Gauge Data',greenValue, yellowValue, redValue);
-            dataValues = [[+greenValue, +yellowValue, +redValue, dataValues], row3Columns[0]];
+            optionalParams[chartTitle] = { greenValue, yellowValue, redValue };
+            var oldDataValues = JSON.parse(dataValues)[0];
+            dataValues = [[+greenValue, +yellowValue, +redValue, oldDataValues[0]], oldDataValues[1]];
             dataValues = JSON.stringify(dataValues);
             console.log('Debug:::dataValues',dataValues);
             break;
@@ -475,7 +482,8 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.kpiTitle:
-            dataValues = [dataValues, xAxisColumns[0]];
+            dataValues = JSON.parse(dataValues);
+            dataValues = dataValues[0];
             dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
@@ -814,7 +822,17 @@ Page {
 
         var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
         var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
+        var row3ColumnsReportData = JSON.parse(reportProperties.row3Columns);
         var colorListModelData = JSON.parse(reportProperties.colorByDataColoumns);
+
+        var chartTitleName = reportProperties.chartTitle;
+        if(chartTitleName == Constants.gaugeChartTitle){
+            var optionalParams = JSON.parse(reportProperties.optionalConfig);
+            var gaugeParams = optionalParams[Constants.gaugeChartTitle];
+            input1Field.text = gaugeParams.greenValue;
+            input2Field.text = gaugeParams.yellowValue;
+            input3Field.text = gaugeParams.redValue;
+        }
 
         // Update List Models
         for(var i=0; i<xAxisColumnsReportData.length; i++){
@@ -823,6 +841,10 @@ Page {
         for(var i=0; i< yAxisColumnsReportData.length; i++){
             yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType, dateFormat: yAxisColumnsReportData[i].dateFormat })
         }
+        for(var i=0; i< row3ColumnsReportData.length; i++){
+            valuesListModel.append({ itemName: row3ColumnsReportData[i].itemName, droppedItemType: row3ColumnsReportData[i].droppedItemType })
+        }
+        
         for(var i=0; i<colorListModelData.length; i++){
             colorListModel.append({ textValue: colorListModelData[i].columnName })
         }
@@ -834,6 +856,7 @@ Page {
         report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
 
+        switchChart(reportProperties.chartTitle)
         reDrawChart();
     }
 
@@ -916,6 +939,40 @@ Page {
             break;
         case Constants.multipleHorizontalAreaChartTitle:
             chartUrl = Constants.multipleHorizontalAreaChartUrl;
+            break;
+        
+        case Constants.pieChartTitle:
+            chartUrl = Constants.pieChartUrl;
+            break;
+        
+        case Constants.donutChartTitle:
+            chartUrl = Constants.donutChartUrl;
+            break;
+            
+        case Constants.radarChartTitle:
+            chartUrl = Constants.radarChartUrl;
+            break;
+            
+        case Constants.sunburstChartTitle:
+            chartUrl = Constants.sunburstChartUrl;
+            break;
+        
+        case Constants.funnelChartTitle:
+            chartUrl = Constants.funnelChartUrl;
+            break;
+            
+        case Constants.gaugeChartTitle:
+            chartUrl = Constants.gaugeChartUrl;
+            break;
+        
+        case Constants.pivotTitle:
+            chartUrl = Constants.pivotTableUrl;
+            break;
+        case Constants.tableTitle:
+            chartUrl = Constants.tableChartUrl;
+            break;
+        case Constants.kpiTitle:
+            chartUrl = Constants.kpiChartUrl;
             break;
         }
 
@@ -1240,12 +1297,19 @@ Page {
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
+        ReportParamsModel.setOptionalConfig(JSON.stringify(optionalParams));
         ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
+        ReportParamsModel.setRow3Columns(JSON.stringify(getAxisModelAsJson(Constants.row3Name)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
         ReportParamsModel.addReport(reportIdMain);
+
+        // Reset after chart is added
+        input1Field.text = '';
+        input2Field.text = '';
+        input3Field.text = '';
 
         chartTitle = Constants.barChartTitle;
         chartUrl = Constants.barChartUrl;
@@ -1277,6 +1341,10 @@ Page {
             console.log('Deleting Report',reportIdMain)
             ReportParamsModel.deleteReport(reportIdMain,false);
         }
+
+        input1Field.text = '';
+        input2Field.text = '';
+        input3Field.text = '';
 
         let currentDashboard = DashboardParamsModel.currentDashboard
     }
@@ -1666,7 +1734,7 @@ Page {
                 console.log('Measures',JSON.stringify(measures))
                 
                 var dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
-                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures, dateConversionOptions);
+                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures, '[]');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
