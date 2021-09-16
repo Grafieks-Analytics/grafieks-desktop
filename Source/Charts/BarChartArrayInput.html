@@ -720,16 +720,22 @@
                         var labelValue = label.textContent;
 
                         var labelYPosition = yScale(data[0][1][i]);
+                        // console.log(labelYPosition);
+
                         // console.log(dataset[i]);
                         label.setAttribute("y", labelYPosition - 12);
                         label.setAttribute("fill", dataLabelColor);
+                        label.textContent = Math.round(dataset[i]);
+                        label.setAttribute(
+                            "display",
+                            labelYPosition > 500 ? "none" : ""
+                        );
                         // label.setAttribute("y", function (d) {
                         //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
                         //     console.log({height})
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent = Math.round(dataset[i]);
                     });
                 }
 

@@ -558,7 +558,11 @@
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            (margin.left + 20) +
+                            "," +
+                            margin.top +
+                            ")"
                     )
                     .append("g")
                     .attr("class", "y-axis")
@@ -624,7 +628,7 @@
                         .attr("dy", "0.3em")
                         .attr("text-anchor", "end")
                         // .attr("x", "-" + (maxWidth + 3))
-                        .attr("x", "-" + 20)
+                        .attr("x", "-" + 10)
                         // .attr("font-size", fontSize)
                         .attr("y", "0");
                 }
@@ -807,7 +811,7 @@
                         yAxisDiv.setAttribute(
                             "transform",
                             "translate(" +
-                                (maxWidth - margin.left) +
+                                (maxWidth - margin.left - 20) +
                                 "," +
                                 0 +
                                 ")"

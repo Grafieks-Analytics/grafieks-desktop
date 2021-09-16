@@ -339,7 +339,7 @@
 
                     d3.select("#legend")
                         .append("p")
-                        .html("xAxisLabel" + "&nbsp;")
+                        .html(xAxisLabel + "&nbsp;")
                         .style("font-weight", "bold")
                         .style("margin", "auto")
                         .style("position", "sticky");
@@ -426,6 +426,10 @@
                             var legendWidth = legendElement.offsetWidth;
                             // margin.left += 100;
                             // width -= 100;
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
                             // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
 
                             d3.select("#mainChartWindow").attr("style", null);
@@ -438,12 +442,13 @@
                                 "margin-left",
                                 legendWidth + "px"
                             );
+                            d3.select("#xAxisLabelId").style("bottom", 0);
                             break;
                         case "top":
                             // clearStyle();
                             d3.select("#mainChartWindow").attr("style", null);
                             // margin.top -= 50;
-                            // height -= 50;
+                            height -= 50;
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "10px")
@@ -475,10 +480,11 @@
                             );
                             // debugger;
                             d3.selectAll("#xAxisDiv").style("bottom", "0px");
+                            d3.select("#xAxisLabelId").style("bottom", 0);
                             break;
                         case "bottom":
                             // clearStyle();
-                            // height -= 50; // use legend client height
+                            height -= 30; // use legend client height
                             // bottomHeight += 50;
                             // margin.bottom += 10;
                             var legendWidth = legendElement.offsetWidth;
@@ -568,6 +574,15 @@
                                 "margin-left",
                                 0
                             );
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
+                            d3.select("#xAxisLabelId").style("bottom", 0);
+                        // d3.selectAll("#my_dataviz").style(
+                        //     "height",
+                        //     "calc(100vh - 122px)"
+                        // );
                     }
                 }
 
@@ -609,7 +624,7 @@
                     .select("#my_dataviz")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + bottomHeight + extraHeight);
+                    .attr("height", height + bottomHeight + extraHeight - 2);
 
                 var g = svg
                     .append("g")
@@ -817,7 +832,7 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
-                 // axis setting starts
+                // axis setting starts
 
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
@@ -860,7 +875,7 @@
                     d3
                         .select("#xAxisLabelId")
                         .append("svg")
-                        .attr("width", window.innerWidth, "height",80)
+                        .attr("width", window.innerWidth, "height", 80)
                 );
 
                 function setYaxisWidth() {
@@ -875,7 +890,7 @@
                         }
                     }
                 }
-                  d3.selectAll(".y-axis text")
+                d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
