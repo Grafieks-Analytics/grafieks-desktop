@@ -289,5 +289,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/KPICustomization.qml</file>
         <file>Source/Modellers/SubComponents/SaveExtract.qml</file>
+        <file>Source/Dashboards/SubComponents/SaveWorkbook.qml</file>
     </qresource>
 </RCC>

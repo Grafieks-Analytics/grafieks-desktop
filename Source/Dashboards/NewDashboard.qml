@@ -12,7 +12,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebEngine 1.7
-import QtQuick.Layouts 1.15
+import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
 
@@ -253,6 +254,10 @@ Page {
         dashboardList.contentX = 0;
     }
 
+    function onPublishDashboardClicked(){
+        saveWorkbookPrompt.open()
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -262,6 +267,11 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveWorkbook{
+        id: saveWorkbookPrompt
+    }
 
 
     // SubComponents Ends
@@ -740,7 +750,7 @@ Page {
                         anchors.centerIn: parent
                     }
 
-                    onClicked: onPublishDataSourceClicked()
+                    onClicked: onPublishDashboardClicked()
 
                     background: Rectangle{
                         color: Constants.grafieksLightGreenColor

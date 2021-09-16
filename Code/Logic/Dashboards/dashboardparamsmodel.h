@@ -8,6 +8,9 @@
 #include <QCoreApplication>
 #include <QtCore/QFileInfo>
 #include <QDir>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QDebug>
 
 #include "../../constants.h"
@@ -170,8 +173,8 @@ public:
     // Save and read files
 
     Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
-
     Q_INVOKABLE void setDashboardReportMap(int reportId);
+    Q_INVOKABLE void saveDashboard();
 
     // General
     QString lastContainerType() const;
@@ -206,8 +209,10 @@ public slots:
 
     // Filter column names
     void getColumnNames(QStringList columnNames);
-
     void setCurrentSelectedColumn(QString currentSelectedColumn);
+
+    // Receive extract workbook data params
+    void getExtractDashboardParams(QJsonObject dashboardParams);
 
 
 
@@ -243,6 +248,10 @@ signals:
     void tmpCanvasWidthChanged(int tmpCanvasWidth);
     void currentColumnTypeChanged(QString currentColumnType);
     void currentSelectedColumnChanged(QString currentSelectedColumn);
+
+    // Save Dashboard Params
+    void sendDashboardParams(QJsonObject dashboardParamsObj);
+    void moveToDashboardScreen();
 
 };
 

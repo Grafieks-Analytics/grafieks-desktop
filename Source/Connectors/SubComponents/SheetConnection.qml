@@ -156,7 +156,7 @@ Popup {
                 anchors.top: parent.top
                 anchors.rightMargin: 10
 
-                text: qsTr("Allow Grafieks desktop to access to your sheet account...")
+                text: qsTr("Allow " + GeneralParamsModel.getAppInfo().APP_NAME + " to access to your sheet account...")
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontHeader
             }

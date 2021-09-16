@@ -76,6 +76,14 @@ ApplicationWindow {
         }
     }
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onMoveToDashboardScreen(){
+            stacklayout_home.currentIndex = 6
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -87,8 +95,16 @@ ApplicationWindow {
     Component.onCompleted: {
 
         // Get Reader file
+        // We call a function to check because signals and slots between Qml and C++ dont Work
+        // Before the components are completely loaded in the UI
+        // Hence after completion we check if the arguments are received and then process the extract
+
         if(ExtractProcessor.receivedArgumentStatus() === true){
-            mainwindow.title = ExtractProcessor.processExtract()
+            ExtractProcessor.processExtract()
+        }
+
+        if(WorkbookProcessor.receivedArgumentStatus() === true){
+            WorkbookProcessor.processExtract()
         }
 
         if(settings.value("user/profileId") > 0){
@@ -184,12 +200,16 @@ ApplicationWindow {
         title: "Select File"
         folder: shortcuts.documents
         fileMode: FileDialog.OpenFile
-        nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")"]
+        nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")", "Workbook (*."+Constants.workbookFileExt+")"]
 
         onAccepted: {
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
             console.log(readerFile)
-            ExtractProcessor.setArgumentsFromMenu(readerFile)
+            if(readerFile.includes(Constants.extractFileExt)){
+                ExtractProcessor.setArgumentsFromMenu(readerFile)
+            } else if(readerFile.includes(Constants.workbookFileExt)){
+                WorkbookProcessor.setArgumentsFromMenu(readerFile)
+            }
 
         }
     }
