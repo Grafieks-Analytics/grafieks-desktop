@@ -209,8 +209,10 @@ public slots:
 
     // Filter column names
     void getColumnNames(QStringList columnNames);
-
     void setCurrentSelectedColumn(QString currentSelectedColumn);
+
+    // Receive extract workbook data params
+    void getExtractDashboardParams(QJsonObject dashboardParams);
 
 
 
@@ -246,6 +248,10 @@ signals:
     void tmpCanvasWidthChanged(int tmpCanvasWidth);
     void currentColumnTypeChanged(QString currentColumnType);
     void currentSelectedColumnChanged(QString currentSelectedColumn);
+
+    // Save Dashboard Params
+    void sendDashboardParams(QJsonObject dashboardParamsObj);
+    void moveToDashboardScreen();
 
 };
 

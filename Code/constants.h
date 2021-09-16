@@ -21,6 +21,8 @@ namespace Constants
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
     const int flushExtractCount = 100000;
+    const QString extractType = "extract";
+    const QString liveType = "live";
 
     // Master Extract Table
     const QString masterExtractTable = "gahc_master_table";

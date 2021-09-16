@@ -1097,6 +1097,189 @@ void DashboardParamsModel::setCurrentSelectedColumn(QString currentSelectedColum
     emit currentSelectedColumnChanged(m_currentSelectedColumn);
 }
 
+void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams)
+{
+    QJsonObject mainObj;
+    QJsonObject childObj;
+
+    QStringList dashboardIds = dashboardParams.value("dashboardReportMap").toObject().keys();
+
+    foreach(QString dashboardId, dashboardIds){
+
+        // dashboardWidgetsMap
+        mainObj = dashboardParams.value("dashboardWidgetsMap").toObject();
+        foreach(QVariant widgetId, mainObj.value(dashboardId).toArray())
+            this->addReportToDashboard(dashboardId.toInt(), widgetId.toInt());
+
+        // dashboardWidgetsZorder
+        mainObj = dashboardParams.value("dashboardWidgetsZorder").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dashboardWidgetsZorderKeys = childObj.keys();
+
+        foreach(QString widgetId, dashboardWidgetsZorderKeys){
+            int zOrder = childObj.value(widgetId).toInt();
+            this->setReportZOrder(dashboardId.toInt(), widgetId.toInt(), zOrder);
+        }
+
+        // dashboardWidgetCoordinates
+        mainObj = dashboardParams.value("dashboardWidgetCoordinates").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dashboardWidgetCoordinatesKeys = childObj.keys();
+
+        foreach(QString widgetId, dashboardWidgetCoordinatesKeys){
+            QVariantList coordinates = childObj.value(widgetId).toArray().toVariantList();
+            this->setDashboardWidgetCoordinates(dashboardId.toInt(), widgetId.toInt(), coordinates.at(0).toFloat(), coordinates.at(1).toFloat(), coordinates.at(2).toFloat(), coordinates.at(3).toFloat());
+        }
+
+        // dashboardWidgetTypeMap
+        mainObj = dashboardParams.value("dashboardWidgetTypeMap").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dashboardWidgetTypeMapKeys = childObj.keys();
+
+        foreach(QString widgetId, dashboardWidgetTypeMapKeys){
+            int typeMap = childObj.value(widgetId).toInt();
+            this->setDashboardWidgetTypeMap(dashboardId.toInt(), widgetId.toInt(), typeMap);
+        }
+
+        // dashboardWidgetUrl
+        mainObj = dashboardParams.value("dashboardWidgetUrl").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dashboardWidgetUrlKeys = childObj.keys();
+
+        foreach(QString widgetId, dashboardWidgetUrlKeys){
+            QUrl url(childObj.value(widgetId).toString());
+            this->setDashboardWidgetUrl(dashboardId.toInt(), widgetId.toInt(), url);
+        }
+
+        // dashboardReportMap
+        mainObj = dashboardParams.value("dashboardReportMap").toObject();
+        foreach(QVariant reportId, mainObj.value(dashboardId).toArray()){
+
+            QVector<int> dashboardReportMapList = this->dashboardReportMap.value(dashboardId.toInt());
+            dashboardReportMapList.append(reportId.toInt());
+            this->dashboardReportMap.insert(dashboardId.toInt(), dashboardReportMapList);
+        }
+
+        // showColumns
+        mainObj = dashboardParams.value("showColumns").toObject();
+        foreach(QVariant params, mainObj.value(dashboardId).toArray()){
+            this->showColumns.insert(dashboardId.toInt(), params.toStringList());
+        }
+
+        // columnAliasMap
+        mainObj = dashboardParams.value("columnAliasMap").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList columnAliasMapKeys = childObj.keys();
+
+        foreach(QString column, columnAliasMapKeys){
+            QString alias = childObj.value(column).toString();
+            this->setColumnAliasName(dashboardId.toInt(), column, alias);
+        }
+
+        // columnFilterType
+        mainObj = dashboardParams.value("columnFilterType").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList columnFilterTypeKeys = childObj.keys();
+
+        foreach(QString column, columnFilterTypeKeys){
+            QString filter = childObj.value(column).toString();
+            this->setColumnFilterType(dashboardId.toInt(), column, filter);
+        }
+
+        // columnIncludeExcludeMap
+        mainObj = dashboardParams.value("columnIncludeExcludeMap").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList columnIncludeExcludeMapKeys = childObj.keys();
+
+        foreach(QString column, columnIncludeExcludeMapKeys){
+            QVariantMap tmp;
+            tmp.insert(column, childObj.value(column).toString());
+            this->columnIncludeExcludeMap.insert(dashboardId.toInt(), tmp);
+        }
+
+        // columnValueMap
+        mainObj = dashboardParams.value("columnValueMap").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList columnValueMapKeys = childObj.keys();
+        QMap<QString, QStringList> valueMap;
+
+        foreach(QString columnName, columnValueMapKeys){
+            QVariantList valueMapVariantList = childObj.value(columnName).toArray().toVariantList();
+            QStringList valueMapStringList;
+
+            foreach(QVariant values, valueMapVariantList){
+                valueMapStringList.append(values.toString());
+            }
+            valueMap.insert(columnName, valueMapStringList);
+
+        }
+        this->columnValueMap.insert(dashboardId.toInt(), valueMap);
+
+        // dashboardName
+        mainObj = dashboardParams.value("dashboardName").toObject();
+        this->dashboardName.insert(dashboardId.toInt(), mainObj.value(dashboardId).toString());
+
+        // dashboardBackgroundColor;
+        mainObj = dashboardParams.value("dashboardBackgroundColor").toObject();
+        this->dashboardBackgroundColor.insert(dashboardId.toInt(), mainObj.value(dashboardId).toString());
+
+        // dashboardOpacity;
+        mainObj = dashboardParams.value("dashboardOpacity").toObject();
+        this->dashboardOpacity.insert(dashboardId.toInt(), mainObj.value(dashboardId).toInt());
+
+        // dashboardGrid;
+        mainObj = dashboardParams.value("dashboardGrid").toObject();
+        this->dashboardGrid.insert(dashboardId.toInt(), mainObj.value(dashboardId).toBool());
+
+        // dashboardCanvasDimensions;
+        mainObj = dashboardParams.value("dashboardCanvasDimensions").toObject();
+        this->dashboardCanvasDimensions.insert(dashboardId.toInt(), mainObj.value(dashboardId).toArray().toVariantList());
+
+        // reportName
+        mainObj = dashboardParams.value("reportName").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList reportNameKeys = childObj.keys();
+
+        foreach(QString widgetId, reportNameKeys){
+            QString name = childObj.value(widgetId).toString();
+            this->setReportName(dashboardId.toInt(), widgetId.toInt(), name);
+        }
+
+        // reportBackgroundColor
+        mainObj = dashboardParams.value("reportBackgroundColor").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList reportBackgroundColorKeys = childObj.keys();
+
+        foreach(QString widgetId, reportBackgroundColorKeys){
+            QString color = childObj.value(widgetId).toString();
+            this->setReportBackgroundColor(dashboardId.toInt(), widgetId.toInt(), color);
+        }
+
+        // reportLineColor
+        mainObj = dashboardParams.value("reportLineColor").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList reportLineColorKeys = childObj.keys();
+
+        foreach(QString widgetId, reportLineColorKeys){
+            QString color = childObj.value(widgetId).toString();
+            this->setReportLineColor(dashboardId.toInt(), widgetId.toInt(), color);
+        }
+
+        // reportOpacity
+        mainObj = dashboardParams.value("reportOpacity").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList reportOpacityKeys = childObj.keys();
+
+        foreach(QString widgetId, reportOpacityKeys){
+            int opacity = childObj.value(widgetId).toInt();
+            this->setReportOpacity(dashboardId.toInt(), widgetId.toInt(), opacity);
+        }
+    }
+
+    emit moveToDashboardScreen();
+
+}
+
 void DashboardParamsModel::setDashboardReportMap(int reportId){
     QVector<int> dashboardReportMapList = dashboardReportMap.value(this->currentDashboard());
     dashboardReportMapList.append(reportId);
@@ -1108,36 +1291,36 @@ void DashboardParamsModel::saveDashboard()
     QJsonObject dashboardParamsObject;
 
     //    // Dashboard Report Mapping
-    //x    QMap<int, QVector<int>> dashboardWidgetsMap; // <dashboardId, <widgetId>>
-    //x    QMap<int, QMap<int, int>> dashboardWidgetsZorder; // <dashboardId, <widgetId, zId>>
-    //x    QMap<int, QMap<int, QVariantList>> dashboardWidgetCoordinates; // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
-    //x    QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
-    //x    QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
+    //xx    QMap<int, QVector<int>> dashboardWidgetsMap; // <dashboardId, <widgetId>>
+    //xx    QMap<int, QMap<int, int>> dashboardWidgetsZorder; // <dashboardId, <widgetId, zId>>
+    //xx    QMap<int, QMap<int, QVariantList>> dashboardWidgetCoordinates; // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
+    //xx    QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
+    //xx    QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
 
-    //x    QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
+    //xx    QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
 
 
     //    // Filter parameters
-    //x    QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
-    //x    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
-    //x    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
-    //x    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
-    //x    QMap<int, QMap<QString, QStringList>> columnValueMap;      // dashboardId - <Column name - value list>
+    //xx    QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
+    //xx    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
+    //xx    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
+    //xx    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
+    //xx    QMap<int, QMap<QString, QStringList>> columnValueMap;      // dashboardId - <Column name - value list>
 
 
     //    // Customize Dashboard parameters
-    //x    QMap<int, QString> dashboardName;
-    //x    QMap<int, QString> dashboardBackgroundColor;
-    //x    QMap<int, int> dashboardOpacity;
-    //x    QMap<int, bool> dashboardGrid;
-    //x    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
+    //xx    QMap<int, QString> dashboardName;
+    //xx    QMap<int, QString> dashboardBackgroundColor;
+    //xx    QMap<int, int> dashboardOpacity;
+    //xx    QMap<int, bool> dashboardGrid;
+    //xx    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
 
 
     //    // Customize Report parameters
-    //    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
-    //    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
-    //    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
-    //    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
+    //xx    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
+    //xx    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
+    //xx    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
+    //xx    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
 
     QList<int> dashboardIds = this->dashboardReportMap.keys();
 
@@ -1317,8 +1500,5 @@ void DashboardParamsModel::saveDashboard()
     dashboardParamsObject.insert("reportOpacity", reportOpacityObj);
 
 
-    QJsonDocument dashboardParamsDocument(dashboardParamsObject);
-    QString strJson(dashboardParamsDocument.toJson(QJsonDocument::Compact));
-
-    qDebug() << dashboardParamsDocument;
+    emit sendDashboardParams(dashboardParamsObject);
 }
