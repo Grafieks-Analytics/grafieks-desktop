@@ -1051,7 +1051,7 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth - 200,
+                    width = window.innerWidth - 100,
                     height =
                         window.innerHeight - margin.top - margin.bottom - 55;
 
@@ -1071,8 +1071,8 @@
                 svg = d3
                     .select("#my_dataviz")
                     .append("svg")
-                    .attr("width", width)
-                    .attr("height", height + margin.top + margin.bottom + 10)
+                    .attr("width", width+20)
+                    .attr("height", height + margin.top + margin.bottom + 15)
                     .append("g")
                     .attr(
                         "transform",
@@ -1431,7 +1431,7 @@
                     markerShape = defaultD3Config.defaultMarkerShape;
                 }
 
-                if (markerStatus) {
+                if (true) {
                     svg.selectAll(".dot")
                         .data(dataValues)
                         .enter()
@@ -1812,7 +1812,7 @@
 
                     extraHeightWorked = true;
                     // extraHeight = maxWidth < 55 ? maxWidth : 53;
-                    extraHeight = maxWidth < 55 ? 100 : 53;
+                    extraHeight = maxWidth < 55 ? 130 : 83;
 
                     //     d3.select(".x-axis").attr("text-anchor", "right");
 
@@ -1903,6 +1903,8 @@
                         }
                     }
                 }
+
+                
 
                 if (extraHeightWorked && !redrawn) {
                     extraHeightWorked = false;
