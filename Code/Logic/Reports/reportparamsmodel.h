@@ -249,13 +249,13 @@ public:
     Q_INVOKABLE int generateNewReportId();
     Q_INVOKABLE void clearReportsScreen();
     Q_INVOKABLE int reportsCount();
+    QString optionalConfig() const;
+    QString row3Columns() const;
 
     QString editReportToggle() const;
     Q_INVOKABLE void saveReport();
 
-    QString optionalConfig() const;
 
-    QString row3Columns() const;
 
 public slots:
 
@@ -296,8 +296,10 @@ public slots:
 
     void setEditReportToggle(QString editReportToggle);
     void setOptionalConfig(QString optionalConfig);
-
     void setRow3Columns(QString row3Columns);
+
+    // Receive extract workbook data params
+    void getExtractReportParams(QJsonObject reportParams);
 
 signals:
     // General properties
@@ -348,10 +350,11 @@ signals:
 
     void clearScreenSignal();
 
-
     void optionalConfigChanged(QString optionalConfig);
-
     void row3ColumnsChanged(QString row3Columns);
+
+    // Save workbook
+    void sendReportParams(QJsonObject reportParamsObject);
 
 private:
 

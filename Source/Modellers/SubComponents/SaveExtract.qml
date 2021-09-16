@@ -12,7 +12,7 @@ import com.grafieks.singleton.constants 1.0
 FileDialog{
     id: saveFilePromptDialog
     title: "Save Extract As"
-    nameFilters: ["Grafieks Extract (*."+ Constants.extractFileExt+" )"];
+    nameFilters: ["Extract (*."+ Constants.extractFileExt+" )"];
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName
 

@@ -2,7 +2,11 @@
 #define WORKBOOKPROCESSOR_H
 
 #include <QObject>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
+#include <QDataStream>
+#include <QFile>
 
 #include "../General/generalparamsmodel.h"
 
@@ -16,12 +20,29 @@ class WorkbookProcessor : public QObject
     QString filePath;
     GeneralParamsModel *generalParamsModel;
 
+    QJsonObject dashboardParams;
+    QJsonObject reportParams;
+    bool receivedArgument;
+
 public:
     explicit WorkbookProcessor(GeneralParamsModel *gpm = nullptr, QObject *parent = nullptr);
 
-    Q_INVOKABLE void setArguments(QString filePath);
+    Q_INVOKABLE void setArgumentsFromMenu(QString filePath);
+    Q_INVOKABLE void setArgumentsByFile(QString filePath);
+    Q_INVOKABLE bool receivedArgumentStatus();
+
+    Q_INVOKABLE void processExtract();
+
+    Q_INVOKABLE void saveWorkbooks(QString filePath);
+
+public slots:
+    void getReportParams(QJsonObject reportParams);
+    void getDashboardParams(QJsonObject dashboardParams);
+
 
 signals:
+    void sendExtractReportParams(QJsonObject reportParams);
+    void sendExtractDashboardParams(QJsonObject dashboardParams);
 
 };
 

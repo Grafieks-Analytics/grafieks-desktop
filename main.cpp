@@ -90,6 +90,7 @@ QString Statics::csvJsonPath;
 QVariantMap Statics::changedHeaderTypes;
 bool Statics::freeLimitExtractSizeExceeded;
 bool Statics::modeProcessReader;
+QString Statics::dsType;
 
 QString Statics::myHost;
 QString Statics::myDb;
@@ -391,6 +392,12 @@ int main(int argc, char *argv[])
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendModels, &csvJsonQueryModel, &CSVJsonQueryModel::getAllFilters);
 
+    // Save & Restore Workbooks
+    QObject::connect(&reportParamsModel, &ReportParamsModel::sendReportParams, &workbookProcessor, &WorkbookProcessor::getReportParams);
+    QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
+
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
@@ -462,6 +469,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
     engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
     engine.rootContext()->setContextProperty("ExtractProcessor", &extractProcessor);
+    engine.rootContext()->setContextProperty("WorkbookProcessor", &workbookProcessor);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
@@ -470,7 +478,6 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
 
     QStringList arguments = QCoreApplication::arguments();
-//    extractProcessor.setArguments2(arguments);
     if(arguments.length()>1){
 
         QString fileToRead = arguments.at(1);
@@ -480,9 +487,9 @@ int main(int argc, char *argv[])
         if(extension == Constants::extractExt){
             extractProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::liveExt){
-//            liveProcessor.setArguments(fileToRead);
+//            liveProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::workbookExt){
-//            workbookProcessor.setArguments(fileToRead);
+            workbookProcessor.setArgumentsByFile(fileToRead);
         } else {
             qDebug() << "Unknown file";
         }
