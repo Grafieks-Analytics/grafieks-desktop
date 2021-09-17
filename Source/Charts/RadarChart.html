@@ -145,9 +145,50 @@
 
             function drawChart(data, plottingConfiguration = {}) {
                 var dataValues = [data[0]];
+                var label = data[1];
 
-                let { d3colorPalette, paddingInner, markerShape, curveType } =
-                    plottingConfiguration;
+                let {
+                    d3colorPalette,
+                    paddingInner,
+                    markerShape,
+                    curveType,
+                    // font size
+                    xLabelfontSize = defaultD3Config.fontSize,
+                    yLabelfontSize = defaultD3Config.fontSize,
+                    xTickfontSize = defaultD3Config.fontSize,
+                    yTickfontSize = defaultD3Config.fontSize,
+                    dataLabelfontSize = defaultD3Config.fontSize,
+                    // font family
+                    xLabelfontFamily = defaultD3Config.fontFamily,
+                    yLabelfontFamily = defaultD3Config.fontFamily,
+                    xTickfontFamily = defaultD3Config.fontFamily,
+                    yTickfontFamily = defaultD3Config.fontFamily,
+                    dataLabelfontFamily = defaultD3Config.fontFamily,
+                    // font color
+                    xLabelfontColor = defaultD3Config.fontColor,
+                    yLabelfontColor = defaultD3Config.fontColor,
+                    xTickfontColor = defaultD3Config.fontColor,
+                    yTickfontColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
+                } = plottingConfiguration;
+                window.xLabelfontSize = xLabelfontSize;
+                window.yLabelfontSize = yLabelfontSize;
+                window.xTickfontSize = xTickfontSize;
+                window.yTickfontSize = yTickfontSize;
+                window.dataLabelfontSize = dataLabelfontSize;
+
+                window.xLabelfontFamily = xLabelfontFamily;
+                window.yLabelfontFamily = yLabelfontFamily;
+                window.xTickfontFamily = xTickfontFamily;
+                window.yTickfontFamily = yTickfontFamily;
+                window.dataLabelfontFamily = dataLabelfontFamily;
+
+                window.xLabelfontColor = xLabelfontColor;
+                window.yLabelfontColor = yLabelfontColor;
+                window.xTickfontColor = xTickfontColor;
+                window.yTickfontColor = yTickfontColor;
+                window.dataLabelColor = dataLabelColor;
+
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
@@ -165,17 +206,16 @@
 
                 var color = d3.scale.ordinal().range(d3Colors);
 
-                radius = Math.min(width/2, height/2);
+                radius = Math.min(width / 2, height / 2);
 
-                if(window.innerWidth < 700 || window.innerHeight < 700){
-                    radius = Math.min(width, height)
+                if (window.innerWidth < 700 || window.innerHeight < 700) {
+                    radius = Math.min(width, height);
                 }
 
-                if(radius < 0){
+                if (radius < 0) {
                     radius = 2;
                 }
 
-                
                 var radarChartOptions = {
                     w: width,
                     h: height,
@@ -184,10 +224,20 @@
                     levels: 6,
                     roundStrokes: true,
                     color: color,
-                    radius
+                    radius,
                 };
+
+                RadarChart("#my_dataviz", dataValues, radarChartOptions,label);
+                d3.selectAll(".axisLabel")
+                    .style("font-size", xTickfontSize)
+                    .style("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor);
+                // .attr("y", 8);
+                d3.selectAll(".axis text")
+                    .style("font-size", yTickfontSize)
+                    .style("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
                 //Call function to draw the Radar chart
-                RadarChart("#my_dataviz", dataValues, radarChartOptions);
             }
 
             drawChart(data);

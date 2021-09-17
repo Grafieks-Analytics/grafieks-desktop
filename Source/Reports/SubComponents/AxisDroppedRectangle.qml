@@ -24,7 +24,7 @@ Rectangle{
     
 
     height: ((parent && parent.height) - 10) || 0
-    width: 200
+    width: (itemType && itemType.toLowerCase()) === 'date' ? 250 : 200
     border.width: 1
     border.color: this.color
     radius: this.width/2
@@ -191,7 +191,7 @@ Rectangle{
         height: parent.height - 10
         anchors.top: parent.top
         anchors.topMargin: 5
-        width: 80
+        width: (itemType && itemType.toLowerCase()) === 'date' ? 130 : 80
         color: Constants.whiteColor
         radius: 10
         visible: (itemType && itemType.toLowerCase()) === 'date' ? true : false
