@@ -53,7 +53,7 @@ const defaultD3Config = {
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
-    dateFormat: "%d-%m-%Y",
+    dateFormat: "%Y",
     defaultMarkerStatus: true,
     chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,

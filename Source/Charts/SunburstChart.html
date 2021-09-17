@@ -31,6 +31,9 @@
                 dominant-baseline: middle;
                 text-anchor: middle;
             }
+            #my_dataviz{
+                height: 100vh;
+            }
         </style>
     </head>
     <body>
@@ -1200,7 +1203,7 @@
                     .attr(
                         "viewBox",
                         `${-width / 2} ${-(height / 2) - 35} ${width} ${
-                            height + 30
+                            height + 40
                         }`
                     )
                     .on("click", () => focusOn()); // Reset zoom on canvas click
