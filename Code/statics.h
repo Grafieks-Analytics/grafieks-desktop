@@ -23,6 +23,7 @@ public:
     static QVariantMap changedHeaderTypes;
     static bool freeLimitExtractSizeExceeded;
     static bool modeProcessReader;
+    static QString dsType;
 
     // Mysql
     static QString myHost;

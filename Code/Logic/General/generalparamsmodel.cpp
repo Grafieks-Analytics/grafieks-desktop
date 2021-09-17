@@ -38,6 +38,20 @@ void GeneralParamsModel::openNewGrafieksInstance()
     QProcess::startDetached(appPath);
 }
 
+QVariantMap GeneralParamsModel::getAppInfo()
+{
+    QVariantMap appInfo;
+
+    appInfo.insert("APP_NAME", Constants::appName);
+    appInfo.insert("APP_VERSION", Constants::appVersion);
+    appInfo.insert("EXTRACT_VERSION", Constants::extractVersion);
+    appInfo.insert("LIVE_VERSION", Constants::liveVersion);
+    appInfo.insert("WORKBOOK_VERSION", Constants::workbookVersion);
+    appInfo.insert("CURRENT_MODE", Constants::currentMode);
+
+    return appInfo;
+}
+
 int GeneralParamsModel::getOnlineStorageType()
 {
     return Statics::onlineStorageType;

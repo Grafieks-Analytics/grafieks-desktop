@@ -10,6 +10,7 @@
 #include <QProcess>
 
 #include "../../statics.h"
+#include "../../constants.h"
 
 class GeneralParamsModel : public QObject
 {
@@ -29,6 +30,8 @@ public:
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
     Q_INVOKABLE void openNewGrafieksInstance();
+
+    Q_INVOKABLE QVariantMap getAppInfo();
 
     Q_INVOKABLE int getOnlineStorageType();
 

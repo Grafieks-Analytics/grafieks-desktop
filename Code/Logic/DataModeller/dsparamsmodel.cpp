@@ -1380,6 +1380,7 @@ void DSParamsModel::setDsType(QString dsType)
     if (m_dsType == dsType)
         return;
 
+    Statics::dsType = dsType;
     m_dsType = dsType;
     emit dsTypeChanged(m_dsType);
 }
