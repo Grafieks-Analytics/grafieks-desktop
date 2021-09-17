@@ -117,6 +117,7 @@
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -134,6 +135,7 @@
                 window.yLabelfontColor = yLabelfontColor;
                 window.xTickfontColor = xTickfontColor;
                 window.yTickfontColor = yTickfontColor;
+                window.dataLabelColor = dataLabelColor;
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
@@ -766,6 +768,7 @@
                         var labelXPosition = x(data[0][1][i]);
                         //     console.log(dataset[i]);
                         label.setAttribute("x", labelXPosition + 30);
+                        label.setAttribute("fill", dataLabelColor);
                         //  label.textContent = textColumn2[1];
                         label.textContent = Math.round(dataset[i]);
                     });

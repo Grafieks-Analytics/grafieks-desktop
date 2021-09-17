@@ -82,6 +82,7 @@ Rectangle{
             title:"Combination - Coming Soon"
             yAxisVisible: true
             maxDropOnXAxis: 1
+            disabled:true
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
             nonClickable: true
@@ -213,6 +214,7 @@ Rectangle{
             activeChart: false
             title:"Tree Chart"
             maxDropOnYAxis: 1
+     
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             yAxisVisible: false
@@ -233,6 +235,7 @@ Rectangle{
             chartHtml:"SankeyChart.html"
             elementHeight: 24
             activeChart: false
+            disabled:true
             title:"Sankey"
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
@@ -245,6 +248,7 @@ Rectangle{
             chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
+            disabled:true
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             title: "Tree Map"
@@ -266,6 +270,7 @@ Rectangle{
             elementHeight: 22
             elementWidth:40
             activeChart: false
+            disabled:true
             xAxisLabelName: "Location"
             yAxisLabelName: "Numerical"
             title:"Map - Coming Soon"
@@ -365,9 +370,11 @@ Rectangle{
             var maxDropOnXAxis = allCharts.get(i).maxDropOnXAxis;
             var maxDropOnYAxis = allCharts.get(i).maxDropOnYAxis;
 
+           var disabled = !!allCharts.get(i).disabled;
             allChartsMapping[chartTitle] = {
                 'maxDropOnXAxis': maxDropOnXAxis || -1,
                 'maxDropOnYAxis': maxDropOnYAxis || -1,
+                disabled
             };
 
         }
@@ -377,7 +384,10 @@ Rectangle{
         allowedYAxisDataPanes = 1;
     }
 
-    function getChart(chartHtml,index,chartTitle,mainCustomizations, subMenuCustomizations=""){
+   function getChart(chartHtml,index,chartTitle,mainCustomizations, subMenuCustomizations=""){
+        if(allChartsMapping[chartTitle].disabled){
+            return
+        }
         report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.chartTitle = chartTitle;
 

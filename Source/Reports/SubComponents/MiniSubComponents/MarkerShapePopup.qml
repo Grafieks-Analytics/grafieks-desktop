@@ -31,14 +31,14 @@ Popup {
             type: "rect"
             filled: false
         }
-//        ListElement{
-//            icon: "Polygon.png"
-//            filled: false
-//        }
-//        ListElement{
-//            icon: "add.png"
-//            filled: false
-//        }
+        //        ListElement{
+        //            icon: "Polygon.png"
+        //            filled: false
+        //        }
+        //        ListElement{
+        //            icon: "add.png"
+        //            filled: false
+        //        }
     }
 
     ListModel{
@@ -53,10 +53,10 @@ Popup {
             type: "rect"
             filled: true
         }
-//        ListElement{
-//            icon: "Polygon_filled.png"
-//            filled: true
-//        }
+        //        ListElement{
+        //            icon: "Polygon_filled.png"
+        //            filled: true
+        //        }
     }
 
     background: Rectangle{
@@ -68,20 +68,25 @@ Popup {
         // var query = 'drawMarker('+filledStatus+',"'+markerShape+'")';
         d3PropertyConfig.filledStatus = filledStatus;
         d3PropertyConfig.markerShape = markerShape;
-        d3PropertyConfig.markerStatus = true;        
+        d3PropertyConfig.markerStatus = true;
         reDrawChart();
     }
 
     Rectangle{
+
         anchors.fill: parent
 
         Row{
-            anchors.fill: parent
+            id:markerShape
+            //            anchors.fill: parent
+            width: parent.width
+            height: parent.height-30
             spacing: 10
 
             Rectangle{
+
                 width: (parent.width - parent.spacing)/2
-                height: parent.height
+                height: parent.height-30
 
                 Column{
                     anchors.fill: parent
@@ -105,7 +110,7 @@ Popup {
             }
             Rectangle{
                 width: (parent.width - parent.spacing)/2
-                height: parent.height
+                height: parent.height-30
 
                 Column{
 
@@ -128,7 +133,41 @@ Popup {
                 }
             }
 
+
         }
+
+        Rectangle{
+            anchors.top: markerShape.bottom
+            width: 60
+            height: 30
+            border.color: "black"
+
+//            Text {
+//                id: none
+//                verticalAlignment: verticalCenter
+//                horizontalAlignment: horizontalAlignment
+//                text: qsTr("None")
+//            }
+            Text {
+                id: componentTitle
+                width:parent.width
+                height: parent.height
+
+               text: qsTr("None")
+
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment:Text.AlignHCenter
+
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: drawMarkerShape(false,"type")
+            }
+
+        }
+
+
+
 
     }
 }

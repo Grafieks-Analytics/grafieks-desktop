@@ -25,7 +25,7 @@
 
             #my_dataviz {
                 overflow-x: scroll;
-                margin-left: 72px;
+                margin-left: 102px;
                 height: 100vh;
             }
 
@@ -538,6 +538,7 @@
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -555,6 +556,7 @@
                 window.yLabelfontColor = yLabelfontColor;
                 window.xTickfontColor = xTickfontColor;
                 window.yTickfontColor = yTickfontColor;
+                window.dataLabelColor = dataLabelColor;
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
@@ -673,6 +675,7 @@
 
                     switch (legendPosition) {
                         case "left":
+                             width -= 10;
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", topPosition)
@@ -798,7 +801,7 @@
                         // For Right Legened
                         case "right":
                         default:
-                            width -= 5;
+                            width -= 10;
 
                             // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
                             var legendWidth = legendElement.offsetWidth;
@@ -849,7 +852,7 @@
                 var svg = d3
                     .select("#my_dataviz")
                     .append("svg")
-                    .attr("width", width + 0 + margin.right)
+                    .attr("width", width - 25 + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr(
@@ -890,13 +893,13 @@
                 //     .tickFormat(d3.format(".2s"));
                 d3.select("#yAxisDiv")
                     .append("svg")
-                    .attr("width", "72")
+                    .attr("width", "102")
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
                         "translate(" +
-                            (margin.left + 11) +
+                            (margin.left + 41) +
                             "," +
                             margin.top +
                             ")"
@@ -1022,7 +1025,7 @@
                         } else {
                             d3.select("#tooltip").style(
                                 "left",
-                                x_pos - scrollVal + 30 + "px"
+                                x_pos - scrollVal + 55 + "px"
                             );
 
                             d3.select(".arrowTooltip").attr(
@@ -1086,15 +1089,26 @@
                         .append("text")
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
+                        .attr("fill", dataLabelColor)
                         .text(function (d) {
                             return d[2];
                         })
                         .attr("x", function (d) {
-                            return x(d[0]) + x.bandwidth() / 2;
+                            return x(d[0]) + x.bandwidth() / 2 - 20;
                         })
                         .attr("y", function (d) {
-                            return y(d[1]) + y.bandwidth() / 2;
+                            return y(d[1]) + y.bandwidth() / 2 + 6;
                         });
+
+                    d3.selectAll("#yAxisDiv text")
+                        .attr("font-size", yTickfontSize)
+                        .attr("font-family", yTickfontFamily)
+                        .attr("fill", yTickfontColor);
+                    d3.selectAll(".x-axis text")
+                        .attr("font-size", xTickfontSize)
+                        .attr("font-family", xTickfontFamily)
+                        .attr("fill", xTickfontColor)
+                        .attr("y", 8);
 
                     // svg.append("g")
                     //     .attr("class", "axis label")
@@ -1121,7 +1135,7 @@
                 }
 
                 setLabel(
-                    "xAxisLabel",
+                    xAxisLabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -1130,7 +1144,7 @@
                     30,
                     false
                 );
-                setLabel("yAxisLabel", "y_label", d3.select("svg"), false);
+                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
 
                 function setXaxisWidth() {
                     var allYAxisTicks =
