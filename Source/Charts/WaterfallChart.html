@@ -463,7 +463,7 @@
                     .attr("width", width + margin.left + margin.right - 10)
                     .attr(
                         "height",
-                        height + margin.bottom + topLegendMargin + 20
+                        height + margin.bottom + topLegendMargin + 21
                     )
                     .append("g")
                     .attr(
@@ -702,7 +702,7 @@
                     }
 
                     extraHeightWorked = true;
-                    maxWidth = maxWidth < 60 ? maxWidth : 60;
+                    maxWidth = maxWidth < 60 ? maxWidth : 80;
                     extraHeight = maxWidth;
 
                     d3.select(".x-axis").attr("text-anchor", "right");
@@ -711,7 +711,7 @@
                         .attr("dy", "0.3em")
                         .attr("text-anchor", "end")
                         // .attr("x", "-" + (maxWidth + 3))
-                        .attr("x", "-" + 20)
+                        .attr("x", "-" + 10)
                         // .attr("font-size", fontSize)
                         .attr("y", "8");
                 }
@@ -750,7 +750,7 @@
                                 (xAxisTick && xAxisTick.length);
 
                             var numOfCharacters =
-                                (extraHeight ? 60 : x.bandwidth()) /
+                                (extraHeight ? 80 : x.bandwidth()) /
                                 singleCharacterLength;
 
                             if (
