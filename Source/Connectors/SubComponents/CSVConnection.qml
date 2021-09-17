@@ -217,10 +217,13 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row4.bottom
-        anchors.topMargin: 15
+        // anchors.top: row4.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: 65
+
         anchors.right: parent.right
-        anchors.rightMargin: label_col
+        anchors.rightMargin: label_col+30
         spacing: 10
 
         Text{

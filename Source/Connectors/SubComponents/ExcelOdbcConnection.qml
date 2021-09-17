@@ -160,7 +160,7 @@ Popup {
         width: parent.width - 2
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 10
+        // anchors.topMargin: 10
         anchors.leftMargin: 1
 
         Text{
@@ -312,7 +312,7 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 55
         anchors.left: parent.left
-        anchors.leftMargin: 100
+        anchors.leftMargin: 80
 
         Rectangle{
 
@@ -356,10 +356,11 @@ Popup {
     Row{
 
         id: row3
-        anchors.top: row2.bottom
-        anchors.topMargin: 15
+        // anchors.top: row2.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
         anchors.right: parent.right
-        anchors.rightMargin: label_col
+        anchors.rightMargin: 65
         //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
@@ -387,7 +388,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Constants.signInText
+            textValue: "Open"
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: handleExcel(selectedFile)
         }
