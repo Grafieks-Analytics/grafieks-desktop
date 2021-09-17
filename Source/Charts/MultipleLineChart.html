@@ -1309,6 +1309,7 @@
                                 "margin-top",
                                 0 + "px"
                             );
+                            d3.select("#xAxisLabelId").style("bottom", 20+"px");
                     }
                 }
 
@@ -1458,7 +1459,7 @@
                 if (!markerShape) {
                     markerShape = defaultD3Config.defaultMarkerShape;
                 }
-                if (labelStatus) {
+                if (labelStatus && markerShape) {
                     svg.selectAll(".dot")
                         .data(dataValues)
                         .enter()
@@ -1476,9 +1477,7 @@
                             return d[2];
                         })
                         .attr(
-                            markerShapeConfig[markerShape] &&
-                                markerShapeConfig[markerShape]
-                                    .xPositionAttrName,
+                            "x",
                             function (d, i) {
                                 this.setAttribute("data-value-x", d[0]);
                                 this.setAttribute("data-value-x1", d[1]);
@@ -1492,9 +1491,7 @@
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)
                         .attr(
-                            markerShapeConfig[markerShape] &&
-                                markerShapeConfig[markerShape]
-                                    .yPositionAttrName,
+                            "y",
                             function (d) {
                                 // console.log(d[2]);
                                 return y(d[2])-5;

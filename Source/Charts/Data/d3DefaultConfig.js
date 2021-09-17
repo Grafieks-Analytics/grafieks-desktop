@@ -54,7 +54,7 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%d-%m-%Y",
-    defaultMarkerStatus: false,
+    defaultMarkerStatus: true,
     chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,
     // horizontalChartType: constants.chartType.STANDARD,
@@ -65,7 +65,7 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: false,
+        legendStatus: true,
         legendPosition: "right",
     },
     defaultlabelConfig: {
