@@ -87,8 +87,8 @@ QString ReportParamsModel::editReportToggle() const
 void ReportParamsModel::saveReport()
 {
 
-// Herein lies the issue
-//(*)    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
+    // Herein lies the issue
+    //(*)    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
 
 
     QJsonObject reportsMapObj;
@@ -133,6 +133,7 @@ void ReportParamsModel::saveReport()
         reportsDataObj.insert(QString::number(reportId), this->reportsData.value(reportId).toString());
 
         // dashboardReportInstances
+        // Object pointer reference - To be coded in QML
         dashboardReportInstancesObj.insert(QString::number(reportId), this->dashboardReportInstances.value(QString::number(reportId)).toString());
 
         // masterReportFilters
@@ -141,7 +142,17 @@ void ReportParamsModel::saveReport()
 
             QJsonObject masterReportFiltersChildTmpObj;
             foreach(QVariant filterKey, this->masterReportFilters.value(reportId).value(filterId)){
-                masterReportFiltersChildTmpObj.insert(filterKey.toString(), this->masterReportFilters.value(reportId).value(filterId).value(filterKey.toString()).toString());
+
+                QList<QString> finalKeys = this->masterReportFilters.value(reportId).value(filterId).keys();
+                foreach(QString finalKey, finalKeys){
+
+                    QString typeName = this->masterReportFilters.value(0).value(filterId).value(finalKey).typeName();
+                    if(typeName == "QVariantList" || typeName == "QStringList"){
+                        masterReportFiltersChildTmpObj.insert(finalKey, QJsonArray::fromStringList(this->masterReportFilters.value(reportId).value(filterId).value(finalKey).toStringList()));
+                    } else {
+                        masterReportFiltersChildTmpObj.insert(finalKey, this->masterReportFilters.value(reportId).value(filterId).value(finalKey).toString());
+                    }
+                }
             }
             masterReportFiltersObj.insert(QString::number(filterId), masterReportFiltersChildTmpObj);
         }
@@ -1252,39 +1263,41 @@ void ReportParamsModel::setRow3Columns(QString row3Columns)
 
 void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
 {
-//    qDebug() << Q_FUNC_INFO << reportParams;
+    //    qDebug() << Q_FUNC_INFO << reportParams;
 
-//    // Customize Report parameters
-//    QMap<int, QVariantMap> reportsMap;           // <<int reportId, reportObj>>
-//    QMap<int, QVariant> reportsData;
-//    QVariantMap dashboardReportInstances; // <[reportId: <reportObject>]>
+    //XX    // Customize Report parameters
+    //XX    QMap<int, QVariantMap> reportsMap;           // <<int reportId, reportObj>>
+    //xx    QMap<int, QVariant> reportsData;
+    //xx    QVariantMap dashboardReportInstances; // <[reportId: <reportObject>]>
 
-//    int reportIdsCounter = 0;
+    //xx    int reportIdsCounter = 0;
 
-//    // Filter specific variables
-//    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
+    //    // Filter specific variables
+    //xx    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
 
 
-//    QVector<int> categoricalFilters;                            // List of categorical filters
-//    QVector<int> dateFilters;                                   // List of date filters
-//    QVector<int> numericalFilters;                              // List of numerical filters
-//    QMap<int, QStringList> filterColumnMap;                     // filter id - <column name - tablename> map
-//    QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
-//    QMap<int, QString> filterRelationMap;                       // filter id - relation map
-//    QMap<int, QString> filterSlugMap;                           // filter id - slug map
-//    QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
-//    QMap<int, bool> includeNullMap;                             // filter id - include null map
-//    QMap<int, bool> selectAllMap;                               // filter id - select All map
-//    QMap<int, QString> filterSectionMap;                        // filter id - section map
-//    QMap<int, QString> filterCategoryMap;                       // filter id - category map
-//    QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
-//    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
-//    QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
-//    QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
-//    QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
+    //xx    QVector<int> categoricalFilters;                            // List of categorical filters
+    //xx    QVector<int> dateFilters;                                   // List of date filters
+    //xx    QVector<int> numericalFilters;                              // List of numerical filters
+    //xx    QMap<int, QStringList> filterColumnMap;                     // filter id - <column name - tablename> map
+    //xx    QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
+    //xx    QMap<int, QString> filterRelationMap;                       // filter id - relation map
+    //xx    QMap<int, QString> filterSlugMap;                           // filter id - slug map
+    //xx    QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
+    //xx    QMap<int, bool> includeNullMap;                             // filter id - include null map
+    //xx    QMap<int, bool> selectAllMap;                               // filter id - select All map
+    //xx    QMap<int, QString> filterSectionMap;                        // filter id - section map
+    //xx    QMap<int, QString> filterCategoryMap;                       // filter id - category map
+    //xx    QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
+    //xx    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
+    //    QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
+    //    QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
+    //    QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
 
     QJsonObject mainObj;
     QJsonObject childObj;
+    QJsonArray mainArray;
+    QVariantList variantList;
 
     QStringList reportIds = reportParams.value("reportsData").toObject().keys();
     QStringList filterIds = reportParams.value("filterColumnMap").toObject().keys();
@@ -1295,13 +1308,134 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
         mainObj = reportParams.value("reportsMap").toObject();
         childObj = mainObj.value(reportId).toObject();
         QStringList reportsMapKeys = childObj.keys();
+        QVariantMap tmp;
 
-        foreach(QString column, reportsMapKeys){
-            QString reports = childObj.value(column).toString();
-//            this->setColumnAliasName(reportId.toInt(), column, alias);
+        for(int i = 0; i < reportsMapKeys.length(); i++){
+            QString reportsMapData = childObj.value(reportsMapKeys.at(i)).toString();
+            tmp.insert(reportsMapKeys.at(i), reportsMapData);
         }
 
+        this->reportsMap.insert(reportId.toInt(), tmp);
+
+        // reportsData
+        this->reportsData.insert(reportId.toInt(), tmp.value("reportTitle"));
+        tmp.clear();
+
+        // dashboardReportInstances
+        this->dashboardReportInstances.insert(reportId, "");
+
+        // masterReportFilters
+        mainObj = reportParams.value("masterReportFilters").toObject();
+        childObj = mainObj.value(reportId).toObject();
+        QStringList filterIds = childObj.keys();
+
+        for(int i = 0; i < filterIds.length(); i++){
+
+            QStringList innerMapKeys = childObj.value(filterIds.at(i)).toObject().keys();
+
+            foreach(QString key, innerMapKeys){
+                QJsonValue::Type t = childObj.value(filterIds.at(i)).toObject().value(key).type();
+
+                if(t == QJsonValue::Bool){
+                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toBool());
+                } else if(t == QJsonValue::Double){
+                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toDouble());
+                } else if(t == QJsonValue::String){
+                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toString());
+                } else if(t == QJsonValue::Array){
+                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toArray().toVariantList());
+                } else if(t == QJsonValue::Object){
+                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toObject().toVariantMap());
+                } else {
+                    tmp.insert(filterIds.at(i), "");
+                }
+            }
+        }
     }
+
+    // reportIdsCounter
+    this->reportIdsCounter = reportParams.value("reportIdsCounter").toInt();
+
+    // categoricalFilters
+    variantList = reportParams.value("categoricalFiltersList").toArray().toVariantList();
+    foreach(QVariant variant, variantList){
+        this->categoricalFilters.append(variant.toInt());
+    }
+
+    // numericalFilters
+    variantList = reportParams.value("numericalFiltersList").toArray().toVariantList();
+    foreach(QVariant variant, variantList){
+        this->numericalFilters.append(variant.toInt());
+    }
+
+    // dateFilters
+    variantList = reportParams.value("dateFiltersList").toArray().toVariantList();
+    foreach(QVariant variant, variantList){
+        this->dateFilters.append(variant.toInt());
+    }
+
+    // filterColumnMap
+    foreach(QString filterId, filterIds){
+
+        // filterColumnMap
+        QStringList stringListTmp;
+        variantList = reportParams.value("filterColumnMap").toObject().value(filterId).toArray().toVariantList();
+        foreach(QVariant variant, variantList){
+            stringListTmp.append(variant.toString());
+        }
+        this->filterColumnMap.insert(filterId.toInt(), stringListTmp);
+
+        // filterValueMap
+        QVariantList variantListTmp;
+        variantList = reportParams.value("filterValueMap").toObject().value(filterId).toArray().toVariantList();
+        foreach(QVariant variant, variantList){
+            variantListTmp.append(variant.toString());
+        }
+        this->filterValueMap.insert(filterId.toInt(), variantListTmp);
+
+        // filterRelationMap;
+        this->filterRelationMap.insert(filterId.toInt(), reportParams.value("filterRelationMap").toObject().value(filterId).toString());
+
+        // filterSlugMap;
+        this->filterSlugMap.insert(filterId.toInt(), reportParams.value("filterSlugMap").toObject().value(filterId).toString());
+
+        // includeExcludeMap;
+        this->includeExcludeMap.insert(filterId.toInt(), reportParams.value("includeExcludeMap").toObject().value(filterId).toBool());
+
+        // selectAllMap;
+        this->selectAllMap.insert(filterId.toInt(), reportParams.value("selectAllMap").toObject().value(filterId).toBool());
+
+        // filterSectionMap;
+        this->filterSectionMap.insert(filterId.toInt(), reportParams.value("filterSectionMap").toObject().value(filterId).toString());
+
+        // filterCategoryMap;
+        this->filterCategoryMap.insert(filterId.toInt(), reportParams.value("filterCategoryMap").toObject().value(filterId).toString());
+
+        // filterSubCategoryMap;
+        this->filterSubCategoryMap.insert(filterId.toInt(), reportParams.value("filterSubCategoryMap").toObject().value(filterId).toString());
+
+        // tmpFilterIndex
+        this->tmpFilterIndex.append(filterId.toInt());
+
+        // dateFormatMap
+        this->dateFormatMap.insert(filterId.toInt(), reportParams.value("dateFormatMap").toObject().value(filterId).toInt());
+
+        // actualDateValues
+        variantList = reportParams.value("actualDateValues").toObject().value(filterId).toArray().toVariantList();
+        QStringList variantListToStringList;
+        foreach(QVariant variant, variantList){
+            variantListToStringList.append(variant.toString());
+        }
+        this->actualDateValues.insert(filterId.toInt(), variantListToStringList);
+
+    }
+
+    // tmpSelectedValues
+    variantList = reportParams.value("filterSubCategoryMap").toArray().toVariantList();
+    foreach(QVariant tmp, variantList){
+        this->tmpSelectedValues.append(tmp.toString());
+    }
+
 }
 
 QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
