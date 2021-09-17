@@ -53,7 +53,7 @@ const defaultD3Config = {
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
-    dateFormat: "%Y",
+    dateFormat: "%d-%m-%Y",
     defaultMarkerStatus: false,
     chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,
@@ -65,7 +65,7 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "right",
     },
     defaultlabelConfig: {
