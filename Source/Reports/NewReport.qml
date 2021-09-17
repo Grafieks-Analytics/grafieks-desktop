@@ -1732,6 +1732,7 @@ Page {
                 console.log('Measures',JSON.stringify(measures))
                 
                 var dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
+                console.log(measures, "MEASURES")
                 ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures, '[]');
                 break;
             case Constants.pivotTitle:
