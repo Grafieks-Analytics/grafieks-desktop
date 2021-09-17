@@ -84,6 +84,15 @@ ApplicationWindow {
         }
     }
 
+    Connections{
+        target: WorkbookProcessor
+
+        function onExtractMissing(){
+            readerDialog.title = "Extract missing. Select a file"
+            readerDialog.open()
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 

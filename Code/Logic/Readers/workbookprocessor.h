@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QDataStream>
 #include <QFile>
+#include <QFileInfo>
 
 #include "../General/generalparamsmodel.h"
 
@@ -41,6 +42,8 @@ public slots:
 
 
 signals:
+    void extractMissing();
+
     void sendExtractReportParams(QJsonObject reportParams);
     void sendExtractDashboardParams(QJsonObject dashboardParams);
 
