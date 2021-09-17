@@ -150,7 +150,7 @@ Popup {
                 anchors.top: parent.top
                 anchors.rightMargin: 10
 
-                text: qsTr("Allow Grafieks desktop to access to your drive account...")
+                text: qsTr("Allow  " + GeneralParamsModel.getAppInfo().APP_NAME + " to access to your drive account...")
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontHeader
             }
