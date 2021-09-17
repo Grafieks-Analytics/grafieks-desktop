@@ -1276,7 +1276,38 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         }
     }
 
+    // EMIT SIGNALS TO NOTIFY THE UI
+
+    // General
     emit moveToDashboardScreen();
+
+    emit dashboardNameChanged(dashboardIds.at(0).toInt(), this->dashboardName.value(dashboardIds.at(0).toInt()));
+    emit dashboardBackgroundColorChanged(dashboardIds.at(0).toInt(), this->dashboardBackgroundColor.value(dashboardIds.at(0).toInt()));
+    emit tmpCanvasHeightChanged(this->dashboardCanvasDimensions.value(dashboardIds.at(0).toInt()).at(1).toInt());
+    emit tmpCanvasWidthChanged(this->dashboardCanvasDimensions.value(dashboardIds.at(0).toInt()).at(0).toInt());
+
+    // Customize Report parameter signals
+
+    QList<int> reportBackgroundColorKeys = this->reportBackgroundColor.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportBackgroundColorKeys){
+        emit reportBackgroundColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportBackgroundColor.value(dashboardIds.at(0).toInt()).value(widgetId));
+    }
+
+    QList<int> reportLineColorKeys = this->reportLineColor.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportLineColorKeys){
+        emit reportLineColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
+    }
+
+    QList<int> reportLineKeys = this->reportLineColor.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportLineKeys){
+        emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
+    }
+
+    QList<int> reportUrlKeys = this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportUrlKeys){
+        qDebug() << "Firing" << dashboardIds.at(0).toInt() <<  widgetId <<  this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString();
+        emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString());
+    }
 
 }
 

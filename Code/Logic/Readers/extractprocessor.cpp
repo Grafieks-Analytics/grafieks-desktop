@@ -1,7 +1,7 @@
 #include "extractprocessor.h"
 
 ExtractProcessor::ExtractProcessor(GeneralParamsModel *gpm, DSParamsModel *dsp, QObject *parent) : QObject(parent),
-    receivedArgument(false)
+    receivedArgument(false), moveToDashboardScreen(true)
 {
     this->generalParamsModel = gpm;
     this->dsParamsModel = dsp;
@@ -46,5 +46,12 @@ void ExtractProcessor::processExtract()
     this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
     emit generateReports(&con);
-    emit extractReaderProcessed();
+    if(this->moveToDashboardScreen)
+        emit extractReaderProcessed();
+}
+
+void ExtractProcessor::setArgumentsFromWorkbook()
+{
+    this->moveToDashboardScreen = false;
+    this->processExtract();
 }
