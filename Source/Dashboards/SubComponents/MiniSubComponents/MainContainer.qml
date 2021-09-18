@@ -118,6 +118,7 @@ Rectangle {
 
             // [Tag: Refactor]
             // Make sure to use them in "Reports" case|condition instead of else
+            console.log("REPORT TYPE", objectType, counter, reportId)
             let reportObj = dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter, reportId: reportId});
             console.log('Type Report Obj',typeof reportObj);
             

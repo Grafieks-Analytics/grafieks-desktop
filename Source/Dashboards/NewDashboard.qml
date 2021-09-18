@@ -58,7 +58,11 @@ Page {
         target: DashboardParamsModel
 
         function onDashboardNameChanged(dashboardId, dashboardName){
-            dashboardModel.get(dashboardId).dashboardName = dashboardName
+            for(var i = 0; i < dashboardModel.rowCount(); i++){
+                if(dashboardModel.get(i).dashboardId === dashboardId){
+                    dashboardModel.get(i).dashboardName = dashboardName
+                }
+            }
         }
 
         function onHideAllDashboardParams(){
@@ -82,7 +86,7 @@ Page {
             }
         }
 
-        
+
     }
 
     Connections{
@@ -95,6 +99,21 @@ Page {
             // hide other panels
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
+        }
+    }
+
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+            var dashboards = DashboardParamsModel.fetchAllDashboards()
+            var dashboardIds = Object.keys(dashboards);
+            var dashboardNames = Object.values(dashboards);
+            // We will start from i =1 because component on completed already generated first dashboard
+            for(var i = 1; i < dashboardNames.length; i++){
+                dashboardModel.append({"dashboardName" : dashboardNames[i], 'dashboardId': parseInt(dashboardIds[i])})
+                TableColumnsModel.addNewDashboard(parseInt(dashboardIds[i]))
+            }
         }
     }
 
@@ -181,27 +200,34 @@ Page {
         let currentCount = DashboardParamsModel.dashboardCount
         let newCount = currentCount + 1
         DashboardParamsModel.setDashboardCount(newCount)
-        let newDashboardName =  "Dashboard "+ newCount
+
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': currentCount})
 
-        DashboardParamsModel.createNewDashboard(currentCount)
-        DashboardParamsModel.setCurrentDashboard(currentCount)
+        var allDashboardKeys = Object.keys(DashboardParamsModel.fetchAllDashboards());
+        var newDashboardId = parseInt(allDashboardKeys[allDashboardKeys.length - 1]) + 1
+
+        let newDashboardName =  "Dashboard "+ (newDashboardId + 1)
+        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': newDashboardId})
+
+
+        DashboardParamsModel.createNewDashboard(newDashboardId)
+        DashboardParamsModel.setCurrentDashboard(newDashboardId)
 
         dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
-        DashboardParamsModel.setDashboardName(currentCount, newDashboardName)
+        DashboardParamsModel.setDashboardName(newDashboardId, newDashboardName)
 
-        TableColumnsModel.addNewDashboard(currentCount)
+        TableColumnsModel.addNewDashboard(newDashboardId)
     }
 
     function setCurrentDashboard(dashboardId,index){
         var listContent = dashboardList.contentItem.children
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        console.log(dashboardId, "DASH ID");
 
-        dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+        if(dashboardModel.get(previousDashboardIndex))
+            dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+
         dashboardModel.setProperty(index,"backgroundColorTest","white");
         DashboardParamsModel.setCurrentDashboard(dashboardId)
 
@@ -216,7 +242,6 @@ Page {
         ReportParamsModel.setEditReportToggle(false);
         GeneralParamsModel.setCurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
-        console.log("REP ID", ReportParamsModel.reportId)
 
     }
 
@@ -233,11 +258,9 @@ Page {
     }
 
     function deleteDashboard(index){
-        dashboardModel.remove(index);
+        dashboardModel.remove(index, 1);
         DashboardParamsModel.destroyDashboard(index)
         TableColumnsModel.deleteDashboard(index)
-
-        console.log(dashboardModel.get(index).dashboardName, "NEW INDEX", index)
     }
 
     function getEndPos(){

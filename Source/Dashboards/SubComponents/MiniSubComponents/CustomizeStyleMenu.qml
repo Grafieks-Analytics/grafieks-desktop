@@ -51,6 +51,16 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+
+            var dashboardOpacityFetch = DashboardParamsModel.getDashboardOpacity(DashboardParamsModel.currentDashboard)
+            opacitySpinBox.value = dashboardOpacityFetch
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
