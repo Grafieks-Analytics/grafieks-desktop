@@ -27,6 +27,13 @@ Item {
     anchors.leftMargin: 3
 
 
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+            DashboardParamsModel.applyFilterToDashboard(DashboardParamsModel.currentDashboard)
+        }
+    }
 
     function hideColumn(){
         DashboardParamsModel.hideAllDashboardRight()
