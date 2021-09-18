@@ -30,8 +30,6 @@ Rectangle{
 
     function onWidthValueChanged(value){
 
-
-
         // Old function to set dimensions in individual canvas
         // Do not delete. Might be required later
 
@@ -104,9 +102,6 @@ Rectangle{
                     onValueChanged: onHeightValueChanged(value)
                 }
             }
-
         }
-
     }
-
 }

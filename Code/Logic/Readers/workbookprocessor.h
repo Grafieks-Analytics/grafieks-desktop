@@ -43,6 +43,7 @@ public slots:
 
 signals:
     void extractMissing();
+    void processExtractFromWorkbook(QString filePath);
 
     void sendExtractReportParams(QJsonObject reportParams);
     void sendExtractDashboardParams(QJsonObject dashboardParams);
