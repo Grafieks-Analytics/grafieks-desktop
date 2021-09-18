@@ -58,7 +58,13 @@ Page {
         target: DashboardParamsModel
 
         function onDashboardNameChanged(dashboardId, dashboardName){
-            dashboardModel.get(dashboardId).dashboardName = dashboardName
+            for(var i = 0; i < dashboardModel.rowCount(); i++){
+                if(dashboardModel.get(i).dashboardId === dashboardId){
+                    dashboardModel.get(i).dashboardName = dashboardName
+                }
+            }
+
+
         }
 
         function onHideAllDashboardParams(){
@@ -181,27 +187,35 @@ Page {
         let currentCount = DashboardParamsModel.dashboardCount
         let newCount = currentCount + 1
         DashboardParamsModel.setDashboardCount(newCount)
-        let newDashboardName =  "Dashboard "+ newCount
+
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': currentCount})
 
-        DashboardParamsModel.createNewDashboard(currentCount)
-        DashboardParamsModel.setCurrentDashboard(currentCount)
+        var allDashboardKeys = Object.keys(DashboardParamsModel.fetchAllDashboards());
+        var newDashboardId = parseInt(allDashboardKeys[allDashboardKeys.length - 1]) + 1
+
+        console.log(newDashboardId, "NDI")
+        let newDashboardName =  "Dashboard "+ (newDashboardId + 1)
+        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': newDashboardId})
+
+
+        DashboardParamsModel.createNewDashboard(newDashboardId)
+        DashboardParamsModel.setCurrentDashboard(newDashboardId)
 
         dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
-        DashboardParamsModel.setDashboardName(currentCount, newDashboardName)
+        DashboardParamsModel.setDashboardName(newDashboardId, newDashboardName)
 
-        TableColumnsModel.addNewDashboard(currentCount)
+        TableColumnsModel.addNewDashboard(newDashboardId)
     }
 
     function setCurrentDashboard(dashboardId,index){
         var listContent = dashboardList.contentItem.children
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        console.log(dashboardId, "DASH ID");
 
-        dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+        if(dashboardModel.get(previousDashboardIndex))
+            dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+
         dashboardModel.setProperty(index,"backgroundColorTest","white");
         DashboardParamsModel.setCurrentDashboard(dashboardId)
 
@@ -233,11 +247,10 @@ Page {
     }
 
     function deleteDashboard(index){
-        dashboardModel.remove(index);
+        console.log("Delete index", index)
+        dashboardModel.remove(index, 1);
         DashboardParamsModel.destroyDashboard(index)
         TableColumnsModel.deleteDashboard(index)
-
-        console.log(dashboardModel.get(index).dashboardName, "NEW INDEX", index)
     }
 
     function getEndPos(){
