@@ -1104,6 +1104,9 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
 
     QStringList dashboardIds = dashboardParams.value("dashboardReportMap").toObject().keys();
 
+    this->setCurrentDashboard(dashboardIds.at(0).toInt());
+    this->setDashboardCount(dashboardIds.length());
+
     foreach(QString dashboardId, dashboardIds){
 
         // dashboardWidgetsMap

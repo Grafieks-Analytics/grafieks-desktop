@@ -302,7 +302,6 @@ void ReportParamsModel::addReport(int reportId)
     // Emitting singal to update report list
     // in dashboards
     emit reportListChanged();
-    
 }
 
 QVariantMap ReportParamsModel::getReportsList(){
@@ -1316,6 +1315,7 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
         }
 
         this->reportsMap.insert(reportId.toInt(), tmp);
+        qDebug() << "What1" << this->reportsMap;
 
         // reportsData
         this->reportsData.insert(reportId.toInt(), tmp.value("reportTitle"));
@@ -1435,6 +1435,12 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
     foreach(QVariant tmp, variantList){
         this->tmpSelectedValues.append(tmp.toString());
     }
+
+    emit reportListChanged();
+
+
+    // Restore charts in dashboard
+    emit generateWorkbookReports();
 
 }
 

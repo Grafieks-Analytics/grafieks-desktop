@@ -107,8 +107,9 @@ Item{
 
         function onReportUrlChanged(refDashboardId, refReportId, url){
             // this signal is emitted whenever setDashboard cpp function is called
-            // setDashboard Report is called whenever a new report is dropped in dashboard area 
+            // setDashboard Report is called whenever a new report is dropped in dashboard area
 
+            console.log("DASH REPOS")
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportIdCpp = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
@@ -122,9 +123,11 @@ Item{
             }
         }
 
+
     }
 
-     Connections{
+
+    Connections{
         target: ChartsModel
 
         function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
@@ -157,7 +160,7 @@ Item{
         }
         function onSignalPieChartValues(output, reportId, dashboardId, chartSource){
             if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
-            drawChartAfterReceivingSignal(output);
+                drawChartAfterReceivingSignal(output);
         }
         function onSignalFunnelChartValues(output, reportId, dashboardId, chartSource){
             if(reportId === newItem.reportId && dashboardId === newItem.dashboardId)
@@ -230,7 +233,9 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-   function drawChartAfterReceivingSignal(dataValues){
+
+
+    function drawChartAfterReceivingSignal(dataValues){
         if(webEngineView.loading){
             return;
         }
@@ -520,6 +525,7 @@ Item{
 
     function onChartLoaded(loadRequest){
 
+        console.log("XE Log", loadRequest)
         if(loadRequest.status === WebEngineLoadRequest.LoadFailedStatus){
             console.log('Page Loading Failed')
             console.log('Error',JSON.stringify(loadRequest))
@@ -548,7 +554,8 @@ Item{
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(reportId);
         reportName.text = reportProperties.reportTitle;
-        console.log("Chart title", reportProperties, reportProperties.reportTitle);   
+        console.log("Chart title", reportProperties, reportProperties.reportTitle);
+        console.log("Chart title xe")
         drawChart(reportProperties);
     }
 
@@ -569,7 +576,7 @@ Item{
     
     // function to get the columnName from model
     // Difference between NewReport.qml and DroopedReport:
-    // 1. Columns are in modal | Columns are in Array 
+    // 1. Columns are in modal | Columns are in Array
     // 2. Since list model uses count and get function, Modified them here as per Array Change
 
     function getAxisColumnNames(axisName){
@@ -577,7 +584,7 @@ Item{
         const reportProperties = ReportParamsModel.getReport(reportId);
         switch(axisName){
         case Constants.xAxisName:
-            var xAxisListModel = JSON.parse(reportProperties.xAxisColumns);        
+            var xAxisListModel = JSON.parse(reportProperties.xAxisColumns);
             model = xAxisListModel;
             break
         case Constants.yAxisName:
@@ -811,30 +818,30 @@ Item{
                 return;
             }
 
-        //     console.log('Webengine View Loading Status:',webEngineView.loading);
-        //     console.log('Data Values:',JSON.stringify(dataValues));
-        //     var colorData = [];
-        //     console.log("colorData5",colorData)
-        //     colorData = JSON.parse(dataValues)[1] || [];
+            //     console.log('Webengine View Loading Status:',webEngineView.loading);
+            //     console.log('Data Values:',JSON.stringify(dataValues));
+            //     var colorData = [];
+            //     console.log("colorData5",colorData)
+            //     colorData = JSON.parse(dataValues)[1] || [];
 
-        //     console.log("colorData2" ,colorData)
-        //     console.log("dataValues" ,JSON.parse(dataValues))
+            //     console.log("colorData2" ,colorData)
+            //     console.log("dataValues" ,JSON.parse(dataValues))
 
-        //     console.log('Selected Chart Title:',chartTitle)
-        //     console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
-        //     console.log('Starting to plot');
+            //     console.log('Selected Chart Title:',chartTitle)
+            //     console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
+            //     console.log('Starting to plot');
 
-        //    var scriptValue = 'window.addEventListener("resize", function () {
-        //              window.clearChart && clearChart();
-        //             drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-        //    });';
+            //    var scriptValue = 'window.addEventListener("resize", function () {
+            //              window.clearChart && clearChart();
+            //             drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
+            //    });';
 
-        //    clearChartValue();
-        //    webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+            //    clearChartValue();
+            //    webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
 
-           // Clear Chart Data
+            // Clear Chart Data
             // ReportsDataModel.clearData();
-           return;
+            return;
         }
 
         webEngineView.runJavaScript('window.clearChart && clearChart()');
@@ -846,7 +853,7 @@ Item{
         reDrawChart();
     }
 
-    // Convert the graph to FitWidth / FitHeight 
+    // Convert the graph to FitWidth / FitHeight
     function convertToFit(){
         standardChart = false;
         reDrawChart()
@@ -968,7 +975,7 @@ Item{
                     anchors.rightMargin: 10
                     visible: hoverStatusReport
                     anchors.left: parent.left
-                      anchors.fill: parent
+                    anchors.fill: parent
 
 
                     spacing: 10
@@ -1071,14 +1078,8 @@ Item{
                                 onTriggered: convertToFit()
                             }
                         }
-
                     }
-
-
                 }
-
-
-
             }
 
 
@@ -1091,6 +1092,12 @@ Item{
             onLoadingChanged: onChartLoaded(loadRequest)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
+            Component.onCompleted: {
+                console.log("LOGGGER")
+
+                 onChartLoaded(loadRequest)
+                console.log("LOGGGER==============================")
+            }
 
             //                    onLoadingChanged: {
 
