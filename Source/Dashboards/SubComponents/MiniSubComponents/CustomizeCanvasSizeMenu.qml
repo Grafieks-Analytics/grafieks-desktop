@@ -18,6 +18,16 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+            var dashboardDimensions = DashboardParamsModel.getDashboardDimensions(DashboardParamsModel.currentDashboard)
+            widthId.value = dashboardDimensions[0]
+            heightId.value = dashboardDimensions[1]
+        }
+    }
+
     function onWidthValueChanged(value){
 
 
