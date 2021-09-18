@@ -90,7 +90,6 @@ Rectangle {
 
             for(var i = 0; i < allDashboardKeys.length; i++){
                 var reportsInFirstDashboard = DashboardParamsModel.fetchReportsInDashboard(allDashboardKeys[i])
-                console.log("REPIRT", reportsInFirstDashboard, allDashboardsObj, "BON",  allDashboardKeys[i])
 
                 for(var j = 1; j <= reportsInFirstDashboard.length; j++){
                     var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)

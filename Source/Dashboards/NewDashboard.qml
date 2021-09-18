@@ -63,8 +63,6 @@ Page {
                     dashboardModel.get(i).dashboardName = dashboardName
                 }
             }
-
-
         }
 
         function onHideAllDashboardParams(){
@@ -88,7 +86,7 @@ Page {
             }
         }
 
-        
+
     }
 
     Connections{
@@ -101,6 +99,21 @@ Page {
             // hide other panels
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
+        }
+    }
+
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+            var dashboards = DashboardParamsModel.fetchAllDashboards()
+            var dashboardIds = Object.keys(dashboards);
+            var dashboardNames = Object.values(dashboards);
+            // We will start from i =1 because component on completed already generated first dashboard
+            for(var i = 1; i < dashboardNames.length; i++){
+                dashboardModel.append({"dashboardName" : dashboardNames[i], 'dashboardId': parseInt(dashboardIds[i])})
+                TableColumnsModel.addNewDashboard(parseInt(dashboardIds[i]))
+            }
         }
     }
 
@@ -194,7 +207,6 @@ Page {
         var allDashboardKeys = Object.keys(DashboardParamsModel.fetchAllDashboards());
         var newDashboardId = parseInt(allDashboardKeys[allDashboardKeys.length - 1]) + 1
 
-        console.log(newDashboardId, "NDI")
         let newDashboardName =  "Dashboard "+ (newDashboardId + 1)
         dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': newDashboardId})
 
@@ -230,7 +242,6 @@ Page {
         ReportParamsModel.setEditReportToggle(false);
         GeneralParamsModel.setCurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
-        console.log("REP ID", ReportParamsModel.reportId)
 
     }
 
@@ -247,7 +258,6 @@ Page {
     }
 
     function deleteDashboard(index){
-        console.log("Delete index", index)
         dashboardModel.remove(index, 1);
         DashboardParamsModel.destroyDashboard(index)
         TableColumnsModel.deleteDashboard(index)
