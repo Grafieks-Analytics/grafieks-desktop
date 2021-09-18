@@ -43,9 +43,14 @@ void WorkbookProcessor::processExtract()
 
             if(doc.object().value("connectionType").toString() == Constants::extractType){
 
-                QFileInfo fi(doc.object().value("datasourcePath").toString());
-                if(!fi.exists())
+                QString filePath = doc.object().value("datasourcePath").toString();
+                QFileInfo fi(filePath);
+
+                if(!fi.exists()){
                     emit extractMissing();
+                } else {
+                    emit processExtractFromWorkbook(filePath);
+                }
 
             } else {
                 qDebug() << Q_FUNC_INFO << "Live type not processed yet";

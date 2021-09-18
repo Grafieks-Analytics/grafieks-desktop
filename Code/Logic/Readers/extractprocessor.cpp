@@ -50,8 +50,9 @@ void ExtractProcessor::processExtract()
         emit extractReaderProcessed();
 }
 
-void ExtractProcessor::setArgumentsFromWorkbook()
+void ExtractProcessor::setArgumentsFromWorkbook(QString filePath)
 {
     this->moveToDashboardScreen = false;
+    this->filePath = filePath;
     this->processExtract();
 }

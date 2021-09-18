@@ -33,7 +33,7 @@ public:
     Q_INVOKABLE void processExtract();
 
 public slots:
-    void setArgumentsFromWorkbook();
+    void setArgumentsFromWorkbook(QString filePath = "");
 
 signals:
 
