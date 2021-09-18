@@ -356,6 +356,9 @@ signals:
     // Save workbook
     void sendReportParams(QJsonObject reportParamsObject);
 
+    // Start generating reports after selecting a workbook
+    void generateWorkbookReports();
+
 private:
 
     QVariantMap insertMasterFilters(int filterId);
