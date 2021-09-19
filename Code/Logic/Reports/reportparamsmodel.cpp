@@ -1315,7 +1315,6 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
         }
 
         this->reportsMap.insert(reportId.toInt(), tmp);
-        qDebug() << "What1" << this->reportsMap;
 
         // reportsData
         this->reportsData.insert(reportId.toInt(), tmp.value("reportTitle"));

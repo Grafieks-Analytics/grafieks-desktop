@@ -1165,9 +1165,12 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
 
         // showColumns
         mainObj = dashboardParams.value("showColumns").toObject();
+        QStringList tmpList;
         foreach(QVariant params, mainObj.value(dashboardId).toArray()){
-            this->showColumns.insert(dashboardId.toInt(), params.toStringList());
+            tmpList.append(params.toString());
         }
+        this->showColumns.insert(dashboardId.toInt(), tmpList);
+
 
         // columnAliasMap
         mainObj = dashboardParams.value("columnAliasMap").toObject();
@@ -1311,8 +1314,6 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         qDebug() << "Firing" << dashboardIds.at(0).toInt() <<  widgetId <<  this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString();
         emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString());
     }
-
-//    emit generateDashboards();
 
 }
 

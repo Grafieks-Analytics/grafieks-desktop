@@ -23,6 +23,7 @@ class WorkbookProcessor : public QObject
 
     QJsonObject dashboardParams;
     QJsonObject reportParams;
+    QJsonObject tableColumnParams;
     bool receivedArgument;
 
 public:
@@ -39,6 +40,7 @@ public:
 public slots:
     void getReportParams(QJsonObject reportParams);
     void getDashboardParams(QJsonObject dashboardParams);
+    void getTableColumns(QJsonObject tableColumns);
 
 
 signals:
@@ -47,6 +49,7 @@ signals:
 
     void sendExtractReportParams(QJsonObject reportParams);
     void sendExtractDashboardParams(QJsonObject dashboardParams);
+    void sendExtractTableColumns(QJsonObject tableColumns);
 
 };
 
