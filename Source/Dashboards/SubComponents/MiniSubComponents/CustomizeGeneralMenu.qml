@@ -16,6 +16,17 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+
+            var dashboardNameFetch = DashboardParamsModel.getDashboardName(DashboardParamsModel.currentDashboard)
+            dashboardName.text = dashboardNameFetch
+        }
+    }
+
+
     Component.onCompleted: {
         dashboardName.text = "Dashboard 1"
 

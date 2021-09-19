@@ -17,9 +17,11 @@ class ExtractProcessor : public QObject
     QString filePath;
     QString testFilePath;
     bool receivedArgument;
+    bool moveToDashboardScreen;
 
     GeneralParamsModel *generalParamsModel;
     DSParamsModel *dsParamsModel;
+
 
 public:
     explicit ExtractProcessor(GeneralParamsModel *gpm = nullptr, DSParamsModel *dsp = nullptr, QObject *parent = nullptr);
@@ -29,6 +31,9 @@ public:
     Q_INVOKABLE bool receivedArgumentStatus();
 
     Q_INVOKABLE void processExtract();
+
+public slots:
+    void setArgumentsFromWorkbook(QString filePath = "");
 
 signals:
 

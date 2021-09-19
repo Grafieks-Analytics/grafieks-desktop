@@ -135,9 +135,6 @@ public:
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
     Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
 
-//    Q_INVOKABLE void setSelectAll(bool status, QString columnName, int dashboardId);
-
-//    Q_INVOKABLE bool ifFilterApplied(int dashboardId);
 
     // Customize Dashboard parameters
 
@@ -252,6 +249,7 @@ signals:
     // Save Dashboard Params
     void sendDashboardParams(QJsonObject dashboardParamsObj);
     void moveToDashboardScreen();
+    void generateDashboards();
 
 };
 

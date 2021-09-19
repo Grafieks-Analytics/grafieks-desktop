@@ -397,6 +397,7 @@ int main(int argc, char *argv[])
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::processExtractFromWorkbook, &extractProcessor, &ExtractProcessor::setArgumentsFromWorkbook);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
