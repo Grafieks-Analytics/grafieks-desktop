@@ -100,12 +100,6 @@ Popup {
         switch(dialogName){
         case "dataLabel": dataLabeleDialog.open();
             break;
-        case "xAxisTickMark": xAxisTickMarkColorDialog.open();
-            break;
-        case "yAxisLegend": yAxisLegendColorDialog.open();
-            break;
-        case "yAxisTickMark": yAxisTickMarkColorDialog.open();
-            break;
         }
     }
 
@@ -161,7 +155,7 @@ Popup {
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: -8
                         anchors.top: parent.top
 
                         onCheckedChanged: showLabel(checked);
@@ -172,6 +166,25 @@ Popup {
                 }
 
             }
+              Row{
+                                width: parent.width
+                                Text {
+                                    text: qsTr("Font Color: ")
+                                    width: 118
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                Rectangle {
+                                    color: Constants.defaultDataLabelColor
+                                    border.color: Constants.borderBlueColor
+                                    width: 15
+                                    height: 15
+                                    MouseArea{
+                                        anchors.fill: parent
+                                        onClicked: openColorDialog("dataLabel");
+                                    }
+
+                                }
+                            }
 
             Rectangle{
                 height: 20
@@ -279,25 +292,7 @@ Popup {
                 }
 
             }
-               Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Font Color: ")
-                                    width: 110
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                Rectangle {
-                                    color: Constants.defaultDataLabelColor
-                                    border.color: Constants.borderBlueColor
-                                    width: 20
-                                    height: 20
-                                    MouseArea{
-                                        anchors.fill: parent
-                                        onClicked: openColorDialog("dataLabel");
-                                    }
-
-                                }
-                            }
+             
 
         }
 

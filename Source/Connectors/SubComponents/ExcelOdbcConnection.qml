@@ -19,11 +19,11 @@ import "../../MainSubComponents"
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 300
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 150
     padding: 0
     property int label_col : 135
 
@@ -312,7 +312,7 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 55
         anchors.left: parent.left
-        anchors.leftMargin: 80
+        anchors.leftMargin: 130
 
         Rectangle{
 

@@ -149,7 +149,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Microsoft SQL"
+            text: "Sign In to Microsoft SQL Server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
