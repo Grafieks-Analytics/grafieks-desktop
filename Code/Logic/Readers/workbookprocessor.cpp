@@ -25,6 +25,7 @@ bool WorkbookProcessor::receivedArgumentStatus()
 void WorkbookProcessor::processExtract()
 {
     QFile fileWorkbook(filePath);
+
     if(!fileWorkbook.open(QIODevice::ReadOnly | QIODevice::Truncate)){
         qDebug() << Q_FUNC_INFO << "Could not open file for reading" << fileWorkbook.errorString();
     } else {
@@ -39,6 +40,23 @@ void WorkbookProcessor::processExtract()
         } else if(doc.isNull()){
             qDebug() << Q_FUNC_INFO << "Blank JsonDocument" ;
         } else {
+
+            if(doc.object().value("connectionType").toString() == Constants::extractType){
+
+                QString filePath = doc.object().value("datasourcePath").toString();
+                QFileInfo fi(filePath);
+
+                if(!fi.exists()){
+                    emit extractMissing();
+                } else {
+                    emit processExtractFromWorkbook(filePath);
+                }
+
+            } else {
+                qDebug() << Q_FUNC_INFO << "Live type not processed yet";
+            }
+
+
             emit sendExtractDashboardParams(doc.object().value("dashboardParams").toObject());
             emit sendExtractReportParams(doc.object().value("reportParams").toObject());
 
@@ -53,9 +71,7 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     finalObj.insert("dashboardParams", this->dashboardParams);
     finalObj.insert("connectionType", Statics::dsType);
 
-    if(Statics::dsType == Constants::extractType){
-        finalObj.insert("datasourcePath", Statics::extractPath);
-    } else {
+    if(Statics::dsType == Constants::liveType){
         finalObj.insert("currentDbIntType", Statics::currentDbIntType);
         finalObj.insert("currentDbName", Statics::currentDbName);
         finalObj.insert("currentDbStrType", Statics::currentDbStrType);
@@ -67,6 +83,9 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
         finalObj.insert("port", "port");
         finalObj.insert("username", "username");
         finalObj.insert("password", "password");
+    } else {
+
+        finalObj.insert("datasourcePath", Statics::extractPath);
     }
 
 

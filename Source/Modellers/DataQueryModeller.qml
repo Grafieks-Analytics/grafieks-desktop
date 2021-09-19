@@ -1103,7 +1103,7 @@ Page {
             CustomRadioButton{
                 id: radio_live
                 radio_text: qsTr("Live")
-                radio_checked: true
+                radio_checked: false
                 enabled: false
                 visible: false
                 parent_dimension: 16

@@ -78,6 +78,48 @@ Rectangle {
         }
     }
 
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+
+            is_dashboard_blank = is_dashboard_blank + 1
+
+            var allDashboardsObj = DashboardParamsModel.fetchAllDashboards()
+            var allDashboardKeys = Object.keys(allDashboardsObj)
+
+            for(var i = 0; i < allDashboardKeys.length; i++){
+                var reportsInFirstDashboard = DashboardParamsModel.fetchReportsInDashboard(allDashboardKeys[i])
+
+                for(var j = 1; j <= reportsInFirstDashboard.length; j++){
+                    var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)
+
+                    let x1 = coordinates[0]
+                    let y1 = coordinates[1]
+
+                    let reportType = Constants.reportTypeChart;
+                    let draggedItem = DashboardParamsModel.getReportName(i, j);
+
+                    dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
+
+                    // Set the last container type param
+                    DashboardParamsModel.setLastContainerType("report");
+
+                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter};
+                    objectJson.reportId = j;
+                    rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
+
+                    const reportProperties = ReportParamsModel.getReport(j);
+                    console.log("Rep prop", i, j, JSON.stringify(reportProperties), DashboardParamsModel.getReportZOrder(i,j), DashboardParamsModel.getReportName(i, j),  DashboardParamsModel.getDashboardWidgetCoordinates(i, j))
+                    const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
+
+                    counter++;
+                }
+
+            }
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -109,6 +151,7 @@ Rectangle {
 
         let reportType = 0;
         let draggedItem = listViewElem.itemName.toLocaleLowerCase();
+//        console.log("Diadem", draggedItem)
 
 
         switch(listViewElem.itemType){

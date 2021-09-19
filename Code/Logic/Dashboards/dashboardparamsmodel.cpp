@@ -1104,6 +1104,9 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
 
     QStringList dashboardIds = dashboardParams.value("dashboardReportMap").toObject().keys();
 
+    this->setCurrentDashboard(dashboardIds.at(0).toInt());
+    this->setDashboardCount(dashboardIds.length());
+
     foreach(QString dashboardId, dashboardIds){
 
         // dashboardWidgetsMap
@@ -1276,7 +1279,40 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         }
     }
 
+    // EMIT SIGNALS TO NOTIFY THE UI
+
+    // General
     emit moveToDashboardScreen();
+
+    emit dashboardNameChanged(dashboardIds.at(0).toInt(), this->dashboardName.value(dashboardIds.at(0).toInt()));
+    emit dashboardBackgroundColorChanged(dashboardIds.at(0).toInt(), this->dashboardBackgroundColor.value(dashboardIds.at(0).toInt()));
+    emit tmpCanvasHeightChanged(this->dashboardCanvasDimensions.value(dashboardIds.at(0).toInt()).at(1).toInt());
+    emit tmpCanvasWidthChanged(this->dashboardCanvasDimensions.value(dashboardIds.at(0).toInt()).at(0).toInt());
+
+    // Customize Report parameter signals
+
+    QList<int> reportBackgroundColorKeys = this->reportBackgroundColor.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportBackgroundColorKeys){
+        emit reportBackgroundColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportBackgroundColor.value(dashboardIds.at(0).toInt()).value(widgetId));
+    }
+
+    QList<int> reportLineColorKeys = this->reportLineColor.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportLineColorKeys){
+        emit reportLineColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
+    }
+
+    QList<int> reportLineKeys = this->reportLineColor.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportLineKeys){
+        emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
+    }
+
+    QList<int> reportUrlKeys = this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).keys();
+    foreach(int widgetId, reportUrlKeys){
+        qDebug() << "Firing" << dashboardIds.at(0).toInt() <<  widgetId <<  this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString();
+        emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString());
+    }
+
+//    emit generateDashboards();
 
 }
 
@@ -1289,40 +1325,7 @@ void DashboardParamsModel::setDashboardReportMap(int reportId){
 void DashboardParamsModel::saveDashboard()
 {
     QJsonObject dashboardParamsObject;
-
-    //    // Dashboard Report Mapping
-    //xx    QMap<int, QVector<int>> dashboardWidgetsMap; // <dashboardId, <widgetId>>
-    //xx    QMap<int, QMap<int, int>> dashboardWidgetsZorder; // <dashboardId, <widgetId, zId>>
-    //xx    QMap<int, QMap<int, QVariantList>> dashboardWidgetCoordinates; // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
-    //xx    QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
-    //xx    QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
-
-    //xx    QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
-
-
-    //    // Filter parameters
-    //xx    QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
-    //xx    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
-    //xx    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
-    //xx    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
-    //xx    QMap<int, QMap<QString, QStringList>> columnValueMap;      // dashboardId - <Column name - value list>
-
-
-    //    // Customize Dashboard parameters
-    //xx    QMap<int, QString> dashboardName;
-    //xx    QMap<int, QString> dashboardBackgroundColor;
-    //xx    QMap<int, int> dashboardOpacity;
-    //xx    QMap<int, bool> dashboardGrid;
-    //xx    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
-
-
-    //    // Customize Report parameters
-    //xx    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
-    //xx    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
-    //xx    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
-    //xx    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
-
-    QList<int> dashboardIds = this->dashboardReportMap.keys();
+    QList<int> dashboardIds = this->dashboardName.keys();
 
     QJsonObject dashboardWidgetsMapObj;
     QJsonObject dashboardWidgetsZorderObj;
@@ -1343,10 +1346,6 @@ void DashboardParamsModel::saveDashboard()
     QJsonObject dashboardGridObj;
     QJsonObject dashboardCanvasDimensionsObj;
 
-    //    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
-    //    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
-    //    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
-    //    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
     QJsonObject reportNameObj;
     QJsonObject reportBackgroundColorObj;
     QJsonObject reportLineColorObj;
@@ -1498,7 +1497,6 @@ void DashboardParamsModel::saveDashboard()
     dashboardParamsObject.insert("reportBackgroundColor", reportBackgroundColorObj);
     dashboardParamsObject.insert("reportLineColor", reportLineColorObj);
     dashboardParamsObject.insert("reportOpacity", reportOpacityObj);
-
 
     emit sendDashboardParams(dashboardParamsObject);
 }
