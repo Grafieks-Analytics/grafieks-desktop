@@ -19,11 +19,11 @@ import com.grafieks.singleton.constants 1.0
 Popup {
     id: popup
     width: 600
-    height: 500
+    height: 300
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 130
     padding: 0
     property int label_col : 135
 

@@ -23,7 +23,7 @@ Popup {
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 200
     padding: 0
     property int label_col : 135
 

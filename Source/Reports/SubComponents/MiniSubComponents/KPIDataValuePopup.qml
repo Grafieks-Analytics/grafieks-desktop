@@ -14,7 +14,7 @@ Popup {
     property int shapeHeight: 20
 
     width: 160
-    height: 250
+    height: 280
     x: 10
     modal: false
     visible: false
@@ -135,11 +135,31 @@ Popup {
         report_desiner_page.d3PropertyConfig['valueFontStylings'].fontSize = fontSize;
         report_desiner_page.reDrawChart();
     }
+         function openColorDialog(dialogName){
+        switch(dialogName){
+        case "dataValueKpi": dataValueDialogKpi.open();
+            break;
+        }
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
+ ColorDialog{
+        id: dataValueDialogKpi
 
+        onColorChanged:{
+
+             Constants.defaultDataLabelColor =  dataValueDialogKpi.color;
+
+if(!d3PropertyConfig.labelFontStylings){
+    d3PropertyConfig.labelFontStylings = {}
+}
+            d3PropertyConfig.labelFontStylings.dataValueColorKpi = dataValueDialogKpi.color+"";
+            reDrawChart();
+        }
+
+    }
     background: Rectangle{
         color: Constants.whiteColor
         border.color: Constants.darkThemeColor
@@ -176,7 +196,7 @@ Popup {
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: -8
                         anchors.top: parent.top
 
                         onCheckedChanged: toggleBold(checked);
@@ -211,7 +231,7 @@ Popup {
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: -8
                         anchors.top: parent.top
 
                         onCheckedChanged: toggleItalic(checked);
@@ -246,7 +266,7 @@ Popup {
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: -8
                         anchors.top: parent.top
 
                         onCheckedChanged: toggleUnderline(checked);
@@ -257,6 +277,26 @@ Popup {
                 }
 
             }
+             Row{
+                                width: parent.width
+                                Text {
+                                    text: qsTr("Font Color: ")
+                                    width: 118
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                Rectangle {
+                                    color: Constants.defaultDataLabelColor
+                                    border.color: Constants.borderBlueColor
+                                    width: 15
+                                    height: 15
+                                    MouseArea{
+                                        anchors.fill: parent
+                                        onClicked: openColorDialog("dataValueKpi");
+                                    }
+
+                                }
+                            }
+
 
             Rectangle{
                 height: 20
@@ -316,7 +356,7 @@ Popup {
                     height: 500
                     onCurrentValueChanged: updateFontSize(currentValue)
                     model: fontSizes
-                    currentIndex: 4
+                    currentIndex: 11
 
                     textRole: "size"
                     width: parent.width-2*leftMargin
