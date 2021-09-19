@@ -36,7 +36,6 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
 {
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
 
-    qDebug() << visibleColumns << this->allColumnVisibleMap.value(dashboardId);
     emit columnNamesChanged(visibleColumns);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
@@ -99,6 +98,83 @@ QString TableColumnsModel::findColumnType(QString columnName)
 void TableColumnsModel::redrawCharts(int dashboardId)
 {
     emit chartValuesChanged(dashboardId);
+}
+
+void TableColumnsModel::saveTableColumns()
+{
+
+    QJsonObject masterObj;
+
+    // filteredChartData
+    QJsonObject filteredChartDataTmp;
+    QList<int> filteredChartDataKeys = this->filteredChartData.keys();
+    for(int i = 0; i < filteredChartDataKeys.length(); i++){
+
+        QList<int> columnKeys = this->filteredChartData.value(i).keys();
+        QJsonObject tmp;
+
+        foreach(int colKey, columnKeys){
+            tmp.insert(QString::number(colKey), QJsonArray::fromStringList(this->reportChartData.value(i).value(colKey)));
+        }
+        filteredChartDataTmp.insert(QString::number(filteredChartDataKeys.at(i)), tmp);
+    }
+    masterObj.insert("reportChartData", filteredChartDataTmp);
+
+
+    // numericalList
+    masterObj.insert("numericalList", QJsonArray::fromStringList(this->numericalList));
+
+    // categoryList
+    masterObj.insert("categoryList", QJsonArray::fromStringList(this->categoryList));
+
+    // dateList
+    masterObj.insert("dateList", QJsonArray::fromStringList(this->dateList));
+
+    // allColumnVisibleMap
+    QJsonObject allColumnVisibleMapTmp;
+    QList<int> columnVisibleMapKeys = this->allColumnVisibleMap.keys();
+    for(int i = 0; i < columnVisibleMapKeys.length(); i++){
+
+        QList<QString> columnNameKeys = this->allColumnVisibleMap.value(i).keys();
+        QJsonObject tmp;
+
+        foreach(QString colKey, columnNameKeys){
+            tmp.insert(colKey, this->allColumnVisibleMap.value(i).value(colKey).toString());
+        }
+        allColumnVisibleMapTmp.insert(QString::number(columnVisibleMapKeys.at(i)), tmp);
+    }
+
+    masterObj.insert("allColumnVisibleMap", allColumnVisibleMapTmp);
+
+    // reportChartData
+    QJsonObject reportChartDataTmp;
+    QList<int> reportChartDataKeys = this->reportChartData.keys();
+    for(int i = 0; i < reportChartDataKeys.length(); i++){
+
+        QList<int> columnKeys = this->reportChartData.value(i).keys();
+        QJsonObject tmp;
+
+        foreach(int colKey, columnKeys){
+            tmp.insert(QString::number(colKey), QJsonArray::fromStringList(this->reportChartData.value(i).value(colKey)));
+        }
+        reportChartDataTmp.insert(QString::number(reportChartDataKeys.at(i)), tmp);
+    }
+    masterObj.insert("reportChartData", reportChartDataTmp);
+
+
+    // columnTypes
+    QJsonObject columnTypesTmp;
+    QStringList columnTypesList = this->columnTypes.keys();
+    for(int k = 0; k < columnTypesList.length(); k++){
+        columnTypesTmp.insert(columnTypesList.at(k), this->columnTypes.value(columnTypesList.at(k)));
+    }
+    masterObj.insert("columnTypes", columnTypesTmp);
+
+    // columnDataList
+    // This list is not required
+    // masterObj.insert("columnDataList", QJsonArray::fromStringList(columnDataList));
+
+    emit signalSaveTableColumns(masterObj);
 }
 
 void TableColumnsModel::addNewDashboard(int dashboardId)
@@ -250,8 +326,45 @@ void TableColumnsModel::generateColumnsForReader(duckdb::Connection *con)
     this->generateColumns(con);
 }
 
+void TableColumnsModel::getExtractTableColumns(QJsonObject tableColumnParams)
+{
+
+    qDebug() << Q_FUNC_INFO << tableColumnParams;
+    //    QMap<int, QMap<int, QStringList>> filteredChartData;
+    //    QMap<int, QStringList *> newChartData;
+    //    QMap<int, QString> newChartHeader;
+    //    QMap<int, QStringList> chartHeaderDetails;
+
+    //    QStringList numericalList;
+    //    QStringList categoryList;
+    //    QStringList dateList;
+    //    QMap<int, QVariantMap> allColumnVisibleMap;         // dashboardId - <columnName - columnType>
+    //    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    //    QMap<QString, QString> columnTypes;
+    //    QStringList columnDataList;
+
+    QJsonObject mainObj;
+    mainObj = tableColumnParams.value("allColumnVisibleMap").toObject();
+    QStringList dashboardIds = mainObj.keys();
+
+    foreach(QString dashboardId, dashboardIds){
+        QJsonObject childObj = mainObj.value(dashboardId).toObject();
+        QStringList childKeys = childObj.keys();
+
+        QVariantMap tmpMap;
+        foreach(QString key, childKeys){
+           tmpMap.insert(key, childObj.value(key).toString());
+        }
+
+        this->allColumnVisibleMap.insert(dashboardId.toInt(), tmpMap);
+        this->applyColumnVisibility(dashboardId.toInt());
+    }
+}
+
+
 void TableColumnsModel::generateColumns(duckdb::Connection *con)
 {
+
     // Fetch data from duckdb
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
