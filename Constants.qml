@@ -48,19 +48,19 @@ QtObject {
     property string excelType: "EXCEL"
 
     // ODBC Driver matching names
-    property string mysqlOdbc: qsTr("mysql")
-    property string postgresOdbc: qsTr("postgres")
+    property string mysqlOdbc: qsTr("MySQL")
+    property string postgresOdbc: qsTr("PostgreSQL")
     property string accessOdbc: qsTr("access")
     property string excelOdbc: qsTr("excel")
     property string hiveOdbc: qsTr("hive")
-    property string impalaOdbc: qsTr("impala")
+    property string impalaOdbc: qsTr("Apache Impala")
     property string mongoOdbc: qsTr("mongo")
-    property string mssqlOdbc: qsTr("sql server")
+    property string mssqlOdbc: qsTr("Microsoft SQL Server")
     property string oracleOdbc: qsTr("oracle")
     property string redshiftOdbc: qsTr("redshift")
-    property string sqliteOdbc: qsTr("sqlite")
+    property string sqliteOdbc: qsTr("SQLite")
     property string snowflakeOdbc: qsTr("snowflake")
-    property string teradataOdbc: qsTr("teradata")
+    property string teradataOdbc: qsTr("Teradata")
 
     // Online Storage Types
     // These values are matched with Constants.h file
@@ -253,6 +253,7 @@ QtObject {
     property color defaultYAxisTickColor: "#000000"
     property color defaultXAxisLabelColor: "#000000"
     property color defaultYAxisLabelColor: "#000000"
+    property color defaultDataLabelColor: "#000000"
     
     property string categoricalItemType: "categorical"
     property string numericalItemType: "numerical"

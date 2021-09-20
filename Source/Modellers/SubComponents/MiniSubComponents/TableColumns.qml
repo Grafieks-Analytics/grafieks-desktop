@@ -90,7 +90,8 @@ Item {
         delegate: Rectangle{
             id: innerListView
             height: 25
-            width: 100
+            width: item_querymodeller.width-80
+
 
 
             CheckBoxTpl{
@@ -101,7 +102,7 @@ Item {
                 parent_dimension: 12
 
                 onClicked: hideColumnSelection(checked, colName, tableName)
-            }
+            }       
 
             Image {
                 id: toggleMenuIcon

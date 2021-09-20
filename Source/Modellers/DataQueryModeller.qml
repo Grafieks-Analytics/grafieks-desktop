@@ -616,7 +616,7 @@ Page {
 
         Rectangle {
             id: dragRect
-            width: 200
+            width: item_querymodeller.width-10
             height: 30
 
 
