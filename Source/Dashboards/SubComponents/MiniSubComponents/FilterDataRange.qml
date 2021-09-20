@@ -23,10 +23,19 @@ Item {
 
         rangeSlider.from = Math.min(...modelData)
         rangeSlider.to = Math.max(...modelData)
-        rangeSlider.first.value = Math.min(...modelData)
-        rangeSlider.second.value = Math.max(...modelData)
+
         value1 = Math.min(...modelData)
         value2 = Math.max(...modelData)
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            rangeSlider.first.value = previousCheckValues[0]
+            rangeSlider.second.value = previousCheckValues[1]
+        } else {
+            rangeSlider.first.value = Math.min(...modelData)
+            rangeSlider.second.value = Math.max(...modelData)
+        }
+
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
