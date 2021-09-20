@@ -864,6 +864,46 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int widgetId)
     return output;
 }
 
+void DashboardParamsModel::setDashboardReportUrl(int dashboardId, int reportId, QUrl url)
+{
+    QMap<int, QString> reportUrl;
+
+    if (this->dashboardReportUrl.value(dashboardId).isEmpty())
+    {
+
+        reportUrl.insert(reportId, url.toString());
+        this->dashboardReportUrl.insert(dashboardId, reportUrl);
+    }
+    else
+    {
+
+        reportUrl = this->dashboardReportUrl.value(dashboardId);
+        reportUrl[reportId] = url.toString();
+
+        this->dashboardReportUrl.insert(dashboardId, reportUrl);
+    }
+
+    emit reportUrlChanged(dashboardId, reportId, url.toString());
+}
+
+QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
+{
+    QUrl output;
+    QMap<int, QString> reportUrl;
+
+    if (!this->dashboardReportUrl.value(dashboardId).isEmpty())
+    {
+
+        reportUrl = this->dashboardReportUrl.value(dashboardId);
+        if (reportUrl.contains(reportId))
+        {
+            output = reportUrl.value(reportId);
+        }
+    }
+
+    return output;
+}
+
 //void DashboardParamsModel::setSelectAll(bool status, QString columnName, int dashboardId)
 //{
 //    emit selectAllChanged(status, columnName, dashboardId);
@@ -1365,8 +1405,10 @@ void DashboardParamsModel::saveDashboard()
 
         // dashboardWidgetTypeMap
         QJsonObject dashboardWidgetTypeMapTmpObj;
-        foreach(int widgetId, this->dashboardWidgetTypeMap.value(dashboardId).keys())
+        foreach(int widgetId, this->dashboardWidgetTypeMap.value(dashboardId).keys()){
             dashboardWidgetTypeMapTmpObj.insert(QString::number(widgetId), this->dashboardWidgetTypeMap.value(dashboardId).value(widgetId));
+            qDebug() << "Widget type" << this->dashboardWidgetTypeMap.value(dashboardId).value(widgetId);
+        }
 
         dashboardWidgetTypeMapObj.insert(QString::number(dashboardId), dashboardWidgetTypeMapTmpObj);
 
