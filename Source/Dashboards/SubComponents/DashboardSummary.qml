@@ -113,6 +113,7 @@ Rectangle {
                     console.log("Rep prop", i, j, JSON.stringify(reportProperties), DashboardParamsModel.getReportZOrder(i,j), DashboardParamsModel.getReportName(i, j),  DashboardParamsModel.getDashboardWidgetCoordinates(i, j))
                     const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
+                    DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
                     counter++;
                 }
 

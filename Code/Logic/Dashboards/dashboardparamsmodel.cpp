@@ -1304,16 +1304,6 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         emit reportLineColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
     }
 
-    QList<int> reportLineKeys = this->reportLineColor.value(dashboardIds.at(0).toInt()).keys();
-    foreach(int widgetId, reportLineKeys){
-        emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
-    }
-
-    QList<int> reportUrlKeys = this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).keys();
-    foreach(int widgetId, reportUrlKeys){
-        qDebug() << "Firing" << dashboardIds.at(0).toInt() <<  widgetId <<  this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString();
-        emit reportUrlChanged(dashboardIds.at(0).toInt(), widgetId, this->dashboardWidgetUrl.value(dashboardIds.at(0).toInt()).value(widgetId).toString());
-    }
 
 }
 
