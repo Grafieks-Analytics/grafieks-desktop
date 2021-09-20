@@ -54,11 +54,11 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
-    defaultMarkerStatus: false,
+    defaultMarkerStatus: true,
     chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,
-    horizontalChartType: constants.chartType.STANDARD,
-    // horizontalChartType: constants.chartType.FIT_HEIGHT,
+    // horizontalChartType: constants.chartType.STANDARD,
+    horizontalChartType: constants.chartType.FIT_HEIGHT,
     standardThresholdWidth: 100,
     standardThresholdHeight: 100,
     fontSize: 12,
@@ -80,29 +80,28 @@ const defaultD3Config = {
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
         defaultRowAlternateStatus: true,
-        defaultBatchsize: 50
+        defaultBatchsize: 50,
     },
     defaultDynamicHeight: false,
     defaultBottomPinch: 1,
-    defaultKPIStyling:{
+    defaultKPIStyling: {
         value: {
             fontSize: 12,
             color: "#000",
             bold: false,
             italic: false,
             underline: false,
-            fontFamily: "Arial"
+            fontFamily: "Arial",
         },
-        label:{
+        label: {
             fontSize: 12,
             color: "#000",
             bold: false,
             italic: false,
             underline: false,
-            fontFamily: "Arial"
-        }
-
-    }
+            fontFamily: "Arial",
+        },
+    },
 };
 const markerShapeConfig = {
     circle: {

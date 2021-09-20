@@ -5,7 +5,7 @@
 /////////// Inspired by the code of alangrafu ///////////
 /////////////////////////////////////////////////////////
 
-function RadarChart(id, data, options) {
+function RadarChart(id, data, options,label) {
     var cfg = {
         w: 600, //Width of the circle
         h: 600, //Height of the circle
@@ -22,7 +22,8 @@ function RadarChart(id, data, options) {
         color: d3.scale.category10(), //Color function
     };
 
-    console.log(options)
+    // console.log(options)
+    // console.log(label)
     //Put all of the options into a variable called cfg
     if ("undefined" !== typeof options) {
         for (var i in options) {
@@ -334,12 +335,36 @@ function RadarChart(id, data, options) {
 
         .on("mouseover mousemove", function (d, i, j) {
             d3.select("#tooltip")
-                .style("left", mouseX + "px")
-                .style("top", mouseY + "px")
+                .style("left", mouseX+10 + "px")
+                .style("top", mouseY-60 + "px")
                 .style("display", "block")
                 .style("z-index", 1000)
                 .style("postion", "absolute")
-                .html(d.axis + " : " + d.value);
+                // .html(d.axis + " : " + d.value);
+                .html(function () {
+                    return (
+                        "<div class='arrowTooltip'></div>" +
+                        "<span style='color:grey;''>" +
+                        label[0] +
+                        ":&nbsp;&nbsp;" +
+                        "</span>" +
+                        "<span style='float: right;'>" +
+                        d.axis +
+                        "</span>" +
+                        "<br/> <br/>" +
+                        "<span style='color:grey;''>" +
+                        label[1] +
+                        ":" +
+                        "</span>" +
+                        "<span style='float: right;margin-left: 15px;'>" +
+                        d.value +
+                        "</span>"
+                    );
+                });
+            d3.select(".arrowTooltip").attr(
+                "style",
+                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+            );
 
             d3.select(this).style("fill", cfg.color(j));
         })
