@@ -109,7 +109,6 @@ Item{
             // this signal is emitted whenever setDashboard cpp function is called
             // setDashboard Report is called whenever a new report is dropped in dashboard area
 
-            console.log("DASH REPOS")
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportIdCpp = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){

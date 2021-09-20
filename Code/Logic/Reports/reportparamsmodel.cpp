@@ -1100,11 +1100,6 @@ void ReportParamsModel::setReportId(int reportId)
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
 
-    // Also emit the following filters
-    // to update the filters list in reports
-    emit categoricalFilterChanged(this->categoricalFilters);
-    emit dateFilterChanged(this->dateFilters);
-    emit numericalFilterChanged(this->numericalFilters);
 }
 
 void ReportParamsModel::setReportTitle(QString reportTitle)
@@ -1516,6 +1511,12 @@ void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterDat
     this->filterSubCategoryMap.insert(filterId, filterData.value("subCategory").toString());
     this->dateFormatMap.insert(filterId, filterData.value("dateFormat").toInt());
     this->actualDateValues.insert(filterId, filterData.value("actualDateValues").toStringList());
+
+    // Also emit the following filters
+    // to update the filters list in reports
+    emit categoricalFilterChanged(this->categoricalFilters);
+    emit dateFilterChanged(this->dateFilters);
+    emit numericalFilterChanged(this->numericalFilters);
 }
 
 void ReportParamsModel::setChartTitle(QString chartTitle)
