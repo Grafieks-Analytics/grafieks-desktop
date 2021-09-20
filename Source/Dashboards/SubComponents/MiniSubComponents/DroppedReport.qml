@@ -103,6 +103,8 @@ Item{
             } else{
                 newItem.visible = false
             }
+
+            reDrawChart();
         }
 
         function onReportUrlChanged(refDashboardId, refReportId, url){

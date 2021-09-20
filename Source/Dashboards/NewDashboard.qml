@@ -85,8 +85,6 @@ Page {
                 is_dashboard_blank = 0
             }
         }
-
-
     }
 
     Connections{
