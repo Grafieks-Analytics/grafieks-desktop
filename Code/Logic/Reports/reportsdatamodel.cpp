@@ -377,8 +377,6 @@ void ReportsDataModel::getReportId(int reportId)
     }
     this->reportChartData.insert(this->reportId, copiedChartData);
 
-    emit reportWhereConditions(this->whereConditions, this->reportId);
-
 }
 
 void ReportsDataModel::generateColumnsForExtract()

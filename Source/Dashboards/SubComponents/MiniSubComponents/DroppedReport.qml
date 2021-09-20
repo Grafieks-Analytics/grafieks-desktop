@@ -103,13 +103,14 @@ Item{
             } else{
                 newItem.visible = false
             }
+
+            reDrawChart();
         }
 
         function onReportUrlChanged(refDashboardId, refReportId, url){
             // this signal is emitted whenever setDashboard cpp function is called
             // setDashboard Report is called whenever a new report is dropped in dashboard area
 
-            console.log("DASH REPOS")
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportIdCpp = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
@@ -677,7 +678,7 @@ Item{
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
-                ChartsModel.getBarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0]);
+                ChartsModel.getBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0]);
 
                 // datavalues is a global property and set using connections
                 // due to multi threading
@@ -685,15 +686,15 @@ Item{
                 break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
-                ChartsModel.getBarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
 
                 break;
             case Constants.horizontalStackedBarChartTitle:
-                ChartsModel.getStackedBarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
+                ChartsModel.getStackedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                ChartsModel.getStackedBarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                ChartsModel.getStackedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalBarGroupedChartTitle:
                 console.log('horizontalBarGroupedChart chart!', yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
@@ -705,7 +706,7 @@ Item{
                     // colorListModel.clear();
                     colorByData = [];
                 }
-                ChartsModel.getNewGroupedBarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
+                ChartsModel.getNewGroupedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
                 break;
             case Constants.groupBarChartTitle:
                 var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
@@ -720,7 +721,7 @@ Item{
                     ReportParamsModel.setLastDropped(null);
                 }
                 console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-                ChartsModel.getNewGroupedBarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                ChartsModel.getNewGroupedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
 
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
@@ -728,81 +729,81 @@ Item{
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
                 // Area - xAxis(String), yAxis(String)
-                ChartsModel.getAreaChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
                 console.log('Stacked Area Chart')
                 console.log('Colour By columnName',columnName)
-                ChartsModel.getStackedAreaChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                ChartsModel.getStackedAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
-                ChartsModel.getLineChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")
-                ChartsModel.getLineChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0],'Sum');
+                ChartsModel.getLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0],'Sum');
                 break;
             case Constants.multiLineChartTitle:
                 console.log(Constants.multiLineChartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.horizontalMultiLineChartTitle:
                 console.log(chartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
                 console.log("DONUT/PIE CLICKED")
-                ChartsModel.getPieChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getPieChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
                 console.log("FUNNEL CLICKED")
-                ChartsModel.getFunnelChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getFunnelChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.radarChartTitle:
                 console.log("RADAR CLICKED")
-                ChartsModel.getRadarChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getRadarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED")
-                ChartsModel.getScatterChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                ChartsModel.getScatterChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
-                ChartsModel.getTreeChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                ChartsModel.getTreeChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.treeMapChartTitle:
-                ChartsModel.getTreeMapChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                ChartsModel.getTreeMapChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
-                ChartsModel.getHeatMapChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
+                ChartsModel.getHeatMapChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED");
-                ChartsModel.getSunburstChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                ChartsModel.getSunburstChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
-                ChartsModel.getWaterfallChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getWaterfallChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
                 console.log('Waterfall Data values',dataValues);
                 break;
             case Constants.gaugeChartTitle:
                 console.log("GAUGE CLICKED")
                 var row3ColumnsArray = Array.from(row3Columns);
-                ChartsModel.getGaugeChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, row3ColumnsArray[0] ,'Sum');
+                ChartsModel.getGaugeChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, row3ColumnsArray[0] ,'Sum');
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
-                ChartsModel.getSankeyChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
+                ChartsModel.getSankeyChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
-                ChartsModel.getKPIChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, xAxisColumns[0]);
+                ChartsModel.getKPIChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
                 console.log("TABLE CLICKED")
@@ -811,7 +812,7 @@ Item{
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
                 //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
-                ChartsModel.getTableChartValues(chartId, newItem.dashboardId, Constants.dashboardScreen, ["state", "district"], "population",'Sum');
+                ChartsModel.getTableChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, ["state", "district"], "population",'Sum');
                 break;
             }
             if(!dataValues){

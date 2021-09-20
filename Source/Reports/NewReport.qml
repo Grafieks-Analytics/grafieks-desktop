@@ -164,7 +164,7 @@ Page {
                 setValuesOnEditReport(reportId);
             }else{
                 addReportButton.text = "Add";
-                ReportParamsModel.setReportId(reportIdMain);
+//                ReportParamsModel.setReportId(reportIdMain);
                 
                 ReportParamsModel.setChartType(Constants.barChartTitle);
                 ReportParamsModel.setChartTitle(Constants.barChartTitle);
@@ -1062,7 +1062,6 @@ Page {
         ReportParamsModel.setLastDropped(null);
 
         report_title_text.text = "";
-        reportIdMain = 0;
 
         // Clear all the list models
         xAxisListModel.clear();
@@ -1260,10 +1259,10 @@ Page {
     function addReport(titleName){
 
         // Add report to dashboard
-       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
-            reportIdMain = generateReportId();
-            ReportParamsModel.setReportId(reportIdMain);
-       }
+//       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
+//            reportIdMain = generateReportId();
+//            ReportParamsModel.setReportId(reportIdMain);
+//       }
         
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
@@ -1286,7 +1285,6 @@ Page {
             ReportParamsModel.setReportTitle(titleName)
         }
 
-        console.log("ANY", chartTitle, JSON.stringify(d3PropertyConfig), report_desiner_page.chartUrl, Constants.xAxisName)
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
