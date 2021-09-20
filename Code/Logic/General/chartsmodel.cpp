@@ -47,8 +47,6 @@ void ChartsModel::getBarChartValues(int reportId, int dashboardId, int chartSour
 {
     this->callThread();
 
-    qDebug() << "" << reportId << dashboardId << chartSource;
-
     this->currentReportId = reportId;
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;

@@ -1067,7 +1067,6 @@ Page {
         ReportParamsModel.setLastDropped(null);
 
         report_title_text.text = "";
-        reportIdMain = 0;
 
         // Clear all the list models
         xAxisListModel.clear();
