@@ -417,6 +417,7 @@ void ReportParamsModel::removeFilter(int filterId, int reportId, QString filterT
     intermediateMasterReportsMap.remove(filterId);
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
     emit masterReportFiltersChanged(this->masterReportFilters.value(reportId).count());
+    emit reportFilterChanged(intermediateMasterReportsMap, reportId);
 
     // This is necessary to reset the filter values in chartsModel after deleting a filter
     // Else we cannot restore the deleted data in filter selection list
