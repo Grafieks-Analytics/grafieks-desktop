@@ -471,9 +471,22 @@ void ReportParamsModel::restoreMasterReportFilters(int reportId)
     QMap<int, QVariantMap> masterValues = this->masterReportFilters.value(reportId);
     QList<int> keys = masterValues.keys();
 
+    this->categoricalFilters.clear();
+    this->dateFilters.clear();
+    this->numericalFilters.clear();
+
     foreach(int filterId, keys){
         restoreMasterFilters(filterId, masterValues.value(filterId));
     }
+
+    // Also emit the following filters
+    // to update the filters list in reports
+    emit categoricalFilterChanged(this->categoricalFilters);
+    emit dateFilterChanged(this->dateFilters);
+    emit numericalFilterChanged(this->numericalFilters);
+
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
 }
 
 void ReportParamsModel::deleteMasterReportFilters(int reportId, bool deleteAll)
@@ -1483,11 +1496,6 @@ QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
 
 void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterData)
 {
-    this->categoricalFilters.clear();
-    this->dateFilters.clear();
-    this->numericalFilters.clear();
-
-    qDebug() << "DUMP" << filterId << m_reportId << filterData;
 
     if(filterData.value("section") == Constants::categoricalType){
         this->categoricalFilters.append(filterId);
@@ -1498,7 +1506,7 @@ void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterDat
     }
 
     QStringList columnTableList;
-    columnTableList << filterData.value("columnName").toString() << filterData.value("tableName").toString();
+    columnTableList << filterData.value("columnName").toStringList().at(0) << filterData.value("columnName").toStringList().at(1);
     this->filterColumnMap.insert(filterId, columnTableList);
     this->filterValueMap.insert(filterId, filterData.value("filterValue").toList());
     this->filterRelationMap.insert(filterId, filterData.value("filterRelation").toString());
@@ -1512,11 +1520,6 @@ void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterDat
     this->dateFormatMap.insert(filterId, filterData.value("dateFormat").toInt());
     this->actualDateValues.insert(filterId, filterData.value("actualDateValues").toStringList());
 
-    // Also emit the following filters
-    // to update the filters list in reports
-    emit categoricalFilterChanged(this->categoricalFilters);
-    emit dateFilterChanged(this->dateFilters);
-    emit numericalFilterChanged(this->numericalFilters);
 }
 
 void ReportParamsModel::setChartTitle(QString chartTitle)
