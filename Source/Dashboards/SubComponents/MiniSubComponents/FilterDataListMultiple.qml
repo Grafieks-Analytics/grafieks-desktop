@@ -50,7 +50,6 @@ Item {
 
     function onMultiSelectCheckboxSelected(modelData,checked, index){
 
-        console.log("MODAL ", modelData, checked, index)
         if(checked === true){
             // Start pushing the individual checked item in the array
             DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
