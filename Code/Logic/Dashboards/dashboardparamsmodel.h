@@ -205,7 +205,7 @@ public slots:
     void setCurrentColumnType(QString currentColumnType);
 
     // Filter column names
-    void getColumnNames(QStringList columnNames);
+    void getColumnNames(int dashboardId, QStringList columnNames);
     void setCurrentSelectedColumn(QString currentSelectedColumn);
 
     // Receive extract workbook data params
