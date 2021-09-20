@@ -114,11 +114,14 @@ Item{
         console.log('global y',globalCordinates.y)
 
         let currentDashboard = DashboardParamsModel.currentDashboard
-        let currentReport = DashboardParamsModel.currentReport + 1
+//        let currentReport = DashboardParamsModel.currentReport + 1
+        let currentReport = 1
 
         console.log(currentDashboard, currentReport, "CURRENT")
 
-        let path = GeneralParamsModel.getTmpPath() + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
+        let path = GeneralParamsModel.getTmpPath()  + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
+       console.log("PATHA1", path)
+//        let path = GeneralParamsModel.getTmpPath() + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
         webengine.url = "file:" + path
     }
 

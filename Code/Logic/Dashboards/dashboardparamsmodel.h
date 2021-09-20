@@ -28,6 +28,7 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
 
     QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
+    QMap<int, QMap<int, QString>> dashboardReportUrl; // <dashboardId, <reportId, url of image/text>>
 
 
     // Filter parameters
@@ -166,6 +167,10 @@ public:
 
     Q_INVOKABLE void setReportOpacity(int dashboardId, int widgetId, int percent);
     Q_INVOKABLE int getReportOpacity(int dashboardId, int widgetId);
+
+    Q_INVOKABLE void setDashboardReportUrl(int dashboardId, int reportId, QUrl url);
+    Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
+
 
     // Save and read files
 
