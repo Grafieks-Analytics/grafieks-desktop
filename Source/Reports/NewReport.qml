@@ -446,13 +446,8 @@ Page {
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
             console.log("testdata",dataValues)
-            
-            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
-            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
-            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
@@ -460,8 +455,6 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
-            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
-            dataValues = JSON.stringify(dataValues);
             console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
             break;

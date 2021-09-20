@@ -477,7 +477,7 @@ Item{
     Component{
         id: styleComponent
         CustomizeStyleMenu{
-            height: 120
+            height: 40
             width: listViewElem.width
         }
     }
