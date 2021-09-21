@@ -68,6 +68,7 @@ void WorkbookProcessor::processExtract()
 void WorkbookProcessor::saveWorkbooks(QString filePath)
 {
     QJsonObject finalObj;
+
     finalObj.insert("reportParams", this->reportParams);
     finalObj.insert("dashboardParams", this->dashboardParams);
     finalObj.insert("tableColumns", this->tableColumnParams);
@@ -91,6 +92,28 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     }
 
 
+    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QDir directory(tmpFilePath);
+    QVariantMap filesMap;
+
+    if(directory.exists()){
+        QStringList files = directory.entryList();
+
+        foreach(QString file, files){
+            if(file != "." && file != ".."){
+                QFile fi(tmpFilePath + file);
+                fi.open(QIODevice::ReadOnly);
+                QByteArray ba;
+                ba = fi.readAll().toBase64();
+
+                filesMap.insert(file, ba.data());
+            }
+        }
+
+    }
+
+    finalObj.insert("files", QJsonObject::fromVariantMap(filesMap));
+
     QJsonDocument doc(finalObj);
     QByteArray docByteArray = doc.toJson(QJsonDocument::Compact);
 
@@ -100,8 +123,10 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     if (!fileWorkbook.open(QIODevice::WriteOnly)){
         qDebug() << Q_FUNC_INFO << " Could not open file for writing" << fileWorkbook.errorString();
     } else {
-        QDataStream out(&fileWorkbook);
-        out << docByteArray;
+       QDataStream out(&fileWorkbook);
+       out << docByteArray;
+
+        // fileWorkbook.write(docByteArray);
 
         fileWorkbook.flush();
         fileWorkbook.close();

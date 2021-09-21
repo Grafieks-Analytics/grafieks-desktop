@@ -432,6 +432,13 @@ void DashboardParamsModel::setDashboardWidgetTypeMap(int dashboardId, int widget
 
         this->dashboardWidgetTypeMap.insert(dashboardId, reportTypeMap);
     }
+
+    // If report type is text type, then save here specially
+    if(reportType == Constants::reportTypeText){
+        QUrl finalFileName;
+        finalFileName = QString::number(this->currentDashboard()) + "_" + QString::number(this->currentReport()) + "_" + generalParamsModel.getFileToken() + ".html";
+        this->setDashboardWidgetUrl(this->currentDashboard(), this->currentReport(), finalFileName);
+    }
 }
 
 int DashboardParamsModel::getDashboardWidgetTypeMap(int dashboardId, int widgetId)

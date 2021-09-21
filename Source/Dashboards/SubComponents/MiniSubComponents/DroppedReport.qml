@@ -1093,12 +1093,7 @@ Item{
             onLoadingChanged: onChartLoaded(loadRequest)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
-            Component.onCompleted: {
-                console.log("LOGGGER")
 
-                 onChartLoaded(loadRequest)
-                console.log("LOGGGER==============================")
-            }
 
             //                    onLoadingChanged: {
 
