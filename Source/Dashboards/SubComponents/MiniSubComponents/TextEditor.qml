@@ -98,10 +98,16 @@ Rectangle{
 
         function onReportBackgroundColorChanged(dashboardId, reportId, color){
 
-            let currentDashboard = DashboardParamsModel.currentDashboard
-            let currentReport = DashboardParamsModel.currentReport
-            let fileToken = GeneralParamsModel.getFileToken()
-            let fileName = dashboardId + "_" + reportId + "_" + fileToken
+            var fileName
+            var currentDashboard = DashboardParamsModel.currentDashboard
+            var currentReport = DashboardParamsModel.currentReport
+            if(GeneralParamsModel.isWorkbookInEditMode() === false){
+
+                let fileToken = GeneralParamsModel.getFileToken()
+                fileName = dashboardId + "_" + reportId + "_" + fileToken
+            } else {
+                fileName = DashboardParamsModel.getDashboardWidgetUrl(dashboardId, reportId)
+            }
 
             if(currentDashboard === dashboardId && currentReport === reportId){
                 document.backgroundColor = color
@@ -122,6 +128,16 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        if(GeneralParamsModel.isWorkbookInEditMode()){
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+
+            const textDocumentParams = DashboardParamsModel.getTextReportParametersMap(dashboardId, reportId)
+            document.setText(textDocumentParams.text)
+            document.setBold(textDocumentParams.bold)
+        }
+    }
 
     function copyText(){
         textArea.copy()
@@ -129,13 +145,36 @@ Rectangle{
 
     function slotSaveDocToHtml(){
 
-        let dashboardId = DashboardParamsModel.currentDashboard
-        let reportId = DashboardParamsModel.currentReport
-        let fileToken = GeneralParamsModel.getFileToken()
-        let fileName = dashboardId + "_" + reportId + "_" + fileToken
+        var fileName
+        var dashboardId = DashboardParamsModel.currentDashboard
+        var reportId = DashboardParamsModel.currentReport
+
+        if(GeneralParamsModel.isWorkbookInEditMode() === false){
+
+            let fileToken = GeneralParamsModel.getFileToken()
+            fileName = dashboardId + "_" + reportId + "_" + fileToken
+        } else {
+            fileName = DashboardParamsModel.getDashboardWidgetUrl(dashboardId, reportId)
+        }
 
         document.saveTmpFile(fileName)
         DashboardParamsModel.setDashboardReportUrl(dashboardId, reportId, fileName)
+
+
+        // Save other params
+        const textDocumentParams = {
+            "text" : textArea.getText(0, document.text.length),
+            "bold" : document.bold,
+            "alignment" : document.alignment,
+            "italic" : document.italic,
+            "underline" : document.underline,
+            "color" : colorDialog.color,
+            "font-family" : document.fontFamily,
+            "font-size" : document.fontSize
+        }
+
+        DashboardParamsModel.setTextReportParametersMap(dashboardId, reportId, textDocumentParams)
+
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -405,6 +444,7 @@ Rectangle{
             textFormat: Qt.RichText
             Component.onCompleted: forceActiveFocus()
             backgroundVisible: false
+
         }
 
         MessageDialog {

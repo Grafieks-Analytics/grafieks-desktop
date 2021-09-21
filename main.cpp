@@ -78,6 +78,7 @@
 
 int Statics::isFreeTier;
 QString Statics::tmpIconPath;
+bool Statics::editMode;
 
 QString Statics::currentDbName;
 int Statics::currentDbIntType;
@@ -246,6 +247,7 @@ int main(int argc, char *argv[])
     Statics::freeLimitExtractSizeExceeded = false;
     Statics::isFreeTier = 1; // 1 = true (Free Tier); 0 = false (Pro)
     Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
+    Statics::editMode = false;
     /***********************************************************************************************************************/
     // Static initializations Ends
 
@@ -493,6 +495,7 @@ int main(int argc, char *argv[])
 //            liveProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::workbookExt){
             workbookProcessor.setArgumentsByFile(fileToRead);
+
         } else {
             qDebug() << "Unknown file";
         }

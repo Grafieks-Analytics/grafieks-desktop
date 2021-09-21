@@ -73,9 +73,7 @@ Popup {
 
 
     Component.onCompleted: {
-        console.log('Position x',editorPopup.parent.x)
-        console.log('Position y',editorPopup.parent.y)
-        console.log('Width',editorPopup.parent.parent.width)
+
         if(editorPopup.parent.x < 260){
             editorPopup.x = 0
             console.log('Changing left position')
@@ -233,9 +231,6 @@ Popup {
                 onClicked: saveText()
 
             }
-
         }
-
     }
-
 }
