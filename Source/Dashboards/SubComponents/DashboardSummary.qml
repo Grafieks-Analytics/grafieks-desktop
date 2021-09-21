@@ -83,6 +83,7 @@ Rectangle {
 
         function onGenerateWorkbookReports(){
 
+            var reportTypeArray = ["blank", "text", "image", "report"]
             is_dashboard_blank = is_dashboard_blank + 1
 
             var allDashboardsObj = DashboardParamsModel.fetchAllDashboards()
@@ -90,6 +91,7 @@ Rectangle {
 
             for(var i = 0; i < allDashboardKeys.length; i++){
                 var reportsInFirstDashboard = DashboardParamsModel.fetchReportsInDashboard(allDashboardKeys[i])
+                var reportTypes = DashboardParamsModel.fetchAllReportTypeMap(i);
 
                 for(var j = 1; j <= reportsInFirstDashboard.length; j++){
                     var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)
@@ -103,17 +105,26 @@ Rectangle {
                     dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
 
                     // Set the last container type param
-                    DashboardParamsModel.setLastContainerType("report");
+                    // report type - chart, image, blank, text
+                    DashboardParamsModel.setLastContainerType(reportTypeArray[reportTypes[j]]);
 
-                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter};
+                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j)};
                     objectJson.reportId = j;
                     rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
                     const reportProperties = ReportParamsModel.getReport(j);
-                    console.log("Rep prop", i, j, JSON.stringify(reportProperties), DashboardParamsModel.getReportZOrder(i,j), DashboardParamsModel.getReportName(i, j),  DashboardParamsModel.getDashboardWidgetCoordinates(i, j))
-                    const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
-                    DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+
+                    // ["blank", "text", "image", "report"]
+                    if(reportTypeArray[reportTypes[j]] === reportTypeArray[1]){
+                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[2]){
+                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[3]) {
+                        const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
+                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+                    }
+
                     counter++;
                 }
 

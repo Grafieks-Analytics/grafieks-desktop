@@ -8,12 +8,14 @@ WorkbookProcessor::WorkbookProcessor(GeneralParamsModel *gpm, QObject *parent) :
 void WorkbookProcessor::setArgumentsFromMenu(QString filePath)
 {
     this->filePath = filePath;
+    Statics::editMode = true;
     this->processExtract();
 }
 
 void WorkbookProcessor::setArgumentsByFile(QString filePath)
 {
     this->filePath = filePath;
+    Statics::editMode = true;
     this->receivedArgument = true;
 }
 

@@ -3,6 +3,7 @@
 
 DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 {
+    m_currentReport = 0;
 
     this->setDashboardCount(1);
     this->setCurrentDashboard(0);
@@ -498,6 +499,26 @@ QUrl DashboardParamsModel::getDashboardWidgetUrl(int dashboardId, int widgetId)
     }
 
     return output;
+}
+
+void DashboardParamsModel::setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams)
+{
+    QMap<int, QVariantMap> tmp;
+    tmp = this->textReportParametersMap.value(dashboardId);
+
+    if(tmp.contains(widgetId)){
+        tmp[widgetId] = textReportParams;
+    } else {
+        tmp.insert(widgetId, textReportParams);
+    }
+
+    this->textReportParametersMap.insert(dashboardId, tmp);
+    qDebug() << this->textReportParametersMap;
+}
+
+QVariant DashboardParamsModel::getTextReportParametersMap(int dashboardId, int widgetId)
+{
+    return this->textReportParametersMap.value(dashboardId).value(widgetId);
 }
 
 void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bool status)
