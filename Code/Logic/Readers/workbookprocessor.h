@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QDataStream>
 #include <QFile>
+#include <QByteArray>
 #include <QDir>
 #include <QFileInfo>
 
