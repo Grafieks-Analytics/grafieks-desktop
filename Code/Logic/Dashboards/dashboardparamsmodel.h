@@ -14,6 +14,7 @@
 #include <QDebug>
 
 #include "../../constants.h"
+#include "../General/generalparamsmodel.h"
 
 class DashboardParamsModel: public QObject
 {
@@ -81,6 +82,8 @@ class DashboardParamsModel: public QObject
     QString m_currentColumnType;
 
     QString m_currentSelectedColumn;
+
+    GeneralParamsModel generalParamsModel;
 
 
 

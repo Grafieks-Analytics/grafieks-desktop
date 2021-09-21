@@ -136,8 +136,6 @@ Rectangle {
     function onDropAreaEntered(drag){
 
         dashboardArea.color = Constants.dropHighlightColor
-        //        console.log("Entered", currentPoint.x, listViewElem.itemName)
-        console.log("droparaea",dropArea.height,dropArea.width)
     }
 
     function onDropAreaDropped(drag){
@@ -152,21 +150,19 @@ Rectangle {
 
         let reportType = 0;
         let draggedItem = listViewElem.itemName.toLocaleLowerCase();
-//        console.log("Diadem", draggedItem)
 
+        switch(listViewElem.itemName){
 
-        switch(listViewElem.itemType){
-
-        case "blank":
+        case "Blank":
             reportType = Constants.reportTypeBlank
             break;
-        case "text":
+        case "Text":
             reportType = Constants.reportTypeText
             break;
-        case "image":
+        case "Image":
             reportType = Constants.reportTypeImage
             break;
-        case "chart":
+        default:
             reportType = Constants.reportTypeChart
             break;
         }
@@ -190,7 +186,8 @@ Rectangle {
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
-        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+        if(reportType === Constants.reportTypeChart)
+            DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);
