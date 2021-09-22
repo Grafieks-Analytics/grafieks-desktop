@@ -7,12 +7,36 @@ import io.qt.examples.texteditor 1.0
 import com.grafieks.singleton.constants 1.0
 
 Rectangle{
+    id: textEditor
     width: parent.width
     height: parent.height
 
     color: Constants.themeColor
 
+    property alias widgetReportId: textEditor.reportId
+    property alias widgetDashboardId : textEditor.dashboardId
 
+    property var reportId;
+    property var dashboardId
+
+    onDashboardIdChanged: {
+        if(GeneralParamsModel.isWorkbookInEditMode()){
+            let dashboardId = textEditor.dashboardId
+            let reportId = textEditor.reportId
+
+            const textDocumentParams = DashboardParamsModel.getTextReportParametersMap(dashboardId, reportId)
+            document.setText(textDocumentParams.text)
+            document.setBold(textDocumentParams.bold)
+            document.setTextColor(textDocumentParams.color)
+            document.setBackgroundColor(textDocumentParams.backgroundColor)
+            document.setFontFamily(textDocumentParams.fontFamily)
+            document.setFontSize(textDocumentParams.fontSize)
+            document.setItalic(textDocumentParams.italic)
+            document.setUnderline(textDocumentParams.underline)
+
+            containerTextArea.color = textDocumentParams.backgroundColor
+        }
+    }
 
 
     /***********************************************************************************************************************/
@@ -129,14 +153,7 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        if(GeneralParamsModel.isWorkbookInEditMode()){
-            let dashboardId = DashboardParamsModel.currentDashboard
-            let reportId = DashboardParamsModel.currentReport
 
-            const textDocumentParams = DashboardParamsModel.getTextReportParametersMap(dashboardId, reportId)
-            document.setText(textDocumentParams.text)
-            document.setBold(textDocumentParams.bold)
-        }
     }
 
     function copyText(){
@@ -169,8 +186,9 @@ Rectangle{
             "italic" : document.italic,
             "underline" : document.underline,
             "color" : colorDialog.color,
-            "font-family" : document.fontFamily,
-            "font-size" : document.fontSize
+            "backgroundColor" : document.backgroundColor,
+            "fontFamily" : document.fontFamily,
+            "fontSize" : document.fontSize
         }
 
         DashboardParamsModel.setTextReportParametersMap(dashboardId, reportId, textDocumentParams)

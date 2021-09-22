@@ -28,14 +28,24 @@ Popup {
     y: (parent.height - editorPopup.height)/2
 
     z:1000
-
     padding: 0
+
+    property alias widgetReportId: editorPopup.reportId
+    property alias widgetDashboardId : editorPopup.dashboardId
+
+    property var reportId;
+    property var dashboardId
 
     background: Rectangle{
         color: Constants.themeColor
     }
 
 
+    onDashboardIdChanged: {
+
+        textEditor.widgetReportId = reportId
+        textEditor.widgetDashboardId = dashboardId
+    }
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS

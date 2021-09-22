@@ -207,7 +207,8 @@ Rectangle {
     }
 
     function onDropAreaPositionChanged(drag){
-        console.log("on position change dashboard",drag.x);
+        DashboardParamsModel.setPositionX(drag.x);
+        DashboardParamsModel.setPositionY(drag.y);
 
     }
     function onDropAreaExited(){
