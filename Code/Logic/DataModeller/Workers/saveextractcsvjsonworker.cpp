@@ -73,8 +73,10 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                         int32_t year = date.year();
                         int32_t month = date.month();
                         int32_t day = date.day();
+                        appender->Append(duckdb::Date::FromDate(year, month, day));
 
-                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                        // Timestamp in duckDb release crashes. Will fix in the future
+                        // appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
                     } else {
                         qDebug() << a.toStdString().c_str();
                     }
