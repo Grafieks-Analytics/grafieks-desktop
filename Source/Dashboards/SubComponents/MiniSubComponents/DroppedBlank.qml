@@ -256,6 +256,7 @@ Item{
                 maximumX: dashboard_summary.width- mainContainer.width
                 smoothed: true
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
 
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()

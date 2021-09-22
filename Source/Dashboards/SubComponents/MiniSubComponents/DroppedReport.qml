@@ -519,10 +519,10 @@ Item{
         mainContainer.rulerStatus = false
     }
 
-    function onDropAreaPositionChangedReport(){
-        currnetPointReport.x=mainContainer.x;
-        currnetPointReport.y=mainContainer.y;
-    }
+//    function onDropAreaPositionChangedReport(){
+//        currnetPointReport.x= mainContainer.x;
+//        currnetPointReport.y= mainContainer.y;
+//    }
 
     function onChartLoaded(loadRequest){
 
@@ -935,11 +935,12 @@ Item{
 
 
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
             //            Drag.hotSpot.x: 2
             //            Drag.hotSpot.y: 2
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
-            onPositionChanged:  onDropAreaPositionChangedReport()
+//            onPositionChanged:  onDropAreaPositionChangedReport()
         }
 
         Rectangle{

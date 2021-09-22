@@ -92,6 +92,9 @@ Item{
             let reportId = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 webengine.url = GeneralParamsModel.getTmpPath() + url
+
+                textEditor.widgetReportId = refReportId
+                textEditor.widgetDashboardId = refDashboardId
                 webengine.reload()
             }
         }
@@ -279,6 +282,8 @@ Item{
 
                 smoothed: true
             }
+
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
             onEntered: showMenus()
