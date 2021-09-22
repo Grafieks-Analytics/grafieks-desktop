@@ -30,6 +30,11 @@ QString GeneralParamsModel::getCurrentDB()
     return Statics::currentDbName;
 }
 
+bool GeneralParamsModel::isWorkbookInEditMode()
+{
+    return Statics::editMode;
+}
+
 void GeneralParamsModel::openNewGrafieksInstance()
 {
     QString appPath = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";

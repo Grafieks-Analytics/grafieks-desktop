@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
+    Q_INVOKABLE bool isWorkbookInEditMode();
     Q_INVOKABLE void openNewGrafieksInstance();
 
     Q_INVOKABLE QVariantMap getAppInfo();

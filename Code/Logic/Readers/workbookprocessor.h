@@ -2,11 +2,14 @@
 #define WORKBOOKPROCESSOR_H
 
 #include <QObject>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
 #include <QDataStream>
 #include <QFile>
+#include <QByteArray>
+#include <QDir>
 #include <QFileInfo>
 
 #include "../General/generalparamsmodel.h"

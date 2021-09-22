@@ -109,8 +109,10 @@ Item{
 
     Component.onCompleted: {
 
-        selectFile()
-        webengine.url = ""
+//        if(GeneralParamsModel.isWorkbookInEditMode() === false){
+//            selectFile()
+//            webengine.url = ""
+//        }
     }
 
     function selectFile(){
@@ -173,13 +175,20 @@ Item{
 
 
     function saveImage(selectedFile){
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        let currentReport = DashboardParamsModel.currentReport
-        let fileToken = GeneralParamsModel.getFileToken();
+        var fileName
+        var currentDashboard = DashboardParamsModel.currentDashboard
+        var currentReport = DashboardParamsModel.currentReport
+        if(GeneralParamsModel.isWorkbookInEditMode() === false){
 
-        const newFileName = currentDashboard + "_" + currentReport + "_" + fileToken
+            let fileToken = GeneralParamsModel.getFileToken()
+            fileName = currentDashboard + "_" + currentReport + "_" + fileToken
+        } else {
+            fileName = DashboardParamsModel.getDashboardWidgetUrl(currentDashboard, currentReport)
+            // Get filename sans extension
+//            console.log("F!", fileName.slice(fileName.lastIndexOf(".")+1))
+        }
 
-        DashboardParamsModel.saveImage(selectedFile, newFileName)
+        DashboardParamsModel.saveImage(selectedFile, fileName)
     }
 
 
@@ -312,6 +321,7 @@ Item{
                 maximumX: dashboard_summary.width- mainContainer.width
                 smoothed: true
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
 
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
