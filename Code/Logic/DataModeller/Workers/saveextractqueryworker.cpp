@@ -12,6 +12,9 @@ void SaveExtractQueryWorker::run()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
     QStringList colInfo;
     QVariant fieldType;
     DataType dataType;
@@ -120,7 +123,7 @@ void SaveExtractQueryWorker::run()
     QSqlQuery query(this->tmpSql, connection);
     QSqlRecord record = query.record();
 
-    QString createTableQuery = "CREATE TABLE " + tableName + "(";
+    QString createTableQuery = "CREATE TABLE " + fileName + "(";
 
     for(int i = 0; i < record.count(); i++){
         QVariant fieldType = record.field(i).value();
@@ -166,7 +169,7 @@ void SaveExtractQueryWorker::run()
     // while running an extract later on
 
     QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
-    QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + tableName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
+    QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
     auto x = con.Query(tableCreateQuery.toStdString());
     if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
@@ -174,7 +177,7 @@ void SaveExtractQueryWorker::run()
     if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
     // Start appending data in table
-    duckdb::Appender appender(con, tableName.toStdString());
+    duckdb::Appender appender(con, fileName.toStdString());
 
     int lineCounter = 0;
 
@@ -203,7 +206,11 @@ void SaveExtractQueryWorker::run()
                 int32_t year = date.year();
                 int32_t month = date.month();
                 int32_t day = date.day();
-                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                appender.Append(duckdb::Date::FromDate(year, month, day));
+                // The below code crashes in the release mode of duckdb
+                // Will need to check
+//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(0, 0, 0, 0)));
+//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
             } else if(columnType == "VARCHAR") {
                 appender.Append(query.value(i).toString().toUtf8().constData());
             } else {
@@ -222,7 +229,7 @@ void SaveExtractQueryWorker::run()
     }
     appender.Close();
 
-    //    auto query1 = con.Query("SELECT * FROM "+ tableName.toStdString());
+    //    auto query1 = con.Query("SELECT * FROM "+ fileName.toStdString());
     //    query1->Print();
 
     emit saveExtractComplete();
