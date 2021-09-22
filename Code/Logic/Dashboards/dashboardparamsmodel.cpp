@@ -3,6 +3,7 @@
 
 DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 {
+    m_currentReport = 0;
 
     this->setDashboardCount(1);
     this->setCurrentDashboard(0);
@@ -432,6 +433,13 @@ void DashboardParamsModel::setDashboardWidgetTypeMap(int dashboardId, int widget
 
         this->dashboardWidgetTypeMap.insert(dashboardId, reportTypeMap);
     }
+
+    // If report type is text type, then save here specially
+    if(reportType == Constants::reportTypeText){
+        QUrl finalFileName;
+        finalFileName = QString::number(this->currentDashboard()) + "_" + QString::number(this->currentReport()) + "_" + generalParamsModel.getFileToken() + ".html";
+        this->setDashboardWidgetUrl(this->currentDashboard(), this->currentReport(), finalFileName);
+    }
 }
 
 int DashboardParamsModel::getDashboardWidgetTypeMap(int dashboardId, int widgetId)
@@ -491,6 +499,25 @@ QUrl DashboardParamsModel::getDashboardWidgetUrl(int dashboardId, int widgetId)
     }
 
     return output;
+}
+
+void DashboardParamsModel::setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams)
+{
+    QMap<int, QVariantMap> tmp;
+    tmp = this->textReportParametersMap.value(dashboardId);
+
+    if(tmp.contains(widgetId)){
+        tmp[widgetId] = textReportParams;
+    } else {
+        tmp.insert(widgetId, textReportParams);
+    }
+
+    this->textReportParametersMap.insert(dashboardId, tmp);
+}
+
+QVariant DashboardParamsModel::getTextReportParametersMap(int dashboardId, int widgetId)
+{
+    return this->textReportParametersMap.value(dashboardId).value(widgetId);
 }
 
 void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bool status)
@@ -1201,6 +1228,26 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
             this->dashboardReportMap.insert(dashboardId.toInt(), dashboardReportMapList);
         }
 
+        // dashboardReportUrl
+        mainObj = dashboardParams.value("dashboardReportUrl").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dashboardReportUrlKeys = childObj.keys();
+
+        foreach(QString widgetId, dashboardReportUrlKeys){
+            QUrl url(childObj.value(widgetId).toString());
+            this->setDashboardReportUrl(dashboardId.toInt(), widgetId.toInt(), url);
+        }
+
+        // textReportParameters
+        mainObj = dashboardParams.value("textReportParametersMap").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList textReportParametersKeys = childObj.keys();
+
+        foreach(QString widgetId, textReportParametersKeys){
+            QVariantMap map = childObj.value(widgetId).toObject().toVariantMap();
+            this->setTextReportParametersMap(dashboardId.toInt(), widgetId.toInt(), map);
+        }
+
         // showColumns
         mainObj = dashboardParams.value("showColumns").toObject();
         QStringList tmpList;
@@ -1362,6 +1409,8 @@ void DashboardParamsModel::saveDashboard()
     QJsonObject dashboardWidgetTypeMapObj;
     QJsonObject dashboardWidgetUrlObj;
     QJsonObject dashboardReportMapObj;
+    QJsonObject dashboardReportUrlObj;
+    QJsonObject textReportParametersMapObj;
     QJsonObject showColumnsObj;
 
     QJsonObject columnAliasMapObj;
@@ -1425,6 +1474,21 @@ void DashboardParamsModel::saveDashboard()
             dashboardReportMapList.append(reportId);
 
         dashboardReportMapObj.insert(QString::number(dashboardId), QJsonArray::fromVariantList(dashboardReportMapList));
+
+        // dashboardReportUrl
+        QJsonObject dashboardReportUrlTmpObj;
+        foreach(int reportId, this->dashboardReportUrl.value(dashboardId).keys())
+            dashboardReportUrlTmpObj.insert(QString::number(reportId), this->dashboardReportUrl.value(dashboardId).value(reportId));
+
+        dashboardReportUrlObj.insert(QString::number(dashboardId), dashboardReportUrlTmpObj);
+
+        // textReportParametersMap
+        QJsonObject textReportParametersMapTmpObj;
+        foreach(int reportId, this->textReportParametersMap.value(dashboardId).keys())
+            textReportParametersMapTmpObj.insert(QString::number(reportId), QJsonObject::fromVariantMap(this->textReportParametersMap.value(dashboardId).value(reportId)));
+
+        textReportParametersMapObj.insert(QString::number(dashboardId), textReportParametersMapTmpObj);
+
 
         // showColumns
         showColumnsObj.insert(QString::number(dashboardId), QJsonArray::fromStringList(this->showColumns.value(dashboardId)));
@@ -1511,6 +1575,8 @@ void DashboardParamsModel::saveDashboard()
     dashboardParamsObject.insert("dashboardWidgetTypeMap", dashboardWidgetTypeMapObj);
     dashboardParamsObject.insert("dashboardWidgetUrl", dashboardWidgetUrlObj);
     dashboardParamsObject.insert("dashboardReportMap", dashboardReportMapObj);
+    dashboardParamsObject.insert("dashboardReportUrl", dashboardReportUrlObj);
+    dashboardParamsObject.insert("textReportParametersMap", textReportParametersMapObj);
     dashboardParamsObject.insert("showColumns", showColumnsObj);
 
     dashboardParamsObject.insert("columnAliasMap", columnAliasMapObj);

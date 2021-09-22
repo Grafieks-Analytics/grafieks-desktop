@@ -14,6 +14,7 @@
 #include <QDebug>
 
 #include "../../constants.h"
+#include "../General/generalparamsmodel.h"
 
 class DashboardParamsModel: public QObject
 {
@@ -28,8 +29,9 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
 
     QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
+    // NEW
     QMap<int, QMap<int, QString>> dashboardReportUrl; // <dashboardId, <reportId, url of image/text>>
-
+    QMap<int, QMap<int, QVariantMap>> textReportParametersMap; // <dashboardId, <reportId, Object>>
 
     // Filter parameters
     QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
@@ -82,6 +84,8 @@ class DashboardParamsModel: public QObject
 
     QString m_currentSelectedColumn;
 
+    GeneralParamsModel generalParamsModel;
+
 
 
 public:
@@ -117,6 +121,9 @@ public:
 
     Q_INVOKABLE void setDashboardWidgetUrl(int dashboardId, int widgetId, QUrl url);
     Q_INVOKABLE QUrl getDashboardWidgetUrl(int dashboardId, int widgetId);
+
+    Q_INVOKABLE void setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams);
+    Q_INVOKABLE QVariant getTextReportParametersMap(int dashboardId, int widgetId);
 
     // Filter Parameters
     Q_INVOKABLE void addToShowColumns(int dashboardId, QString colName, bool status);

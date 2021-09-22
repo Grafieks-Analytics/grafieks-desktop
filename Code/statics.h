@@ -10,6 +10,7 @@ public:
 
     static int isFreeTier;
     static QString tmpIconPath;
+    static bool editMode;
 
 
     static QString currentDbName;
