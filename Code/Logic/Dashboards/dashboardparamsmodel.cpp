@@ -297,6 +297,53 @@ QVariantMap DashboardParamsModel::fetchAllReportTypeMap(int dashboardId)
     return output;
 }
 
+void DashboardParamsModel::deleteReport(int reportId, int dashboardId)
+{
+    // Delete from all dashboards
+    if(dashboardId == -1){
+        QList<int> dashboardIds = this->dashboardReportMap.keys();
+
+        foreach(int dashboardId, dashboardIds){
+            QVector<int> reportIds = this->dashboardReportMap.value(dashboardId);
+
+            if(reportIds.contains(reportId)){
+                this->deleteReportFromDashboard(dashboardId, reportId);
+                this->deleteReportZOrder(dashboardId, reportId);
+                this->deleteDashboardWidgetCoordinates(dashboardId, reportId);
+                this->deleteDashboardWidgetTypeMap(dashboardId, reportId);
+                this->deleteDashboardWidgetUrl(dashboardId, reportId);
+
+                this->deleteDashboardReportMap(dashboardId, reportId);
+
+                this->deleteDashboardReportUrl(dashboardId, reportId);
+                this->deleteTextReportParametersMap(dashboardId, reportId);
+
+                this->deleteReportName(dashboardId, reportId);
+                this->deleteReportBackgroundColor(dashboardId, reportId);
+                this->deleteReportLineColor(dashboardId, reportId);
+                this->deleteReportOpacity(dashboardId, reportId);
+            }
+        }
+
+    } else {
+        this->deleteReportFromDashboard(dashboardId, reportId);
+        this->deleteReportZOrder(dashboardId, reportId);
+        this->deleteDashboardWidgetCoordinates(dashboardId, reportId);
+        this->deleteDashboardWidgetTypeMap(dashboardId, reportId);
+        this->deleteDashboardWidgetUrl(dashboardId, reportId);
+
+        this->deleteDashboardReportMap(dashboardId, reportId);
+
+        this->deleteDashboardReportUrl(dashboardId, reportId);
+        this->deleteTextReportParametersMap(dashboardId, reportId);
+
+        this->deleteReportName(dashboardId, reportId);
+        this->deleteReportBackgroundColor(dashboardId, reportId);
+        this->deleteReportLineColor(dashboardId, reportId);
+        this->deleteReportOpacity(dashboardId, reportId);
+    }
+}
+
 void DashboardParamsModel::addReportToDashboard(int dashboardId, int widgetId)
 {
     QVector<int> reports;
@@ -372,6 +419,23 @@ int DashboardParamsModel::getReportZOrder(int dashboardId, int widgetId)
     return output;
 }
 
+void DashboardParamsModel::deleteReportZOrder(int dashboardId, int widgetId)
+{
+    int output = 0;
+    QMap<int, int> reportsZOrder;
+
+    if (!this->dashboardWidgetsMap.value(dashboardId).isEmpty())
+    {
+
+        reportsZOrder = this->dashboardWidgetsZorder.value(dashboardId);
+        if (reportsZOrder.contains(widgetId))
+        {
+            reportsZOrder.remove(widgetId);
+        }
+        this->dashboardWidgetsZorder.insert(dashboardId, reportsZOrder);
+    }
+}
+
 void DashboardParamsModel::setDashboardWidgetCoordinates(int dashboardId, int widgetId, float x1, float y1, float x2, float y2)
 {
 
@@ -412,6 +476,22 @@ QVariantList DashboardParamsModel::getDashboardWidgetCoordinates(int dashboardId
     }
 
     return output;
+}
+
+void DashboardParamsModel::deleteDashboardWidgetCoordinates(int dashboardId, int widgetId)
+{
+    QMap<int, QVariantList> reportCoordinates;
+
+    if (!this->dashboardWidgetCoordinates.value(dashboardId).isEmpty())
+    {
+
+        reportCoordinates = this->dashboardWidgetCoordinates.value(dashboardId);
+        if (reportCoordinates.contains(widgetId))
+        {
+            reportCoordinates.remove(widgetId);
+        }
+        this->dashboardWidgetCoordinates.insert(dashboardId, reportCoordinates);
+    }
 }
 
 void DashboardParamsModel::setDashboardWidgetTypeMap(int dashboardId, int widgetId, int reportType)
@@ -460,6 +540,21 @@ int DashboardParamsModel::getDashboardWidgetTypeMap(int dashboardId, int widgetI
     return output;
 }
 
+void DashboardParamsModel::deleteDashboardWidgetTypeMap(int dashboardId, int widgetId)
+{
+    QMap<int, int> reportTypeMap;
+
+    if (!this->dashboardWidgetTypeMap.value(dashboardId).isEmpty())
+    {
+        reportTypeMap = this->dashboardWidgetTypeMap.value(dashboardId);
+        if (reportTypeMap.contains(widgetId))
+        {
+            reportTypeMap.remove(widgetId);
+        }
+        this->dashboardWidgetTypeMap.insert(dashboardId, reportTypeMap);
+    }
+}
+
 void DashboardParamsModel::setDashboardWidgetUrl(int dashboardId, int widgetId, QUrl url)
 {
     QMap<int, QUrl> reportUrl;
@@ -501,6 +596,23 @@ QUrl DashboardParamsModel::getDashboardWidgetUrl(int dashboardId, int widgetId)
     return output;
 }
 
+void DashboardParamsModel::deleteDashboardWidgetUrl(int dashboardId, int widgetId)
+{
+    QMap<int, QUrl> reportUrl;
+
+    if (!this->dashboardWidgetUrl.value(dashboardId).isEmpty())
+    {
+
+        reportUrl = this->dashboardWidgetUrl.value(dashboardId);
+        if (reportUrl.contains(widgetId))
+        {
+            reportUrl.remove(widgetId);
+        }
+
+        this->dashboardWidgetUrl.insert(dashboardId, reportUrl);
+    }
+}
+
 void DashboardParamsModel::setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams)
 {
     QMap<int, QVariantMap> tmp;
@@ -518,6 +630,15 @@ void DashboardParamsModel::setTextReportParametersMap(int dashboardId, int widge
 QVariant DashboardParamsModel::getTextReportParametersMap(int dashboardId, int widgetId)
 {
     return this->textReportParametersMap.value(dashboardId).value(widgetId);
+}
+
+void DashboardParamsModel::deleteTextReportParametersMap(int dashboardId, int widgetId)
+{
+    QMap<int, QVariantMap> textReportParam;
+    textReportParam = this->textReportParametersMap.value(dashboardId);
+    textReportParam.remove(widgetId);
+
+    this->textReportParametersMap.insert(dashboardId, textReportParam);
 }
 
 void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bool status)
@@ -769,6 +890,22 @@ QString DashboardParamsModel::getReportName(int dashboardId, int widgetId)
     return output;
 }
 
+void DashboardParamsModel::deleteReportName(int dashboardId, int widgetId)
+{
+    QMap<int, QString> name;
+
+    if (!this->reportName.value(dashboardId).isEmpty())
+    {
+
+        name = this->reportName.value(dashboardId);
+        if (name.contains(widgetId))
+        {
+            name.remove(widgetId);
+        }
+        this->reportName.insert(dashboardId, name);
+    }
+}
+
 void DashboardParamsModel::setReportBackgroundColor(int dashboardId, int widgetId, QString color)
 {
 
@@ -808,6 +945,23 @@ QString DashboardParamsModel::getReportBackgroundColor(int dashboardId, int widg
     }
 
     return output;
+}
+
+void DashboardParamsModel::deleteReportBackgroundColor(int dashboardId, int widgetId)
+{
+    QMap<int, QString> backgroundColor;
+
+    if (!this->reportBackgroundColor.value(dashboardId).isEmpty())
+    {
+
+        backgroundColor = this->reportBackgroundColor.value(dashboardId);
+        if (backgroundColor.contains(widgetId))
+        {
+            backgroundColor.remove(widgetId);
+        }
+
+        this->reportBackgroundColor.insert(dashboardId, backgroundColor);
+    }
 }
 
 void DashboardParamsModel::setReportLineColor(int dashboardId, int widgetId, QString color)
@@ -852,6 +1006,23 @@ QString DashboardParamsModel::getReportLineColor(int dashboardId, int widgetId)
     return output;
 }
 
+void DashboardParamsModel::deleteReportLineColor(int dashboardId, int widgetId)
+{
+    QMap<int, QString> lineColor;
+
+    if (!this->reportLineColor.value(dashboardId).isEmpty())
+    {
+
+        lineColor = this->reportLineColor.value(dashboardId);
+        if (lineColor.contains(widgetId))
+        {
+            lineColor.remove(widgetId);
+        }
+
+        this->reportLineColor.insert(dashboardId, lineColor);
+    }
+}
+
 void DashboardParamsModel::setReportOpacity(int dashboardId, int widgetId, int percent)
 {
 
@@ -889,6 +1060,23 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int widgetId)
     }
 
     return output;
+}
+
+void DashboardParamsModel::deleteReportOpacity(int dashboardId, int widgetId)
+{
+    QMap<int, int> reportOpacity;
+
+    if (!this->reportOpacity.value(dashboardId).isEmpty())
+    {
+
+        reportOpacity = this->reportOpacity.value(dashboardId);
+        if (reportOpacity.contains(widgetId))
+        {
+            reportOpacity.remove(widgetId);
+        }
+
+        this->reportOpacity.insert(dashboardId, reportOpacity);
+    }
 }
 
 void DashboardParamsModel::setDashboardReportUrl(int dashboardId, int reportId, QUrl url)
@@ -929,6 +1117,24 @@ QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
     }
 
     return output;
+}
+
+
+
+void DashboardParamsModel::deleteDashboardReportUrl(int dashboardId, int reportId)
+{
+    QMap<int, QString> reportUrl;
+
+    if (!this->dashboardReportUrl.value(dashboardId).isEmpty())
+    {
+
+        reportUrl = this->dashboardReportUrl.value(dashboardId);
+        if (reportUrl.contains(reportId))
+        {
+            reportUrl.remove(reportId);
+        }
+        this->dashboardReportUrl.insert(dashboardId, reportUrl);
+    }
 }
 
 //void DashboardParamsModel::setSelectAll(bool status, QString columnName, int dashboardId)
@@ -1596,4 +1802,14 @@ void DashboardParamsModel::saveDashboard()
     dashboardParamsObject.insert("reportOpacity", reportOpacityObj);
 
     emit sendDashboardParams(dashboardParamsObject);
+}
+
+void DashboardParamsModel::deleteDashboardReportMap(int dashboardId, int reportId)
+{
+    QVector<int> reportIds;
+
+    reportIds = this->dashboardReportMap.value(dashboardId);
+    reportIds.removeAll(reportId);
+
+    this->dashboardReportMap.insert(dashboardId, reportIds);
 }

@@ -140,8 +140,6 @@ Rectangle{
             } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType) {
                 singleSelectCheckList.model = ForwardOnlyDataModel
                 multiSelectCheckList.model  = ForwardOnlyDataModel
-            } else {
-console.log("Else type")
             }
 
             var jsonOptions = JSON.parse(options)
