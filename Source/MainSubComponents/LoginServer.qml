@@ -97,7 +97,7 @@ Popup {
             id: server_address
             placeholderText: "http://"
             selectByMouse: true
-            maximumLength: 45
+            maximumLength: 250
             font.pixelSize: Constants.fontCategoryHeader
             anchors.verticalCenter: parent.verticalCenter
             width: 370
