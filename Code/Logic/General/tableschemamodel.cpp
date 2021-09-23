@@ -70,7 +70,8 @@ void TableSchemaModel::showSchema(QString query)
 
         for(QString tableName: tablesList){
 
-            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
+            tableName = tableName.replace(QRegularExpression("[\"`'\\[\\]]"), "");
+
 
             QSqlRecord record = dbCon.record(tableName);
 
