@@ -84,13 +84,17 @@ void CSVJsonQueryModel::getAllFilters(FilterCategoricalListModel *categoricalFil
     this->updateModelValues(0);
 }
 
-void CSVJsonQueryModel::extractSaved()
+void CSVJsonQueryModel::extractSaved(QString errorMessage)
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
 
-    FreeTierExtractsManager freeTierExtractsManager;
-    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &CSVJsonQueryModel::extractSizeLimit);
+    if(errorMessage.length() == 0){
+        FreeTierExtractsManager freeTierExtractsManager;
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &CSVJsonQueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMessage);
+    }
 }
 
 

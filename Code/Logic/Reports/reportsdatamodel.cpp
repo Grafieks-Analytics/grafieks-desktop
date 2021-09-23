@@ -18,10 +18,10 @@ QStringList ReportsDataModel::fetchColumnData(QString columnName, QString option
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     QString joiner = "\"";
     QString query = "SELECT DISTINCT " + joiner + columnName + joiner + " FROM " + joiner + tableName + joiner;
@@ -445,10 +445,10 @@ void ReportsDataModel::generateColumns(duckdb::Connection *con)
     // Fetch data from duckdb
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     // Clear existing chart headers data
     this->numericalList.clear();

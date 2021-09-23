@@ -569,10 +569,10 @@ void TableSchemaModel::extractSchema(duckdb::Connection *con)
     QStringList outputDataList;
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType || Statics::currentDbIntType == Constants::accessIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
 

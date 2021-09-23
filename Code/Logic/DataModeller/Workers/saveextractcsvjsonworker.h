@@ -42,12 +42,12 @@ public:
 
 private:
     bool appendExtractData(duckdb::Appender *appender);
-    bool createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
+    QString createExtractDb(QFile *file, QString fileName, duckdb::Connection con);
 protected:
     void run() override;
 
 signals:
-    void saveExtractComplete();
+    void saveExtractComplete(QString errorMsg);
 
 };
 

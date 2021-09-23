@@ -91,7 +91,7 @@ Rectangle{
             "slug" : slug
         }
 
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             CSVJsonDataModel.columnData(columnName, tableName, JSON.stringify(options))
