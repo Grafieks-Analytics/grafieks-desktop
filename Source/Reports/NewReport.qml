@@ -1079,6 +1079,8 @@ Page {
         dragActiveObject= {};
         colorByData = [];
 
+// TODO:reset all constants for chart
+
         // Calling this redraw will clear the chart because no x and y columns will be available
         // [Tag: Optimization]
         // Check instead of reDraw if we can call only one function to clear the chart

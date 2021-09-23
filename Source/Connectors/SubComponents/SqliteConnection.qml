@@ -19,7 +19,7 @@ import com.grafieks.singleton.constants 1.0
 Popup {
     id: popup
     width: 600
-    height: 300
+    height: 250
     modal: true
     visible: false
     x: parent.width/2 - 300

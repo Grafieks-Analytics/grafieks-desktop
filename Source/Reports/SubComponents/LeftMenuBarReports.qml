@@ -173,7 +173,7 @@ Rectangle{
             maxDropOnXAxis: 5
             yAxisVisible: false
             lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: "Properties,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label"
         }
 //        ListElement{

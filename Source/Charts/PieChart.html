@@ -502,7 +502,7 @@
                             return "";
                         }
                         return (
-                            d.data.value +
+                            Math.round(d.data.value) +
                             " (" +
                             ((d.data.value / totalSum) * 100).toFixed(2) +
                             "%)"
