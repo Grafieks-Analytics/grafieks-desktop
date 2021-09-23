@@ -33,7 +33,7 @@ protected:
     void run() override;
 
 signals:
-    void saveExtractComplete();
+    void saveExtractComplete(QString errorMsg);
 
 };
 

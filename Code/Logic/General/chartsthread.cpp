@@ -1874,10 +1874,10 @@ QString ChartsThread::getTableName()
 {
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     return tableName;
 }

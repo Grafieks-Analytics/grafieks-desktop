@@ -130,9 +130,9 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
     return output;
 }
 
-bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
+QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
 {
-    bool output = true;
+    QString errorMsg = "";
     QString delimiter = Statics::separator;
 
     this->rejectIds.clear();
@@ -208,7 +208,7 @@ bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
 
             auto createT = con.Query(createTableQuery.toStdString());
             if(!createT->success) {
-                output = false;
+                errorMsg = createT->error.c_str();
                 qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
             }
             qDebug() << createTableQuery << createT->success;
@@ -230,7 +230,7 @@ bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
     if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
 
-    return output;
+    return errorMsg;
 }
 
 void SaveExtractCsvJsonWorker::run()
@@ -250,12 +250,12 @@ void SaveExtractCsvJsonWorker::run()
     QFile fileCreateExtract(Statics::csvJsonPath);
     fileCreateExtract.open(QFile::ReadOnly | QFile::Text);
 
-    bool createDb = this->createExtractDb(&fileCreateExtract, fileName, con);
+    QString createDb = this->createExtractDb(&fileCreateExtract, fileName, con);
 
     fileCreateExtract.close();
 
     // Append data to Extract
-    if(createDb){
+    if(createDb.length() <= 0){
         QFile fileAppendData(Statics::csvJsonPath);
         fileAppendData.open(QFile::ReadOnly | QFile::Text);
 
@@ -283,5 +283,5 @@ void SaveExtractCsvJsonWorker::run()
         fileAppendData.close();
     }
 
-    emit saveExtractComplete();
+    emit saveExtractComplete(createDb);
 }

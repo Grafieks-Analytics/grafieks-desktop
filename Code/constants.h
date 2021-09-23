@@ -102,6 +102,7 @@ namespace Constants
     const QString excelType = "EXCEL";
     const QString csvType = "CSV";
     const QString jsonType = "JSON";
+    const QString accessType = "ACCESS";
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";

@@ -303,7 +303,7 @@ Rectangle{
             }
 
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
                 QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
             } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
                 ForwardOnlyDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))

@@ -90,13 +90,17 @@ void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
     this->query = filteredQuery.simplified();
 }
 
-void ForwardOnlyQueryModel::extractSaved()
+void ForwardOnlyQueryModel::extractSaved(QString errorMsg)
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
 
-    FreeTierExtractsManager freeTierExtractsManager;
-    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
+    if(errorMsg.length() == 0){
+        FreeTierExtractsManager freeTierExtractsManager;
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMsg);
+    }
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()

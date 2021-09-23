@@ -147,13 +147,17 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 }
 
 
-void QueryModel::extractSaved()
+void QueryModel::extractSaved(QString errorMessage)
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
 
-    FreeTierExtractsManager freeTierExtractsManager;
-    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
+    if(errorMessage.length() == 0){
+        FreeTierExtractsManager freeTierExtractsManager;
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMessage);
+    }
 }
 
 void QueryModel::extractSizeLimit()

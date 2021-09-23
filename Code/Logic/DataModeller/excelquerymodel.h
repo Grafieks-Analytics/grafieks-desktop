@@ -51,7 +51,7 @@ public:
 
 public slots:
     void receiveExcelFilterQuery(QString query);
-    void extractSaved();
+    void extractSaved(QString errorMsg);
 
 private:
     void generateRoleNames();
@@ -66,6 +66,7 @@ signals:
     void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
+    void extractCreationError(QString errorMessage);
 
 };
 
