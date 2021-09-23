@@ -371,10 +371,10 @@ void TableColumnsModel::generateColumns(duckdb::Connection *con)
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     // Clear existing chart headers data
     this->numericalList.clear();

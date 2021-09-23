@@ -200,7 +200,7 @@ Item{
         if(isSqlSelect){
             console.log(GeneralParamsModel.getDbClassification(), "Classification");
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
 
                 dataPreviewResult.visible = true
                 queryUpdate.visible = true

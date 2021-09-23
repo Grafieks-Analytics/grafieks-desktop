@@ -125,6 +125,7 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
     }
 
     function showCustomizeReport(){

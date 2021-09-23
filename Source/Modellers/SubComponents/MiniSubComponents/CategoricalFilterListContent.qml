@@ -134,14 +134,12 @@ Rectangle{
             } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
                 singleSelectCheckList.model = ExcelDataModel
                 multiSelectCheckList.model  = ExcelDataModel
-            } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType) {
+            } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType) {
                 singleSelectCheckList.model = QueryDataModel
                 multiSelectCheckList.model  = QueryDataModel
             } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType) {
                 singleSelectCheckList.model = ForwardOnlyDataModel
                 multiSelectCheckList.model  = ForwardOnlyDataModel
-            } else {
-console.log("Else type")
             }
 
             var jsonOptions = JSON.parse(options)
@@ -232,7 +230,7 @@ console.log("Else type")
 
             }
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
                 QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
             } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
                 ForwardOnlyDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))

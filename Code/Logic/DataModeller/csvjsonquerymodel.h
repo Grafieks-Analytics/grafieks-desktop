@@ -63,7 +63,7 @@ public:
 
 public slots:
     void getAllFilters(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr);
-    void extractSaved();
+    void extractSaved(QString errorMessage);
 
 private:
 
@@ -78,6 +78,7 @@ signals:
     void clearTablePreview();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
+    void extractCreationError(QString errorMessage);
 
 };
 

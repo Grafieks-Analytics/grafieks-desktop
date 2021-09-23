@@ -127,6 +127,19 @@ Item{
 
     }
 
+    Connections{
+        target: ReportParamsModel
+
+        function onReportDeleted(deletedReportId){
+            if(deletedReportId === newItem.reportId) {
+
+                mainContainer.destroy()
+                this.destroy()
+                is_dashboard_blank = is_dashboard_blank - 1
+            }
+        }
+    }
+
 
     Connections{
         target: ChartsModel
@@ -451,6 +464,13 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+//        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+
+        let curr = DashboardParamsModel.currentReport
+
+        ReportParamsModel.deleteReport(curr, false)
+        DashboardParamsModel.deleteReport(curr)
+
     }
 
     function editSelectedReport(reportId){

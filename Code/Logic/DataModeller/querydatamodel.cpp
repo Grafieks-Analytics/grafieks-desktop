@@ -47,7 +47,12 @@ void QueryDataModel::columnData(QString col, QString tableName, QString options)
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName);
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
+    if(Statics::currentDbIntType == Constants::accessIntType){
+        output = this->getData("SELECT DISTINCT [" + col + "] FROM [" + tableName + "]");
+    } else {
+        output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
+    }
+
 
     this->m_roleNames.insert(0, col.toUtf8());
     emit columnListModelDataChanged(options, false);
@@ -60,7 +65,12 @@ void QueryDataModel::columnSearchData(QString col, QString tableName, QString se
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName + " WHERE '" + col + "' LIKE '%"+searchString+"%'");
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
+    if(Statics::currentDbIntType == Constants::accessIntType){
+        output = this->getData("SELECT DISTINCT ["  + col  + "] FROM [" + tableName + "] WHERE [" + col + "] LIKE '%"+searchString+"%'");
+    } else {
+        output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
+    }
+
     emit columnListModelDataChanged(options, true);
 }
 
@@ -158,6 +168,7 @@ QStringList QueryDataModel::getData(QString queryString)
     }
 
     QSqlDatabase queryDataDb = QSqlDatabase::database(conType);
+    qDebug() << Q_FUNC_INFO << queryDataDb.isOpen();
     QSqlQuery query(queryString, queryDataDb);
 
     this->resultData.clear();
@@ -170,6 +181,7 @@ QStringList QueryDataModel::getData(QString queryString)
     }
 
     output = this->resultData;
+    qDebug() << "ATTA" << output;
     this->totalRowCount = this->resultData.count();
     return output;
 

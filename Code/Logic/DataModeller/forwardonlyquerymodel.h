@@ -38,7 +38,7 @@ public:
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
-    void extractSaved();
+    void extractSaved(QString errorMsg);
 
 private:
     void generateRoleNames();
@@ -74,6 +74,7 @@ signals:
     void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
+    void extractCreationError(QString errorMessage);
 
 
 
