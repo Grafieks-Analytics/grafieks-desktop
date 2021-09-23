@@ -45,7 +45,7 @@ public slots:
     void receiveFilterQuery(QString & filteredQuery);
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
-    void extractSaved();
+    void extractSaved(QString errorMessage);
 
 
 signals:
@@ -56,6 +56,7 @@ signals:
     void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
+    void extractCreationError(QString errorMessage);
 
 private:
     QHash<int, QByteArray> m_roleNames;

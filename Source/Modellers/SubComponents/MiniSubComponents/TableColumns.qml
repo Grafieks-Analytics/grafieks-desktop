@@ -56,6 +56,8 @@ Item {
         var key = ""
         if(GeneralParamsModel.getDbClassification() === Constants.excelType){
             key = "[" + tableName + "$]" + "." + "[" + colName + "]"
+        } else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+            key = "[" + tableName + "]" + "." + "[" + colName + "]"
         } else {
             key = tableName + "." + colName
         }

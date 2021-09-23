@@ -46,6 +46,7 @@ QtObject {
     property string csvType: "CSV"
     property string jsonType: "JSON"
     property string excelType: "EXCEL"
+    property string accessType: "ACCESS"
 
     // ODBC Driver matching names
     property string mysqlOdbc: qsTr("MySQL")

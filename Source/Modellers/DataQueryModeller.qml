@@ -186,6 +186,12 @@ Page {
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
         }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
     }
 
     Connections{
@@ -197,6 +203,12 @@ Page {
 
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
         }
     }
 
@@ -211,6 +223,12 @@ Page {
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
         }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
     }
 
     Connections{
@@ -222,6 +240,12 @@ Page {
 
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
         }
     }
 
@@ -557,6 +581,7 @@ Page {
 
     function saveExtractPopupFunction(signalType){
 
+        queryModellerPage.timeElapsed = 0
         waitTimer.start()
 
         if(signalType === true){
@@ -570,7 +595,7 @@ Page {
 
     function saveExtractLimit(freeLimit){
 
-        timeElapsed = 0
+        queryModellerPage.timeElapsed = 0
         waitTimer.stop()
 
         if(freeLimit){
@@ -781,6 +806,12 @@ Page {
 
     }
 
+    MessageDialog{
+        id: extractCreationError
+        title: "Extract create error"
+        icon: StandardIcon.Critical
+    }
+
 
     // This is a component because it uses Qt.labs.Platform
     // and this conflicts with the current file
@@ -794,8 +825,8 @@ Page {
         interval: 1000;
         repeat: true
         onTriggered: {
-            timeElapsed++
-            saveExtractPopup.timerText = "Time elapsed: " + timeElapsed + " seconds"
+            queryModellerPage.timeElapsed++
+            saveExtractPopup.timerText = "Time elapsed: " + queryModellerPage.timeElapsed + " seconds"
         }
     }
 

@@ -23,6 +23,7 @@ FileDialog{
 
         switch(GeneralParamsModel.getDbClassification()){
         case Constants.sqlType:
+        case Constants.accessType:
             console.log("SQL save extract")
             QueryModel.saveExtractData()
             break;

@@ -316,6 +316,7 @@ QVariantMap ReportParamsModel::getReportsList(){
     return tmpReportsData;
 }
 
+
 void ReportParamsModel::resetFilter()
 {
 
@@ -340,8 +341,12 @@ void ReportParamsModel::deleteReport(int reportId, bool allReports)
         this->reportsData.remove(reportId);
         this->dashboardReportInstances.remove(QString::number(reportId));
 
-        // Filter specific variables
-        this->masterReportFilters.remove(reportId);
+        // Filter for specific reports
+        // Not deleted right now as it is referecnced somewhere with a pointer
+        // Will have to check
+//        this->deleteMasterReportFilters(reportId);
+
+        emit reportDeleted(reportId);
     } else {
 
         // Customize Report parameters

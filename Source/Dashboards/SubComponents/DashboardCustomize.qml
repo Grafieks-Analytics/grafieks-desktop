@@ -319,7 +319,7 @@ Item{
                                 anchors.verticalCenter: parent.verticalCenter
                                 MouseArea{
                                     anchors.fill: parent
-                                    onClicked: editSelectedReport()
+                                    onClicked: console.log("CLICKER")
                                 }
                             }
                         }
