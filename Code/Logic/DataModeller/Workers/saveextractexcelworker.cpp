@@ -1,8 +1,9 @@
 #include "saveextractexcelworker.h"
 
-SaveExtractExcelWorker::SaveExtractExcelWorker(QString query)
+SaveExtractExcelWorker::SaveExtractExcelWorker(QString query, QVariantMap changedColumnTypes)
 {
     this->query = query;
+    this->changedColumnTypes = changedColumnTypes;
 }
 
 void SaveExtractExcelWorker::run()
@@ -34,11 +35,13 @@ void SaveExtractExcelWorker::run()
     for(int i = 0; i < this->internalColCount; i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
+        QString fieldName = record.fieldName(i);
+        QString tableName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$"));
 
         // lastIndexOf used here because the sheet name may itself contain `$` along with the $ used to name the excel sheet in sql query
-        QString checkFieldName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$")) + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+        QString checkFieldName = tableName + "." + fieldName;
+        if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+            type = this->changedColumnTypes.value(checkFieldName).toString();
 
             if(type == Constants::categoricalType){
                 type = "VARCHAR";
@@ -61,7 +64,7 @@ void SaveExtractExcelWorker::run()
             }
         }
 
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }
 

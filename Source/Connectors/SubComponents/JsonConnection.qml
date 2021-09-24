@@ -182,8 +182,8 @@ Popup {
         Text{
             id: jsonFileName
             anchors.left: parent.left
-                        anchors.leftMargin:  10
-                        anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin:  10
+            anchors.verticalCenter: parent.verticalCenter
             text:""
         }
         }

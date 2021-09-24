@@ -34,7 +34,7 @@ QVariant ExcelDataModel::data(const QModelIndex &index, int role) const
 {
     switch (role) {
     case Qt::DisplayRole:
-        return this->resultData[index.row()];
+        return this->modelOutput[index.row()];
     default:
         break;
     }
@@ -49,17 +49,17 @@ QHash<int, QByteArray> ExcelDataModel::roleNames() const
 
 void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 {
-    this->resultData.clear();
+    this->modelOutput.clear();
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+tableName;
 
     QSqlQuery query(dbQueryString, dbExcel);
 
     while(query.next()){
-        this->resultData.append(query.value(0).toString());
+        this->modelOutput.append(query.value(0).toString());
     }
 
-    this->totalRowCount = this->resultData.length();
+    this->totalRowCount = this->modelOutput.length();
     this->m_roleNames.insert(0, col.toUtf8());
 
     emit columnListModelDataChanged(options);
@@ -68,7 +68,7 @@ void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 void ExcelDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
-    this->resultData.clear();
+    this->modelOutput.clear();
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+ tableName + " WHERE [" + col + "] LIKE '%" + searchString + "%'";
     qDebug() << dbQueryString;
@@ -76,10 +76,10 @@ void ExcelDataModel::columnSearchData(QString col, QString tableName, QString se
     QSqlQuery query(dbQueryString, dbExcel);
 
     while(query.next()){
-        this->resultData.append(query.value(0).toString());
+        this->modelOutput.append(query.value(0).toString());
     }
 
-    this->totalRowCount = this->resultData.length();
+    this->totalRowCount = this->modelOutput.length();
     this->m_roleNames.insert(0, col.toUtf8());
 
     emit columnListModelDataChanged(options);
@@ -103,6 +103,11 @@ QStringList ExcelDataModel::filterTableList(QString keyword)
         }
     }
     return output;
+}
+
+QStringList ExcelDataModel::getDateColumnData()
+{
+    return this->modelOutput;
 }
 
 

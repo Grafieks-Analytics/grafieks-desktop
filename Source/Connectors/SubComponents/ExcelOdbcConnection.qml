@@ -63,11 +63,8 @@ Popup {
         }
 
         function onLogout(){
-            server.text = ""
-            database.text = ""
-            port.text = ""
-            username.text = ""
-            password.text = ""
+            excelFileName.text = ""
+            selectedFile = ""
         }
     }
 

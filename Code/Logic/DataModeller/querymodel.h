@@ -17,6 +17,7 @@
 #include "./Workers/setchartdataqueryworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractqueryworker.h"
+#include "../General/generalparamsmodel.h"
 
 #include "../../duckdb.hpp"
 
@@ -27,7 +28,7 @@ class QueryModel : public QSqlQueryModel
 
 
 public:
-    explicit QueryModel(QObject *parent = 0);
+    explicit QueryModel(GeneralParamsModel *gpm, QObject *parent = 0);
     ~QueryModel();
 
     // QSqlQueryModel method override
@@ -76,6 +77,7 @@ private:
     QStringList columnStringTypes;
 
     QThread extractThread;
+    GeneralParamsModel *generalParamsModel;
 
 };
 

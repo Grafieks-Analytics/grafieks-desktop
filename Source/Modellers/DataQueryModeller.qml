@@ -260,6 +260,15 @@ Page {
         }
     }
 
+    Connections{
+        target: DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+            searchTextBox.text = ""
+            ds_name.text = ""
+        }
+    }
+
 
 
     // Connection  Ends
@@ -431,7 +440,7 @@ Page {
     }
 
     function searchTable(text){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             tableslist.model = NewTableListModel.filterTableList(text)
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             tableslist.model = CSVJsonDataModel.filterTableList(text)
@@ -480,7 +489,7 @@ Page {
 
     function clearModelQueryData(){
 
-        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
         //            QueryModel.removeTmpChartData()
         //        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
         //            DuckQueryModel.removeTmpChartData()
@@ -518,7 +527,7 @@ Page {
     }
 
     function disconnectDS(){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             NewTableListModel.clearData()
         } else {
             ForwardOnlyDataModel.clearData()
@@ -529,6 +538,7 @@ Page {
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
+        DSParamsModel.setDsName("")
 
         // Clear filters
         FilterCategoricalListModel.clearFilters()
