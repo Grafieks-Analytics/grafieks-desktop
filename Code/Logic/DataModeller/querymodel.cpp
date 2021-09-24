@@ -1,8 +1,9 @@
 #include "querymodel.h"
 
 
-QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
+QueryModel::QueryModel(GeneralParamsModel *gpm, QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
 {
+    this->generalParamsModel = gpm;
 }
 
 QueryModel::~QueryModel()
@@ -58,7 +59,7 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
 void QueryModel::saveExtractData()
 {
-    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql);
+    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
 
@@ -200,6 +201,7 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
     emit clearTablePreview();
 
     this->tmpSql = filteredQuery.simplified();
+    qDebug() << "RECEIVED SQL" <<  this->tmpSql;
 }
 
 void QueryModel::generateRoleNames()

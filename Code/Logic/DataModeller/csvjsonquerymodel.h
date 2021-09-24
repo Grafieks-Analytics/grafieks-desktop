@@ -13,6 +13,7 @@
 #include "../../statics.h"
 
 #include "../General/datatype.h"
+#include "../General/generalparamsmodel.h"
 
 #include "./filtercategoricallistmodel.h"
 #include "./filterdatelistmodel.h"
@@ -31,6 +32,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     FilterDateListModel *dateFilter;
     FilterCsvJson filterCsvJson;
     DataType dataType;
+    GeneralParamsModel *generalParamsModel;
 
     QStringList headerDataPreview;
     QHash<int, QByteArray> m_roleNames;
@@ -48,7 +50,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QMap<int, QString> matchedDateFormats;
 
 public:
-    explicit CSVJsonQueryModel(QObject *parent = nullptr);
+    explicit CSVJsonQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
 
     Q_INVOKABLE void setHideParams(QString hideParams);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);

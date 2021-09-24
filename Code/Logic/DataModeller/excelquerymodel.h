@@ -15,6 +15,7 @@
 #include "../General/datatype.h"
 #include "../../duckdb.hpp"
 #include "../General/querysplitter.h"
+#include "../General/generalparamsmodel.h"
 
 #include "./Workers/saveextractexcelworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
@@ -28,6 +29,7 @@ class ExcelQueryModel : public QAbstractTableModel
     QString query;
     int internalColCount;
     QuerySplitter querySplitter;
+    GeneralParamsModel *generalParamsModel;
 
     QHash<int, QByteArray> m_roleNames;
 
@@ -36,7 +38,7 @@ class ExcelQueryModel : public QAbstractTableModel
     QStringList whereParams;
 
 public:
-    explicit ExcelQueryModel(QObject *parent = nullptr);
+    explicit ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
 
     Q_INVOKABLE void setQuery(QString query);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);

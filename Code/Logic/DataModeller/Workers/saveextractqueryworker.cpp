@@ -1,8 +1,9 @@
 #include "saveextractqueryworker.h"
 
-SaveExtractQueryWorker::SaveExtractQueryWorker(QString tmpSql)
+SaveExtractQueryWorker::SaveExtractQueryWorker(QString tmpSql, QVariantMap changedColumnTypes)
 {
     this->tmpSql = tmpSql;
+    this->changedColumnTypes = changedColumnTypes;
 }
 
 void SaveExtractQueryWorker::run()
@@ -126,15 +127,21 @@ void SaveExtractQueryWorker::run()
     QSqlRecord record = query.record();
     qDebug() << record;
 
+    qDebug() << "QUERY PARAMS CHANGED TYOE" << generalParamsModel.getChangedColumnTypes();
+
     QString createTableQuery = "CREATE TABLE " + fileName + "(";
 
     for(int i = 0; i < record.count(); i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
+        QString fieldName = record.fieldName(i);
+        QString tableName = record.field(i).tableName().toStdString().c_str();
 
-        QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+
+        QString checkFieldName = tableName + "." + fieldName;
+        qDebug() << "CHANGING" << checkFieldName << this->changedColumnTypes;
+        if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+            type = this->changedColumnTypes.value(checkFieldName).toString();
 
             if(type == Constants::categoricalType){
                 type = "VARCHAR";
@@ -157,7 +164,7 @@ void SaveExtractQueryWorker::run()
             }
         }
 
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }
 

@@ -1,8 +1,9 @@
 #include "saveextractforwardonlyworker.h"
 
-SaveExtractForwardOnlyWorker::SaveExtractForwardOnlyWorker(QString query)
+SaveExtractForwardOnlyWorker::SaveExtractForwardOnlyWorker(QString query, QVariantMap changedColumnTypes)
 {
     this->query = query;
+    this->changedColumnTypes = changedColumnTypes;
 }
 
 void SaveExtractForwardOnlyWorker::run()
@@ -68,10 +69,12 @@ void SaveExtractForwardOnlyWorker::run()
         for(int i = 0; i < colCount; i++){
             QVariant fieldType = record.field(i).value();
             QString type = dataType.qVariantType(fieldType.typeName());
+            QString fieldName = record.fieldName(i);
+            QString tableName = record.field(i).tableName().toStdString().c_str();
 
-            QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-            if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-                type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+            QString checkFieldName = tableName + "." + fieldName;
+            if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+                type = this->changedColumnTypes.value(checkFieldName).toString();
 
                 if(type == Constants::categoricalType){
                     type = "VARCHAR";
@@ -94,7 +97,7 @@ void SaveExtractForwardOnlyWorker::run()
                 }
             }
 
-            createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
+            createTableQuery += "\"" + fieldName + "\" " + type + ",";
             this->columnStringTypes.append(type);
         }
 
