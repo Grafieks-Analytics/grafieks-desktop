@@ -325,7 +325,7 @@ Rectangle{
 
     function onAllCheckBoxCheckedChanged(checked){
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType && mainCheckBox.visible === true){
             setCheckedAll(checked)
         }
     }
