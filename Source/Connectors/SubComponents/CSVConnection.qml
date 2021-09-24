@@ -45,8 +45,9 @@ Popup {
 
         function onLogout(){
             selectedFile = ""
-            separator.text = ""
+            separator.text = ","
             csvFileName.text = ""
+            idSeparatorText.text = ""
         }
 
         function onCsvLoginStatus(status, directLogin){
