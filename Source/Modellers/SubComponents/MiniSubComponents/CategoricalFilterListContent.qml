@@ -62,6 +62,10 @@ Rectangle{
         function onFilterIndexChanged(){
             counter = DSParamsModel.filterIndex
         }
+
+        function onModeChanged(){
+            searchText.text = ""
+        }
     }
 
     Connections{
@@ -96,6 +100,7 @@ Rectangle{
         }
     }
 
+
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -127,7 +132,6 @@ Rectangle{
             singleSelectCheckList.model = []
             multiSelectCheckList.model = []
 
-            console.log(GeneralParamsModel.getDbClassification() , "TYPER")
             if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType){
                 singleSelectCheckList.model = CSVJsonDataModel
                 multiSelectCheckList.model  = CSVJsonDataModel
@@ -251,7 +255,7 @@ Rectangle{
     }
 
     function onAllCheckBoxCheckedChanged(checked){
-        if(DSParamsModel.section === Constants.categoricalTab){
+        if(DSParamsModel.section === Constants.categoricalTab && mainCheckBox.visible === true){
             setCheckedAll(checked)
         }
     }

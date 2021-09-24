@@ -115,6 +115,14 @@ Rectangle {
 
     }
 
+    Connections{
+        target: DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+            clearTable()
+        }
+    }
+
     function setHeaders(tableHeaders){
         if(tableHeaders.length > 0){
             roleNames = tableHeaders

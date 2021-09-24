@@ -1,7 +1,8 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent) : QAbstractTableModel(parent)
 {
+    this->generalParamsModel  = gpm;
 }
 
 ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
@@ -38,7 +39,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
-    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query);
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query, this->generalParamsModel->getChangedColumnTypes());
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
 

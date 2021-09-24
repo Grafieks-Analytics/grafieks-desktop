@@ -1,6 +1,6 @@
 #include "saveextractcsvjsonworker.h"
 
-SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter, FilterNumericalListModel *numericalFilter, FilterDateListModel *dateFilter, int totalFiltersCount, QStringList hideParams)
+SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter, FilterNumericalListModel *numericalFilter, FilterDateListModel *dateFilter, int totalFiltersCount, QStringList hideParams, QVariantMap changedColumnTypes)
 {
     this->categoricalFilter = categoricalFilter;
     this->numericalFilter = numericalFilter;
@@ -8,6 +8,7 @@ SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *c
 
     this->totalFiltersCount = totalFiltersCount;
     this->hideParams = hideParams;
+    this->changedColumnTypes = changedColumnTypes;
 
 }
 
@@ -171,8 +172,8 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
                     // If so, set the users choice as default, else process the other condition
                     QString checkFieldName = fileName + "." + this->columnNamesMap.value(i);
 
-                    if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-                        varType = Statics::changedHeaderTypes.value(checkFieldName).toString();
+                    if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+                        varType = this->changedColumnTypes.value(checkFieldName).toString();
                     }
 
                     if(varType == Constants::categoricalType){

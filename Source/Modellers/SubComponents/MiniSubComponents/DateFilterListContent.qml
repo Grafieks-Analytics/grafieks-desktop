@@ -134,6 +134,10 @@ Rectangle{
             counter = DSParamsModel.filterIndex
 
         }
+
+        function onModeChanged(){
+            searchText.text = ""
+        }
     }
 
     Connections{
@@ -164,6 +168,7 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(values){
+            console.log("VALUEs", values)
             updateData(values)
         }
     }
@@ -198,16 +203,28 @@ Rectangle{
             singleSelectCheckList.model = []
             multiSelectCheckList.model = []
 
-            singleSelectCheckList.model = colData
-            multiSelectCheckList.model  = colData
-
-
             // Date format
             selectedFormat = DSParamsModel.getDateFormatMap(counter)
             customBox.currentIndex = selectedFormat
 
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType){
+                singleSelectCheckList.model = CSVJsonDataModel
+                multiSelectCheckList.model  = CSVJsonDataModel
+                convertDate(CSVJsonDataModel.getDateColumnData())
+            } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
+                singleSelectCheckList.model = ExcelDataModel
+                multiSelectCheckList.model  = ExcelDataModel
+                convertDate(ExcelDataModel.getDateColumnData())
+            } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                singleSelectCheckList.model = QueryDataModel.getDateColumnData()
+                multiSelectCheckList.model  = QueryDataModel.getDateColumnData()
+                convertDate(QueryDataModel.getDateColumnData())
+            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType) {
+                singleSelectCheckList.model = ForwardOnlyDataModel
+                multiSelectCheckList.model  = ForwardOnlyDataModel
+                convertDate(ForwardOnlyDataModel.getDateColumnData())
+            }
 
-            convertDate(colData)
             var jsonOptions = JSON.parse(options)
 
             if(jsonOptions.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
@@ -325,7 +342,7 @@ Rectangle{
 
     function onAllCheckBoxCheckedChanged(checked){
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType && mainCheckBox.visible === true){
             setCheckedAll(checked)
         }
     }
@@ -454,7 +471,6 @@ Rectangle{
             var tmpColData = [removeTZ, getYear, getQuarterYear, getMonthYear, getWeekYear, getFullDate, getDateTime, dateData]
             sortedMasterColData.push(tmpColData)
         }
-
         masterColData = sortedMasterColData
     }
 

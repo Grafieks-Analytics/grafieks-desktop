@@ -88,7 +88,6 @@ int Statics::onlineStorageType;
 QString Statics::driverName;
 QString Statics::extractPath;
 QString Statics::csvJsonPath;
-QVariantMap Statics::changedHeaderTypes;
 bool Statics::freeLimitExtractSizeExceeded;
 bool Statics::modeProcessReader;
 QString Statics::dsType;
@@ -285,7 +284,6 @@ int main(int argc, char *argv[])
     User User;
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
-    QueryModel queryModel;
     QueryDataModel queryDataModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
@@ -305,14 +303,11 @@ int main(int argc, char *argv[])
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
     ReportsDataModel reportsDataModel;
-    ForwardOnlyDataModel forwardOnlyDataModel;
-    ForwardOnlyQueryModel forwardOnlyQueryModel;
+    ForwardOnlyDataModel forwardOnlyDataModel;  
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel;
-    ExcelQueryModel excelQueryModel;
     ExcelDataModel excelDataModel;
     CSVJsonDataModel csvJsonDataModel;
-    CSVJsonQueryModel csvJsonQueryModel;
     TableSchemaModel tableSchemaModel;
     NewTableColumnsModel newTableColumnsModel;
 
@@ -348,6 +343,12 @@ int main(int argc, char *argv[])
     ExtractProcessor extractProcessor(&generalParamsModel, &dsParamsModel);
     LiveProcessor liveProcessor(&generalParamsModel, &dsParamsModel);
     WorkbookProcessor workbookProcessor(&generalParamsModel);
+
+    // Data Modeler
+    QueryModel queryModel(&generalParamsModel);
+    ForwardOnlyQueryModel forwardOnlyQueryModel(&generalParamsModel);
+    ExcelQueryModel excelQueryModel(&generalParamsModel);
+    CSVJsonQueryModel csvJsonQueryModel(&generalParamsModel);
 
 
     // OBJECT INITIALIZATION ENDS

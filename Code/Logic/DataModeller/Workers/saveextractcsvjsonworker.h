@@ -35,10 +35,11 @@ class SaveExtractCsvJsonWorker : public QThread
     QVector<int> rejectIds;
     QMap<int, QString> columnStringTypes;
     QMap<int, QString> matchedDateFormats;
+    QVariantMap changedColumnTypes;
 
 
 public:
-    explicit SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr, int totalFiltersCount = 0, QStringList hideParams = QStringList());
+    explicit SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr, int totalFiltersCount = 0, QStringList hideParams = QStringList(), QVariantMap changedColumnTypes = QVariantMap());
 
 private:
     bool appendExtractData(duckdb::Appender *appender);
