@@ -55,11 +55,10 @@ QHash<int, QByteArray> ForwardOnlyDataModel::roleNames() const
 
 void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString options)
 {
-    QStringList output;
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
+    this->modelOutput = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
 
     this->m_roleNames.insert(0, col.toUtf8());
     emit columnListModelDataChanged(options);
@@ -67,22 +66,20 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString op
 
 void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
-    QStringList output;
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE UPPER(" + col + ") LIKE UPPER('%"+searchString+"%')");
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE UPPER(" + joiner + col + joiner + ") LIKE UPPER('%"+searchString+"%')");
+    this->modelOutput = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE UPPER(" + joiner + col + joiner + ") LIKE UPPER('%"+searchString+"%')");
     emit columnListModelDataChanged(options);
 }
 
 QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString moduleName, QString searchString)
 {
-
+    QStringList output;
     QString conType;
     QString queryString;
     QString fieldName;
     QString fieldType;
-    QStringList output;
 
     QString joiner = this->getQueryJoiner();
 
@@ -199,7 +196,6 @@ QStringList ForwardOnlyDataModel::filterTableList(QString keyword)
 QStringList ForwardOnlyDataModel::getDbList()
 {
     QStringList output;
-
     QString conType;
     QString queryString;
 
@@ -233,6 +229,11 @@ QStringList ForwardOnlyDataModel::getDbList()
     }
 
     return output;
+}
+
+QStringList ForwardOnlyDataModel::getDateColumnData()
+{
+    return this->modelOutput;
 }
 
 QString ForwardOnlyDataModel::getQueryJoiner()
