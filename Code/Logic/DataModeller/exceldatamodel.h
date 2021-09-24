@@ -20,9 +20,9 @@ class ExcelDataModel : public QAbstractTableModel
 {
     Q_OBJECT
     QMap<int, QString> sheetNamesMap;
+    QStringList modelOutput;
 
     QHash<int, QByteArray> m_roleNames;
-    QStringList resultData;
     int totalRowCount;
     int totalColCount;
 
@@ -41,6 +41,9 @@ public:
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
+
+    // We are doing date separately than other models because we have to convert the format in the UI
+    Q_INVOKABLE QStringList getDateColumnData();
 
 private:
     QStringList getTableListQAXObject();

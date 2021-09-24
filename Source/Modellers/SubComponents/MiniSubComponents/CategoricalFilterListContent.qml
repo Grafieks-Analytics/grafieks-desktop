@@ -62,6 +62,10 @@ Rectangle{
         function onFilterIndexChanged(){
             counter = DSParamsModel.filterIndex
         }
+
+        function onModeChanged(){
+            searchText.text = ""
+        }
     }
 
     Connections{
@@ -95,6 +99,7 @@ Rectangle{
             updateData(values)
         }
     }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
