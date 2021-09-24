@@ -250,7 +250,7 @@ Rectangle{
     }
 
     function onAllCheckBoxCheckedChanged(checked){
-        if(DSParamsModel.section === Constants.categoricalTab){
+        if(DSParamsModel.section === Constants.categoricalTab && mainCheckBox.visible === true){
             setCheckedAll(checked)
         }
     }

@@ -139,7 +139,6 @@ void SaveExtractQueryWorker::run()
 
 
         QString checkFieldName = tableName + "." + fieldName;
-        qDebug() << "CHANGING" << checkFieldName << this->changedColumnTypes;
         if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
             type = this->changedColumnTypes.value(checkFieldName).toString();
 
