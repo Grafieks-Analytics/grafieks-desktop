@@ -260,6 +260,15 @@ Page {
         }
     }
 
+    Connections{
+        target: DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+            searchTextBox.text = ""
+            ds_name.text = ""
+        }
+    }
+
 
 
     // Connection  Ends
@@ -529,6 +538,7 @@ Page {
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
+        DSParamsModel.setDsName("")
 
         // Clear filters
         FilterCategoricalListModel.clearFilters()
