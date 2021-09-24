@@ -127,7 +127,6 @@ Rectangle{
             singleSelectCheckList.model = []
             multiSelectCheckList.model = []
 
-            console.log(GeneralParamsModel.getDbClassification() , "TYPER")
             if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType){
                 singleSelectCheckList.model = CSVJsonDataModel
                 multiSelectCheckList.model  = CSVJsonDataModel
