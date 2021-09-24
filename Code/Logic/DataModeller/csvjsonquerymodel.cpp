@@ -1,9 +1,9 @@
 #include "csvjsonquerymodel.h"
 
-CSVJsonQueryModel::CSVJsonQueryModel(QObject *parent) : QAbstractTableModel(parent),
+CSVJsonQueryModel::CSVJsonQueryModel(GeneralParamsModel *gpm, QObject *parent) : QAbstractTableModel(parent),
     categoricalFilter(nullptr), numericalFilter(nullptr), dateFilter(nullptr), totalFiltersCount(0)
 {
-
+    this->generalParamsModel = gpm;
 }
 
 void CSVJsonQueryModel::setHideParams(QString hideParams)
@@ -26,7 +26,7 @@ void CSVJsonQueryModel::setPreviewQuery(int previewRowCount)
 void CSVJsonQueryModel::saveExtractData()
 {
 
-    SaveExtractCsvJsonWorker *saveExtractCsvJsonWorker = new SaveExtractCsvJsonWorker(this->categoricalFilter, this->numericalFilter, this->dateFilter, this->totalFiltersCount, this->hideParams);
+    SaveExtractCsvJsonWorker *saveExtractCsvJsonWorker = new SaveExtractCsvJsonWorker(this->categoricalFilter, this->numericalFilter, this->dateFilter, this->totalFiltersCount, this->hideParams, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractCsvJsonWorker, &SaveExtractCsvJsonWorker::saveExtractComplete, this, &CSVJsonQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractCsvJsonWorker, &SaveExtractCsvJsonWorker::finished, saveExtractCsvJsonWorker, &SaveExtractCsvJsonWorker::deleteLater, Qt::QueuedConnection);
 

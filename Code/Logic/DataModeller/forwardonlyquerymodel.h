@@ -17,13 +17,14 @@
 #include "./Workers/generaterolenamesforwardonlyworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractforwardonlyworker.h"
+#include "../General/generalparamsmodel.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit ForwardOnlyQueryModel(QObject *parent = nullptr);
+    explicit ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
     ~ForwardOnlyQueryModel();
 
     Q_INVOKABLE void setQuery(QString query);
@@ -56,6 +57,7 @@ private:
     QString query;
     QString finalSql;
     QuerySplitter querySplitter;
+    GeneralParamsModel *generalParamsModel;
 
     // Data variables for Charts
     QMap<int, QStringList*> forwardOnlyChartData;

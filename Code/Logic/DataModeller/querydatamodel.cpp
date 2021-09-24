@@ -168,7 +168,6 @@ QStringList QueryDataModel::getData(QString queryString)
     }
 
     QSqlDatabase queryDataDb = QSqlDatabase::database(conType);
-    qDebug() << Q_FUNC_INFO << queryDataDb.isOpen();
     QSqlQuery query(queryString, queryDataDb);
 
     this->resultData.clear();
@@ -181,7 +180,6 @@ QStringList QueryDataModel::getData(QString queryString)
     }
 
     output = this->resultData;
-    qDebug() << "ATTA" << output;
     this->totalRowCount = this->resultData.count();
     return output;
 
