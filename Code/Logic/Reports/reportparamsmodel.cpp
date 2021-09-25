@@ -139,23 +139,10 @@ void ReportParamsModel::saveReport()
         // masterReportFilters
         QJsonObject masterReportFiltersTmpObj;
         foreach(int filterId, this->masterReportFilters.value(reportId).keys()){
-
-            QJsonObject masterReportFiltersChildTmpObj;
-            foreach(QVariant filterKey, this->masterReportFilters.value(reportId).value(filterId)){
-
-                QList<QString> finalKeys = this->masterReportFilters.value(reportId).value(filterId).keys();
-                foreach(QString finalKey, finalKeys){
-
-                    QString typeName = this->masterReportFilters.value(0).value(filterId).value(finalKey).typeName();
-                    if(typeName == "QVariantList" || typeName == "QStringList"){
-                        masterReportFiltersChildTmpObj.insert(finalKey, QJsonArray::fromStringList(this->masterReportFilters.value(reportId).value(filterId).value(finalKey).toStringList()));
-                    } else {
-                        masterReportFiltersChildTmpObj.insert(finalKey, this->masterReportFilters.value(reportId).value(filterId).value(finalKey).toString());
-                    }
-                }
-            }
-            masterReportFiltersObj.insert(QString::number(filterId), masterReportFiltersChildTmpObj);
+            masterReportFiltersTmpObj.insert(QString::number(filterId), QJsonObject::fromVariantMap(this->masterReportFilters.value(reportId).value(filterId)));
         }
+
+        masterReportFiltersObj.insert(QString::number(reportId), masterReportFiltersTmpObj);
 
     }
 
@@ -310,7 +297,6 @@ QVariantMap ReportParamsModel::getReportsList(){
     QList<int> keys = this->reportsData.keys();
 
     foreach(int key, keys){
-        qDebug() << "Reports Data" << this->reportsData.value(key);
         tmpReportsData.insert(QString::number(key), this->reportsData.value(key));
     }
     return tmpReportsData;
@@ -1084,7 +1070,6 @@ void ReportParamsModel::setCalculatedFieldPopupStatus(QString createFieldPopupSt
 void ReportParamsModel::setXAxisColumns(QString xAxisColumns)
 {
 
-    qDebug() << "XAXIS" << xAxisColumns;
     if (m_xAxisColumns == xAxisColumns)
         return;
 
@@ -1276,36 +1261,6 @@ void ReportParamsModel::setRow3Columns(QString row3Columns)
 
 void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
 {
-    //    qDebug() << Q_FUNC_INFO << reportParams;
-
-    //XX    // Customize Report parameters
-    //XX    QMap<int, QVariantMap> reportsMap;           // <<int reportId, reportObj>>
-    //xx    QMap<int, QVariant> reportsData;
-    //xx    QVariantMap dashboardReportInstances; // <[reportId: <reportObject>]>
-
-    //xx    int reportIdsCounter = 0;
-
-    //    // Filter specific variables
-    //xx    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
-
-
-    //xx    QVector<int> categoricalFilters;                            // List of categorical filters
-    //xx    QVector<int> dateFilters;                                   // List of date filters
-    //xx    QVector<int> numericalFilters;                              // List of numerical filters
-    //xx    QMap<int, QStringList> filterColumnMap;                     // filter id - <column name - tablename> map
-    //xx    QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
-    //xx    QMap<int, QString> filterRelationMap;                       // filter id - relation map
-    //xx    QMap<int, QString> filterSlugMap;                           // filter id - slug map
-    //xx    QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
-    //xx    QMap<int, bool> includeNullMap;                             // filter id - include null map
-    //xx    QMap<int, bool> selectAllMap;                               // filter id - select All map
-    //xx    QMap<int, QString> filterSectionMap;                        // filter id - section map
-    //xx    QMap<int, QString> filterCategoryMap;                       // filter id - category map
-    //xx    QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
-    //xx    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
-    //    QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
-    //    QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
-    //    QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
 
     QJsonObject mainObj;
     QJsonObject childObj;
@@ -1342,10 +1297,12 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
         childObj = mainObj.value(reportId).toObject();
         QStringList filterIds = childObj.keys();
 
+
+        QMap<int, QVariantMap> filterMap;
+
         for(int i = 0; i < filterIds.length(); i++){
 
             QStringList innerMapKeys = childObj.value(filterIds.at(i)).toObject().keys();
-
             foreach(QString key, innerMapKeys){
                 QJsonValue::Type t = childObj.value(filterIds.at(i)).toObject().value(key).type();
 
@@ -1362,8 +1319,14 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
                 } else {
                     tmp.insert(filterIds.at(i), "");
                 }
+
             }
+
+            filterMap.insert(i, tmp);
+            tmp.clear();
         }
+
+        this->masterReportFilters.insert(reportId.toInt(), filterMap);
     }
 
     // reportIdsCounter
@@ -1449,8 +1412,8 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
         this->tmpSelectedValues.append(tmp.toString());
     }
 
-    emit reportListChanged();
 
+    emit reportListChanged();
 
     // Restore charts in dashboard
     emit generateWorkbookReports();
