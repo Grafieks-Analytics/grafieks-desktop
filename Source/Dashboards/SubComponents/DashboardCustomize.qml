@@ -309,11 +309,11 @@ Item{
                             height: parent.height
                             width: 50
                             anchors.right: parent.right
-                            anchors.rightMargin:  20
+                            anchors.rightMargin:  5
                             Image{
                                 id: resizeReport
-                                height: 16
-                                width: 16
+                                height: 20
+                                width: 20
                                 z:50
                                 anchors.right: parent.right
                                 anchors.rightMargin:  20
