@@ -111,7 +111,7 @@ void SaveExtractForwardOnlyWorker::run()
             // Create a master table to refer the name of actual extract tableName
             // while running an extract later on
 
-            QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
+            QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER)";
             QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + tableName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
             auto x = con.Query(tableCreateQuery.toStdString());
