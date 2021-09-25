@@ -28,15 +28,16 @@ class SaveExtractExcelWorker : public QThread
     int internalRowCount;
     int internalColCount;
     QStringList columnStringTypes;
+    QVariantMap changedColumnTypes;
 
 public:
-    explicit SaveExtractExcelWorker(QString query = "");
+    explicit SaveExtractExcelWorker(QString query = "", QVariantMap changedColumnTypes = QVariantMap());
 
 protected:
     void run() override;
 
 signals:
-    void saveExtractComplete();
+    void saveExtractComplete(QString errorMsg);
 
 };
 

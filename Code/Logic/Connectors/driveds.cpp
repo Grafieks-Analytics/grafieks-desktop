@@ -303,7 +303,7 @@ void DriveDS::fileDownloadFinished()
         QString fileName = QDir::temp().tempPath() +"/" + this->newFileName;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.write(m_networkReply->readAll());
         file.close();
 
         if(this->extension.contains("xls") || this->extension.contains("xlsx")){

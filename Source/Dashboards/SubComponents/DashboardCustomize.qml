@@ -116,6 +116,7 @@ Item{
         editIconVisible = false
 
     }
+    
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -296,6 +297,7 @@ Item{
                         anchors.left: parent.left
                         anchors.fill: parent
                         height: parent.height
+                        z:100
 
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
@@ -312,23 +314,83 @@ Item{
                                 id: resizeReport
                                 height: 16
                                 width: 16
+                                z:50
                                 anchors.right: parent.right
                                 anchors.rightMargin:  20
                                 visible: editIconVisible
-                                source: "/Images/icons/edit gray.png"
+                                source: "/Images/icons/menu-button.png"
                                 anchors.verticalCenter: parent.verticalCenter
                                 MouseArea{
                                     anchors.fill: parent
-                                    onClicked: editSelectedReport()
+                                    onClicked: menuOptions.open()
                                 }
                             }
                         }
+                         Row{
+
+                anchors.right: tableImg.right
+                anchors.top: toggleMenuIcon.bottom
+                anchors.rightMargin: -70
+                width: parent.width-30
+                height: 80
+
+                Item {
+                    id: name
+
+                    anchors.right:parent.right
+
+                    x: -menuOptions.width
+
+                    // Menu{
+                    //     id: menuOptions
+                    //     background: Rectangle{
+                    //         implicitWidth: 200
+                    //         border.color: Constants.darkThemeColor
+                    //     }
+
+
+                        Menu{
+                            id: menuOptions
+
+                            background: Rectangle{
+                                implicitWidth: 180
+
+                                border.color: Constants.darkThemeColor
+                            }
+                            MenuItem {
+                                id:menuItem1
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: qsTr("Edit")
+
+                            //   TODO:edit report
+
+                            }
+                            MenuSeparator{}
+                            MenuItem {
+                                id:menuItem2
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: qsTr("Delete")
+                                // TODO:Delete report
+
+                               
+                            }
+
+                        }
+                    }
+                // }
+
+
+            }
 
                     }
 
                     MouseArea {
                         id: mouseArea
-                        anchors.fill: parent
+                        // anchors.fill: parent
+                        height:parent.height
+                        width:parent.width
                         drag.target:  dragRect
                         drag.minimumX: -( new_dashboard_page.width - parent.width)
                         drag.maximumX: 0

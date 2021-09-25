@@ -95,6 +95,7 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
     }
 
     function showCustomizeReport(){
@@ -256,6 +257,7 @@ Item{
                 maximumX: dashboard_summary.width- mainContainer.width
                 smoothed: true
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
 
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()

@@ -186,6 +186,12 @@ Page {
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
         }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
     }
 
     Connections{
@@ -197,6 +203,12 @@ Page {
 
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
         }
     }
 
@@ -211,6 +223,12 @@ Page {
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
         }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
     }
 
     Connections{
@@ -223,6 +241,12 @@ Page {
         function onExtractFileExceededLimit(freeLimit){
             saveExtractLimit(freeLimit)
         }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
     }
 
 
@@ -233,6 +257,19 @@ Page {
         // when extract is saved
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(true)
+        }
+    }
+
+    Connections{
+        target: DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+            searchTextBox.text = ""
+            ds_name.text = ""
+        }
+
+        function onDisconnectAll(){
+            disconnectDS()
         }
     }
 
@@ -407,7 +444,7 @@ Page {
     }
 
     function searchTable(text){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             tableslist.model = NewTableListModel.filterTableList(text)
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             tableslist.model = CSVJsonDataModel.filterTableList(text)
@@ -456,7 +493,7 @@ Page {
 
     function clearModelQueryData(){
 
-        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
         //            QueryModel.removeTmpChartData()
         //        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
         //            DuckQueryModel.removeTmpChartData()
@@ -494,7 +531,7 @@ Page {
     }
 
     function disconnectDS(){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             NewTableListModel.clearData()
         } else {
             ForwardOnlyDataModel.clearData()
@@ -505,6 +542,7 @@ Page {
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
+        DSParamsModel.setDsName("")
 
         // Clear filters
         FilterCategoricalListModel.clearFilters()
@@ -557,6 +595,7 @@ Page {
 
     function saveExtractPopupFunction(signalType){
 
+        queryModellerPage.timeElapsed = 0
         waitTimer.start()
 
         if(signalType === true){
@@ -570,7 +609,7 @@ Page {
 
     function saveExtractLimit(freeLimit){
 
-        timeElapsed = 0
+        queryModellerPage.timeElapsed = 0
         waitTimer.stop()
 
         if(freeLimit){
@@ -781,6 +820,12 @@ Page {
 
     }
 
+    MessageDialog{
+        id: extractCreationError
+        title: "Extract create error"
+        icon: StandardIcon.Critical
+    }
+
 
     // This is a component because it uses Qt.labs.Platform
     // and this conflicts with the current file
@@ -794,8 +839,8 @@ Page {
         interval: 1000;
         repeat: true
         onTriggered: {
-            timeElapsed++
-            saveExtractPopup.timerText = "Time elapsed: " + timeElapsed + " seconds"
+            queryModellerPage.timeElapsed++
+            saveExtractPopup.timerText = "Time elapsed: " + queryModellerPage.timeElapsed + " seconds"
         }
     }
 

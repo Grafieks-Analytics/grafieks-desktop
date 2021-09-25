@@ -342,6 +342,7 @@ signals:
 
     // For Dashboard Reports
     void reportListChanged();
+    void reportDeleted(int deletedReportId);
 
     void editReportToggleChanged(QString editReportToggle);
     void categoricalFilterChanged(QVector<int> filterList);

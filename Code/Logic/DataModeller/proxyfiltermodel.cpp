@@ -97,7 +97,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
             newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
         }
 
-
+        qDebug() << "EMITTING WHERE" << newQuery;
 
         emit sendFilterQuery(newQuery);
         break;

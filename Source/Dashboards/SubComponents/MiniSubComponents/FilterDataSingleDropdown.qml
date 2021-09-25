@@ -27,12 +27,17 @@ Item{
         modelContent.unshift("Select All")
         control.model = modelContent
 
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         var i = 0;
         listModel.clear()
         modelContent.forEach(item => {
                                  listModel.append({"name": item, "checked": true, "index": i})
+                                 if(previousCheckValues.length > 0 && item === previousCheckValues[0]){
+                                     control.currentIndex = i
+                                 }
                                  i++
                              })
+
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 

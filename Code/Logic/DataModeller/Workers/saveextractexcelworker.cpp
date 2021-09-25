@@ -1,8 +1,9 @@
 #include "saveextractexcelworker.h"
 
-SaveExtractExcelWorker::SaveExtractExcelWorker(QString query)
+SaveExtractExcelWorker::SaveExtractExcelWorker(QString query, QVariantMap changedColumnTypes)
 {
     this->query = query;
+    this->changedColumnTypes = changedColumnTypes;
 }
 
 void SaveExtractExcelWorker::run()
@@ -17,6 +18,7 @@ void SaveExtractExcelWorker::run()
 
     QStringList list;
     QString finalSqlInterPart;
+    QString errorMsg = "";
 
     QSqlDatabase conExcel =  QSqlDatabase::addDatabase("QODBC", "excelQ");
 
@@ -33,11 +35,13 @@ void SaveExtractExcelWorker::run()
     for(int i = 0; i < this->internalColCount; i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
+        QString fieldName = record.fieldName(i);
+        QString tableName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$"));
 
         // lastIndexOf used here because the sheet name may itself contain `$` along with the $ used to name the excel sheet in sql query
-        QString checkFieldName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$")) + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+        QString checkFieldName = tableName + "." + fieldName;
+        if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+            type = this->changedColumnTypes.value(checkFieldName).toString();
 
             if(type == Constants::categoricalType){
                 type = "VARCHAR";
@@ -60,7 +64,7 @@ void SaveExtractExcelWorker::run()
             }
         }
 
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }
 
@@ -68,68 +72,74 @@ void SaveExtractExcelWorker::run()
     createTableQuery += ")";
 
     auto createT = con.Query(createTableQuery.toStdString());
-    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
+    if(createT->success) {
 
-    // Create a master table to refer the name of actual extract tableName
-    // while running an extract later on
+        // Create a master table to refer the name of actual extract tableName
+        // while running an extract later on
 
-    QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
-    QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
+        QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
+        QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
-    auto x = con.Query(tableCreateQuery.toStdString());
-    if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
-    auto z = con.Query(tableInserQuery.toStdString());
-    if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
+        auto x = con.Query(tableCreateQuery.toStdString());
+        if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
+        auto z = con.Query(tableInserQuery.toStdString());
+        if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
-    // Start appending data in table
-    duckdb::Appender appender(con, fileName.toStdString());
+        // Start appending data in table
+        duckdb::Appender appender(con, fileName.toStdString());
 
-    int lineCounter = 0;
-    while(query.next()){
-        appender.BeginRow();
-        for(int i = 0; i < this->internalColCount; i++){
+        int lineCounter = 0;
+        while(query.next()){
+            appender.BeginRow();
+            for(int i = 0; i < this->internalColCount; i++){
 
-            QString columnType = this->columnStringTypes.at(i);
-            if(columnType == "INTEGER"){
-                appender.Append(query.value(i).toInt());
-            } else if(columnType == "BIGINT"){
-                appender.Append(query.value(i).toDouble());
-            }  else if(columnType == "FLOAT") {
-                appender.Append(query.value(i).toFloat());
-            } else if(columnType == "DOUBLE") {
-                appender.Append(query.value(i).toDouble());
-            } else if(columnType == "DATE"){
-                QDate date = query.value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender.Append(duckdb::Date::FromDate(year, month, day));
-            } else if(columnType == "TIMESTAMP"){
-                QDate date = query.value(i).toDate();
-                QTime time = query.value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-            } else if(columnType == "VARCHAR"){
-                appender.Append(query.value(i).toString().toUtf8().constData());
-            } else {
-                qDebug() << "UNDETECTED" << query.value(i).toString().toUtf8().constData();
+                QString columnType = this->columnStringTypes.at(i);
+                if(columnType == "INTEGER"){
+                    appender.Append(query.value(i).toInt());
+                } else if(columnType == "BIGINT"){
+                    appender.Append(query.value(i).toDouble());
+                }  else if(columnType == "FLOAT") {
+                    appender.Append(query.value(i).toFloat());
+                } else if(columnType == "DOUBLE") {
+                    appender.Append(query.value(i).toDouble());
+                } else if(columnType == "DATE"){
+                    QDate date = query.value(i).toDate();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender.Append(duckdb::Date::FromDate(year, month, day));
+                } else if(columnType == "TIMESTAMP"){
+                    QDate date = query.value(i).toDate();
+                    QTime time = query.value(i).toDateTime().time();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender.Append(duckdb::Date::FromDate(year, month, day));
+                    // Timestamp crashes in duckDb release. Will fix in the future
+                    // appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                } else if(columnType == "VARCHAR"){
+                    appender.Append(query.value(i).toString().toUtf8().constData());
+                } else {
+                    qDebug() << "UNDETECTED" << query.value(i).toString().toUtf8().constData();
+                }
+
             }
+            appender.EndRow();
+            list.clear();
 
+            lineCounter++;
+
+            if(lineCounter % Constants::flushExtractCount == 0){
+                appender.Flush();
+            }
         }
-        appender.EndRow();
-        list.clear();
 
-        lineCounter++;
-
-        if(lineCounter % Constants::flushExtractCount == 0){
-            appender.Flush();
-        }
+        appender.Close();
+    } else {
+        errorMsg = createT->error.c_str();
     }
 
-    appender.Close();
 
-    emit saveExtractComplete();
+    emit saveExtractComplete(errorMsg);
 }
 

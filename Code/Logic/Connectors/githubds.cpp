@@ -213,7 +213,7 @@ void GithubDS::fileDownloadFinished()
         QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +"." + this->extension;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.write(m_networkReply->readAll());
         file.close();
 
         if(this->extension.contains("xls")){
