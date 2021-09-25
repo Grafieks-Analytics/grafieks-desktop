@@ -233,6 +233,11 @@ ApplicationWindow {
         }
     }
 
+    About{
+        id: aboutPopup
+    }
+
+
     // SubComponents Starts
 
     // This is a component because it uses Qt.labs.Platform
@@ -475,6 +480,10 @@ ApplicationWindow {
 
             MenuItem{
                 text: qsTr("About")
+                onTriggered: {
+                    console.log("About clicked")
+                    aboutPopup.open()
+                }
             }
 
 //            MenuItem{
