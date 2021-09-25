@@ -276,8 +276,7 @@
             window.dataLabelfontSize = dataLabelfontSize;
             window.dataLabelfontFamily = dataLabelfontFamily;
             window.dataLabelColor = dataLabelColor;
-            
-           
+
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
@@ -286,9 +285,9 @@
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
+
+              labelStatus = labelConfig.labelStatus;
             
-             let { labelStatus } = labelConfig;
-             
 
             d3.selectAll("#my_dataviz").html("");
             (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
@@ -503,7 +502,7 @@
                 });
 
             // Add labels for the nodes
-            if (true) {
+            if (labelStatus) {
                 nodeEnter
                     .append("text")
                     .attr("dy", ".35em")
@@ -679,6 +678,6 @@
             }, 50);
         }
 
-        drawChart(data);
+        // drawChart(data);
     </script>
 </body>

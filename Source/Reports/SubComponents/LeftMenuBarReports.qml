@@ -314,7 +314,7 @@ Rectangle{
             subMenuCustomizations: "tool tip,size,data label,grid line,grand total"
         }
         ListElement{
-            icon: "123.png"
+            icon: "kpi.png"
             chartHtml:"KPI.html"
             elementWidth: 30
             elementHeight: 20

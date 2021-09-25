@@ -11,6 +11,7 @@
     <script src="./Data/utils.js"></script>
 
     <script src="Data/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
 
     <title>Pie Chart</title>
@@ -56,15 +57,15 @@
                 Binders: 2114,
                 Bookcases: 8016,
                 Chairs: 6906,
-                Envelopes: 1134,
+                Envelopes: 1134.56456,
                 Fasteners: 160,
                 Furnishings: 2398,
                 Labels: 192,
                 Paper: 1198,
                 Phones: 8372,
-                Storage: 4638,
+                Storage: 4638.5612,
                 Supplies: 132,
-                Tables: 10230,
+                Tables: 10230.8854,
             },
             ["sub-category", "sales"],
         ];
@@ -121,10 +122,13 @@
                 innerRadius,
                 dataLabelfontSize = defaultD3Config.fontSize,
                 dateFormat = defaultD3Config.dateFormat,
+                
                 dataLabelfontFamily = defaultD3Config.fontFamily,
+                dataLabelColor = defaultD3Config.fontColor,
             } = plottingConfiguration;
             window.dataLabelfontSize = dataLabelfontSize;
             window.dataLabelfontFamily = dataLabelfontFamily;
+            window.dataLabelfontSize = dataLabelfontSize;
 
             var data = transformData(data, dateFormat);
 
@@ -149,7 +153,7 @@
                 innerRadius = defaultD3Config.innerRadius;
             }
             let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus } = labelConfig;
+            let { labelStatus,labelFormat } = labelConfig;
             d3.select("#legend").html("").style("padding", "");
 
             var translateSvg = 0;
@@ -473,7 +477,11 @@
                     .attr("stroke-width", 1)
                     .attr("points", function (d) {
                         if (!d.showLabel) {
-                            return [[0,0], [0,0],[0,0] ];
+                            return [
+                                [0, 0],
+                                [0, 0],
+                                [0, 0],
+                            ];
                         }
                         var posA = outerArc.centroid(d); // line insertion in the slice
                         // posA[1]= outerArc.centroid(d)[1]-20;
@@ -496,13 +504,14 @@
                     .append("text")
                     .attr("font-family", dataLabelfontFamily)
                     .attr("font-size", dataLabelfontSize)
+                    .attr("fill", dataLabelColor)
                     .text(function (d) {
                         console.log(d.data.key);
                         if (!d.showLabel) {
                             return "";
                         }
                         return (
-                            Math.round(d.data.value) +
+                            labelFormatSet(d.data.value, labelFormat) +
                             " (" +
                             ((d.data.value / totalSum) * 100).toFixed(2) +
                             "%)"
@@ -524,6 +533,6 @@
         }
 
         // Initialize the plot with the first dataset
-        drawChart(data);
+        // drawChart(data);
     </script>
 </body>
