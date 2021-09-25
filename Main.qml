@@ -134,6 +134,10 @@ ApplicationWindow {
         GeneralParamsModel.openNewGrafieksInstance();
     }
 
+    function disconnectDS(){
+        DSParamsModel.disconnectDS()
+    }
+
     function saveDatasource(){
 
         dsSaveDialog.visible = true
@@ -318,9 +322,17 @@ ApplicationWindow {
 
 //        }
 
-//        Menu {
-//            id: dataMenu
-//            title: qsTr("&Data")
+        Menu {
+            id: dataMenu
+            title: qsTr("&Data")
+
+
+                MenuItem{
+                    id: disconnect_ds
+                    text: qsTr("Disconnect")
+
+                    onTriggered: disconnectDS()
+                }
 
 
 //            MenuItem{
@@ -353,7 +365,9 @@ ApplicationWindow {
 //                id: action_export_ds_excel
 //                text: qsTr("Export Datasource to Excel")
 //            }
-//        }
+        }
+
+
 
         Menu {
             id: serverMenu

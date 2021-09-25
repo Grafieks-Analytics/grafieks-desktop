@@ -5,6 +5,9 @@
 #include <QThread>
 #include <QDebug>
 #include <QApplication>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "chartsthread.h"
 
@@ -80,6 +83,8 @@ public:
     Q_INVOKABLE void getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE void getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
+    Q_INVOKABLE void saveChartsModel();
+
 private:
     void callThread();
 
@@ -113,6 +118,7 @@ public slots:
     void receiveReportConditions(QString whereConditions, int currentReportId);
     void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
 
+    void getExtractWhereParams(QJsonObject whereParams);
 signals:
 
     void signalBarChartValues(QString output, int reportId, int dashboardId, int chartSource);
@@ -139,6 +145,7 @@ signals:
     void signalStackedAreaChartValues(QString output, int reportId, int dashboardId, int chartSource);
     void signalMultiLineChartValues(QString output, int reportId, int dashboardId, int chartSource);
 
+    void sendWhereParams(QJsonObject whereParams);
 
 };
 

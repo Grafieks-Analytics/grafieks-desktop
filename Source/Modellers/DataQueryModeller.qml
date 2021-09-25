@@ -267,6 +267,10 @@ Page {
             searchTextBox.text = ""
             ds_name.text = ""
         }
+
+        function onDisconnectAll(){
+            disconnectDS()
+        }
     }
 
 
