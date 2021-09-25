@@ -566,7 +566,7 @@ Item {
                     tmpJoinString += ")"
 
                     if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString
+                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString + ")"
                     } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
                     }  else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
@@ -630,7 +630,7 @@ Item {
             }
 
 
-            if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+            if(GeneralParamsModel.getDbClassification() === Constants.accessType || GeneralParamsModel.getDbClassification() === Constants.excelType ) {
                 let braces = "";
                 for(var i = 0; i < totalJoinCount - 1; i++){
                     braces += "(";
