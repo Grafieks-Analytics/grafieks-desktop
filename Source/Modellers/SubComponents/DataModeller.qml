@@ -271,7 +271,16 @@ Item {
             if(DSParamsModel.fetchRectangles(refObject) !== ""){
 
                 // Ensure that deleted tables are not reflected in generated query later
-                let dynamicObjectName =  DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                let dynamicObjectName;
+
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                    dynamicObjectName = "[" + DSParamsModel.fetchRectangles(refObject).name  + "$]."
+                } else if(GeneralParamsModel.getDbClassification() === Constants.accessType){
+                    dynamicObjectName = "[" + DSParamsModel.fetchRectangles(refObject).name  + "]."
+                } else {
+                    dynamicObjectName = DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                }
+
                 DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
 
                 DSParamsModel.removeRectangles(refObject);
