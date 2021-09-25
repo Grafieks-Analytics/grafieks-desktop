@@ -28,6 +28,8 @@ import "./Source/Reports"
 import "./Source/Others"
 import "./Source/MainSubComponents"
 
+import "./Source/Dashboards/SubComponents"
+
 
 ApplicationWindow {
 
@@ -143,6 +145,10 @@ ApplicationWindow {
         dsSaveDialog.visible = true
     }
 
+    function saveWorkbook(){
+        saveWorkbookPrompt.open()
+    }
+
     function openDatasource(){
 
         dsOpenDialog.visible = true
@@ -227,6 +233,14 @@ ApplicationWindow {
         }
     }
 
+    // SubComponents Starts
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveWorkbook{
+        id: saveWorkbookPrompt
+    }
+
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -272,6 +286,18 @@ ApplicationWindow {
 
                 onTriggered: saveDatasource()
             }
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_save_workbook
+                text: qsTr("Save Workbook")
+                enabled: true
+
+                onTriggered: saveWorkbook()
+            }
+
+            MenuSeparator{}
 
             MenuItem{
                 id: action_sampledata
@@ -333,7 +359,6 @@ ApplicationWindow {
 
                     onTriggered: disconnectDS()
                 }
-
 
 //            MenuItem{
 //                id: action_new_ds
@@ -401,9 +426,16 @@ ApplicationWindow {
 
                 onTriggered: {
                     Datasources.setSourceType(Constants.liveDS)
-
                     publishGrafieks1.visible = true
                 }
+            }
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_publish_workbook
+                text: qsTr("Publish Workbook")
+                enabled: false
             }
         }
 
