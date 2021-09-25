@@ -1,7 +1,8 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent) : QAbstractTableModel(parent)
 {
+    this->generalParamsModel  = gpm;
 }
 
 ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
@@ -38,7 +39,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
-    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query);
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query, this->generalParamsModel->getChangedColumnTypes());
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
 
@@ -90,13 +91,17 @@ void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
     this->query = filteredQuery.simplified();
 }
 
-void ForwardOnlyQueryModel::extractSaved()
+void ForwardOnlyQueryModel::extractSaved(QString errorMsg)
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
 
-    FreeTierExtractsManager freeTierExtractsManager;
-    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
+    if(errorMsg.length() == 0){
+        FreeTierExtractsManager freeTierExtractsManager;
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMsg);
+    }
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()

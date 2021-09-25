@@ -115,6 +115,14 @@ Rectangle {
 
     }
 
+    Connections{
+        target: DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+            clearTable()
+        }
+    }
+
     function setHeaders(tableHeaders){
         if(tableHeaders.length > 0){
             roleNames = tableHeaders
@@ -204,7 +212,7 @@ Rectangle {
                     renderType: Text.NativeRendering
                     // text: modelData
                     onObjectNameChanged: {
-                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
                             textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
                         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                             textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))

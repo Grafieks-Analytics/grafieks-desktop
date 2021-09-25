@@ -129,7 +129,7 @@ void ChartsThread::getBarChartValues()
 {
 
     QJsonArray data;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
@@ -150,16 +150,19 @@ void ChartsThread::getBarChartValues()
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+
+                counter++;
 
                 xAxisData.append(xAxisDataPointer->at(i));
                 yAxisData.append(yAxisDataPointer->at(i).toFloat());
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 yAxisData[index] = yAxisData[index].toFloat() + yAxisDataPointer->at(i).toFloat();
 
             }
@@ -183,7 +186,7 @@ void ChartsThread::getBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
     emit signalBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -286,7 +289,7 @@ void ChartsThread::getGroupedBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -299,7 +302,7 @@ void ChartsThread::getNewGroupedBarChartValues()
     QList<QString> uniqueSplitKeyData;
     QStringList reportChartDataVar;
 
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitKeyDataPointer(new QStringList);
@@ -332,13 +335,15 @@ void ChartsThread::getNewGroupedBarChartValues()
         qint64 nanoSec;
         myTimer2.start();
 
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj = QJsonObject();
 
             QString uniqueHash = xAxisDataPointer->at(i);
             if(!uniqueHashKeywords->contains(uniqueHash)){
-                uniqueHashKeywords->append(uniqueHash);
+                uniqueHashKeywords->insert(uniqueHash, counter);
+                counter++;
 
                 obj.insert("mainCategory", xAxisDataPointer->at(i));
 
@@ -347,7 +352,7 @@ void ChartsThread::getNewGroupedBarChartValues()
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(uniqueHash);
+                index = uniqueHashKeywords->value(uniqueHash);
                 obj = axisDataArray[index].toObject();
                 obj[splitKeyDataPointer->at(i)] = obj.value(splitKeyDataPointer->at(i)).toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -382,8 +387,7 @@ void ChartsThread::getNewGroupedBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
-    qDebug() << doc;
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalNewGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -402,7 +406,7 @@ void ChartsThread::getLineBarChartValues()
 {
 
     QJsonArray data;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yBarAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yLineAxisDataPointer(new QStringList);
@@ -429,11 +433,13 @@ void ChartsThread::getLineBarChartValues()
 
     // Add data
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
             tmpData.clear();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 tmpData.append(xAxisDataPointer->at(i));
                 tmpData.append(yLineAxisDataPointer->at(i).toFloat());
@@ -442,7 +448,7 @@ void ChartsThread::getLineBarChartValues()
                 colData.append(QJsonArray::fromVariantList(tmpData));
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 tmpData.append(colData.at(index).toArray().toVariantList());
 
                 tmpData[1] = tmpData[1].toFloat() + yLineAxisDataPointer->at(i).toFloat();
@@ -467,7 +473,7 @@ void ChartsThread::getLineBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalLineBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -480,7 +486,7 @@ void ChartsThread::getPieChartValues()
 
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
 
     // Fetch data from extract
     QString tableName = this->getTableName();
@@ -501,10 +507,12 @@ void ChartsThread::getPieChartValues()
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 obj.insert(xAxisDataPointer->at(i), yAxisDataPointer->at(i).toFloat());
             } else{
@@ -525,7 +533,7 @@ void ChartsThread::getPieChartValues()
 
     QJsonDocument doc;
     doc.setArray(data);
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalPieChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -535,7 +543,8 @@ void ChartsThread::getFunnelChartValues()
 
     QJsonArray data;
     QJsonArray axisDataArray;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
+//    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
@@ -560,12 +569,14 @@ void ChartsThread::getFunnelChartValues()
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj.empty();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 obj.insert("key", xAxisDataPointer->at(i));
                 obj.insert("value", yAxisDataPointer->at(i).toDouble());
@@ -573,7 +584,7 @@ void ChartsThread::getFunnelChartValues()
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 obj = axisDataArray[index].toObject();
                 obj["value"] = obj.value("value").toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -595,7 +606,7 @@ void ChartsThread::getFunnelChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalFunnelChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -606,7 +617,7 @@ void ChartsThread::getRadarChartValues()
 
     QJsonArray data;
     QJsonArray axisDataArray;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
@@ -632,12 +643,14 @@ void ChartsThread::getRadarChartValues()
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj.empty();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 obj.insert("axis", xAxisDataPointer->at(i));
                 obj.insert("value", yAxisDataPointer->at(i).toDouble());
@@ -645,7 +658,7 @@ void ChartsThread::getRadarChartValues()
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 obj = axisDataArray[index].toObject();
                 obj["value"] = obj.value("value").toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -667,7 +680,7 @@ void ChartsThread::getRadarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalRadarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -679,7 +692,7 @@ void ChartsThread::getScatterChartValues()
     QVariantList tmpData;
     float xAxisTmpData;
     float yAxisTmpData;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
@@ -721,6 +734,7 @@ void ChartsThread::getScatterChartValues()
 
     // Populate the actual data
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             masterKeyword = splitDataPointer->at(i);
@@ -729,7 +743,8 @@ void ChartsThread::getScatterChartValues()
             yAxisTmpData = 0.0;
 
             if(!uniqueHashKeywords->contains(masterKeyword)){
-                uniqueHashKeywords->append(masterKeyword);
+                uniqueHashKeywords->insert(masterKeyword, counter);
+                counter++;
 
                 tmpData.append(xAxisDataPointer->at(i).toFloat());
                 tmpData.append(yAxisDataPointer->at(i).toFloat());
@@ -738,7 +753,7 @@ void ChartsThread::getScatterChartValues()
                 colData.append(QJsonArray::fromVariantList(tmpData));
             } else{
 
-                index = uniqueHashKeywords->indexOf(masterKeyword);
+                index = uniqueHashKeywords->value(masterKeyword);
                 xAxisTmpData =  colData.at(index).toArray().at(0).toDouble() + xAxisDataPointer->at(i).toDouble();
                 yAxisTmpData =  colData.at(index).toArray().at(1).toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -768,7 +783,7 @@ void ChartsThread::getScatterChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalScatterChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -807,7 +822,7 @@ void ChartsThread::getScatterChartNumericalValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalScatterChartNumericalValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -913,7 +928,7 @@ void ChartsThread::getHeatMapChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalHeatMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -969,7 +984,7 @@ void ChartsThread::getGaugeChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalGaugeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -1121,7 +1136,7 @@ void ChartsThread::getKPIChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalKPIChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -1245,7 +1260,7 @@ void ChartsThread::getMultiLineChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalMultiLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -1254,7 +1269,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 {
 
     QJsonArray data;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
@@ -1279,11 +1294,13 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
             tmpData.clear();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 tmpData.append(xAxisDataPointer->at(i));
                 tmpData.append(yAxisDataPointer->at(i).toFloat());
@@ -1291,7 +1308,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
                 colData.append(QJsonArray::fromVariantList(tmpData));
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 tmpData.append(colData.at(index).toArray().toVariantList());
 
                 tmpData[1] = tmpData[1].toFloat() + yAxisDataPointer->at(i).toFloat();
@@ -1313,7 +1330,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     if(identifier == "getAreaChartValues"){
         emit signalAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
@@ -1499,7 +1516,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     QJsonDocument doc;
     doc.setArray(cols);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     if(identifier == "getSunburstChartValues"){
         emit signalSunburstChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
@@ -1613,8 +1630,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
-    qDebug() << doc;
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     if(identifier == "getStackedBarChartValues"){
         emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
@@ -1635,7 +1651,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QVariantList masterOutput;
     QMap<QString, QMap<QString, QString>> dateConversionParams;
 
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
 
@@ -1655,7 +1671,6 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     // Fetch data from extract
     QString tableName = this->getTableName();
 
-    qDebug() << xAxisColumn << yAxisColumn << "MISSING COLs";
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
@@ -1756,6 +1771,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
     // Actual values
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
 
             tmpData.clear();
@@ -1768,7 +1784,8 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
 
             if(!uniqueHashKeywords->contains(masterKeyword)){
-                uniqueHashKeywords->append(masterKeyword);
+                uniqueHashKeywords->insert(masterKeyword, counter);
+                counter++;
 
                 for(int j = 0; j < xAxisLength; j++){
                     tmpData.append(xAxisDataPointer->value(j).at(i));
@@ -1787,7 +1804,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(masterKeyword);
+                index = uniqueHashKeywords->value(masterKeyword);
                 tmpData.append(colData.at(index).toArray().toVariantList());
 
                 for(int j = 0; j < yAxisLength; j++){
@@ -1820,7 +1837,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
     if(identifier == "getTableChartValues"){
         emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
@@ -1865,7 +1882,6 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(
     if(!dataList->error.empty())
         qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
 
-    qDebug() << Q_FUNC_INFO << "Chart query" <<queryString;
     return dataList;
 
 }
@@ -1874,10 +1890,10 @@ QString ChartsThread::getTableName()
 {
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     return tableName;
 }

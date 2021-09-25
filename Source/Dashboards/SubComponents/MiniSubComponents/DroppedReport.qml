@@ -127,6 +127,19 @@ Item{
 
     }
 
+    Connections{
+        target: ReportParamsModel
+
+        function onReportDeleted(deletedReportId){
+            if(deletedReportId === newItem.reportId) {
+
+                mainContainer.destroy()
+                this.destroy()
+                is_dashboard_blank = is_dashboard_blank - 1
+            }
+        }
+    }
+
 
     Connections{
         target: ChartsModel
@@ -451,6 +464,13 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+//        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+
+        let curr = DashboardParamsModel.currentReport
+
+        ReportParamsModel.deleteReport(curr, false)
+        DashboardParamsModel.deleteReport(curr)
+
     }
 
     function editSelectedReport(reportId){
@@ -519,10 +539,10 @@ Item{
         mainContainer.rulerStatus = false
     }
 
-    function onDropAreaPositionChangedReport(){
-        currnetPointReport.x=mainContainer.x;
-        currnetPointReport.y=mainContainer.y;
-    }
+//    function onDropAreaPositionChangedReport(){
+//        currnetPointReport.x= mainContainer.x;
+//        currnetPointReport.y= mainContainer.y;
+//    }
 
     function onChartLoaded(loadRequest){
 
@@ -861,6 +881,7 @@ Item{
     }
 
 
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -935,11 +956,12 @@ Item{
 
 
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
             //            Drag.hotSpot.x: 2
             //            Drag.hotSpot.y: 2
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
-            onPositionChanged:  onDropAreaPositionChangedReport()
+//            onPositionChanged:  onDropAreaPositionChangedReport()
         }
 
         Rectangle{
@@ -1093,12 +1115,7 @@ Item{
             onLoadingChanged: onChartLoaded(loadRequest)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
-            Component.onCompleted: {
-                console.log("LOGGGER")
 
-                 onChartLoaded(loadRequest)
-                console.log("LOGGGER==============================")
-            }
 
             //                    onLoadingChanged: {
 

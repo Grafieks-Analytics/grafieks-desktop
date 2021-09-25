@@ -18,6 +18,12 @@ Item {
     property var value2: 0
 
     onComponentNameChanged: {
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            condition1Text.text = previousCheckValues[0]
+            condition2Text.text = previousCheckValues[1]
+        }
+
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 

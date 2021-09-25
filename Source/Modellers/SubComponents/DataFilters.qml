@@ -258,8 +258,7 @@ Popup {
             "values" : ""
         }
 
-        console.log(colName, tableName, section, category)
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType  || GeneralParamsModel.getDbClassification() === Constants.accessType ){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             CSVJsonDataModel.columnData(colName, tableName, JSON.stringify(options))

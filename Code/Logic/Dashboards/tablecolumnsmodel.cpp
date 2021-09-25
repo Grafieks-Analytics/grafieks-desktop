@@ -231,6 +231,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
         QString currentColumnName = showColumns.value(dashboardId).at(j);
 
         QString currentColumnRelation = columnFilterType.value(dashboardId).value(currentColumnName).toString();
+        qDebug() << "CURRENT REL" << currentColumnRelation;
         QString valueIncludeExclude = columnIncludeExcludeMap.value(dashboardId).value(currentColumnName).toString();
         QStringList filterValues = columnValueMap.value(dashboardId).value(currentColumnName);
 
@@ -261,36 +262,36 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
             float min = filterValues.at(0).toFloat();
             float max = filterValues.at(1).toFloat();
-            whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + min + " AND " + max + " AND ";
+            whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + QString::number(min) + " AND " + QString::number(max) + " AND ";
         }
 
         // Not equal relations
         else if(currentColumnRelation == "dataNotEqual"){
 
             float value = filterValues.at(0).toFloat();
-            whereConditions += joiner + currentColumnName + joiner + " != " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " != " + QString::number(value) + " AND ";
         }
 
         // Smaller than relations
         else if(currentColumnRelation == "dataSmaller"){
 
             float value = filterValues.at(0).toFloat();
-            whereConditions += joiner + currentColumnName + joiner + " < " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " < " + QString::number(value) + " AND ";
 
         } else if(currentColumnRelation == "dataGreater"){
 
             float value = filterValues.at(0).toFloat();
-            whereConditions += joiner + currentColumnName + joiner + " > " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " > " + QString::number(value) + " AND ";
 
         } else if(currentColumnRelation == "dataEqualOrSmaller"){
 
             float value = filterValues.at(0).toFloat();
-            whereConditions += joiner + currentColumnName + joiner + " <= " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " <= " + QString::number(value) + " AND ";
 
         } else if(currentColumnRelation == "dataEqualOrGreater"){
 
             float value = filterValues.at(0).toFloat();
-            whereConditions += joiner + currentColumnName + joiner + " >= " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " >= " + QString::number(value) + " AND ";
 
         } else{
             qDebug() << "ELSE CONDITION" << currentColumnRelation;
@@ -370,10 +371,10 @@ void TableColumnsModel::generateColumns(duckdb::Connection *con)
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     // Clear existing chart headers data
     this->numericalList.clear();

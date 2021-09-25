@@ -78,6 +78,7 @@
 
 int Statics::isFreeTier;
 QString Statics::tmpIconPath;
+bool Statics::editMode;
 
 QString Statics::currentDbName;
 int Statics::currentDbIntType;
@@ -87,7 +88,6 @@ int Statics::onlineStorageType;
 QString Statics::driverName;
 QString Statics::extractPath;
 QString Statics::csvJsonPath;
-QVariantMap Statics::changedHeaderTypes;
 bool Statics::freeLimitExtractSizeExceeded;
 bool Statics::modeProcessReader;
 QString Statics::dsType;
@@ -246,6 +246,7 @@ int main(int argc, char *argv[])
     Statics::freeLimitExtractSizeExceeded = false;
     Statics::isFreeTier = 1; // 1 = true (Free Tier); 0 = false (Pro)
     Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
+    Statics::editMode = false;
     /***********************************************************************************************************************/
     // Static initializations Ends
 
@@ -283,7 +284,6 @@ int main(int argc, char *argv[])
     User User;
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
-    QueryModel queryModel;
     QueryDataModel queryDataModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
@@ -303,14 +303,11 @@ int main(int argc, char *argv[])
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
     ReportsDataModel reportsDataModel;
-    ForwardOnlyDataModel forwardOnlyDataModel;
-    ForwardOnlyQueryModel forwardOnlyQueryModel;
+    ForwardOnlyDataModel forwardOnlyDataModel;  
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel;
-    ExcelQueryModel excelQueryModel;
     ExcelDataModel excelDataModel;
     CSVJsonDataModel csvJsonDataModel;
-    CSVJsonQueryModel csvJsonQueryModel;
     TableSchemaModel tableSchemaModel;
     NewTableColumnsModel newTableColumnsModel;
 
@@ -346,6 +343,12 @@ int main(int argc, char *argv[])
     ExtractProcessor extractProcessor(&generalParamsModel, &dsParamsModel);
     LiveProcessor liveProcessor(&generalParamsModel, &dsParamsModel);
     WorkbookProcessor workbookProcessor(&generalParamsModel);
+
+    // Data Modeler
+    QueryModel queryModel(&generalParamsModel);
+    ForwardOnlyQueryModel forwardOnlyQueryModel(&generalParamsModel);
+    ExcelQueryModel excelQueryModel(&generalParamsModel);
+    CSVJsonQueryModel csvJsonQueryModel(&generalParamsModel);
 
 
     // OBJECT INITIALIZATION ENDS
@@ -396,9 +399,11 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::sendReportParams, &workbookProcessor, &WorkbookProcessor::getReportParams);
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
     QObject::connect(&tableColumnsModel, &TableColumnsModel::signalSaveTableColumns, &workbookProcessor, &WorkbookProcessor::getTableColumns);
+    QObject::connect(&chartsModel, &ChartsModel::sendWhereParams, &workbookProcessor, &WorkbookProcessor::getWhereParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractWhereParams, &chartsModel, &ChartsModel::getExtractWhereParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processExtractFromWorkbook, &extractProcessor, &ExtractProcessor::setArgumentsFromWorkbook);
 
     // SIGNAL & SLOTS ENDS
@@ -493,6 +498,7 @@ int main(int argc, char *argv[])
 //            liveProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::workbookExt){
             workbookProcessor.setArgumentsByFile(fileToRead);
+
         } else {
             qDebug() << "Unknown file";
         }

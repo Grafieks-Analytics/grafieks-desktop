@@ -83,6 +83,7 @@ Rectangle {
 
         function onGenerateWorkbookReports(){
 
+            var reportTypeArray = ["blank", "text", "image", "report"]
             is_dashboard_blank = is_dashboard_blank + 1
 
             var allDashboardsObj = DashboardParamsModel.fetchAllDashboards()
@@ -90,6 +91,7 @@ Rectangle {
 
             for(var i = 0; i < allDashboardKeys.length; i++){
                 var reportsInFirstDashboard = DashboardParamsModel.fetchReportsInDashboard(allDashboardKeys[i])
+                var reportTypes = DashboardParamsModel.fetchAllReportTypeMap(i);
 
                 for(var j = 1; j <= reportsInFirstDashboard.length; j++){
                     var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)
@@ -103,20 +105,28 @@ Rectangle {
                     dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
 
                     // Set the last container type param
-                    DashboardParamsModel.setLastContainerType("report");
+                    // report type - chart, image, blank, text
+                    DashboardParamsModel.setLastContainerType(reportTypeArray[reportTypes[j]]);
 
-                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter};
+                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j)};
                     objectJson.reportId = j;
                     rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
                     const reportProperties = ReportParamsModel.getReport(j);
-                    console.log("Rep prop", i, j, JSON.stringify(reportProperties), DashboardParamsModel.getReportZOrder(i,j), DashboardParamsModel.getReportName(i, j),  DashboardParamsModel.getDashboardWidgetCoordinates(i, j))
-                    const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
-                    DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+
+                    // ["blank", "text", "image", "report"]
+                    if(reportTypeArray[reportTypes[j]] === reportTypeArray[1]){
+                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[2]){
+                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[3]) {
+                        const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
+                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+                    }
+
                     counter++;
                 }
-
             }
         }
     }
@@ -136,8 +146,6 @@ Rectangle {
     function onDropAreaEntered(drag){
 
         dashboardArea.color = Constants.dropHighlightColor
-        //        console.log("Entered", currentPoint.x, listViewElem.itemName)
-        console.log("droparaea",dropArea.height,dropArea.width)
     }
 
     function onDropAreaDropped(drag){
@@ -152,21 +160,19 @@ Rectangle {
 
         let reportType = 0;
         let draggedItem = listViewElem.itemName.toLocaleLowerCase();
-//        console.log("Diadem", draggedItem)
 
+        switch(listViewElem.itemName){
 
-        switch(listViewElem.itemType){
-
-        case "blank":
+        case "Blank":
             reportType = Constants.reportTypeBlank
             break;
-        case "text":
+        case "Text":
             reportType = Constants.reportTypeText
             break;
-        case "image":
+        case "Image":
             reportType = Constants.reportTypeImage
             break;
-        case "chart":
+        default:
             reportType = Constants.reportTypeChart
             break;
         }
@@ -190,7 +196,8 @@ Rectangle {
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
-        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+        if(reportType === Constants.reportTypeChart)
+            DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);
@@ -199,7 +206,8 @@ Rectangle {
     }
 
     function onDropAreaPositionChanged(drag){
-        console.log("on position change dashboard",drag.x);
+        DashboardParamsModel.setPositionX(drag.x);
+        DashboardParamsModel.setPositionY(drag.y);
 
     }
     function onDropAreaExited(){

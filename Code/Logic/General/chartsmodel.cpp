@@ -336,6 +336,31 @@ void ChartsModel::getMultiLineChartValues(int reportId, int dashboardId, int cha
     chartsThread->methodSelector("getMultiLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
 }
 
+void ChartsModel::saveChartsModel()
+{
+    // QMap<int, QString> reportWhereConditions;
+    // QMap<int, QString> dashboardWhereConditions;
+
+    QJsonObject reportWhereConditionsObj;
+    QJsonObject dashboardWhereConditionsObj;
+    QJsonObject finalObj;
+
+    QList<int> reportKeys = this->reportWhereConditions.keys();
+    foreach(int id, reportKeys){
+        reportWhereConditionsObj.insert(QString::number(id), this->reportWhereConditions.value(id));
+    }
+
+    QList<int> dashboardKeys = this->dashboardWhereConditions.keys();
+    foreach(int id, dashboardKeys){
+        dashboardWhereConditionsObj.insert(QString::number(id), this->dashboardWhereConditions.value(id));
+    }
+
+    finalObj.insert("reportWhereConditions", reportWhereConditionsObj);
+    finalObj.insert("dashboardWhereConditions", dashboardWhereConditionsObj);
+
+    emit sendWhereParams(finalObj);
+}
+
 void ChartsModel::callThread()
 {
     if(!chartsThreadThread.isRunning()){
@@ -348,7 +373,6 @@ void ChartsModel::callThread()
 
 void ChartsModel::slotBarChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {
-    qDebug() << "BAR" << this->currentReportId << this->currentDashboardId << this->currentChartSource << output;
     emit signalBarChartValues(output,reportId, dashboardId, chartSource);
     chartsThreadThread.quit();
 }
@@ -499,4 +523,27 @@ void ChartsModel::receiveReportConditions(QString whereConditions, int currentRe
 void ChartsModel::receiveDashboardConditions(QString whereConditions, int currentDashboardId)
 {
     this->dashboardWhereConditions.insert(currentDashboardId, whereConditions);
+}
+
+void ChartsModel::getExtractWhereParams(QJsonObject whereParams)
+{
+    // reportWhereConditions
+    QStringList reportIds = whereParams.value("reportWhereConditions").toObject().keys();
+    QVariantMap reportMap = whereParams.value("reportWhereConditions").toObject().toVariantMap();
+
+    foreach(QString reportId, reportIds){
+
+        this->reportWhereConditions.insert(reportId.toInt(), reportMap.value(reportId).toString());
+    }
+
+
+    // dashboardWhereConditions
+    QStringList dashboardIds = whereParams.value("dashboardWhereConditions").toObject().keys();
+    QVariantMap dashboardMap = whereParams.value("dashboardWhereConditions").toObject().toVariantMap();
+
+    foreach(QString dashboardId, dashboardIds){
+
+        this->dashboardWhereConditions.insert(dashboardId.toInt(), dashboardMap.value(dashboardId).toString());
+    }
+
 }

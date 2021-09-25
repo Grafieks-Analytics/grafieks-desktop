@@ -4,6 +4,8 @@ import QtWebView 1.1
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../../MainSubComponents"
+
 // This is the Text Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
 
@@ -11,6 +13,7 @@ Item{
 
     id: newItem
     visible: true
+
 
     anchors{
         top: mainContainer.top
@@ -22,6 +25,7 @@ Item{
 
     property var hoverStatus: false
     property string webUrl: ""
+    property var filePathSet: false
 
 
     /***********************************************************************************************************************/
@@ -86,8 +90,13 @@ Item{
 
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
+                webengine.url = GeneralParamsModel.getTmpPath() + url
+
+                textEditor.widgetReportId = refReportId
+                textEditor.widgetDashboardId = refDashboardId
                 webengine.reload()
+            }
         }
 
         function onDashboardContentDestroyed(dashboardId){
@@ -108,18 +117,20 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+//    onWebUrlChanged: {
+//        webengine.url = "file:" + webUrl
+//    }
+
     Component.onCompleted: {
-        var globalCordinates = this.mapToGlobal(0,0)
-        console.log('global x',globalCordinates.x)
-        console.log('global y',globalCordinates.y)
+//        var globalCordinates = this.mapToGlobal(0,0)
+//        console.log('global x',globalCordinates.x)
+//        console.log('global y',globalCordinates.y)
+//        let currentDashboard = DashboardParamsModel.currentDashboard
+//        let currentReport = DashboardParamsModel.currentReport + 1
 
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        let currentReport = DashboardParamsModel.currentReport + 1
 
-        console.log(currentDashboard, currentReport, "CURRENT")
-
-        let path = GeneralParamsModel.getTmpPath() + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
-        webengine.url = "file:" + path
+//        let path = GeneralParamsModel.getTmpPath()  + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
+//        webengine.url = "file:" + path
     }
 
     function destroyElement(){
@@ -128,6 +139,7 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
     }
 
     function showCustomizeReport(){
@@ -271,6 +283,8 @@ Item{
 
                 smoothed: true
             }
+
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
             onEntered: showMenus()
@@ -292,10 +306,12 @@ Item{
 
                 case ( WebView.LoadFailedStatus):
                     webengine.visible = false
+                    editText.visible = true
                     break
 
                 case ( WebView.LoadSucceededStatus):
                     webengine.visible = true
+                    editText.visible = false
                     break
                 }
 
@@ -305,8 +321,17 @@ Item{
 
     }
 
+    CustomButton{
+        id: editText
+        textValue: "Edit Text"
+        anchors.centerIn: parent
+        visible: true
+        onClicked: showTextEditor()
+    }
+
     WidgetTextEditor{
         id: textEditor
+        visible: false
     }
 
 
