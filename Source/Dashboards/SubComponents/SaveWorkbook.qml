@@ -27,6 +27,9 @@ FileDialog{
         // Save Table Columns Model params
         TableColumnsModel.saveTableColumns();
 
+        // Save ChartsModel
+        ChartsModel.saveChartsModel();
+
         // Save workbook file
         let fileName = GeneralParamsModel.urlToFilePath(saveWorkbookPromptDialog.currentFile)
         WorkbookProcessor.saveWorkbooks(fileName);

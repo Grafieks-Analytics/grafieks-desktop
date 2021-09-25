@@ -40,6 +40,11 @@ void DSParamsModel::executeModelerQuery()
     emit processQuery();
 }
 
+void DSParamsModel::disconnectDS()
+{
+    emit disconnectAll();
+}
+
 void DSParamsModel::resetDataModel()
 {
 

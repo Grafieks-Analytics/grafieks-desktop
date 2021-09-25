@@ -28,8 +28,6 @@ using namespace jsoncons;
 class ChartsThread : public QObject
 {
     Q_OBJECT
-    QMap<int, QStringList> newChartHeaderreportWhereConditions;
-    QMap<int, QString> headerMap;
     QString reportWhereConditions;
     QString dashboardWhereConditions;
     int currentDashboardId;

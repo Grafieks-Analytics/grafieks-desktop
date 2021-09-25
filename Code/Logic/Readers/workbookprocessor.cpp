@@ -83,6 +83,7 @@ void WorkbookProcessor::processExtract()
             emit sendExtractDashboardParams(doc.object().value("dashboardParams").toObject());
             emit sendExtractReportParams(doc.object().value("reportParams").toObject());
             emit sendExtractTableColumns(doc.object().value("tableColumns").toObject());
+            emit sendExtractWhereParams(doc.object().value("whereParams").toObject());
 
         }
     }
@@ -113,10 +114,10 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
 
     }
 
-
     finalObj.insert("reportParams", this->reportParams);
     finalObj.insert("dashboardParams", this->dashboardParams);
     finalObj.insert("tableColumns", this->tableColumnParams);
+    finalObj.insert("whereParams", this->whereParams);
     finalObj.insert("connectionType", Statics::dsType);
 
     if(Statics::dsType == Constants::liveType){
@@ -173,4 +174,10 @@ void WorkbookProcessor::getTableColumns(QJsonObject tableColumns)
 {
     this->tableColumnParams = tableColumns;
     qDebug() << Q_FUNC_INFO << "Slot Table Column params" << tableColumns;
+}
+
+void WorkbookProcessor::getWhereParams(QJsonObject whereParams)
+{
+    qDebug() << Q_FUNC_INFO << "GOT WHERE" << whereParams;
+    this->whereParams = whereParams;
 }

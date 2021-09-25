@@ -358,7 +358,7 @@ void BoxDS::fileDownloadFinished()
         QString fileName = QDir::temp().tempPath() +"/" + this->boxFileId + this->boxExtension;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(bytes.data(), bytes.size());
+        file.write(bytes.data());
         file.close();
 
         if(this->boxExtension.contains("xls") || this->boxExtension.contains("xlsx")){
