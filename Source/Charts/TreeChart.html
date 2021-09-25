@@ -631,51 +631,51 @@
                 update(d);
             }
 
-            setTimeout(() => {
-                const arrayDepth = [];
-                var numberOfNodes =
-                    document.querySelectorAll('[depth="1"]').length;
-                for (let i = 0; i <= maxDepth; i++) {
-                    arrayDepth.push(
-                        document.querySelectorAll('[depth="' + i + '"]').length
-                    );
-                }
-                var maxNode = Math.max(...arrayDepth);
-                var maxNodeIndex = arrayDepth.indexOf(maxNode);
-                var listMaxNode = document.querySelectorAll(
-                    '[depth="' + maxNodeIndex + '"]'
-                );
-                var minDistaceList = [];
-                translateData = [];
+            // setTimeout(() => {
+            //     const arrayDepth = [];
+            //     var numberOfNodes =
+            //         document.querySelectorAll('[depth="1"]').length;
+            //     for (let i = 0; i <= maxDepth; i++) {
+            //         arrayDepth.push(
+            //             document.querySelectorAll('[depth="' + i + '"]').length
+            //         );
+            //     }
+            //     var maxNode = Math.max(...arrayDepth);
+            //     var maxNodeIndex = arrayDepth.indexOf(maxNode);
+            //     var listMaxNode = document.querySelectorAll(
+            //         '[depth="' + maxNodeIndex + '"]'
+            //     );
+            //     var minDistaceList = [];
+            //     translateData = [];
 
-                listMaxNode.forEach((node) => {
-                    // TODO: put this in function in utils
-                    var abc = node.getAttribute("transform").split(",")[1];
-                    translateData.push(
-                        +abc.substring(0, abc.length - 1).trim()
-                    );
-                });
-                for (let i = 0; i < listMaxNode.length - 1; i++) {
-                    if (translateData[i + 1] - translateData[i] < 80) {
-                        minDistaceList.push(
-                            translateData[i + 1] - translateData[i]
-                        );
-                        // console.log("test");
-                    }
-                }
-                var minDistance = +Math.min(...minDistaceList);
+            //     listMaxNode.forEach((node) => {
+            //         // TODO: put this in function in utils
+            //         var abc = node.getAttribute("transform").split(",")[1];
+            //         translateData.push(
+            //             +abc.substring(0, abc.length - 1).trim()
+            //         );
+            //     });
+            //     for (let i = 0; i < listMaxNode.length - 1; i++) {
+            //         if (translateData[i + 1] - translateData[i] < 80) {
+            //             minDistaceList.push(
+            //                 translateData[i + 1] - translateData[i]
+            //             );
+            //             // console.log("test");
+            //         }
+            //     }
+            //     var minDistance = +Math.min(...minDistaceList);
 
-                heightNode = minDistance * maxNode;
+            //     heightNode = minDistance * maxNode;
 
-                // console.log({ arrayDepth });
+            //     // console.log({ arrayDepth });
 
-                if (!reDraw) {
-                    reDraw = true;
-                    drawChart(window.data);
-                }
+            //     // if (!reDraw) {
+            //     //     reDraw = true;
+            //     //     drawChart(window.data);
+            //     // }
 
-                redraw = false;
-            }, 50);
+            //     // redraw = false;
+            // }, 50);
         }
 
         // drawChart(data);
