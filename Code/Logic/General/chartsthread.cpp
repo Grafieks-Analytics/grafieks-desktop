@@ -383,7 +383,6 @@ void ChartsThread::getNewGroupedBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson();
-    qDebug() << doc;
 
     emit signalNewGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
@@ -1614,7 +1613,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     doc.setArray(data);
 
     QString strData = doc.toJson();
-    qDebug() << doc;
 
     if(identifier == "getStackedBarChartValues"){
         emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
@@ -1655,7 +1653,6 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     // Fetch data from extract
     QString tableName = this->getTableName();
 
-    qDebug() << xAxisColumn << yAxisColumn << "MISSING COLs";
 
     QString xQueryString =  "SELECT ";
     foreach(QVariant xCols, xAxisColumn){
@@ -1865,7 +1862,6 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(
     if(!dataList->error.empty())
         qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
 
-    qDebug() << Q_FUNC_INFO << "Chart query" <<queryString;
     return dataList;
 
 }

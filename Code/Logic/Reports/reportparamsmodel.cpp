@@ -1100,7 +1100,6 @@ void ReportParamsModel::setReportId(int reportId)
     if (m_reportId == reportId)
         return;
 
-    qDebug() << "RECEIVED REPORT ID" << reportId;
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
 
@@ -1297,30 +1296,24 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
         childObj = mainObj.value(reportId).toObject();
         QStringList filterIds = childObj.keys();
 
-
         QMap<int, QVariantMap> filterMap;
 
         for(int i = 0; i < filterIds.length(); i++){
 
-            QStringList innerMapKeys = childObj.value(filterIds.at(i)).toObject().keys();
-            foreach(QString key, innerMapKeys){
-                QJsonValue::Type t = childObj.value(filterIds.at(i)).toObject().value(key).type();
+            QVariantMap innerMapObject = childObj.value(filterIds.at(i)).toObject().toVariantMap();
 
-                if(t == QJsonValue::Bool){
-                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toBool());
-                } else if(t == QJsonValue::Double){
-                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toDouble());
-                } else if(t == QJsonValue::String){
-                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toString());
-                } else if(t == QJsonValue::Array){
-                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toArray().toVariantList());
-                } else if(t == QJsonValue::Object){
-                    tmp.insert(filterIds.at(i), childObj.value(filterIds.at(i)).toObject().value(key).toObject().toVariantMap());
-                } else {
-                    tmp.insert(filterIds.at(i), "");
-                }
-
-            }
+            tmp.insert("actualDateValues", innerMapObject.value("actualDateValues").toStringList());
+            tmp.insert("category", innerMapObject.value("category").toString());
+            tmp.insert("columnName", innerMapObject.value("columnName").toStringList());
+            tmp.insert("dateFormat", innerMapObject.value("dateFormat").toString());
+            tmp.insert("filterRelation", innerMapObject.value("filterRelation").toString());
+            tmp.insert("filterSlug", innerMapObject.value("filterSlug").toString());
+            tmp.insert("filterValue", innerMapObject.value("filterValue").toStringList());
+            tmp.insert("includeExclude", innerMapObject.value("includeExclude").toBool());
+            tmp.insert("includeNull", innerMapObject.value("includeNull").toBool());
+            tmp.insert("section", innerMapObject.value("section").toString());
+            tmp.insert("selectAll", innerMapObject.value("selectAll").toBool());
+            tmp.insert("subCategory", innerMapObject.value("subCategory").toString());
 
             filterMap.insert(i, tmp);
             tmp.clear();
@@ -1328,6 +1321,8 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
 
         this->masterReportFilters.insert(reportId.toInt(), filterMap);
     }
+
+
 
     // reportIdsCounter
     this->reportIdsCounter = reportParams.value("reportIdsCounter").toInt();
