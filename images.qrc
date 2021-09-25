@@ -195,5 +195,6 @@
         <file>Images/icons/charts/geo_grey.png</file>
         <file>Images/icons/charts/sankey_grey.png</file>
         <file>Images/icons/charts/treemap_grey.png</file>
+        <file>Images/icons/charts/kpi.png</file>
     </qresource>
 </RCC>
