@@ -119,7 +119,7 @@ Column{
      
         color: "white"
 
-            z: -12000
+            z: -120000
 
 //        x:-leftMargin
 //        border.color: Constants.darkThemeColor
@@ -154,6 +154,7 @@ Column{
             width: parent.width-10
       
              anchors.horizontalCenter: parent.horizontalCenter
+             z: 20000    
         }
 
     }
@@ -173,7 +174,7 @@ Column{
         height: parent.height/3 - 6
          width: parent.width
         color: "white"
-            z: -12000
+            z: -120000
 
 //        border.color: Constants.darkThemeColor
 //          anchors.horizontalCenter: parent.horizontalCenter
@@ -205,6 +206,7 @@ Column{
              height: parent.height - 40
              width: parent.width-10
              anchors.horizontalCenter:  parent.horizontalCenter
+             z: 20000    
         }
 
     }
