@@ -535,8 +535,14 @@ Popup {
         id: postgresObcModalError
         visible: false
         title: "Postgres Driver missing"
-        text: qsTr("You don't have Postgres driver. Download it here <a href=\"https://www.postgresql.org/ftp/odbc/versions\">https://www.postgresql.org/ftp/odbc/versions</a>")
+
+Text {
+    // anchors.centerIn: parent
+        text: qsTr("You don't have Postgres driver. Download it here <a href=\"https://www.postgresql.org/ftp/odbc/versions\">click here</a>")
+    onLinkActivated: Qt.openUrlExternally(link)
+}
 
     }
+    
 
 }

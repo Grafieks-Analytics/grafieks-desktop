@@ -116,6 +116,7 @@ Column{
     Rectangle{
         height: parent.height/3 - 6
         width: parent.width
+     
         color: "white"
 
             z: -120000
@@ -127,6 +128,7 @@ Column{
         Rectangle{
             id:numericalRect
             height: 25
+            z:10
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
@@ -150,6 +152,7 @@ Column{
             anchors.top: numericalRect.bottom
              height: parent.height - 40
             width: parent.width-10
+      
              anchors.horizontalCenter: parent.horizontalCenter
              z: 20000    
         }
@@ -179,6 +182,7 @@ Column{
         Rectangle{
             id:dateRect
             height: 25
+            z:10
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
