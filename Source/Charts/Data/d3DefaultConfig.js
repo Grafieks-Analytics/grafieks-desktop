@@ -69,8 +69,8 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: false,
-        legendPosition: "right",
+        legendStatus: true,
+        legendPosition: "bottom",
     },
     defaultlabelConfig: {
         labelStatus: true,

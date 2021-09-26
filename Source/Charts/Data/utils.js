@@ -403,13 +403,14 @@ function labelFormatSet(labelValue, labelFormat) {
             return Math.round(labelValue).toLocaleString("en-US");
             break;
         case "symbol":
-             if (labelValue > 999 && labelValue < 1000000) {
-                 return (labelValue / 1000).toFixed(1) + "K"; // convert to K for number from > 1000 < 1 million
-             } else if (labelValue > 1000000) {
-                 return (labelValue / 1000000).toFixed(1) + "M"; // convert to M for number from > 1 million
-             } else if (labelValue < 900) {
-                 return labelValue; // if value < 1000, nothing to do
-             }
+            //  if (labelValue > 999 && labelValue < 1000000) {
+            //      return (labelValue / 1000).toFixed(1) + "K"; // convert to K for number from > 1000 < 1 million
+            //  } else if (labelValue > 1000000) {
+            //      return (labelValue / 1000000).toFixed(1) + "M"; // convert to M for number from > 1 million
+            //  } else if (labelValue < 900) {
+            //      return labelValue; // if value < 1000, nothing to do
+            //  }
+            return d3.format(".2s")(labelValue);
             // return numeral(labelValue).format("0 a");
             break;
         case "currency":

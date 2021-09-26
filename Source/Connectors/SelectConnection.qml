@@ -591,7 +591,7 @@ Page {
             }
 
             Text{
-                text:name
+                text:(name == "Postgres"?"PostgresSQL":(name == "Sql Server"?"Microsoft Sql Server":name))
                 font.pointSize: Constants.fontReading
                 color:"gray"
                 anchors.top: imageId.bottom

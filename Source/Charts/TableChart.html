@@ -538,6 +538,17 @@
                     document.querySelector("table").classList.remove("compact");
                 }
             }
+            function grandTotalStatus(totalStatus) {
+                if (totalStatus) {
+                    document.querySelectorAll("tfoot").forEach((e) =>{e.style.display =
+                        "table-footer-group";
+                    })
+                } else {
+                    document.querySelectorAll("tfoot").forEach(e =>{e.style.display =
+                        "none";
+                    })
+                }
+            }
             function searchToggle(searchStatus) {
                 if (searchStatus) {
                     document.getElementById("example_filter").style.display =
@@ -580,6 +591,7 @@
                     defaultSearchStatus,
                     defaultRowAlternateStatus,
                     defaultBatchsize,
+                    defaultGrandTotalStatus
                 } = defaultD3Config.defaultTableChartConfig;
                 let {
                     cellBorderStatus = defaultCellBorderStatus,
@@ -588,6 +600,7 @@
                     searchStatus = defaultSearchStatus,
                     rowAlternateStatus = defaultRowAlternateStatus,
                     batchSize = defaultBatchsize,
+                    totalStatus = defaultGrandTotalStatus,
                 } = plotConfiguration;
 
                 addHeader();
@@ -612,6 +625,7 @@
                 }
 
                 setCompact(compactStatus);
+                grandTotalStatus(totalStatus);
 
                 window.dataTableValues = createBatches(data[0], batchSize);
                 window.counter = 0;
