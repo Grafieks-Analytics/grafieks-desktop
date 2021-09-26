@@ -9,6 +9,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
 
         <!-- Create a div where the graph will take place -->
@@ -1052,7 +1053,7 @@
                 d3.selectAll("#yAxisDiv").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 // legends code starts

@@ -22,7 +22,7 @@ const constants = {
         RECT: "rect",
     },
     labelFormat: {
-        ROUND: "round",
+        ROUND: "symbol",
         NONE: "none",
     },
     chartMargins: {
@@ -69,8 +69,8 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: false,
-        legendPosition: "right",
+        legendStatus: true,
+        legendPosition: "bottom",
     },
     defaultlabelConfig: {
         labelStatus: true,
@@ -85,6 +85,7 @@ const defaultD3Config = {
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
         defaultSearchStatus:true,
+        defaultGrandTotalStatus:false,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50,
     },
