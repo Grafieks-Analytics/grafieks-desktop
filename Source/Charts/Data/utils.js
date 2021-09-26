@@ -266,6 +266,9 @@ function clearChart() {
         console.log("d3 not available skipping");
         return;
     }
+    //pivot table has id rr -> [Tag: Refactor]
+    // Change this later to my_dataviz
+    d3.selectAll("#rr").html("");
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
     d3.selectAll("#xAxisDiv").html("");

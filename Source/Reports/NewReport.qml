@@ -83,6 +83,7 @@ Page {
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
+    property var allowedRow3AxisDataPanes: 0;
 
     property var reportTitleName: "";
 
@@ -434,7 +435,7 @@ Page {
         case Constants.funnelChartTitle:
             console.log(chartTitle,"CLICKED");
             var dataValuesTemp = dataValues && JSON.parse(dataValues);
-            colorData = Object.keys(dataValuesTemp[0])
+            colorData = dataValuesTemp[0].map(d=> d.key);
             delete dataValuesTemp;
             break;
         case Constants.radarChartTitle:
@@ -442,6 +443,9 @@ Page {
             break;
         case Constants.scatterChartTitle:
             console.log(chartTitle,"CLICKED")
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = dataValuesTemp[2]
+            delete dataValuesTemp;
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -510,10 +514,16 @@ Page {
             });
         }
 
-        var scriptValue = 'window.addEventListener("resize", function () {
-                   window.clearChart && clearChart();
+        var scriptValue = '
+            var timer;
+            window.addEventListener("resize", function () {
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-           });';
+                }, 200);
+            });
+        ';
 
         clearChartValue();
         var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
@@ -633,6 +643,9 @@ Page {
                 console.log('Switching to multiple line chart')
                 switchChart(Constants.multipleAreaChartTitle);
                 break;
+            case Constants.pivotTitle:
+                allowedRow3AxisDataPanes = 5;
+                break;
             default:
                 console.log('Missed condition in isHorizontalGraph change veritcal')
 
@@ -650,10 +663,11 @@ Page {
         // Basically these are the basic configs
         // Having Max Allowed Values for now
         const chartDetailsConfig = allChartsMapping[chartTitle];
-        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
+        const { maxDropOnXAxis, maxDropOnYAxis, maxDropOnRow3Axis = 0 } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -674,8 +688,16 @@ Page {
             dataValuesRemoved = true;
         }
 
+        if(maxDropOnRow3Axis > 0 && maxDropOnRow3Axis < row3Columns.length){
+            row3Columns = row3Columns.splice(0,maxDropOnYAxis);
+            ReportParamsModel.setRow3Columns(row3Columns);
+            valuesListModel.remove(maxDropOnYAxis,valuesListModel.count - maxDropOnRow3Axis);
+            dataValuesRemoved = true;
+        }
+
         allowedXAxisDataPanes = maxDropOnXAxis;
         allowedYAxisDataPanes = maxDropOnYAxis;
+        allowedRow3AxisDataPanes = maxDropOnRow3Axis;
 
         // change axis on the basis of chart title
         // Updating the Row visible here => Sanky charts can have 3 rows
@@ -1138,8 +1160,7 @@ Page {
 
         if(chartTitle == Constants.pivotTitle){
 
-            if(xAxisColumns.length > 0 && yAxisColumns.length > 0  && row3Columns.length > 0){
-                console.log(xAxisColumns, row3Columns, yAxisColumns)
+            if(isPivotChart()){
                 drawChart();
             }
             return;
@@ -1155,7 +1176,6 @@ Page {
             return;
         }
 
-        
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1365,16 +1385,50 @@ Page {
     function xAxisDropEligible(itemName, itemType){
         console.log('Debug:: Item type',itemType)
         var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns  = getAxisColumnNames(Constants.yAxisName);
         // Check if condition more data pills can be added or not';
         if(xAxisColumns.length === allowedXAxisDataPanes){
             return false;
         }
 
         switch(chartTitle){
+            case Constants.lineChartTitle:
+            case Constants.areaChartTitle:
+            case Constants.barChartTitle:
+                if(!yAxisColumns.length && !xAxisColumns.length ){
+                    return true;
+                }
+                if((itemType && itemType.toLowerCase() == "numerical")){
+                    return  false;
+                }
+                return true;
+            case Constants.horizontalBarChartTitle:
+                if(yAxisColumns.length  &&  (itemType && itemType.toLowerCase() != "numerical")){
+                    return  false;
+                }
+                return true;
             case Constants.tableTitle:
                 if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
                     return false;
                 }
+            case Constants.sunburstChartTitle:
+                if((itemType && itemType.toLowerCase()) != "categorical"){
+                    return false;
+                }
+                return true;
+            
+            case Constants.donutChartTitle:
+            case Constants.pieChartTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            case Constants.pivotTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            
         }
         
 
@@ -1387,13 +1441,49 @@ Page {
         
     }
 
-    function yAxisDropEligible(itemName){
+    function yAxisDropEligible(itemName, itemType){
         var yAxisColumns  = getAxisColumnNames(Constants.yAxisName);
+        var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
         const multiChart = true;
         // Check if condition more data pills can be added or not';
         if(yAxisColumns.length === allowedYAxisDataPanes){
             return false;
         }
+
+        switch(chartTitle){
+            case Constants.lineChartTitle:
+            case Constants.areaChartTitle:
+            case Constants.barChartTitle:
+                if(xAxisColumns.length  &&  (itemType && itemType.toLowerCase() != "numerical")){
+                    return  false;
+                }
+                return true;
+            case Constants.horizontalBarChartTitle:
+                if(yAxisColumns.length  &&  (itemType && itemType.toLowerCase() == "numerical")){
+                    return  false;
+                }
+                return true;
+            
+            case Constants.sunburstChartTitle:
+                if((itemType && itemType.toLowerCase()) != "numerical"){
+                    return false;
+                }
+                return true;
+            
+            case Constants.donutChartTitle:
+            case Constants.pieChartTitle:
+                if((itemType && itemType.toLowerCase()) != "numerical"){
+                    return false;
+                }
+                return true;
+            case Constants.pivotTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            
+        }
+        
         if(multiChart){
             return true;
         }
@@ -1405,13 +1495,13 @@ Page {
     }
     
     function row3AxisDropEligible(itemName, itemType){
-        var row3Columns  = getAxisColumnNames(row3Columns);
+        var row3Columns  = getAxisColumnNames(Constants.row3Name);
         const multiChart = true;
         // Check if condition more data pills can be added or not';
-        if(row3Columns.length === allowedYAxisDataPanes){
+        if(row3Columns.length === allowedRow3AxisDataPanes){
             return false;
         }
-        if(chartTitle == Constants.pivotTitle && itemType != "numerical"){
+        if(chartTitle == Constants.pivotTitle && (itemType && itemType.toLowerCase() != "numerical")){
             return false;
         }
         if(multiChart){
@@ -1444,7 +1534,7 @@ Page {
             xAxisColumns.push(itemName);
 
         }else if(axis === Constants.yAxisName){
-            if(!yAxisDropEligible(itemName)){
+            if(!yAxisDropEligible(itemName, itemType)){
                 // Red color
                 return;
             }
@@ -1522,6 +1612,17 @@ Page {
         return false;
     }
 
+    function isPivotChart(){
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+        if((xAxisColumns.length > 0 || yAxisColumns.length > 0)  || (xAxisColumns.length > 0 && row3Columns.length > 0) || (yAxisColumns.length > 0 && row3Columns.length > 0)){
+            console.log('Pivot is eliigble')
+            return true;
+        }
+        return false;
+    }
+
     function drawChart(){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
@@ -1547,7 +1648,12 @@ Page {
         }
         */
 
-        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || (chartTitle == Constants.gaugeChartTitle && isGaugeChart())) {
+        if(
+            (xAxisColumns.length && yAxisColumns.length) || 
+            (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || 
+            (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
+            (chartTitle == Constants.pivotTitle && isPivotChart())
+        ) {
 
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);
@@ -1957,6 +2063,7 @@ Page {
     LeftMenuBarReports{
         id: left_menubar_reports
         anchors.top: seperator_title_bar.bottom
+        z:-12000
         Component.onCompleted: {
 
             loadchart.connect(report_desiner_page.changeChart)
@@ -1988,7 +2095,7 @@ Page {
         anchors.left: tool_sep_leftmenubarreports.right
         anchors.top: seperator_title_bar.bottom
         anchors.leftMargin: 0
-        z:1
+        z:-12000
     }
 
     ToolSeparator{
