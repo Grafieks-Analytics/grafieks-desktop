@@ -74,7 +74,7 @@ Rectangle{
             maxDropOnYAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape,line type"
             colorByDropEligible: "categorical"
         }
         ListElement{
@@ -111,6 +111,8 @@ Rectangle{
             activeChart: false
             title:"Scatter Plot"
             yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
