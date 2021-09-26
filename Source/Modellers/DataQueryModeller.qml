@@ -1563,6 +1563,7 @@ Page {
 
                     height: column_querymodeller.height - 180
                     width:column_querymodeller.width
+                    
 
                     Rectangle {
                         id: categoryItem
@@ -1575,10 +1576,10 @@ Page {
                         Rectangle{
                             id:dateRect
                             height: 30
-                            width: parent.width
+                            width: parent.width+1
                             color: Constants.themeColor
                             //            anchors.top: parent.top
-                            //            x:-leftMargin
+                                       x:-1
 
                             border.color: Constants.darkThemeColor
 

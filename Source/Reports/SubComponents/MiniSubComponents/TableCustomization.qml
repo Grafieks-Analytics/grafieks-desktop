@@ -61,6 +61,10 @@ Column{
         report_desiner_page.d3PropertyConfig['compactStatus'] = checkedStatus;
         report_desiner_page.reDrawChart();
     }
+    function toggleSearch(checkedStatus){
+        report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
+        report_desiner_page.reDrawChart();
+    }
     function toggleRowAlternateStatus(checkedStatus){
         console.log('Debug:: Alternate changed? ', checkedStatus);
         report_desiner_page.d3PropertyConfig['rowAlternateStatus'] = checkedStatus;
@@ -239,6 +243,38 @@ Column{
                 anchors.rightMargin: 5
                 anchors.top: parent.top
                 onCheckedChanged: toggleCompactStatus(checked);
+
+            }
+
+        }
+
+    }
+    Rectangle{
+
+        height: 35
+        width: 150
+
+        Rectangle{
+            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                text: qsTr("Search Status")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+
+                checked: true
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: toggleSearch(checked);
 
             }
 
