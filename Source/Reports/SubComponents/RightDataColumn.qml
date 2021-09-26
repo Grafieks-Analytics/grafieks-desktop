@@ -60,6 +60,7 @@ Column{
 //        border.color: Constants.darkThemeColor
 //         anchors.horizontalCenter: parent.horizontalCenter
 
+            z: -12000
 
         Rectangle{
             id:categoricalHeadingRect
@@ -116,6 +117,9 @@ Column{
         height: parent.height/3 - 6
         width: parent.width
         color: "white"
+
+            z: -12000
+
 //        x:-leftMargin
 //        border.color: Constants.darkThemeColor
 //         anchors.horizontalCenter: parent.horizontalCenter
@@ -166,6 +170,8 @@ Column{
         height: parent.height/3 - 6
          width: parent.width
         color: "white"
+            z: -12000
+
 //        border.color: Constants.darkThemeColor
 //          anchors.horizontalCenter: parent.horizontalCenter
 
