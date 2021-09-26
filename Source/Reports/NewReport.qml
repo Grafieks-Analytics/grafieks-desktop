@@ -2539,34 +2539,40 @@ Page {
 
             Rectangle{
                 id: row4TextInput1Label
-                width: 100
+                width: 130
                 height: parent.height
                 anchors.left: row4Valueseparator.right
+                
+                // anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: input1Label
                     text: 'Max/Green'
                     anchors.centerIn: parent
+                    // verticalalignment:parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.right:parent.right
+                    anchors.rightMargin:10
                 }
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator2
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput1Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator2
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput1Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput1
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator2.right
-                border.color: Constants.borderBlueColor
+                anchors.left: row4TextInput1Label.right
+                // border.color: Constants.borderBlueColor
 
                 Rectangle{
                     width: 160
@@ -2619,22 +2625,22 @@ Page {
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator4
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput2Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator4
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput2Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput2
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator4.right
+                anchors.left: row4TextInput2Label.right
 
                 Rectangle{
                     width: 160
@@ -2688,23 +2694,23 @@ Page {
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator6
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput3Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator6
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput3Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput3
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator6.right
-                border.color: Constants.borderBlueColor
+                anchors.left: row4TextInput3Label.right
+                // border.color: Constants.borderBlueColor
                 Rectangle{
                     width: 160
                     height: 30
