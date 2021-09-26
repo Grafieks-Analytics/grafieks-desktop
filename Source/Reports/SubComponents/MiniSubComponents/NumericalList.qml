@@ -22,6 +22,8 @@ ListView{
         target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            
+              allNumerical = [ false , ...allNumerical]
             numericalList.model =  allNumerical
 
         }
@@ -51,6 +53,8 @@ ListView{
 
     delegate: DataPaneElement{
         id: dataPaneListElement
+        visible: modelData === false ? false : true
+        height: modelData === false ? 0 : 24
     }
 
 }
