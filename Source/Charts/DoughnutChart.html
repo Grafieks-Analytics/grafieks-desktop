@@ -125,7 +125,7 @@
         }
 
         function drawChart(data, plottingConfiguration = {}) {
-            debugger;
+            // debugger;
             let {
                 d3colorPalette,
                 paddingInner,
@@ -163,7 +163,7 @@
                 innerRadius = defaultD3Config.innerRadius;
             }
             let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus,labelFormat } = labelConfig;
+            let { labelStatus, labelFormat } = labelConfig;
             d3.select("#legend").html("").style("padding", "");
 
             var translateSvg = 0;
@@ -202,6 +202,8 @@
             if (legendStatus) {
                 var legendHeight =
                     document.querySelector("#legend").offsetHeight;
+                var legendWidth = document.querySelector("#legend").offsetWidth;
+
                 var legendElement = document.querySelector("#legend");
 
                 // topPosition = "calc(50vh - " + legendHeight + "px)";
@@ -214,6 +216,9 @@
                 } else {
                     topPosition = 0;
                 }
+                rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
+                // rightPosition = "500px";
+                // console.log({ rightPosition });
                 legendElement.style.padding = "10px";
 
                 switch (legendPosition) {
@@ -226,6 +231,7 @@
                             .style("top", topPosition)
                             .style("right", "auto")
                             // .style("bottom", "auto")
+                            .style("width", "fit-content")
                             .style("left", "0px")
                             .style("display", "block")
                             .style("max-height", "100vh")
@@ -238,16 +244,16 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
                         break;
-                    case "top":
+                   case "top":
                         // margin.top += 80;
                         height -= 10;
                         translateSvgTop += 60;
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "10px")
-                            .style("right", "0px")
+                            // .style("right", rightPosition)
                             .style("bottom", "auto")
-                            .style("left", 10 + "px")
+                            .style("left", "auto")
                             .style("display", "flex")
                             .style("max-width", "99vw")
                             .style("overflow", "scroll");
@@ -264,7 +270,7 @@
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "auto")
-                            .style("right", "auto")
+                            // .style("right", rightPosition)
                             .style("bottom", "0px")
                             // .style("left", 0 + "px")
                             .style("display", "flex")
@@ -544,6 +550,18 @@
                             d.startAngle + (d.endAngle - d.startAngle) / 2;
                         return midangle < Math.PI ? "start" : "end";
                     });
+            }
+            var legendWidth = document.querySelector("#legend").offsetWidth;
+            console.log({ legendWidth });
+            if (legendWidth <= window.innerWidth - 50) {
+                console.log(window.innerWidth);
+                console.log({ legendWidth });
+                rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
+            } else {
+                rightPosition = 0;
+            }
+            if (legendPosition == "top" || legendPosition == "bottom") {
+                d3.select("#legend").style("right", rightPosition);
             }
         }
 

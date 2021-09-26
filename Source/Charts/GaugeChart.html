@@ -140,7 +140,7 @@
                 that.configure = configure;
 
                 function centerTranslation() {
-                    return "translate(" + (r + 5) + "," + (r + 5) + ")";
+                    return "translate(" + (r + 5) + "," + (r + 140) + ")";
                 }
 
                 function isRendered() {
@@ -272,7 +272,7 @@
                     var label = window.data[1];
                     d3.select("#x")
                         .html(numberFormat(newValue) + "<br>" + label)
-                        .style("margin-top", "-" + ((gaugeSize / 2 + 7) + "px"));
+                        .style("margin-top", "-" + ((gaugeSize / 2 - 140) + "px"));
                     if (newConfiguration !== undefined) {
                         configure(newConfiguration);
                     }
@@ -320,8 +320,8 @@
                 updateReadings(readingValue);
             }
 
-            // var data = [[50044, 12000, 1000, 2000], ["Label"]];
-            // drawChart(data);
+            var data = [[50044, 12000, 1000, 2000], ["Label"]];
+            drawChart(data);
         </script>
     </body>
 </html>
