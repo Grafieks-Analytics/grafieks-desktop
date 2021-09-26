@@ -9,7 +9,7 @@ Rectangle{
     width: parent.width
     anchors.leftMargin: 5
 
-    //    z: 999
+    z: 200000
 
 
 
