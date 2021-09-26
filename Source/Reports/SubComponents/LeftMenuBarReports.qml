@@ -220,7 +220,7 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Reference Line"
-            subMenuCustomizations: "tool tip,size,data label,grid line"
+            subMenuCustomizations: "tool tip,data label"
         }
         // ListElement{
         //     icon: "force_directed.png"
