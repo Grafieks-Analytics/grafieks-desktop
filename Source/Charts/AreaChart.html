@@ -72,7 +72,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var lineStroke = 3;
             var {
                 initialCircleRadius,
                 initialBoxDimension,
@@ -149,6 +148,7 @@
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
                     markerShape = false,
                     filledStatus = false,
                     curveType = defaultD3Config.defaultLineCurve,
@@ -171,6 +171,7 @@
                 window.yLabelfontColor = yLabelfontColor;
                 window.xTickfontColor = xTickfontColor;
                 window.yTickfontColor = yTickfontColor;
+                window.dataLabelColor = dataLabelColor;
 
                 d3Colors = d3colorPalette;
 
@@ -187,6 +188,8 @@
 
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
                 width = window.innerWidth - margin.left - margin.right - 20;
+
+                var lineStroke = (1 - paddingInner) * 4;
 
                 height =
                     window.innerHeight -
@@ -447,14 +450,14 @@
                 xScale = d3
                     .scaleBand()
                     .range([0, width])
-                    .padding(paddingInner)
+                    // .padding(paddingInner)
                     .domain(
                         dataValues.map(function (d) {
                             return d[0];
                         })
                     )
-                    .padding(paddingInner)
-                    .paddingInner(paddingInner);
+                    .padding(0.5)
+                    .paddingInner(0.5);
 
                 var minValue = d3.min(dataValues, function (d) {
                     return d[1];
@@ -559,7 +562,11 @@
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            (margin.left + 20) +
+                            "," +
+                            margin.top +
+                            ")"
                     )
                     .append("g")
                     .attr("class", "y-axis")
@@ -625,7 +632,7 @@
                         .attr("dy", "0.3em")
                         .attr("text-anchor", "end")
                         // .attr("x", "-" + (maxWidth + 3))
-                        .attr("x", "-" + 20)
+                        .attr("x", "-" + 10)
                         // .attr("font-size", fontSize)
                         .attr("y", "0");
                 }
@@ -668,6 +675,7 @@
                         var labelYPosition = yScale(dataValues[i][1]);
                         // console.log(dataset[i]);
                         label.setAttribute("y", labelYPosition + 10);
+                        label.setAttribute("fill", dataLabelColor);
                         // label.setAttribute("y", 50 - 10);
                         // label.setAttribute("y", function (d) {
                         //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
@@ -675,7 +683,7 @@
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent = dataValues[i][1];
+                        label.textContent = Math.round(dataValues[i][1]);
                     });
                 }
                 d3.select(".axis.label path").remove();
@@ -807,7 +815,7 @@
                         yAxisDiv.setAttribute(
                             "transform",
                             "translate(" +
-                                (maxWidth - margin.left) +
+                                (maxWidth - margin.left - 20) +
                                 "," +
                                 0 +
                                 ")"
@@ -922,7 +930,7 @@
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
-                                    yValue.toFixed(2) +
+                                    Math.round(yValue) +
                                     "</span>"
                                 );
                             });

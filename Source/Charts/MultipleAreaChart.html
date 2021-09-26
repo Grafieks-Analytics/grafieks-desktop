@@ -990,35 +990,43 @@
                     yLabelfontSize = defaultD3Config.fontSize,
                     xTickfontSize = defaultD3Config.fontSize,
                     yTickfontSize = defaultD3Config.fontSize,
+                    dataLabelfontSize = defaultD3Config.fontSize,
                     // font family
                     xLabelfontFamily = defaultD3Config.fontFamily,
                     yLabelfontFamily = defaultD3Config.fontFamily,
                     xTickfontFamily = defaultD3Config.fontFamily,
                     yTickfontFamily = defaultD3Config.fontFamily,
+                    dataLabelfontFamily = defaultD3Config.fontFamily,
                     // font color
                     xLabelfontColor = defaultD3Config.fontColor,
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
 
                     markerShape = defaultD3Config.defaultMarkerShape,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+
+                    filledStatus = false,
                 } = plottingConfiguration;
 
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
                 window.xTickfontSize = xTickfontSize;
                 window.yTickfontSize = yTickfontSize;
+                window.dataLabelfontSize = dataLabelfontSize;
 
                 window.xLabelfontFamily = xLabelfontFamily;
                 window.yLabelfontFamily = yLabelfontFamily;
                 window.xTickfontFamily = xTickfontFamily;
                 window.yTickfontFamily = yTickfontFamily;
+                window.dataLabelfontFamily = dataLabelfontFamily;
 
                 window.xLabelfontColor = xLabelfontColor;
                 window.yLabelfontColor = yLabelfontColor;
                 window.xTickfontColor = xTickfontColor;
                 window.yTickfontColor = yTickfontColor;
+                window.dataLabelColor = dataLabelColor;
 
                 // var dataValues = data[0];
                 var y_pos_x_label = 55;
@@ -1026,7 +1034,7 @@
                 var [dataValues, lineMainCategories, allKeys, label] =
                     transformData(data[0], dateFormat, dateFormat);
 
-                console.log({ lineMainCategories });
+                // console.log({ lineMainCategories });
 
                 // console.log({ dataValues, keys });
 
@@ -1048,9 +1056,52 @@
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
+                // legends code starts
+                d3.select("#legend").html("").style("padding", "");
+                if (legendStatus) {
+                    d3.select("#legend").html("");
+
+                    d3.select("#legend")
+                        .append("p")
+                        .html(colorData + "&nbsp;")
+                        .style("font-weight", "bold")
+                        .style("margin", "auto")
+                        .style("position", "sticky");
+
+                    // console.log({ data });
+                    d3.select("#legend")
+                        .selectAll("div")
+                        .data(data[1])
+                        .enter()
+                        .append("div")
+                        .html((d, i) => {
+                            return (
+                                '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                                d3Colors[i % d3Colors.length] +
+                                ';">  </div>' +
+                                "<span style='margin-left: 5px; max-width: 160px'>" +
+                                d +
+                                "</span>"
+                            );
+                        })
+                        .style("display", "flex")
+                        .style("padding", "2px");
+                }
+
+                // legends code ends
+
+                // legends height ,width elements
+
+                const yAxisWidth =
+                    document.querySelector("#yAxisDiv").clientWidth;
+                d3.select("#legend").attr("style", null);
+                d3.select("#mainChartWindow").attr("style", null);
+                d3.select("#xAxisLabelId").style("bottom", 20);
+                var legendElement = document.querySelector("#legend");
+
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth - 88,
+                    width = window.innerWidth - 100,
                     height =
                         window.innerHeight - margin.top - margin.bottom - 55;
 
@@ -1063,15 +1114,219 @@
                 }
                 if (legendPosition == "left" || legendPosition == "right") {
                     // var legendWidth = legendElement.offsetWidth;
-                    width -= 20;
+                    width -= 5;
+                    height -= 20;
                 }
+                var legendHeight = legendElement.offsetHeight;
+
+                // console.log(document.querySelector("#legend").offsetHeight);
+                // console.log({ legendHeight });
+                var legendWidth = legendElement.offsetWidth;
+
+                // legends code starts
+                if (legendStatus) {
+                    if (
+                        legendHeight <
+                        document.querySelector("html").offsetHeight
+                    ) {
+                        topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
+                    } else {
+                        topPosition = 0;
+                    }
+                    rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+
+                    //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
+                    var widthOld =
+                        document.querySelector("html").clientWidth - 72;
+                    var heightOld = document.querySelector("html").clientHeight;
+
+                    // legendElement.style.padding = "10px";
+                    legendElement.style.border = "1px solid black";
+
+                    switch (legendPosition) {
+                        case "left":
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", topPosition)
+                                .style("right", "auto")
+                                // .style("bottom", "auto")
+                                .style("left", "0px")
+                                // .style("right", "5px")
+                                .style("display", "block")
+                                .style("max-height", "100vh")
+                                .style("overflow", "scroll")
+                                .style("border", "none")
+                                .style("position", "fixed");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            var legendWidth = legendElement.offsetWidth;
+                            // margin.left += 100;
+                            width -= legendWidth;
+                            // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
+
+                            d3.select("#mainChartWindow").attr("style", null);
+
+                            d3.select("#mainChartWindow").style(
+                                "width",
+                                widthOld - legendWidth + yAxisWidth
+                            );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                legendWidth + "px"
+                            );
+                            d3.select("#xAxisLabelId").style("bottom", "0px");
+                            d3.selectAll("#my_dataviz").style(
+                                "height",
+                                "calc(100vh - 32px) "
+                            );
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
+
+                            break;
+                        case "top":
+                            d3.select("#mainChartWindow").attr("style", null);
+                            // margin.top += 50;
+                            // debugger;
+                            // height -= 50;
+                            y_pos_x_label = 57;
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", "10px")
+                                .style("right", rightPosition)
+                                .style("bottom", "auto")
+                                .style("left", "auto")
+                                .style("display", "flex")
+                                .style("max-width", "99vw")
+                                .style("overflow", "scroll")
+                                .style("border", "none");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+                            // d3.select("#xAxisLabelId").style("bottom", 20);
+                            d3.select("#xAxisLabelId").style(
+                                "bottom",
+                                10 + "px"
+                            );
+                            d3.selectAll("#my_dataviz").style(
+                                "height",
+                                "calc(100vh - 32px) "
+                            );
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                30 + "px"
+                            );
+
+                            break;
+                        case "bottom":
+                            // height -= 50; // use legend client height
+                            margin.bottom += 10;
+                            var legendWidth = legendElement.offsetWidth;
+                            y_pos_x_label = 20;
+
+                            d3.select("#xAxisLabelId").style("bottom", "60px");
+                            d3.select("#mainChartWindow").attr("style", null);
+
+                            // d3.select("#mainChartWindow").style("width", width);
+                            //  d3.select("#mainChartWindow").style("height",heightOld-80 );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                0
+                            );
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", "auto")
+                                .style("right", rightPosition)
+                                .style("bottom", "0px")
+                                // .style("left", margin.left + "px")
+                                .style("display", "flex")
+                                .style("max-width", "99vw")
+                                .style("overflow", "scroll")
+                                .style("border", "none");
+
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+                            d3.selectAll("#my_dataviz").style(
+                                "height",
+                                "calc(100vh - 42px)"
+                            );
+                             d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
+
+                            break;
+                        // For Right Legened
+                        case "right":
+                        default:
+                            // width -= 220;
+                            // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
+                            var legendWidth = legendElement.offsetWidth;
+                            width -= legendWidth + 10;
+
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("right", "0px")
+                                .style("left", "auto")
+                                .style("position", "fixed")
+                                .style("top", topPosition)
+                                .style("max-height", "100vh")
+                                .style("overflow", "scroll")
+                                .style("border", "none")
+                                .style("bottom", "auto")
+                                .style("display", "block");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            d3.select("#mainChartWindow").attr("style", null);
+                            d3.select("#mainChartWindow").style(
+                                "width",
+                                widthOld - legendWidth + yAxisWidth - 10 + "px"
+                            );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                0
+                            );
+                            d3.select("#xAxisLabelId").style("bottom", 20);
+
+                            d3.selectAll("#my_dataviz").style(
+                                "height",
+                                "calc(100vh - 32px) "
+                            );
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
+                            d3.select("#xAxisLabelId").style("bottom", 20+"px");
+                    }
+                }
+
+                // if (legendPosition == "left" || legendPosition == "right") {
+                //     var legendWidth = legendElement.offsetWidth;
+                //     width -= legendWidth;
+                // }
+
+                // legends code ends
 
                 // append the svg object to the body of the page
                 svg = d3
                     .select("#my_dataviz")
                     .append("svg")
-                    .attr("width", width)
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("width", width + 20)
+                    .attr("height", height + margin.top + margin.bottom + 15)
                     .append("g")
                     .attr(
                         "transform",
@@ -1107,7 +1362,7 @@
                     y_min = 0;
                 }
 
-                console.log("Min Max", y_min, y_max);
+                // console.log("Min Max", y_min, y_max);
                 // Add Y axis
                 y = d3
                     .scaleLinear()
@@ -1162,230 +1417,6 @@
                 }); // list of group names
                 var color = d3.scaleOrdinal().domain(res).range(d3Colors);
 
-                // legends code starts
-                d3.select("#legend").html("").style("padding", "");
-                if (legendStatus) {
-                    d3.select("#legend").html("");
-
-                    d3.select("#legend")
-                        .append("p")
-                        .html(colorData + "&nbsp;")
-                        .style("font-weight", "bold")
-                        .style("margin", "auto")
-                        .style("position", "sticky");
-
-                    console.log({ data });
-                    d3.select("#legend")
-                        .selectAll("div")
-                        .data(data[1])
-                        .enter()
-                        .append("div")
-                        .html((d, i) => {
-                            return (
-                                '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                d3Colors[i % d3Colors.length] +
-                                ';">  </div>' +
-                                "<span style='margin-left: 5px; max-width: 160px'>" +
-                                d +
-                                "</span>"
-                            );
-                        })
-                        .style("display", "flex")
-                        .style("padding", "2px");
-                }
-
-                // legends code ends
-
-                // legends height ,width elements
-
-                const yAxisWidth =
-                    document.querySelector("#yAxisDiv").clientWidth;
-                d3.select("#legend").attr("style", null);
-                d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#xAxisLabelId").style("bottom", 20);
-                var legendElement = document.querySelector("#legend");
-
-                var legendHeight = legendElement.offsetHeight;
-
-                console.log(document.querySelector("#legend").offsetHeight);
-                console.log({ legendHeight });
-                var legendWidth = legendElement.offsetWidth;
-
-                // legends code starts
-                if (legendStatus) {
-                    if (
-                        legendHeight <
-                        document.querySelector("html").offsetHeight
-                    ) {
-                        topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
-                    } else {
-                        topPosition = 0;
-                    }
-                    rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
-
-                    //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
-                    var widthOld =
-                        document.querySelector("html").clientWidth - 72;
-                    var heightOld = document.querySelector("html").clientHeight;
-
-                    // legendElement.style.padding = "10px";
-                    legendElement.style.border = "1px solid black";
-
-                    switch (legendPosition) {
-                        case "left":
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("top", topPosition)
-                                .style("right", "auto")
-                                // .style("bottom", "auto")
-                                .style("left", "0px")
-                                // .style("right", "5px")
-                                .style("display", "block")
-                                .style("max-height", "100vh")
-                                .style("overflow", "scroll")
-                                .style("border", "none")
-                                .style("position", "fixed");
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-
-                            var legendWidth = legendElement.offsetWidth;
-                            // margin.left += 100;
-                            // width -= 100;
-                            // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
-
-                            d3.select("#mainChartWindow").attr("style", null);
-
-                            d3.select("#mainChartWindow").style(
-                                "width",
-                                widthOld - legendWidth + yAxisWidth
-                            );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                legendWidth + "px"
-                            );
-                            d3.select("#xAxisLabelId").style("bottom", "20px");
-
-                            break;
-                        case "top":
-                            d3.select("#mainChartWindow").attr("style", null);
-                            // margin.top += 50;
-                            // debugger;
-                            height -= 50;
-                            y_pos_x_label = 57;
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("top", "10px")
-                                .style("right", rightPosition)
-                                .style("bottom", "auto")
-                                .style("left", "auto")
-                                .style("display", "flex")
-                                .style("max-width", "99vw")
-                                .style("overflow", "scroll")
-                                .style("border", "none");
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-                            // d3.select("#xAxisLabelId").style("bottom", 20);
-                            d3.select("#xAxisLabelId").style(
-                                "bottom",
-                                10 + "px"
-                            );
-                            d3.selectAll("#my_dataviz").style(
-                                "height",
-                                "calc(100vh - 32px) "
-                            );
-                            d3.selectAll("#my_dataviz").style(
-                                "margin-top",
-                                30 + "px"
-                            );
-
-                            break;
-                        case "bottom":
-                            height -= 50; // use legend client height
-                            margin.bottom += 10;
-                            var legendWidth = legendElement.offsetWidth;
-                            y_pos_x_label = 20;
-
-                            d3.select("#xAxisLabelId").style("bottom", "60px");
-                            d3.select("#mainChartWindow").attr("style", null);
-
-                            // d3.select("#mainChartWindow").style("width", width);
-                            //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                0
-                            );
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("top", "auto")
-                                .style("right", rightPosition)
-                                .style("bottom", "0px")
-                                // .style("left", margin.left + "px")
-                                .style("display", "flex")
-                                .style("max-width", "99vw")
-                                .style("overflow", "scroll")
-                                .style("border", "none");
-
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-                            d3.selectAll("#my_dataviz").style(
-                                "height",
-                                "calc(100vh - 42px)"
-                            );
-
-                            break;
-                        // For Right Legened
-                        case "right":
-                        default:
-                            // width -= 220;
-                            // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
-                            var legendWidth = legendElement.offsetWidth;
-
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("right", "0px")
-                                .style("left", "auto")
-                                .style("position", "fixed")
-                                .style("top", topPosition)
-                                .style("max-height", "100vh")
-                                .style("overflow", "scroll")
-                                .style("border", "none")
-                                .style("bottom", "auto")
-                                .style("display", "block");
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-
-                            d3.select("#mainChartWindow").attr("style", null);
-                            d3.select("#mainChartWindow").style(
-                                "width",
-                                widthOld - legendWidth + yAxisWidth - 10 + "px"
-                            );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                0
-                            );
-                            d3.select("#xAxisLabelId").style("bottom", 20);
-                    }
-                }
-
-                if (legendPosition == "left" || legendPosition == "right") {
-                    var legendWidth = legendElement.offsetWidth;
-                    width -= legendWidth - 20;
-                }
-
-                // legends code ends
-
                 setLabel(
                     xAxisLabel,
                     "x_label",
@@ -1429,157 +1460,232 @@
                     return value;
                 };
 
-                svg.selectAll(".dot")
-                    .data(dataValues)
-                    .enter()
-                    .append(markerShape)
-                    .attr("stroke", function (d) {
-                        return color(d[1]);
-                    })
-                    .attr("class", markerShape)
-                    .attr("class", "marker-shape")
-                    .attr(
-                        "transform",
-                        "translate(" +
-                            (markerShape == constants.markerShapes.RECT
-                                ? 0 - 2.8
-                                : 0) +
-                            "," +
-                            -2.8 +
-                            ")"
-                    )
-                    .attr("fill", function (d) {
-                        return color(d[1]);
-                    })
-                    .attr(
-                        markerShapeConfig[markerShape] &&
-                            markerShapeConfig[markerShape].xPositionAttrName,
-                        function (d, i) {
+                var fill = "#ffffff";
+
+                if (!markerShape) {
+                    markerShape = defaultD3Config.defaultMarkerShape;
+                }
+                if (labelStatus && markerShape) {
+                    svg.selectAll(".dot")
+                        .data(dataValues)
+                        .enter()
+                        .append("text")
+                        .attr("class", "dataLabel")
+                        .text(function (d, i) {
                             this.setAttribute("data-value-x", d[0]);
                             this.setAttribute("data-value-x1", d[1]);
 
                             this.setAttribute("data-value-y", d[2]);
 
-                            return x(d[0]) + x.bandwidth() / 2;
-                        }
-                    )
-                    .attr(
-                        markerShapeConfig[markerShape] &&
-                            markerShapeConfig[markerShape].yPositionAttrName,
-                        function (d) {
-                            console.log(d[2]);
-                            return y(d[2]);
-                        }
-                    )
-                    .attr("r", initialCircleRadius)
-                    .attr("height", initialBoxDimension)
-                    .attr("width", initialBoxDimension)
-                    .attr("points", function (d, i) {
-                        var x1 = x(d[0]);
-                        return x1;
-                    })
-                    .on("mouseout", function (d, i) {
-                        d3.select("#tooltip").style("display", "none");
-                        d3.selectAll(".bar").style("opacity", 1);
-                    })
-                    .on("mousemove", function (d, i) {
-                        var x_pos = d3.mouse(this)[0];
-                        var y_pos = d3.mouse(this)[1];
+                            if (!d[2]) {
+                                return "";
+                            }
+                            return d[2];
+                        })
+                        .attr(
+                            "x",
+                            function (d, i) {
+                                this.setAttribute("data-value-x", d[0]);
+                                this.setAttribute("data-value-x1", d[1]);
 
-                        const xValue = dateformatValue(d[0]);
-                        const xValue1 = dateformatValue(d[1]);
-                        const yValue = d[2];
+                                this.setAttribute("data-value-y", d[2]);
 
-                        d3.select("#tooltip")
-                            // .style("left", x_pos + "px")
-                            // .style("top", y_pos - 20 + "px")
-                            .style("top", y_pos - 20 + "px")
-                            .style("display", "block")
-                            // .html(xValue + ", " + yValue.toFixed(2));
-                            // .html(function () {
-                            //     var textValue = d.y0 - d.y1;
-                            //     if (d.y1 < 0) {
-                            //         textValue = d.y1 - d.y0;
-                            //     }
+                                return x(d[0]) + x.bandwidth() / 2;
+                            }
+                        )
+                        .attr("font-family", dataLabelfontFamily)
+                        .attr("font-size", dataLabelfontSize)
+                        .attr("fill", dataLabelColor)
+                        .attr(
+                            "y",
+                            function (d) {
+                                // console.log(d[2]);
+                                return y(d[2])-5;
+                            }
+                        );
+                }
+                if (markerShape) {
+                    svg.selectAll(".dot")
+                        .data(dataValues)
+                        .enter()
+                        .append(markerShape)
+                        .attr("stroke", function (d) {
+                            return color(d[1]);
+                        })
+                        .attr("class", markerShape)
+                        .attr("class", "marker-shape")
+                        .attr(
+                            "transform",
+                            "translate(" +
+                                (markerShape == constants.markerShapes.RECT
+                                    ? 0 - 2.8
+                                    : 0) +
+                                "," +
+                                (markerShape == constants.markerShapes.RECT
+                                    ? 0 - 2.8
+                                    : 0) +
+                                ")"
+                        )
+                        .attr("fill", function (d) {
+                            if (filledStatus) {
+                                initialCircleRadius = 3;
+                                fill = color(d[1]);
+                            }
+                            return fill;
+                        })
+                        .attr(
+                            markerShapeConfig[markerShape] &&
+                                markerShapeConfig[markerShape]
+                                    .xPositionAttrName,
+                            function (d, i) {
+                                this.setAttribute("data-value-x", d[0]);
+                                this.setAttribute("data-value-x1", d[1]);
 
-                            //     return (
-                            //         "<div class='arrowTooltip'></div>" +
-                            //         Math.round(yValue) +
-                            //         "</div>"
-                            //     );
-                            // });
-                            .html(function () {
-                                var textValue = d.y0 - d.y1;
-                                if (d.y1 < 0) {
-                                    textValue = d.y1 - d.y0;
-                                }
+                                this.setAttribute("data-value-y", d[2]);
 
-                                return (
-                                    "<div class='arrowTooltip'></div>" +
-                                    "<span style='color:grey;''>" +
-                                    xAxisLabel +
-                                    ":&nbsp;&nbsp;" +
-                                    "</span>" +
-                                    "<span style='float: right;'>" +
-                                    xValue +
-                                    "</span>" +
-                                    "<br/> <br/>" +
-                                    "<span style='color:grey;''>" +
-                                    colorData +
-                                    ":&nbsp;&nbsp;" +
-                                    "</span>" +
-                                    "<span style='float: right;'>" +
-                                    xValue1 +
-                                    "</span>" +
-                                    "<br/> <br/>" +
-                                    "<span style='color:grey;''>" +
-                                    yAxisLabel +
-                                    ":" +
-                                    "</span>" +
-                                    "<span style='float: right;margin-left: 15px;'>" +
-                                    Math.round(yValue) +
-                                    "</span>"
-                                );
-                            });
-                        var scrollVal =
-                            document.querySelector("#my_dataviz").scrollLeft;
+                                return x(d[0]) + x.bandwidth() / 2;
+                            }
+                        )
+                        .attr(
+                            markerShapeConfig[markerShape] &&
+                                markerShapeConfig[markerShape]
+                                    .yPositionAttrName,
+                            function (d) {
+                                // console.log(d[2]);
+                                return y(d[2]);
+                            }
+                        )
+                        .attr("r", initialCircleRadius)
+                        .attr("height", initialBoxDimension)
+                        .attr("width", initialBoxDimension)
+                        .attr("points", function (d, i) {
+                            var x1 = x(d[0]);
+                            return x1;
+                        })
+                        .on("mouseout", function (d, i) {
+                            d3.select("#tooltip").style("display", "none");
+                            d3.selectAll(".bar").style("opacity", 1);
+                        })
+                        .on("mousemove", function (d, i) {
+                            var x_pos = d3.mouse(this)[0];
+                            var y_pos = d3.mouse(this)[1];
 
-                        if (
-                            x_pos - scrollVal >
-                            document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth -
-                                20
-                        ) {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos -
-                                    scrollVal -
+                            const xValue = dateformatValue(d[0]);
+                            const xValue1 = dateformatValue(d[1]);
+                            const yValue = d[2];
+
+                            d3.select("#tooltip")
+                                // .style("left", x_pos + "px")
+                                // .style("top", y_pos - 20 + "px")
+                                .style("top", y_pos - 20 + "px")
+                                .style("display", "block")
+                                // .html(xValue + ", " + yValue.toFixed(2));
+                                // .html(function () {
+                                //     var textValue = d.y0 - d.y1;
+                                //     if (d.y1 < 0) {
+                                //         textValue = d.y1 - d.y0;
+                                //     }
+
+                                //     return (
+                                //         "<div class='arrowTooltip'></div>" +
+                                //         Math.round(yValue) +
+                                //         "</div>"
+                                //     );
+                                // });
+                                .html(function () {
+                                    var textValue = d.y0 - d.y1;
+                                    if (d.y1 < 0) {
+                                        textValue = d.y1 - d.y0;
+                                    }
+
+                                    return (
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        xAxisLabel +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        xValue +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        colorData +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        xValue1 +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        yAxisLabel +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        Math.round(yValue) +
+                                        "</span>"
+                                    );
+                                });
+                            var scrollVal =
+                                document.querySelector(
+                                    "#my_dataviz"
+                                ).scrollLeft;
+
+                            if (
+                                x_pos - scrollVal >
+                                document.documentElement.clientWidth -
                                     document.querySelector("#tooltip")
-                                        .clientWidth +
-                                    58 +
-                                    "px"
-                            );
-
-                            d3.select(".arrowTooltip")
-                                //  document.querySelector("#tooltip:before")
-                                // .style("height","50px";"width","50px";"background-color","red";")
-
-                                .attr(
-                                    "style",
-                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                        .clientWidth -
+                                    20
+                            ) {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    x_pos -
+                                        scrollVal -
+                                        document.querySelector("#tooltip")
+                                            .clientWidth +
+                                        58 +
+                                        "px"
                                 );
-                        } else {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos - scrollVal + 80 + "px"
-                            );
 
-                            d3.select(".arrowTooltip").attr(
-                                "style",
-                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
-                            );
-                        }
-                    });
+                                d3.select(".arrowTooltip")
+                                    //  document.querySelector("#tooltip:before")
+                                    // .style("height","50px";"width","50px";"background-color","red";")
+
+                                    .attr(
+                                        "style",
+                                        "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                    );
+                            } else {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    x_pos - scrollVal + 80 + "px"
+                                );
+
+                                d3.select(".arrowTooltip").attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                            }
+                            var shapeClass = ".marker-shape";
+                            d3.selectAll(shapeClass).style("opacity", 0.3);
+                            d3.select(this)
+                                .style("opacity", 1)
+                                .attr("r", onHoverCircleRadius)
+                                .attr("height", onHoverBoxDimension)
+                                .attr("width", onHoverBoxDimension)
+                                .attr("data-value-x", xValue)
+                                .attr("data-value-y", yValue.toFixed(2));
+                        })
+                        .on("mouseout", function () {
+                            d3.select("#tooltip").style("display", "none");
+                            var shapeClass = ".marker-shape";
+                            d3.selectAll(shapeClass)
+                                .style("opacity", 1)
+                                .attr("r", initialCircleRadius)
+                                .attr("height", initialBoxDimension)
+                                .attr("width", initialBoxDimension);
+                        });
+                }
 
                 /*
                             var mouseG = svg
@@ -1756,6 +1862,15 @@
                     setXaxisWidth();
                 }
 
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 8);
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
                 function setXaxisWidth() {
                     var allYAxisTicks =
                         document.querySelectorAll(".x-axis .tick");
@@ -1769,7 +1884,8 @@
                     }
 
                     extraHeightWorked = true;
-                    extraHeight = maxWidth < 55 ? maxWidth : 53;
+                    // extraHeight = maxWidth < 55 ? maxWidth : 53;
+                    extraHeight = maxWidth < 55 ? 130 : 83;
 
                     //     d3.select(".x-axis").attr("text-anchor", "right");
 
