@@ -42,6 +42,7 @@ ListView{
 
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+              allDates = [ false , ...allDates]
             dateList.model =  allDates
 
         }
@@ -108,5 +109,7 @@ ListView{
     width: parent.width
     delegate: DataPaneElement{
         id: dataPaneListElement
+         visible: modelData === false ? false : true
+        height: modelData === false ? 0 : 24
     }
 }
