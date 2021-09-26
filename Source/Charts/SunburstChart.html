@@ -3,6 +3,7 @@
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3DefaultConfig.js"></script>
         <script src="Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
         <script src="./Data/utils.js"></script>
 
@@ -1000,9 +1001,9 @@
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
-                [data,labels] = data;
+                [data, labels] = data;
                 // labels = data[1];
-                console.log({labels})
+                console.log({ labels });
                 // data = { name: "", children: data };
                 let {
                     d3colorPalette,
@@ -1013,7 +1014,7 @@
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     dataLabelfontSize = defaultD3Config.fontSize,
                     dataLabelfontFamily = defaultD3Config.fontFamily,
-                     dataLabelColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
                 } = plottingConfiguration;
                 window.dataLabelfontSize = dataLabelfontSize;
                 window.dataLabelfontFamily = dataLabelfontFamily;
@@ -1024,7 +1025,7 @@
 
                 let { legendStatus, legendPosition } = legendConfig;
                 d3Colors = d3colorPalette;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
@@ -1377,16 +1378,18 @@
                                 }
                                 return (
                                     "<div class='arrowTooltip'></div>" +
-                                    (d.depth ? ("<span style='color:grey;''>" +
-                                    d.data.label +
-                                    ":&nbsp;&nbsp;" +
-                                    "</span>" +
-                                    "<span style='float: right;'>" +
-                                    d.data.name +
-                                    "</span>" ) : "") +
+                                    (d.depth
+                                        ? "<span style='color:grey;''>" +
+                                          d.data.label +
+                                          ":&nbsp;&nbsp;" +
+                                          "</span>" +
+                                          "<span style='float: right;'>" +
+                                          d.data.name +
+                                          "</span>"
+                                        : "") +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    labels[(labels.length)-1] +
+                                    labels[labels.length - 1] +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +

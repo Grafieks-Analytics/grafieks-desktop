@@ -9,7 +9,9 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
+        
 
         <style type="text/css">
             body {
@@ -53,7 +55,6 @@
         <div id="legend"></div>
 
         <script>
-
             var dataset = [
                 [
                     ["Furniture", 741999.0625],
@@ -79,7 +80,6 @@
                 onHoverBoxDimension,
                 defaultLineCurve,
             } = defaultD3Config;
-
 
             drawChart(dataset);
 
@@ -178,7 +178,7 @@
                 d3.selectAll("#yAxisDiv").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 dataValues = transformData(dataValues, dateFormat);
@@ -540,7 +540,7 @@
                     .attr("d", line(dataValues)) // 11. Calls the line generator
                     .attr("stroke", d3Colors[0])
                     .attr("stroke-width", lineStroke)
-                    .attr("fill",  d3Colors[0])
+                    .attr("fill", d3Colors[0])
                     .attr(
                         "transform",
                         "translate(" + 0 + "," + margin.top + ")"
@@ -926,7 +926,7 @@
                                     "</span>"
                                 );
                             });
-                            
+
                         var scrollVal =
                             document.querySelector("#my_dataviz").scrollLeft;
 
