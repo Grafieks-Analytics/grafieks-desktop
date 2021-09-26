@@ -327,7 +327,7 @@ function setSvgBackground(backgroundColor, opacity) {
     var styleTag = document.createElement("style");
     styleTag.id = "dashboardStyle";
     styleTag.innerHTML =
-        "#my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " +
+        "body, #my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " +
         backgroundColor +
         " }";
     document.head.append(styleTag);

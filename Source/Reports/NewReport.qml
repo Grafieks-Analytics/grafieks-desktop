@@ -411,6 +411,7 @@ Page {
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.stackedAreaChartTitle:
+        case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
@@ -764,6 +765,13 @@ Page {
         case Constants.multipleAreaChartTitle:
         case Constants.groupBarChartTitle:
         case Constants.stackedBarChartTitle:
+        case Constants.pieChartTitle:
+        case Constants.donutChartTitle:
+        case Constants.radarChartTitle:
+        case Constants.sunburstChartTitle:
+        case Constants.treeChartTitle:
+        case Constants.waterfallChartTitle:
+
              if(!(allCategoricalValues(xAxisColumnDetails) || allDateValues(xAxisColumnDetails)) ){
                  console.log('Clearing Chart? :sad')
                 xAxisListModel.clear();
@@ -805,11 +813,11 @@ Page {
             break;
         case Constants.heatMapChartTitle:
             
-            if(!allCategoricalValues(xAxisColumnDetails)){
+            if(!(allCategoricalValues(xAxisColumnDetails) || allDateValues(xAxisColumnDetails))){
                 xAxisListModel.clear();
             }
             
-            if(!allCategoricalValues(yAxisColumnDetails)){
+            if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(xAxisColumnDetails))){
                 yAxisListModel.clear();
             }
             
@@ -1537,6 +1545,8 @@ Page {
                     return false;
                 }
                 return true;
+            case Constants.treeChartTitle:
+            case Constants.radarChartTitle:
             case Constants.sunburstChartTitle:
                 if((itemType && itemType.toLowerCase()) != "categorical"){
                     return false;
@@ -1545,6 +1555,7 @@ Page {
             
             case Constants.donutChartTitle:
             case Constants.pieChartTitle:
+            case Constants.waterfallChartTitle:
                 if((itemType && itemType.toLowerCase()) == "numerical"){
                     return false;
                 }
@@ -1610,6 +1621,8 @@ Page {
                 return true;
             
             case Constants.sunburstChartTitle:
+            case Constants.treeChartTitle:
+            case Constants.radarChartTitle:
                 if((itemType && itemType.toLowerCase()) != "numerical"){
                     return false;
                 }
@@ -1617,6 +1630,7 @@ Page {
             
             case Constants.donutChartTitle:
             case Constants.pieChartTitle:
+            case Constants.waterfallChartTitle:
                 if((itemType && itemType.toLowerCase()) != "numerical"){
                     return false;
                 }
