@@ -170,7 +170,7 @@ Column{
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
         const chartDetailsConfig = allChartsMapping[chartTitle];
-        let { colorByDropEligible } = chartDetailsConfig || "";
+        let { colorByDropEligible = "" } = chartDetailsConfig || "";
 
         colorByDropEligible = colorByDropEligible.split(',');
         if(!colorByDropEligible.includes(itemType.toLowerCase())){
