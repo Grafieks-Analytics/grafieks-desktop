@@ -534,7 +534,7 @@ Popup {
     MessageDialog {
         id: postgresObcModalError
         visible: false
-        title: "Postgres Driver missing"
+        title: "PostgreSQL Driver missing"
         text: qsTr("You don't have Postgres driver. Download it here <a href=\"https://www.postgresql.org/ftp/odbc/versions\">https://www.postgresql.org/ftp/odbc/versions</a>")
 
     }
