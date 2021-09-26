@@ -1375,23 +1375,22 @@
                                 if (d.y1 < 0) {
                                     textValue = d.y1 - d.y0;
                                 }
-
                                 return (
                                     "<div class='arrowTooltip'></div>" +
-                                    "<span style='color:grey;''>" +
+                                    (d.depth ? ("<span style='color:grey;''>" +
                                     d.data.label +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
                                     d.data.name +
-                                    "</span>" +
+                                    "</span>" ) : "") +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
                                     labels[(labels.length)-1] +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
-                                    d.value +
+                                    d.data.size +
                                     "</span>"
                                 );
                             });
