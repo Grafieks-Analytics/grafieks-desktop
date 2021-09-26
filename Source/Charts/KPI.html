@@ -85,7 +85,11 @@
                         bold,
                         italic,
                         underline,
+                        dataLabelColorKpi = defaultD3Config.fontColor,
+                        dataValueColorKpi = defaultD3Config.fontColor,
                     } = labelFontStylings;
+                    window.dataLabelColorKpi = dataLabelColorKpi;
+                    window.dataValueColorKpi = dataValueColorKpi;
 
                     var labelStyling = document.getElementById("labelStyling");
                     if (labelStyling) {
@@ -110,12 +114,12 @@
                     `<div class="value text-center"></div><div class="label text-center"></div>`
                 );
 
-                d3.select(".value").text(value);
-                d3.select(".label").text(label);
+                d3.select(".value").text(Math.round(value)).style("color",dataValueColorKpi);
+                d3.select(".label").text(label).style("color",dataLabelColorKpi);
             }
 
-            data = [120, "Label"];
-            drawChart(data);
+            // data = [120.555, "Label"];
+            // drawChart(data);
         </script>
     </body>
 </html>

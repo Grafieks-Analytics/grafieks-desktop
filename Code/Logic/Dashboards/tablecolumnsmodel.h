@@ -7,6 +7,10 @@
 #include <QRegularExpression>
 #include <QDebug>
 
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+
 #include "../General/datatype.h"
 
 #include "../../constants.h"
@@ -47,7 +51,7 @@ public:
     Q_INVOKABLE QString findColumnType(QString columnName);
 
     Q_INVOKABLE void redrawCharts(int dashboardId);
-
+    Q_INVOKABLE void saveTableColumns();
 
 
 public slots:
@@ -57,12 +61,17 @@ public slots:
     void generateColumnsForExtract();
     void generateColumnsForReader(duckdb::Connection *con);
 
+    void getExtractTableColumns(QJsonObject tableColumnParams);
+
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
-    void columnNamesChanged(QStringList columnNames);
+    void columnNamesChanged(int dashboardId, QStringList columnNames);
     void dashboardWhereConditions(QString whereConditions, int currentDashboardId);
     void chartValuesChanged(int currentDashboardId);
+
+    // save table columns
+    void signalSaveTableColumns(QJsonObject tableColumnParams);
 
 
 private:

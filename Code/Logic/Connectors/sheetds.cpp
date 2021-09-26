@@ -157,7 +157,7 @@ void SheetDS::fileDownloadFinished()
         QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +".xlsx";
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.write(m_networkReply->readAll());
         file.close();
 
         emit fileDownloaded(fileName, "excel");

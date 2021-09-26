@@ -26,15 +26,28 @@ Item {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
         modelContent.unshift("Select All")
 
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         var i = 0;
-        modelContent.forEach(item => {
-                             listModel.append({"name": item, "checked": true, "index": i})
-                                 i++
-                             })
+        listModel.clear()
+
+        if(previousCheckValues.length > 0){
+            modelContent.forEach(item => {
+                                     var checkedStatus = previousCheckValues.includes(item) ? true : false;
+                                     listModel.append({"name": item, "checked": checkedStatus, "index": i})
+                                     i++
+                                 })
+        } else {
+            modelContent.forEach(item => {
+                                     listModel.append({"name": item, "checked": true, "index": i})
+                                     i++
+                                 })
+        }
+
+
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
 
         // for the first time, select all values
-       master = true
+        master = true
 
     }
 

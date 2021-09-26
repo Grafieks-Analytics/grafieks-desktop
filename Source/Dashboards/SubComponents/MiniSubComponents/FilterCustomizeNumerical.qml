@@ -75,6 +75,7 @@ Item {
     function setFilterType(newFilter){
         let currentDashboardId = DashboardParamsModel.currentDashboard
         let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        console.log("NEW FILTER", newFilter)
         DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
     }
 

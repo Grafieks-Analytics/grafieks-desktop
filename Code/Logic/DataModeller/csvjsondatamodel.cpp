@@ -34,7 +34,7 @@ QVariant CSVJsonDataModel::data(const QModelIndex &index, int role) const
 {
     switch (role) {
     case Qt::DisplayRole:
-        return this->resultData[index.row()];
+        return this->modelOutput[index.row()];
     default:
         break;
     }
@@ -87,7 +87,8 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
             }
         }
     }
-    this->resultData = this->masterResultData;
+    this->modelOutput.clear();
+    this->modelOutput = this->masterResultData;
     this->totalRowCount = this->masterResultData.length();
 
     emit columnListModelDataChanged(options);
@@ -95,9 +96,9 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
 
 void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
-
+    this->modelOutput.clear();
     QStringList output = this->masterResultData.filter(searchString, Qt::CaseInsensitive);
-    this->resultData = output;
+    this->modelOutput = output;
     this->totalRowCount = output.length();
     emit columnListModelDataChanged(options);
 }
@@ -119,5 +120,10 @@ QStringList CSVJsonDataModel::filterTableList(QString keyword)
 
     output.filter(keyword, Qt::CaseInsensitive);
     return output;
+}
+
+QStringList CSVJsonDataModel::getDateColumnData()
+{
+    return this->modelOutput;
 }
 

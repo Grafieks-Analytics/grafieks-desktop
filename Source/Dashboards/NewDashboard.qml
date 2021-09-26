@@ -85,8 +85,6 @@ Page {
                 is_dashboard_blank = 0
             }
         }
-
-
     }
 
     Connections{
@@ -234,7 +232,10 @@ Page {
     }
 
     function createNewReport(){
-        ReportParamsModel.setReportId(null);
+        var reportId = ReportParamsModel.generateNewReportId();
+        ReportParamsModel.setReportId(reportId);
+
+
         ReportParamsModel.clearReportsScreen();
         // Setting Edit toggle to false
         // Signal event is added

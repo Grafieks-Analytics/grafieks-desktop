@@ -16,6 +16,8 @@ Item {
     property alias componentName: filterDataItemRange.objectName
 
     onComponentNameChanged: {
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        conditionText.text = previousCheckValues[0].length > 0 ? previousCheckValues[0] : ""
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 

@@ -30,6 +30,11 @@ QString GeneralParamsModel::getCurrentDB()
     return Statics::currentDbName;
 }
 
+bool GeneralParamsModel::isWorkbookInEditMode()
+{
+    return Statics::editMode;
+}
+
 void GeneralParamsModel::openNewGrafieksInstance()
 {
     QString appPath = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
@@ -92,9 +97,7 @@ void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName
 
     this->changedHeaderTypes.insert(tableName + "." + columnName, newColumnType);
 
-    qDebug() << this->changedHeaderTypes;
-
-    Statics::changedHeaderTypes = this->changedHeaderTypes;
+    qDebug() << "Changed col type" << this->changedHeaderTypes;
 
     emit colTypeChanged();
 }

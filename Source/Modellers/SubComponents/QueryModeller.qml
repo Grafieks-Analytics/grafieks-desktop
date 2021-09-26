@@ -64,7 +64,7 @@ Item{
         // If set false, header wont generate in Preview
         DSParamsModel.setRunCalled(false);
 
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType ){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             CSVJsonQueryModel.setQuery(DSParamsModel.tmpSql)
@@ -103,6 +103,7 @@ Item{
     Rectangle{
         height: queryModellerItem.height
         width: queryModellerItem.width
+        y:-5
 
         Flickable {
             id: flickText

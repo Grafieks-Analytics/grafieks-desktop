@@ -19,11 +19,11 @@ import "../../MainSubComponents"
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 300
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 150
     padding: 0
     property int label_col : 135
 
@@ -63,11 +63,8 @@ Popup {
         }
 
         function onLogout(){
-            server.text = ""
-            database.text = ""
-            port.text = ""
-            username.text = ""
-            password.text = ""
+            excelFileName.text = ""
+            selectedFile = ""
         }
     }
 
@@ -160,7 +157,7 @@ Popup {
         width: parent.width - 2
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 10
+        // anchors.topMargin: 10
         anchors.leftMargin: 1
 
         Text{
@@ -312,7 +309,7 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 55
         anchors.left: parent.left
-        anchors.leftMargin: 100
+        anchors.leftMargin: 130
 
         Rectangle{
 
@@ -356,10 +353,11 @@ Popup {
     Row{
 
         id: row3
-        anchors.top: row2.bottom
-        anchors.topMargin: 15
+        // anchors.top: row2.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
         anchors.right: parent.right
-        anchors.rightMargin: label_col
+        anchors.rightMargin: 65
         //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
@@ -387,7 +385,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Constants.signInText
+            textValue: "Open"
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: handleExcel(selectedFile)
         }

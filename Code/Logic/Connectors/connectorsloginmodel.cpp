@@ -126,7 +126,7 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString u
     QString accessFileName = fileInfo.fileName();
 
 
-    this->staticSetter(accessFileName, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType, false, driver);
+    this->staticSetter(accessFileName, Constants::accessType, Constants::accessIntType, Constants::accessOdbcStrType, false, driver);
     emit accessLoginStatus(response);
 }
 

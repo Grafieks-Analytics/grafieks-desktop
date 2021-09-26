@@ -101,7 +101,8 @@ Popup {
     }
 
     function connectToRedshift(){
-        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "18.142.18.19", database.text, port.text, username.text, password.text)
+//        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "18.142.18.19", database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -315,7 +316,7 @@ Popup {
 
         TextField{
             id: server
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             height: 40
@@ -344,7 +345,7 @@ Popup {
         }
         TextField{
             id: port
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             //width: 130
@@ -389,7 +390,7 @@ Popup {
 
         TextField{
             id: database
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -435,7 +436,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -480,7 +481,7 @@ Popup {
 
         TextField{
             id: password
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter

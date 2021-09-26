@@ -23,6 +23,8 @@ class QueryDataModel : public QAbstractTableModel
     int totalRowCount;
     int totalColCount;
 
+    QStringList modelOutput;
+
 public:
     explicit QueryDataModel(QObject *parent = nullptr);
 
@@ -34,6 +36,9 @@ public:
 
     Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
+
+    // We are doing date separately than other models because we have to convert the format in the UI
+    Q_INVOKABLE QStringList getDateColumnData();
 
 private:
     QString getQueryJoiner();

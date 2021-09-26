@@ -27,12 +27,21 @@ Item {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
         modelContent.unshift("Select All")
 
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         listModel.clear()
         var i = 0;
-        modelContent.forEach(item => {
-                                 listModel.append({"name": item, "checked": true, "index": i})
-                                 i++
-                             })
+        if(previousCheckValues.length > 0){
+            modelContent.forEach(item => {
+                                     var checkedStatus = previousCheckValues.includes(item) ? true : false;
+                                     listModel.append({"name": item, "checked": checkedStatus, "index": i})
+                                     i++
+                                 })
+        } else {
+            modelContent.forEach(item => {
+                                     listModel.append({"name": item, "checked": true, "index": i})
+                                     i++
+                                 })
+        }
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
@@ -108,7 +117,7 @@ Item {
             CustomRadioButton{
                 ButtonGroup.group: buttonGroupSingleList
                 radio_text: model.name
-                radio_checked: model.index === 0 ? true : false
+                radio_checked: model.checked
                 parent_dimension: 16
 
                 onCheckedChanged: onRadioSelect(model.name, checked)

@@ -21,6 +21,10 @@ const constants = {
         CIRCLE: "circle",
         RECT: "rect",
     },
+    labelFormat: {
+        ROUND: "round",
+        NONE: "none",
+    },
     chartMargins: {
         top: 20,
         left: 70,
@@ -65,11 +69,12 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "right",
     },
     defaultlabelConfig: {
         labelStatus: true,
+        labelFormat: constants.labelFormat.ROUND,
     },
     defaultGridConfig: {
         gridStatus: true,
@@ -79,6 +84,7 @@ const defaultD3Config = {
         defaultCellBorderStatus: true,
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
+        defaultSearchStatus:true,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50,
     },
@@ -117,3 +123,5 @@ const markerShapeConfig = {
         yPositionAttrName: "y",
     },
 };
+
+

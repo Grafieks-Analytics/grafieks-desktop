@@ -165,7 +165,7 @@ Page {
                 setValuesOnEditReport(reportId);
             }else{
                 addReportButton.text = "Add";
-                ReportParamsModel.setReportId(reportIdMain);
+//                ReportParamsModel.setReportId(reportIdMain);
                 
                 ReportParamsModel.setChartType(Constants.barChartTitle);
                 ReportParamsModel.setChartTitle(Constants.barChartTitle);
@@ -450,13 +450,8 @@ Page {
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
             console.log("testdata",dataValues)
-            
-            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
-            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
-            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
@@ -464,8 +459,6 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
-            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
-            dataValues = JSON.stringify(dataValues);
             console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
             break;
@@ -1091,7 +1084,6 @@ Page {
         ReportParamsModel.setLastDropped(null);
 
         report_title_text.text = "";
-        reportIdMain = 0;
 
         // Clear all the list models
         xAxisListModel.clear();
@@ -1108,6 +1100,8 @@ Page {
         reportDataPanes= {};  // Report Data Panes Object
         dragActiveObject= {};
         colorByData = [];
+
+// TODO:reset all constants for chart
 
         // Calling this redraw will clear the chart because no x and y columns will be available
         // [Tag: Optimization]
@@ -1287,10 +1281,10 @@ Page {
     function addReport(titleName){
 
         // Add report to dashboard
-       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
-            reportIdMain = generateReportId();
-            ReportParamsModel.setReportId(reportIdMain);
-       }
+//       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
+//            reportIdMain = generateReportId();
+//            ReportParamsModel.setReportId(reportIdMain);
+//       }
         
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
@@ -1313,7 +1307,6 @@ Page {
             ReportParamsModel.setReportTitle(titleName)
         }
 
-        console.log("ANY", chartTitle, JSON.stringify(d3PropertyConfig), report_desiner_page.chartUrl, Constants.xAxisName)
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));

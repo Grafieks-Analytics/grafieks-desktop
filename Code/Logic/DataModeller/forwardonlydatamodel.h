@@ -17,6 +17,7 @@ class ForwardOnlyDataModel : public QAbstractListModel
 {
     Q_OBJECT
     DataType dataType;
+    QStringList modelOutput;
 
     QList<QStringList> allColumns;
     QStringList tables;
@@ -44,6 +45,8 @@ public:
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
     Q_INVOKABLE QStringList getDbList();
+
+    Q_INVOKABLE QStringList getDateColumnData();
 
 
 private:

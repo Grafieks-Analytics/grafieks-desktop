@@ -14,6 +14,7 @@
 #include <QDebug>
 
 #include "../../constants.h"
+#include "../General/generalparamsmodel.h"
 
 class DashboardParamsModel: public QObject
 {
@@ -28,7 +29,9 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
 
     QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
-
+    // NEW
+    QMap<int, QMap<int, QString>> dashboardReportUrl; // <dashboardId, <reportId, url of image/text>>
+    QMap<int, QMap<int, QVariantMap>> textReportParametersMap; // <dashboardId, <reportId, Object>>
 
     // Filter parameters
     QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
@@ -81,6 +84,8 @@ class DashboardParamsModel: public QObject
 
     QString m_currentSelectedColumn;
 
+    GeneralParamsModel generalParamsModel;
+
 
 
 public:
@@ -98,6 +103,7 @@ public:
     Q_INVOKABLE QVariantMap fetchAllReportCoordinates(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportUrls(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportTypeMap(int dashboardId);
+    Q_INVOKABLE void deleteReport(int reportId, int dashboardId = -1);
 
 
     // Dashboard Report Mapping
@@ -107,15 +113,23 @@ public:
 
     Q_INVOKABLE void setReportZOrder(int dashboardId, int widgetId, int zOrder);
     Q_INVOKABLE int getReportZOrder(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportZOrder(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setDashboardWidgetCoordinates(int dashboardId, int widgetId, float x1, float y1, float x2, float y2);
     Q_INVOKABLE QVariantList getDashboardWidgetCoordinates(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteDashboardWidgetCoordinates(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setDashboardWidgetTypeMap(int dashboardId, int widgetId, int reportType);
     Q_INVOKABLE int getDashboardWidgetTypeMap(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteDashboardWidgetTypeMap(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setDashboardWidgetUrl(int dashboardId, int widgetId, QUrl url);
     Q_INVOKABLE QUrl getDashboardWidgetUrl(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteDashboardWidgetUrl(int dashboardId, int widgetId);
+
+    Q_INVOKABLE void setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams);
+    Q_INVOKABLE QVariant getTextReportParametersMap(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteTextReportParametersMap(int dashboardId, int widgetId);
 
     // Filter Parameters
     Q_INVOKABLE void addToShowColumns(int dashboardId, QString colName, bool status);
@@ -157,21 +171,32 @@ public:
 
     Q_INVOKABLE void setReportName(int dashboardId, int widgetId, QString reportName);
     Q_INVOKABLE QString getReportName(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportName(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setReportBackgroundColor(int dashboardId, int widgetId, QString color);
     Q_INVOKABLE QString getReportBackgroundColor(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportBackgroundColor(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setReportLineColor(int dashboardId, int widgetId, QString color);
     Q_INVOKABLE QString getReportLineColor(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportLineColor(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setReportOpacity(int dashboardId, int widgetId, int percent);
     Q_INVOKABLE int getReportOpacity(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportOpacity(int dashboardId, int widgetId);
+
+    Q_INVOKABLE void setDashboardReportUrl(int dashboardId, int reportId, QUrl url);
+    Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
+    Q_INVOKABLE void deleteDashboardReportUrl(int dashboardId, int reportId);
+
 
     // Save and read files
 
     Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
     Q_INVOKABLE void setDashboardReportMap(int reportId);
     Q_INVOKABLE void saveDashboard();
+
+    Q_INVOKABLE void deleteDashboardReportMap(int dashboardId, int reportId);
 
     // General
     QString lastContainerType() const;
@@ -205,7 +230,7 @@ public slots:
     void setCurrentColumnType(QString currentColumnType);
 
     // Filter column names
-    void getColumnNames(QStringList columnNames);
+    void getColumnNames(int dashboardId, QStringList columnNames);
     void setCurrentSelectedColumn(QString currentSelectedColumn);
 
     // Receive extract workbook data params

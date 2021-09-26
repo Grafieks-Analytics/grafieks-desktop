@@ -23,7 +23,7 @@ Popup {
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 200
     padding: 0
     property int label_col : 135
 
@@ -105,8 +105,8 @@ Popup {
     }
 
     function connectToMySQL(){
-//        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.mysqlLogin('localhost', 'grafieks_my', '3306', 'root', '')
+        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
+//        ConnectorsLoginModel.mysqlLogin('localhost', 'grafieks_my', '3306', 'root', '')
 
     }
 
@@ -321,7 +321,7 @@ Popup {
 
         TextField{
             id: server
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             height: 40
@@ -350,7 +350,7 @@ Popup {
         }
         TextField{
             id: port
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             //width: 130
@@ -395,7 +395,7 @@ Popup {
 
         TextField{
             id: database
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -441,7 +441,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -486,7 +486,7 @@ Popup {
 
         TextField{
             id: password
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
@@ -510,8 +510,10 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row5.bottom
-        anchors.topMargin: 15
+        // anchors.top: row5.bottom
+        // anchors.topMargin: 15
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin:15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         //        anchors.rightMargin: label_col*2 + 47

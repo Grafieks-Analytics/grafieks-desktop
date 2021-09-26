@@ -32,6 +32,11 @@ namespace Constants
     const QString liveExt = "gads";
     const QString workbookExt = "gawb";
 
+    const int reportTypeBlank = 0;
+    const int reportTypeText = 1;
+    const int reportTypeImage = 2;
+    const int reportTypeChart = 3;
+
     // Free Tier Limits
     const int freeTierExtractLimit = 1024 * 1024 * 1024; // 1GB limit
 //    const int freeTierExtractLimit = 1024 * 1024 * 2;
@@ -97,6 +102,7 @@ namespace Constants
     const QString excelType = "EXCEL";
     const QString csvType = "CSV";
     const QString jsonType = "JSON";
+    const QString accessType = "ACCESS";
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";

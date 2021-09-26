@@ -1,8 +1,9 @@
 #include "saveextractqueryworker.h"
 
-SaveExtractQueryWorker::SaveExtractQueryWorker(QString tmpSql)
+SaveExtractQueryWorker::SaveExtractQueryWorker(QString tmpSql, QVariantMap changedColumnTypes)
 {
     this->tmpSql = tmpSql;
+    this->changedColumnTypes = changedColumnTypes;
 }
 
 void SaveExtractQueryWorker::run()
@@ -12,6 +13,9 @@ void SaveExtractQueryWorker::run()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
     QStringList colInfo;
     QVariant fieldType;
     DataType dataType;
@@ -19,6 +23,7 @@ void SaveExtractQueryWorker::run()
     QStringList tableHeaders;
     QMap<int, QStringList> sqlChartHeader;
     QHash<int, QByteArray> roleNames;
+    QString errorMsg =  "";
     QSqlDatabase connection;
 
     switch(Statics::currentDbIntType){
@@ -118,17 +123,24 @@ void SaveExtractQueryWorker::run()
 
     }
     QSqlQuery query(this->tmpSql, connection);
+    qDebug() << "QUERY" << this->tmpSql;
     QSqlRecord record = query.record();
+    qDebug() << record;
 
-    QString createTableQuery = "CREATE TABLE " + tableName + "(";
+    qDebug() << "QUERY PARAMS CHANGED TYOE" << generalParamsModel.getChangedColumnTypes();
+
+    QString createTableQuery = "CREATE TABLE " + fileName + "(";
 
     for(int i = 0; i < record.count(); i++){
         QVariant fieldType = record.field(i).value();
         QString type = dataType.qVariantType(fieldType.typeName());
+        QString fieldName = record.fieldName(i);
+        QString tableName = record.field(i).tableName().toStdString().c_str();
 
-        QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
+
+        QString checkFieldName = tableName + "." + fieldName;
+        if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+            type = this->changedColumnTypes.value(checkFieldName).toString();
 
             if(type == Constants::categoricalType){
                 type = "VARCHAR";
@@ -151,7 +163,7 @@ void SaveExtractQueryWorker::run()
             }
         }
 
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + ",";
         this->columnStringTypes.append(type);
     }
 
@@ -160,72 +172,80 @@ void SaveExtractQueryWorker::run()
     qDebug() << createTableQuery;
 
     auto createT = con.Query(createTableQuery.toStdString());
-    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT" << createT->error.c_str();
+    if(createT->success) {
 
-    // Create a master table to refer the name of actual extract tableName
-    // while running an extract later on
+        // Create a master table to refer the name of actual extract tableName
+        // while running an extract later on
 
-    QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
-    QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + tableName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
+        QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
+        QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
-    auto x = con.Query(tableCreateQuery.toStdString());
-    if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
-    auto z = con.Query(tableInserQuery.toStdString());
-    if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
+        auto x = con.Query(tableCreateQuery.toStdString());
+        if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
+        auto z = con.Query(tableInserQuery.toStdString());
+        if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
-    // Start appending data in table
-    duckdb::Appender appender(con, tableName.toStdString());
+        // Start appending data in table
+        duckdb::Appender appender(con, fileName.toStdString());
 
-    int lineCounter = 0;
+        int lineCounter = 0;
 
-    while(query.next()){
-        appender.BeginRow();
-        for(int i = 0; i < record.count(); i++){
-            QString columnType = this->columnStringTypes.at(i);
+        while(query.next()){
+            appender.BeginRow();
+            for(int i = 0; i < record.count(); i++){
+                QString columnType = this->columnStringTypes.at(i);
 
-            if(columnType == "INTEGER"){
-                appender.Append(query.value(i).toInt());
-            } else if(columnType == "BIGINT"){
-                appender.Append(query.value(i).toDouble());
-            }  else if(columnType == "FLOAT") {
-                appender.Append(query.value(i).toFloat());
-            } else if(columnType == "DOUBLE") {
-                appender.Append(query.value(i).toDouble());
-            } else if(columnType == "DATE"){
-                QDate date = query.value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender.Append(duckdb::Date::FromDate(year, month, day));
-            } else if(columnType == "TIMESTAMP"){
-                QDate date = query.value(i).toDate();
-                QTime time = query.value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-            } else if(columnType == "VARCHAR") {
-                appender.Append(query.value(i).toString().toUtf8().constData());
-            } else {
-                qDebug() << "UNDETECTED" << query.value(i).toString().toUtf8().constData();
+                if(columnType == "INTEGER"){
+                    appender.Append(query.value(i).toInt());
+                } else if(columnType == "BIGINT"){
+                    appender.Append(query.value(i).toDouble());
+                }  else if(columnType == "FLOAT") {
+                    appender.Append(query.value(i).toFloat());
+                } else if(columnType == "DOUBLE") {
+                    appender.Append(query.value(i).toDouble());
+                } else if(columnType == "DATE"){
+                    QDate date = query.value(i).toDate();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender.Append(duckdb::Date::FromDate(year, month, day));
+                } else if(columnType == "TIMESTAMP"){
+                    QDate date = query.value(i).toDate();
+                    QTime time = query.value(i).toDateTime().time();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender.Append(duckdb::Date::FromDate(year, month, day));
+                    // The below code crashes in the release mode of duckdb
+                    // Will need to check
+                    //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(0, 0, 0, 0)));
+                    //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                } else if(columnType == "VARCHAR") {
+                    appender.Append(query.value(i).toString().toUtf8().constData());
+                } else {
+                    qDebug() << "UNDETECTED" << query.value(i).toString().toUtf8().constData();
+                }
+
+
             }
+            appender.EndRow();
 
+            lineCounter++;
 
+            if(lineCounter % Constants::flushExtractCount == 0){
+                appender.Flush();
+            }
         }
-        appender.EndRow();
+        appender.Close();
 
-        lineCounter++;
 
-        if(lineCounter % Constants::flushExtractCount == 0){
-            appender.Flush();
-        }
+        //    auto query1 = con.Query("SELECT * FROM "+ fileName.toStdString());
+        //    query1->Print();
+    } else {
+        errorMsg =  createT->error.c_str();
     }
-    appender.Close();
 
-    //    auto query1 = con.Query("SELECT * FROM "+ tableName.toStdString());
-    //    query1->Print();
-
-    emit saveExtractComplete();
+    emit saveExtractComplete(errorMsg);
 }
 
 

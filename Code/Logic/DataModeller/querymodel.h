@@ -17,6 +17,7 @@
 #include "./Workers/setchartdataqueryworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractqueryworker.h"
+#include "../General/generalparamsmodel.h"
 
 #include "../../duckdb.hpp"
 
@@ -27,7 +28,7 @@ class QueryModel : public QSqlQueryModel
 
 
 public:
-    explicit QueryModel(QObject *parent = 0);
+    explicit QueryModel(GeneralParamsModel *gpm, QObject *parent = 0);
     ~QueryModel();
 
     // QSqlQueryModel method override
@@ -45,7 +46,7 @@ public slots:
     void receiveFilterQuery(QString & filteredQuery);
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
-    void extractSaved();
+    void extractSaved(QString errorMessage);
 
 
 signals:
@@ -56,6 +57,7 @@ signals:
     void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit);
+    void extractCreationError(QString errorMessage);
 
 private:
     QHash<int, QByteArray> m_roleNames;
@@ -75,6 +77,7 @@ private:
     QStringList columnStringTypes;
 
     QThread extractThread;
+    GeneralParamsModel *generalParamsModel;
 
 };
 

@@ -19,11 +19,11 @@ import "../../MainSubComponents"
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 360
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 200
     padding: 0
     property int label_col : 135
     property var fileName: ""
@@ -351,7 +351,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -420,8 +420,10 @@ Popup {
     Row{
 
         id: row5
-        anchors.top: row4.bottom
-        anchors.topMargin: 15
+        // anchors.top: row4.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         //        anchors.rightMargin: label_col*2 + 47

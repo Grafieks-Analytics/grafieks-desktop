@@ -126,7 +126,7 @@ Popup {
 
         TextField{
             id: username_field
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -170,7 +170,7 @@ Popup {
 
         TextField{
             id: password_field
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter

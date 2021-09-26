@@ -1,8 +1,9 @@
 #include "querymodel.h"
 
 
-QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
+QueryModel::QueryModel(GeneralParamsModel *gpm, QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
 {
+    this->generalParamsModel = gpm;
 }
 
 QueryModel::~QueryModel()
@@ -58,7 +59,7 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
 void QueryModel::saveExtractData()
 {
-    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql);
+    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
 
@@ -147,13 +148,17 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 }
 
 
-void QueryModel::extractSaved()
+void QueryModel::extractSaved(QString errorMessage)
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
 
-    FreeTierExtractsManager freeTierExtractsManager;
-    QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
+    if(errorMessage.length() == 0){
+        FreeTierExtractsManager freeTierExtractsManager;
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMessage);
+    }
 }
 
 void QueryModel::extractSizeLimit()
@@ -196,6 +201,7 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
     emit clearTablePreview();
 
     this->tmpSql = filteredQuery.simplified();
+    qDebug() << "RECEIVED SQL" <<  this->tmpSql;
 }
 
 void QueryModel::generateRoleNames()
