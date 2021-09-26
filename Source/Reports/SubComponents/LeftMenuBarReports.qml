@@ -315,9 +315,9 @@ Rectangle{
             maxDropOnYAxis: 5
             maxDropOnRow3Axis: 5
             themeVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
+            mainCustomizations: "Properties,Total"
             colorByDropEligible: ""
-            subMenuCustomizations: "tool tip,size,data label,grid line,pivot theme,grand total,row total,sub total"
+            subMenuCustomizations: "pivot theme,grand total,row total,sub total"
         }
         ListElement{
             icon: "table.png"
@@ -329,7 +329,7 @@ Rectangle{
             maxDropOnXAxis: 5
             title:"Table"
             mainCustomizations: "Total,Table Customization"
-            subMenuCustomizations: "tool tip,size,data label,grid line,grand total"
+            subMenuCustomizations: "tool tip,size,data label,grand total"
         }
         ListElement{
             icon: "kpi.png"
@@ -340,7 +340,7 @@ Rectangle{
             title:"KPI"
             xAxisLabelName: "Values"
             mainCustomizations: "KPI Properties"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            subMenuCustomizations: "data label"
         }
     }
 
