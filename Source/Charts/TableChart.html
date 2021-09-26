@@ -30,12 +30,9 @@
     </head>
 
     <body>
-        <div id="my_dataviz" style="padding: 10px">
-            
-        </div>
+        <div id="my_dataviz" style="padding: 10px"></div>
 
         <script>
-            
             var data = [
                 [
                     [
@@ -540,28 +537,38 @@
                     document.querySelector("table").classList.remove("compact");
                 }
             }
+            function searchToggle(searchStatus) {
+                if (searchStatus) {
+                    document.getElementById("example_filter").style.display =
+                        "block";
+                } else {
+                    document.getElementById("example_filter").style.display =
+                        "none";
+                }
+            }
 
-            function init(){
-                document.querySelector("#my_dataviz").innerHTML = `<table id="example" class="ui celled table" style="width: 100%">
+            function init() {
+                document.querySelector(
+                    "#my_dataviz"
+                ).innerHTML = `<table id="example" class="ui celled table" style="width: 100%">
                             <thead></thead>
                             <tbody></tbody>
                             <tfoot></tfoot>
                         </table>`;
 
-                    removeCellBorder();
-                    removeHoverBackground();
-                    removeRowAlternateColor();
-                    setCompact(false);
-                        
+                removeCellBorder();
+                removeHoverBackground();
+                removeRowAlternateColor();
+                setCompact(false);
             }
-            
-            function clearChart(){
+
+            function clearChart() {
                 init();
             }
-            
+
             function drawChart(data, plotConfiguration = {}) {
                 window.data = data;
-                if(window.tableInstance){
+                if (window.tableInstance) {
                     tableInstance.destroy();
                 }
                 init();
@@ -569,15 +576,17 @@
                     defaultCellBorderStatus,
                     defaultCellHoverStatus,
                     defaultCompactStatus,
+                    defaultSearchStatus,
                     defaultRowAlternateStatus,
-                    defaultBatchsize
+                    defaultBatchsize,
                 } = defaultD3Config.defaultTableChartConfig;
                 let {
                     cellBorderStatus = defaultCellBorderStatus,
                     hoverStatus = defaultCellHoverStatus,
                     compactStatus = defaultCompactStatus,
+                    searchStatus = defaultSearchStatus,
                     rowAlternateStatus = defaultRowAlternateStatus,
-                    batchSize = defaultBatchsize
+                    batchSize = defaultBatchsize,
                 } = plotConfiguration;
 
                 addHeader();
@@ -619,9 +628,11 @@
                 });
 
                 setLazyLoadHandler();
+                searchToggle(searchStatus);
             }
 
             // drawChart(data);
+            
 
             function updateTable() {
                 addDataToRow();
@@ -689,7 +700,9 @@
             }
 
             function addDataToRow() {
-                tableInstance.rows.add(window.dataTableValues[window.counter++]).draw();
+                tableInstance.rows
+                    .add(window.dataTableValues[window.counter++])
+                    .draw();
             }
         </script>
     </body>

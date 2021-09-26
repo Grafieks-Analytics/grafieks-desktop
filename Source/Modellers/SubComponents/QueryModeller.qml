@@ -103,6 +103,7 @@ Item{
     Rectangle{
         height: queryModellerItem.height
         width: queryModellerItem.width
+        y:-5
 
         Flickable {
             id: flickText

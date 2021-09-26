@@ -208,6 +208,7 @@
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+                    dataLabelColor = defaultD3Config.fontColor,
                 } = plottingConfiguration;
                 // plottingConfiguration restore from windows
                 window.xLabelfontSize = xLabelfontSize;
@@ -220,11 +221,12 @@
                 window.yLabelfontFamily = yLabelfontFamily;
                 window.xTickfontFamily = xTickfontFamily;
                 window.yTickfontFamily = yTickfontFamily;
-                window.dataLabelfontFamily = dataLabelfontFamily;
+                window.dataLabelColor = dataLabelColor;
 
                 window.xLabelfontColor = xLabelfontColor;
                 window.yLabelfontColor = yLabelfontColor;
                 window.xTickfontColor = xTickfontColor;
+                window.yTickfontColor = yTickfontColor;
                 window.yTickfontColor = yTickfontColor;
 
                 let { legendStatus, legendPosition } = legendConfig;
@@ -655,7 +657,8 @@
                         )
                         .text((d) => f(d.end - d.start))
                         .attr("font-family", dataLabelfontFamily)
-                        .attr("font-size", dataLabelfontSize);
+                        .attr("font-size", dataLabelfontSize)
+                        .attr("fill",  dataLabelColor);
                     // .text(d => f(d.value))
                 }
                 d3.selectAll(".x-axis text")
