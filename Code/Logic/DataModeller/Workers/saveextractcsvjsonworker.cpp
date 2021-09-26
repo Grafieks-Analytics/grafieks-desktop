@@ -1,6 +1,6 @@
 #include "saveextractcsvjsonworker.h"
 
-SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter, FilterNumericalListModel *numericalFilter, FilterDateListModel *dateFilter, int totalFiltersCount, QStringList hideParams)
+SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *categoricalFilter, FilterNumericalListModel *numericalFilter, FilterDateListModel *dateFilter, int totalFiltersCount, QStringList hideParams, QVariantMap changedColumnTypes)
 {
     this->categoricalFilter = categoricalFilter;
     this->numericalFilter = numericalFilter;
@@ -8,6 +8,7 @@ SaveExtractCsvJsonWorker::SaveExtractCsvJsonWorker(FilterCategoricalListModel *c
 
     this->totalFiltersCount = totalFiltersCount;
     this->hideParams = hideParams;
+    this->changedColumnTypes = changedColumnTypes;
 
 }
 
@@ -73,8 +74,10 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                         int32_t year = date.year();
                         int32_t month = date.month();
                         int32_t day = date.day();
+                        appender->Append(duckdb::Date::FromDate(year, month, day));
 
-                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                        // Timestamp in duckDb release crashes. Will fix in the future
+                        // appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
                     } else {
                         qDebug() << a.toStdString().c_str();
                     }
@@ -128,9 +131,9 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
     return output;
 }
 
-bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
+QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, duckdb::Connection con)
 {
-    bool output = true;
+    QString errorMsg = "";
     QString delimiter = Statics::separator;
 
     this->rejectIds.clear();
@@ -169,8 +172,8 @@ bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
                     // If so, set the users choice as default, else process the other condition
                     QString checkFieldName = fileName + "." + this->columnNamesMap.value(i);
 
-                    if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-                        varType = Statics::changedHeaderTypes.value(checkFieldName).toString();
+                    if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+                        varType = this->changedColumnTypes.value(checkFieldName).toString();
                     }
 
                     if(varType == Constants::categoricalType){
@@ -206,7 +209,7 @@ bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
 
             auto createT = con.Query(createTableQuery.toStdString());
             if(!createT->success) {
-                output = false;
+                errorMsg = createT->error.c_str();
                 qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
             }
             qDebug() << createTableQuery << createT->success;
@@ -228,7 +231,7 @@ bool SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName, du
     if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
 
-    return output;
+    return errorMsg;
 }
 
 void SaveExtractCsvJsonWorker::run()
@@ -248,12 +251,12 @@ void SaveExtractCsvJsonWorker::run()
     QFile fileCreateExtract(Statics::csvJsonPath);
     fileCreateExtract.open(QFile::ReadOnly | QFile::Text);
 
-    bool createDb = this->createExtractDb(&fileCreateExtract, fileName, con);
+    QString createDb = this->createExtractDb(&fileCreateExtract, fileName, con);
 
     fileCreateExtract.close();
 
     // Append data to Extract
-    if(createDb){
+    if(createDb.length() <= 0){
         QFile fileAppendData(Statics::csvJsonPath);
         fileAppendData.open(QFile::ReadOnly | QFile::Text);
 
@@ -281,5 +284,5 @@ void SaveExtractCsvJsonWorker::run()
         fileAppendData.close();
     }
 
-    emit saveExtractComplete();
+    emit saveExtractComplete(createDb);
 }

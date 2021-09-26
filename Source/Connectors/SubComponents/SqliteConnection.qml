@@ -19,11 +19,11 @@ import com.grafieks.singleton.constants 1.0
 Popup {
     id: popup
     width: 600
-    height: 500
+    height: 250
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 130
     padding: 0
     property int label_col : 135
 
@@ -152,10 +152,12 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row3.bottom
-        anchors.topMargin: 15
+        // anchors.top: row3.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin:15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col - 100
         spacing: 10
 
         Button{

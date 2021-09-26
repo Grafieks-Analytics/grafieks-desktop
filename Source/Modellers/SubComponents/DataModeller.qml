@@ -183,6 +183,8 @@ Item {
                         param = "[" + tableName + "$]" + "." + "[" + item[0] + "]"
                     } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
+                    } else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                        param = "[" + tableName + "]" + "." + "[" + item[0] + "]"
                     } else {
                         param = DSParamsModel.queryJoiner + tableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + item[0] + DSParamsModel.queryJoiner
                     }
@@ -507,9 +509,11 @@ Item {
     // Form the sql join statement
     function joinOrder(objId, recursion = false){
 
+
         var objArray = []
         var tmpArray = []
         var tmpJoinString = ""
+        var totalJoinCount = 0;
 
         if(recursion === true) {
             objArray = objId
@@ -520,6 +524,8 @@ Item {
 
 
         objArray.forEach(function(item){
+
+            totalJoinCount++
 
             if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 
@@ -537,6 +543,7 @@ Item {
                     let joinPrimaryJoinTable = DSParamsModel.fetchPrimaryJoinTable(innerItem)
                     let joinConditionsList = ""
 
+
                     tmpJoinString += "("
 
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
@@ -544,6 +551,9 @@ Item {
                         let key = Object.keys(joinConditions)[i]
                         if(GeneralParamsModel.getDbClassification() === Constants.excelType){
                             tmpJoinString += " [" + joinCurrentTableName  + "$].[" +  joinConditions[key][1] + "] = [" + joinCompareTableName + "$].[" + joinConditions[key][0] + "] AND"
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                            tmpJoinString += " [" + joinCurrentTableName  + "].[" +  joinConditions[key][1] + "] = [" + joinCompareTableName + "].[" + joinConditions[key][0] + "] AND"
+
                         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
                         }  else {
@@ -559,12 +569,16 @@ Item {
                         joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString
                     } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
-                    }  else {
+                    }  else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable  + "] ON " + tmpJoinString + ")"
+
+                    } else {
                         joinString += " " + joinType + " " + DSParamsModel.queryJoiner + joinPrimaryJoinTable + DSParamsModel.queryJoiner + " ON " + tmpJoinString
                     }
 
                     tmpJoinString = ""
                 })
+
             }
         })
 
@@ -586,7 +600,7 @@ Item {
             DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
 
                 // Check if the column is unselected by a user
-                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType || GeneralParamsModel.getDbClassification() === Constants.accessType){
                     if(hideColumns.indexOf(item) === -1)
                         selectColumns += " " + item + ","
                 } else {
@@ -606,13 +620,28 @@ Item {
             } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
                 forParams = "[" + DSParamsModel.fetchExistingTables(firstRectId) + "$]"
 
+            }  else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                forParams = "[" + DSParamsModel.fetchExistingTables(firstRectId) + "]"
+
             } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
             }  else{
                 forParams = DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
             }
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
+
+            if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                let braces = "";
+                for(var i = 0; i < totalJoinCount - 1; i++){
+                    braces += "(";
+                }
+
+
+                finalQuery = "SELECT " + selectColumns + " FROM " + braces + forParams + " " + joinString.slice(0, -1)
+            } else {
+                finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
+            }
+
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
@@ -942,7 +971,7 @@ Item {
         // If set false, header wont generate in Preview
         DSParamsModel.setRunCalled(false);
 
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType ){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)

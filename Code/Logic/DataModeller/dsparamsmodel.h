@@ -126,6 +126,7 @@ public:
     ~DSParamsModel();
 
     Q_INVOKABLE void executeModelerQuery();
+    Q_INVOKABLE void disconnectDS();
 
     Q_INVOKABLE void resetDataModel();
     Q_INVOKABLE bool saveDatasource(QString filename);
@@ -325,6 +326,7 @@ signals:
 
     // General
     void processQuery();
+    void disconnectAll();
     void currentTabChanged(int currentTab);
     void fileExtensionChanged(QString fileExtension);
     void runCalledChanged(bool runCalled);

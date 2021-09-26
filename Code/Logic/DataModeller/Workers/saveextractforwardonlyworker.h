@@ -25,15 +25,16 @@ class SaveExtractForwardOnlyWorker : public QThread
     QString query;
     int internalColCount;
     QStringList columnStringTypes;
+    QVariantMap changedColumnTypes;
 
 public:
-    explicit SaveExtractForwardOnlyWorker(QString query = "");
+    explicit SaveExtractForwardOnlyWorker(QString query = "", QVariantMap changedColumnTypes = QVariantMap());
 
 protected:
     void run() override;
 
 signals:
-    void saveExtractComplete();
+    void saveExtractComplete(QString errorMsg);
 
 };
 

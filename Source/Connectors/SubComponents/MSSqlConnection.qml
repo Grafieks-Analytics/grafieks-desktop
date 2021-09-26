@@ -149,7 +149,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Microsoft SQL"
+            text: "Sign In to Microsoft SQL Server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -314,7 +314,7 @@ Popup {
 
         TextField{
             id: server
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             height: 40
@@ -343,7 +343,7 @@ Popup {
         }
         TextField{
             id: port
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             //width: 130
@@ -388,7 +388,7 @@ Popup {
 
         TextField{
             id: database
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -434,7 +434,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -479,7 +479,7 @@ Popup {
 
         TextField{
             id: password
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
@@ -503,8 +503,10 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row5.bottom
-        anchors.topMargin: 15
+        // anchors.top: row5.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin:15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         //        anchors.rightMargin: label_col*2 + 47

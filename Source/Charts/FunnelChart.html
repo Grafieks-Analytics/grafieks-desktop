@@ -120,11 +120,14 @@
                         legendConfig = defaultD3Config.defaultLegendConfig,
                         dataLabelfontSize = defaultD3Config.fontSize,
                         dataLabelfontFamily = defaultD3Config.fontFamily,
+                        dataLabelColor = defaultD3Config.fontColor,
+
                     } = plottingConfiguration;
                     let { labelStatus } = labelConfig;
                     let { legendStatus, legendPosition } = legendConfig;
                     window.dataLabelfontSize = dataLabelfontSize;
                     window.dataLabelfontFamily = dataLabelfontFamily;
+                    window.dataLabelColor = dataLabelColor;
                     d3Colors = d3colorPalette;
                     // documentation for options
                     // https://github.com/jakezatecky/d3-funnel/blob/master/README.md
@@ -159,7 +162,7 @@
                         },
                         label: {
                             enabled: labelStatus,
-                            fill: "black",
+                            fill:  dataLabelColor,
                             fontSize: dataLabelfontSize,
                             fontFamily: dataLabelfontFamily,
                         },

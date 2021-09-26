@@ -20,11 +20,11 @@ import "../../MainSubComponents"
 Popup {
     id: popup
     width: 600
-    height: 500
+    height: 300
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 150
     padding: 0
     property int label_col : 135
 
@@ -45,8 +45,9 @@ Popup {
 
         function onLogout(){
             selectedFile = ""
-            separator.text = ""
+            separator.text = ","
             csvFileName.text = ""
+            idSeparatorText.text = ""
         }
 
         function onCsvLoginStatus(status, directLogin){
@@ -194,7 +195,7 @@ Popup {
 
         TextField{
             id: idSeparatorText
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 200
@@ -217,10 +218,13 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row4.bottom
-        anchors.topMargin: 15
+        // anchors.top: row4.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: 65
+
         anchors.right: parent.right
-        anchors.rightMargin: label_col
+        anchors.rightMargin: label_col+30
         spacing: 10
 
         Text{

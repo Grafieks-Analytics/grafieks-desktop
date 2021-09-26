@@ -36,6 +36,14 @@ ListView {
         }
     }
 
+    Connections {
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+
+        }
+    }
+
     function handleCheckChange(colName, status){
         if(currentDashboardId === DashboardParamsModel.currentDashboard){
             if(colName !== ""){

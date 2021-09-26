@@ -36,8 +36,7 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
 {
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
 
-    qDebug() << visibleColumns << this->allColumnVisibleMap.value(dashboardId);
-    emit columnNamesChanged(visibleColumns);
+    emit columnNamesChanged(dashboardId, visibleColumns);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
 
@@ -51,7 +50,8 @@ QStringList TableColumnsModel::fetchColumnData(QString colName)
     QString fileName = QFileInfo(tableName).baseName().toLower();
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
 
-    QString query = "SELECT DISTINCT " + colName + " FROM " + fileName;
+    QString joiner = "\"";
+    QString query = "SELECT DISTINCT " + joiner + colName + joiner + " FROM " + fileName;
     auto dataList = con.Query(query.toStdString());
 
     int totalRows = dataList->collection.Count();
@@ -72,7 +72,9 @@ QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnN
     QString fileName = QFileInfo(tableName).baseName().toLower();
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
 
-    QString query = "SELECT DISTINCT " + columnName + " FROM " + fileName + " WHERE " + columnName + " LIKE '%" + keyword + "%'";
+
+    QString joiner = "\"";
+    QString query = "SELECT DISTINCT " + joiner + columnName + joiner + " FROM " + fileName + " WHERE " + columnName + " LIKE '%" + keyword + "%'";
     auto dataList = con.Query(query.toStdString());
     if(!dataList->success)
         qDebug() << Q_FUNC_INFO << dataList->error.c_str();
@@ -99,6 +101,83 @@ QString TableColumnsModel::findColumnType(QString columnName)
 void TableColumnsModel::redrawCharts(int dashboardId)
 {
     emit chartValuesChanged(dashboardId);
+}
+
+void TableColumnsModel::saveTableColumns()
+{
+
+    QJsonObject masterObj;
+
+    // filteredChartData
+    QJsonObject filteredChartDataTmp;
+    QList<int> filteredChartDataKeys = this->filteredChartData.keys();
+    for(int i = 0; i < filteredChartDataKeys.length(); i++){
+
+        QList<int> columnKeys = this->filteredChartData.value(i).keys();
+        QJsonObject tmp;
+
+        foreach(int colKey, columnKeys){
+            tmp.insert(QString::number(colKey), QJsonArray::fromStringList(this->reportChartData.value(i).value(colKey)));
+        }
+        filteredChartDataTmp.insert(QString::number(filteredChartDataKeys.at(i)), tmp);
+    }
+    masterObj.insert("reportChartData", filteredChartDataTmp);
+
+
+    // numericalList
+    masterObj.insert("numericalList", QJsonArray::fromStringList(this->numericalList));
+
+    // categoryList
+    masterObj.insert("categoryList", QJsonArray::fromStringList(this->categoryList));
+
+    // dateList
+    masterObj.insert("dateList", QJsonArray::fromStringList(this->dateList));
+
+    // allColumnVisibleMap
+    QJsonObject allColumnVisibleMapTmp;
+    QList<int> columnVisibleMapKeys = this->allColumnVisibleMap.keys();
+    for(int i = 0; i < columnVisibleMapKeys.length(); i++){
+
+        QList<QString> columnNameKeys = this->allColumnVisibleMap.value(i).keys();
+        QJsonObject tmp;
+
+        foreach(QString colKey, columnNameKeys){
+            tmp.insert(colKey, this->allColumnVisibleMap.value(i).value(colKey).toString());
+        }
+        allColumnVisibleMapTmp.insert(QString::number(columnVisibleMapKeys.at(i)), tmp);
+    }
+
+    masterObj.insert("allColumnVisibleMap", allColumnVisibleMapTmp);
+
+    // reportChartData
+    QJsonObject reportChartDataTmp;
+    QList<int> reportChartDataKeys = this->reportChartData.keys();
+    for(int i = 0; i < reportChartDataKeys.length(); i++){
+
+        QList<int> columnKeys = this->reportChartData.value(i).keys();
+        QJsonObject tmp;
+
+        foreach(int colKey, columnKeys){
+            tmp.insert(QString::number(colKey), QJsonArray::fromStringList(this->reportChartData.value(i).value(colKey)));
+        }
+        reportChartDataTmp.insert(QString::number(reportChartDataKeys.at(i)), tmp);
+    }
+    masterObj.insert("reportChartData", reportChartDataTmp);
+
+
+    // columnTypes
+    QJsonObject columnTypesTmp;
+    QStringList columnTypesList = this->columnTypes.keys();
+    for(int k = 0; k < columnTypesList.length(); k++){
+        columnTypesTmp.insert(columnTypesList.at(k), this->columnTypes.value(columnTypesList.at(k)));
+    }
+    masterObj.insert("columnTypes", columnTypesTmp);
+
+    // columnDataList
+    // This list is not required
+    // masterObj.insert("columnDataList", QJsonArray::fromStringList(columnDataList));
+
+    emit signalSaveTableColumns(masterObj);
 }
 
 void TableColumnsModel::addNewDashboard(int dashboardId)
@@ -144,84 +223,83 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
     QList<int> dashboardIdLists = showColumns.keys();
 
-    for(int i = 0; i < dashboardIdLists.length(); i++){
 
-        int filterCount = showColumns.value(i).length();
+    int filterCount = showColumns.value(dashboardId).length();
 
-        for(int j = 0; j < filterCount; j++){
+    for(int j = 0; j < filterCount; j++){
 
-            QString currentColumnName = showColumns.value(i).at(j);
+        QString currentColumnName = showColumns.value(dashboardId).at(j);
 
-            QString currentColumnRelation = columnFilterType.value(i).value(currentColumnName).toString();
-            QString valueIncludeExclude = columnIncludeExcludeMap.value(i).value(currentColumnName).toString();
-            QStringList filterValues = columnValueMap.value(i).value(currentColumnName);
+        QString currentColumnRelation = columnFilterType.value(dashboardId).value(currentColumnName).toString();
+        qDebug() << "CURRENT REL" << currentColumnRelation;
+        QString valueIncludeExclude = columnIncludeExcludeMap.value(dashboardId).value(currentColumnName).toString();
+        QStringList filterValues = columnValueMap.value(dashboardId).value(currentColumnName);
 
-            QVector<int> filterValueIds;
-            QStringList selectedValues;
+        QVector<int> filterValueIds;
+        QStringList selectedValues;
 
-            // Equal relations
-            if(equalRelationsList.indexOf(currentColumnRelation) >= 0){
+        // Equal relations
+        if(equalRelationsList.indexOf(currentColumnRelation) >= 0){
 
-                QStringList tmpValList;
-                QString inArrayValues;
-                QString notRelationString = valueIncludeExclude == "include" ? "" : " NOT ";
+            QStringList tmpValList;
+            QString inArrayValues;
+            QString notRelationString = valueIncludeExclude == "include" ? "" : " NOT ";
 
 
-                foreach(QString value, filterValues){
-                    if(tmpValList.indexOf(value) < 0){
-                        tmpValList.append(value);
+            foreach(QString value, filterValues){
+                if(tmpValList.indexOf(value) < 0){
+                    tmpValList.append(value);
 
-                        inArrayValues += "'" + value + "',";
-                    }
+                    inArrayValues += "'" + value + "',";
                 }
-                inArrayValues.chop(1);
-                whereConditions += joiner + currentColumnName + joiner + notRelationString + " IN (" + inArrayValues + ") AND ";
             }
-
-            // Between relations
-            else if(betweenRelationList.indexOf(currentColumnRelation) >= 0){
-
-                float min = filterValues.at(0).toFloat();
-                float max = filterValues.at(1).toFloat();
-                whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + min + " AND " + max + " AND ";
-            }
-
-            // Not equal relations
-            else if(currentColumnRelation == "dataNotEqual"){
-
-                float value = filterValues.at(0).toFloat();
-                whereConditions += joiner + currentColumnName + joiner + " != " + value + " AND ";
-            }
-
-            // Smaller than relations
-            else if(currentColumnRelation == "dataSmaller"){
-
-                float value = filterValues.at(0).toFloat();
-                whereConditions += joiner + currentColumnName + joiner + " < " + value + " AND ";
-
-            } else if(currentColumnRelation == "dataGreater"){
-
-                float value = filterValues.at(0).toFloat();
-                whereConditions += joiner + currentColumnName + joiner + " > " + value + " AND ";
-
-            } else if(currentColumnRelation == "dataEqualOrSmaller"){
-
-                float value = filterValues.at(0).toFloat();
-                whereConditions += joiner + currentColumnName + joiner + " <= " + value + " AND ";
-
-            } else if(currentColumnRelation == "dataEqualOrGreater"){
-
-                float value = filterValues.at(0).toFloat();
-                whereConditions += joiner + currentColumnName + joiner + " >= " + value + " AND ";
-
-            } else{
-                qDebug() << "ELSE CONDITION" << currentColumnRelation;
-            }
+            inArrayValues.chop(1);
+            whereConditions += joiner + currentColumnName + joiner + notRelationString + " IN (" + inArrayValues + ") AND ";
         }
 
-        this->filteredChartData.insert(i, tmpColData);
-        tmpColData.clear();
+        // Between relations
+        else if(betweenRelationList.indexOf(currentColumnRelation) >= 0){
+
+            float min = filterValues.at(0).toFloat();
+            float max = filterValues.at(1).toFloat();
+            whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + QString::number(min) + " AND " + QString::number(max) + " AND ";
+        }
+
+        // Not equal relations
+        else if(currentColumnRelation == "dataNotEqual"){
+
+            float value = filterValues.at(0).toFloat();
+            whereConditions += joiner + currentColumnName + joiner + " != " + QString::number(value) + " AND ";
+        }
+
+        // Smaller than relations
+        else if(currentColumnRelation == "dataSmaller"){
+
+            float value = filterValues.at(0).toFloat();
+            whereConditions += joiner + currentColumnName + joiner + " < " + QString::number(value) + " AND ";
+
+        } else if(currentColumnRelation == "dataGreater"){
+
+            float value = filterValues.at(0).toFloat();
+            whereConditions += joiner + currentColumnName + joiner + " > " + QString::number(value) + " AND ";
+
+        } else if(currentColumnRelation == "dataEqualOrSmaller"){
+
+            float value = filterValues.at(0).toFloat();
+            whereConditions += joiner + currentColumnName + joiner + " <= " + QString::number(value) + " AND ";
+
+        } else if(currentColumnRelation == "dataEqualOrGreater"){
+
+            float value = filterValues.at(0).toFloat();
+            whereConditions += joiner + currentColumnName + joiner + " >= " + QString::number(value) + " AND ";
+
+        } else{
+            qDebug() << "ELSE CONDITION" << currentColumnRelation;
+        }
     }
+
+    this->filteredChartData.insert(dashboardId, tmpColData);
+    tmpColData.clear();
 
     // Chop trailing ' AND '
     whereConditions.chop(5);
@@ -250,16 +328,53 @@ void TableColumnsModel::generateColumnsForReader(duckdb::Connection *con)
     this->generateColumns(con);
 }
 
+void TableColumnsModel::getExtractTableColumns(QJsonObject tableColumnParams)
+{
+
+    qDebug() << Q_FUNC_INFO << tableColumnParams;
+    //    QMap<int, QMap<int, QStringList>> filteredChartData;
+    //    QMap<int, QStringList *> newChartData;
+    //    QMap<int, QString> newChartHeader;
+    //    QMap<int, QStringList> chartHeaderDetails;
+
+    //    QStringList numericalList;
+    //    QStringList categoryList;
+    //    QStringList dateList;
+    //    QMap<int, QVariantMap> allColumnVisibleMap;         // dashboardId - <columnName - columnType>
+    //    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    //    QMap<QString, QString> columnTypes;
+    //    QStringList columnDataList;
+
+    QJsonObject mainObj;
+    mainObj = tableColumnParams.value("allColumnVisibleMap").toObject();
+    QStringList dashboardIds = mainObj.keys();
+
+    foreach(QString dashboardId, dashboardIds){
+        QJsonObject childObj = mainObj.value(dashboardId).toObject();
+        QStringList childKeys = childObj.keys();
+
+        QVariantMap tmpMap;
+        foreach(QString key, childKeys){
+            tmpMap.insert(key, childObj.value(key).toString());
+        }
+
+        this->allColumnVisibleMap.insert(dashboardId.toInt(), tmpMap);
+        this->applyColumnVisibility(dashboardId.toInt());
+    }
+}
+
+
 void TableColumnsModel::generateColumns(duckdb::Connection *con)
 {
+
     // Fetch data from duckdb
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
         tableName = QFileInfo(tableName).baseName().toLower();
         tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+//    }
 
     // Clear existing chart headers data
     this->numericalList.clear();

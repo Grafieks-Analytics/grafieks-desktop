@@ -46,7 +46,6 @@ Rectangle{
         // Listview height
         function onCategoricalFilterChanged(filterList){
 
-            console.log("DUMP", filterList)
             var newModel = []
             listFiltersListView.model = newModel
 
