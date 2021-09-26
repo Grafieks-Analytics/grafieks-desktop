@@ -41,7 +41,7 @@ Item{
     // Or Categorical Value is added on Y axis
     // On Change we update the graph title
     property bool isHorizontalGraph: false;
-    
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -259,7 +259,7 @@ Item{
         var chartUrl = reportProperties.chartUrl;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         var optionalParams = JSON.parse(reportProperties.optionalConfig);
-        
+
         if(standardChart){
             d3PropertyConfig.chartType = "Standard";
         }else{
@@ -269,7 +269,7 @@ Item{
                 d3PropertyConfig.chartType = "FitWidth";
             }
         }
-        
+
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
@@ -315,7 +315,7 @@ Item{
             dataValues = JSON.parse(dataValues);
             dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
             dataValues = JSON.stringify(dataValues);
-            
+
             break;
         case Constants.groupBarChartTitle:
             var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
@@ -327,7 +327,7 @@ Item{
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
             }
-            
+
             dataValues = JSON.parse(dataValues);
             dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
             dataValues = JSON.stringify(dataValues);
@@ -421,11 +421,11 @@ Item{
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.pivotTitle:
-            
+
             dataValues = JSON.parse(dataValues);
             dataValues.push([xAxisColumns,yAxisColumns,row3Columns]);
             dataValues = JSON.stringify(dataValues);
-            
+
             console.log(chartTitle,"CLICKED")
             break;
         default:
@@ -485,7 +485,7 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
-            
+
             // [Tag: Refactor]
             // Move this to constants
             fullScreenReport.source= "/Images/icons/zoom in gray.png"
@@ -594,7 +594,7 @@ Item{
         return false;
     }
 
-    
+
     // function to get the columnName from model
     // Difference between NewReport.qml and DroopedReport:
     // 1. Columns are in modal | Columns are in Array
@@ -644,7 +644,7 @@ Item{
         var chartId = reportProperties.reportId;
         var chartUrl = reportProperties.chartUrl;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
-        
+
         if(standardChart){
             d3PropertyConfig.chartType = "Standard";
         }else{
@@ -654,7 +654,7 @@ Item{
                 d3PropertyConfig.chartType = "FitWidth";
             }
         }
-        
+
         var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
         console.log('Colour By Data',JSON.stringify(colorByData));
 

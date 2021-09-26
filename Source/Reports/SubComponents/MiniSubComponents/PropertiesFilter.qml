@@ -34,6 +34,8 @@ Column{
     property var pivotThemeVisible2: !!report_desiner_page.subMenuCustomizationsAvailable.includes('pivot theme');
     property var lineTypeVisible2: !!report_desiner_page.subMenuCustomizationsAvailable.includes('line type');
 
+    property var droppedColorType: null;
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -118,6 +120,8 @@ Column{
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
+        droppedColorType = itemType.toLowerCase();
+ 
 
         if(!isDropEligible()){
             element.border.color = Constants.themeColor
@@ -165,6 +169,13 @@ Column{
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
+        const chartDetailsConfig = allChartsMapping[chartTitle];
+        let { colorByDropEligible } = chartDetailsConfig || "";
+
+        colorByDropEligible = colorByDropEligible.split(',');
+        if(!colorByDropEligible.includes(itemType.toLowerCase())){
+            return false;
+        }
         
         if(report_desiner_page.chartTitle==Constants.groupBarChartTitle){
             var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
@@ -312,7 +323,7 @@ Column{
                 delegate: Rectangle{
                     height: colorBoxHeight
                     width: parent.width
-                    color: "#BADCFF"
+                    color: droppedColorType != "numerical" ? Constants.defaultCategoricalColor : Constants.defaultNumericalColor; 
                     border.width: 1
                     border.color: "#CDE6FF"
 
