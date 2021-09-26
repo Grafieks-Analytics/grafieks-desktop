@@ -9,6 +9,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
 
         <style type="text/css">
@@ -267,7 +268,7 @@
                 d3.selectAll("#yAxisDiv").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 d3Colors = d3colorPalette;
@@ -675,7 +676,7 @@
                     .attr("d", line(dataValues)) // 11. Calls the line generator
                     .attr("stroke", d3Colors[0])
                     .attr("stroke-width", lineStroke)
-                    .attr("fill",  d3Colors[0])
+                    .attr("fill", d3Colors[0])
                     .attr(
                         "transform",
                         "translate(" +

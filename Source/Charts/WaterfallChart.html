@@ -5,6 +5,7 @@
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
         <style>
             .bar.total rect {
@@ -185,7 +186,7 @@
                     // } = defaultD3Config.defaultLegendConfig,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig: {
-                        labelStatus,
+                        labelStatus,labelFormat
                     } = defaultD3Config.defaultlabelConfig,
                     gridConfig: {
                         gridStatus,
@@ -655,7 +656,7 @@
                             "dy",
                             (d) => (d.class === "negative" ? "-" : "") + ".75em"
                         )
-                        .text((d) => f(d.end - d.start))
+                        .text((d) => labelFormatSet( f(d.end - d.start) ,labelFormat))
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill",  dataLabelColor);

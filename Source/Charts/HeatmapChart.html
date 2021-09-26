@@ -8,6 +8,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <title>Heatmap</title>
         <link rel="stylesheet" href="Data/general.css" />
         <style type="text/css">
@@ -580,7 +581,7 @@
                 // var [dataValues, [myGroups, myVars]] = data;
                 let { legendStatus, legendPosition } = legendConfig;
                 let { gridStatus } = gridConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
 
                 // set the dimensions and margins of the graph
                 d3.selectAll("#my_dataviz").html("");
@@ -679,7 +680,7 @@
 
                     switch (legendPosition) {
                         case "left":
-                             width -= 10;
+                            width -= 10;
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", topPosition)
@@ -741,9 +742,11 @@
                                 .style("overflow", "scroll")
                                 .style("transform", "rotate(-90deg)")
                                 .style("border", "none");
-                             d3.selectAll(".minMaxValue")
-                                 .style("transform", "rotate(90deg)")
-                  
+                            d3.selectAll(".minMaxValue").style(
+                                "transform",
+                                "rotate(90deg)"
+                            );
+
                             d3.selectAll("#legend div span")
                                 .style("max-width", "160px")
                                 .style("white-space", "nowrap")
@@ -782,8 +785,10 @@
                                 "margin-left",
                                 0
                             );
-                            d3.selectAll(".minMaxValue")
-                                 .style("transform", "rotate(90deg)")
+                            d3.selectAll(".minMaxValue").style(
+                                "transform",
+                                "rotate(90deg)"
+                            );
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "auto")
@@ -1100,7 +1105,7 @@
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)
                         .text(function (d) {
-                            return d[2];
+                            return labelFormatSet(d[2], labelFormat);
                         })
                         .attr("x", function (d) {
                             return x(d[0]) + x.bandwidth() / 2 - 20;

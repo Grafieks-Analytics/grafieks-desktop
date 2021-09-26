@@ -9,6 +9,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
         <style type="text/css">
             body {
@@ -671,7 +672,7 @@
                     chartType = constants.chartType.FIT_HEIGHT;
                 }
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 // var dataValues = data[0];

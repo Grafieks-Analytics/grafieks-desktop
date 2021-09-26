@@ -22,7 +22,7 @@ const constants = {
         RECT: "rect",
     },
     labelFormat: {
-        ROUND: "round",
+        ROUND: "symbol",
         NONE: "none",
     },
     chartMargins: {
@@ -85,6 +85,7 @@ const defaultD3Config = {
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
         defaultSearchStatus:true,
+        defaultGrandTotalStatus:true,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50,
     },
