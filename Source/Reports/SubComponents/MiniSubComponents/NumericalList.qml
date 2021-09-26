@@ -7,7 +7,7 @@ ListView{
 
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
-    interactive: false
+    interactive: true
     clip: false
     ScrollBar.vertical: ScrollBar {
         policy: ScrollBar.AlwaysOn
@@ -46,7 +46,7 @@ ListView{
 
     anchors.top: numericalHeading.bottom
     anchors.topMargin: 5
-    height: parent.height - numericalHeading.height - 5
+    height: parent.height - 20
     width: parent.width
 
     delegate: DataPaneElement{

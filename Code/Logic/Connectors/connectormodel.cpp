@@ -59,12 +59,12 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
         //        addConnector(new Connector("ODBC","/Images/icons/connectors/odbc.png","rdbms", false));
         addConnector(new Connector("Snowflake","/Images/icons/connectors/snowflake.png","rdbms", true));
         addConnector(new Connector("SQLite", "/Images/icons/connectors/sqlite.png", "rdbms", true));
-        addConnector(new Connector("Microsoft SQL Server", "/Images/icons/connectors/sqlserver.png", "rdbms", true));
+        addConnector(new Connector("Sql Server", "/Images/icons/connectors/sqlserver.png", "rdbms", true));
         addConnector(new Connector("Teradata", "/Images/icons/connectors/teradata.png", "rdbms", true));
         addConnector(new Connector("CSV","/Images/icons/connectors/csv.png","file", true));
 //        addConnector(new Connector("Impala","/Images/icons/connectors/impala.png","rdbms", false));
         addConnector(new Connector("MongoDB","/Images/icons/connectors/mongo.png","nosql", true));
-        addConnector(new Connector("PostgreSQL", "/Images/icons/postgres.png", "rdbms", true));
+        addConnector(new Connector("Postgres", "/Images/icons/postgres.png", "rdbms", true));
     }
     }
 
