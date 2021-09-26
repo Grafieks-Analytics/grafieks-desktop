@@ -85,7 +85,7 @@ const defaultD3Config = {
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
         defaultSearchStatus:true,
-        defaultGrandTotalStatus:true,
+        defaultGrandTotalStatus:false,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50,
     },

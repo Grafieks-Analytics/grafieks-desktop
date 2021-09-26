@@ -1411,6 +1411,7 @@ Page {
                 if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
                     return false;
                 }
+                return true;
             case Constants.sunburstChartTitle:
                 if((itemType && itemType.toLowerCase()) != "categorical"){
                     return false;
