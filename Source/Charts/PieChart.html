@@ -11,7 +11,8 @@
     <script src="./Data/utils.js"></script>
 
     <script src="Data/d3-scale-chromatic.v1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script> -->
+    <script src="./Data/min/numeral.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
 
     <title>Pie Chart</title>
@@ -57,17 +58,17 @@
                 Binders: 2114,
                 Bookcases: 8016,
                 Chairs: 6906,
-                Envelopes: 1134.56456,
+                Envelopes: 1134,
                 Fasteners: 160,
                 Furnishings: 2398,
                 Labels: 192,
                 Paper: 1198,
                 Phones: 8372,
-                Storage: 4638.5612,
+                Storage: 4638,
                 Supplies: 132,
-                Tables: 10230.8854,
+                Tables: 10230,
             },
-            ["sub-category", "sales"],
+            ["sub_category", "sales"],
         ];
 
         function transformData(dataValues, dateFormat) {
@@ -122,7 +123,7 @@
                 innerRadius,
                 dataLabelfontSize = defaultD3Config.fontSize,
                 dateFormat = defaultD3Config.dateFormat,
-                
+
                 dataLabelfontFamily = defaultD3Config.fontFamily,
                 dataLabelColor = defaultD3Config.fontColor,
             } = plottingConfiguration;
@@ -153,7 +154,7 @@
                 innerRadius = defaultD3Config.innerRadius;
             }
             let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus,labelFormat } = labelConfig;
+            let { labelStatus, labelFormat } = labelConfig;
             d3.select("#legend").html("").style("padding", "");
 
             var translateSvg = 0;
@@ -204,6 +205,7 @@
                 } else {
                     topPosition = 0;
                 }
+
                 legendElement.style.padding = "10px";
 
                 switch (legendPosition) {
@@ -235,9 +237,9 @@
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "10px")
-                            .style("right", "0px")
+                            // .style("right", rightPosition)
                             .style("bottom", "auto")
-                            .style("left", 10 + "px")
+                            .style("left", "auto")
                             .style("display", "flex")
                             .style("max-width", "99vw")
                             .style("overflow", "scroll");
@@ -254,9 +256,9 @@
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "auto")
-                            .style("right", "auto")
+                            // .style("right", rightPosition)
                             .style("bottom", "0px")
-                            // .style("left", 0 + "px")
+                            .style("left", "auto")
                             .style("display", "flex")
                             .style("max-width", "99vw")
                             .style("overflow", "scroll");
@@ -530,9 +532,21 @@
                         return midangle < Math.PI ? "start" : "end";
                     });
             }
+            var legendWidth = document.querySelector("#legend").offsetWidth;
+            console.log({ legendWidth });
+            if (legendWidth <= window.innerWidth - 50) {
+                console.log(window.innerWidth);
+                console.log({ legendWidth });
+                rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
+            } else {
+                rightPosition = 0;
+            }
+            if (legendPosition == "top" || legendPosition == "bottom") {
+                d3.select("#legend").style("right", rightPosition);
+            }
         }
 
         // Initialize the plot with the first dataset
-        // drawChart(data);
+        drawChart(data);
     </script>
 </body>

@@ -8,6 +8,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <title>Heatmap</title>
         <link rel="stylesheet" href="Data/general.css" />
         <style type="text/css">
@@ -36,6 +37,10 @@
                 height: 40px;
                 /* background-color: red; */
             }
+            /* #legend{
+                display: flex;
+                flex-direction: column;
+            } */
         </style>
     </head>
     <body>
@@ -572,11 +577,18 @@
                     "yAxisLabel",
                     "Value",
                 ];
+
+                var [minValue, maxValue] = d3.extent(dataValues, function (d) {
+                    return +d[2];
+                });
+
+                console.log({ minValue });
+                console.log({ maxValue });
                 console.log(data);
                 // var [dataValues, [myGroups, myVars]] = data;
                 let { legendStatus, legendPosition } = legendConfig;
                 let { gridStatus } = gridConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
 
                 // set the dimensions and margins of the graph
                 d3.selectAll("#my_dataviz").html("");
@@ -628,12 +640,16 @@
                             console.log(d3Colors[1]);
                             if (1) {
                                 return (
-                                    '<div style="width: 15px; height: 200px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
+                                    '<div style="height: 310px;"><div class="minMaxValue">' +
+                                    minValue +
+                                    '</div><div style="width: 15px; height: 200px; margin-top:2px; border: 1px solid grey; background-image: linear-gradient(' +
                                     d3Colors[0] +
                                     "," +
                                     d3Colors[1] +
                                     // d3Colors[i % d3Colors.length] +
-                                    ');"> </div>'
+                                    ');"> </div><div class="minMaxValue">' +
+                                    maxValue +
+                                    "</div></div>"
                                 );
                             }
                         })
@@ -675,7 +691,7 @@
 
                     switch (legendPosition) {
                         case "left":
-                             width -= 10;
+                            width -= 10;
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", topPosition)
@@ -728,7 +744,7 @@
                             y_pos_x_label = 57;
                             d3.select("#legend")
                                 .attr("style", null)
-                                .style("top", "-90px")
+                                .style("top", "-150px")
                                 .style("right", rightPosition)
                                 .style("bottom", "auto")
                                 .style("left", "auto")
@@ -737,6 +753,13 @@
                                 .style("overflow", "scroll")
                                 .style("transform", "rotate(-90deg)")
                                 .style("border", "none");
+                            d3.selectAll(".minMaxValue")
+                                .style("transform", "rotate(90deg)")
+                                .style("margin-top", "15px")
+                                .style("margin-right", "0px")
+                                .style("position", "relative")
+                                .style("right", "10px");
+
                             d3.selectAll("#legend div span")
                                 .style("max-width", "160px")
                                 .style("white-space", "nowrap")
@@ -775,17 +798,27 @@
                                 "margin-left",
                                 0
                             );
+                            d3.selectAll(".minMaxValue").style(
+                                "transform",
+                                "rotate(90deg)"
+                            );
                             d3.select("#legend")
                                 .attr("style", null)
                                 .style("top", "auto")
                                 .style("right", rightPosition)
-                                .style("bottom", "-70px")
+                                .style("bottom", "-100px")
                                 .style("transform", "rotate(-90deg)")
                                 // .style("left", margin.left + "px")
                                 .style("display", "flex")
                                 .style("max-width", "99vw")
                                 .style("overflow", "scroll")
                                 .style("border", "none");
+                            d3.selectAll(".minMaxValue")
+                                .style("transform", "rotate(90deg)")
+                                .style("margin-top", "15px")
+                                .style("margin-right", "0px")
+                                .style("position", "relative")
+                                .style("right", "10px");
 
                             d3.selectAll("#legend div span")
                                 .style("max-width", "160px")
@@ -808,7 +841,7 @@
 
                             d3.select("#legend")
                                 .attr("style", null)
-                                .style("right", "10px")
+                                .style("right", "0px")
                                 .style("left", "auto")
                                 .style("position", "fixed")
                                 .style("top", topPosition)
@@ -819,9 +852,15 @@
                                 .style("display", "block");
                             d3.selectAll("#legend div span")
                                 .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
+                                .style("white-space", "nowrap");
+                            // .style("overflow", "hidden")
+                            // .style("text-overflow", "ellipsis");
+                            d3.selectAll(".minMaxValue")
+                                // .style("transform", "rotate(90deg)")
+                                // .style("margin-top", "15px")
+                                // .style("margin-right", "0px")
+                                .style("position", "relative");
+                            // .style("right", "10px");
 
                             d3.select("#mainChartWindow").attr("style", null);
                             d3.select("#mainChartWindow").style(
@@ -1091,7 +1130,7 @@
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)
                         .text(function (d) {
-                            return d[2];
+                            return labelFormatSet(d[2], labelFormat);
                         })
                         .attr("x", function (d) {
                             return x(d[0]) + x.bandwidth() / 2 - 20;

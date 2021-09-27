@@ -266,6 +266,9 @@ function clearChart() {
         console.log("d3 not available skipping");
         return;
     }
+    //pivot table has id rr -> [Tag: Refactor]
+    // Change this later to my_dataviz
+    d3.selectAll("#rr").html("");
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
     d3.selectAll("#xAxisDiv").html("");
@@ -324,7 +327,7 @@ function setSvgBackground(backgroundColor, opacity) {
     var styleTag = document.createElement("style");
     styleTag.id = "dashboardStyle";
     styleTag.innerHTML =
-        "#my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " +
+        "body, #my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " +
         backgroundColor +
         " }";
     document.head.append(styleTag);
@@ -400,7 +403,15 @@ function labelFormatSet(labelValue, labelFormat) {
             return Math.round(labelValue).toLocaleString("en-US");
             break;
         case "symbol":
-            return numeral(labelValue).format("0 a");
+            //  if (labelValue > 999 && labelValue < 1000000) {
+            //      return (labelValue / 1000).toFixed(1) + "K"; // convert to K for number from > 1000 < 1 million
+            //  } else if (labelValue > 1000000) {
+            //      return (labelValue / 1000000).toFixed(1) + "M"; // convert to M for number from > 1 million
+            //  } else if (labelValue < 900) {
+            //      return labelValue; // if value < 1000, nothing to do
+            //  }
+            return d3.format(".2s")(labelValue);
+            // return numeral(labelValue).format("0 a");
             break;
         case "currency":
             return numeral(labelValue).format("$0,0.00");

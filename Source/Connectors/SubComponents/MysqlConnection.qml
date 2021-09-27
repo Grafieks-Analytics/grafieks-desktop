@@ -155,7 +155,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Mysql"
+            text: "Sign In to MySQL"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader

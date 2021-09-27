@@ -233,6 +233,7 @@
             console.log(data[1])
             xAxisLabel = data[1][0]
             yAxisLabel = data[1][1]
+            colorData = data[1][2]
 
             let {
                 d3colorPalette,
@@ -314,7 +315,7 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html("xAxisLabel" + "&nbsp;")
+                    .html(xAxisLabel + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
@@ -650,6 +651,14 @@
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 d[1]+
+                                "</span>"+
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                colorData +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                d[2]+
                                 "</span>"
                             );
                         });

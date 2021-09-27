@@ -5,6 +5,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
         <style type="text/css">
             body {
@@ -284,7 +285,7 @@
 
                 var legendNames = [];
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 var { groupBarChartColorBy } = options || {};
@@ -926,10 +927,10 @@
                                 .attr("class", "label")
                                 // yScale1.bandwidth()
                                 .attr("y", (d) => {
-                                    return yScale1(d.name) + 15; // y = yScale1
+                                    return yScale1(d.name) +8; // y = yScale1
                                 })
                                 .text(function (d) {
-                                    return d.value;
+                                    return   labelFormatSet(d.value, labelFormat);
                                 })
                                 .attr("font-family", dataLabelfontFamily)
                                 .attr("font-size", dataLabelfontSize)
