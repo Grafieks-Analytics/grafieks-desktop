@@ -132,7 +132,6 @@ Item{
 
         function onReportDeleted(deletedReportId){
             if(deletedReportId === newItem.reportId) {
-                console.log("DELETER", deletedReportId, newItem.reportId)
                 newItem.destroy()
                 mainContainer.destroy()
                 this.destroy()
