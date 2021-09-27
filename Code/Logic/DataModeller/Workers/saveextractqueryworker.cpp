@@ -159,11 +159,11 @@ void SaveExtractQueryWorker::run()
                     }
                 }
             } else {
-                type = "TIMESTAMP";
+                type = "DATE";
             }
         }
 
-        createTableQuery += "\"" + fieldName + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + " NULL,";
         this->columnStringTypes.append(type);
     }
 
@@ -177,7 +177,7 @@ void SaveExtractQueryWorker::run()
         // Create a master table to refer the name of actual extract tableName
         // while running an extract later on
 
-        QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
+        QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER)";
         QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
         auto x = con.Query(tableCreateQuery.toStdString());
@@ -208,6 +208,7 @@ void SaveExtractQueryWorker::run()
                     int32_t year = date.year();
                     int32_t month = date.month();
                     int32_t day = date.day();
+                    qDebug() << year << month << day;
                     appender.Append(duckdb::Date::FromDate(year, month, day));
                 } else if(columnType == "TIMESTAMP"){
                     QDate date = query.value(i).toDate();
@@ -215,6 +216,7 @@ void SaveExtractQueryWorker::run()
                     int32_t year = date.year();
                     int32_t month = date.month();
                     int32_t day = date.day();
+                    qDebug() << year << month << day;
                     appender.Append(duckdb::Date::FromDate(year, month, day));
                     // The below code crashes in the release mode of duckdb
                     // Will need to check

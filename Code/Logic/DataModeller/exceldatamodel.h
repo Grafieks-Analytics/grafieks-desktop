@@ -26,6 +26,8 @@ class ExcelDataModel : public QAbstractTableModel
     int totalRowCount;
     int totalColCount;
 
+    QStringList output;
+
 public:
     explicit ExcelDataModel(QObject *parent = nullptr);
     ~ExcelDataModel();

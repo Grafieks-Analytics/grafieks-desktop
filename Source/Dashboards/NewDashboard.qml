@@ -279,7 +279,8 @@ Page {
     }
 
     function onPublishDashboardClicked(){
-        saveWorkbookPrompt.open()
+        console.log("Publish dashboard coming soon")
+        publishWorkbook.open()
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -291,13 +292,13 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
-    // This is a component because it uses Qt.labs.Platform
-    // and this conflicts with the current file
-    SaveWorkbook{
-        id: saveWorkbookPrompt
+
+    MessageDialog {
+        id: publishWorkbook
+        title: "Publish Datasource"
+        icon: StandardIcon.Information
+        text: "Publish datasource coming soon"
     }
-
-
     // SubComponents Ends
     /***********************************************************************************************************************/
 

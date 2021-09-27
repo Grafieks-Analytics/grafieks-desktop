@@ -105,21 +105,18 @@ void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString 
 
 QStringList CSVJsonDataModel::getTableList()
 {
-    QStringList output;
+
     QString db = Statics::currentDbName;
     this->fileName       = QFileInfo(db).baseName().toLower();
     this->fileName = this->fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    output.append(this->fileName);
-    return output;
+    this->output.append(this->fileName);
+    return this->output;
 }
 
 QStringList CSVJsonDataModel::filterTableList(QString keyword)
 {
-    QStringList output;
-    output << this->fileName;
 
-    output.filter(keyword, Qt::CaseInsensitive);
-    return output;
+    return this->output.filter(keyword, Qt::CaseInsensitive);
 }
 
 QStringList CSVJsonDataModel::getDateColumnData()
