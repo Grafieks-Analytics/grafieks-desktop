@@ -119,10 +119,15 @@ Item{
 
     function deleteReport(reportId){
         let curr = reportId
-        console.log("DLEETEING", reportId)
 
         ReportParamsModel.deleteReport(curr, false)
         DashboardParamsModel.deleteReport(curr)
+    }
+
+    function editReport(reportId){
+        stacklayout_home.currentIndex = Constants.newReportIndex;
+        ReportParamsModel.setReportId(reportId);
+        ReportParamsModel.setEditReportToggle(reportId);
     }
     
 
