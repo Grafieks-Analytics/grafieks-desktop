@@ -114,11 +114,11 @@
                     `<div class="value text-center"></div><div class="label text-center"></div>`
                 );
 
-                d3.select(".value").text(value).style("color",dataValueColorKpi);
+                d3.select(".value").text(Math.round(value)).style("color",dataValueColorKpi);
                 d3.select(".label").text(label).style("color",dataLabelColorKpi);
             }
 
-            // data = [120, "Label"];
+            // data = [120.555, "Label"];
             // drawChart(data);
         </script>
     </body>

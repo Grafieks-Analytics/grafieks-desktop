@@ -262,9 +262,9 @@ function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
 }
 
 function clearChart() {
-    if(!window.d3){
-        console.log('d3 not available skipping')
-        return;    
+    if (!window.d3) {
+        console.log("d3 not available skipping");
+        return;
     }
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
@@ -335,9 +335,9 @@ function setXAxisTicksDistance(distanceValue = "1em") {
 }
 
 function clearStyle() {
-    if(!window.d3){
-        console.log('d3 not available skipping')
-        return;    
+    if (!window.d3) {
+        console.log("d3 not available skipping");
+        return;
     }
     d3.selectAll("#xAxisDiv").attr("style", null);
     d3.selectAll("#xAxisLabelId").attr("style", null);
@@ -380,13 +380,40 @@ function removeAxisTicks(axis = "xAxis", dataValues, range, options = {}) {
 }
 
 function createBatches(array, chunk_size) {
-    return Array(Math.ceil(array.length / chunk_size)).fill().map((_, index) => index * chunk_size).map(begin => array.slice(begin, begin + chunk_size));;
+    return Array(Math.ceil(array.length / chunk_size))
+        .fill()
+        .map((_, index) => index * chunk_size)
+        .map((begin) => array.slice(begin, begin + chunk_size));
 }
 
-function sortArraysOfObjectByValue(array, valueKey){
+function sortArraysOfObjectByValue(array, valueKey) {
     return array.sort(function (a, b) {
         return b[valueKey] - a[valueKey];
     });
+}
+function labelFormatSet(labelValue, labelFormat) {
+    switch (labelFormat) {
+        case "round":
+            return Math.round(labelValue);
+            break;
+        case "comma":
+            return Math.round(labelValue).toLocaleString("en-US");
+            break;
+        case "symbol":
+            return numeral(labelValue).format("0 a");
+            break;
+        case "currency":
+            return numeral(labelValue).format("$0,0.00");
+            break;
+        case "percentage":
+            return numeral(labelValue).format("0%");
+            break;
+        case "none":
+            return labelValue;
+            break;
+        default:
+            return Math.round(labelValue);
+    }
 }
 
 // Main
