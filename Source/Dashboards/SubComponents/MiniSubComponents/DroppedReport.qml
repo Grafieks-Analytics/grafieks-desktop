@@ -132,7 +132,8 @@ Item{
 
         function onReportDeleted(deletedReportId){
             if(deletedReportId === newItem.reportId) {
-
+                console.log("DELETER", deletedReportId, newItem.reportId)
+                newItem.destroy()
                 mainContainer.destroy()
                 this.destroy()
                 is_dashboard_blank = is_dashboard_blank - 1
@@ -464,12 +465,7 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
-//        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
-
-        let curr = DashboardParamsModel.currentReport
-
-        ReportParamsModel.deleteReport(curr, false)
-        DashboardParamsModel.deleteReport(curr)
+        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
 
     }
 

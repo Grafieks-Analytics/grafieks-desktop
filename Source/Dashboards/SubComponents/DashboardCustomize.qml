@@ -116,6 +116,14 @@ Item{
         editIconVisible = false
 
     }
+
+    function deleteReport(reportId){
+        let curr = reportId
+        console.log("DLEETEING", reportId)
+
+        ReportParamsModel.deleteReport(curr, false)
+        DashboardParamsModel.deleteReport(curr)
+    }
     
 
 
@@ -362,6 +370,7 @@ Item{
                                 implicitHeight: 30
                                 leftPadding: 15
                                 text: qsTr("Edit")
+                                onTriggered: editReport(reportId)
 
                             //   TODO:edit report
 
@@ -372,6 +381,7 @@ Item{
                                 implicitHeight: 30
                                 leftPadding: 15
                                 text: qsTr("Delete")
+                                onTriggered: deleteReport(reportId)
                                 // TODO:Delete report
 
                                
