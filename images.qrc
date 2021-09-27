@@ -214,5 +214,6 @@
         <file>Images/icons/connectors/sqlite.png</file>
         <file>Images/icons/connectors/sqlserver.png</file>
         <file>Images/icons/connectors/teradata.png</file>
+        <file>Images/icons/connectors/excel.png</file>
     </qresource>
 </RCC>

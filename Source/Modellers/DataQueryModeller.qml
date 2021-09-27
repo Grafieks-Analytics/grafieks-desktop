@@ -448,7 +448,7 @@ Page {
             tableslist.model = NewTableListModel.filterTableList(text)
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             tableslist.model = CSVJsonDataModel.filterTableList(text)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
             tableslist.model = ExcelDataModel.filterTableList(text)
         } else{
             tableslist.model = ForwardOnlyDataModel.filterTableList(text)
