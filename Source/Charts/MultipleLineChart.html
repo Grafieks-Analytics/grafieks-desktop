@@ -9,6 +9,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
 
         <!-- Create a div where the graph will take place -->
@@ -1052,7 +1053,7 @@
                 d3.selectAll("#yAxisDiv").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 // legends code starts
@@ -1259,7 +1260,7 @@
                                 "height",
                                 "calc(100vh - 42px)"
                             );
-                             d3.selectAll("#my_dataviz").style(
+                            d3.selectAll("#my_dataviz").style(
                                 "margin-top",
                                 0 + "px"
                             );
@@ -1309,7 +1310,10 @@
                                 "margin-top",
                                 0 + "px"
                             );
-                            d3.select("#xAxisLabelId").style("bottom", 20+"px");
+                            d3.select("#xAxisLabelId").style(
+                                "bottom",
+                                20 + "px"
+                            );
                     }
                 }
 
@@ -1474,29 +1478,23 @@
                             if (!d[2]) {
                                 return "";
                             }
-                            return d[2];
+                            return labelFormatSet(d[2], labelFormat);
                         })
-                        .attr(
-                            "x",
-                            function (d, i) {
-                                this.setAttribute("data-value-x", d[0]);
-                                this.setAttribute("data-value-x1", d[1]);
+                        .attr("x", function (d, i) {
+                            this.setAttribute("data-value-x", d[0]);
+                            this.setAttribute("data-value-x1", d[1]);
 
-                                this.setAttribute("data-value-y", d[2]);
+                            this.setAttribute("data-value-y", d[2]);
 
-                                return x(d[0]) + x.bandwidth() / 2;
-                            }
-                        )
+                            return x(d[0]) + x.bandwidth() / 2;
+                        })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)
-                        .attr(
-                            "y",
-                            function (d) {
-                                // console.log(d[2]);
-                                return y(d[2])-5;
-                            }
-                        );
+                        .attr("y", function (d) {
+                            // console.log(d[2]);
+                            return y(d[2]) - 5;
+                        });
                 }
                 if (markerShape) {
                     svg.selectAll(".dot")

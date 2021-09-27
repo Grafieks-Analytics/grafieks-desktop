@@ -6,6 +6,7 @@
     <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <script src="./Data/min/numeral.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
     <style>
         body {
@@ -197,7 +198,7 @@
             }
 
             let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus } = labelConfig;
+            let { labelStatus, labelFormat } = labelConfig;
             let { gridStatus } = gridConfig;
 
             d3Colors = d3colorPalette;
@@ -826,9 +827,9 @@
                     })
                     .text(function (d) {
                         console.log(d);
-                        return Math.round(
+                        return labelFormatSet(
                             d[1] <= 0 ? d[0] - d[1] : d[1] - d[0]
-                        );
+                        , labelFormat);
                     })
                     .attr("x", function (d, i) {
                         return (

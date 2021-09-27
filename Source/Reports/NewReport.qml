@@ -83,6 +83,7 @@ Page {
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
+    property var allowedRow3AxisDataPanes: 0;
 
     property var reportTitleName: "";
 
@@ -410,6 +411,7 @@ Page {
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.stackedAreaChartTitle:
+        case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
@@ -427,21 +429,27 @@ Page {
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
             console.log(chartTitle,"CLICKED");
-//            var dataValuesTemp = dataValues && JSON.parse(dataValues);
-//            colorData = dataValuesTemp[0].map(d=> d.key );
-//            delete dataValuesTemp;
+           var dataValuesTemp = dataValues && JSON.parse(dataValues);
+           colorData = Object.keys(dataValuesTemp[0]);
+           delete dataValuesTemp;
             break;
         case Constants.funnelChartTitle:
             console.log(chartTitle,"CLICKED");
             var dataValuesTemp = dataValues && JSON.parse(dataValues);
-            colorData = Object.keys(dataValuesTemp[0])
+            colorData = dataValuesTemp[0].map(d=> d.key);
             delete dataValuesTemp;
             break;
         case Constants.radarChartTitle:
             console.log(chartTitle,"CLICKED")
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = [dataValuesTemp[1][0]];
+           delete dataValuesTemp;
             break;
         case Constants.scatterChartTitle:
             console.log(chartTitle,"CLICKED")
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = dataValuesTemp[2]
+            delete dataValuesTemp;
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -510,10 +518,16 @@ Page {
             });
         }
 
-        var scriptValue = 'window.addEventListener("resize", function () {
-                   window.clearChart && clearChart();
+        var scriptValue = '
+            var timer;
+            window.addEventListener("resize", function () {
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-           });';
+                }, 200);
+            });
+        ';
 
         clearChartValue();
         var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
@@ -633,6 +647,9 @@ Page {
                 console.log('Switching to multiple line chart')
                 switchChart(Constants.multipleAreaChartTitle);
                 break;
+            case Constants.pivotTitle:
+                allowedRow3AxisDataPanes = 5;
+                break;
             default:
                 console.log('Missed condition in isHorizontalGraph change veritcal')
 
@@ -650,10 +667,16 @@ Page {
         // Basically these are the basic configs
         // Having Max Allowed Values for now
         const chartDetailsConfig = allChartsMapping[chartTitle];
-        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
+        const { maxDropOnXAxis, maxDropOnYAxis, maxDropOnRow3Axis = 0 } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+        var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
+
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -674,8 +697,16 @@ Page {
             dataValuesRemoved = true;
         }
 
+        if(maxDropOnRow3Axis > 0 && maxDropOnRow3Axis < row3Columns.length){
+            row3Columns = row3Columns.splice(0,maxDropOnYAxis);
+            ReportParamsModel.setRow3Columns(row3Columns);
+            valuesListModel.remove(maxDropOnYAxis,valuesListModel.count - maxDropOnRow3Axis);
+            dataValuesRemoved = true;
+        }
+
         allowedXAxisDataPanes = maxDropOnXAxis;
         allowedYAxisDataPanes = maxDropOnYAxis;
+        allowedRow3AxisDataPanes = maxDropOnRow3Axis;
 
         // change axis on the basis of chart title
         // Updating the Row visible here => Sanky charts can have 3 rows
@@ -683,31 +714,6 @@ Page {
 
         // Optimization Can be done => call switch function here to change the graph
         switch(chartTitle){
-        case Constants.horizontalStackedBarChartTitle:
-            console.log('Make Horizontal stacked bar chart');
-            chartUrl=Constants.horizontalStackedBarChartUrl
-            webEngineView.url = Constants.chartsBaseUrl+chartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.stackedBarChartTitle:
-            chartUrl=Constants.stackedBarChartUrl
-            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.stackedAreaChartTitle:
-            chartUrl=Constants.stackedAreaChartUrl;
-            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
         case Constants.sankeyTitle:
             row3Visible =  true;
             xAxisVisible = true
@@ -715,6 +721,14 @@ Page {
             row4Visible = false
             break;
         case Constants.pivotTitle:
+
+            if(!(allCategoricalValues(xAxisColumnDetails) || allDateValues(xAxisColumnDetails)  )){
+                xAxisListModel.clear();
+            }
+            if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails)  )){
+                yAxisListModel.clear();
+            }
+        
             row3Visible =  true;
             xAxisVisible = true
             yAxisVisible = true
@@ -722,6 +736,10 @@ Page {
             pivotThemeVisible=true
             break;
         case Constants.tableTitle:
+            var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+            if(allNumericalValues(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
             yAxisVisible = false
             xAxisVisible = true
             row3Visible = false
@@ -739,11 +757,100 @@ Page {
             row3Visible = false
             row4Visible = false
             break;
+        
+        case Constants.barChartTitle:
+        case Constants.lineChartTitle:
+        case Constants.areaChartTitle:
+        case Constants.multiLineChartTitle:
+        case Constants.multipleAreaChartTitle:
+        case Constants.groupBarChartTitle:
+        case Constants.stackedBarChartTitle:
+        case Constants.pieChartTitle:
+        case Constants.donutChartTitle:
+        case Constants.radarChartTitle:
+        case Constants.sunburstChartTitle:
+        case Constants.treeChartTitle:
+        case Constants.waterfallChartTitle:
+
+             if(!(allCategoricalValues(xAxisColumnDetails) || allDateValues(xAxisColumnDetails)) ){
+                 console.log('Clearing Chart? :sad')
+                xAxisListModel.clear();
+            }
+            
+            if(!allNumericalValues(yAxisColumnDetails)){
+                yAxisListModel.clear();
+            }
+
+            
+            clearColorByList();
+            
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.horizontalBarChartTitle:
+        case Constants.horizontalLineChartTitle:
+        case Constants.horizontalAreaChartTitle:
+        case Constants.horizontalBarGroupedChartTitle:
+        case Constants.multipleHorizontalAreaChartTitle:
+        case Constants.horizontalMultiLineChartTitle:
+        case Constants.horizontalStackedBarChartTitle:
+
+             if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails)) ){
+                yAxisListModel.clear();
+            }
+            
+            if(!allNumericalValues(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
+
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+
+            break;
+        case Constants.heatMapChartTitle:
+            
+            if(!(allCategoricalValues(xAxisColumnDetails) || allDateValues(xAxisColumnDetails))){
+                xAxisListModel.clear();
+            }
+            
+            if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(xAxisColumnDetails))){
+                yAxisListModel.clear();
+            }
+            
+            clearColorByList();
+
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.scatterChartTitle:
+            
+            if(!allNumericalValues(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
+            
+            if(!allNumericalValues(yAxisColumnDetails)){
+                yAxisListModel.clear();
+            }
+            
+            clearColorByList();
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+            
         default:
             xAxisVisible = true
             yAxisVisible = true
             row3Visible = false
             row4Visible = false
+            clearColorByList();
         }
 
         // If any column is removed on changing the chart name
@@ -790,6 +897,46 @@ Page {
         webEngineView.runJavaScript('exportToExcel()');
     }
 
+    function clearColorByList(){
+
+        var clearFlag = true;
+        var lastColorByValueItemType = (colorByData.length && colorByData[0].itemType) || "";
+        console.log('Clear???', lastColorByValueItemType)
+        switch(chartTitle){
+            case Constants.barChartTitle:
+            case Constants.lineChartTitle:
+            case Constants.areaChartTitle:
+            case Constants.multiLineChartTitle:
+            case Constants.multipleAreaChartTitle:
+            case Constants.groupBarChartTitle:
+            case Constants.stackedBarChartTitle:    
+            case Constants.horizontalBarChartTitle:
+            case Constants.horizontalLineChartTitle:
+            case Constants.horizontalAreaChartTitle:
+            case Constants.horizontalBarGroupedChartTitle:
+            case Constants.multipleHorizontalAreaChartTitle:
+            case Constants.horizontalMultiLineChartTitle:
+            case Constants.horizontalStackedBarChartTitle:
+            case Constants.scatterChartTitle:
+            
+                if(lastColorByValueItemType.toLowerCase() == "categorical"){
+                    clearFlag = false;
+                }
+                break;
+            case Constants.heatMapChartTitle:
+                if(lastColorByValueItemType.toLowerCase() == "numerical"){
+                    clearFlag = false;
+                }
+                break;
+        
+        }
+
+        if(clearFlag){    
+            colorListModel.clear();
+            colorByData = [];
+            ReportParamsModel.setLastDropped(null);
+        }
+    }
     
     function clearValuesOnAddNewReport(){
         clearAllChartValues();
@@ -1138,8 +1285,7 @@ Page {
 
         if(chartTitle == Constants.pivotTitle){
 
-            if(xAxisColumns.length > 0 && yAxisColumns.length > 0  && row3Columns.length > 0){
-                console.log(xAxisColumns, row3Columns, yAxisColumns)
+            if(isPivotChart()){
                 drawChart();
             }
             return;
@@ -1155,7 +1301,6 @@ Page {
             return;
         }
 
-        
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1363,18 +1508,75 @@ Page {
     }
 
     function xAxisDropEligible(itemName, itemType){
-        console.log('Debug:: Item type',itemType)
         var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns  = getAxisColumnNames(Constants.yAxisName);
         // Check if condition more data pills can be added or not';
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+
         if(xAxisColumns.length === allowedXAxisDataPanes){
             return false;
         }
 
         switch(chartTitle){
+            case Constants.lineChartTitle:
+            case Constants.areaChartTitle:
+            case Constants.barChartTitle:
+                if(!yAxisColumns.length && !xAxisColumns.length ){
+                    return true;
+                }
+                if((itemType && itemType.toLowerCase() == "numerical")){
+                    return  false;
+                }
+                return true;
+            case Constants.horizontalLineChartTitle:
+            case Constants.horizontalAreaChartTitle:
+            case Constants.horizontalBarChartTitle:
+                if(!yAxisColumns.length && !xAxisColumns.length ){
+                    return true;
+                }
+                if((itemType && itemType.toLowerCase() != "numerical")){
+                    return  false;
+                }
+                return true;
             case Constants.tableTitle:
+                console.log('Table tile',itemType);
                 if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
                     return false;
                 }
+                return true;
+            case Constants.treeChartTitle:
+            case Constants.radarChartTitle:
+            case Constants.sunburstChartTitle:
+                if((itemType && itemType.toLowerCase()) != "categorical"){
+                    return false;
+                }
+                return true;
+            
+            case Constants.donutChartTitle:
+            case Constants.pieChartTitle:
+            case Constants.waterfallChartTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            case Constants.pivotTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            case Constants.heatMapChartTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+                           
+            case Constants.scatterChartTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return true;
+                }
+                return false;
+
         }
         
 
@@ -1387,31 +1589,128 @@ Page {
         
     }
 
-    function yAxisDropEligible(itemName){
+    function yAxisDropEligible(itemName, itemType){
         var yAxisColumns  = getAxisColumnNames(Constants.yAxisName);
+        var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
         const multiChart = true;
         // Check if condition more data pills can be added or not';
         if(yAxisColumns.length === allowedYAxisDataPanes){
             return false;
         }
+
+        switch(chartTitle){
+            case Constants.lineChartTitle:
+            case Constants.areaChartTitle:
+            case Constants.barChartTitle:
+                if(!yAxisColumns.length && !xAxisColumns.length ){
+                    return true;
+                }
+               if(itemType && itemType.toLowerCase() != "numerical"){
+                    return  false;
+                }
+                return true;
+            case Constants.horizontalLineChartTitle:
+            case Constants.horizontalAreaChartTitle:
+            case Constants.horizontalBarChartTitle:
+                if(!yAxisColumns.length && !xAxisColumns.length ){
+                    return true;
+                }
+                if(itemType && itemType.toLowerCase() == "numerical"){
+                    return  false;
+                }
+                return true;
+            
+            case Constants.sunburstChartTitle:
+            case Constants.treeChartTitle:
+            case Constants.radarChartTitle:
+                if((itemType && itemType.toLowerCase()) != "numerical"){
+                    return false;
+                }
+                return true;
+            
+            case Constants.donutChartTitle:
+            case Constants.pieChartTitle:
+            case Constants.waterfallChartTitle:
+                if((itemType && itemType.toLowerCase()) != "numerical"){
+                    return false;
+                }
+                return true;
+            case Constants.pivotTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            case Constants.heatMapChartTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return false;
+                }
+                return true;
+            
+            case Constants.scatterChartTitle:
+                if((itemType && itemType.toLowerCase()) == "numerical"){
+                    return true;
+                }
+                return false;
+        }
+        
         if(multiChart){
             return true;
         }
         return false;
     }
 
-    function allNumericalValues(data){
-        return true;
+    function allNumericalValues(details){
+        var flag = true; 
+        console.log('detail',JSON.stringify(details));
+        details.forEach(detail =>{ 
+            if(detail.itemType && detail.itemType.toLowerCase() != "numerical"){
+                flag = false;
+            }
+        })
+        if(flag){
+            return true;
+        }
+        return false;
     }
+
+    function allCategoricalValues(details){
+        var flag = true; 
+        console.log('detail',JSON.stringify(details));
+        details.forEach(detail =>{ 
+            console.log('detail',detail);
+            if(detail.itemType && detail.itemType.toLowerCase() != "categorical"){
+                flag = false;
+            }
+        })
+        if(flag){
+            return true;
+        }
+        return false;
+    }
+
+    function allDateValues(details){
+        console.log('detail',JSON.stringify(details));
+        var flag = true; 
+        details.forEach(detail =>{ 
+            if(detail.itemType && detail.itemType.toLowerCase() != "date"){
+                flag = false;
+            }
+        })
+        if(flag){
+            return true;
+        }
+        return false;
+    }
+
     
     function row3AxisDropEligible(itemName, itemType){
-        var row3Columns  = getAxisColumnNames(row3Columns);
+        var row3Columns  = getAxisColumnNames(Constants.row3Name);
         const multiChart = true;
         // Check if condition more data pills can be added or not';
-        if(row3Columns.length === allowedYAxisDataPanes){
+        if(row3Columns.length === allowedRow3AxisDataPanes){
             return false;
         }
-        if(chartTitle == Constants.pivotTitle && itemType != "numerical"){
+        if(chartTitle == Constants.pivotTitle && (itemType && itemType.toLowerCase() != "numerical")){
             return false;
         }
         if(multiChart){
@@ -1444,7 +1743,7 @@ Page {
             xAxisColumns.push(itemName);
 
         }else if(axis === Constants.yAxisName){
-            if(!yAxisDropEligible(itemName)){
+            if(!yAxisDropEligible(itemName, itemType)){
                 // Red color
                 return;
             }
@@ -1522,6 +1821,17 @@ Page {
         return false;
     }
 
+    function isPivotChart(){
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+        if((xAxisColumns.length > 0 || yAxisColumns.length > 0)  || (xAxisColumns.length > 0 && row3Columns.length > 0) || (yAxisColumns.length > 0 && row3Columns.length > 0)){
+            console.log('Pivot is eliigble')
+            return true;
+        }
+        return false;
+    }
+
     function drawChart(){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
@@ -1547,7 +1857,12 @@ Page {
         }
         */
 
-        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || (chartTitle == Constants.gaugeChartTitle && isGaugeChart())) {
+        if(
+            (xAxisColumns.length && yAxisColumns.length) || 
+            (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || 
+            (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
+            (chartTitle == Constants.pivotTitle && isPivotChart())
+        ) {
 
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);
@@ -1560,13 +1875,6 @@ Page {
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
                 ChartsModel.getBarChartValues(reportIdMain, 0, Constants.reportScreen, yAxisColumns[0],xAxisColumns[0]);
-
-                // datavalues is a global property and set using connections
-                // due to multi threading
-                colorData = [JSON.parse(dataValues)[1][0]] || [];
-                colorData.forEach(function (element,index) {
-                    dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                });
                 break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
@@ -1957,6 +2265,7 @@ Page {
     LeftMenuBarReports{
         id: left_menubar_reports
         anchors.top: seperator_title_bar.bottom
+        z:-12000
         Component.onCompleted: {
 
             loadchart.connect(report_desiner_page.changeChart)
@@ -1988,7 +2297,7 @@ Page {
         anchors.left: tool_sep_leftmenubarreports.right
         anchors.top: seperator_title_bar.bottom
         anchors.leftMargin: 0
-        z:1
+        z:-12000
     }
 
     ToolSeparator{
@@ -2432,34 +2741,40 @@ Page {
 
             Rectangle{
                 id: row4TextInput1Label
-                width: 100
+                width: 130
                 height: parent.height
                 anchors.left: row4Valueseparator.right
+                
+                // anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: input1Label
                     text: 'Max/Green'
                     anchors.centerIn: parent
+                    // verticalalignment:parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.right:parent.right
+                    anchors.rightMargin:10
                 }
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator2
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput1Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator2
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput1Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput1
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator2.right
-                border.color: Constants.borderBlueColor
+                anchors.left: row4TextInput1Label.right
+                // border.color: Constants.borderBlueColor
 
                 Rectangle{
                     width: 160
@@ -2512,22 +2827,22 @@ Page {
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator4
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput2Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator4
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput2Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput2
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator4.right
+                anchors.left: row4TextInput2Label.right
 
                 Rectangle{
                     width: 160
@@ -2581,23 +2896,23 @@ Page {
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator6
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput3Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator6
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput3Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput3
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator6.right
-                border.color: Constants.borderBlueColor
+                anchors.left: row4TextInput3Label.right
+                // border.color: Constants.borderBlueColor
                 Rectangle{
                     width: 160
                     height: 30

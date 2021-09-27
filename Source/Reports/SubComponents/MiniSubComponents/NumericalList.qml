@@ -7,7 +7,7 @@ ListView{
 
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
-    interactive: false
+    interactive: true
     clip: false
     ScrollBar.vertical: ScrollBar {
         policy: ScrollBar.AlwaysOn
@@ -22,6 +22,8 @@ ListView{
         target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            
+              allNumerical = [ false , ...allNumerical]
             numericalList.model =  allNumerical
 
         }
@@ -46,11 +48,13 @@ ListView{
 
     anchors.top: numericalHeading.bottom
     anchors.topMargin: 5
-    height: parent.height - numericalHeading.height - 5
+    height: parent.height - 20
     width: parent.width
 
     delegate: DataPaneElement{
         id: dataPaneListElement
+        visible: modelData === false ? false : true
+        height: modelData === false ? 0 : 24
     }
 
 }

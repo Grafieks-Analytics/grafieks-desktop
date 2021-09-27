@@ -150,7 +150,7 @@ Popup {
                 anchors.top: parent.top
                 anchors.rightMargin: 10
 
-                text: qsTr("Allow " + GeneralParamsModel.getAppInfo().APP_NAME + " to access to your Github account...")
+                text: qsTr("Allow " + GeneralParamsModel.getAppInfo().APP_NAME + " to access to your GitHub account...")
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontHeader
             }
