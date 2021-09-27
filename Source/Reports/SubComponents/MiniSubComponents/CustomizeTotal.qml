@@ -60,8 +60,10 @@ Column{
         report_desiner_page.reDrawChart();
     }
     function showColumnTotal(checkedStatus){
-        report_desiner_page.d3PropertyConfig['columnWiseGrandTotal'] = checkedStatus;
+        report_desiner_page.d3PropertyConfig['totalStatus'] = checkedStatus;
         report_desiner_page.reDrawChart();
+        //        report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
+        // report_desiner_page.reDrawChart();
     }
     function showSubTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['subTotalVisible'] = checkedStatus;

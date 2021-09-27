@@ -10,7 +10,7 @@ ListView{
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     interactive: true
-    clip: false
+    clip: false  
     ScrollBar.vertical: ScrollBar {
         policy: ScrollBar.AlwaysOn
         anchors.right: parent.right
@@ -24,6 +24,7 @@ ListView{
         target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            allCategorical = [ false , ...allCategorical]
             categoricalList.model =  allCategorical
         }
     }
@@ -34,6 +35,11 @@ ListView{
     width: parent.width
     delegate: DataPaneElement{
         id: dataPaneListElement
+        visible: modelData === false ? false : true
+        height: modelData === false ? 0 : 24
+        Component.onCompleted: {
+            console.log('Debug: Index', itemType, modelData, itemName);
+        }
     }
 
 }
