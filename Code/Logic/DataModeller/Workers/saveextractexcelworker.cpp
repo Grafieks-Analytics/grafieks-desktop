@@ -60,11 +60,11 @@ void SaveExtractExcelWorker::run()
                     }
                 }
             } else {
-                type = "TIMESTAMP";
+                type = "DATE";
             }
         }
 
-        createTableQuery += "\"" + fieldName + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + " NULL,";
         this->columnStringTypes.append(type);
     }
 
@@ -94,6 +94,7 @@ void SaveExtractExcelWorker::run()
             for(int i = 0; i < this->internalColCount; i++){
 
                 QString columnType = this->columnStringTypes.at(i);
+                qDebug() << columnType;
                 if(columnType == "INTEGER"){
                     appender.Append(query.value(i).toInt());
                 } else if(columnType == "BIGINT"){
@@ -107,6 +108,7 @@ void SaveExtractExcelWorker::run()
                     int32_t year = date.year();
                     int32_t month = date.month();
                     int32_t day = date.day();
+                    qDebug()  << "DATE" <<  year << day << month;
                     appender.Append(duckdb::Date::FromDate(year, month, day));
                 } else if(columnType == "TIMESTAMP"){
                     QDate date = query.value(i).toDate();
@@ -114,9 +116,10 @@ void SaveExtractExcelWorker::run()
                     int32_t year = date.year();
                     int32_t month = date.month();
                     int32_t day = date.day();
-                    appender.Append(duckdb::Date::FromDate(year, month, day));
+                    qDebug()  << "TOMESTAMP" <<  year << day << month;
+//                    appender.Append(duckdb::Date::FromDate(year, month, day));
                     // Timestamp crashes in duckDb release. Will fix in the future
-                    // appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                     appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
                 } else if(columnType == "VARCHAR"){
                     appender.Append(query.value(i).toString().toUtf8().constData());
                 } else {

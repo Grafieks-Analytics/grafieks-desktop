@@ -24,6 +24,8 @@ class CSVJsonDataModel : public QAbstractTableModel
     int totalRowCount;
     int totalColCount;
 
+    QStringList output;
+
 public:
     explicit CSVJsonDataModel(QObject *parent = nullptr);
     ~CSVJsonDataModel();

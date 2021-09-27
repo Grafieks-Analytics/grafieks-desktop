@@ -87,22 +87,14 @@ void ExcelDataModel::columnSearchData(QString col, QString tableName, QString se
 
 QStringList ExcelDataModel::getTableList()
 {
-    QStringList output;
-    output = this->getTableListQAXObject();
-
-    return output;
+    this->getTableListQAXObject();
+    return this->output;
 }
 
 QStringList ExcelDataModel::filterTableList(QString keyword)
 {
-    QStringList output;
-    qDebug() << this->sheetNamesMap;
-    foreach(QString word, this->sheetNamesMap){
-        if(word.contains(keyword, Qt::CaseInsensitive)){
-            output.append(word);
-        }
-    }
-    return output;
+    qDebug() << "FHERE" << keyword;
+    return this->output.filter(keyword, Qt::CaseInsensitive);
 }
 
 QStringList ExcelDataModel::getDateColumnData()
@@ -113,7 +105,6 @@ QStringList ExcelDataModel::getDateColumnData()
 
 QStringList ExcelDataModel::getTableListQAXObject()
 {
-    QStringList output;
     QString excelPath = Statics::currentDbName;
     qDebug() << excelPath << Q_FUNC_INFO;
     this->sheetNamesMap.clear();
@@ -145,7 +136,7 @@ QStringList ExcelDataModel::getTableListQAXObject()
 
     for(int i = 1; i <= count; i++){
         QAxObject *worksheet = worksheets->querySubObject("Item(int)", i);
-        output.append(worksheet->dynamicCall("Name()").toString());
+        this->output.append(worksheet->dynamicCall("Name()").toString());
         this->sheetNamesMap.insert(i, worksheet->dynamicCall("Name()").toString());
     }
 
@@ -153,6 +144,6 @@ QStringList ExcelDataModel::getTableListQAXObject()
     workbook->dynamicCall("Close()");
     excel->dynamicCall("Quit()");
 
-    qDebug() << output;
+    qDebug() << Q_FUNC_INFO <<  this->output;
     return output;
 }

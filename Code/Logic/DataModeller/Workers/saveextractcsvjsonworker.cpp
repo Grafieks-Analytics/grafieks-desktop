@@ -74,6 +74,7 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                         int32_t year = date.year();
                         int32_t month = date.month();
                         int32_t day = date.day();
+                        qDebug() << "HERE" << typeid(day).name();
                         appender->Append(duckdb::Date::FromDate(year, month, day));
 
                         // Timestamp in duckDb release crashes. Will fix in the future
@@ -118,6 +119,7 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                     int32_t year = date.year();
                     int32_t month = date.month();
                     int32_t day = date.day();
+                    qDebug() << "THERE" << year << month << day << time.hour() << time.minute() << time.second();
                     appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
 
                 } else {
@@ -199,7 +201,7 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
                     }
 
                     this->columnStringTypes.insert(i, varType);
-                    createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + ",";
+                    createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + " NULL,";
                 }
             }
 

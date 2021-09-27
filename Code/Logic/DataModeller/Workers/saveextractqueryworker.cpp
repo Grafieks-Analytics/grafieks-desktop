@@ -159,11 +159,11 @@ void SaveExtractQueryWorker::run()
                     }
                 }
             } else {
-                type = "TIMESTAMP";
+                type = "DATE";
             }
         }
 
-        createTableQuery += "\"" + fieldName + "\" " + type + ",";
+        createTableQuery += "\"" + fieldName + "\" " + type + " NULL,";
         this->columnStringTypes.append(type);
     }
 
