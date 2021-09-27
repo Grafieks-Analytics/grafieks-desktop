@@ -453,7 +453,6 @@ Page {
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
-            console.log("testdata",dataValues)
             break;
         case Constants.treeMapChartTitle:
             console.log(chartTitle,"CLICKED")
