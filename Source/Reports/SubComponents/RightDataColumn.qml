@@ -60,6 +60,7 @@ Column{
 //        border.color: Constants.darkThemeColor
 //         anchors.horizontalCenter: parent.horizontalCenter
 
+            z: -12000
 
         Rectangle{
             id:categoricalHeadingRect
@@ -115,7 +116,11 @@ Column{
     Rectangle{
         height: parent.height/3 - 6
         width: parent.width
+     
         color: "white"
+
+            z: -120000
+
 //        x:-leftMargin
 //        border.color: Constants.darkThemeColor
 //         anchors.horizontalCenter: parent.horizontalCenter
@@ -123,6 +128,7 @@ Column{
         Rectangle{
             id:numericalRect
             height: 25
+            z:10
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
@@ -146,7 +152,9 @@ Column{
             anchors.top: numericalRect.bottom
              height: parent.height - 40
             width: parent.width-10
+      
              anchors.horizontalCenter: parent.horizontalCenter
+             z: 20000    
         }
 
     }
@@ -166,12 +174,15 @@ Column{
         height: parent.height/3 - 6
          width: parent.width
         color: "white"
+            z: -120000
+
 //        border.color: Constants.darkThemeColor
 //          anchors.horizontalCenter: parent.horizontalCenter
 
         Rectangle{
             id:dateRect
             height: 25
+            z:10
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
@@ -195,6 +206,7 @@ Column{
              height: parent.height - 40
              width: parent.width-10
              anchors.horizontalCenter:  parent.horizontalCenter
+             z: 20000    
         }
 
     }

@@ -9,7 +9,7 @@ Rectangle{
     width: parent.width
     anchors.leftMargin: 5
 
-    //    z: 999
+    z: 200000
 
 
 
@@ -50,7 +50,6 @@ Rectangle{
 
         if(report_desiner_page.chartTitle==Constants.groupBarChartTitle || report_desiner_page.chartTitle==Constants.horizontalBarGroupedChartTitle){
             var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
-            console.log(xAxisValidNames);
             if(xAxisValidNames.includes(itemName)){
                 return true;
             }
@@ -150,23 +149,19 @@ Rectangle{
         drag.target: dataPaneListElement
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
-                console.log("dragdrag")
                 if(itemType == "Numerical"){
-                    console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= Constants.defaultNumericalColor
                     rightDataDrag.radius=15
 //                    rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Categorical"){
-                    console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= Constants.defaultCategoricalColor
                     rightDataDrag.radius=15
 //                    rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Date"){
-                    console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= "yellow"
                     rightDataDrag.radius=15
 //                    rightDataDrag.width=parent.width+5
@@ -176,7 +171,6 @@ Rectangle{
 
 
                 report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType, dateFormat: Constants.yearFormat };
-                console.log(modelData);
 
                 ReportParamsModel.itemName = modelData;
                 ReportParamsModel.itemType = itemType;

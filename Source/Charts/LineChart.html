@@ -9,6 +9,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
 
         <style type="text/css">
@@ -177,7 +178,7 @@
                 d3.selectAll("#yAxisDiv").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
-                let { labelStatus } = labelConfig;
+                let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
                 dataValues = transformData(dataValues, dateFormat);
@@ -679,7 +680,7 @@
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent = Math.round(dataValues[i][1]);
+                        label.textContent =  labelFormatSet(dataValues[i][1], labelFormat);
                     });
                 }
                 d3.select(".axis.label path").remove();

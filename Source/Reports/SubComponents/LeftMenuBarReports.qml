@@ -48,6 +48,7 @@ Rectangle{
             maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "categorical"
         }
         ListElement{
             icon: "area.png"
@@ -60,7 +61,8 @@ Rectangle{
             maxDropOnXAxis: 1
             maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
+            colorByDropEligible: "categorical"
         }
         ListElement{
             icon: "line_chart.png"
@@ -72,7 +74,8 @@ Rectangle{
             maxDropOnYAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape,line type"
+            colorByDropEligible: "categorical"
         }
         ListElement{
             // icon: "combination_chart.png"
@@ -87,6 +90,7 @@ Rectangle{
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
             nonClickable: true
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "categorical"
         }
         ListElement{
             icon: "heatmap.png"
@@ -99,6 +103,7 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "numerical"
         }
         ListElement{
             icon: "scatter_plot.png"
@@ -106,9 +111,12 @@ Rectangle{
             activeChart: false
             title:"Scatter Plot"
             yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "categorical"
         }
         ListElement{
             icon: "waterfall.png"
@@ -120,7 +128,7 @@ Rectangle{
             maxDropOnYAxis: 1
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            subMenuCustomizations: "tool tip,size,data label,grid line"
         }
         ListElement{
             icon: "pie_chart.png"
@@ -135,6 +143,7 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label"
+            colorByDropEligible: ""
         }
         ListElement{
             icon: "donut.png"
@@ -149,6 +158,7 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label"
+            colorByDropEligible: ""
         }
         ListElement{
             icon: "radar.png"
@@ -161,6 +171,7 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: ""
         }
         ListElement{
             icon: "sunburst.png"
@@ -175,6 +186,7 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label"
+            colorByDropEligible: ""
         }
 //        ListElement{
 //            icon: "nightingales_rose.png"
@@ -207,6 +219,7 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,dynamic height,bottom pinch"
+            colorByDropEligible: ""
         }
         ListElement{
             icon: "tree_chart.png"
@@ -220,7 +233,8 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Reference Line"
-            subMenuCustomizations: "tool tip,size,data label,grid line"
+            subMenuCustomizations: "tool tip,data label"
+            colorByDropEligible: ""
         }
         // ListElement{
         //     icon: "force_directed.png"
@@ -240,6 +254,7 @@ Rectangle{
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
             mainCustomizations: "Properties,Legend,Reference Line"
+            colorByDropEligible: ""
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
@@ -254,6 +269,7 @@ Rectangle{
             title: "Tree Map"
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
+            colorByDropEligible: ""
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label"
         }
@@ -276,6 +292,7 @@ Rectangle{
             title:"Map - Coming Soon"
             mainCustomizations: "Properties,Legend"
             nonClickable: true
+            colorByDropEligible: ""
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
         }
         ListElement{
@@ -287,6 +304,7 @@ Rectangle{
             title:"Gauge Chart"
             mainCustomizations: ""
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: ""
         }
         ListElement{
             icon: "pivot.png"
@@ -297,9 +315,11 @@ Rectangle{
             yAxisLabelName: "Columns"
             maxDropOnXAxis: 5
             maxDropOnYAxis: 5
+            maxDropOnRow3Axis: 5
             themeVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
-            subMenuCustomizations: "tool tip,size,data label,grid line,pivot theme,grand total,row total,sub total"
+            mainCustomizations: "Properties,Total"
+            colorByDropEligible: ""
+            subMenuCustomizations: "pivot theme,grand total,row total,sub total"
         }
         ListElement{
             icon: "table.png"
@@ -311,7 +331,7 @@ Rectangle{
             maxDropOnXAxis: 5
             title:"Table"
             mainCustomizations: "Total,Table Customization"
-            subMenuCustomizations: "tool tip,size,data label,grid line,grand total"
+            subMenuCustomizations: "tool tip,size,data label,grand total"
         }
         ListElement{
             icon: "kpi.png"
@@ -321,8 +341,8 @@ Rectangle{
             activeChart: false
             title:"KPI"
             xAxisLabelName: "Values"
-            mainCustomizations: "KPI Customization"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            mainCustomizations: "KPI Properties"
+            subMenuCustomizations: "data label"
         }
     }
 
@@ -369,12 +389,17 @@ Rectangle{
 
             var maxDropOnXAxis = allCharts.get(i).maxDropOnXAxis;
             var maxDropOnYAxis = allCharts.get(i).maxDropOnYAxis;
+            var maxDropOnRow3Axis = allCharts.get(i).maxDropOnRow3Axis;
+
+            var colorByDropEligible = allCharts.get(i).colorByDropEligible;
 
            var disabled = !!allCharts.get(i).disabled;
             allChartsMapping[chartTitle] = {
                 'maxDropOnXAxis': maxDropOnXAxis || -1,
                 'maxDropOnYAxis': maxDropOnYAxis || -1,
-                disabled
+                'maxDropOnRow3Axis': maxDropOnRow3Axis || -1,
+                disabled,
+                colorByDropEligible
             };
 
         }

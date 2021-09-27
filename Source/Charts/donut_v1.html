@@ -11,10 +11,10 @@
     <script src="./Data/utils.js"></script>
 
     <script src="Data/d3-scale-chromatic.v1.min.js"></script>
+    <script src="./Data/min/numeral.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
 
     <title>Pie Chart</title>
-    
 </head>
 <body>
     <!-- Create a div where the graph will take place -->
@@ -56,7 +56,7 @@
             }
 
             let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus } = labelConfig;
+            let { labelStatus, labelFormat } = labelConfig;
 
             if (legendStatus) {
                 var legendHeight =
@@ -251,7 +251,6 @@
             u.exit().remove();
 
             var data_ready = pie(d3.entries(data));
-            
 
             // The arc generator
             var arc = d3
@@ -264,7 +263,6 @@
                 .arc()
                 .innerRadius(radius * 0.9)
                 .outerRadius(radius * 0.9);
-                
 
             if (labelStatus) {
                 // // Add the polylines between chart and labels:
@@ -286,7 +284,6 @@
                 //         posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
                 //         return [posA, posB, posC];
                 //     });
-                
 
                 var polyline = svg
                     // .select(".lines")
@@ -337,7 +334,7 @@
                 //             d.startAngle + (d.endAngle - d.startAngle) / 2;
                 //         return midangle < Math.PI ? "start" : "end";
                 //     });
-             
+
                 var label = svg
                     // .select(".labels")
                     .selectAll("allLabels")
@@ -374,9 +371,9 @@
                 //     .style("font-size", ".9em")
                 //     .style("text-anchor", "middle");
             }
-               function midAngle(d) {
-                    return d.startAngle + (d.endAngle - d.startAngle) / 2;
-                }
+            function midAngle(d) {
+                return d.startAngle + (d.endAngle - d.startAngle) / 2;
+            }
         }
 
         // Initialize the plot with the first dataset

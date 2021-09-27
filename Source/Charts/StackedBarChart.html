@@ -6,6 +6,7 @@
     <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <script src="./Data/min/numeral.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
     <style>
         body {
@@ -456,7 +457,7 @@
             window.dataLabelColor = dataLabelColor;
 
             let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus } = labelConfig;
+            let { labelStatus, labelFormat } = labelConfig;
             let { gridStatus } = gridConfig;
 
             d3.selectAll("#my_dataviz").html("");
@@ -1057,9 +1058,9 @@
                     .attr("font-size", dataLabelfontSize)
                     .attr("fill", dataLabelColor)
                     .text(function (d) {
-                        return Math.round(
+                        return  labelFormatSet(
                             d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0
-                        );
+                        , labelFormat);
                     });
             }
             d3.selectAll("#yAxisDiv text")
