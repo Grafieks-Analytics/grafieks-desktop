@@ -390,9 +390,6 @@ Item{
             console.log(chartTitle,"CLICKED");
             break;
         case Constants.sunburstChartTitle:
-            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
-            dataValues = JSON.stringify(dataValues);
-            console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.waterfallChartTitle:
@@ -872,15 +869,87 @@ Item{
                 console.log('Non Measues',JSON.stringify(nonMeasures))
                 console.log('Measures',JSON.stringify(measures))
                 
-                var dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
+                var dateConversionOptions = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() == "date"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => {
+                    var format = d.dateFormat;
+                    switch(format){
+                        case "%Y":
+                            format = "Year";
+                            break; 
+                        case "%d":
+                            format = "Day";
+                            break; 
+                        case "%b":
+                            format = "month";
+                            break; 
+                        case "%d %b %Y":
+                            format = "day,month,year";
+                            break; 
+                        case "%b %Y":
+                            format = "month,year";
+                            break; 
+                        default:
+                            format = "Year";
+                            break;
+                    }
+                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
+                })
+                console.log('Date Values',JSON.stringify(dateConversionOptions));
+                
+                dateConversionOptions = JSON.stringify(dateConversionOptions);
+                
                 console.log(measures, "MEASURES")
-                ChartsModel.getTableChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, nonMeasures , measures, '[]');
+                ChartsModel.getTableChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, nonMeasures , measures, dateConversionOptions);
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
                  var row3ColumnsArray = Array.from(row3Columns);
+                  
+                var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+                var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+
+                var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
+                var dateConversionOptions = tempDataValues.filter(d=>{
+                    if(d.itemType.toLowerCase() == "date"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => {
+                    var format = d.dateFormat;
+                    switch(format){
+                        case "%Y":
+                            format = "Year";
+                            break; 
+                        case "%d":
+                            format = "Day";
+                            break; 
+                        case "%b":
+                            format = "month";
+                            break; 
+                        case "%d %b %Y":
+                            format = "day,month,year";
+                            break; 
+                        case "%b %Y":
+                            format = "month,year";
+                            break; 
+                        default:
+                            format = "Year";
+                            break;
+                    }
+                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
+                })
+                
+                dateConversionOptions = JSON.stringify(dateConversionOptions);
                 // Temporary running function
-                ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
+                ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray, dateConversionOptions);
+                
+                 
+                // Temporary running function
+                // ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
                 
                 break;
             }
