@@ -213,7 +213,6 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
                 errorMsg = createT->error.c_str();
                 qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
             }
-            qDebug() << createTableQuery << createT->success;
         }
 
         lineCount++;
@@ -239,6 +238,19 @@ void SaveExtractCsvJsonWorker::run()
 {
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
+
+    // Remove extract file if already exists
+    QFile fileRemove(extractPath);
+    if(fileRemove.exists()) {
+        QString tmpFile = extractPath;
+        tmpFile.append(".wal");
+
+        QFile fileTmpRemove(tmpFile);
+
+        fileTmpRemove.remove();
+        fileRemove.remove();
+    }
+
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
