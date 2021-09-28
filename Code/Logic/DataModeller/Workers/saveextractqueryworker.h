@@ -27,12 +27,19 @@ class SaveExtractQueryWorker : public QThread
 
     GeneralParamsModel generalParamsModel;
 
+    int colCount;
+
 
 public:
     explicit SaveExtractQueryWorker(QString tmpSql = "", QVariantMap changedColumnTypes = QVariantMap());
 
 protected:
     void run() override;
+
+private:
+    void appendExtractData(duckdb::Appender *appender, QSqlQuery *query);
+
+
 
 signals:
     void saveExtractComplete(QString errorMsg);

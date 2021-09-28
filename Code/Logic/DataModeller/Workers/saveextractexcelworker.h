@@ -36,6 +36,10 @@ public:
 protected:
     void run() override;
 
+private:
+    void appendExtractData(duckdb::Appender *appender, QSqlQuery *query);
+
+
 signals:
     void saveExtractComplete(QString errorMsg);
 
