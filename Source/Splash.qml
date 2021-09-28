@@ -33,7 +33,7 @@ Window {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 30
-            source: "Images/logos/logo.png"
+            source: "../Images/logos/logo.png"
             height: 267
             width: 278
         }
