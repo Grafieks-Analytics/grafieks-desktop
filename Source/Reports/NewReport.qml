@@ -516,6 +516,10 @@ Page {
             });
         }
 
+        d3PropertyConfig['dataColumns'] = { xAxisColumnDetails, yAxisColumnDetails, row3ColumnDetails, colorByData };
+
+        console.log('d3PropertyConfig',JSON.stringify(d3PropertyConfig));
+
         var scriptValue = '
             var timer;
             window.addEventListener("resize", function () {
