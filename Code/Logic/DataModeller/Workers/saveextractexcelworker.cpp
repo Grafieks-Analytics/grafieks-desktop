@@ -10,6 +10,19 @@ void SaveExtractExcelWorker::run()
 {
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
+
+    // Remove extract file if already exists
+    QFile fileRemove(extractPath);
+    if(fileRemove.exists()) {
+        QString tmpFile = extractPath;
+        tmpFile.append(".wal");
+
+        QFile fileTmpRemove(tmpFile);
+
+        fileTmpRemove.remove();
+        fileRemove.remove();
+    }
+
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
@@ -110,7 +123,6 @@ void SaveExtractExcelWorker::appendExtractData(duckdb::Appender *appender, QSqlQ
         for(int i = 0; i < this->internalColCount; i++){
 
             QString columnType = this->columnStringTypes.at(i);
-            qDebug() << columnType;
             if(columnType == "INTEGER"){
                 appender->Append(query->value(i).toInt());
             } else if(columnType == "BIGINT"){
