@@ -42,8 +42,6 @@ Rectangle{
     function onDateFormatSelected(index){
         var dateFormat = dateCalculations.get(index).dateFormat;
         report_desiner_page.d3PropertyConfig['dateFormat'] = dateFormat;
-        report_desiner_page.reDrawChart();
-
         switch(axisType){
             case Constants.xAxisName:
                 xAxisListModel.setProperty(itemIndexId,'dateFormat',dateFormat);
@@ -52,6 +50,7 @@ Rectangle{
                 yAxisListModel.setProperty(itemIndexId,'dateFormat',dateFormat);
                 break;
         }
+        report_desiner_page.reDrawChart();
     }
 
     function getIndexValue(dateFormat){

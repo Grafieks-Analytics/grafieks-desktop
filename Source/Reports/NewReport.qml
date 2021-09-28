@@ -181,7 +181,6 @@ Page {
 
                 // When New Report is added we clear all the fields -> So if multiple line/bar is changed then we have to revert it.
                 // We can also handle this from dropped page :think:
-                
                 // console.log('This is a new report!. Please handle the charts in this section here');
                 // console.log(chartTitle);
 
@@ -517,6 +516,10 @@ Page {
             });
         }
 
+        d3PropertyConfig['dataColumns'] = { xAxisColumnDetails, yAxisColumnDetails, row3ColumnDetails, colorByData };
+
+        console.log('d3PropertyConfig',JSON.stringify(d3PropertyConfig));
+
         var scriptValue = '
             var timer;
             window.addEventListener("resize", function () {
@@ -771,8 +774,7 @@ Page {
         case Constants.treeChartTitle:
         case Constants.waterfallChartTitle:
 
-             if(!(allCategoricalValues(xAxisColumnDetails) || allDateValues(xAxisColumnDetails)) ){
-                 console.log('Clearing Chart? :sad')
+            if(!allNonMeasures(xAxisColumnDetails)){
                 xAxisListModel.clear();
             }
             
@@ -796,7 +798,7 @@ Page {
         case Constants.horizontalMultiLineChartTitle:
         case Constants.horizontalStackedBarChartTitle:
 
-             if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails)) ){
+             if(!allNonMeasures(yAxisColumnDetails) ){
                 yAxisListModel.clear();
             }
             
@@ -1687,6 +1689,22 @@ Page {
         return false;
     }
 
+
+    function allNonMeasures(details){
+        var flag = true; 
+        console.log('detail',JSON.stringify(details));
+        details.forEach(detail =>{ 
+            console.log('detail',detail);
+            if(detail.itemType && detail.itemType.toLowerCase() == "numerical"){
+                flag = false;
+            }
+        })
+        if(flag){
+            return true;
+        }
+        return false;
+    }
+
     function allDateValues(details){
         console.log('detail',JSON.stringify(details));
         var flag = true; 
@@ -2030,20 +2048,83 @@ Page {
                     }
                     return false;
                 }).map(d=> d.itemName)
-                console.log('Non Measues',JSON.stringify(nonMeasures))
-                console.log('Measures',JSON.stringify(measures))
+                var dateConversionOptions = xAxisColumnDetails.filter(d=>{
+                    if(d.itemType.toLowerCase() == "date"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => {
+                    var format = d.dateFormat;
+                    switch(format){
+                        case "%Y":
+                            format = "Year";
+                            break; 
+                        case "%d":
+                            format = "Day";
+                            break; 
+                        case "%b":
+                            format = "month";
+                            break; 
+                        case "%d %b %Y":
+                            format = "day,month,year";
+                            break; 
+                        case "%b %Y":
+                            format = "month,year";
+                            break; 
+                        default:
+                            format = "Year";
+                            break;
+                    }
+                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
+                })
+                console.log('Date Values',JSON.stringify(dateConversionOptions));
                 
-                var dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
-                console.log(measures, "MEASURES")
-                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures, '[]');
+                dateConversionOptions = JSON.stringify(dateConversionOptions);
+                // dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
+                ChartsModel.getTableChartValues(reportIdMain, 0, Constants.reportScreen, nonMeasures , measures, dateConversionOptions);
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
                 console.log('row3Columns',row3Columns);
                 var row3ColumnsArray = Array.from(row3Columns);
                 
+                var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+                var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+
+                var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
+                var dateConversionOptions = tempDataValues.filter(d=>{
+                    if(d.itemType.toLowerCase() == "date"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => {
+                    var format = d.dateFormat;
+                    switch(format){
+                        case "%Y":
+                            format = "Year";
+                            break; 
+                        case "%d":
+                            format = "Day";
+                            break; 
+                        case "%b":
+                            format = "month";
+                            break; 
+                        case "%d %b %Y":
+                            format = "day,month,year";
+                            break; 
+                        case "%b %Y":
+                            format = "month,year";
+                            break; 
+                        default:
+                            format = "Year";
+                            break;
+                    }
+                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
+                })
+                
+                dateConversionOptions = JSON.stringify(dateConversionOptions);
                 // Temporary running function
-                ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
+                ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray, dateConversionOptions);
                 
                 /*
 
