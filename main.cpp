@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
     // CONTEXT PROPERTY STARTS
 
     // Define singletons
-    qmlRegisterSingletonType(QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants");
+    qmlRegisterSingletonType(QUrl("qrc:/Source/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants");
     qmlRegisterType<DocumentHandlerModel>("io.qt.examples.texteditor", 1, 0, "DocumentHandlerModel");
 
     // Set contexts for QML
@@ -506,8 +506,8 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     // OPEN Extracts/Live/Workbook files ENDS
 
-    engine.load(QUrl(QStringLiteral("qrc:/Splash.qml")));
-    engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Source/Splash.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Source/Main.qml")));
 
     if (engine.rootObjects().isEmpty())
         return -1;

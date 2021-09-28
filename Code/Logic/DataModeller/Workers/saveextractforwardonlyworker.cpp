@@ -14,7 +14,6 @@ void SaveExtractForwardOnlyWorker::run()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
     QStringList list;
-    int colCount;
     QString errorMsg = "";
 
     QSqlDatabase dbForward;
@@ -57,7 +56,7 @@ void SaveExtractForwardOnlyWorker::run()
 
     QSqlQuery q(this->query, dbForward);
     QSqlRecord record = q.record();
-    colCount = record.count();
+    this->colCount = record.count();
 
     if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
@@ -66,7 +65,7 @@ void SaveExtractForwardOnlyWorker::run()
 
         QString createTableQuery = "CREATE TABLE " + tableName + "(";
 
-        for(int i = 0; i < colCount; i++){
+        for(int i = 0; i < this->colCount; i++){
             QVariant fieldType = record.field(i).value();
             QString type = dataType.qVariantType(fieldType.typeName());
             QString fieldName = record.fieldName(i);
@@ -122,56 +121,8 @@ void SaveExtractForwardOnlyWorker::run()
             // Start appending data in table
             duckdb::Appender appender(con, tableName.toStdString());
 
+            appendExtractData(&appender, &q);
 
-            int lineCounter = 0;
-            while(q.next()){
-
-                appender.BeginRow();
-                for(int i = 0; i < colCount; i++){
-                    QString columnType = this->columnStringTypes.at(i);
-
-                    if(columnType == "INTEGER"){
-                        appender.Append(q.value(i).toInt());
-                    } else if(columnType == "BIGINT"){
-                        appender.Append(q.value(i).toDouble());
-                    }  else if(columnType == "FLOAT") {
-                        appender.Append(q.value(i).toFloat());
-                    } else if(columnType == "DOUBLE") {
-                        appender.Append(q.value(i).toDouble());
-                    } else if(columnType == "DATE"){
-                        QDate date = q.value(i).toDate();
-                        int32_t year = date.year();
-                        int32_t month = date.month();
-                        int32_t day = date.day();
-                        appender.Append(duckdb::Date::FromDate(year, month, day));
-                        qDebug() <<"Date" <<  date;
-                    } else if(columnType == "TIMESTAMP"){
-                        QDate date = q.value(i).toDate();
-                        QTime time = q.value(i).toDateTime().time();
-                        int32_t year = date.year();
-                        int32_t month = date.month();
-                        int32_t day = date.day();
-                        appender.Append(duckdb::Date::FromDate(year, month, day));
-                        qDebug() <<"Timestamp" <<  date;
-                        // Timestamp crashes in duckDb release. Will fix in the future
-                        // appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-                    } else if(columnType == "VARCHAR") {
-                        appender.Append(q.value(i).toString().toUtf8().constData());
-                    } else {
-                        qDebug() << "UNDETECTED" << q.value(i).toString().toUtf8().constData();
-                    }
-                }
-
-                appender.EndRow();
-
-                lineCounter++;
-
-                if(lineCounter % Constants::flushExtractCount == 0){
-                    appender.Flush();
-                }
-            }
-
-            appender.Close();
         } else {
             errorMsg =  createT->error.c_str();
         }
@@ -179,4 +130,55 @@ void SaveExtractForwardOnlyWorker::run()
     }
 
     emit saveExtractComplete(errorMsg);
+}
+
+void SaveExtractForwardOnlyWorker::appendExtractData(duckdb::Appender *appender, QSqlQuery *q)
+{
+
+    int lineCounter = 0;
+    while(q->next()){
+
+        appender->BeginRow();
+        for(int i = 0; i < this->colCount; i++){
+            QString columnType = this->columnStringTypes.at(i);
+
+            if(columnType == "INTEGER"){
+                appender->Append(q->value(i).toInt());
+            } else if(columnType == "BIGINT"){
+                appender->Append(q->value(i).toDouble());
+            }  else if(columnType == "FLOAT") {
+                appender->Append(q->value(i).toFloat());
+            } else if(columnType == "DOUBLE") {
+                appender->Append(q->value(i).toDouble());
+            } else if(columnType == "DATE"){
+                QDate date = q->value(i).toDate();
+                int32_t year = date.year();
+                int32_t month = date.month();
+                int32_t day = date.day();
+                appender->Append(duckdb::Date::FromDate(year, month, day));
+                qDebug() <<"Date" <<  date;
+            } else if(columnType == "TIMESTAMP"){
+                QDate date = q->value(i).toDate();
+                QTime time = q->value(i).toDateTime().time();
+                int32_t year = date.year();
+                int32_t month = date.month();
+                int32_t day = date.day();
+                appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+            } else if(columnType == "VARCHAR") {
+                appender->Append(q->value(i).toString().toUtf8().constData());
+            } else {
+                qDebug() << "UNDETECTED" << q->value(i).toString().toUtf8().constData();
+            }
+        }
+
+        appender->EndRow();
+
+        lineCounter++;
+
+        if(lineCounter % Constants::flushExtractCount == 0){
+            appender->Flush();
+        }
+    }
+
+    appender->Close();
 }
