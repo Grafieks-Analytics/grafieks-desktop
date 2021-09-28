@@ -27,11 +27,17 @@ class SaveExtractForwardOnlyWorker : public QThread
     QStringList columnStringTypes;
     QVariantMap changedColumnTypes;
 
+    int colCount;
+
 public:
     explicit SaveExtractForwardOnlyWorker(QString query = "", QVariantMap changedColumnTypes = QVariantMap());
 
 protected:
     void run() override;
+
+private:
+    void appendExtractData(duckdb::Appender *appender, QSqlQuery *query);
+
 
 signals:
     void saveExtractComplete(QString errorMsg);

@@ -18,17 +18,17 @@ import Qt.labs.platform 1.1
 import com.grafieks.singleton.constants 1.0
 
 
-import "./Source/Modellers"
-import "./Source/Modellers/SubComponents"
-import "./Source/Modellers/SubComponents/MiniSubComponents"
-import "./Source/Dashboards"
-import "./Source/Connectors"
-import "./Source/Datasources"
-import "./Source/Reports"
-import "./Source/Others"
-import "./Source/MainSubComponents"
+import "./Modellers"
+import "./Modellers/SubComponents"
+import "./Modellers/SubComponents/MiniSubComponents"
+import "./Dashboards"
+import "./Connectors"
+import "./Datasources"
+import "./Reports"
+import "./Others"
+import "./MainSubComponents"
 
-import "./Source/Dashboards/SubComponents"
+import "./Dashboards/SubComponents"
 
 
 ApplicationWindow {

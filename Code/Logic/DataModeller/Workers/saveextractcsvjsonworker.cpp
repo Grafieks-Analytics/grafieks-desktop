@@ -119,7 +119,6 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                     int32_t year = date.year();
                     int32_t month = date.month();
                     int32_t day = date.day();
-                    qDebug() << "THERE" << year << month << day << time.hour() << time.minute() << time.second();
                     appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
 
                 } else {
@@ -214,7 +213,6 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
                 errorMsg = createT->error.c_str();
                 qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
             }
-            qDebug() << createTableQuery << createT->success;
         }
 
         lineCount++;
@@ -240,6 +238,19 @@ void SaveExtractCsvJsonWorker::run()
 {
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
+
+    // Remove extract file if already exists
+    QFile fileRemove(extractPath);
+    if(fileRemove.exists()) {
+        QString tmpFile = extractPath;
+        tmpFile.append(".wal");
+
+        QFile fileTmpRemove(tmpFile);
+
+        fileTmpRemove.remove();
+        fileRemove.remove();
+    }
+
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
