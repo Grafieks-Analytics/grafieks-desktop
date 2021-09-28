@@ -273,8 +273,11 @@ Item{
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
+        
+        var xAxisColumnDetails = getAxisColumnDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getAxisColumnDetails(Constants.yAxisName);
+        var row3ColumnDetails = getAxisColumnDetails(Constants.row3Name);
 
-        console.log(xAxisColumns, yAxisColumns)
         var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
         var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
 
@@ -379,16 +382,11 @@ Item{
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
-            dataValues = [{ name: xAxisColumns[0] , children: JSON.parse(dataValues) }]
-            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
-            dataValues = JSON.stringify(dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
-            console.log('Debug:: datavalues',dataValues);
             console.log(chartTitle,"CLICKED");
             break;
         case Constants.sunburstChartTitle:
@@ -622,6 +620,40 @@ Item{
     }
 
 
+    function getAxisColumnDetails(axisName){
+        var model = null;
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        switch(axisName){
+        case Constants.xAxisName:
+            var xAxisListModel = JSON.parse(reportProperties.xAxisColumns);
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            var yAxisListModel = JSON.parse(reportProperties.yAxisColumns);
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = JSON.parse(reportProperties.row3Columns || "[]");
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        return model;
+    }
+
+    
+    function isPivotChart(){
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var row3Columns = getAxisColumnNames(Constants.row3Name);
+        if((xAxisColumns.length > 0 || yAxisColumns.length > 0)  || (xAxisColumns.length > 0 && row3Columns.length > 0) || (yAxisColumns.length > 0 && row3Columns.length > 0)){
+            console.log('Pivot is eliigble')
+            return true;
+        }
+        return false;
+    }
+    
     // This function is copied from NewReport.qml
     // Make sure to make the changes properly
     // Add a comment whenever a different change is made
@@ -657,6 +689,10 @@ Item{
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
 
+        var xAxisColumnDetails = getAxisColumnDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getAxisColumnDetails(Constants.yAxisName);
+        var row3ColumnDetails = getAxisColumnDetails(Constants.row3Name);
+
         console.log("Okay, Now it's time to draw the chart")
 
         console.log('Draw Chart X Column names',JSON.stringify(xAxisColumns));
@@ -673,17 +709,16 @@ Item{
         }
 
 
-        if((xAxisColumns.length && yAxisColumns.length) || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || (chartTitle == Constants.gaugeChartTitle && isGaugeChart())) {
 
-            var xAxisColumnNamesArray = [];
-            var i = 0; // itereator => By passing warning
-            for(i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(yAxisColumns[i]);
-            }
-            var yAxisColumnNamesArray = [];
-            for(i=0;i<yAxisColumns.length;i++){
-                yAxisColumnNamesArray.push(yAxisColumns[i]);
-            }
+        if(
+            (xAxisColumns.length && yAxisColumns.length) || 
+            (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || 
+            (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
+            (chartTitle == Constants.pivotTitle && isPivotChart())
+        ) {
+
+            var xAxisColumnNamesArray = Array.from(xAxisColumns);
+            var yAxisColumnNamesArray = Array.from(yAxisColumns);
 
             var dataValues = null;
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
@@ -821,13 +856,32 @@ Item{
                 ChartsModel.getKPIChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
-                console.log("TABLE CLICKED")
-                ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
+                console.log("TABLE CLICKED");
+                var nonMeasures = xAxisColumnDetails.filter(d=>{
+                    if((d.itemType || d.droppedItemType).toLowerCase() != "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d => d.itemName)
+                var measures = xAxisColumnDetails.filter(d=>{
+                    if((d.itemType || d.droppedItemType).toLowerCase() == "numerical"){
+                        return true;
+                    }
+                    return false;
+                }).map(d=> d.itemName)
+                console.log('Non Measues',JSON.stringify(nonMeasures))
+                console.log('Measures',JSON.stringify(measures))
+                
+                var dateConversionOptions = '[{"itemName": "Ship Date", "itemType": "Date", "dateFormat": "Year", "separator" : "/"}, {"itemName": "Order Date", "itemType": "Date", "dateFormat": "Year,month", "separator" : "/"}]'
+                console.log(measures, "MEASURES")
+                ChartsModel.getTableChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, nonMeasures , measures, '[]');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
-                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
-                ChartsModel.getTableChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, ["state", "district"], "population",'Sum');
+                 var row3ColumnsArray = Array.from(row3Columns);
+                // Temporary running function
+                ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
+                
                 break;
             }
             if(!dataValues){
