@@ -114,12 +114,16 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                     QString dateTime = a.toStdString().c_str();
                     QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
 
-                    QDate date = dateTimeVal.date();
-                    QTime time = dateTimeVal.time();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                    if(dateTimeVal.isValid()){
+                        QDate date = dateTimeVal.date();
+                        QTime time = dateTimeVal.time();
+                        int32_t year = date.year();
+                        int32_t month = date.month();
+                        int32_t day = date.day();
+                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                    } else {
+                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(1970, 1, 1), duckdb::Time::FromTime(0, 0, 0, 5476)));
+                    }
 
                 } else {
                     qDebug() << a.toStdString().c_str();

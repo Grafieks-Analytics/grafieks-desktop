@@ -164,19 +164,26 @@ void SaveExtractForwardOnlyWorker::appendExtractData(duckdb::Appender *appender,
             } else if(columnType == "DOUBLE") {
                 appender->Append(q->value(i).toDouble());
             } else if(columnType == "DATE"){
-                QDate date = q->value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender->Append(duckdb::Date::FromDate(year, month, day));
-                qDebug() <<"Date" <<  date;
+                if(q->value(i).toDate().isValid()){
+                    QDate date = q->value(i).toDate();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender->Append(duckdb::Date::FromDate(year, month, day));
+                } else {
+                    appender->Append(duckdb::Date::FromDate(1970, 1, 1));
+                }
             } else if(columnType == "TIMESTAMP"){
-                QDate date = q->value(i).toDate();
-                QTime time = q->value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                if(q->value(i).toDateTime().isValid()){
+                    QDate date = q->value(i).toDate();
+                    QTime time = q->value(i).toDateTime().time();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                } else {
+                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(1970, 1, 1), duckdb::Time::FromTime(0, 0, 0, 5476)));
+                }
             } else if(columnType == "VARCHAR") {
                 appender->Append(q->value(i).toString().toUtf8().constData());
             } else {
