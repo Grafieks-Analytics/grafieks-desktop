@@ -15,7 +15,6 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    QString finalSql;
 
     switch (Statics::currentDbIntType) {
 
@@ -25,12 +24,13 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     case Constants::postgresIntType:
     case Constants::mongoIntType:{
         if(this->tmpSql.contains(" limit ", Qt::CaseInsensitive)){
-            finalSql = this->tmpSql.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
+            this->finalSql = this->tmpSql.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
         } else{
-            finalSql = this->tmpSql;
+            this->finalSql = this->tmpSql;
         }
 
-        finalSql += " limit " + QString::number(previewRowCount);
+        this->finalSql += " WHERE " + this->newWhereConditions;
+        this->finalSql += " limit " + QString::number(previewRowCount);
         break;
     }
 
@@ -44,22 +44,23 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
         if(this->tmpSql.contains(" top ", Qt::CaseInsensitive)){
             finalSqlInterPart = this->tmpSql.split(" top ", Qt::KeepEmptyParts, Qt::CaseInsensitive).last();
-            finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart.section(' ', 1);
+            this->finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart.section(' ', 1) + " WHERE " + this->newWhereConditions;
 
         } else{
             finalSqlInterPart = this->tmpSql.section(' ', 1);
-            finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart;
+            this->finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart + " WHERE " + this->newWhereConditions;
         }
         break;
     }
     }
 
-    this->executeQuery(finalSql);
+    this->executeQuery(this->finalSql);
 }
 
 void QueryModel::saveExtractData()
 {
-    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(this->tmpSql, this->generalParamsModel->getChangedColumnTypes());
+    QString extractQuery = this->tmpSql + " WHERE " + this->newWhereConditions;
+    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
 
@@ -195,13 +196,13 @@ void QueryModel::extractSizeLimit()
 }
 
 
-void QueryModel::receiveFilterQuery(QString &filteredQuery)
+void QueryModel::receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    this->tmpSql = filteredQuery.simplified();
-    qDebug() << "RECEIVED SQL" <<  this->tmpSql;
+    this->existingWhereConditions = existingWhereConditions;
+    this->newWhereConditions = newWhereConditions;
 }
 
 void QueryModel::generateRoleNames()

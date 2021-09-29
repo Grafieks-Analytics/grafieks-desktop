@@ -32,6 +32,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
         this->finalSql = this->query;
     }
 
+    this->finalSql += " WHERE " + this->newWhereConditions;
     this->finalSql += " limit " + QString::number(previewRowCount);
     this->generateRoleNames();
 
@@ -39,7 +40,8 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
-    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(this->query, this->generalParamsModel->getChangedColumnTypes());
+    QString extractQuery = this->query + " WHERE " + this->newWhereConditions;
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
 
@@ -83,12 +85,13 @@ QHash<int, QByteArray> ForwardOnlyQueryModel::roleNames() const
 }
 
 
-void ForwardOnlyQueryModel::receiveFilterQuery(QString &filteredQuery)
+void ForwardOnlyQueryModel::receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
+    this->existingWhereConditions = existingWhereConditions;
+    this->newWhereConditions = newWhereConditions;
 
-    this->query = filteredQuery.simplified();
 }
 
 void ForwardOnlyQueryModel::extractSaved(QString errorMsg)

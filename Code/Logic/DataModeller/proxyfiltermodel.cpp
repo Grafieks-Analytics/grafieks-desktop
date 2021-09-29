@@ -58,7 +58,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
             newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
         }
 
-        emit sendExcelFilterQuery(newQuery);
+        emit sendExcelFilterQuery(existingWhereString, newWhereConditions);
 
         break;
     }
@@ -97,9 +97,8 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
             newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
         }
 
-        qDebug() << "EMITTING WHERE" << newQuery;
 
-        emit sendFilterQuery(newQuery);
+        emit sendFilterQuery(existingWhereString, newWhereConditions);
         break;
     }
 

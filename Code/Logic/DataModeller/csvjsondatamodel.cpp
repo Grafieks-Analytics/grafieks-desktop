@@ -55,6 +55,10 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
     int columnNumber = 0;
     this->masterResultData.clear();
 
+    QJsonDocument optionsObj = QJsonDocument::fromJson(options.toUtf8());
+    QJsonObject obj = optionsObj.object();
+
+
     QFile file(Statics::csvJsonPath);
     file.open(QFile::ReadOnly | QFile::Text);
 
@@ -62,6 +66,7 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
         qDebug() << "Cannot open file" << file.errorString();
     } else{
 
+        int dataTypeCounter = 0;
         while(!file.atEnd()){
             const QByteArray line = file.readLine().simplified();
             if(firstLine){
@@ -81,6 +86,13 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
                 this->m_roleNames.insert(0, col.toUtf8());
             } else {
                 QString colData = line.split(*delimiter.toStdString().c_str()).at(columnNumber);
+
+
+                if(dataTypeCounter == 0 && obj.value("section").toString() == Constants::dateType){
+                    DataType datatype;
+                    this->dateFormat = datatype.variableType(colData).at(1);
+                    dataTypeCounter++;
+                }
 
                 if(!this->masterResultData.contains(colData)){
                     this->masterResultData.append(colData);
@@ -119,6 +131,11 @@ QStringList CSVJsonDataModel::filterTableList(QString keyword)
 {
 
     return this->output.filter(keyword, Qt::CaseInsensitive);
+}
+
+QString CSVJsonDataModel::getDateFormat()
+{
+    return this->dateFormat;
 }
 
 QStringList CSVJsonDataModel::getDateColumnData()

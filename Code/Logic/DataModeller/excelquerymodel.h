@@ -27,6 +27,7 @@ class ExcelQueryModel : public QAbstractTableModel
     int previewRowCount;
     QList<QStringList> resultData;
     QString query;
+    QString finalSql;
     int internalColCount;
     QuerySplitter querySplitter;
     GeneralParamsModel *generalParamsModel;
@@ -36,6 +37,9 @@ class ExcelQueryModel : public QAbstractTableModel
     QStringList selectParams;
     QStringList tableParams;
     QStringList whereParams;
+
+    QString exisitingWhereConditions;
+    QString newWhereConditions;
 
 public:
     explicit ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
@@ -52,7 +56,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
 public slots:
-    void receiveExcelFilterQuery(QString query);
+    void receiveExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void extractSaved(QString errorMsg);
 
 private:

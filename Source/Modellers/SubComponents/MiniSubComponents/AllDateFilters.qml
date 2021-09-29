@@ -73,6 +73,7 @@ Rectangle{
     // Called when edit filter from date list clicked
     function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
+        console.log(section, "SECTION")
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setInternalCounter(filterIndex)
         DSParamsModel.setFilterModelIndex(modelIndex)
