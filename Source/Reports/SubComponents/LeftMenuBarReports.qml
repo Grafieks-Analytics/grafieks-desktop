@@ -182,6 +182,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             maxDropOnYAxis: 1
             maxDropOnXAxis: 5
+            axisSettingsDisabled: true
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Reference Line"
@@ -216,6 +217,7 @@ Rectangle{
             maxDropOnYAxis: 1
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
+            axisSettingsDisabled: true
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,dynamic height,bottom pinch"
@@ -304,6 +306,7 @@ Rectangle{
             title:"Gauge Chart"
             mainCustomizations: ""
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            axisSettingsDisabled: true
             colorByDropEligible: ""
         }
         ListElement{
@@ -579,6 +582,7 @@ Rectangle{
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: displayToolTipVisible
                 ToolTip.text: qsTr(title)
+
             }
 
         }
