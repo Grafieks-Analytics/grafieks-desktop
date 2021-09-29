@@ -291,41 +291,41 @@ Column{
     }
 
     // Text Format starts
-    Rectangle{
+    // Rectangle{
 
-        height: 20
-        width: parent.width
-
-
-
-        Rectangle{
-            anchors.fill: parent
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.bottom:  parent.bottom
-            anchors.bottomMargin:  20
+    //     height: 20
+    //     width: parent.width
 
 
-            Text {
-                text: qsTr("Text Format")
-                anchors.left: parent.left
-                anchors.leftMargin: leftMargin
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: Constants.fontCategoryHeaderSmall
-            }
 
-            Image {
-                height: editImageSize
-                width: editImageSize
-                source: "/Images/icons/Edit_20.png"
-                anchors.right: parent.right
-                anchors.rightMargin: leftMargin
-                anchors.verticalCenter: parent.verticalCenter
-            }
+    //     Rectangle{
+    //         anchors.fill: parent
+    //         anchors.top: parent.top
+    //         anchors.topMargin: 5
+    //         anchors.bottom:  parent.bottom
+    //         anchors.bottomMargin:  20
 
-        }
 
-    }
+    //         Text {
+    //             text: qsTr("Text Format")
+    //             anchors.left: parent.left
+    //             anchors.leftMargin: leftMargin
+    //             anchors.verticalCenter: parent.verticalCenter
+    //             font.pixelSize: Constants.fontCategoryHeaderSmall
+    //         }
+
+    //         Image {
+    //             height: editImageSize
+    //             width: editImageSize
+    //             source: "/Images/icons/Edit_20.png"
+    //             anchors.right: parent.right
+    //             anchors.rightMargin: leftMargin
+    //             anchors.verticalCenter: parent.verticalCenter
+    //         }
+
+    //     }
+
+    // }
     // Text Format Ends
 
 }

@@ -349,13 +349,17 @@
                                 "margin-left",
                                 legendWidth
                             );
+                               d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
                             d3.select("#xAxisLabelId").style("bottom", 0);
 
                             break;
                         case "top":
                             d3.select("#mainChartWindow").attr("style", null);
                             // margin.top += 35;
-                            height -= 35;
+                            height -= 45;
                             y_pos_x_label = 57;
                             var legendWidth = legendElement.offsetWidth;
                             d3.select("#legend")
@@ -415,6 +419,10 @@
                                 .style("white-space", "nowrap")
                                 .style("overflow", "hidden")
                                 .style("text-overflow", "ellipsis");
+                                   d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
+                            );
                             break;
                         // For Right Legened
                         case "right":
@@ -448,6 +456,10 @@
                             d3.select("#mainChartWindow").style(
                                 "margin-left",
                                 0
+                            );
+                               d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                0 + "px"
                             );
                             d3.select("#xAxisLabelId").style("bottom", 0);
                             width =

@@ -79,7 +79,7 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            // drawChart(dataset);
+            drawChart(dataset);
 
             function transformData(dataValues, dateFormat) {
                 var valueDateType = false;
@@ -680,7 +680,10 @@
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent =  labelFormatSet(dataValues[i][1], labelFormat);
+                        label.textContent = labelFormatSet(
+                            dataValues[i][1],
+                            labelFormat
+                        );
                     });
                 }
                 d3.select(".axis.label path").remove();
