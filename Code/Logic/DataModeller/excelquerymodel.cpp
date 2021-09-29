@@ -26,8 +26,8 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
 
     finalSqlInterPart = this->query.section(' ', 1);
-    QString newLimitQuery = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart;
-    QSqlQuery query(newLimitQuery, conExcel);
+    this->finalSql = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart + " WHERE " + this->newWhereConditions;
+    QSqlQuery query(this->finalSql, conExcel);
     QSqlRecord record = query.record();
 
     this->internalColCount = record.count();
@@ -79,7 +79,8 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
 void ExcelQueryModel::saveExtractData()
 {
-    SaveExtractExcelWorker *saveExtractExcelWorker = new SaveExtractExcelWorker(this->query, this->generalParamsModel->getChangedColumnTypes());
+    QString extractQuery = this->query + + " WHERE " + this->newWhereConditions;
+    SaveExtractExcelWorker *saveExtractExcelWorker = new SaveExtractExcelWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractExcelWorker, &SaveExtractExcelWorker::saveExtractComplete, this, &ExcelQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractExcelWorker, &SaveExtractExcelWorker::finished, saveExtractExcelWorker, &SaveExtractExcelWorker::deleteLater, Qt::QueuedConnection);
 
@@ -123,10 +124,12 @@ QHash<int, QByteArray> ExcelQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ExcelQueryModel::receiveExcelFilterQuery(QString query)
+void ExcelQueryModel::receiveExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
-    this->query = query;
+
     emit clearTablePreview();
+    this->exisitingWhereConditions = exisitingWhereConditions;
+    this->newWhereConditions = newWhereConditions;
 }
 
 

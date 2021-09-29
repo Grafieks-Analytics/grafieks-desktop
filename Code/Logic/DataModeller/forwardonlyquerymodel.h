@@ -38,7 +38,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
 public slots:
-    void receiveFilterQuery(QString & filteredQuery);
+    void receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void extractSaved(QString errorMsg);
 
 private:
@@ -66,6 +66,9 @@ private:
 
     DataType dataType;
     QStringList columnStringTypes;
+
+    QString existingWhereConditions;
+    QString newWhereConditions;
 
 signals:
 
