@@ -19,6 +19,7 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
 
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
+    allColumns.clear();
 
     switch(Statics::currentDbIntType){
 

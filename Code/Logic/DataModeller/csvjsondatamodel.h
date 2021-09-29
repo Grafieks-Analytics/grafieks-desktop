@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QAbstractTableModel>
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QFileInfo>
 #include <QDebug>
 
@@ -11,6 +13,7 @@
 #include "../../constants.h"
 
 #include "../General/querysplitter.h"
+#include "../General/datatype.h"
 
 class CSVJsonDataModel : public QAbstractTableModel
 {
@@ -23,6 +26,9 @@ class CSVJsonDataModel : public QAbstractTableModel
     QStringList modelOutput;
     int totalRowCount;
     int totalColCount;
+    QString dateFormat;
+
+    QStringList output;
 
 public:
     explicit CSVJsonDataModel(QObject *parent = nullptr);
@@ -38,6 +44,7 @@ public:
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
+    Q_INVOKABLE QString getDateFormat();
 
     // We are doing date separately than other models because we have to convert the format in the UI
     Q_INVOKABLE QStringList getDateColumnData();

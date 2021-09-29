@@ -158,7 +158,7 @@ Rectangle{
                 leftJoinCol.visible = true
                 rightJoinCol.visible = true
                 innerJoinCol.visible = true
-                fullJoinCol.visible = true
+                fullJoinCol.visible = false
             }
         }
 

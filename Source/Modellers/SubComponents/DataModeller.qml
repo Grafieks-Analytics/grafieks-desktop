@@ -271,7 +271,16 @@ Item {
             if(DSParamsModel.fetchRectangles(refObject) !== ""){
 
                 // Ensure that deleted tables are not reflected in generated query later
-                let dynamicObjectName =  DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                let dynamicObjectName;
+
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                    dynamicObjectName = "[" + DSParamsModel.fetchRectangles(refObject).name  + "$]."
+                } else if(GeneralParamsModel.getDbClassification() === Constants.accessType){
+                    dynamicObjectName = "[" + DSParamsModel.fetchRectangles(refObject).name  + "]."
+                } else {
+                    dynamicObjectName = DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                }
+
                 DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
 
                 DSParamsModel.removeRectangles(refObject);
@@ -566,7 +575,7 @@ Item {
                     tmpJoinString += ")"
 
                     if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString
+                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString + ")"
                     } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
                     }  else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
@@ -630,7 +639,7 @@ Item {
             }
 
 
-            if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+            if(GeneralParamsModel.getDbClassification() === Constants.accessType || GeneralParamsModel.getDbClassification() === Constants.excelType ) {
                 let braces = "";
                 for(var i = 0; i < totalJoinCount - 1; i++){
                     braces += "(";

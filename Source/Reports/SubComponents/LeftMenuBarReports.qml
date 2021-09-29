@@ -74,7 +74,7 @@ Rectangle{
             maxDropOnYAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape,line type"
             colorByDropEligible: "categorical"
         }
         ListElement{
@@ -82,6 +82,8 @@ Rectangle{
             icon: "combination_grey.png"
             activeChart: false
             chartHtml:"bar.html"
+            elementHeight: 22
+            elementWidth:40
             title:"Combination - Coming Soon"
             yAxisVisible: true
             maxDropOnXAxis: 1
@@ -91,6 +93,20 @@ Rectangle{
             nonClickable: true
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
             colorByDropEligible: "categorical"
+            // icon: "geo_grey.png"
+            // chartHtml:"GeoChart.html"
+            // elementHeight: 22
+            // elementWidth:40
+            // activeChart: false
+            // disabled:true
+            // xAxisLabelName: "Location"
+            // yAxisLabelName: "Numerical"
+            // title:"Combinatio - Coming Soon"
+            // mainCustomizations: "Properties,Legend"
+            // nonClickable: true
+            // colorByDropEligible: ""
+            // subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            
         }
         ListElement{
             icon: "heatmap.png"
@@ -111,6 +127,8 @@ Rectangle{
             activeChart: false
             title:"Scatter Plot"
             yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
