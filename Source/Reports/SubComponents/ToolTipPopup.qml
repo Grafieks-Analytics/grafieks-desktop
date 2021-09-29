@@ -318,11 +318,11 @@ Popup {
             }
             // TODO:invisible if not color data
             Rectangle{
-                id:toolTipEdit2
+                id:toolTipEdit3
                 height:25
                 width:parent.width
 
-                anchors.top: toolTipEdit1.bottom
+                anchors.top: toolTipEdit2.bottom
                     anchors.topMargin: 15
 
                 TextField{
