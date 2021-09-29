@@ -2497,6 +2497,8 @@ Page {
                     width: 50
                     anchors.verticalCenter: parent.verticalCenter
 
+                    visible: !allChartsMapping[chartTitle].axisSettingsDisabled
+
                     Image {
                         source: "/Images/icons/customize.png"
                         anchors.verticalCenter: parent.verticalCenter
@@ -2602,6 +2604,8 @@ Page {
                     anchors.rightMargin: 1
                     width: 50
                     anchors.verticalCenter: parent.verticalCenter
+                    visible: !allChartsMapping[chartTitle].axisSettingsDisabled
+
 
                     Image {
                         source: "/Images/icons/customize.png"
