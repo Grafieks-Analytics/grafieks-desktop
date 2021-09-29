@@ -93,7 +93,6 @@ QStringList ExcelDataModel::getTableList()
 
 QStringList ExcelDataModel::filterTableList(QString keyword)
 {
-    qDebug() << "FHERE" << keyword;
     return this->output.filter(keyword, Qt::CaseInsensitive);
 }
 
@@ -106,8 +105,8 @@ QStringList ExcelDataModel::getDateColumnData()
 QStringList ExcelDataModel::getTableListQAXObject()
 {
     QString excelPath = Statics::currentDbName;
-    qDebug() << excelPath << Q_FUNC_INFO;
     this->sheetNamesMap.clear();
+    this->output.clear();
 
     /* When pApplication is destructed, all its related child objects will be cleaned up, a kind of scope pointer */
     QScopedPointer<QAxObject> excel(new QAxObject());

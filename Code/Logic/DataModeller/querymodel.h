@@ -43,7 +43,7 @@ public:
     Q_INVOKABLE void saveExtractData();
 
 public slots:
-    void receiveFilterQuery(QString & filteredQuery);
+    void receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void extractSaved(QString errorMessage);
@@ -72,9 +72,13 @@ private:
     int tmpRowCount;
     int tmpColCount;
     QString tmpSql;
+    QString finalSql;
     SetChartDataQueryWorker *setChartDataWorker;
     QSqlQueryModel queryModel;
     QStringList columnStringTypes;
+
+    QString existingWhereConditions;
+    QString newWhereConditions;
 
     QThread extractThread;
     GeneralParamsModel *generalParamsModel;
