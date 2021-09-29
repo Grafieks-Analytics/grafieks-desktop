@@ -242,7 +242,7 @@ Column{
         id: styleComponent
 
         CustomizeReportStyleMenu{
-            height: 120
+            height: 70
             width: listViewElem.width
         }
 
