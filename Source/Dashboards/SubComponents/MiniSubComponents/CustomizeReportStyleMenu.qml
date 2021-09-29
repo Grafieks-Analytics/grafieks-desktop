@@ -176,29 +176,29 @@ Rectangle{
 
         }
 
-        Row{
+        // Row{
 
-            width: parent.width
-            height: 30
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.right: parent.right
-            anchors.rightMargin: 15
+        //     width: parent.width
+        //     height: 30
+        //     anchors.left: parent.left
+        //     anchors.leftMargin: 15
+        //     anchors.right: parent.right
+        //     anchors.rightMargin: 15
 
-            Text {
-                id: opacity
-                text: qsTr("Opacity")
-                anchors.verticalCenter: parent.verticalCenter
-            }
+        //     Text {
+        //         id: opacity
+        //         text: qsTr("Opacity")
+        //         anchors.verticalCenter: parent.verticalCenter
+        //     }
 
-            CustomSpinBox {
-                id: opacitySpinBox
-                value: 0
-                anchors.right: parent.right
-                onValueChanged: onOpacityValueChanged(value)
-            }
+        //     CustomSpinBox {
+        //         id: opacitySpinBox
+        //         value: 0
+        //         anchors.right: parent.right
+        //         onValueChanged: onOpacityValueChanged(value)
+        //     }
 
-        }
+        // }
 
 
     }
