@@ -53,6 +53,7 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
     QString delimiter = Statics::separator;
 
     int columnNumber = 0;
+    this->masterResultData.clear();
 
     QFile file(Statics::csvJsonPath);
     file.open(QFile::ReadOnly | QFile::Text);
@@ -106,6 +107,7 @@ void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString 
 QStringList CSVJsonDataModel::getTableList()
 {
 
+    this->output.clear();
     QString db = Statics::currentDbName;
     this->fileName       = QFileInfo(db).baseName().toLower();
     this->fileName = this->fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
