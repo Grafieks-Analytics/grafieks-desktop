@@ -439,16 +439,26 @@
                 ["Category", " SubCategory", "Sales"],
             ];
 
-            function transformData(dataValue, dateFormat, dateFormat1) {
+            function transformData(
+                dataValue,
+                dataColumns = {},
+                dateFormat,
+                dateFormat1
+            ) {
                 var dataValue = data[0];
                 var json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
 
-                if (isDateFormat(dataValue[0][0])) {
+                // [Tag: Date Change]
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
+                // [Tag: Date Change]
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     isKey1Date = true;
                 }
-                if (isDateFormat(dataValue[0][1])) {
+                // [Tag: Date Change]
+                if (colorByData[0].itemType == "Date") {
                     isKey2Date = true;
                 }
 
@@ -526,6 +536,7 @@
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
+                    dataColumns,            // [Tag: Date Change]
                     // font size
                     xLabelfontSize = defaultD3Config.fontSize,
                     yLabelfontSize = defaultD3Config.fontSize,
@@ -566,9 +577,9 @@
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
 
-                console.log({ dateFormat, dateFormat1 });
                 var [dataValues, [myGroups, myVars]] = transformData(
                     data,
+                    dataColumns,    // [Tag: Date Change]  
                     dateFormat,
                     dateFormat1
                 );
