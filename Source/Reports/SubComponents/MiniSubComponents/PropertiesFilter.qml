@@ -172,6 +172,16 @@ Column{
         const chartDetailsConfig = allChartsMapping[chartTitle];
         let { colorByDropEligible = "" } = chartDetailsConfig || "";
 
+        // Add Color by eligibble for dynamic changing graphs
+        switch(report_desiner_page.chartTitle){
+            case Constants.horizontalBarChartTitle:
+            case Constants.groupBarChartTitle:
+            case Constants.horizontalBarGroupedChartTitle:
+            case Constants.horizontalAreaChartTitle:
+                colorByDropEligible = "categorical";    
+
+        }
+        
         colorByDropEligible = colorByDropEligible.split(',');
         if(!colorByDropEligible.includes(itemType.toLowerCase())){
             return false;

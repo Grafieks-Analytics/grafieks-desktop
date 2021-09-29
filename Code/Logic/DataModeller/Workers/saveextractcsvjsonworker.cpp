@@ -74,6 +74,7 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                         int32_t year = date.year();
                         int32_t month = date.month();
                         int32_t day = date.day();
+                        qDebug() << "HERE" << typeid(day).name();
                         appender->Append(duckdb::Date::FromDate(year, month, day));
 
                         // Timestamp in duckDb release crashes. Will fix in the future
@@ -113,12 +114,16 @@ bool SaveExtractCsvJsonWorker::appendExtractData(duckdb::Appender *appender)
                     QString dateTime = a.toStdString().c_str();
                     QDateTime dateTimeVal = QDateTime::fromString(dateTime, this->matchedDateFormats.value(i));
 
-                    QDate date = dateTimeVal.date();
-                    QTime time = dateTimeVal.time();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                    if(dateTimeVal.isValid()){
+                        QDate date = dateTimeVal.date();
+                        QTime time = dateTimeVal.time();
+                        int32_t year = date.year();
+                        int32_t month = date.month();
+                        int32_t day = date.day();
+                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                    } else {
+                        appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(1970, 1, 1), duckdb::Time::FromTime(0, 0, 0, 5476)));
+                    }
 
                 } else {
                     qDebug() << a.toStdString().c_str();
@@ -199,7 +204,7 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
                     }
 
                     this->columnStringTypes.insert(i, varType);
-                    createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + ",";
+                    createTableQuery += "\"" + this->columnNamesMap.value(i) + "\" " + varType + " NULL,";
                 }
             }
 
@@ -212,7 +217,6 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
                 errorMsg = createT->error.c_str();
                 qDebug() <<Q_FUNC_INFO << "Error Creating Extract" << createT->error.c_str();
             }
-            qDebug() << createTableQuery << createT->success;
         }
 
         lineCount++;
@@ -222,7 +226,7 @@ QString SaveExtractCsvJsonWorker::createExtractDb(QFile *file, QString fileName,
     // Create a master table to refer the name of actual extract tableName
     // while running an extract later on
 
-    QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version REAL, mode VARCHAR, extract_version INTEGER)";
+    QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER)";
     QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
     auto x = con.Query(tableCreateQuery.toStdString());
@@ -238,6 +242,19 @@ void SaveExtractCsvJsonWorker::run()
 {
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
+
+    // Remove extract file if already exists
+    QFile fileRemove(extractPath);
+    if(fileRemove.exists()) {
+        QString tmpFile = extractPath;
+        tmpFile.append(".wal");
+
+        QFile fileTmpRemove(tmpFile);
+
+        fileTmpRemove.remove();
+        fileRemove.remove();
+    }
+
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 

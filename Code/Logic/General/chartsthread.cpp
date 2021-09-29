@@ -1731,7 +1731,7 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
                         if(format.toLower() == "day"){
                             convertedDate += QString::number(dateTime.date().day()) + separator;
                         } else if(format.toLower() == "month"){
-                            convertedDate += QString::number(dateTime.date().month())  + separator;
+                            convertedDate += dateTime.date().toString("MMM")  + separator;
                         } else {
                             convertedDate += QString::number(dateTime.date().year())  + separator;
                         }

@@ -50,7 +50,7 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterTopContent.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterWildcardContent.qml</file>
-        <file>Constants.qml</file>
+        <file>Source/Constants.qml</file>
         <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
         <file>Source/MainSubComponents/CustomButton.qml</file>
         <file>Source/MainSubComponents/CustomTextArea.qml</file>
@@ -274,8 +274,8 @@
         <file>Source/Charts/HorizontalAreaChart.html</file>
         <file>Source/Charts/HorizontalMultipleAreaChart.html</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
-        <file>Splash.qml</file>
-        <file>Main.qml</file>
+        <file>Source/Splash.qml</file>
+        <file>Source/Main.qml</file>
         <file>Source/Charts/Data/dataTables.semanticui.min.js</file>
         <file>Source/Charts/Data/semantic-icons.css</file>
         <file>Source/Charts/Data/dataTables.min.js</file>
@@ -290,5 +290,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/KPICustomization.qml</file>
         <file>Source/Modellers/SubComponents/SaveExtract.qml</file>
         <file>Source/Dashboards/SubComponents/SaveWorkbook.qml</file>
+        <file>Source/Others/About.qml</file>
     </qresource>
 </RCC>

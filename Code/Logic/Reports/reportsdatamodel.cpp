@@ -196,11 +196,12 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
                         tmpList.append(tmpVal);
 
                         // insert keys
-                        values += "'" + tmpVal + "',";
+                        values += "'" + tmpVal.replace("'", "''") + "',";
                     }
                 }
             }
             values.chop(1);
+            qDebug() << "IN VALUES" << values;
 
             QString notRelationString = includeExclude == true ? " NOT " : "";
             whereConditions += joiner + columnName + joiner + notRelationString + " IN (" + values + ") AND ";
@@ -215,7 +216,8 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
             if(section == Constants::dateType){
                 whereConditions += joiner + columnName + joiner + " = '" + actualDateValues.at(0) + "' AND ";
             } else{
-                whereConditions += joiner + columnName + joiner + " = '" + filterValueList.at(0) + "' AND ";
+                QString param = filterValueList.at(0);
+                whereConditions += joiner + columnName + joiner + " = '" + param.replace("'", "''") + "' AND ";
             }
 
         }
@@ -225,7 +227,8 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugNotEqualRelation){
 
             qDebug() << "FILTER HERE" << filterSlug << "NOT EQUAL REL 5";
-            whereConditions += joiner + columnName + joiner + " != '" + filterValueList.at(0) + "' AND ";
+            QString param = filterValueList.at(0);
+            whereConditions += joiner + columnName + joiner + " != '" + param.replace("'", "''") + "' AND ";
 
         }
 
@@ -303,7 +306,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
             qDebug() << "FILTER HERE" << filterSlug << "CONTAINING REL 11";
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal + "' AND ";
+            whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal.replace("'", "''") + "' AND ";
         }
 
         // 12. For Ends With relation
@@ -313,7 +316,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
             qDebug() << "FILTER HERE" << filterSlug << "ENDS With REL 12";
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal + "' AND ";
+            whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal.replace("'", "''") + "' AND ";
         }
 
         // 13. For Doesnt Start With relation
@@ -323,7 +326,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
             qDebug() << "FILTER HERE" << filterSlug << "Doenst start with REL 13";
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal + "' AND ";
+            whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal.replace("'", "''")  + "' AND ";
         }
 
         // 14. For Doesnt End With relation
@@ -333,7 +336,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
             qDebug() << "FILTER HERE" << filterSlug << "Doenst end with REL 14";
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal + "' AND ";
+            whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal.replace("'", "''")  + "' AND ";
         }
 
         // 15. Filter

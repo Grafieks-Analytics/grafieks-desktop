@@ -334,15 +334,21 @@
         var redrawn = false;
         var extraHeight = 0;
 
-        function transformData(dataValue, dateFormat, dateFormat1) {
+        // [Tag: Date Change]
+        function transformData(dataValue, dataColumns = {}, dateFormat, dateFormat1) {
             json = {};
             var isKey1Date = false;
             var isKey2Date = false;
 
-            if (isDateFormat(dataValue[0][1])) {
+            // [Tag: Date Change]
+            var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
+            // [Tag: Date Change]
+            if (xAxisColumnDetails[0].itemType == "Date") {
                 isKey1Date = true;
             }
-            if (isDateFormat(dataValue[0][0])) {
+            // [Tag: Date Change]
+            if (colorByData[0].itemType == "Date") {
                 isKey2Date = true;
             }
 
@@ -413,6 +419,7 @@
                 dateFormat1,
                 chartType,
                 toolTip,
+                dataColumns,            // [Tag: Date Change]
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig = defaultD3Config.defaultlabelConfig,
                 gridConfig = defaultD3Config.defaultGridConfig,
@@ -502,6 +509,7 @@
 
             var [data, keys, labels] = transformData(
                 data[0],
+                dataColumns,    // [Tag: Date Change]  
                 dateFormat,
                 dateFormat1
             );

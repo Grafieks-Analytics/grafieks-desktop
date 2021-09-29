@@ -18,15 +18,17 @@ import Qt.labs.platform 1.1
 import com.grafieks.singleton.constants 1.0
 
 
-import "./Source/Modellers"
-import "./Source/Modellers/SubComponents"
-import "./Source/Modellers/SubComponents/MiniSubComponents"
-import "./Source/Dashboards"
-import "./Source/Connectors"
-import "./Source/Datasources"
-import "./Source/Reports"
-import "./Source/Others"
-import "./Source/MainSubComponents"
+import "./Modellers"
+import "./Modellers/SubComponents"
+import "./Modellers/SubComponents/MiniSubComponents"
+import "./Dashboards"
+import "./Connectors"
+import "./Datasources"
+import "./Reports"
+import "./Others"
+import "./MainSubComponents"
+
+import "./Dashboards/SubComponents"
 
 
 ApplicationWindow {
@@ -143,6 +145,10 @@ ApplicationWindow {
         dsSaveDialog.visible = true
     }
 
+    function saveWorkbook(){
+        saveWorkbookPrompt.open()
+    }
+
     function openDatasource(){
 
         dsOpenDialog.visible = true
@@ -227,6 +233,19 @@ ApplicationWindow {
         }
     }
 
+    About{
+        id: aboutPopup
+    }
+
+
+    // SubComponents Starts
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveWorkbook{
+        id: saveWorkbookPrompt
+    }
+
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -272,6 +291,18 @@ ApplicationWindow {
 
                 onTriggered: saveDatasource()
             }
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_save_workbook
+                text: qsTr("Save Workbook")
+                enabled: true
+
+                onTriggered: saveWorkbook()
+            }
+
+            MenuSeparator{}
 
             MenuItem{
                 id: action_sampledata
@@ -333,7 +364,6 @@ ApplicationWindow {
 
                     onTriggered: disconnectDS()
                 }
-
 
 //            MenuItem{
 //                id: action_new_ds
@@ -401,9 +431,16 @@ ApplicationWindow {
 
                 onTriggered: {
                     Datasources.setSourceType(Constants.liveDS)
-
                     publishGrafieks1.visible = true
                 }
+            }
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_publish_workbook
+                text: qsTr("Publish Workbook")
+                enabled: false
             }
         }
 
@@ -443,6 +480,10 @@ ApplicationWindow {
 
             MenuItem{
                 text: qsTr("About")
+                onTriggered: {
+                    console.log("About clicked")
+                    aboutPopup.open()
+                }
             }
 
 //            MenuItem{

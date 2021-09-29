@@ -266,6 +266,7 @@ Popup {
                 id:toolTipEdit1
                 height:25
                 width:parent.width
+                
 
                 anchors.top: label3.bottom
                     anchors.topMargin: 15
@@ -284,6 +285,8 @@ Popup {
 
                     background: Rectangle{
                         border.width: 1
+                        border.color:Constants.borderBlueColor
+                 
 
                     }
                 }
@@ -307,6 +310,34 @@ Popup {
                     placeholderText: "column2"
                     background: Rectangle{
                         border.width: 1
+                        border.color:Constants.borderBlueColor
+
+
+                    }
+                }
+            }
+            // TODO:invisible if not color data
+            Rectangle{
+                id:toolTipEdit2
+                height:25
+                width:parent.width
+
+                anchors.top: toolTipEdit1.bottom
+                    anchors.topMargin: 15
+
+                TextField{
+                    id:toolTipText3
+                    width: parent.width-150
+                    selectByMouse: true
+                    height:25
+                    cursorVisible: true
+                    anchors.top: parent.top
+                    anchors.topMargin: 5
+                    placeholderText: "column3"
+                    background: Rectangle{
+                        border.width: 1
+                        border.color:Constants.borderBlueColor
+
 
                     }
                 }

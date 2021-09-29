@@ -33,7 +33,7 @@ Window {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 30
-            source: "Images/logos/logo.png"
+            source: "../Images/logos/logo.png"
             height: 267
             width: 278
         }
@@ -43,7 +43,7 @@ Window {
             anchors.top:splashImage.bottom
             anchors.topMargin: 20
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr(GeneralParamsModel.getAppInfo().APP_NAME + " v" + GeneralParamsModel.getAppInfo().APP_VERSION)
+            text: qsTr(GeneralParamsModel.getAppInfo().APP_NAME + " " + GeneralParamsModel.getAppInfo().APP_VERSION)
             font.pointSize: Constants.fontCategoryHeaderSmall
             color: Constants.grafieksGreen
         }
