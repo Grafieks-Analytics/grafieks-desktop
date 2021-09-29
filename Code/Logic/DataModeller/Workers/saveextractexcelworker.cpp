@@ -32,83 +32,97 @@ void SaveExtractExcelWorker::run()
     QString finalSqlInterPart;
     QString errorMsg = "";
 
-    QSqlDatabase conExcel =  QSqlDatabase::addDatabase("QODBC", "excelQ");
+    QDateTime d = QDateTime::currentDateTime();
+    QString connectionName = "excelQ" + d.toString();
+
+    QSqlDatabase conExcel =  QSqlDatabase::addDatabase("QODBC", connectionName);
+    conExcel.setConnectOptions("SQL_ATTR_ACCESS_MODE=SQL_MODE_READ_ONLY");
 
     conExcel.setDatabaseName(Statics::excelDb);
-    conExcel.open();
 
-    QSqlQuery query(this->query, conExcel);
-    if(query.lastError().text() <= 0){
-        QSqlRecord record = query.record();
+    if(conExcel.open()){
+        qDebug() << "IF BLOCK";
 
-        this->internalColCount = record.count();
+        QSqlQuery query(this->query, conExcel);
+        if(query.lastError().text() <= 0){
+            QSqlRecord record = query.record();
 
-        QString createTableQuery = "CREATE TABLE " + fileName + "(";
+            this->internalColCount = record.count();
 
-        for(int i = 0; i < this->internalColCount; i++){
-            QVariant fieldType = record.field(i).value();
-            QString type = dataType.qVariantType(fieldType.typeName());
-            QString fieldName = record.fieldName(i);
-            QString tableName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$"));
+            QString createTableQuery = "CREATE TABLE " + fileName + "(";
 
-            // lastIndexOf used here because the sheet name may itself contain `$` along with the $ used to name the excel sheet in sql query
-            QString checkFieldName = tableName + "." + fieldName;
-            if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
-                type = this->changedColumnTypes.value(checkFieldName).toString();
+            for(int i = 0; i < this->internalColCount; i++){
+                QVariant fieldType = record.field(i).value();
+                QString type = dataType.qVariantType(fieldType.typeName());
+                QString fieldName = record.fieldName(i);
+                QString tableName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$"));
 
-                if(type == Constants::categoricalType){
-                    type = "VARCHAR";
-                } else if(type == Constants::numericalType){
-                    QString dataLen = record.field(i).value().toString();
+                // lastIndexOf used here because the sheet name may itself contain `$` along with the $ used to name the excel sheet in sql query
+                QString checkFieldName = tableName + "." + fieldName;
+                if(this->changedColumnTypes.value(checkFieldName).toString() != ""){
+                    type = this->changedColumnTypes.value(checkFieldName).toString();
 
-                    if(dataLen.toLower().contains("e-") || dataLen.toLower().contains("e+") || dataLen.toLower().contains(".")){
-                        type = "DOUBLE";
-                    } else {
-                        if(dataLen.length() <= 10 && dataLen.toInt() < 2147483647){
-                            type = "INTEGER";
-                        } else if(dataLen.length() <= 19 && dataLen.toLong() < 9223372036854775808) {
-                            type = "BIGINT";
+                    if(type == Constants::categoricalType){
+                        type = "VARCHAR";
+                    } else if(type == Constants::numericalType){
+                        QString dataLen = record.field(i).value().toString();
+
+                        if(dataLen.toLower().contains("e-") || dataLen.toLower().contains("e+") || dataLen.toLower().contains(".")){
+                            type = "DOUBLE";
                         } else {
-                            type = "HUGEINT";
+                            if(dataLen.length() <= 10 && dataLen.toInt() < 2147483647){
+                                type = "INTEGER";
+                            } else if(dataLen.length() <= 19 && dataLen.toLong() < 9223372036854775808) {
+                                type = "BIGINT";
+                            } else {
+                                type = "HUGEINT";
+                            }
                         }
+                    } else {
+                        type = "DATE";
                     }
-                } else {
-                    type = "DATE";
                 }
+
+                createTableQuery += "\"" + fieldName + "\" " + type + " NULL,";
+                this->columnStringTypes.append(type);
             }
 
-            createTableQuery += "\"" + fieldName + "\" " + type + " NULL,";
-            this->columnStringTypes.append(type);
-        }
+            createTableQuery.chop(1);
+            createTableQuery += ")";
 
-        createTableQuery.chop(1);
-        createTableQuery += ")";
+            auto createT = con.Query(createTableQuery.toStdString());
+            if(createT->success) {
 
-        auto createT = con.Query(createTableQuery.toStdString());
-        if(createT->success) {
+                // Create a master table to refer the name of actual extract tableName
+                // while running an extract later on
 
-            // Create a master table to refer the name of actual extract tableName
-            // while running an extract later on
+                QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER)";
+                QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
 
-            QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER)";
-            QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
+                auto x = con.Query(tableCreateQuery.toStdString());
+                if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
+                auto z = con.Query(tableInserQuery.toStdString());
+                if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
-            auto x = con.Query(tableCreateQuery.toStdString());
-            if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
-            auto z = con.Query(tableInserQuery.toStdString());
-            if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
+                // Start appending data in table
+                duckdb::Appender appender(con, fileName.toStdString());
 
-            // Start appending data in table
-            duckdb::Appender appender(con, fileName.toStdString());
-
-            appendExtractData(&appender, &query);
+                appendExtractData(&appender, &query);
+            } else {
+                qDebug() << "ELSE BLOCK3";
+                errorMsg = createT->error.c_str();
+            }
         } else {
-            errorMsg = createT->error.c_str();
+            qDebug() << "ELSE BLOCK2";
+            errorMsg = query.lastError().text();
         }
     } else {
-        errorMsg = query.lastError().text();
-    }
+        qDebug() << "ELSE BLOCK1";
+        errorMsg = conExcel.isOpenError();
+        conExcel.close();
+        conExcel.removeDatabase(connectionName);
 
+    }
 
     emit saveExtractComplete(errorMsg);
 }
@@ -132,18 +146,26 @@ void SaveExtractExcelWorker::appendExtractData(duckdb::Appender *appender, QSqlQ
             } else if(columnType == "DOUBLE") {
                 appender->Append(query->value(i).toDouble());
             } else if(columnType == "DATE"){
-                QDate date = query->value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender->Append(duckdb::Date::FromDate(year, month, day));
+                if(query->value(i).toDate().isValid()){
+                    QDate date = query->value(i).toDate();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender->Append(duckdb::Date::FromDate(year, month, day));
+                } else {
+                   appender->Append(duckdb::Date::FromDate(1970, 1, 1));
+                }
             } else if(columnType == "TIMESTAMP"){
-                QDate date = query->value(i).toDate();
-                QTime time = query->value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                if(query->value(i).toDateTime().isValid()){
+                    QDate date = query->value(i).toDate();
+                    QTime time = query->value(i).toDateTime().time();
+                    int32_t year = date.year();
+                    int32_t month = date.month();
+                    int32_t day = date.day();
+                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
+                } else {
+                    appender->Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(1970, 1, 1), duckdb::Time::FromTime(0, 0, 0, 5476)));
+                }
             } else if(columnType == "VARCHAR"){
                 appender->Append(query->value(i).toString().toUtf8().constData());
             } else {

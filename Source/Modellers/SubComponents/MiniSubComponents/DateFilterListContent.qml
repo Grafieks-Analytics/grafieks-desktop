@@ -474,6 +474,10 @@ Rectangle{
         masterColData = sortedMasterColData
     }
 
+    function isValidDate(dateObject){
+        return new Date(dateObject).toString() !== 'Invalid Date';
+    }
+
     function getRemoveTZ(inputDate){
 
         let outDate = inputDate.replace(/T/gi, " ")
@@ -482,6 +486,7 @@ Rectangle{
     }
 
     function getYearValue(inputDate){
+        console.log("INPUT DATE", inputDate, isValidDate(inputDate))
         let t = Date.parse(inputDate)
         let d = new Date(t);
 

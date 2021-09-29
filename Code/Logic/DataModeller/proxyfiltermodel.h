@@ -30,8 +30,8 @@ private:
     QString getQueryJoiner();
 
 signals:
-    void sendFilterQuery(QString &filteredQuery);
-    void sendExcelFilterQuery(QString &filteredQuery);
+    void sendFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
+    void sendExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void sendModels(FilterCategoricalListModel *categoryModel, FilterNumericalListModel * numericalModel, FilterDateListModel *dateModel);
 
 };
