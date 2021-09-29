@@ -15,6 +15,7 @@
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <script src="./Data/min/numeral.min.js"></script>
         <script src="./Data/d3-funnel.min.js"></script>
+        <link rel="stylesheet" href="Data/general.css" />
 
         <style>
             #tooltip {
@@ -299,13 +300,13 @@
                                 d3.select("#legend")
                                     .attr("style", null)
                                     .style("top", "10px")
-                                    .style("right", rightPosition)
+                                    // .style("right", rightPosition)
                                     .style("bottom", "auto")
                                     .style("position", "absolute")
                                     .style("left", "auto")
                                     .style("display", "flex")
                                     .style("max-width", "99vw")
-                                    // .style("overflow", "scroll")
+                                    .style("overflow", "scroll")
                                     .style("border", "none");
                                 d3.selectAll("#legend div span")
                                     .style("max-width", "160px")
@@ -316,14 +317,14 @@
                                 //     "bottom",
                                 //     10 + "px"
                                 // );
-                                // d3.selectAll("#my_dataviz").style(
-                                //     "height",
-                                //     "calc(100vh - 72px) "
-                                // );
-                                // d3.selectAll("#my_dataviz").style(
-                                //     "margin-top",
-                                //     50 + "px"
-                                // );
+                                d3.selectAll("#my_dataviz").style(
+                                    "height",
+                                    "calc(100vh - 72px) "
+                                );
+                                d3.selectAll("#my_dataviz").style(
+                                    "margin-top",
+                                    60 + "px"
+                                );
 
                                 // d3.selectAll("#legend div").style(
                                 //     "padding",
@@ -348,12 +349,12 @@
                                 d3.select("#legend")
                                     .attr("style", null)
                                     .style("top", "auto")
-                                    .style("right", rightPosition)
+                                    // .style("right", rightPosition)
                                     .style("bottom", "0px")
                                     // .style("left", margin.left + "px")
                                     .style("display", "flex")
                                     .style("max-width", "99vw")
-                                    // .style("overflow", "scroll")
+                                    .style("overflow", "scroll")
                                     .style("border", "none");
 
                                 d3.selectAll("#legend div span")
@@ -363,8 +364,12 @@
                                     .style("text-overflow", "ellipsis");
                                 // d3.selectAll("#my_dataviz").style(
                                 //     "height",
-                                //     "calc(100vh - 42px)"
+                                //     "calc(100vh - 142px)"
                                 // );
+                                  d3.selectAll("#my_dataviz").style(
+                                    "margin-top",
+                                    20 + "px"
+                                );
 
                                 break;
                             // For Right Legened
@@ -417,6 +422,18 @@
                     // }
 
                     // legends code ends
+                              var legendWidth = document.querySelector("#legend").offsetWidth;
+                console.log({ legendWidth });
+                if (legendWidth <= window.innerWidth - 50) {
+                    console.log(window.innerWidth);
+                    console.log({ legendWidth });
+                    rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
+                } else {
+                    rightPosition = 0;
+                }
+                if (legendPosition == "top" || legendPosition == "bottom") {
+                    d3.select("#legend").style("right", rightPosition);
+                }
 
                     var funnelSvg = document.querySelectorAll("svg g");
                     funnelSvg.forEach((e) => {
@@ -476,6 +493,7 @@
                 } catch (error) {
                     console.log(error);
                 }
+      
             }
 
             drawChart(data);

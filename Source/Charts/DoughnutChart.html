@@ -245,7 +245,7 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
                         break;
-                   case "top":
+                    case "top":
                         // margin.top += 80;
                         height -= 10;
                         translateSvgTop += 60;
@@ -311,6 +311,12 @@
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
             // var radius = Math.min(width, height) / 2;
             var radius = Math.min(width, height) / 2;
+            if (radius == height / 2 && height>width) {
+                radius = radius - 100;
+            }
+            if (innerRadius - radius >= 5) {
+                innerRadius = innerRadius / 2;
+            }
             console.log({ radius });
 
             d3.selectAll("#my_dataviz").html("");
