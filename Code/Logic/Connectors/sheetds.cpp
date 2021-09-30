@@ -53,7 +53,7 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
         Statics::onlineStorageType = Constants::sheetIntType;
 
         // Get Files list
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'&pageSize=1000"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 
 
@@ -75,7 +75,7 @@ void SheetDS::fetchDatasources()
 void SheetDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27&pageSize=1000"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataSearchFinished);
 }
 
@@ -86,14 +86,15 @@ void SheetDS::homeBut()
 {
     emit showBusyIndicator(true);
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'&pageSize=1000"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
 
-void SheetDS::fetchFileData(QString gFileId)
+void SheetDS::fetchFileData(QString gFileId, QString gFileName)
 {
     emit showBusyIndicator(true);
     this->gFileId = gFileId;
+    this->gFileName = gFileName;
 
     QUrl sheetDownloadUrl("https://www.googleapis.com/drive/v3/files/" + gFileId +"/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key="+Secret::sheetClient);
     m_networkReply = this->google->get(sheetDownloadUrl);
@@ -154,7 +155,7 @@ void SheetDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +".xlsx";
+        QString fileName = QDir::temp().tempPath() +"/" + this->gFileName.toStdString().c_str() +".xlsx";
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());

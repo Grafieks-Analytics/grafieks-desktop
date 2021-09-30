@@ -176,8 +176,6 @@ void DriveDS::dataReadFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "FILES" << resultJson;
-
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
 
@@ -230,7 +228,6 @@ void DriveDS::dataSearchFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "FILES" << resultJson;
 
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
@@ -298,7 +295,6 @@ void DriveDS::fileDownloadFinished()
     }else{
 
         QFileInfo f(this->newFileName);
-        qDebug() << this->newFileName << "FILENAME" << f.baseName().toUtf8();
 
         QString fileName = QDir::temp().tempPath() +"/" + this->newFileName;
         QFile file(fileName);

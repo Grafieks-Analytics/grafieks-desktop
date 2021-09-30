@@ -222,7 +222,7 @@ Popup {
             SheetDS.folderNav(pathFolder)
         }
         else{
-            SheetDS.fetchFileData(gSheetId)
+            SheetDS.fetchFileData(gSheetId, name)
         }
 
         path.text = name
