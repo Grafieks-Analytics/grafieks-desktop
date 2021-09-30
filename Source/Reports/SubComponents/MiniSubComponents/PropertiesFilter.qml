@@ -129,7 +129,7 @@ Column{
         }
 
         colorByData.push({ columnName: itemName, itemType: itemType });
-        colorListModel.append({textValue: itemName})
+        colorListModel.append({textValue: itemName,itemName:itemName})
 
         ReportParamsModel.setLastDropped(itemType);
 
