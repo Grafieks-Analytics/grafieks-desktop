@@ -1546,7 +1546,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     auto dataList = this->queryFunction(queryString);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
+    QHash<QString, int> masterKeywordHash;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
@@ -1565,9 +1565,13 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
     }
 
+    qDebug() << "SPEED 1";
+
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
+
+    qDebug() << "SPEED 2";
 
     int index;
     QJsonArray colData;
@@ -1580,7 +1584,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
                 masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
 
-                masterKeywordList.append(masterKeyword);
+                masterKeywordHash.insert(masterKeyword, i);
 
                 tmpData.clear();
                 tmpData.append(xAxisDataPointerPre.at(i));
@@ -1594,6 +1598,8 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    qDebug() << "SPEED 3";
+
 
     // Populate the actual data
     try{
@@ -1603,7 +1609,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
             tmpData.clear();
             yAxisTmpData = 0.0;
 
-            index = masterKeywordList.indexOf(masterKeyword);
+            index = masterKeywordHash.value(masterKeyword);
             yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
             tmpData.append(xAxisDataPointer->at(i));
@@ -1616,6 +1622,8 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     } catch(std::exception &e){
         qWarning() << Q_FUNC_INFO << e.what();
     }
+
+    qDebug() << "SPEED 4";
 
     QJsonArray columns;
     columns.append(xSplitKey);
