@@ -53,7 +53,7 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
         Statics::onlineStorageType = Constants::driveIntType;
 
         // Get files list
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 
     });
@@ -76,7 +76,7 @@ void DriveDS::fetchDatasources()
 void DriveDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"'"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"' and (mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataSearchFinished);
 }
 
@@ -87,7 +87,7 @@ void DriveDS::homeBut()
 {
     emit showBusyIndicator(true);
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
@@ -176,8 +176,6 @@ void DriveDS::dataReadFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "FILES" << resultJson;
-
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
 
@@ -230,7 +228,6 @@ void DriveDS::dataSearchFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "FILES" << resultJson;
 
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
@@ -298,7 +295,6 @@ void DriveDS::fileDownloadFinished()
     }else{
 
         QFileInfo f(this->newFileName);
-        qDebug() << this->newFileName << "FILENAME" << f.baseName().toUtf8();
 
         QString fileName = QDir::temp().tempPath() +"/" + this->newFileName;
         QFile file(fileName);
