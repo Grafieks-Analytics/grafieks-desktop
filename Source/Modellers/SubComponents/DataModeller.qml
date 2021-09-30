@@ -981,11 +981,11 @@ Item {
         DSParamsModel.setRunCalled(false);
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType ){
-            QueryModel.callSql(DSParamsModel.tmpSql)
+            QueryModel.callSql(DSParamsModel.tmpSql, true)
         } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
-            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql, true)
         } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-            ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
+            ExcelQueryModel.setQuery(DSParamsModel.tmpSql, true)
         }
     }
 
