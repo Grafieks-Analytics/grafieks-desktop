@@ -56,7 +56,7 @@ QtObject {
     property string hiveOdbc: qsTr("hive")
     property string impalaOdbc: qsTr("Apache Impala")
     property string mongoOdbc: qsTr("mongo")
-    property string mssqlOdbc: qsTr("Microsoft SQL Server")
+    property string mssqlOdbc: qsTr("SQL Server")
     property string oracleOdbc: qsTr("oracle")
     property string redshiftOdbc: qsTr("redshift")
     property string sqliteOdbc: qsTr("SQLite")
