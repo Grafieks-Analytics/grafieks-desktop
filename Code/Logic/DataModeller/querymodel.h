@@ -38,7 +38,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void callSql(QString tmpSql);
+    Q_INVOKABLE void callSql(QString tmpSql, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
 
@@ -79,6 +79,7 @@ private:
 
     QString existingWhereConditions;
     QString newWhereConditions;
+    bool queriedFromDataModeler;
 
     QThread extractThread;
     GeneralParamsModel *generalParamsModel;

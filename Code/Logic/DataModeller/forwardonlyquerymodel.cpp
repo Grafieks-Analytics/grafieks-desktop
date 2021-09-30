@@ -11,13 +11,14 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 
 }
 
-void ForwardOnlyQueryModel::setQuery(QString query)
+void ForwardOnlyQueryModel::setQuery(QString query, bool queriedFromDataModeler)
 {
 
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
     this->query = query.simplified();
+    this->queriedFromDataModeler = queriedFromDataModeler;
     querySplitter.setQueryForClasses(this->query);
 
 }
@@ -32,7 +33,9 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
         this->finalSql = this->query;
     }
 
-    this->finalSql += " WHERE " + this->newWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        this->finalSql += " WHERE " + this->newWhereConditions;
+
     this->finalSql += " limit " + QString::number(previewRowCount);
     this->generateRoleNames();
 
@@ -40,7 +43,14 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
-    QString extractQuery = this->query + " WHERE " + this->newWhereConditions;
+    QString extractQuery;
+    QString finalWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        finalWhereConditions = " WHERE " + this->newWhereConditions;
+
+    extractQuery = this->query + finalWhereConditions;
+
+
     SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
