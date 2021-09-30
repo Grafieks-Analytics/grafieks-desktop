@@ -53,7 +53,7 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
         Statics::onlineStorageType = Constants::sheetIntType;
 
         // Get Files list
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'&pageSize=1000"));
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 
 
@@ -75,7 +75,7 @@ void SheetDS::fetchDatasources()
 void SheetDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27&pageSize=1000"));
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataSearchFinished);
 }
 
@@ -86,7 +86,7 @@ void SheetDS::homeBut()
 {
     emit showBusyIndicator(true);
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'&pageSize=1000"));
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
 
