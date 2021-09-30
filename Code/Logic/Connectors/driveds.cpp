@@ -53,7 +53,7 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
         Statics::onlineStorageType = Constants::driveIntType;
 
         // Get files list
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&pageSize=1000"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 
     });
@@ -87,7 +87,7 @@ void DriveDS::homeBut()
 {
     emit showBusyIndicator(true);
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&pageSize=1000"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
