@@ -366,7 +366,7 @@
                                 //     "height",
                                 //     "calc(100vh - 142px)"
                                 // );
-                                  d3.selectAll("#my_dataviz").style(
+                                d3.selectAll("#my_dataviz").style(
                                     "margin-top",
                                     20 + "px"
                                 );
@@ -422,18 +422,20 @@
                     // }
 
                     // legends code ends
-                              var legendWidth = document.querySelector("#legend").offsetWidth;
-                console.log({ legendWidth });
-                if (legendWidth <= window.innerWidth - 50) {
-                    console.log(window.innerWidth);
+                    var legendWidth =
+                        document.querySelector("#legend").offsetWidth;
                     console.log({ legendWidth });
-                    rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
-                } else {
-                    rightPosition = 0;
-                }
-                if (legendPosition == "top" || legendPosition == "bottom") {
-                    d3.select("#legend").style("right", rightPosition);
-                }
+                    if (legendWidth <= window.innerWidth - 50) {
+                        console.log(window.innerWidth);
+                        console.log({ legendWidth });
+                        rightPosition =
+                            "calc(45vw - " + legendWidth / 2 + "px)";
+                    } else {
+                        rightPosition = 0;
+                    }
+                    if (legendPosition == "top" || legendPosition == "bottom") {
+                        d3.select("#legend").style("right", rightPosition);
+                    }
 
                     var funnelSvg = document.querySelectorAll("svg g");
                     funnelSvg.forEach((e) => {
@@ -448,6 +450,12 @@
                             // );
                             var value = e.querySelector("text tspan").innerHTML;
                             var valueTooltip = value.split(":");
+                            if (!toolTip) {
+                                toolTip = {
+                                    textColumn1: label[0],
+                                    textColumn2: label[1],
+                                };
+                            }
 
                             // console.log(event.clientX);
                             d3.select("#tooltip")
@@ -461,7 +469,7 @@
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
-                                        label[0] +
+                                        toolTip.textColumn1 +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -469,7 +477,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        label[1] +
+                                        toolTip.textColumn2 +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
@@ -493,7 +501,6 @@
                 } catch (error) {
                     console.log(error);
                 }
-      
             }
 
             drawChart(data);

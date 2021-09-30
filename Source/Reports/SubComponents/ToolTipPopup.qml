@@ -11,7 +11,7 @@ import "./MiniSubComponents";
 Popup {
 
     id: toolTipPopup
-    width: parent.width * 0.5
+    width: 600
     height: 400
     anchors.centerIn: parent
 
@@ -185,7 +185,7 @@ Popup {
         spacing: 300
 
 
-    //         Column{
+            Column{
     //             id:firstCol
     //             spacing: 100
 
@@ -386,7 +386,7 @@ anchors.top:xAxisListModelList.bottom
             textLabel:"colorData"
         }
     }
-// }
+}
 
     }
 
