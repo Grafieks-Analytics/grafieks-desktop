@@ -53,7 +53,7 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
         Statics::onlineStorageType = Constants::driveIntType;
 
         // Get files list
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&pageSize=1000"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 
     });
@@ -76,7 +76,7 @@ void DriveDS::fetchDatasources()
 void DriveDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"'"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"' and (mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataSearchFinished);
 }
 
@@ -87,7 +87,7 @@ void DriveDS::homeBut()
 {
     emit showBusyIndicator(true);
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&pageSize=1000"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
