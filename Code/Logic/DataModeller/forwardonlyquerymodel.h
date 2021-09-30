@@ -27,7 +27,7 @@ public:
     explicit ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
     ~ForwardOnlyQueryModel();
 
-    Q_INVOKABLE void setQuery(QString query);
+    Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
 
@@ -69,6 +69,7 @@ private:
 
     QString existingWhereConditions;
     QString newWhereConditions;
+    bool queriedFromDataModeler;
 
 signals:
 

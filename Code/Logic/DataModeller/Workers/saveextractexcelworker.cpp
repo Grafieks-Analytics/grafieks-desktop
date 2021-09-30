@@ -109,11 +109,11 @@ void SaveExtractExcelWorker::run()
 
                 appendExtractData(&appender, &query);
             } else {
-                qDebug() << "ELSE BLOCK3";
+                qDebug() << "ELSE BLOCK3" << createT->error.c_str();
                 errorMsg = createT->error.c_str();
             }
         } else {
-            qDebug() << "ELSE BLOCK2";
+            qDebug() << "ELSE BLOCK2" << query.lastError().text();
             errorMsg = query.lastError().text();
         }
     } else {

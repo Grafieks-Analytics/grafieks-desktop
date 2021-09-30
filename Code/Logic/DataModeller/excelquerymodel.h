@@ -40,11 +40,12 @@ class ExcelQueryModel : public QAbstractTableModel
 
     QString exisitingWhereConditions;
     QString newWhereConditions;
+    bool queriedFromDataModeler;
 
 public:
     explicit ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
 
-    Q_INVOKABLE void setQuery(QString query);
+    Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
 
     Q_INVOKABLE void saveExtractData();
