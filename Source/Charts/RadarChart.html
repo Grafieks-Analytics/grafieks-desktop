@@ -152,6 +152,7 @@
                     paddingInner,
                     markerShape,
                     curveType,
+                    toolTip,
                     // font size
                     xLabelfontSize = defaultD3Config.fontSize,
                     yLabelfontSize = defaultD3Config.fontSize,
@@ -215,6 +216,12 @@
                 if (radius < 0) {
                     radius = 2;
                 }
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: label[0],
+                        textColumn2: label[1],
+                    };
+                }
 
                 var radarChartOptions = {
                     w: width,
@@ -227,7 +234,7 @@
                     radius,
                 };
 
-                RadarChart("#my_dataviz", dataValues, radarChartOptions,label);
+                RadarChart("#my_dataviz", dataValues, radarChartOptions, label,toolTip);
                 d3.selectAll(".axisLabel")
                     .style("font-size", xTickfontSize)
                     .style("font-family", xTickfontFamily)
@@ -240,7 +247,7 @@
                 //Call function to draw the Radar chart
             }
 
-            // drawChart(data);
+            drawChart(data);
         </script>
     </body>
 </html>

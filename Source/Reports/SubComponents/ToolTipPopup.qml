@@ -408,6 +408,7 @@ anchors.top:xAxisListModelList.bottom
                 
             //    d3PropertyConfig.toolTip={textColumn1:toolTipText1.text,textColumn2:toolTipText2.text}
                 // reDrawChart();
+                toolTipPopup.visible = false
             }
         }
     }

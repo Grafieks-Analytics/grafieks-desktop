@@ -118,6 +118,7 @@
                         d3colorPalette = defaultD3Config.d3ColorPalette,
                         dynamicHeight = defaultD3Config.defaultDynamicHeight,
                         bottomPinch = defaultD3Config.defaultBottomPinch,
+                        toolTip,
                         labelConfig = defaultD3Config.defaultlabelConfig,
                         legendConfig = defaultD3Config.defaultLegendConfig,
                         dataLabelfontSize = defaultD3Config.fontSize,
@@ -168,6 +169,12 @@
                             fontFamily: dataLabelfontFamily,
                         },
                     };
+                      if (!toolTip) {
+                                toolTip = {
+                                    textColumn1: label[0],
+                                    textColumn2: label[1],
+                                };
+                            }
 
                     chart.draw(data, options);
                     //  const note = document.querySelector(".d3-funnel-tooltip");
@@ -450,12 +457,7 @@
                             // );
                             var value = e.querySelector("text tspan").innerHTML;
                             var valueTooltip = value.split(":");
-                            if (!toolTip) {
-                                toolTip = {
-                                    textColumn1: label[0],
-                                    textColumn2: label[1],
-                                };
-                            }
+                          
 
                             // console.log(event.clientX);
                             d3.select("#tooltip")
