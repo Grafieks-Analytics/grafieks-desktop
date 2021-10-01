@@ -981,6 +981,7 @@
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     chartType = defaultD3Config.chartType,
                     curveType = defaultLineCurve,
+                    toolTip,
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
@@ -1045,7 +1046,15 @@
                 d3Colors = d3colorPalette;
 
                 stroke = d3Colors[0];
-                [xAxisLabel, colorData, yAxisLabel] = data[2];
+                [xAxisLabel, yAxisLabel, colorData] = data[2];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                        colorData: colorData,
+                    };
+                }
+
                 // colorData = "colorData";
                 // console.log({ data });
 
@@ -1593,7 +1602,7 @@
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
-                                        xAxisLabel +
+                                        toolTip.textColumn1 +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1601,7 +1610,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        colorData +
+                                        toolTip.textColumn2 +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1609,7 +1618,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        yAxisLabel +
+                                        toolTip.colorData +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +

@@ -335,7 +335,12 @@
         var extraHeight = 0;
 
         // [Tag: Date Change]
-        function transformData(dataValue, dataColumns = {}, dateFormat, dateFormat1) {
+        function transformData(
+            dataValue,
+            dataColumns = {},
+            dateFormat,
+            dateFormat1
+        ) {
             json = {};
             var isKey1Date = false;
             var isKey2Date = false;
@@ -410,6 +415,7 @@
             var tooltipColumn2 = "test2";
             var [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
 
+
             let {
                 d3colorPalette,
                 paddingInner,
@@ -419,7 +425,7 @@
                 dateFormat1,
                 chartType,
                 toolTip,
-                dataColumns,            // [Tag: Date Change]
+                dataColumns, // [Tag: Date Change]
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig = defaultD3Config.defaultlabelConfig,
                 gridConfig = defaultD3Config.defaultGridConfig,
@@ -470,10 +476,13 @@
             d3.selectAll("#my_dataviz").html("");
             d3.selectAll("#yAxisDiv").html("");
             d3.selectAll("#legend").html("");
-
-            if (!d3colorPalette) {
-                d3colorPalette = defaultD3Config.d3ColorPalette;
-            }
+            var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+            // if (colorByData[0].itemName == xAxisColumnDetails[0].itemName){
+                
+            // }
+                if (!d3colorPalette) {
+                    d3colorPalette = defaultD3Config.d3ColorPalette;
+                }
             d3Colors = d3colorPalette;
 
             if (!paddingInner) {
@@ -509,7 +518,7 @@
 
             var [data, keys, labels] = transformData(
                 data[0],
-                dataColumns,    // [Tag: Date Change]  
+                dataColumns, // [Tag: Date Change]
                 dateFormat,
                 dateFormat1
             );
@@ -759,7 +768,7 @@
                 toolTip = {
                     textColumn1: labels && labels[0],
                     textColumn2: labels && labels[1],
-                    textColumn3: labels && labels[2],
+                    colorData: labels && labels[2],
                 };
             }
 
@@ -990,7 +999,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                toolTip.textColumn3 +
+                                toolTip.colorData +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
@@ -1066,9 +1075,10 @@
                     .attr("font-size", dataLabelfontSize)
                     .attr("fill", dataLabelColor)
                     .text(function (d) {
-                        return  labelFormatSet(
-                            d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0
-                        , labelFormat);
+                        return labelFormatSet(
+                            d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0,
+                            labelFormat
+                        );
                     });
             }
             d3.selectAll("#yAxisDiv text")
@@ -1297,6 +1307,6 @@
         //     drawChart(data);
         // });
 
-        drawChart(data);
+        drawChart(data,{"dataColumns":{"xAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[{"columnName":"City","itemType":"Categorical"}]},"toolTip":{"textColumn1":"city","colorData":"city","textColumn2":"dd"}});
     </script>
 </body>
