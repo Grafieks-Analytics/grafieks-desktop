@@ -155,7 +155,11 @@ void SheetDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QString fileName = QDir::temp().tempPath() +"/" + this->gFileName.toStdString().c_str() +".xlsx";
+
+        QString fileNameTmp = this->gFileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+
+        QString fileName = QDir::temp().tempPath() +"/" + fileNameTmp +".xlsx";
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());
