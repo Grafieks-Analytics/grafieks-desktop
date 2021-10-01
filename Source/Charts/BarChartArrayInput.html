@@ -727,7 +727,10 @@
                         // console.log(dataset[i]);
                         label.setAttribute("y", labelYPosition - 12);
                         label.setAttribute("fill", dataLabelColor);
-                        label.textContent = labelFormatSet(dataset[i], labelFormat);
+                        label.textContent = labelFormatSet(
+                            dataset[i],
+                            labelFormat
+                        );
                         label.setAttribute(
                             "display",
                             labelYPosition > 500 ? "none" : ""

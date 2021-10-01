@@ -415,7 +415,6 @@
             var tooltipColumn2 = "test2";
             var [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
 
-
             let {
                 d3colorPalette,
                 paddingInner,
@@ -478,11 +477,11 @@
             d3.selectAll("#legend").html("");
             var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
             // if (colorByData[0].itemName == xAxisColumnDetails[0].itemName){
-                
+
             // }
-                if (!d3colorPalette) {
-                    d3colorPalette = defaultD3Config.d3ColorPalette;
-                }
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
             d3Colors = d3colorPalette;
 
             if (!paddingInner) {
@@ -1307,6 +1306,30 @@
         //     drawChart(data);
         // });
 
-        drawChart(data,{"dataColumns":{"xAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[{"columnName":"City","itemType":"Categorical"}]},"toolTip":{"textColumn1":"city","colorData":"city","textColumn2":"dd"}});
+        drawChart(data, {
+            dataColumns: {
+                xAxisColumnDetails: [
+                    {
+                        itemName: "Category",
+                        itemType: "Categorical",
+                        dateFormat: "%Y",
+                    },
+                ],
+                yAxisColumnDetails: [
+                    {
+                        itemName: "Sales",
+                        itemType: "Numerical",
+                        dateFormat: "%Y",
+                    },
+                ],
+                row3ColumnDetails: [],
+                colorByData: [{ columnName: "City", itemType: "Categorical" }],
+            },
+            toolTip: {
+                textColumn1: "city",
+                colorData: "city",
+                textColumn2: "dd",
+            },
+        });
     </script>
 </body>
