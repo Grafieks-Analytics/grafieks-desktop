@@ -698,7 +698,6 @@ void ChartsThread::getScatterChartValues()
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
