@@ -698,7 +698,6 @@ void ChartsThread::getScatterChartValues()
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
@@ -839,7 +838,7 @@ void ChartsThread::getHeatMapChartValues()
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
+    QHash<QString, int> masterKeywordList;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
@@ -873,6 +872,7 @@ void ChartsThread::getHeatMapChartValues()
 
     // Populate the actual data
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
@@ -880,7 +880,8 @@ void ChartsThread::getHeatMapChartValues()
             yAxisTmpData = 0.0;
 
             if(!masterKeywordList.contains(masterKeyword)){
-                masterKeywordList.append(masterKeyword);
+                masterKeywordList.insert(masterKeyword, counter);
+                counter++;
 
                 try{
                     tmpData.append(xAxisDataPointer->at(i));
@@ -894,7 +895,7 @@ void ChartsThread::getHeatMapChartValues()
 
             } else{
 
-                index = masterKeywordList.indexOf(masterKeyword);
+                index = masterKeywordList.value(masterKeyword);
                 yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
                 tmpData.append(xAxisDataPointer->at(i));
@@ -1169,7 +1170,7 @@ void ChartsThread::getMultiLineChartValues()
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
+    QHash<QString, int> masterKeywordList;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
@@ -1210,7 +1211,7 @@ void ChartsThread::getMultiLineChartValues()
 
                 masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
 
-                masterKeywordList.append(masterKeyword);
+                masterKeywordList.insert(masterKeyword, j);
 
                 tmpData.clear();
                 tmpData.append(xAxisDataPointerPre.at(i));
@@ -1233,7 +1234,7 @@ void ChartsThread::getMultiLineChartValues()
             tmpData.clear();
             yAxisTmpData = 0.0;
 
-            index = masterKeywordList.indexOf(masterKeyword);
+            index = masterKeywordList.value(masterKeyword);
             yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
             tmpData.append(xAxisDataPointer->at(i));
@@ -1357,16 +1358,16 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     json emptyJsonArray(json_array_arg);
     QMap<QString, int> positions;
     QMap<int, QString> pastHashKeyword;
-    long measure = 0;
-    int total = 0;
+    float measure = 0;
+    float total = 0;
 
     json *jsonPointer = new json;
     json *jsonPointerMeasure = new json;
-    QScopedPointer<QMap<QString, long>> totalCount(new QMap<QString, long>);
+    QScopedPointer<QMap<QString, float>> totalCount(new QMap<QString, float>);
 
     // masterHash will be used to compare if any map has been generated earlier
     // if there is an exact match with the hash, then it exists. Else create a new hash
-    QScopedPointer<QStringList> masterHash(new QStringList);
+    QScopedPointer<QHash<QString, int>> masterHash(new QHash<QString, int>);
 
     // Fetch data from extract
     QString tableName = this->getTableName();
@@ -1394,18 +1395,22 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     int totalXCols = xDataList->ColumnCount();
 
 
-
     // Considering the measure as string here to avoid unwanted errors in wrong casting
     // The front in javascript can easily handle this
 
     try{
+        float x = 0;
         for(int i = 0; i < totalRows; i++){
 
-            measure = yDataList->GetValue<float>(0, i);
+            QString measureString = yDataList->GetValue(0, i).ToString().c_str();
+            measure = measureString.toFloat();
+            x += measure;
+
 
             json tmpOutput;
             pastHashKeyword.clear();
 
+            int counter = 0;
             for(int j = 0; j < totalXCols; j++){
 
                 paramName = xDataList->GetValue(j, i).ToString().c_str();
@@ -1420,8 +1425,9 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
 
                 // If the hash doesnt exist, add to hash
-                if(!masterHash->contains(hashKeyword, Qt::CaseSensitive)){
-                    masterHash->append(hashKeyword);
+                if(!masterHash->contains(hashKeyword)){
+                    masterHash->insert(hashKeyword, counter);
+                    counter++;
                     totalCount->insert(hashKeyword, measure);
 
                     tmpOutput["name"] = paramName.toStdString();
@@ -1467,7 +1473,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
                 } else{
 
-                    long newValue = totalCount->value(hashKeyword) + measure;
+                    float newValue = totalCount->value(hashKeyword) + measure;
                     totalCount->insert(hashKeyword, newValue);
                     pastHashKeyword.insert(j, hashKeyword);
 
@@ -1532,121 +1538,113 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
 {
 
-    QJsonArray data;
-    QVariantList tmpData;
-    float yAxisTmpData;
+        QJsonArray data;
+        QVariantList tmpData;
+        float yAxisTmpData;
 
-    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> splitDataPointer(new QStringList);
+        QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
+        QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
+        QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+        auto dataList = this->queryFunction(queryString);
 
-    // Order of QMap - xAxisCol, SplitKey, Value
-    QHash<QString, int> masterKeywordHash;
-    QString masterKeyword;
-    QStringList xAxisDataPointerPre;
-    QStringList splitDataPointerPre;
+        // Order of QMap - xAxisCol, SplitKey, Value
+        QHash<QString, int> masterKeywordList;
+        QString masterKeyword;
+        QStringList xAxisDataPointerPre;
+        QStringList splitDataPointerPre;
 
-    // Fetch data here
+        // Fetch data here
 
-    int totalRows = dataList->collection.Count();
+        int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
-    }
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+        }
 
-    qDebug() << "SPEED 1";
+        // Fetch unique xAxisData & splitter
+        xAxisDataPointerPre.removeDuplicates();
+        splitDataPointerPre.removeDuplicates();
 
-    // Fetch unique xAxisData & splitter
-    xAxisDataPointerPre.removeDuplicates();
-    splitDataPointerPre.removeDuplicates();
+        int index;
+        QJsonArray colData;
 
-    qDebug() << "SPEED 2";
+        // Pre - Populate the json array
+        try{
+            for(int i = 0; i < xAxisDataPointerPre.length(); i++){
 
-    int index;
-    QJsonArray colData;
+                for(int j = 0; j < splitDataPointerPre.length(); j++){
 
-    // Pre - Populate the json array
-    try{
-        for(int i = 0; i < xAxisDataPointerPre.length(); i++){
+                    masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
 
-            for(int j = 0; j < splitDataPointerPre.length(); j++){
+                    masterKeywordList.insert(masterKeyword, j);
 
-                masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
+                    tmpData.clear();
+                    tmpData.append(xAxisDataPointerPre.at(i));
+                    tmpData.append(splitDataPointerPre.at(j));
+                    tmpData.append(0);
 
-                masterKeywordHash.insert(masterKeyword, i);
-
-                tmpData.clear();
-                tmpData.append(xAxisDataPointerPre.at(i));
-                tmpData.append(splitDataPointerPre.at(j));
-                tmpData.append(0);
-
-                colData.append(QJsonArray::fromVariantList(tmpData));
+                    colData.append(QJsonArray::fromVariantList(tmpData));
+                }
             }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    qDebug() << "SPEED 3";
 
 
-    // Populate the actual data
-    try{
-        for(int i = 0; i < xAxisDataPointer->length(); i++){
+        // Populate the actual data
+        try{
+            for(int i = 0; i < xAxisDataPointer->length(); i++){
 
-            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
-            tmpData.clear();
-            yAxisTmpData = 0.0;
+                masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+                tmpData.clear();
+                yAxisTmpData = 0.0;
 
-            index = masterKeywordHash.value(masterKeyword);
-            yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
+                index = masterKeywordList.value(masterKeyword);
+                yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
-            tmpData.append(xAxisDataPointer->at(i));
-            tmpData.append(splitDataPointer->at(i));
-            tmpData.append(yAxisTmpData);
+                tmpData.append(xAxisDataPointer->at(i));
+                tmpData.append(splitDataPointer->at(i));
+                tmpData.append(yAxisTmpData);
 
-            colData.replace(index, QJsonArray::fromVariantList(tmpData));
+                colData.replace(index, QJsonArray::fromVariantList(tmpData));
 
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
 
-    qDebug() << "SPEED 4";
-
-    QJsonArray columns;
-    columns.append(xSplitKey);
-    columns.append(yAxisColumn);
+        QJsonArray columns;
+        columns.append(xSplitKey);
+        columns.append(yAxisColumn);
 
 
-    data.append(colData);
-    data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
-    data.append(QJsonArray::fromStringList(splitDataPointerPre));
-    data.append(columns);
+        data.append(colData);
+        data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+        data.append(QJsonArray::fromStringList(splitDataPointerPre));
+        data.append(columns);
 
-    QJsonDocument doc;
-    doc.setArray(data);
+        QJsonDocument doc;
+        doc.setArray(data);
 
-    QString strData = doc.toJson(QJsonDocument::Compact);
+        QString strData = doc.toJson(QJsonDocument::Compact);
 
-    if(identifier == "getStackedBarChartValues"){
-        emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    } else if(identifier == "getStackedAreaChartValues") {
-        emit signalStackedAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    } else{
-        emit signalStackedBarAreaValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    }
+        if(identifier == "getStackedBarChartValues"){
+            emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        } else if(identifier == "getStackedAreaChartValues") {
+            emit signalStackedAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        } else{
+            emit signalStackedBarAreaValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+        }
 
 }
 

@@ -135,6 +135,14 @@ Page {
             }
         }
 
+        function onExcelLoginOdbcStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = ExcelDataModel.getTableList()
+                queryModellerTab.visible = false
+            }
+        }
+
         function onCsvLoginStatus(status){
             if(status.status === true){
                 // Call functions
