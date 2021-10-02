@@ -92,13 +92,14 @@
                 return originalData;
             }
 
-            function transformData(dataValue, dateFormat) {
+            function transformData(dataValue, dataColumns = {}, dateFormat) {
                 var transformedDataValue = {};
                 var globalKeys = [];
 
                 var isKey1Date = false;
 
-                if (isDateFormat(dataValue[0][0].mainCategory)) {
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     isKey1Date = true;
                 }
 
@@ -184,6 +185,7 @@
                     dateFormat,
                     chartType,
                     toolTip,
+                    dataColumns,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -264,7 +266,7 @@
                         defaultD3Config.standardThresholdWidth;
                 }
 
-                data = transformData(data, dateFormat);
+                data = transformData(data, dataColumns, dateFormat);
 
                 var [data, all_keys, labels, legendNames] = data;
                 console.log({ legendNames });
