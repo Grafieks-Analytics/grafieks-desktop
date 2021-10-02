@@ -285,9 +285,14 @@
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
+            if (!toolTip) {
+                toolTip = {
+                    textColumn1: xAxisLabel,
+                    textColumn2: yAxisLabel,
+                };
+            }
 
-              labelStatus = labelConfig.labelStatus;
-            
+            labelStatus = labelConfig.labelStatus;
 
             d3.selectAll("#my_dataviz").html("");
             (margin = { top: 30, right: 30, bottom: 70, left: 60 }),

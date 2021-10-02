@@ -174,10 +174,11 @@
 
                 d3.selectAll("#yAxisDiv").html("");
 
-                const {
+                let {
                     f,
                     margin,
                     paddingInner,
+                    toolTip,
                     chartType = constants.chartType.FIT_WIDTH,
                     dateFormat = defaultD3Config.dateFormat,
                     // legendStatus: {
@@ -186,7 +187,8 @@
                     // } = defaultD3Config.defaultLegendConfig,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig: {
-                        labelStatus,labelFormat
+                        labelStatus,
+                        labelFormat,
                     } = defaultD3Config.defaultlabelConfig,
                     gridConfig: {
                         gridStatus,
@@ -236,6 +238,13 @@
                 if (!legendStatus) {
                     legendWidth = 0;
                 }
+                  if (!toolTip) {
+                    toolTip = {
+                        textColumn1: data[1][0],
+                        textColumn2: data[1][1],
+                    };
+                }
+
 
                 var width = window.innerWidth - margin.left - margin.right;
                 var height =
@@ -248,8 +257,9 @@
                 var [dataValues, labels] = transformData(data, dateFormat);
 
                 var keys = ["Increase", "Decrease", "Total"];
-                const [xAxisLabel, yAxisLabel] = data[1];
+                var [xAxisLabel, yAxisLabel] = data[1];
 
+              
                 const _data = waterfallData(dataValues);
                 window.clearChart && clearChart();
 
@@ -349,7 +359,7 @@
                                 "margin-left",
                                 legendWidth
                             );
-                               d3.selectAll("#my_dataviz").style(
+                            d3.selectAll("#my_dataviz").style(
                                 "margin-top",
                                 0 + "px"
                             );
@@ -419,7 +429,7 @@
                                 .style("white-space", "nowrap")
                                 .style("overflow", "hidden")
                                 .style("text-overflow", "ellipsis");
-                                   d3.selectAll("#my_dataviz").style(
+                            d3.selectAll("#my_dataviz").style(
                                 "margin-top",
                                 0 + "px"
                             );
@@ -457,7 +467,7 @@
                                 "margin-left",
                                 0
                             );
-                               d3.selectAll("#my_dataviz").style(
+                            d3.selectAll("#my_dataviz").style(
                                 "margin-top",
                                 0 + "px"
                             );
@@ -595,7 +605,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    xAxisLabel +
+                                    toolTip.textColumn1  +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -603,7 +613,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    yAxisLabel +
+                                    toolTip.textColumn2 +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
@@ -668,10 +678,12 @@
                             "dy",
                             (d) => (d.class === "negative" ? "-" : "") + ".75em"
                         )
-                        .text((d) => labelFormatSet( f(d.end - d.start) ,labelFormat))
+                        .text((d) =>
+                            labelFormatSet(f(d.end - d.start), labelFormat)
+                        )
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
-                        .attr("fill",  dataLabelColor);
+                        .attr("fill", dataLabelColor);
                     // .text(d => f(d.value))
                 }
                 d3.selectAll(".x-axis text")

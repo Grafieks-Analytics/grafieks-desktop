@@ -11,7 +11,6 @@
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
-        
 
         <style type="text/css">
             body {
@@ -80,7 +79,7 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            // drawChart(dataset);
+            drawChart(dataset);
 
             function transformData(dataValues, dateFormat) {
                 var valueDateType = false;
@@ -185,6 +184,12 @@
                 dataValues = transformData(dataValues, dateFormat);
                 window.chartDataValues = dataValues;
                 [xAxisLabel, yAxisLabel] = data[1];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
 
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
                 width = window.innerWidth - margin.left - margin.right - 20;
@@ -573,7 +578,7 @@
                     .call(yAxis);
 
                 if (markerStatus && curveType == constants.cureveType.LINEAR) {
-                    drawMarker(filledStatus, markerShape);
+                    drawMarker(filledStatus, markerShape, toolTip);
                 }
 
                 setLabel(
@@ -830,10 +835,16 @@
                 }
             }
 
-            function drawMarker(fillStatus, markerShape) {
+            function drawMarker(fillStatus, markerShape, toolTip) {
                 dateformatValue = function (value) {
                     return value;
                 };
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
 
                 let dataValues = window.chartDataValues,
                     fill = "#ffffff",
@@ -918,7 +929,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    xAxisLabel +
+                                    toolTip.textColumn1 +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -926,7 +937,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    yAxisLabel +
+                                    toolTip.textColumn2 +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +

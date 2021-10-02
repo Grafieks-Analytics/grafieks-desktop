@@ -220,10 +220,7 @@
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     dateFormat = defaultD3Config.dateFormat,
                     chartType = defaultD3Config.horizontalChartType,
-                    toolTip = {
-                        textColumn1: "labels[0]",
-                        textColumn2: "labels[1]",
-                    },
+                    toolTip,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -680,7 +677,7 @@
 
                 // line chart
                 var line = d3
-                  .area()
+                    .area()
                     .y(function (d, i) {
                         return yScale(d[0]);
                     })
@@ -730,7 +727,7 @@
                     .call(xAxis);
 
                 if (markerStatus) {
-                    drawMarker(filledStatus, markerShape);
+                    drawMarker(filledStatus, markerShape, toolTip);
                 }
                 var yAxis = d3.axisLeft(yScale);
                 if (labelStatus) {
@@ -907,10 +904,16 @@
                 }
             }
 
-            function drawMarker(fillStatus, markerShape) {
+            function drawMarker(fillStatus, markerShape, toolTip) {
                 dateformatValue = function (value) {
                     return value;
                 };
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
 
                 let dataValues = window.chartDataValues,
                     fill = "#ffffff",
@@ -994,7 +997,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    xAxisLabel +
+                                     toolTip.textColumn1 +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -1002,7 +1005,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    yAxisLabel +
+                                    toolTip.textColumn2 +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +

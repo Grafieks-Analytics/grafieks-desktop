@@ -230,15 +230,16 @@
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             d3.selectAll("#my_dataviz").html("");
-            console.log(data[1])
-            xAxisLabel = data[1][0]
-            yAxisLabel = data[1][1]
-            colorData = data[1][2]
+            console.log(data[1]);
+            xAxisLabel = data[1][0];
+            yAxisLabel = data[1][1];
+            colorData = data[1][2];
 
             let {
                 d3colorPalette,
                 paddingInner,
                 innerRadius,
+                toolTip,
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig = defaultD3Config.defaultlabelConfig,
                 gridConfig = defaultD3Config.defaultGridConfig,
@@ -294,6 +295,13 @@
 
             if (!innerRadius) {
                 innerRadius = defaultD3Config.innerRadius;
+            }
+            if (!toolTip) {
+                toolTip = {
+                    textColumn1: xAxisLabel,
+                    textColumn2: yAxisLabel,
+                    colorData: colorData,
+                };
             }
 
             // set the dimensions and margins of the graph
@@ -638,7 +646,7 @@
                             return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
-                                xAxisLabel +
+                                toolTip.textColumn1 +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -646,66 +654,65 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                yAxisLabel +
+                                toolTip.textColumn2 +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                d[1]+
-                                "</span>"+
+                                d[1] +
+                                "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                colorData +
+                                toolTip.colorData +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                d[2]+
+                                d[2] +
                                 "</span>"
                             );
                         });
-                              var scrollVal =
-                            document.querySelector("#my_dataviz").scrollLeft;
+                    var scrollVal =
+                        document.querySelector("#my_dataviz").scrollLeft;
 
-                        if (
-                            x_pos - scrollVal >
-                            document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth -
-                                40
-                        ) {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos -
-                                    scrollVal -
-                                    document.querySelector("#tooltip")
-                                        .clientWidth +
-                                    70 +
-                                    "px"
-                            );
+                    if (
+                        x_pos - scrollVal >
+                        document.documentElement.clientWidth -
+                            document.querySelector("#tooltip").clientWidth -
+                            40
+                    ) {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos -
+                                scrollVal -
+                                document.querySelector("#tooltip").clientWidth +
+                                70 +
+                                "px"
+                        );
 
-                            d3.select(".arrowTooltip")
-                                //  document.querySelector("#tooltip:before")
-                                // .style("height","50px";"width","50px";"background-color","red";")
+                        d3.select(".arrowTooltip")
+                            //  document.querySelector("#tooltip:before")
+                            // .style("height","50px";"width","50px";"background-color","red";")
 
-                                .attr(
-                                    "style",
-                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
-                                );
-                        } else {
-                            d3.select("#tooltip").style(
-                                "left",
-                                x_pos - scrollVal + 95 + "px"
-                            );
-
-                            d3.select(".arrowTooltip").attr(
+                            .attr(
                                 "style",
-                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
                             );
-                        }
-                        
+                    } else {
+                        d3.select("#tooltip").style(
+                            "left",
+                            x_pos - scrollVal + 95 + "px"
+                        );
+
+                        d3.select(".arrowTooltip").attr(
+                            "style",
+                            "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                        );
+                    }
+
                     d3.select(".scatter" + i + d[2]);
 
                     d3.select(this).attr("r", 10);
                 })
-                
+
                 .on("mouseout", function (d, i) {
                     d3.select("#tooltip").style("display", "none");
                     d3.select(".scatter" + i + d[2]);
@@ -751,7 +758,7 @@
             setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
         }
 
-        // drawChart(data);
+        drawChart(data);
 
         // Generate Grid ends
         // });
