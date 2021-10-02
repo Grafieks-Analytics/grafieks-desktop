@@ -37,7 +37,7 @@ Rectangle{
         function onCurrentReportChanged(reportId){
 
             let dashboardId = DashboardParamsModel.currentDashboard
-            opacitySpinBox.value = DashboardParamsModel.getReportOpacity(dashboardId, reportId)
+//              opacitySpinBox.value = DashboardParamsModel.getReportOpacity(dashboardId, reportId)
         }
     }
 
