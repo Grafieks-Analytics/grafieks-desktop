@@ -365,6 +365,14 @@
                     minHeight = 0;
                 }
 
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: labels[0],
+                        textColumn2: labels[1],
+                        textColumn3: labels[2],
+                    };
+                }
+
                 const yAxisWidth =
                     document.querySelector("#yAxisDiv").clientWidth;
 
@@ -819,7 +827,7 @@
                                         return (
                                             "<div class='arrowTooltip'></div>" +
                                             "<span style='color:grey;''>" +
-                                            labels[0] +
+                                            toolTip.textColumn1 +
                                             ":&nbsp;&nbsp;" +
                                             "</span>" +
                                             "<span style='float: right;'>" +
@@ -827,7 +835,7 @@
                                             "</span>" +
                                             "<br/> <br/>" +
                                             "<span style='color:grey;''>" +
-                                            labels[1] +
+                                            toolTip.textColumn2 +
                                             ":" +
                                             "</span>" +
                                             "<span style='float: right;margin-left: 15px;'>" +
@@ -835,7 +843,7 @@
                                             "</span>" +
                                             "<br/> <br/>" +
                                             "<span style='color:grey;''>" +
-                                            labels[2] +
+                                            toolTip.textColumn3 +
                                             ":" +
                                             "</span>" +
                                             "<span style='float: right;margin-left: 15px;'>" +
@@ -927,10 +935,10 @@
                                 .attr("class", "label")
                                 // yScale1.bandwidth()
                                 .attr("y", (d) => {
-                                    return yScale1(d.name) +8; // y = yScale1
+                                    return yScale1(d.name) + 8; // y = yScale1
                                 })
                                 .text(function (d) {
-                                    return   labelFormatSet(d.value, labelFormat);
+                                    return labelFormatSet(d.value, labelFormat);
                                 })
                                 .attr("font-family", dataLabelfontFamily)
                                 .attr("font-size", dataLabelfontSize)
@@ -1153,7 +1161,7 @@
                 ["Category", "Sub-category", "Sales"],
             ];
 
-            // drawChart(data);
+            drawChart(data);
         </script>
     </body>
 </html>
