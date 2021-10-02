@@ -182,6 +182,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             maxDropOnYAxis: 1
             maxDropOnXAxis: 5
+            axisSettingsDisabled: true
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Reference Line"
@@ -216,6 +217,7 @@ Rectangle{
             maxDropOnYAxis: 1
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
+            axisSettingsDisabled: true
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
             subMenuCustomizations: "color by,tool tip,size,data label,dynamic height,bottom pinch"
@@ -304,6 +306,7 @@ Rectangle{
             title:"Gauge Chart"
             mainCustomizations: ""
             subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            axisSettingsDisabled: true
             colorByDropEligible: ""
         }
         ListElement{
@@ -320,6 +323,7 @@ Rectangle{
             mainCustomizations: "Properties,Total"
             colorByDropEligible: ""
             subMenuCustomizations: "pivot theme,grand total,row total,sub total"
+            axisSettingsDisabled: true
         }
         ListElement{
             icon: "table.png"
@@ -332,6 +336,7 @@ Rectangle{
             title:"Table"
             mainCustomizations: "Total,Table Customization"
             subMenuCustomizations: "tool tip,size,data label,grand total"
+            axisSettingsDisabled: true
         }
         ListElement{
             icon: "kpi.png"
@@ -343,6 +348,7 @@ Rectangle{
             xAxisLabelName: "Values"
             mainCustomizations: "KPI Properties"
             subMenuCustomizations: "data label"
+            axisSettingsDisabled: true
         }
     }
 
@@ -392,6 +398,7 @@ Rectangle{
             var maxDropOnRow3Axis = allCharts.get(i).maxDropOnRow3Axis;
 
             var colorByDropEligible = allCharts.get(i).colorByDropEligible;
+            var axisSettingsDisabled = !!allCharts.get(i).axisSettingsDisabled;
 
            var disabled = !!allCharts.get(i).disabled;
             allChartsMapping[chartTitle] = {
@@ -399,7 +406,8 @@ Rectangle{
                 'maxDropOnYAxis': maxDropOnYAxis || -1,
                 'maxDropOnRow3Axis': maxDropOnRow3Axis || -1,
                 disabled,
-                colorByDropEligible
+                colorByDropEligible,
+                axisSettingsDisabled
             };
 
         }
@@ -574,6 +582,7 @@ Rectangle{
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: displayToolTipVisible
                 ToolTip.text: qsTr(title)
+
             }
 
         }
