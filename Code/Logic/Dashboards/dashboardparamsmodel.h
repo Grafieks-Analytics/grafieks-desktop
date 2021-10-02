@@ -204,7 +204,7 @@ public:
     int positionX() const;
     int zIndex() const;
     int dashboardCount() const;
-    int currentDashboard() const;    
+    int currentDashboard() const;
     int currentReport() const;
     int tmpCanvasHeight() const;
     int tmpCanvasWidth() const;
@@ -223,7 +223,7 @@ public slots:
     void setPositionX(int positionX);
     void setZIndex(int zIndex);
     void setDashboardCount(int dashboardCount);
-    void setCurrentDashboard(int currentDashboard);   
+    void setCurrentDashboard(int currentDashboard);
     void setCurrentReport(int currentReport);
     void setTmpCanvasHeight(int tmpCanvasHeight);
     void setTmpCanvasWidth(int tmpCanvasWidth);
@@ -263,6 +263,7 @@ signals:
 
 
     // Customize Report parameters
+    void reportNameChanged(int dashboardId, int widgetId, QString reportName);
     void reportBackgroundColorChanged(int dashboardId, int widgetId, QString color);
     void reportLineColorChanged(int dashboardId, int widgetId, QString color);
     void reportUrlChanged(int dashboardId, int widgetId, QString url);
