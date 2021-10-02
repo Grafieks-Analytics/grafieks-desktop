@@ -79,7 +79,6 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-        console.log(param)
         switch(param.toLowerCase()){
 
         case "grs":
@@ -326,7 +325,6 @@ Page {
         title: "Select a file"
 
         onAccepted: {
-            console.log("file chosen")
             messageDialog1.open()
         }
         onRejected: console.log("file rejected")
