@@ -125,7 +125,6 @@ QString QuerySplitter::getAliasName(QString columnString)
         list = columnString.split(separator);
     }
 
-    qDebug() << "LIST" << list;
     return list[1];
 }
 

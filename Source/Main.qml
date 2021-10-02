@@ -223,7 +223,6 @@ ApplicationWindow {
 
         onAccepted: {
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
-            console.log(readerFile)
             if(readerFile.includes(Constants.extractFileExt)){
                 ExtractProcessor.setArgumentsFromMenu(readerFile)
             } else if(readerFile.includes(Constants.workbookFileExt)){
@@ -481,7 +480,6 @@ ApplicationWindow {
             MenuItem{
                 text: qsTr("About")
                 onTriggered: {
-                    console.log("About clicked")
                     aboutPopup.open()
                 }
             }
