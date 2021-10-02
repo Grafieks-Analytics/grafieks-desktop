@@ -180,14 +180,12 @@
                 var valueDateType = false;
                 var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
                 if (yAxisColumnDetails[0].itemType == "Date") {
-                    isKey1Date = true;
+                    valueDateType = true;
+                    dateFormat = yAxisColumnDetails[0].dateFormat
                 }
-                // if (isDateFormat(dataValues[0][0])) {
-                //     valueDateType = true;
-                // }
                 var dateWiseResponse = {};
 
-                if (valueDateType) {
+                if (valueDateType && !redrawn) {
                     dataValues.forEach((dataRow) => {
                         var requiredTypeData = getDateFormattedData(
                             dataRow[0],
