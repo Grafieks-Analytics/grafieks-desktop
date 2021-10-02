@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
   OsEntries osEntries;
   osEntries.witeToWindowsRegistry();
 #elif Q_OS_MACX
-  qDebug() << "Mac & Linux versions not supported yet";
+  qDebug() <<Q_FUNC_INFO << "Mac & Linux versions not supported yet";
 #else
 #error "We don't support that version yet..."
 #endif
@@ -500,7 +500,7 @@ int main(int argc, char *argv[])
             workbookProcessor.setArgumentsByFile(fileToRead);
 
         } else {
-            qDebug() << "Unknown file";
+            qDebug() << Q_FUNC_INFO << "Unknown file";
         }
     }
     /***********************************************************************************************************************/

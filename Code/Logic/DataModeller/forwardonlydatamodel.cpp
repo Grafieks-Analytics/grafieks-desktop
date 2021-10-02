@@ -118,7 +118,6 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
 
             // Remove characters after `(` and then trim whitespaces
             QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-            qDebug() << "fieldTypeTrimmed" <<fieldTypeTrimmed << fieldName << fieldType;
 
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldTypeTrimmed);

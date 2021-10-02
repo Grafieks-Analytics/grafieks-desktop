@@ -32,7 +32,6 @@ bool FilterCsvJson::filteredValue(QVariant currentValue, QString valueList, cons
 
     bool output = false;
 
-    //    qDebug() << currentValue << valueList << slug << "SWITCH";
 
     switch(relationSlugs.indexOf(slug)){
 
