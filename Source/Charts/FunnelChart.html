@@ -29,7 +29,7 @@
     </head>
 
     <body>
-        <div id="my_dataviz" style="text-align: center; margin-top: 40px"></div>
+        <div id="my_dataviz" style="text-align: center"></div>
         <div id="tooltip"></div>
         <div id="legend"></div>
 
@@ -169,12 +169,12 @@
                             fontFamily: dataLabelfontFamily,
                         },
                     };
-                      if (!toolTip) {
-                                toolTip = {
-                                    textColumn1: label[0],
-                                    textColumn2: label[1],
-                                };
-                            }
+                    if (!toolTip) {
+                        toolTip = {
+                            textColumn1: label[0],
+                            textColumn2: label[1],
+                        };
+                    }
 
                     chart.draw(data, options);
                     //  const note = document.querySelector(".d3-funnel-tooltip");
@@ -182,6 +182,8 @@
                     // document.querySelector("d3-funnel-tooltip")
                     // legends code starts
                     d3.select("#legend").html("").style("padding", "");
+                    // d3.select("#my_dataviz").style("null");
+                    d3.select("#my_dataviz").style("padding-top", "40px");
                     if (legendStatus) {
                         d3.select("#legend").html("");
 
@@ -239,7 +241,7 @@
                         } else {
                             topPosition = 0;
                         }
-
+                        d3.select("#my_dataviz").style("padding-top", "0");
                         rightPosition =
                             "calc(50vw - " + legendWidth / 2 + "px)";
 
@@ -332,6 +334,10 @@
                                     "margin-top",
                                     60 + "px"
                                 );
+                                d3.select("#my_dataviz").style(
+                                    "padding-top",
+                                    "0"
+                                );
 
                                 // d3.selectAll("#legend div").style(
                                 //     "padding",
@@ -376,6 +382,10 @@
                                 d3.selectAll("#my_dataviz").style(
                                     "margin-top",
                                     20 + "px"
+                                );
+                                d3.select("#my_dataviz").style(
+                                    "padding-top",
+                                    "0"
                                 );
 
                                 break;
@@ -457,7 +467,6 @@
                             // );
                             var value = e.querySelector("text tspan").innerHTML;
                             var valueTooltip = value.split(":");
-                          
 
                             // console.log(event.clientX);
                             d3.select("#tooltip")
@@ -505,7 +514,7 @@
                 }
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>
