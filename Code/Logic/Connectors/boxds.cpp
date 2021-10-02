@@ -261,7 +261,6 @@ void BoxDS::dataReadFinished()
         // Get user email
 
         if(!emailSet){
-             qDebug() << "EMAIL SER" << emailSet;
             m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/users/me/"));
             connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
             emailSet = true;

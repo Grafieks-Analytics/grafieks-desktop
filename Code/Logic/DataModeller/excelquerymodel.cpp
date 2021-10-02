@@ -5,11 +5,12 @@ ExcelQueryModel::ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent) : QAb
     this->generalParamsModel = gpm;
 }
 
-void ExcelQueryModel::setQuery(QString query)
+void ExcelQueryModel::setQuery(QString query, bool queriedFromDataModeler)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
     this->query = query;
+    this->queriedFromDataModeler = queriedFromDataModeler;
 }
 
 void ExcelQueryModel::setPreviewQuery(int previewRowCount)
@@ -26,7 +27,14 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
 
     finalSqlInterPart = this->query.section(' ', 1);
-    this->finalSql = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart + " WHERE " + this->newWhereConditions;
+
+    QString finalWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        finalWhereConditions = " WHERE " + this->newWhereConditions;
+
+    this->finalSql = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart + finalWhereConditions;
+
+
     QSqlQuery query(this->finalSql, conExcel);
     QSqlRecord record = query.record();
 
@@ -79,7 +87,13 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
 void ExcelQueryModel::saveExtractData()
 {
-    QString extractQuery = this->query + + " WHERE " + this->newWhereConditions;
+    QString extractQuery;
+    QString finalWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        finalWhereConditions = " WHERE " + this->newWhereConditions;
+
+    extractQuery = this->query + finalWhereConditions;
+
     SaveExtractExcelWorker *saveExtractExcelWorker = new SaveExtractExcelWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractExcelWorker, &SaveExtractExcelWorker::saveExtractComplete, this, &ExcelQueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractExcelWorker, &SaveExtractExcelWorker::finished, saveExtractExcelWorker, &SaveExtractExcelWorker::deleteLater, Qt::QueuedConnection);

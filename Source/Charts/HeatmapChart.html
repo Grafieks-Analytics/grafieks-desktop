@@ -531,6 +531,7 @@
                     paddingInner,
                     markerShape,
                     curveType,
+                    toolTip,
                     dateFormat = defaultD3Config.dateFormat,
                     dateFormat1 = defaultD3Config.dateFormat,
                     legendConfig = defaultD3Config.defaultLegendConfig,
@@ -588,6 +589,13 @@
                     "yAxisLabel",
                     "Value",
                 ];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                        colorData: valueLabel,
+                    };
+                }
 
                 var [minValue, maxValue] = d3.extent(dataValues, function (d) {
                     return +d[2];
@@ -1021,7 +1029,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    xAxisLabel +
+                                    toolTip.textColumn1 +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -1029,7 +1037,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    yAxisLabel +
+                                    toolTip.textColumn2 +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -1037,7 +1045,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    valueLabel +
+                                    toolTip.colorData +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +

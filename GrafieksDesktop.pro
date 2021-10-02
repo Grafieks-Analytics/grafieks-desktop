@@ -29,7 +29,6 @@ SOURCES += \
     Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Connectors/teradatacon.cpp \
-    Code/Logic/Connectors/Workers/duckworker.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -43,7 +42,6 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
-    Code/Logic/Connectors/duckthread.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
@@ -151,7 +149,6 @@ HEADERS += \
     Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
     Code/Connectors/teradatacon.h \
-    Code/Logic/Connectors/Workers/duckworker.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
@@ -165,7 +162,6 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
-    Code/Logic/Connectors/duckthread.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \

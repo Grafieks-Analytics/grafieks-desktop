@@ -629,6 +629,7 @@
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     chartType = defaultD3Config.chartType,
                     curveType = defaultLineCurve,
+                    toolTip,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -692,6 +693,13 @@
                 var [dataValues, lineMainCategories, allKeys, label] =
                     transformData(data[0], dateFormat, dateFormat);
                 [xAxisLabel, colorData, yAxisLabel] = data[2];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                        colorData: colorData,
+                    };
+                }
 
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
@@ -1227,21 +1235,15 @@
                             }
                             return d[2];
                         })
-                        .attr(
-                           "x",
-                            function (d, i) {
-                                this.setAttribute("data-value-x", d[2]);
-                                this.setAttribute("data-value-y", d[0]);
+                        .attr("x", function (d, i) {
+                            this.setAttribute("data-value-x", d[2]);
+                            this.setAttribute("data-value-y", d[0]);
 
-                                return x(d[2]);
-                            }
-                        )
-                        .attr(
-                            "y",
-                            function (d) {
-                                return y(d[0]) + y.bandwidth() / 2;
-                            }
-                        )
+                            return x(d[2]);
+                        })
+                        .attr("y", function (d) {
+                            return y(d[0]) + y.bandwidth() / 2;
+                        })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor);
@@ -1313,6 +1315,7 @@
                             y_pos -= yScroll;
 
                             const xValue = dateformatValue(d[0]);
+                            const xValue1 = dateformatValue(d[1]);
                             const yValue = d[2];
 
                             d3.select("#tooltip")
@@ -1333,7 +1336,9 @@
                                         // "</div>"
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
-                                        xAxisLabel +
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        toolTip.textColumn1 +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1341,7 +1346,15 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        yAxisLabel +
+                                        toolTip.textColumn2 +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        xValue1 +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        toolTip.colorData +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
@@ -1422,7 +1435,7 @@
                 }
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>

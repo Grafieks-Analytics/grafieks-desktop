@@ -134,6 +134,7 @@
                 labelConfig,
                 dateFormat = defaultD3Config.dateFormat,
                 innerRadius,
+                toolTip,
                 dataLabelfontSize = defaultD3Config.fontSize,
                 dataLabelfontFamily = defaultD3Config.fontFamily,
                 dataLabelColor = defaultD3Config.fontColor,
@@ -171,6 +172,12 @@
             var translateSvgTop = 100;
             var xAxisLabel = data[1][0];
             var yAxisLabel = data[1][1];
+            if (!toolTip) {
+                toolTip = {
+                    textColumn1: xAxisLabel,
+                    textColumn2: yAxisLabel,
+                };
+            }
 
             if (legendStatus) {
                 // d3.select("#legend").html("");
@@ -245,7 +252,7 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
                         break;
-                   case "top":
+                    case "top":
                         // margin.top += 80;
                         height -= 10;
                         translateSvgTop += 60;
@@ -311,6 +318,12 @@
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
             // var radius = Math.min(width, height) / 2;
             var radius = Math.min(width, height) / 2;
+            if (radius == height / 2 && height > width) {
+                radius = radius - 100;
+            }
+            if (innerRadius - radius >= 5) {
+                innerRadius = innerRadius / 2;
+            }
             console.log({ radius });
 
             d3.selectAll("#my_dataviz").html("");
@@ -403,7 +416,7 @@
                             return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
-                                xAxisLabel +
+                                toolTip.textColumn1 +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -411,7 +424,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                yAxisLabel +
+                                toolTip.textColumn2 +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +

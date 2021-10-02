@@ -71,7 +71,6 @@ void ExcelDataModel::columnSearchData(QString col, QString tableName, QString se
     this->modelOutput.clear();
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+ tableName + " WHERE [" + col + "] LIKE '%" + searchString + "%'";
-    qDebug() << dbQueryString;
 
     QSqlQuery query(dbQueryString, dbExcel);
 

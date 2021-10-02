@@ -5,7 +5,7 @@
 /////////// Inspired by the code of alangrafu ///////////
 /////////////////////////////////////////////////////////
 
-function RadarChart(id, data, options,label) {
+function RadarChart(id, data, options, label, toolTip) {
     var cfg = {
         w: 600, //Width of the circle
         h: 600, //Height of the circle
@@ -68,12 +68,15 @@ function RadarChart(id, data, options,label) {
     //     radius = Math.min(cfg.w, cfg.h)
     // }
 
-    console.log(radius)
-        
-    var chartDomain = Math.max(Math.abs(minValue),Math.abs(maxValue))
-    
+    console.log(radius);
+
+    var chartDomain = Math.max(Math.abs(minValue), Math.abs(maxValue));
+
     //Scale for the radius
-    var rScale = d3.scale.linear().range([0, radius]).domain([-chartDomain, chartDomain]);
+    var rScale = d3.scale
+        .linear()
+        .range([0, radius])
+        .domain([-chartDomain, chartDomain]);
 
     /////////////////////////////////////////////////////////
     //////////// Create the container SVG and g /////////////
@@ -137,16 +140,16 @@ function RadarChart(id, data, options,label) {
         .attr("fill", "#737373")
         .text(function (d, i) {
             // return Format((maxValue * d) / cfg.levels);
-            if(minValue < 0){
-                if(i < cfg.levels/2 ){
-                    return Math.round((chartDomain * (d-i)) / (cfg.levels));
+            if (minValue < 0) {
+                if (i < cfg.levels / 2) {
+                    return Math.round((chartDomain * (d - i)) / cfg.levels);
                 }
-                if(i == cfg.levels/2){
+                if (i == cfg.levels / 2) {
                     return 0;
                 }
-                return Math.round(-((chartDomain * (i-d)) / (cfg.levels)));
+                return Math.round(-((chartDomain * (i - d)) / cfg.levels));
             }
-            return Math.round(((chartDomain * d) / cfg.levels));
+            return Math.round((chartDomain * d) / cfg.levels);
         });
 
     /////////////////////////////////////////////////////////
@@ -166,12 +169,14 @@ function RadarChart(id, data, options,label) {
         .attr("y1", 0)
         .attr("x2", function (d, i) {
             return (
-                rScale(chartDomain * 1.1) * Math.cos(angleSlice * i - Math.PI / 2)
+                rScale(chartDomain * 1.1) *
+                Math.cos(angleSlice * i - Math.PI / 2)
             );
         })
         .attr("y2", function (d, i) {
             return (
-                rScale(chartDomain * 1.1) * Math.sin(angleSlice * i - Math.PI / 2)
+                rScale(chartDomain * 1.1) *
+                Math.sin(angleSlice * i - Math.PI / 2)
             );
         })
         .attr("class", "line");
@@ -280,13 +285,13 @@ function RadarChart(id, data, options,label) {
         .attr("class", "radarCircle")
         .attr("r", cfg.dotRadius)
         .attr("cx", function (d, i) {
-            if(d.value<0){
+            if (d.value < 0) {
                 return rScale(d.value) * Math.cos(angleSlice * i + Math.PI / 2);
             }
             return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2);
         })
         .attr("cy", function (d, i) {
-            if(d.value<0){
+            if (d.value < 0) {
                 return rScale(d.value) * Math.sin(angleSlice * i + Math.PI / 2);
             }
             return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2);
@@ -319,13 +324,13 @@ function RadarChart(id, data, options,label) {
         .attr("class", "radarInvisibleCircle")
         .attr("r", 10)
         .attr("cx", function (d, i) {
-            if(d.value < 0){
+            if (d.value < 0) {
                 return rScale(d.value) * Math.cos(angleSlice * i + Math.PI / 2);
             }
             return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2);
         })
         .attr("cy", function (d, i) {
-            if(d.value < 0){
+            if (d.value < 0) {
                 return rScale(d.value) * Math.sin(angleSlice * i + Math.PI / 2);
             }
             return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2);
@@ -335,8 +340,8 @@ function RadarChart(id, data, options,label) {
 
         .on("mouseover mousemove", function (d, i, j) {
             d3.select("#tooltip")
-                .style("left", mouseX+10 + "px")
-                .style("top", mouseY-60 + "px")
+                .style("left", mouseX + 10 + "px")
+                .style("top", mouseY - 60 + "px")
                 .style("display", "block")
                 .style("z-index", 1000)
                 .style("postion", "absolute")
@@ -345,7 +350,8 @@ function RadarChart(id, data, options,label) {
                     return (
                         "<div class='arrowTooltip'></div>" +
                         "<span style='color:grey;''>" +
-                        label[0] +
+                        // label[0] +
+                        toolTip.textColumn1 +
                         ":&nbsp;&nbsp;" +
                         "</span>" +
                         "<span style='float: right;'>" +
@@ -353,7 +359,8 @@ function RadarChart(id, data, options,label) {
                         "</span>" +
                         "<br/> <br/>" +
                         "<span style='color:grey;''>" +
-                        label[1] +
+                        // label[1] +
+                        toolTip.textColumn2 +
                         ":" +
                         "</span>" +
                         "<span style='float: right;margin-left: 15px;'>" +

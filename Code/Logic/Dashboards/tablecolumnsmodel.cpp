@@ -231,7 +231,6 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
         QString currentColumnName = showColumns.value(dashboardId).at(j);
 
         QString currentColumnRelation = columnFilterType.value(dashboardId).value(currentColumnName).toString();
-        qDebug() << "CURRENT REL" << currentColumnRelation;
         QString valueIncludeExclude = columnIncludeExcludeMap.value(dashboardId).value(currentColumnName).toString();
         QStringList filterValues = columnValueMap.value(dashboardId).value(currentColumnName);
 
@@ -303,7 +302,6 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
     // Chop trailing ' AND '
     whereConditions.chop(5);
-    qDebug() << "Dashboard where conditions " << whereConditions;
     emit dashboardWhereConditions(whereConditions, dashboardId);
 }
 

@@ -184,6 +184,12 @@
                 dataValues = transformData(dataValues, dateFormat);
                 window.chartDataValues = dataValues;
                 [xAxisLabel, yAxisLabel] = data[1];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
 
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
                 width = window.innerWidth - margin.left - margin.right - 20;
@@ -570,7 +576,7 @@
                     .call(yAxis);
 
                 if (markerStatus && curveType == constants.cureveType.LINEAR) {
-                    drawMarker(filledStatus, markerShape);
+                    drawMarker(filledStatus, markerShape,toolTip);
                 }
 
                 setLabel(
@@ -680,7 +686,10 @@
                         //     return 10;
                         // })
                         //  label.textContent = textColumn2[1];
-                        label.textContent =  labelFormatSet(dataValues[i][1], labelFormat);
+                        label.textContent = labelFormatSet(
+                            dataValues[i][1],
+                            labelFormat
+                        );
                     });
                 }
                 d3.select(".axis.label path").remove();
@@ -827,10 +836,16 @@
                 }
             }
 
-            function drawMarker(fillStatus, markerShape) {
+            function drawMarker(fillStatus, markerShape,toolTip) {
                 dateformatValue = function (value) {
                     return value;
                 };
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
 
                 let dataValues = window.chartDataValues,
                     fill = "#ffffff",
@@ -915,7 +930,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    xAxisLabel +
+                                    toolTip.textColumn1 +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
@@ -923,7 +938,7 @@
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    yAxisLabel +
+                                    toolTip.textColumn2 +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +

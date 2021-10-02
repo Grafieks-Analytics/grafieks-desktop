@@ -87,6 +87,7 @@ signals:
     void snowflakeLoginStatus(QVariantMap status);
     void teradataLoginStatus(QVariantMap status);
     void excelLoginStatus(QVariantMap status, bool directLogin);
+    void excelLoginOdbcStatus(QVariantMap status, bool directLogin);
     void jsonLoginStatus(QVariantMap status, bool directLogin);
     void csvLoginStatus(QVariantMap status, bool directLogin);
     void accessLoginStatus(QVariantMap status);

@@ -90,10 +90,11 @@ void SheetDS::homeBut()
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
 
-void SheetDS::fetchFileData(QString gFileId)
+void SheetDS::fetchFileData(QString gFileId, QString gFileName)
 {
     emit showBusyIndicator(true);
     this->gFileId = gFileId;
+    this->gFileName = gFileName;
 
     QUrl sheetDownloadUrl("https://www.googleapis.com/drive/v3/files/" + gFileId +"/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key="+Secret::sheetClient);
     m_networkReply = this->google->get(sheetDownloadUrl);
@@ -154,7 +155,11 @@ void SheetDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +".xlsx";
+
+        QString fileNameTmp = this->gFileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+
+        QString fileName = QDir::temp().tempPath() +"/" + fileNameTmp +".xlsx";
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());

@@ -70,10 +70,10 @@ const defaultD3Config = {
     fontColor: "black",
     defaultLegendConfig: {
         legendStatus: false,
-        legendPosition: "bottom",
+        legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: false,
+        labelStatus: true,
         labelFormat: constants.labelFormat.ROUND,
     },
     defaultGridConfig: {

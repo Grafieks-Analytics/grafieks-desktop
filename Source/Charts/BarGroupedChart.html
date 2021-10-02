@@ -313,6 +313,13 @@
                 var maxHeight = d3.max(data, (d) =>
                     d3.max(all_keys, (k) => d && d[k])
                 );
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: labels[0],
+                        textColumn2: labels[1],
+                        textColumn3: labels[2],
+                    };
+                }
 
                 var legendNameArray = [legendNames[0]];
                 var legenedNameLabel = legendNames[0];
@@ -720,7 +727,7 @@
                                         return (
                                             "<div class='arrowTooltip'></div>" +
                                             "<span style='color:grey;''>" +
-                                            labels[0] +
+                                            toolTip.textColumn1 +
                                             ":&nbsp;&nbsp;" +
                                             "</span>" +
                                             "<span style='float: right;'>" +
@@ -728,7 +735,7 @@
                                             "</span>" +
                                             "<br/> <br/>" +
                                             "<span style='color:grey;''>" +
-                                            labels[1] +
+                                            toolTip.textColumn2 +
                                             ":" +
                                             "</span>" +
                                             "<span style='float: right;margin-left: 15px;'>" +
@@ -736,7 +743,7 @@
                                             "</span>" +
                                             "<br/> <br/>" +
                                             "<span style='color:grey;''>" +
-                                            labels[2] +
+                                            toolTip.textColumn3 +
                                             ":" +
                                             "</span>" +
                                             "<span style='float: right;margin-left: 15px;'>" +

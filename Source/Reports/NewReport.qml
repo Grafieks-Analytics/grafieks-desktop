@@ -987,7 +987,8 @@ Page {
         }
         
         for(var i=0; i<colorListModelData.length; i++){
-            colorListModel.append({ textValue: colorListModelData[i].columnName })
+            // TODO:optimisation remove textValue
+            colorListModel.append({ textValue: colorListModelData[i].columnName ,itemName: colorListModelData[i].columnName})
         }
 
         // Update Property Variables
