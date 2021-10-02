@@ -173,7 +173,6 @@ Rectangle{
             if(jsonOptions.slug === Constants.slugBetweenRelation){
 
                 var splitValues = jsonOptions.values.split(" And ")
-                console.log(splitValues, "SPLIT VALUES")
                 textField.text = splitValues[0]
                 textField2nd.text = splitValues[1]
             } else{

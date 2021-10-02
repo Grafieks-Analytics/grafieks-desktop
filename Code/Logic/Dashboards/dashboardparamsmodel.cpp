@@ -870,6 +870,7 @@ void DashboardParamsModel::setReportName(int dashboardId, int widgetId, QString 
 
         this->reportName.insert(dashboardId, name);
     }
+    emit reportNameChanged(dashboardId, widgetId, reportName);
 }
 
 QString DashboardParamsModel::getReportName(int dashboardId, int widgetId)
@@ -983,7 +984,6 @@ void DashboardParamsModel::setReportLineColor(int dashboardId, int widgetId, QSt
         this->reportLineColor.insert(dashboardId, lineColor);
     }
 
-    qDebug() << "LINE COLOR" << color;
     emit reportLineColorChanged(dashboardId, widgetId, color);
 }
 
@@ -1662,7 +1662,6 @@ void DashboardParamsModel::saveDashboard()
         QJsonObject dashboardWidgetTypeMapTmpObj;
         foreach(int widgetId, this->dashboardWidgetTypeMap.value(dashboardId).keys()){
             dashboardWidgetTypeMapTmpObj.insert(QString::number(widgetId), this->dashboardWidgetTypeMap.value(dashboardId).value(widgetId));
-            qDebug() << "Widget type" << this->dashboardWidgetTypeMap.value(dashboardId).value(widgetId);
         }
 
         dashboardWidgetTypeMapObj.insert(QString::number(dashboardId), dashboardWidgetTypeMapTmpObj);

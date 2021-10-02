@@ -19,16 +19,10 @@ Component.prototype.createOperations = function()
         // call the base create operations function
         component.createOperations();
 
-        
-        var cmd = installer.environmentVariable("SystemRoot") + "\\System32\\cmd.exe";
-        
-//        var addKey = "HKEY_CLASSES_ROOT\\WOW6432Node\\.gads";
-//        var addValue = "HKEY_CLASSES_ROOT\\WOW6432Node\\.gads /ve /t REG_SZ /d \"Grafieks Data Source Live\"";
-
-        
-//        component.addElevatedOperation("Execute", cmd, "/C", "add reg", addKey);
-//        component.addElevatedOperation("Execute", cmd, "/C", "add reg", addValue);
-
+        if (systemInfo.productType === "windows") {
+            component.addOperation("CreateShortcut", "@TargetDir@/GrafieksDesktop.exe", "@StartMenuDir@/GrafieksDesktop.lnk",
+                                   "workingDirectory=@TargetDir@", "description=Open Grafieks Desktop");
+        }
 
     } catch (e) {
         console.log(e);

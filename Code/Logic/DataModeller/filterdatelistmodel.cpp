@@ -151,7 +151,6 @@ bool FilterDateListModel::setData(const QModelIndex &index, const QVariant &valu
     {
 
         if( filterList->actualValue()!= value.toString() ){
-            qDebug() << value.toString() << "Actual value insert";
             filterList->setActualValue(value.toString());
             somethingChanged = true;
         }
@@ -217,7 +216,6 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 
 void FilterDateListModel::newFilter(int counter, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, QString actualValue, bool includeNull, bool exclude )
 {
-    qDebug() << actualValue << "Actual value request";
 
     if(Statics::currentDbClassification == Constants::excelType){
         colName = "["+colName+"]";

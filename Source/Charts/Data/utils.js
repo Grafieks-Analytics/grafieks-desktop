@@ -410,7 +410,7 @@ function labelFormatSet(labelValue, labelFormat) {
             //  } else if (labelValue < 900) {
             //      return labelValue; // if value < 1000, nothing to do
             //  }
-            return d3.format(".2s")(labelValue);
+            return d3.format(".3s")(labelValue);
             // return numeral(labelValue).format("0 a");
             break;
         case "currency":

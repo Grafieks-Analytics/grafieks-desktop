@@ -97,8 +97,6 @@ void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName
 
     this->changedHeaderTypes.insert(tableName + "." + columnName, newColumnType);
 
-    qDebug() << "Changed col type" << this->changedHeaderTypes;
-
     emit colTypeChanged();
 }
 
