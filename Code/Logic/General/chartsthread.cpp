@@ -1205,13 +1205,15 @@ void ChartsThread::getMultiLineChartValues()
 
     // Pre - Populate the json array
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointerPre.length(); i++){
 
             for(int j = 0; j < splitDataPointerPre.length(); j++){
 
                 masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
 
-                masterKeywordList.insert(masterKeyword, j);
+                masterKeywordList.insert(masterKeyword, counter);
+                counter++;
 
                 tmpData.clear();
                 tmpData.append(xAxisDataPointerPre.at(i));
@@ -1580,13 +1582,15 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
         // Pre - Populate the json array
         try{
+            int counter = 0;
             for(int i = 0; i < xAxisDataPointerPre.length(); i++){
 
                 for(int j = 0; j < splitDataPointerPre.length(); j++){
 
                     masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
 
-                    masterKeywordList.insert(masterKeyword, j);
+                    masterKeywordList.insert(masterKeyword, counter);
+                    counter++;
 
                     tmpData.clear();
                     tmpData.append(xAxisDataPointerPre.at(i));
@@ -1785,7 +1789,6 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
 
             for(int j = 0; j < xAxisLength; j++){
                 masterKeyword.append(xAxisDataPointer->value(j).at(i));
-//                qDebug() << xAxisDataPointer->value(j).at(i);
             }
 
 
