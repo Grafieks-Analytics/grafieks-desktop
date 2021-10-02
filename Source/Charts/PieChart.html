@@ -71,13 +71,12 @@
             ["sub_category", "sales"],
         ];
 
-        function transformData(dataValues,dataColumns = {}, dateFormat) {
+        function transformData(dataValues, dataColumns = {}, dateFormat) {
             var isKey1Date = false;
 
             // if (isDateFormat(Object.keys(dataValues[0])[0])) {
             //     isKey1Date = true;
             // }
-
 
             var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
@@ -88,8 +87,7 @@
             if (!isKey1Date) {
                 return dataValues;
             }
-            
-            
+
             var json = {};
             var uniqueKey = [];
             Object.keys(dataValues[0]).forEach((d) => {
@@ -142,7 +140,7 @@
             window.dataLabelfontFamily = dataLabelfontFamily;
             window.dataLabelfontSize = dataLabelfontSize;
 
-            var data = transformData(data, dateFormat);
+            var data = transformData(data,dataColumns, dateFormat);
 
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -564,6 +562,6 @@
         }
 
         // Initialize the plot with the first dataset
-        drawChart(data);
+        // drawChart(data);
     </script>
 </body>
