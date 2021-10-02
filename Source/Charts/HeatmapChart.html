@@ -446,20 +446,23 @@
                 dateFormat1
             ) {
                 var dataValue = data[0];
+                
                 var json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
 
                 // [Tag: Date Change]
-                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+                var { xAxisColumnDetails = [], yAxisColumnDetails=[] } = dataColumns;
 
                 // [Tag: Date Change]
                 if (xAxisColumnDetails[0].itemType == "Date") {
                     isKey1Date = true;
+                    dateFormat = xAxisColumnDetails[0].dateFormat
                 }
                 // [Tag: Date Change]
-                if (colorByData[0].itemType == "Date") {
+                if (yAxisColumnDetails[0].itemType == "Date") {
                     isKey2Date = true;
+                    dateFormat1 = yAxisColumnDetails[0].dateFormat
                 }
 
                 var uniqueKey1 = [];
@@ -1232,7 +1235,7 @@
                 }
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>

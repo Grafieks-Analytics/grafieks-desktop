@@ -79,12 +79,36 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            drawChart(dataset);
+            drawChart(dataset, {
+                chartType: "FitWidth",
+                dataColumns: {
+                    xAxisColumnDetails: [
+                        {
+                            itemName: "Category",
+                            itemType: "Categorical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    yAxisColumnDetails: [
+                        {
+                            itemName: "Sales",
+                            itemType: "Numerical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    row3ColumnDetails: [],
+                    colorByData: [],
+                },
+            });
 
-            function transformData(dataValues, dateFormat) {
+            function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
-                if (isDateFormat(dataValues[0][0])) {
+                // if (isDateFormat(dataValues[0][0])) {
+                //     valueDateType = true;
+                // }
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
                 }
                 var dateWiseResponse = {};
@@ -127,6 +151,7 @@
                     dateFormat = defaultD3Config.dateFormat,
                     chartType = defaultD3Config.chartType,
                     toolTip,
+                    dataColumns,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -176,12 +201,13 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
 
-                dataValues = transformData(dataValues, dateFormat);
+                dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
                 [xAxisLabel, yAxisLabel] = data[1];
                 if (!toolTip) {
@@ -576,7 +602,7 @@
                     .call(yAxis);
 
                 if (markerStatus && curveType == constants.cureveType.LINEAR) {
-                    drawMarker(filledStatus, markerShape,toolTip);
+                    drawMarker(filledStatus, markerShape, toolTip);
                 }
 
                 setLabel(
@@ -836,7 +862,7 @@
                 }
             }
 
-            function drawMarker(fillStatus, markerShape,toolTip) {
+            function drawMarker(fillStatus, markerShape, toolTip) {
                 dateformatValue = function (value) {
                     return value;
                 };
