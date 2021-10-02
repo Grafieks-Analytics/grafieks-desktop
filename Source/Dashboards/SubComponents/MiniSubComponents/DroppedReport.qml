@@ -566,7 +566,7 @@ Item{
     }
 
     function setChartBackgroundColor(background){
-        webEngineView.runJavaScript('setSvgBackground("'+background+'")');
+        webEngineView.runJavaScript('window.setSvgBackground && setSvgBackground("'+background+'")');
     }
 
     // Clear the chart defaults
@@ -886,7 +886,7 @@ Item{
                 console.log('Measures',JSON.stringify(measures))
                 
                 var dateConversionOptions = xAxisColumnDetails.filter(d=>{
-                    if(d.itemType.toLowerCase() == "date"){
+                    if((d.itemType || d.droppedItemType).toLowerCase() == "date"){
                         return true;
                     }
                     return false;
@@ -925,12 +925,9 @@ Item{
                 console.log("PIVOT CLICKED")
                  var row3ColumnsArray = Array.from(row3Columns);
                   
-                var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
-                var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
-
                 var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
                 var dateConversionOptions = tempDataValues.filter(d=>{
-                    if(d.itemType.toLowerCase() == "date"){
+                    if((d.itemType || d.droppedItemType).toLowerCase() == "date"){
                         return true;
                     }
                     return false;
@@ -960,12 +957,7 @@ Item{
                 })
                 
                 dateConversionOptions = JSON.stringify(dateConversionOptions);
-                // Temporary running function
-                ChartsModel.getPivotChartValues(reportIdMain, 0, Constants.reportScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray, dateConversionOptions);
-                
-                 
-                // Temporary running function
-                // ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,'Sum');
+                ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,dateConversionOptions);
                 
                 break;
             }
