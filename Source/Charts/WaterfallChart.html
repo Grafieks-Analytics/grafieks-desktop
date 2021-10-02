@@ -122,10 +122,11 @@
                 ["Order_Date", "Sales"],
             ];
 
-            function transformData(data, dateFormat) {
+            function transformData(data, dataColumns, dateFormat) {
                 var [dataValues, labels] = data;
                 var isKey1Date = false;
-                if (isDateFormat(dataValues[0][0])) {
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     isKey1Date = true;
                 }
                 if (!isKey1Date) {
@@ -181,6 +182,7 @@
                     toolTip,
                     chartType = constants.chartType.FIT_WIDTH,
                     dateFormat = defaultD3Config.dateFormat,
+                    dataColumns,
                     // legendStatus: {
                     //     legendStatus,
                     //     legendPosition,
@@ -254,7 +256,7 @@
                     2 -
                     extraHeight;
 
-                var [dataValues, labels] = transformData(data, dateFormat);
+                var [dataValues, labels] = transformData(data, dataColumns, dateFormat);
 
                 var keys = ["Increase", "Decrease", "Total"];
                 var [xAxisLabel, yAxisLabel] = data[1];
@@ -844,7 +846,7 @@
                 return data;
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>

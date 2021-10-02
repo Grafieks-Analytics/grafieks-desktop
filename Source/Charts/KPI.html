@@ -28,6 +28,7 @@
         <script src="./Data/d3DefaultConfig.js"></script>
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/min/numeral.min.js"></script>
     </head>
 
     <body>
@@ -55,7 +56,9 @@
                         bold,
                         italic,
                         underline,
+                        labelConfig = defaultD3Config.defaultlabelConfig,
                     } = valueFontStylings;
+                    var { labelStatus, labelFormat } = labelConfig;
 
                     var valueStyling = document.getElementById("valueStyling");
                     if (valueStyling) {
@@ -114,11 +117,16 @@
                     `<div class="value text-center"></div><div class="label text-center"></div>`
                 );
 
-                d3.select(".value").text(Math.round(value)).style("color",dataValueColorKpi);
-                d3.select(".label").text(label).style("color",dataLabelColorKpi);
+                // d3.select(".value").text(Math.round(value)).style("color",dataValueColorKpi);
+                d3.select(".value")
+                    .text(labelFormatSet(value, labelFormat))
+                    .style("color", dataValueColorKpi);
+                d3.select(".label")
+                    .text(label)
+                    .style("color", dataLabelColorKpi);
             }
 
-            // data = [120.555, "Label"];
+            // data = [12044444.555, "Label"];
             // drawChart(data);
         </script>
     </body>
