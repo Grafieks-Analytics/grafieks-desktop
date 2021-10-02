@@ -267,6 +267,7 @@
                 d3colorPalette,
                 paddingInner,
                 markerShape,
+                toolTip,
                 curveType,
                 labelConfig = defaultD3Config.defaultlabelConfig,
                 dataLabelfontSize = defaultD3Config.fontSize,
@@ -285,6 +286,8 @@
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
+
+            [xAxisLabel, yAxisLabel] = labels;
             if (!toolTip) {
                 toolTip = {
                     textColumn1: xAxisLabel,
@@ -683,6 +686,6 @@
             // }, 50);
         }
 
-        // drawChart(data);
+        drawChart(data);
     </script>
 </body>
