@@ -71,16 +71,25 @@
             ["sub_category", "sales"],
         ];
 
-        function transformData(dataValues, dateFormat) {
+        function transformData(dataValues,dataColumns = {}, dateFormat) {
             var isKey1Date = false;
 
-            if (isDateFormat(Object.keys(dataValues[0])[0])) {
+            // if (isDateFormat(Object.keys(dataValues[0])[0])) {
+            //     isKey1Date = true;
+            // }
+
+
+            var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
+            if (xAxisColumnDetails[0].itemType == "Date") {
                 isKey1Date = true;
             }
 
             if (!isKey1Date) {
                 return dataValues;
             }
+            
+            
             var json = {};
             var uniqueKey = [];
             Object.keys(dataValues[0]).forEach((d) => {
@@ -117,6 +126,7 @@
         function drawChart(data, plottingConfiguration = {}) {
             let {
                 d3colorPalette,
+                dataColumns,
                 paddingInner,
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig,
@@ -302,7 +312,7 @@
 
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
             // var radius = Math.min(width, height) / 2;
-            var radius =(Math.min(width, height) / 2)-30;
+            var radius = Math.min(width, height) / 2 - 30;
             console.log({ radius });
 
             d3.selectAll("#my_dataviz").html("");
