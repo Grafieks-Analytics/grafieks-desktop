@@ -263,10 +263,12 @@ Popup {
                     }
                 }
 
+                /*
                 Rectangle{
                     id: multipleAxisMenubutton
                     height: 40
                     width: parent.width
+                    visible: false
 
                     Rectangle{
                         id: multipleAxisMenuRectangle
@@ -306,6 +308,8 @@ Popup {
                         onExited: multipleAxisMenuRectangle.color =  Constants.themeColor
                     }
                 }
+
+                */
 
             }
 

@@ -42,6 +42,8 @@ Item{
     // On Change we update the graph title
     property bool isHorizontalGraph: false;
 
+    property var backgroundColorValue: false;
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -68,6 +70,12 @@ Item{
     Connections{
         target: DashboardParamsModel
 
+        function onReportNameChanged(refDashboardId, refReportId, reportName){
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
+                setReportName(reportName);
+            }
+        }
+
         function onReportBackgroundColorChanged(refDashboardId, refReportId, refColor){
 
             let dashboardId = DashboardParamsModel.currentDashboard
@@ -77,6 +85,7 @@ Item{
 
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.color = refColor
+                backgroundColorValue = refColor;
                 setChartBackgroundColor(refColor);
             }
         }
@@ -450,6 +459,9 @@ Item{
         clearChartValue();
         var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
         webEngineView.runJavaScript(runScriptString);
+        if(backgroundColorValue){
+            setChartBackgroundColor(backgroundColorValue);
+        }
     }
 
 
@@ -562,9 +574,13 @@ Item{
         webEngineView.runJavaScript('window.clearChart && clearChart()');
     }
 
+    function setReportName(reportTitle){
+        reportName.text = reportTitle;
+    }
+
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(reportId);
-        reportName.text = reportProperties.reportTitle;
+        setReportName(reportProperties.reportTitle);
         console.log("Chart title", reportProperties, reportProperties.reportTitle);
         console.log("Chart title xe")
         drawChart(reportProperties);
@@ -1233,25 +1249,6 @@ Item{
             onLoadingChanged: onChartLoaded(loadRequest)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
-
-
-            //                    onLoadingChanged: {
-
-            //                        switch(loadRequest.status){
-
-            //                        case ( WebView.LoadFailedStatus):
-            //                            webEngineView.visible = false
-            //                            chooseImage.visible = true
-            //                            break
-
-            //                        case ( WebView.LoadSucceededStatus):
-            //                            webEngineView.visible = true
-            //                            chooseImage.visible = false
-            //                            break
-            //                        }
-
-            //                    }
-
         }
 
     }

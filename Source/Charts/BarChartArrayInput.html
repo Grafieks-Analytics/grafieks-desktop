@@ -92,17 +92,10 @@
                 window.data = data;
                 dataValues = data[0];
 
-                // date format
-                var parseTime = d3.timeParse("%d-%b-%y");
 
                 // data values to be plot
                 var dataValues = data[0];
                 const [xAxisLabel, yAxisLabel] = data[1];
-                //   var [data, keys, labels] = transformData(
-                //     data[0],
-                //     dateFormat,
-                //     dateFormat1
-                // );
 
                 // Plot configuration contains all the config of report, these values are passed from QML,
                 // if no value is passed default value is taken from defaultConfig.js
@@ -116,6 +109,7 @@
                     dateFormat,
                     chartType,
                     toolTip,
+                    dataColumns,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -164,6 +158,7 @@
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
+                let { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 let { gridStatus } = gridConfig;
 
@@ -238,7 +233,7 @@
                 var y_pos_x_label = 55;
 
                 var valueDateType = false;
-                if (isDateFormat(xAxisDataSet[0])) {
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
                 }
 

@@ -870,6 +870,7 @@ void DashboardParamsModel::setReportName(int dashboardId, int widgetId, QString 
 
         this->reportName.insert(dashboardId, name);
     }
+    emit reportNameChanged(dashboardId, widgetId, reportName);
 }
 
 QString DashboardParamsModel::getReportName(int dashboardId, int widgetId)
