@@ -4,10 +4,6 @@
     <Version>Beta</Version>
     <Title>Grafieks Desktop</Title>
     <Publisher>Grafieks Analytics Ltd</Publisher>
-
-    <Licenses>
-        <License name="Grafieks License Agreement" file="eula.txt" />
-    </Licenses>
     
     <WizardStyle>Modern</WizardStyle>
     <!-- <StyleSheet>style.qss</StyleSheet> -->

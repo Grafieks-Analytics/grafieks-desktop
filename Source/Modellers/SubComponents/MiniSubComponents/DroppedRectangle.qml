@@ -179,7 +179,6 @@ Item{
 
     function hideColumnSelection(colName, tableName){
 
-        console.log("remove column")
         var key = tableName + "." + colName
 
         // If key already exists, remove

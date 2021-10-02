@@ -45,7 +45,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onExcelLoginStatus(status, directLogin){
+        function onExcelLoginOdbcStatus(status, directLogin){
 
             if(directLogin === true){
                 if(status.status === true){

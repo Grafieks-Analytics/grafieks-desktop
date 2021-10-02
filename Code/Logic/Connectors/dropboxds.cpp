@@ -60,7 +60,7 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
 
         const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
         QJsonObject obj;
-        obj.insert("limit", 100);
+        obj.insert("limit", 1000);
         obj.insert("path","");
         obj.insert("recursive",true);
         obj.insert("include_media_info",false);
@@ -132,7 +132,7 @@ void DropboxDS::folderNav(QString path)
     emit showBusyIndicator(true);
 
     QJsonObject obj;
-    obj.insert("limit", 100);
+    obj.insert("limit", 1000);
     obj.insert("path",path);
     obj.insert("recursive",false);
     obj.insert("include_media_info",false);
@@ -420,7 +420,6 @@ void DropboxDS::saveFile()
         file.close();
 
         if(this->extension.contains("xls") || this->extension.contains("xlsx")){
-            qDebug() << "Downloaded excel";
             emit fileDownloaded(fileName, "excel");
 
         } else if(this->extension.contains("csv")){

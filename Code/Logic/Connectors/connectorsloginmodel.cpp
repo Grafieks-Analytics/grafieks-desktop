@@ -134,7 +134,7 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
     response = excelcon->ExcelOdbcInstance(driver, filename);
     this->staticSetter(filename, Constants::excelType, Constants::excelIntType, Constants::excelOdbcStrType, false, driver);
-    emit excelLoginStatus(response, true);
+    emit excelLoginOdbcStatus(response, true);
 }
 
 void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString separator)
