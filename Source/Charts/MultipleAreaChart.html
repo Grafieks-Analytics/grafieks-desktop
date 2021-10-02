@@ -902,15 +902,19 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            function transformData(dataValue, dateFormat, dateFormat1) {
+            function transformData(dataValue, dataColumns = {}, dateFormat, dateFormat1) {
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
+                // [Tag: Date Change]
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
-                if (isDateFormat(dataValue[0][1])) {
+                // [Tag: Date Change]
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     isKey1Date = true;
                 }
-                if (isDateFormat(dataValue[0][0])) {
+                // [Tag: Date Change]
+                if (colorByData[0].itemType == "Date") {
                     isKey2Date = true;
                 }
 
@@ -1008,6 +1012,8 @@
                     markerShape = defaultD3Config.defaultMarkerShape,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
 
+                    dataColumns,
+
                     filledStatus = false,
                 } = plottingConfiguration;
 
@@ -1033,7 +1039,7 @@
                 var y_pos_x_label = 55;
 
                 var [dataValues, lineMainCategories, allKeys, label] =
-                    transformData(data[0], dateFormat, dateFormat);
+                    transformData(data[0], dataColumns, dateFormat, dateFormat);
 
                 // console.log({ lineMainCategories });
 

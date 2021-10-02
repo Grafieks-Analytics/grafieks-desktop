@@ -92,7 +92,8 @@ Popup {
 
     function showLabel(checked){
         var labelConfig = d3PropertyConfig.labelConfig || {};
-        labelConfig['labelStatus'] = checked;
+        labelConfig.labelStatus = checked;
+        labelConfig.labelFormat = "symbol";
         d3PropertyConfig.labelConfig = labelConfig;
         reDrawChart();
     }

@@ -819,7 +819,7 @@ Page {
                 xAxisListModel.clear();
             }
             
-            if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(xAxisColumnDetails))){
+            if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails))){
                 yAxisListModel.clear();
             }
             
