@@ -174,16 +174,18 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            drawChart(dataset);
+            drawChart(dataset,{"chartType":"FitWidth","dataColumns":{"xAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]}});
 
-            function transformData(dataValues, dateFormat) {
+            function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
-                if (isDateFormat(dataValues[0][0])) {
+                var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
+                if (yAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
+                    dateFormat = yAxisColumnDetails[0].dateFormat
                 }
                 var dateWiseResponse = {};
 
-                if (valueDateType) {
+                if (valueDateType && !redrawn) {
                     dataValues.forEach((dataRow) => {
                         var requiredTypeData = getDateFormattedData(
                             dataRow[0],
@@ -221,6 +223,7 @@
                     dateFormat = defaultD3Config.dateFormat,
                     chartType = defaultD3Config.horizontalChartType,
                     toolTip,
+                    dataColumns,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
@@ -273,12 +276,13 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 d3Colors = d3colorPalette;
 
                 // transforming data
                 // Checking date values
-                dataValues = transformData(dataValues, dateFormat);
+                dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
                 [xAxisLabel, yAxisLabel] = data[1];
 

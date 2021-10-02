@@ -176,11 +176,16 @@
 
             // drawChart(dataset);
 
-            function transformData(dataValues, dateFormat) {
+            function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
-                if (isDateFormat(dataValues[0][0])) {
+                // [Tag: Date Change]
+                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
+                // [Tag: Date Change]
+                if (xAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
                 }
+
                 var dateWiseResponse = {};
 
                 if (valueDateType) {
@@ -228,6 +233,7 @@
                     // font size
                     xLabelfontSize = defaultD3Config.fontSize,
                     yLabelfontSize = defaultD3Config.fontSize,
+                    dataColumns,
                     xTickfontSize = defaultD3Config.fontSize,
                     yTickfontSize = defaultD3Config.fontSize,
                     dataLabelfontSize = defaultD3Config.fontSize,
@@ -278,7 +284,7 @@
 
                 // transforming data
                 // Checking date values
-                dataValues = transformData(dataValues, dateFormat);
+                dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
                 [xAxisLabel, yAxisLabel] = data[1];
 
@@ -997,7 +1003,7 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                     toolTip.textColumn1 +
+                                    toolTip.textColumn1 +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +

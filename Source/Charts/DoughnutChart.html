@@ -82,10 +82,16 @@
             },
             ["order-date", "sales"],
         ];
-        function transformData(dataValues, dateFormat) {
+        function transformData(dataValues,dataColumns, dateFormat) {
             var isKey1Date = false;
 
-            if (isDateFormat(Object.keys(dataValues[0])[0])) {
+            // if (isDateFormat(Object.keys(dataValues[0])[0])) {
+            //     isKey1Date = true;
+            // }
+
+            var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
+             if (xAxisColumnDetails[0].itemType == "Date") {
                 isKey1Date = true;
             }
 
@@ -130,6 +136,7 @@
             let {
                 d3colorPalette,
                 paddingInner,
+                dataColumns,
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig,
                 dateFormat = defaultD3Config.dateFormat,
@@ -151,7 +158,7 @@
             }
 
             const d3Colors = d3colorPalette;
-            var data = transformData(data, dateFormat);
+            var data = transformData(data,dataColumns, dateFormat);
             // set the dimensions and margins of the graph
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                 width = window.innerWidth - margin.left - margin.right + 80,
@@ -317,7 +324,7 @@
 
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
             // var radius = Math.min(width, height) / 2;
-            var radius = Math.min(width, height) / 2;
+            var radius = Math.min(width, height) / 2 - 30;
             if (radius == height / 2 && height > width) {
                 radius = radius - 100;
             }
@@ -580,6 +587,6 @@
         }
 
         // Initialize the plot with the first dataset
-        drawChart(data);
+        // drawChart(data);
     </script>
 </body>

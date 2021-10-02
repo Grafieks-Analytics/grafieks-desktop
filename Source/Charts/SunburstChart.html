@@ -1442,7 +1442,7 @@
                     text.append("textPath")
                         .attr("startOffset", "50%")
                         .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
-                        .text((d) => d.data.name)
+                        .text((d) => labelFormatSet(d.data.name, labelFormat))
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor);
@@ -1497,7 +1497,7 @@
             // drawChart(data);
 
             // window.addEventListener("resize", function () {
-            drawChart(data);
+            // drawChart(data);
             // });
         </script>
     </body>
