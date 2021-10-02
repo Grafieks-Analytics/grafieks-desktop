@@ -11,7 +11,7 @@ import "./MiniSubComponents";
 Popup {
 
     id: toolTipPopup
-    width: parent.width * 0.5
+    width: 600
     height: 400
     anchors.centerIn: parent
 
@@ -23,6 +23,7 @@ Popup {
     background: Rectangle{
         color: Constants.whiteColor
     }
+    // property int currentIndexTooltip:0;
 
 
     /***********************************************************************************************************************/
@@ -80,6 +81,12 @@ Popup {
         case "yAxisTickMark": yAxisTickMarkColorDialog.open();
             break;
         }
+    }
+
+    function generateLabel(currentIndexTooltip){
+        // currentIndexTooltip=currentIndexTooltip+1
+        console.log(currentIndexTooltip)
+        return "textColumn"+(currentIndexTooltip+1);
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -179,142 +186,209 @@ Popup {
 
 
             Column{
-                id:firstCol
-                spacing: 100
+    //             id:firstCol
+    //             spacing: 100
 
-                width: parent.width/2
+    //             width: parent.width/2
 
-                Text {
-                    id: label2
-                    text: qsTr("Column")
-                }
-
-
-
-
-                Rectangle{
-                    id:xAxisToolTip
-                    height:30
-                    width:parent.width
-
-                    anchors.top: label2.bottom
-                    anchors.topMargin: 15
+    //             Text {
+    //                 id: label2
+    //                 text: qsTr("Column")
+    //             }
 
 
 
-                    ListView{
 
-                        height: parent.height
-                        width: parent.width
+    //             Rectangle{
+    //                 id:xAxisToolTip
+    //                 height:30
+    //                 width:parent.width
 
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                        model: xAxisListModel
-                        orientation: Qt.Vertical
-                        spacing: 5
-                        interactive: false
-                        delegate:  Text {
-
-                            text: qsTr(itemName)
-                        }
-
-                    }
-                }
-                Rectangle{
-                    id:yAxisToolTip
-                    height:30
-                    width:parent.width
-
-                    anchors.top: xAxisToolTip.bottom
-                        anchors.topMargin: 15
+    //                 anchors.top: label2.bottom
+    //                 anchors.topMargin: 15
 
 
 
-                    ListView{
+    //                 ListView{
 
-                        height: parent.height
-                        width: parent.width
+    //                     height: parent.height
+    //                     width: parent.width
 
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                        model: yAxisListModel
-                        orientation: Qt.Vertical
-                        spacing: 5
-                        interactive: false
-                        delegate:  Text {
+    //                     anchors.top: parent.top
+    //                     anchors.topMargin: 3
+    //                     model: xAxisListModel
+    //                     orientation: Qt.Vertical
+    //                     spacing: 5
+    //                     interactive: false
+    //                     delegate:  Text {
 
-                            text: qsTr(itemName)
-                        }
+    //                         text: qsTr(itemName)
+    //                     }
 
-                    }
-                }
+    //                 }
+    //             }
+    //             Rectangle{
+    //                 id:yAxisToolTip
+    //                 height:30
+    //                 width:parent.width
 
-
-
-            }
-
-        Column{
-            spacing: 100
-            width: parent.width/2
-            anchors.right: parent.right
-            Text {
-                id: label3
-                text: qsTr("Tooltip Label")
-            }
-
-            Rectangle{
-                id:toolTipEdit1
-                height:25
-                width:parent.width
-
-                anchors.top: label3.bottom
-                    anchors.topMargin: 15
-
-                TextField{
-                     id:toolTipText1
-                    width: parent.width-150
-                    selectByMouse: true
-                    height:25
-                    cursorVisible: true
-                    anchors.top: parent.top
-                    anchors.topMargin: 5
-                    placeholderText: "column1"
+    //                 anchors.top: xAxisToolTip.bottom
+    //                     anchors.topMargin: 15
 
 
 
-                    background: Rectangle{
-                        border.width: 1
+    //                 ListView{
 
-                    }
-                }
-            }
-            Rectangle{
-                id:toolTipEdit2
-                height:25
-                width:parent.width
+    //                     height: parent.height
+    //                     width: parent.width
 
-                anchors.top: toolTipEdit1.bottom
-                    anchors.topMargin: 15
+    //                     anchors.top: parent.top
+    //                     anchors.topMargin: 3
+    //                     model: yAxisListModel
+    //                     orientation: Qt.Vertical
+    //                     spacing: 5
+    //                     interactive: false
+    //                     delegate:  Text {
 
-                TextField{
-                    id:toolTipText2
-                    width: parent.width-150
-                    selectByMouse: true
-                    height:25
-                    cursorVisible: true
-                    anchors.top: parent.top
-                    anchors.topMargin: 5
-                    placeholderText: "column2"
-                    background: Rectangle{
-                        border.width: 1
+    //                         text: qsTr(itemName)
+    //                     }
 
-                    }
-                }
-            }
+    //                 }
+    //             }
+
+
+
+    //         }
+
+    //     Column{
+    //         spacing: 100
+    //         width: parent.width/2
+    //         anchors.right: parent.right
+    //         Text {
+    //             id: label3
+    //             text: qsTr("Tooltip Label")
+    //         }
+
+    //         Rectangle{
+    //             id:toolTipEdit1
+    //             height:25
+    //             width:parent.width
+                
+
+    //             anchors.top: label3.bottom
+    //                 anchors.topMargin: 15
+
+    //             TextField{
+    //                  id:toolTipText1
+    //                 width: parent.width-150
+    //                 selectByMouse: true
+    //                 height:25
+    //                 cursorVisible: true
+    //                 anchors.top: parent.top
+    //                 anchors.topMargin: 5
+    //                 placeholderText: "column1"
+
+
+
+    //                 background: Rectangle{
+    //                     border.width: 1
+    //                     border.color:Constants.borderBlueColor
+                 
+
+    //                 }
+    //             }
+    //         }
+    //         Rectangle{
+    //             id:toolTipEdit2
+    //             height:25
+    //             width:parent.width
+
+    //             anchors.top: toolTipEdit1.bottom
+    //                 anchors.topMargin: 15
+
+    //             TextField{
+    //                 id:toolTipText2
+    //                 width: parent.width-150
+    //                 selectByMouse: true
+    //                 height:25
+    //                 cursorVisible: true
+    //                 anchors.top: parent.top
+    //                 anchors.topMargin: 5
+    //                 placeholderText: "column2"
+    //                 background: Rectangle{
+    //                     border.width: 1
+    //                     border.color:Constants.borderBlueColor
+
+
+    //                 }
+    //             }
+    //         }
+    //         // TODO:invisible if not color data
+    //         Rectangle{
+    //             id:toolTipEdit3
+    //             height:25
+    //             width:parent.width
+
+    //             anchors.top: toolTipEdit2.bottom
+    //                 anchors.topMargin: 15
+
+    //             TextField{
+    //                 id:toolTipText3
+    //                 width: parent.width-150
+    //                 selectByMouse: true
+    //                 height:25
+    //                 cursorVisible: true
+    //                 anchors.top: parent.top
+    //                 anchors.topMargin: 5
+    //                 placeholderText: "column3"
+    //                 background: Rectangle{
+    //                     border.width: 1
+    //                     border.color:Constants.borderBlueColor
+
+
+    //                 }
+    //             }
+    //         }
+    //     }
+    ListView{
+        id:xAxisListModelList
+    model:xAxisListModel
+    height:xAxisListModel.count*50
+    width:parent.width
+    delegate:
+        TooltipInputControl{
+            textValue:itemName
+            textLabel:generateLabel(index)
         }
+    }
+    ListView{
+id:yAxisListModelList
+anchors.top:xAxisListModelList.bottom
+    model:yAxisListModel
+    height:yAxisListModel.count*50
+    width:parent.width
+    delegate:
+        TooltipInputControl{
+            textValue:itemName
+            textLabel:generateLabel(xAxisListModel.count+index)
+            
+        }
+    }
+    ListView{
+        anchors.top:yAxisListModelList.bottom
+
+    model:colorListModel
+    height:colorListModel.count*50
+    width:parent.width
+    delegate:
+        TooltipInputControl{
+            textValue:itemName
+            textLabel:"colorData"
+        }
+    }
+}
 
     }
-
 
 
 
@@ -331,8 +405,10 @@ Popup {
             anchors.rightMargin: 20
             textValue: "Apply"
             onClicked: {
-               d3PropertyConfig.toolTip={textColumn1:toolTipText1.text,textColumn2:toolTipText2.text}
-                reDrawChart();
+                
+            //    d3PropertyConfig.toolTip={textColumn1:toolTipText1.text,textColumn2:toolTipText2.text}
+                // reDrawChart();
+                toolTipPopup.visible = false
             }
         }
     }

@@ -121,6 +121,7 @@
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig,
                 innerRadius,
+                toolTip,
                 dataLabelfontSize = defaultD3Config.fontSize,
                 dateFormat = defaultD3Config.dateFormat,
 
@@ -161,6 +162,12 @@
             var translateSvgTop = 100;
             var xAxisLabel = data[1][0];
             var yAxisLabel = data[1][1];
+            if (!toolTip) {
+                toolTip = {
+                    textColumn1: xAxisLabel,
+                    textColumn2: yAxisLabel,
+                };
+            }
 
             if (legendStatus) {
                 // d3.select("#legend").html("");
@@ -385,7 +392,7 @@
                             return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
-                                xAxisLabel +
+                                toolTip.textColumn1 +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -393,7 +400,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                yAxisLabel +
+                                toolTip.textColumn2 +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +

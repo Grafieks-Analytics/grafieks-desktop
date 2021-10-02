@@ -981,6 +981,7 @@
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     chartType = defaultD3Config.chartType,
                     curveType = defaultLineCurve,
+                    toolTip,
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
@@ -1046,6 +1047,13 @@
 
                 stroke = d3Colors[0];
                 [xAxisLabel, colorData, yAxisLabel] = data[2];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                        colorData: colorData,
+                    };
+                }
                 // colorData = "colorData";
                 // console.log({ data });
 
@@ -1260,7 +1268,7 @@
                                 "height",
                                 "calc(100vh - 42px)"
                             );
-                             d3.selectAll("#my_dataviz").style(
+                            d3.selectAll("#my_dataviz").style(
                                 "margin-top",
                                 0 + "px"
                             );
@@ -1310,7 +1318,10 @@
                                 "margin-top",
                                 0 + "px"
                             );
-                            d3.select("#xAxisLabelId").style("bottom", 20+"px");
+                            d3.select("#xAxisLabelId").style(
+                                "bottom",
+                                20 + "px"
+                            );
                     }
                 }
 
@@ -1482,27 +1493,21 @@
                             }
                             return d[2];
                         })
-                        .attr(
-                            "x",
-                            function (d, i) {
-                                this.setAttribute("data-value-x", d[0]);
-                                this.setAttribute("data-value-x1", d[1]);
+                        .attr("x", function (d, i) {
+                            this.setAttribute("data-value-x", d[0]);
+                            this.setAttribute("data-value-x1", d[1]);
 
-                                this.setAttribute("data-value-y", d[2]);
+                            this.setAttribute("data-value-y", d[2]);
 
-                                return x(d[0]) + x.bandwidth() / 2;
-                            }
-                        )
+                            return x(d[0]) + x.bandwidth() / 2;
+                        })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)
-                        .attr(
-                            "y",
-                            function (d) {
-                                // console.log(d[2]);
-                                return y(d[2])-5;
-                            }
-                        );
+                        .attr("y", function (d) {
+                            // console.log(d[2]);
+                            return y(d[2]) - 5;
+                        });
                 }
                 if (markerShape) {
                     svg.selectAll(".dot")
@@ -1601,7 +1606,7 @@
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
-                                        xAxisLabel +
+                                        toolTip.textColumn1 +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1609,7 +1614,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        colorData +
+                                        toolTip.textColumn2 +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1617,7 +1622,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        yAxisLabel +
+                                        toolTip.colorData +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +

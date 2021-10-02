@@ -1010,6 +1010,7 @@
                     paddingInner,
                     markerShape,
                     curveType,
+                    toolTip,
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     dataLabelfontSize = defaultD3Config.fontSize,
@@ -1370,13 +1371,22 @@
                             .style("display", "block")
                             .style("z-index", 1000)
                             .style("postion", "absolute")
+                            // .style("height", (d.depth?"":"6"))
                             // .text(d.data.name + ":" + d.value);
                             .html(function () {
                                 var textValue = d.y0 - d.y1;
                                 if (d.y1 < 0) {
                                     textValue = d.y1 - d.y0;
                                 }
+                                if (!toolTip) {
+                                    toolTip = {
+                                        textColumn1: d.data.label,
+                                        // textColumn1: d.data.name,
+                                        textColumn2: labels[labels.length - 1],
+                                    };
+                                }
                                 return (
+                                    
                                     "<div class='arrowTooltip'></div>" +
                                     (d.depth
                                         ? "<span style='color:grey;''>" +
@@ -1385,11 +1395,11 @@
                                           "</span>" +
                                           "<span style='float: right;'>" +
                                           d.data.name +
-                                          "</span>"
+                                          "</span>" +
+                                          "<br/> <br/>"
                                         : "") +
-                                    "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    labels[labels.length - 1] +
+                                    toolTip.textColumn2 +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
@@ -1487,7 +1497,7 @@
             // drawChart(data);
 
             // window.addEventListener("resize", function () {
-            //     drawChart(data);
+            drawChart(data);
             // });
         </script>
     </body>

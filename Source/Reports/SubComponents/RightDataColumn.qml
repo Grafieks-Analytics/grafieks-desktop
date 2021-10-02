@@ -128,7 +128,7 @@ Column{
         Rectangle{
             id:numericalRect
             height: 25
-            z:10
+            z:20
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
@@ -144,6 +144,7 @@ Column{
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: Constants.fontCategoryHeader
+            z: 30000000
         }
 }
 

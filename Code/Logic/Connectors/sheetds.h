@@ -39,7 +39,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
-    Q_INVOKABLE void fetchFileData(QString gFileId);
+    Q_INVOKABLE void fetchFileData(QString gFileId, QString gFileName);
 
     void addDataSource(Sheet * Sheet);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -76,6 +76,7 @@ private:
 
     QString username;
     QString gFileId;
+    QString gFileName;
 };
 
 #endif // SHEETDS_H

@@ -41,7 +41,6 @@ void SaveExtractExcelWorker::run()
     conExcel.setDatabaseName(Statics::excelDb);
 
     if(conExcel.open()){
-        qDebug() << "IF BLOCK";
 
         QSqlQuery query(this->query, conExcel);
         if(query.lastError().text() <= 0){
@@ -109,15 +108,12 @@ void SaveExtractExcelWorker::run()
 
                 appendExtractData(&appender, &query);
             } else {
-                qDebug() << "ELSE BLOCK3";
                 errorMsg = createT->error.c_str();
             }
         } else {
-            qDebug() << "ELSE BLOCK2";
             errorMsg = query.lastError().text();
         }
     } else {
-        qDebug() << "ELSE BLOCK1";
         errorMsg = conExcel.isOpenError();
         conExcel.close();
         conExcel.removeDatabase(connectionName);
