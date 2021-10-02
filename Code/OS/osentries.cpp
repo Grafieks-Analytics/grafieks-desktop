@@ -8,25 +8,51 @@ OsEntries::OsEntries(QObject *parent) : QObject(parent)
 void OsEntries::witeToWindowsRegistry()
 {
     // Application registry
-    QSettings settings("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks\\shell\\open\\command", QSettings::NativeFormat );
-    QString appPath = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
-    appPath.replace("/", "\\");
-    settings.setValue("Default", appPath + " \"%1\"");
+    // GADS
+    QSettings settingsGads("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks.gads\\shell\\open\\command", QSettings::NativeFormat );
+    QString appPathGads = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
+    appPathGads.replace("/", "\\");
+    settingsGads.setValue("Default", appPathGads + " \"%1\"");
 
-    // GADSE registry (Extract)
+    QSettings settingsGadsIcon("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks.gads\\DefaultIcon", QSettings::NativeFormat );
+    QString appPathGadsIcon = QCoreApplication::applicationDirPath() + "/rc/gads.ico";
+    settingsGadsIcon.setValue("Default", appPathGadsIcon);
+
+    // GAWB
+    QSettings settingsGawb("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks.gawb\\shell\\open\\command", QSettings::NativeFormat );
+    QString appPathGawb = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
+    appPathGawb.replace("/", "\\");
+    settingsGawb.setValue("Default", appPathGawb + " \"%1\"");
+
+    QSettings settingsGawbIcon("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks.gawb\\DefaultIcon", QSettings::NativeFormat );
+    QString appPathGawbIcon = QCoreApplication::applicationDirPath() + "/rc/gawb.ico";
+    settingsGawbIcon.setValue("Default", appPathGawbIcon);
+
+    // GADSE
+    QSettings settingsGadse("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks.gadse\\shell\\open\\command", QSettings::NativeFormat );
+    QString appPathGadse = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
+    appPathGadse.replace("/", "\\");
+    settingsGadse.setValue("Default", appPathGadse + " \"%1\"");
+
+    QSettings settingsGadseIcon("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\Grafieks.gadse\\DefaultIcon", QSettings::NativeFormat );
+    QString appPathGadseIcon = QCoreApplication::applicationDirPath() + "/rc/gadse.ico";
+    settingsGadseIcon.setValue("Default", appPathGadseIcon);
+
+
+
+    // Extensions entry
+    // GADSE (Extract)
     QSettings gadse("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\.gadse", QSettings::NativeFormat);
-    gadse.setValue("Default", "Grafieks");
-    gadse.setValue("DefaultIcon", Statics::tmpIconPath);
+    gadse.setValue("Default", "Grafieks.gadse");
 
-    // GADS registry (Live)
+
+    // GADS (Live)
     QSettings gads("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\.gads", QSettings::NativeFormat);
-    gads.setValue("Default", "Grafieks");
-    gads.setValue("DefaultIcon",  Statics::tmpIconPath);
+    gads.setValue("Default", "Grafieks.gads");
 
-    // GAWB registry (Workbook)
+    // GAWB (Workbook)
     QSettings gawb("HKEY_CURRENT_USER\\SOFTWARE\\CLASSES\\.gawb", QSettings::NativeFormat);
-    gawb.setValue("Default", "Grafieks");
-    gawb.setValue("DefaultIcon",  Statics::tmpIconPath);
+    gawb.setValue("Default", "Grafieks.gawb");
 }
 
 void OsEntries::writeToMacRegistry()
