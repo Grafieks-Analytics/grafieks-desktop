@@ -126,6 +126,7 @@ Rectangle {
             rectangles.set(counter, reportObj);
         }
 
+        DashboardParamsModel.setDashboardReportMap(reportId);
         DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
 
         console.log('x',mainContainer.x, 'y', mainContainer.y, 'z', mainContainer.z, mainContainer.width, mainContainer.height);

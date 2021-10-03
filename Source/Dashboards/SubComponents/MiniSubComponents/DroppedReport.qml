@@ -105,7 +105,6 @@ Item{
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
 
             newItem.dashboardId = dashboardId
-            newItem.reportsInCurrentDashboard = reportsInCurrentDashboard
 
             if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
                 newItem.visible = true
@@ -579,7 +578,7 @@ Item{
     }
 
     function reDrawChart(){
-        const reportProperties = ReportParamsModel.getReport(reportId);
+        const reportProperties = ReportParamsModel.getReport(parseInt(newItem.objectName));
         setReportName(reportProperties.reportTitle);
         console.log("Chart title", reportProperties, reportProperties.reportTitle);
         console.log("Chart title xe")
