@@ -93,41 +93,48 @@ Rectangle {
                 var reportsInFirstDashboard = DashboardParamsModel.fetchReportsInDashboard(allDashboardKeys[i])
                 var reportTypes = DashboardParamsModel.fetchAllReportTypeMap(i);
 
-                for(var j = 1; j <= reportsInFirstDashboard.length; j++){
-                    var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)
+                reportsInFirstDashboard.forEach(j => {
 
-                    let x1 = coordinates[0]
-                    let y1 = coordinates[1]
+                                                    var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)
 
-                    let reportType = Constants.reportTypeChart;
-                    let draggedItem = DashboardParamsModel.getReportName(i, j);
+                                                    let x1 = coordinates[0]
+                                                    let y1 = coordinates[1]
 
-                    dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
+                                                    let reportType = Constants.reportTypeChart;
+                                                    let draggedItem = DashboardParamsModel.getReportName(i, j);
 
-                    // Set the last container type param
-                    // report type - chart, image, blank, text
-                    DashboardParamsModel.setLastContainerType(reportTypeArray[reportTypes[j]]);
+                                                    dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
 
-                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j)};
-                    objectJson.reportId = j;
-                    rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
+                                                    // Set the last container type param
+                                                    // report type - chart, image, blank, text
+                                                    DashboardParamsModel.setLastContainerType(reportTypeArray[reportTypes[j]]);
 
-                    const reportProperties = ReportParamsModel.getReport(j);
+                                                    var mainContainerVisibility = i === 0 ? true : false
+                                                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j), visible: mainContainerVisibility};
+                                                    console.log("VISIO", JSON.stringify(objectJson))
+                                                    objectJson.reportId = j;
+                                                    rectangles.set(counter, dynamicContainer.createObject(parent,objectJson));
+
+                                                    const reportProperties = ReportParamsModel.getReport(j);
 
 
-                    // ["blank", "text", "image", "report"]
-                    if(reportTypeArray[reportTypes[j]] === reportTypeArray[1]){
-                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
-                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[2]){
-                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
-                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[3]) {
-                        const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
-                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
-                    }
+                                                    // ["blank", "text", "image", "report"]
+                                                    if(reportTypeArray[reportTypes[j]] === reportTypeArray[1]){
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                                                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[2]){
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                                                    } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[3]) {
+                                                        const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+                                                    }
 
-                    counter++;
-                }
+                                                    counter++;
+                                                })
+
             }
+
+            DashboardParamsModel.setCurrentDashboard(allDashboardKeys.length - 1);
+
         }
     }
 
