@@ -422,6 +422,7 @@ Rectangle{
             return
         }
         report_desiner_page.chartUrl = chartHtml;
+        report_desiner_page.previousChartTitle = report_desiner_page.chartTitle;
         report_desiner_page.chartTitle = chartTitle;
 
         report_desiner_page.customizationsAvailable = mainCustomizations;
@@ -476,7 +477,8 @@ Rectangle{
                     chartHtml = Constants.horizontalMultiLineChartUrl;
                     console.log('Horizontal Chart Load');
                 }else{
-                    console.log('Missed Horizontal Condition')
+                    // chartHtml = Constants.horizontalLineChartUrl; // Added on last day
+                    console.log('Missed Horizontal Condition ---> Making it horizontal line chart!')
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){

@@ -551,28 +551,16 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            function transformData(
-                dataValue,
-                dataColumns,
-                dateFormat,
-                dateFormat1
-            ) {
+            function transformData(dataValue, dateFormat, dateFormat1) {
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
 
-                // [Tag: Date Change]
-                var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
-
-                // [Tag: Date Change]
-                if (yAxisColumnDetails[0].itemType == "Date") {
-                    isKey2Date = true;
-                    dateFormat = yAxisColumnDetails[0].dateFormat;
-                }
-                // [Tag: Date Change]
-                if (colorByData[0].itemType == "Date") {
+                if (isDateFormat(dataValue[0][1])) {
                     isKey1Date = true;
-                    dateFormat1 = colorByData[0].dateFormat;
+                }
+                if (isDateFormat(dataValue[0][0])) {
+                    isKey2Date = true;
                 }
 
                 var uniqueKey2 = [];
@@ -646,7 +634,6 @@
                     labelConfig = defaultD3Config.defaultlabelConfig,
                     gridConfig = defaultD3Config.defaultGridConfig,
                     standardThresholdHeight = defaultD3Config.standardThresholdHeight,
-                    dataColumns,
                     // font size
                     xLabelfontSize = defaultD3Config.fontSize,
                     yLabelfontSize = defaultD3Config.fontSize,
@@ -704,7 +691,7 @@
 
                 d3Colors = d3colorPalette;
                 var [dataValues, lineMainCategories, allKeys, label] =
-                    transformData(data[0], dataColumns, dateFormat, dateFormat);
+                    transformData(data[0], dateFormat, dateFormat);
                 [xAxisLabel, colorData, yAxisLabel] = data[2];
                 if (!toolTip) {
                     toolTip = {
