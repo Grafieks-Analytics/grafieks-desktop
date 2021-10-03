@@ -189,16 +189,8 @@ ApplicationWindow {
     }
 
 
-    FileDialog {
+    SaveExtract{
         id: dsSaveDialog
-        title: "Save as"
-        folder: shortcuts.documents
-        fileMode: FileDialog.SaveFile
-        defaultSuffix: DSParamsModel.fileExtension
-        onAccepted: {
-            DSParamsModel.saveDatasource(file)
-
-        }
     }
 
     FileDialog {
