@@ -57,6 +57,11 @@
 
         <script>
             // Spectral color range
+
+            var extraHeightWorked = false;
+            var redrawn = false;
+            var extraHeight = 0;
+            
             var d3colors = [
                 "#ffffff",
                 "#f7fbff",
@@ -6541,6 +6546,9 @@
             }
 
             function drawChart(data, plottingConfiguration = {}) {
+                if (!redrawn) {
+                    extraHeight = 0;
+                }
                 window.data = data;
 
                 let {
@@ -6637,7 +6645,7 @@
                     (width =
                         window.innerWidth - margin.left - margin.right - 20),
                     (height =
-                        window.innerHeight - margin.top - margin.bottom - 20);
+                        window.innerHeight - margin.top - margin.bottom - 20 - extraHeight);
 
                 // var margin = { top: 30, right: 30, bottom: 30, left: 30 },
                 //     width = 1300 - margin.left - margin.right,
@@ -6930,7 +6938,7 @@
                     .select("#my_dataviz")
                     .append("svg")
                     .attr("width", width - 25 + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("height", height + margin.top + margin.bottom + extraHeight)
                     .append("g")
                     .attr(
                         "transform",
@@ -7122,6 +7130,7 @@
                 console.log(barWidth);
 
                 removeAxisTicks("xAxis", dataValues, null);
+                removeAxisTicks("yAxis", dataValues, null);
 
                 for (var i = 0; i < a.length; i++) {
                     if (i == 0 && barWidth < textWidth * 0.5) {
@@ -7249,8 +7258,44 @@
                         // .attr("font-size", fontSize)
                         .attr("y", "8");
                 }
+
+                if (extraHeightWorked && !redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = true;
+                    drawChart(window.data, plottingConfiguration);
+                }
+
+                if (extraHeightWorked && redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = false;
+                }
             }
 
+            drawChart(data, {
+                chartType: "FitWidth",
+                dataColumns: {
+                    xAxisColumnDetails: [
+                        {
+                            itemName: "Order Date",
+                            itemType: "Date",
+                            dateFormat: "%b %Y",
+                        },
+                    ],
+                    yAxisColumnDetails: [
+                        {
+                            itemName: "Ship Date",
+                            itemType: "Date",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    row3ColumnDetails: [],
+                    colorByData: [
+                        { columnName: "Row ID", itemType: "Numerical" },
+                    ],
+                },
+                dateFormat: "%b %Y",
+                gridConfig: { gridStatus: true },
+            });
         </script>
     </body>
 </html>
