@@ -536,14 +536,11 @@ Popup {
         visible: false
         title: "Postgres Driver missing"
 
-// Button {
-//     // anchors.centerIn: parent
+
         text: qsTr("You don't have Postgres driver.Click Ok to Download")
-//     onLinkActivated: Qt.openUrlExternally(link)
-//  Download it here <a href=\"https://www.postgresql.org/ftp/odbc/versions\">click here</a>
-// }
+
  standardButtons: StandardButton.Ok
-    // Component.onCompleted: visible = true
+
 onAccepted: {Qt.openUrlExternally("https://www.postgresql.org/ftp/odbc/versions")
 }
 

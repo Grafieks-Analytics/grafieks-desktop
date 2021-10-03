@@ -530,8 +530,14 @@ Popup {
         id: oracleOdbcModalError
         visible: false
         title: "Oracle Driver missing"
-        text: qsTr("You don't have Oracle driver. Download it here <a href=\"https://www.oracle.com/database/technologies/instant-client/downloads.html\">https://www.oracle.com/database/technologies/instant-client/downloads.html</a>")
+        // text: qsTr("You don't have Oracle driver. Download it here <a href=\"https://www.oracle.com/database/technologies/instant-client/downloads.html\">https://www.oracle.com/database/technologies/instant-client/downloads.html</a>")
+text: qsTr("You don't have Oracle driver.Click Ok to Download")
 
+ standardButtons: StandardButton.Ok
+
+onAccepted: {Qt.openUrlExternally("https://www.oracle.com/database/technologies/instant-client/downloads.html")
+}
+    
     }
 
 }

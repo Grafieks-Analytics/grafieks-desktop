@@ -532,8 +532,13 @@ Popup {
         id: mssqlOdbcModalError
         visible: false
         title: "Microsoft SQL Driver missing"
-        text: qsTr("You don't have Microsoft SQL driver. Download it here <a href=\"https://www.microsoft.com/en-in/download/details.aspx?id=36434\">https://www.microsoft.com/en-in/download/details.aspx?id=36434</a>")
+        // text: qsTr("You don't have Microsoft SQL driver. Download it here <a href=\"https://www.microsoft.com/en-in/download/details.aspx?id=36434\">https://www.microsoft.com/en-in/download/details.aspx?id=36434</a>")
+text: qsTr("You don't have Microsoft SQL driver.Click Ok to Download")
 
+ standardButtons: StandardButton.Ok
+
+onAccepted: {Qt.openUrlExternally("https://www.microsoft.com/en-in/download/details.aspx?id=36434")
+}
     }
 
 }
