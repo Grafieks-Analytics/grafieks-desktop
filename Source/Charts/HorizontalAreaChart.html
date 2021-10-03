@@ -179,10 +179,10 @@
             function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
                 // [Tag: Date Change]
-                var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
+                var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 // [Tag: Date Change]
-                if (xAxisColumnDetails[0].itemType == "Date") {
+                if (yAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
                 }
 
