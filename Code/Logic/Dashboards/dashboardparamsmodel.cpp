@@ -1375,7 +1375,6 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
 
     QStringList dashboardIds = dashboardParams.value("dashboardReportMap").toObject().keys();
 
-    this->setCurrentDashboard(dashboardIds.at(0).toInt());
     this->setDashboardCount(dashboardIds.length());
 
     foreach(QString dashboardId, dashboardIds){
@@ -1595,7 +1594,6 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         emit reportLineColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
     }
 
-
 }
 
 void DashboardParamsModel::setDashboardReportMap(int reportId){
@@ -1717,7 +1715,7 @@ void DashboardParamsModel::saveDashboard()
         foreach(QString columnName, this->columnIncludeExcludeMap.value(dashboardId).keys())
             columnIncludeExcludeMapTmpObj.insert(columnName, this->columnIncludeExcludeMap.value(dashboardId).value(columnName).toString());
 
-        columnFilterTypeObj.insert(QString::number(dashboardId), columnIncludeExcludeMapTmpObj);
+        columnIncludeExcludeMapObj.insert(QString::number(dashboardId), columnIncludeExcludeMapTmpObj);
 
 
         // columnValueMap
