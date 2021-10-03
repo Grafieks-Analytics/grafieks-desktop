@@ -773,7 +773,7 @@ Page {
         case Constants.barChartTitle:
         case Constants.lineChartTitle:
         case Constants.areaChartTitle:
-            if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.heatMapChartTitle){
+           if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.heatMapChartTitle || previousChartTitle == Constants.tableTitle){
                 if(!allNonMeasures(xAxisColumnDetails)){
                     xAxisListModel.clear();
                 }
