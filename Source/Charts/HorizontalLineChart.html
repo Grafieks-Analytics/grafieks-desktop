@@ -147,7 +147,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-
             function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
                 var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
@@ -219,7 +218,7 @@
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
                     markerShape = false,
-                    filledStatus = false,
+                    filledStatus = true,
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdHeight = defaultD3Config.standardThresholdHeight,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
@@ -816,7 +815,7 @@
                     .attr("font-family", xTickfontFamily)
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
-                d3.selectAll("#yAxisDiv text")
+                d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
