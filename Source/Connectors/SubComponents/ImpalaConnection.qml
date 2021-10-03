@@ -530,8 +530,13 @@ Popup {
         id: impalaOdbcModalError
         visible: false
         title: "Impala Driver missing"
-        text: qsTr("You don't have Impala driver. Download it here <a href=\"https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html\">https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html</a>")
+        // text: qsTr("You don't have Impala driver. Download it here <a href=\"https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html\">https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html</a>")
+text: qsTr("You don't have Impala driver.Click Ok to Download")
 
+ standardButtons: StandardButton.Ok
+
+onAccepted: {Qt.openUrlExternally("https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html")
+}
     }
 
 }

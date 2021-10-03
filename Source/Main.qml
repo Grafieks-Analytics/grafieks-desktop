@@ -157,6 +157,9 @@ ApplicationWindow {
     function openReaderDialog(){
         readerDialog.visible = true
     }
+    function openLicense(){
+        licensePopup.open()
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -226,6 +229,9 @@ ApplicationWindow {
 
     About{
         id: aboutPopup
+    }
+    License{
+        id: licensePopup
     }
 
 

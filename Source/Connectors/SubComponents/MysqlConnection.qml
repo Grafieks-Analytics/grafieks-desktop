@@ -541,8 +541,13 @@ Popup {
         id: mysqlOdbcModalError
         visible: false
         title: "MySql Driver missing"
-        text: qsTr("You don't have MySql driver. Download it here <a href=\"https://dev.mysql.com/downloads/connector/odbc/\">https://dev.mysql.com/downloads/connector/odbc/</a>")
+        // text: qsTr("You don't have MySql driver. Download it here <a href=\"https://dev.mysql.com/downloads/connector/odbc/\">https://dev.mysql.com/downloads/connector/odbc/</a>")
+text: qsTr("You don't have MySql driver.Click Ok to Download")
 
+ standardButtons: StandardButton.Ok
+
+onAccepted: {Qt.openUrlExternally("https://dev.mysql.com/downloads/connector/odbc/")
+}
     }
 
 }
