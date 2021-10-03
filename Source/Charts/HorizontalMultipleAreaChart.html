@@ -551,16 +551,25 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            function transformData(dataValue, dateFormat, dateFormat1) {
+            function transformData(
+                dataValue,
+                dataColumns,
+                dateFormat,
+                dateFormat1
+            ) {
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
 
-                if (isDateFormat(dataValue[0][1])) {
-                    isKey1Date = true;
-                }
-                if (isDateFormat(dataValue[0][0])) {
+                var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
+                // [Tag: Date Change]
+                if (yAxisColumnDetails[0].itemType == "Date") {
                     isKey2Date = true;
+                }
+                // [Tag: Date Change]
+                if (colorByData[0].itemType == "Date") {
+                    isKey1Date = true;
                 }
 
                 var uniqueKey2 = [];
@@ -640,6 +649,7 @@
                     xTickfontSize = defaultD3Config.fontSize,
                     yTickfontSize = defaultD3Config.fontSize,
                     dataLabelfontSize = defaultD3Config.fontSize,
+                    dataColumns,
                     // font family
                     xLabelfontFamily = defaultD3Config.fontFamily,
                     yLabelfontFamily = defaultD3Config.fontFamily,
@@ -691,7 +701,7 @@
 
                 d3Colors = d3colorPalette;
                 var [dataValues, lineMainCategories, allKeys, label] =
-                    transformData(data[0], dateFormat, dateFormat);
+                    transformData(data[0], dataColumns, dateFormat, dateFormat);
                 [xAxisLabel, colorData, yAxisLabel] = data[2];
                 if (!toolTip) {
                     toolTip = {

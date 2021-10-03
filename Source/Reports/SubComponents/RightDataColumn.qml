@@ -89,14 +89,20 @@ Column{
             }
         }
 
-
-        CategoricalList{
-            id: categoricalList
+        Rectangle{
+            height: parent.height- 45
+            width: parent.width
             anchors.top: categoricalHeadingRect.bottom
-            height: parent.height - 40
+            
+            CategoricalList{
+            id: categoricalList
+            height: parent.height - 10
+            anchors.top: parent.top
+            
             width: parent.width-10
              anchors.horizontalCenter: parent.horizontalCenter
 
+            }
         }
 
     }
@@ -136,26 +142,33 @@ Column{
 
             border.color: Constants.darkThemeColor
 
-        Text {
-            id: numericalHeading
-            text: qsTr("Numerical")
-            anchors.left: parent.left
+                Text {
+                    id: numericalHeading
+                    text: qsTr("Numerical")
+                    anchors.left: parent.left
 
-            anchors.leftMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: Constants.fontCategoryHeader
-            z: 30000000
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.fontCategoryHeader
+                    
+                }
         }
-}
 
-        NumericalList{
-            id: numericalList
+        
+        Rectangle{
+            height: parent.height- 45
+            width: parent.width
             anchors.top: numericalRect.bottom
-             height: parent.height - 40
-            width: parent.width-10
-      
-             anchors.horizontalCenter: parent.horizontalCenter
-             z: 20000    
+            
+            NumericalList{
+                id: numericalList
+                anchors.top: parent.top
+                height: parent.height - 10
+                width: parent.width-10
+        
+                anchors.horizontalCenter: parent.horizontalCenter
+                z: 20000    
+            }
         }
 
     }
