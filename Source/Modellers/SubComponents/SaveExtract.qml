@@ -18,7 +18,7 @@ FileDialog{
 
     onAccepted: {
 
-        let fileName = GeneralParamsModel.urlToFilePath(saveFilePrompt.currentFile)
+        let fileName = GeneralParamsModel.urlToFilePath(saveFilePromptDialog.currentFile)
         GeneralParamsModel.setExtractPath(fileName)
 
         switch(GeneralParamsModel.getDbClassification()){
