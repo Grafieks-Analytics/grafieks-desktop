@@ -1079,6 +1079,10 @@ Page {
             break;
         case Constants.horizontalBarChartTitle:
             chartUrl = Constants.horizontalBarChartUrl;
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical";
+            break;
+        case Constants.horizontalBarGroupedChartTitle:
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical";
             break;
         case Constants.horizontalStackedBarChartTitle:
             chartUrl = Constants.horizontalStackedBarChartUrl;
@@ -1088,6 +1092,7 @@ Page {
             break;
         case Constants.groupBarChartTitle:
             chartUrl = Constants.barGroupedChartUrl
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical";
             break;
         case Constants.horizontalLineChartTitle:
             chartUrl = Constants.horizontalLineChartUrl
