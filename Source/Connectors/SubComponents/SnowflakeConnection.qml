@@ -530,8 +530,13 @@ Popup {
         id: snowflakeOdbcModalError
         visible: false
         title: "SnowFlake Driver missing"
-        text: qsTr("You don't have SnowFlake driver. Download it here <a href=\"https://sfc-repo.snowflakecomputing.com/odbc/index.html\">https://sfc-repo.snowflakecomputing.com/odbc/index.html</a>")
+        // text: qsTr("You don't have SnowFlake driver. Download it here <a href=\"https://sfc-repo.snowflakecomputing.com/odbc/index.html\">https://sfc-repo.snowflakecomputing.com/odbc/index.html</a>")
+   text: qsTr("You don't have SnowFlake driver.Click Ok to Download")
 
+ standardButtons: StandardButton.Ok
+
+onAccepted: {Qt.openUrlExternally("https://sfc-repo.snowflakecomputing.com/odbc/index.html")
+}
     }
 
 }
