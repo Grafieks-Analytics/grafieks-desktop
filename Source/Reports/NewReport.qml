@@ -54,6 +54,8 @@ Page {
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
+    property string previousChartTitle: "";
+
     property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
     property var subMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
 
@@ -666,9 +668,16 @@ Page {
 
         console.log('Chart Title Changed',chartTitle);
 
+        if(d3PropertyConfig.toolTip){
+            delete d3PropertyConfig.toolTip;
+        }
+
         // Charts Mapping
         // Basically these are the basic configs
         // Having Max Allowed Values for now
+        if(!allChartsMapping[chartTitle]){
+            allChartsMapping[chartTitle] = {}
+        }
         const chartDetailsConfig = allChartsMapping[chartTitle];
         const { maxDropOnXAxis, maxDropOnYAxis, maxDropOnRow3Axis = 0 } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
@@ -764,16 +773,33 @@ Page {
         case Constants.barChartTitle:
         case Constants.lineChartTitle:
         case Constants.areaChartTitle:
-        case Constants.multiLineChartTitle:
-        case Constants.multipleAreaChartTitle:
-        case Constants.groupBarChartTitle:
-        case Constants.stackedBarChartTitle:
+            if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.heatMapChartTitle){
+                if(!allNonMeasures(xAxisColumnDetails)){
+                    xAxisListModel.clear();
+                }
+                
+                if(!allNumericalValues(yAxisColumnDetails)){
+                    yAxisListModel.clear();
+                }
+                
+                clearColorByList();
+            }
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
         case Constants.radarChartTitle:
         case Constants.sunburstChartTitle:
         case Constants.treeChartTitle:
         case Constants.waterfallChartTitle:
+        
+        case Constants.multiLineChartTitle:
+        case Constants.multipleAreaChartTitle:
+        case Constants.groupBarChartTitle:
+        case Constants.stackedBarChartTitle:
 
             if(!allNonMeasures(xAxisColumnDetails)){
                 xAxisListModel.clear();
@@ -782,14 +808,13 @@ Page {
             if(!allNumericalValues(yAxisColumnDetails)){
                 yAxisListModel.clear();
             }
-
             
             clearColorByList();
-            
             xAxisVisible = true
             yAxisVisible = true
             row3Visible = false
             row4Visible = false
+        
             break;
         case Constants.horizontalBarChartTitle:
         case Constants.horizontalLineChartTitle:
@@ -799,8 +824,9 @@ Page {
         case Constants.horizontalMultiLineChartTitle:
         case Constants.horizontalStackedBarChartTitle:
 
-             if(!allNonMeasures(yAxisColumnDetails) ){
-                yAxisListModel.clear();
+             
+            if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails))){
+                yAxisColumnDetails.clear();
             }
             
             if(!allNumericalValues(xAxisColumnDetails)){
@@ -1041,14 +1067,22 @@ Page {
     // 3. Update the webEngine URL
 
     function switchChart(chartTitleValue){
+        previousChartTitle = chartTitle;
         chartTitle = chartTitleValue;
         var chartUrl = '';
+        if(!allChartsMapping[chartTitle]){
+            allChartsMapping[chartTitle] = {}
+        }
         switch(chartTitle){
         case Constants.barChartTitle:
             chartUrl = Constants.barChartUrl;
             break;
         case Constants.horizontalBarChartTitle:
             chartUrl = Constants.horizontalBarChartUrl;
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical";
+            break;
+        case Constants.horizontalBarGroupedChartTitle:
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical";
             break;
         case Constants.horizontalStackedBarChartTitle:
             chartUrl = Constants.horizontalStackedBarChartUrl;
@@ -1058,9 +1092,11 @@ Page {
             break;
         case Constants.groupBarChartTitle:
             chartUrl = Constants.barGroupedChartUrl
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical";
             break;
         case Constants.horizontalLineChartTitle:
             chartUrl = Constants.horizontalLineChartUrl
+            allChartsMapping[chartTitle].colorByDropEligible = "categorical"
             break;
         case Constants.multiLineChartTitle:
             chartUrl = Constants.multiLineChartUrl;
@@ -1116,6 +1152,10 @@ Page {
             break;
         case Constants.kpiTitle:
             chartUrl = Constants.kpiChartUrl;
+            break;
+        case Constants.treeChartTitle:
+            chartUrl = Constants.treeChartUrl;
+            allowedXAxisDataPanes = 5;
             break;
         }
 
@@ -1264,7 +1304,7 @@ Page {
         console.log('Debug::',xAxisType, yAxisType);
 
         if(xAxisType == "numerical" || yAxisType == "date" || yAxisType == "categorical"){
-            console.log('Debug:: Graph is horizontal');
+            console.log('Debug:: Graph is horizontal',isHorizontalGraph);
             isHorizontalGraph = true;
         }else if(yAxisType == "numerical" || xAxisType == "date" || xAxisType == "categorical"){
             console.log('Debug:: Graph is not horizontal');

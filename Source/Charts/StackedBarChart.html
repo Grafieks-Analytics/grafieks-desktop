@@ -1306,30 +1306,6 @@
         //     drawChart(data);
         // });
 
-        drawChart(data, {
-            dataColumns: {
-                xAxisColumnDetails: [
-                    {
-                        itemName: "Category",
-                        itemType: "Categorical",
-                        dateFormat: "%Y",
-                    },
-                ],
-                yAxisColumnDetails: [
-                    {
-                        itemName: "Sales",
-                        itemType: "Numerical",
-                        dateFormat: "%Y",
-                    },
-                ],
-                row3ColumnDetails: [],
-                colorByData: [{ columnName: "City", itemType: "Categorical" }],
-            },
-            toolTip: {
-                textColumn1: "city",
-                colorData: "city",
-                textColumn2: "dd",
-            },
-        });
+        
     </script>
 </body>

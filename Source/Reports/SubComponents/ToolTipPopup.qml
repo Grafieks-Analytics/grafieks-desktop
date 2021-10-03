@@ -358,7 +358,7 @@ Popup {
     delegate:
         TooltipInputControl{
             textValue:itemName
-            textLabel:generateLabel(index)
+            textLabel:generateLabel( report_desiner_page.isHorizontalGraph ? (yAxisListModel.count + index) : index)
         }
     }
     ListView{
@@ -370,7 +370,7 @@ anchors.top:xAxisListModelList.bottom
     delegate:
         TooltipInputControl{
             textValue:itemName
-            textLabel:generateLabel(xAxisListModel.count+index)
+            textLabel:generateLabel(report_desiner_page.isHorizontalGraph ? index : xAxisListModel.count+index)
             
         }
     }

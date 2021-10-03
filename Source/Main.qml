@@ -458,9 +458,17 @@ ApplicationWindow {
             }
             MenuItem{
                 text: qsTr("Support")
+                onTriggered: {
+                    // stacklayout_home.currentIndex = 2
+                    Qt.openUrlExternally("https://grafieks.com/");
+                }
             }
             MenuItem{
                 text: qsTr("Grafieks Community")
+                onTriggered: {
+                    // stacklayout_home.currentIndex = 2
+                    Qt.openUrlExternally("https://community.grafieks.com/");
+                }
             }
 
             MenuSeparator{}
