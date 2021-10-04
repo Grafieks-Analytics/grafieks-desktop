@@ -2,7 +2,7 @@
 
 1. Put all the logo icons (Windows -.ico, Mac - .icns) inside `config` folder
 2. Remember to copy `duckdb.dll` to data folder
-3. Remember to copy images/rc folder to data folder
+3. Remember to copy `images/rc` folder to data folder
 
 ## Offline installer
 ```
