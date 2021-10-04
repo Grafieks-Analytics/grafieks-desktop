@@ -6996,15 +6996,15 @@
                     .call(d3.axisLeft(y).tickSizeOuter(0))
                     .call(y);
 
-                // d3.selectAll(".x-axis text")
-                //     .attr("font-size", xTickfontSize)
-                //     .attr("font-family", xTickfontFamily)
-                //     .attr("fill", xTickfontColor)
-                //     .attr("y", 8);
-                // d3.selectAll("#yAxisDiv text")
-                //     .attr("font-size", yTickfontSize)
-                //     .attr("font-family", yTickfontFamily)
-                //     .attr("fill", yTickfontColor);
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 8);
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
 
                 svg.selectAll()
                     .data(dataValues, function (d) {

@@ -902,7 +902,12 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            function transformData(dataValue, dataColumns = {}, dateFormat, dateFormat1) {
+            function transformData(
+                dataValue,
+                dataColumns = {},
+                dateFormat,
+                dateFormat1
+            ) {
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
@@ -1014,7 +1019,7 @@
 
                     dataColumns,
 
-                    filledStatus = false,
+                    filledStatus = true,
                 } = plottingConfiguration;
 
                 window.xLabelfontSize = xLabelfontSize;
@@ -1878,7 +1883,7 @@
                     .attr("font-family", xTickfontFamily)
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
-                d3.selectAll("#yAxisDiv text")
+                d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
