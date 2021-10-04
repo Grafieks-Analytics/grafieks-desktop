@@ -110,8 +110,7 @@ Rectangle {
                                                     DashboardParamsModel.setLastContainerType(reportTypeArray[reportTypes[j]]);
 
                                                     var mainContainerVisibility = i === 0 ? true : false
-                                                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : counter, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j), visible: mainContainerVisibility};
-                                                    console.log("VISIO", JSON.stringify(objectJson))
+                                                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : j, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j), visible: mainContainerVisibility};
                                                     objectJson.reportId = j;
                                                     rectangles.set(counter, dynamicContainer.createObject(parent,objectJson));
 
@@ -120,12 +119,12 @@ Rectangle {
 
                                                     // ["blank", "text", "image", "report"]
                                                     if(reportTypeArray[reportTypes[j]] === reportTypeArray[1]){
-                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, DashboardParamsModel.getDashboardWidgetUrl(i, j));
                                                     } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[2]){
-                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, DashboardParamsModel.getDashboardWidgetUrl(i, j));
                                                     } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[3]) {
                                                         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
-                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, chartUrl);
                                                     }
 
                                                     counter++;
@@ -167,20 +166,28 @@ Rectangle {
 
         let reportType = 0;
         let draggedItem = listViewElem.itemName.toLocaleLowerCase();
+        var newReportId = 0;
 
         switch(listViewElem.itemName){
 
         case "Blank":
             reportType = Constants.reportTypeBlank
+            newReportId = ReportParamsModel.generateNewReportId();
+            ReportParamsModel.setReportId(newReportId);
             break;
         case "Text":
             reportType = Constants.reportTypeText
+            newReportId = ReportParamsModel.generateNewReportId();
+            ReportParamsModel.setReportId(newReportId);
             break;
         case "Image":
             reportType = Constants.reportTypeImage
+            newReportId = ReportParamsModel.generateNewReportId();
+            ReportParamsModel.setReportId(newReportId);
             break;
         default:
             reportType = Constants.reportTypeChart
+            newReportId = listViewElem.reportId;
             break;
         }
 
@@ -189,26 +196,27 @@ Rectangle {
         // Set the last container type param
         DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
 
-        var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter};
-        if(listViewElem.reportId){
-            objectJson.reportId = listViewElem.reportId;
-        }
+
+        var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : newReportId, reportId: newReportId};
+
+
+
         rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
-        DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
+
+        DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, newReportId)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
-        DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, counter, x1, y1, x2, y2)
-        DashboardParamsModel.setDashboardWidgetTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
+        DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, newReportId, x1, y1, x2, y2)
+        DashboardParamsModel.setDashboardWidgetTypeMap(DashboardParamsModel.currentDashboard, newReportId, reportType)
 
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
         if(reportType === Constants.reportTypeChart)
-            DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+            DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, newReportId, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);
-
         counter++;
     }
 
