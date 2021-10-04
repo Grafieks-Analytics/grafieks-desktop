@@ -186,7 +186,7 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Reference Line"
-            subMenuCustomizations: "color by,tool tip,size,data label"
+            subMenuCustomizations: "color by,tool tip,data label"
             colorByDropEligible: ""
         }
 //        ListElement{
