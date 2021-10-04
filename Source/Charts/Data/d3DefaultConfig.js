@@ -48,7 +48,7 @@ const defaultD3Config = {
         "#17becf",
     ],
     defaultPaddingInner: 0.25,
-    defaultMarkerShape: constants.markerShapes.RECT,
+    defaultMarkerShape: constants.markerShapes.CIRCLE,
     initialCircleRadius: 3,
     onHoverCircleRadius: 7,
     initialBoxDimension: 6,
