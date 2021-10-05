@@ -54,6 +54,8 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     obj.insert("SourceType", sourceType);
     obj.insert("ColumnName", extractColumnName);
     obj.insert("IsFullExtract", isFullExtract);
+    obj.insert("DatasourceFileName", dsName);
+    obj.insert("FileData", base64Image);
 
 
     QJsonDocument doc(obj);
@@ -89,6 +91,8 @@ void PublishDatasourceModel::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
+
+        qDebug() << Q_FUNC_INFO << resultJson;
 
         m_tempStorage->clear();
     }
