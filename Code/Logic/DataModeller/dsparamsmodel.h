@@ -129,7 +129,6 @@ public:
     Q_INVOKABLE void disconnectDS();
 
     Q_INVOKABLE void resetDataModel();
-    Q_INVOKABLE bool saveDatasource(QString filename);
     Q_INVOKABLE QVariantList readDatasource(QString filename);
 
     Q_INVOKABLE void addToHideColumns(QString colName);

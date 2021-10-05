@@ -323,14 +323,14 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html(xAxisLabel + "&nbsp;")
+                    .html(colorData + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
 
                 d3.select("#legend")
                     .selectAll("div")
-                    .data([data[1][0]])
+                    .data(data[2])
                     .enter()
                     .append("div")
                     .html((d, i) => {
@@ -645,6 +645,14 @@
 
                             return (
                                 "<div class='arrowTooltip'></div>" +
+                                 "<span style='color:grey;''>" +
+                                toolTip.colorData +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                d[2] +
+                                "</span>"+
+                                "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
                                 toolTip.textColumn1 +
                                 ":&nbsp;&nbsp;" +
@@ -659,15 +667,9 @@
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 d[1] +
-                                "</span>" +
-                                "<br/> <br/>" +
-                                "<span style='color:grey;''>" +
-                                toolTip.colorData +
-                                ":" +
-                                "</span>" +
-                                "<span style='float: right;margin-left: 15px;'>" +
-                                d[2] +
-                                "</span>"
+                                "</span>" 
+                                
+                               
                             );
                         });
                     var scrollVal =
@@ -738,6 +740,16 @@
 
             var yAxisDiv = document.querySelector("#yAxisDiv svg");
             // Generate Grid starts
+
+            d3.selectAll("#yAxisDiv text")
+                .attr("font-size", yTickfontSize)
+                .attr("font-family", yTickfontFamily)
+                .attr("fill", yTickfontColor);
+            d3.selectAll(".x-axis text")
+                .attr("font-size", xTickfontSize)
+                .attr("font-family", xTickfontFamily)
+                .attr("fill", xTickfontColor)
+                .attr("y", 8);
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);

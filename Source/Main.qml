@@ -157,6 +157,9 @@ ApplicationWindow {
     function openReaderDialog(){
         readerDialog.visible = true
     }
+    function openLicense(){
+        licensePopup.open()
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -189,16 +192,8 @@ ApplicationWindow {
     }
 
 
-    FileDialog {
+    SaveExtract{
         id: dsSaveDialog
-        title: "Save as"
-        folder: shortcuts.documents
-        fileMode: FileDialog.SaveFile
-        defaultSuffix: DSParamsModel.fileExtension
-        onAccepted: {
-            DSParamsModel.saveDatasource(file)
-
-        }
     }
 
     FileDialog {
@@ -234,6 +229,9 @@ ApplicationWindow {
 
     About{
         id: aboutPopup
+    }
+    License{
+        id: licensePopup
     }
 
 

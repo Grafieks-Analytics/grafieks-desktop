@@ -36,9 +36,10 @@ Rectangle {
     property var dynamicReportBox : Qt.createComponent("./DroppedReport.qml");
 
     property var objectType: "";
-    property var reportId: ""; // This works only in case of reports | Else this will always be empty [Tag: Optimization]
+    property var reportId: "";
 
     property var rulerStatus: false
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
 
     /***********************************************************************************************************************/
@@ -65,9 +66,9 @@ Rectangle {
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 mainContainer.visible = true
             } else{
                 mainContainer.visible = false
@@ -103,14 +104,14 @@ Rectangle {
         // Use Switch Case
         
         if(DashboardParamsModel.lastContainerType === "text"){
-            rectangles.set(counter,dynamicText.createObject(parent, {z:mainContainer.z, name: 'Text', objectName : counter}))
+            rectangles.set(counter,dynamicText.createObject(parent, {z:mainContainer.z, name: 'Text', objectName : counter, uniqueHash: uniqueHash}))
         }
 
         else if(DashboardParamsModel.lastContainerType === "image"){
-            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : counter}))
+            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : counter, uniqueHash: uniqueHash}))
         }
         else if(DashboardParamsModel.lastContainerType === "blank"){
-            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter}))
+            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter, uniqueHash: uniqueHash}))
         }
         else{
 
@@ -119,13 +120,14 @@ Rectangle {
             // [Tag: Refactor]
             // Make sure to use them in "Reports" case|condition instead of else
             console.log("REPORT TYPE", objectType, counter, reportId)
-            let reportObj = dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter, reportId: reportId});
+            let reportObj = dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter, reportId: reportId, uniqueHash: uniqueHash});
             console.log('Type Report Obj',typeof reportObj);
             
             ReportParamsModel.addDashboardReportInstance(reportObj, reportId);
             rectangles.set(counter, reportObj);
         }
 
+        DashboardParamsModel.setDashboardReportMap(reportId);
         DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
 
         console.log('x',mainContainer.x, 'y', mainContainer.y, 'z', mainContainer.z, mainContainer.width, mainContainer.height);

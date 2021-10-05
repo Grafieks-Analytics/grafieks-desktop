@@ -55,7 +55,7 @@ Rectangle {
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             listModel.clear()
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
             showColumns.forEach((item) => {

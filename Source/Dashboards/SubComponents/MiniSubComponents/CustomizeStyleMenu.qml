@@ -36,7 +36,7 @@ Rectangle{
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
             opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
 //            gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
