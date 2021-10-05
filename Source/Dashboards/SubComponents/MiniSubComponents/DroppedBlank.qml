@@ -20,6 +20,7 @@ Item{
 
 
     property var hoverStatus: false
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -63,9 +64,9 @@ Item{
                 droppedRectangle.border.color = refColor
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 newItem.visible = true
             } else{
                 newItem.visible = false
@@ -95,12 +96,12 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
-         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
     }
 
     function showCustomizeReport(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-        console.log(newItem.objectName, DashboardParamsModel.currentReport)
         customizeReport.visible = true;
 
     }
