@@ -26,6 +26,7 @@ Item{
     property var hoverStatus: false
     property string webUrl: ""
     property var filePathSet: false
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
 
     /***********************************************************************************************************************/
@@ -76,7 +77,7 @@ Item{
                 droppedTextId.border.color = refColor
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
             if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
                 newItem.visible = true
@@ -117,20 +118,20 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-//    onWebUrlChanged: {
-//        webengine.url = "file:" + webUrl
-//    }
+    //    onWebUrlChanged: {
+    //        webengine.url = "file:" + webUrl
+    //    }
 
     Component.onCompleted: {
-//        var globalCordinates = this.mapToGlobal(0,0)
-//        console.log('global x',globalCordinates.x)
-//        console.log('global y',globalCordinates.y)
-//        let currentDashboard = DashboardParamsModel.currentDashboard
-//        let currentReport = DashboardParamsModel.currentReport + 1
+        //        var globalCordinates = this.mapToGlobal(0,0)
+        //        console.log('global x',globalCordinates.x)
+        //        console.log('global y',globalCordinates.y)
+        //        let currentDashboard = DashboardParamsModel.currentDashboard
+        //        let currentReport = DashboardParamsModel.currentReport + 1
 
 
-//        let path = GeneralParamsModel.getTmpPath()  + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
-//        webengine.url = "file:" + path
+        //        let path = GeneralParamsModel.getTmpPath()  + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
+        //        webengine.url = "file:" + path
     }
 
     function destroyElement(){
@@ -139,7 +140,8 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
-         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
     }
 
     function showCustomizeReport(){
