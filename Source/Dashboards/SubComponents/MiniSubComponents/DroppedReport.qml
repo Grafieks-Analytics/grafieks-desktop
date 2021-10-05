@@ -43,6 +43,7 @@ Item{
     property bool isHorizontalGraph: false;
 
     property var backgroundColorValue: false;
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
 
     /***********************************************************************************************************************/
@@ -102,11 +103,10 @@ Item{
 
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
             newItem.dashboardId = dashboardId
-
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 newItem.visible = true
             } else{
                 newItem.visible = false
@@ -471,6 +471,7 @@ Item{
 
         // Delete from c++
         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
 
     }
 

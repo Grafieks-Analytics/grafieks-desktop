@@ -26,6 +26,7 @@ Item{
 
     property var hoverStatus: false
     property var originalPoint: Object()
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -70,9 +71,9 @@ Item{
                 droppedImageId.border.color = refColor
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 newItem.visible = true
             } else{
                 newItem.visible = false
@@ -109,10 +110,10 @@ Item{
 
     Component.onCompleted: {
 
-//        if(GeneralParamsModel.isWorkbookInEditMode() === false){
-//            selectFile()
-//            webengine.url = ""
-//        }
+        //        if(GeneralParamsModel.isWorkbookInEditMode() === false){
+        //            selectFile()
+        //            webengine.url = ""
+        //        }
     }
 
     function selectFile(){
@@ -125,7 +126,8 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
-         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
     }
 
     function showCustomizeReport(){
@@ -186,7 +188,6 @@ Item{
         } else {
             fileName = DashboardParamsModel.getDashboardWidgetUrl(currentDashboard, currentReport)
             // Get filename sans extension
-//            console.log("F!", fileName.slice(fileName.lastIndexOf(".")+1))
         }
 
         DashboardParamsModel.saveImage(selectedFile, fileName)

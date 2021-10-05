@@ -58,7 +58,7 @@ Rectangle {
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
             // Fetch Dashboard customize params
             dashboardArea.color = DashboardParamsModel.getDashboardBackgroundColor(dashboardId)
@@ -91,17 +91,17 @@ Rectangle {
 
             for(var i = 0; i < allDashboardKeys.length; i++){
                 var reportsInFirstDashboard = DashboardParamsModel.fetchReportsInDashboard(allDashboardKeys[i])
-                var reportTypes = DashboardParamsModel.fetchAllReportTypeMap(i);
+                var reportTypes = DashboardParamsModel.fetchAllReportTypeMap(allDashboardKeys[i]);
 
                 reportsInFirstDashboard.forEach(j => {
 
-                                                    var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(i, j)
+                                                    var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(allDashboardKeys[i], j)
 
                                                     let x1 = coordinates[0]
                                                     let y1 = coordinates[1]
 
                                                     let reportType = Constants.reportTypeChart;
-                                                    let draggedItem = DashboardParamsModel.getReportName(i, j);
+                                                    let draggedItem = DashboardParamsModel.getReportName(allDashboardKeys[i], j);
 
                                                     dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
 
@@ -109,9 +109,9 @@ Rectangle {
                                                     // report type - chart, image, blank, text
                                                     DashboardParamsModel.setLastContainerType(reportTypeArray[reportTypes[j]]);
 
-                                                    var mainContainerVisibility = i === 0 ? true : false
-                                                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(i,j),  objectName : j, webUrl: DashboardParamsModel.getDashboardWidgetUrl(i, j), visible: mainContainerVisibility};
-                                                    objectJson.reportId = j;
+                                                    var uniqueHash = DashboardParamsModel.getDashboardUniqueWidget(allDashboardKeys[i], j)
+
+                                                    var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(allDashboardKeys[i],j),  objectName : j, reportId: j, uniqueHash: uniqueHash, webUrl: DashboardParamsModel.getDashboardWidgetUrl(allDashboardKeys[i], j)};
                                                     rectangles.set(counter, dynamicContainer.createObject(parent,objectJson));
 
                                                     const reportProperties = ReportParamsModel.getReport(j);
@@ -119,9 +119,9 @@ Rectangle {
 
                                                     // ["blank", "text", "image", "report"]
                                                     if(reportTypeArray[reportTypes[j]] === reportTypeArray[1]){
-                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, DashboardParamsModel.getDashboardWidgetUrl(allDashboardKeys[i], j));
                                                     } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[2]){
-                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, DashboardParamsModel.getDashboardWidgetUrl(i, j));
+                                                        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, DashboardParamsModel.getDashboardWidgetUrl(allDashboardKeys[i], j));
                                                     } else if(reportTypeArray[reportTypes[j]] === reportTypeArray[3]) {
                                                         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
                                                         DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, j, chartUrl);
@@ -197,13 +197,13 @@ Rectangle {
         DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
 
 
-        var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : newReportId, reportId: newReportId};
-
+        var randHash = randomHash(5);
+        var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : newReportId, reportId: newReportId, uniqueHash: randHash};
 
 
         rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
-
+        DashboardParamsModel.setDashboardUniqueWidget(DashboardParamsModel.currentDashboard, newReportId, randHash)
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, newReportId)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
         DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, newReportId, x1, y1, x2, y2)
@@ -227,6 +227,17 @@ Rectangle {
     }
     function onDropAreaExited(){
         //        console.log('Exit');
+    }
+
+    function randomHash(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() *
+     charactersLength));
+       }
+       return result;
     }
 
 
