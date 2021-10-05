@@ -71,7 +71,7 @@ Page {
             column_filter_newdashboard_add.visible = false
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             column_filter_newdashboard.visible = false
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
@@ -107,12 +107,15 @@ Page {
             var dashboards = DashboardParamsModel.fetchAllDashboards()
             var dashboardIds = Object.keys(dashboards);
             var dashboardNames = Object.values(dashboards);
+
             // We will start from i =1 because component on completed already generated first dashboard
             for(var i = 1; i < dashboardNames.length; i++){
                 dashboardModel.append({"dashboardName" : dashboardNames[i], 'dashboardId': parseInt(dashboardIds[i])})
                 TableColumnsModel.addNewDashboard(parseInt(dashboardIds[i]))
             }
+
         }
+
     }
 
     // Connections Ends
@@ -174,7 +177,7 @@ Page {
     }
 
     function onCustomizeBtnClicked(){
-        
+
         // [Tag: Refactor]
         // Return in if
         // this will reduce id else ladders

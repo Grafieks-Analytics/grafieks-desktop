@@ -773,7 +773,7 @@ Page {
         case Constants.barChartTitle:
         case Constants.lineChartTitle:
         case Constants.areaChartTitle:
-            if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.heatMapChartTitle || previousChartTitle == Constants.tableTitle){
+           if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.heatMapChartTitle || previousChartTitle == Constants.tableTitle){
                 if(!allNonMeasures(xAxisColumnDetails)){
                     xAxisListModel.clear();
                 }
@@ -1508,7 +1508,6 @@ Page {
         // Gets called again which creates a new id and add it to map
         ReportParamsModel.setEditReportToggle("-1");
 
-        DashboardParamsModel.setDashboardReportMap(reportIdMain);
         // switchChart(Constants.barChartTitle);
     }
 

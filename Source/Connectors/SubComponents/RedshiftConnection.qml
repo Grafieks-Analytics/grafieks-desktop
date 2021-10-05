@@ -531,9 +531,16 @@ Popup {
           id: redshiftOdbcModalError
           visible: false
           title: "Amazon Redshift Driver missing"
-          text: qsTr("You don't have Amazon Redshift driver. Download it here <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
-\">https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
-</a>")
+//           text: qsTr("You don't have Amazon Redshift driver. Download it here <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+// \">https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+// </a>")
+ text: qsTr("You don't have Amazon Redshift driver.Click Ok to Download")
+
+ standardButtons: StandardButton.Ok
+
+onAccepted: {Qt.openUrlExternally("https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html")
+}
+    
 
       }
 

@@ -61,7 +61,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-
             var {
                 initialCircleRadius,
                 initialBoxDimension,
@@ -188,7 +187,7 @@
                     markerShape = defaultD3Config.defaultMarkerShape,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
 
-                    filledStatus = false,
+                    filledStatus = true,
                 } = plottingConfiguration;
 
                 window.xLabelfontSize = xLabelfontSize;
@@ -1048,7 +1047,7 @@
                     .attr("font-family", xTickfontFamily)
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
-                d3.selectAll("#yAxisDiv text")
+                d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
@@ -1180,7 +1179,7 @@
                     .attr("font-family", xTickfontFamily)
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
-                d3.selectAll("#yAxisDiv text")
+                d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
@@ -1278,7 +1277,6 @@
                     .style("opacity", "1")
                     .html(tooltipDataText);
             }
-
         </script>
     </body>
 </html>
