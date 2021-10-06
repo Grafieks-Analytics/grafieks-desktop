@@ -322,6 +322,16 @@ void DashboardParamsModel::deleteReport(int reportId, int dashboardId)
                 this->deleteReportBackgroundColor(dashboardId, reportId);
                 this->deleteReportLineColor(dashboardId, reportId);
                 this->deleteReportOpacity(dashboardId, reportId);
+
+                // deleteDashboardUniqueWidget is unique because inner QVariantmap contains Hash as key and widgetId as value
+                QVariantMap map = this->dashboardUniqueWidgetMap.value(dashboardId);
+                QMapIterator<QString, QVariant> i(map);
+                while (i.hasNext()) {
+                    i.next();
+                    if(i.value() == reportId){
+                        this->deleteDashboardUniqueWidget(dashboardId, i.key());
+                    }
+                }
             }
         }
 
@@ -611,6 +621,31 @@ void DashboardParamsModel::deleteDashboardWidgetUrl(int dashboardId, int widgetI
 
         this->dashboardWidgetUrl.insert(dashboardId, reportUrl);
     }
+}
+
+void DashboardParamsModel::setDashboardUniqueWidget(int dashboardId, int widgetId, QString hash)
+{
+    QVariantMap tmpWidgetHash;
+
+    tmpWidgetHash = this->dashboardUniqueWidgetMap.value(dashboardId);
+    tmpWidgetHash.insert(hash, widgetId);
+
+    this->dashboardUniqueWidgetMap.insert(dashboardId, tmpWidgetHash);
+}
+
+QString DashboardParamsModel::getDashboardUniqueWidget(int dashboardId, int widgetId)
+{
+    return this->dashboardUniqueWidgetMap.value(dashboardId).key(widgetId);
+}
+
+void DashboardParamsModel::deleteDashboardUniqueWidget(int dashboardId, QString hash)
+{
+    QVariantMap tmpWidgetHash;
+
+    tmpWidgetHash = this->dashboardUniqueWidgetMap.value(dashboardId);
+    tmpWidgetHash.remove(hash);
+
+    this->dashboardUniqueWidgetMap.insert(dashboardId, tmpWidgetHash);
 }
 
 void DashboardParamsModel::setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams)
@@ -1286,8 +1321,11 @@ void DashboardParamsModel::setCurrentDashboard(int currentDashboard)
     QVector<int> reportsInDashboard;
     reportsInDashboard = this->dashboardWidgetsMap.value(currentDashboard);
 
+    QVariantMap uniqueWidgets;
+    uniqueWidgets = this->dashboardUniqueWidgetMap.value(currentDashboard);
+
     m_currentDashboard = currentDashboard;
-    emit currentDashboardChanged(m_currentDashboard, reportsInDashboard);
+    emit currentDashboardChanged(m_currentDashboard, reportsInDashboard, uniqueWidgets);
 }
 
 void DashboardParamsModel::setCurrentReport(int currentReport)
@@ -1422,6 +1460,17 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         foreach(QString widgetId, dashboardWidgetUrlKeys){
             QUrl url(childObj.value(widgetId).toString());
             this->setDashboardWidgetUrl(dashboardId.toInt(), widgetId.toInt(), url);
+        }
+
+        // dashboardUniqueWidgetMap
+        mainObj = dashboardParams.value("dashboardUniqueWidgetMap").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dashboardUniqueWidgetKeys = childObj.keys();
+
+        foreach(QString hash, dashboardUniqueWidgetKeys){
+            int widgetId = childObj.value(hash).toString().toInt();
+//            qDebug() << "SLOT D" << widgetId << dashboardUniqueWidgetKeys << childObj << childObj.value(hash).toString().toInt();
+            this->setDashboardUniqueWidget(dashboardId.toInt(), widgetId, hash);
         }
 
         // dashboardReportMap
@@ -1572,6 +1621,7 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         }
     }
 
+
     // EMIT SIGNALS TO NOTIFY THE UI
 
     // General
@@ -1612,6 +1662,7 @@ void DashboardParamsModel::saveDashboard()
     QJsonObject dashboardWidgetCoordinatesObj;
     QJsonObject dashboardWidgetTypeMapObj;
     QJsonObject dashboardWidgetUrlObj;
+    QJsonObject dashboardUniqueWidgetObj;
     QJsonObject dashboardReportMapObj;
     QJsonObject dashboardReportUrlObj;
     QJsonObject textReportParametersMapObj;
@@ -1670,6 +1721,13 @@ void DashboardParamsModel::saveDashboard()
             dashboardWidgetUrlTmpObj.insert(QString::number(widgetId), this->dashboardWidgetUrl.value(dashboardId).value(widgetId).toString());
 
         dashboardWidgetUrlObj.insert(QString::number(dashboardId), dashboardWidgetUrlTmpObj);
+
+        // dashboardUniqueWidgetMap
+        QJsonObject dashboardUniqueWidgetTmpObj;
+        foreach(QString hash, this->dashboardUniqueWidgetMap.value(dashboardId).keys())
+            dashboardUniqueWidgetTmpObj.insert(hash, this->dashboardUniqueWidgetMap.value(dashboardId).value(hash).toString());
+
+        dashboardUniqueWidgetObj.insert(QString::number(dashboardId), dashboardUniqueWidgetTmpObj);
 
         // dashboardReportMap
         QVariantList dashboardReportMapList;
@@ -1777,6 +1835,7 @@ void DashboardParamsModel::saveDashboard()
     dashboardParamsObject.insert("dashboardWidgetCoordinates", dashboardWidgetCoordinatesObj);
     dashboardParamsObject.insert("dashboardWidgetTypeMap", dashboardWidgetTypeMapObj);
     dashboardParamsObject.insert("dashboardWidgetUrl", dashboardWidgetUrlObj);
+    dashboardParamsObject.insert("dashboardUniqueWidgetMap", dashboardUniqueWidgetObj);
     dashboardParamsObject.insert("dashboardReportMap", dashboardReportMapObj);
     dashboardParamsObject.insert("dashboardReportUrl", dashboardReportUrlObj);
     dashboardParamsObject.insert("textReportParametersMap", textReportParametersMapObj);
