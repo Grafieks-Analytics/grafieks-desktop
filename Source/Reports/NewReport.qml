@@ -62,6 +62,9 @@ Page {
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
     property var d3PropertyConfig: ({});
+//    property var chartPropertyConfig: ({});
+    
+
 
     // This object will contain all the extra param models 
     /*
@@ -1034,6 +1037,10 @@ Page {
         let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
         console.log(reportInstance);
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
+    //    drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
+
+        console.log("properties",JSON.stringify(reportProperties))
+
         var reportUrl = reportInstance.getChartUrl();
 
         // Check if on updating the graph chart url was changed.

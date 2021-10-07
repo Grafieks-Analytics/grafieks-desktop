@@ -681,6 +681,14 @@ Rectangle{
                                 }
                                 Rectangle {
                                     color: Constants.defaultXAxisTickColor
+//                                    {
+//                                        Qt.binding(function() {console.log("testbinding",chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
+//                                            return Constants.defaultXAxisTickColor })}
+//                                    color:Constants.defaultXAxisTickColor
+//                                    {
+//                                        console.log("chartproperty",chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
+//                                         (chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog || Constants.defaultXAxisTickColor)
+//                                    }
                                     border.color: Constants.borderBlueColor
                                     width: 20
                                     height: 20
