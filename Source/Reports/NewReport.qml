@@ -415,7 +415,7 @@ Page {
         case Constants.stackedAreaChartTitle:
         case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
-            console.log(Constants.multiLineChartTitle,"CLICKED");
+            console.log(chartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
             dataValues[1].splice(1,0,colorByColumnName);
             colorData = (dataValues && dataValues[1]) || [];
@@ -764,6 +764,9 @@ Page {
             row3Visible =  false
             break;
         case Constants.kpiTitle:
+            if(!allNumericalValues(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
             yAxisVisible = false
             xAxisVisible = true
             row3Visible = false
