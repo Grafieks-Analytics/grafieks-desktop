@@ -361,6 +361,7 @@ Item{
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.stackedAreaChartTitle:
+        case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
@@ -795,9 +796,10 @@ Item{
                 ChartsModel.getAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
+            case Constants.multipleAreaChartTitle:
                 console.log('Stacked Area Chart')
-                console.log('Colour By columnName',columnName)
-                ChartsModel.getStackedAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                console.log('Colour By columnName',colorByColumnName)
+                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
