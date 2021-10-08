@@ -12,6 +12,8 @@
 #include <QObject>
 #include <QDebug>
 
+#include "../../statics.h"
+
 
 class PublishDatasourceModel : public QObject
 {
@@ -23,6 +25,7 @@ public:
 private slots:
     void reading();
     void readComplete();
+    void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
 
 signals:
     void publishDSStatus(QVariantMap status);
@@ -33,6 +36,7 @@ private:
     QByteArray * m_tempStorage;
     QVariantMap outputStatus;
 
+    void uploadFile();
 };
 
 #endif // PUBLISHDATASOURCEMODEL_H
