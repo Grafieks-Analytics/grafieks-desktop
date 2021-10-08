@@ -40,6 +40,7 @@ Page {
     property var flatFiles: [Constants.excelType, Constants.csvType, Constants.jsonType]
 
     property int timeElapsed : 0
+    property bool ifPublishClicked: false
 
 
     // Dont delete this
@@ -839,6 +840,7 @@ Page {
     // and this conflicts with the current file
     SaveExtract{
         id: saveFilePrompt
+        ifPublish: ifPublishClicked
     }
 
     Timer {

@@ -112,8 +112,10 @@ Popup {
         var isFullExtract = DSParamsModel.isFullExtract
         var extractColumnName = DSParamsModel.extractColName
 
+        var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
-        PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
+
+        PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
     }
 
 
