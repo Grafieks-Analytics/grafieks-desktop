@@ -4,7 +4,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-        <script src="./Data/min/numeral.min.js"></script>
+
         <link rel="stylesheet" href="Data/general.css" />
         <style type="text/css">
             body {
@@ -119,6 +119,9 @@
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
+
+                    dataColumns
+
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -165,6 +168,8 @@
                 // const { top, right, bottom, left } = constants.chartMargins;
                 var margin = { top: 0, right: 50, bottom: 80, left: 100 };
                 var width = window.innerWidth - 40;
+                let { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
+
 
                 var height = window.innerHeight - 92;
 
@@ -176,7 +181,7 @@
 
                 var valueDateType = false;
 
-                if (isDateFormat(xAxisDataSet[0])) {
+                if (yAxisColumnDetails[0].itemType == "Date") {
                     valueDateType = true;
                 }
 

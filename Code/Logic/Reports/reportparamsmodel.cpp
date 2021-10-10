@@ -234,6 +234,11 @@ void ReportParamsModel::saveReport()
     emit sendReportParams(finalObj);
 }
 
+QString ReportParamsModel::qmlChartConfig() const
+{
+    return m_qmlChartConfig;
+}
+
 QString ReportParamsModel::optionalConfig() const
 {
     return m_optionalConfig;
@@ -274,6 +279,7 @@ void ReportParamsModel::addReport(int reportId)
     tmp.insert("reportId", reportId);
     tmp.insert("reportTitle",this->reportTitle());
     tmp.insert("d3PropertiesConfig",this->d3PropertiesConfig());
+    tmp.insert("qmlChartConfig",this->qmlChartConfig());
     tmp.insert("xAxisColumns", this->xAxisColumns() );
     tmp.insert("yAxisColumns", this->yAxisColumns() );
     tmp.insert("row3Columns", this->row3Columns() );
@@ -1413,6 +1419,15 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
     // Restore charts in dashboard
     emit generateWorkbookReports();
 
+}
+
+void ReportParamsModel::setQmlChartConfig(QString qmlChartConfig)
+{
+    if (m_qmlChartConfig == qmlChartConfig)
+        return;
+
+    m_qmlChartConfig = qmlChartConfig;
+    emit qmlChartConfigChanged(m_qmlChartConfig);
 }
 
 QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
