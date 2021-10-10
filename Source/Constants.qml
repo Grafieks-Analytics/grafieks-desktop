@@ -388,4 +388,7 @@ QtObject {
     property var dayMonthYearFormat: "%d %b %Y";
     property var monthYearFormat: "%b %Y";
     
+    property var defaultCustomizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
+    property var defaultSubMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
+    
 }
