@@ -506,8 +506,10 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
-            originalPoint.x = currnetPointReport.x
-            originalPoint.y = currnetPointReport.y
+            var coords = DashboardParamsModel.getDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport)
+
+            originalPoint.x = coords[0]
+            originalPoint.y = coords[1]
 
             // [Tag: Refactor]
             // Move this to constants
