@@ -255,6 +255,7 @@ QtObject {
     property color defaultXAxisLabelColor: "#000000"
     property color defaultYAxisLabelColor: "#000000"
     property color defaultDataLabelColor: "#000000"
+    property color defaultDataValueColor: "#000000"
     
     property string categoricalItemType: "categorical"
     property string numericalItemType: "numerical"
@@ -387,5 +388,8 @@ QtObject {
     property var monthFormat: "%b";
     property var dayMonthYearFormat: "%d %b %Y";
     property var monthYearFormat: "%b %Y";
+    
+    property var defaultCustomizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
+    property var defaultSubMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
     
 }

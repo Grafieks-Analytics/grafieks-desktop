@@ -71,6 +71,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString optionalConfig READ optionalConfig WRITE setOptionalConfig NOTIFY optionalConfigChanged)
     Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
     Q_PROPERTY(QString editReportToggle READ editReportToggle WRITE setEditReportToggle NOTIFY editReportToggleChanged)
+    Q_PROPERTY(QString qmlChartConfig READ qmlChartConfig WRITE setQmlChartConfig NOTIFY qmlChartConfigChanged)
 
 
     // For Filters
@@ -257,6 +258,8 @@ public:
 
 
 
+    QString qmlChartConfig() const;
+
 public slots:
 
     // General properties
@@ -300,6 +303,8 @@ public slots:
 
     // Receive extract workbook data params
     void getExtractReportParams(QJsonObject reportParams);
+
+    void setQmlChartConfig(QString qmlChartConfig);
 
 signals:
     // General properties
@@ -360,11 +365,14 @@ signals:
     // Start generating reports after selecting a workbook
     void generateWorkbookReports();
 
+    void qmlChartConfigChanged(QString qmlChartConfig);
+
 private:
 
     QVariantMap insertMasterFilters(int filterId);
     void restoreMasterFilters(int filterId, QVariantMap filterData);
     QString m_optionalConfig;
     QString m_row3Columns;
+    QString m_qmlChartConfig;
 };
 #endif // REPORTPARAMSMODEL_H

@@ -193,6 +193,25 @@ Item{
         DashboardParamsModel.saveImage(selectedFile, fileName)
     }
 
+    function loadingChangedImageWidget(loadRequest){
+        
+        var defaultScript = "var styleTag = document.createElement('style'); styleTag.innerHTML = '*{ pointer-events:none; background: transparent !important; }'; document.head.appendChild(styleTag);";
+
+        switch(loadRequest.status){
+            case ( WebView.LoadFailedStatus):
+                webengine.visible = false
+                chooseImage.visible = true
+                break
+
+            case ( WebView.LoadSucceededStatus):
+                webengine.visible = true
+                chooseImage.visible = false
+
+                webengine.runJavaScript(defaultScript);
+                
+                break
+            }
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -342,22 +361,7 @@ Item{
             width:newItem.width - 10
             height:newItem.height  - imageMenu.height
 
-            onLoadingChanged: {
-
-                switch(loadRequest.status){
-
-                case ( WebView.LoadFailedStatus):
-                    webengine.visible = false
-                    chooseImage.visible = true
-                    break
-
-                case ( WebView.LoadSucceededStatus):
-                    webengine.visible = true
-                    chooseImage.visible = false
-                    break
-                }
-
-            }
+            onLoadingChanged: loadingChangedImageWidget(loadRequest)
 
         }
 
