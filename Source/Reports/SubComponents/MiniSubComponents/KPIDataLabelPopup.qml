@@ -135,7 +135,7 @@ Popup {
         report_desiner_page.d3PropertyConfig['labelFontStylings'].fontSize = fontSize;
         report_desiner_page.reDrawChart();
     }
-      function openColorDialog(dialogName){
+    function openColorDialog(dialogName){
         switch(dialogName){
         case "dataLabelKpi": dataLabelDialogKpi.open();
             break;
@@ -146,16 +146,16 @@ Popup {
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
-      ColorDialog{
+    ColorDialog{
         id: dataLabelDialogKpi
 
         onColorChanged:{
 
-             Constants.defaultDataLabelColor =  dataLabelDialogKpi.color;
+            Constants.defaultDataLabelColor =  dataLabelDialogKpi.color;
 
-if(!d3PropertyConfig.labelFontStylings){
-    d3PropertyConfig.labelFontStylings = {}
-}
+            if(!d3PropertyConfig.labelFontStylings){
+                d3PropertyConfig.labelFontStylings = {}
+            }
             d3PropertyConfig.labelFontStylings.dataLabelColorKpi = dataLabelDialogKpi.color+"";
             reDrawChart();
         }
@@ -278,25 +278,25 @@ if(!d3PropertyConfig.labelFontStylings){
                 }
 
             }
-              Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Font Color: ")
-                                    width: 118
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                Rectangle {
-                                    color: Constants.defaultDataLabelColor
-                                    border.color: Constants.borderBlueColor
-                                    width: 15
-                                    height: 15
-                                    MouseArea{
-                                        anchors.fill: parent
-                                        onClicked: openColorDialog("dataLabelKpi");
-                                    }
+            Row{
+                width: parent.width
+                Text {
+                    text: qsTr("Font Color: ")
+                    width: 118
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Rectangle {
+                    color: Constants.defaultDataLabelColor
+                    border.color: Constants.borderBlueColor
+                    width: 15
+                    height: 15
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: openColorDialog("dataLabelKpi");
+                    }
 
-                                }
-                            }
+                }
+            }
 
             Rectangle{
                 height: 20
@@ -367,7 +367,7 @@ if(!d3PropertyConfig.labelFontStylings){
 
                 }
 
-            }     
+            }
 
         }
 
