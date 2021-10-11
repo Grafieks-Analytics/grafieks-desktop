@@ -1869,3 +1869,8 @@ void DashboardParamsModel::deleteDashboardReportMap(int dashboardId, int reportI
 
     this->dashboardReportMap.insert(dashboardId, reportIds);
 }
+
+bool DashboardParamsModel::getDashboardReportMap(int dashboardId, int reportId)
+{
+    return this->dashboardReportMap.value(dashboardId).contains(reportId);
+}
