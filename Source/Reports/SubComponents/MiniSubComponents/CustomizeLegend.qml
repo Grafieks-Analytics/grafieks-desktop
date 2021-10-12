@@ -53,8 +53,16 @@ Column{
         var legendConfig = d3PropertyConfig.legendConfig || {};
         legendConfig['legendStatus'] = checked;
         legendConfig['legendPosition'] = "right";
-        right_radio.radio_checked = true;
+        if(checked){
+            right_radio.radio_checked = true;
+        }else{
+            right_radio.radio_checked = false;
+            left_radio.radio_checked = false;
+            top_radio.radio_checked = false;
+            bottom_radio.radio_checked = false;
+        }
         d3PropertyConfig.legendConfig = legendConfig;
+        qmlChartConfig.legendStatus = checked;
         reDrawChart();
     }
 
@@ -65,6 +73,12 @@ Column{
         var legendConfig = d3PropertyConfig.legendConfig || {};
         legendConfig['legendPosition'] = position;
         d3PropertyConfig.legendConfig = legendConfig;
+        qmlChartConfig.legendConfig = { 
+            right_radio: right_radio.radio_checked, 
+            left_radio: left_radio.radio_checked, 
+            top_radio: top_radio.radio_checked, 
+            bottom_radio: bottom_radio.radio_checked
+        } ;
         reDrawChart();
     }
 
@@ -200,6 +214,7 @@ Column{
                     }
 
                     CustomRadioButton{
+                        id: left_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width
@@ -240,6 +255,7 @@ Column{
                     }
 
                     CustomRadioButton{
+                        id: bottom_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width
@@ -269,6 +285,7 @@ Column{
                     }
 
                     CustomRadioButton{
+                        id: top_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width

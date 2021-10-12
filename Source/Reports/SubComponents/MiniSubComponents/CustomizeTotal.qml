@@ -57,16 +57,19 @@ Column{
 
     function showRowTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['rowWiseGrandTotal'] = checkedStatus;
+        qmlChartConfig.rowWiseGrandTotalStatus = checkedStatus;
         report_desiner_page.reDrawChart();
     }
     function showColumnTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['totalStatus'] = checkedStatus;
         report_desiner_page.reDrawChart();
+        qmlChartConfig.grandTotalStatus = checkedStatus;
         //        report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
         // report_desiner_page.reDrawChart();
     }
     function showSubTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['subTotalVisible'] = checkedStatus;
+        qmlChartConfig.subTotalStatus = checkedStatus;
         report_desiner_page.reDrawChart();
     }
 
