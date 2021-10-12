@@ -2114,7 +2114,29 @@
                     .html(tooltipDataText);
             }
 
-            // drawChart(data);
+            drawChart(data, {
+                chartType: "FitWidth",
+                dataColumns: {
+                    xAxisColumnDetails: [
+                        {
+                            itemName: "Category",
+                            itemType: "Categorical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    yAxisColumnDetails: [
+                        {
+                            itemName: "Sales",
+                            itemType: "Numerical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    row3ColumnDetails: [],
+                    colorByData: [
+                        { columnName: "Sub_Category", itemType: "Categorical" },
+                    ],
+                },
+            });
         </script>
     </body>
 </html>
