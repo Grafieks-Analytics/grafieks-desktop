@@ -258,6 +258,7 @@ Item{
 
 
     function drawChartAfterReceivingSignal(dataValues){
+        console.log("datavaluestest",dataValues)
         if(webEngineView.loading){
             return;
         }

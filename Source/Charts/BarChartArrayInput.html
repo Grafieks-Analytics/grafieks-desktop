@@ -40,7 +40,7 @@
         <div id="mainChartWindow" style="display: flex">
             <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
-            <div id="xAxisLabelId" style="position: fixed"></div>
+            <div id="xAxisLabelId" style=""></div>
         </div>
 
         <div id="tooltip"></div>
@@ -231,7 +231,7 @@
                             xAxisDateWiseValues[requiredTypeData] = 0;
                         }
 
-                        console.log(requiredTypeData, redrawn);
+                        // console.log(requiredTypeData, redrawn);
                         xAxisDateWiseValues[requiredTypeData] +=
                             dataValues[1][i];
                     });
@@ -724,13 +724,13 @@
 
                         var tickWidth = tick && tick.getBBox().width;
                         if (tickWidth > barWidth) {
-                            console.log("Length is long", numOfCharacters);
+                            // console.log("Length is long", numOfCharacters);
                             var tickValue = tick.innerHTML;
                             tickValue =
                                 tickValue &&
                                 tickValue.substr(0, numOfCharacters - 3) +
                                     "...";
-                            console.log(tickValue);
+                            // console.log(tickValue);
                             tick.innerHTML = tickValue;
                         }
                     }
@@ -853,7 +853,7 @@
                                 xAxisTick.length > numOfCharacters
                             ) {
                                 if (Math.ceil(numOfCharacters) > 3) {
-                                    console.log(xAxisTick);
+                                    // console.log(xAxisTick);
                                     allXAxisTexts[i].innerHTML =
                                         (xAxisTick &&
                                             xAxisTick.substr(
@@ -919,6 +919,7 @@
                 }
             }
             //  draw function defination starts
+<<<<<<< HEAD
             drawChart(data, {
                 dataColumns: {
                     xAxisColumnDetails: [
@@ -939,6 +940,9 @@
                     colorByData: [],
                 },
             });
+=======
+            // drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
+>>>>>>> 811bb753d4646755980f20d14c1d37c16534aa40
         </script>
         <!-- javascripts ends -->
     </body>

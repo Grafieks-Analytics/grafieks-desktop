@@ -1388,6 +1388,10 @@ Page {
         let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
         console.log(reportInstance);
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
+    //    drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
+
+        console.log("properties",JSON.stringify(reportProperties))
+
         var reportUrl = reportInstance.getChartUrl();
 
         // Check if on updating the graph chart url was changed.

@@ -103,9 +103,9 @@ Popup {
 
         onColorChanged:{
 
-             Constants.defaultXAxisLabelColor =  xAxisLegendColorDialog.color;
+            Constants.defaultXAxisLabelColor =  xAxisLegendColorDialog.color;
 
-//            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
+            //            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
             d3PropertyConfig.xLabelfontColor=xAxisLegendColorDialog.color+"";
             reDrawChart();
         }
@@ -116,9 +116,13 @@ Popup {
         id: xAxisTickMarkColorDialog
         onColorChanged:{
 
-             Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
+            //   Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
+           if(!chartPropertyConfig.axisSettings){
+               chartPropertyConfig.axisSettings={}
+           }
+           chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog = xAxisTickMarkColorDialog.color;
 
-//            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+xAxisTickMarkColorDialog.color+"')")
+            //            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+xAxisTickMarkColorDialog.color+"')")
             d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
             reDrawChart();
         }
@@ -128,9 +132,9 @@ Popup {
         id: yAxisLegendColorDialog
         onColorChanged:{
 
-             Constants.defaultYAxisLabelColor = yAxisLegendColorDialog.color;
+            Constants.defaultYAxisLabelColor = yAxisLegendColorDialog.color;
 
-//            webEngineView.runJavaScript("changeChartAttributes('.y_label','fill', '"+yAxisLegendColorDialog.color+"')")
+            //            webEngineView.runJavaScript("changeChartAttributes('.y_label','fill', '"+yAxisLegendColorDialog.color+"')")
             d3PropertyConfig.yLabelfontColor=yAxisLegendColorDialog.color+"";
             reDrawChart();
         }
@@ -140,8 +144,8 @@ Popup {
         id: yAxisTickMarkColorDialog
         onColorChanged:{
 
-             Constants.defaultYAxisTickColor = yAxisTickMarkColorDialog.color;
-//            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','fill', '"+yAxisTickMarkColorDialog.color+"')")
+            Constants.defaultYAxisTickColor = yAxisTickMarkColorDialog.color;
+            //            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','fill', '"+yAxisTickMarkColorDialog.color+"')")
             d3PropertyConfig.yTickfontColor=yAxisTickMarkColorDialog.color+"";
             reDrawChart();
         }
