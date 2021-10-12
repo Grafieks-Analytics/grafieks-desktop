@@ -27,6 +27,7 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, QVariantList>> dashboardWidgetCoordinates; // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
     QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
+    QMap<int, QVariantMap> dashboardUniqueWidgetMap; // <dashboardId, <uniqueHash, widgetId>>
 
     QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
     // NEW
@@ -126,6 +127,10 @@ public:
     Q_INVOKABLE void setDashboardWidgetUrl(int dashboardId, int widgetId, QUrl url);
     Q_INVOKABLE QUrl getDashboardWidgetUrl(int dashboardId, int widgetId);
     Q_INVOKABLE void deleteDashboardWidgetUrl(int dashboardId, int widgetId);
+
+    Q_INVOKABLE void setDashboardUniqueWidget(int dashboardId, int widgetId, QString hash);
+    Q_INVOKABLE QString getDashboardUniqueWidget(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteDashboardUniqueWidget(int dashboardId, QString hash);
 
     Q_INVOKABLE void setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams);
     Q_INVOKABLE QVariant getTextReportParametersMap(int dashboardId, int widgetId);
@@ -245,7 +250,7 @@ signals:
     void zIndexChanged(int zIndex);
     void dashboardCountChanged(int dashboardCount);
     void dashboardContentDestroyed(int dashboardId);
-    void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
+    void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard, QVariantMap dashboardUniqueWidgets);
     void currentReportChanged(int currentReport);
 
     void hideAllDashboardParams();

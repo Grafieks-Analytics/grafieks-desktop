@@ -43,6 +43,7 @@ Item{
     property bool isHorizontalGraph: false;
 
     property var backgroundColorValue: false;
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
 
     /***********************************************************************************************************************/
@@ -102,11 +103,10 @@ Item{
 
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
             newItem.dashboardId = dashboardId
-
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 newItem.visible = true
             } else{
                 newItem.visible = false
@@ -362,6 +362,7 @@ Item{
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.stackedAreaChartTitle:
+        case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
@@ -472,6 +473,7 @@ Item{
 
         // Delete from c++
         DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
 
     }
 
@@ -795,9 +797,10 @@ Item{
                 ChartsModel.getAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
+            case Constants.multipleAreaChartTitle:
                 console.log('Stacked Area Chart')
-                console.log('Colour By columnName',columnName)
-                ChartsModel.getStackedAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                console.log('Colour By columnName',colorByColumnName)
+                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")

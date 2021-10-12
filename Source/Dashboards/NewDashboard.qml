@@ -71,7 +71,7 @@ Page {
             column_filter_newdashboard_add.visible = false
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             column_filter_newdashboard.visible = false
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
