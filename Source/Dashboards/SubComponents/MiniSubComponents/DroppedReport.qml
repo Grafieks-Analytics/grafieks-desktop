@@ -258,8 +258,6 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
-
     function drawChartAfterReceivingSignal(dataValues){
         if(webEngineView.loading){
             return;
