@@ -202,7 +202,7 @@ public:
     Q_INVOKABLE void saveDashboard();
 
     Q_INVOKABLE void deleteDashboardReportMap(int dashboardId, int reportId);
-    Q_INVOKABLE bool getDashboardReportMap(int dashboardId, int reportId);
+    Q_INVOKABLE bool getDashboardReportMap(int reportId);
 
     // General
     QString lastContainerType() const;
