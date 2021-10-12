@@ -1870,7 +1870,14 @@ void DashboardParamsModel::deleteDashboardReportMap(int dashboardId, int reportI
     this->dashboardReportMap.insert(dashboardId, reportIds);
 }
 
-bool DashboardParamsModel::getDashboardReportMap(int dashboardId, int reportId)
+bool DashboardParamsModel::getDashboardReportMap(int reportId)
 {
-    return this->dashboardReportMap.value(dashboardId).contains(reportId);
+    bool output = false;
+    foreach(QVector<int> reportIds, this->dashboardReportMap){
+        if(reportIds.contains(reportId)){
+            output = true;
+            break;
+        }
+    }
+    return output;
 }
