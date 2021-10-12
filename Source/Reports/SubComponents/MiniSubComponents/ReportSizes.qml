@@ -75,13 +75,10 @@ Column{
     function onChartSizeChanged(value){
         switch(value){
         case "FitWidth":
-            d3PropertyConfig['chartType'] = value;
-            break;
         case "FitHeight":
-            d3PropertyConfig['chartType'] = value;
-            break;
         case "Standard":
-            d3PropertyConfig['chartType'] = value;
+            d3PropertyConfig.chartType = value;
+            qmlChartConfig.chartType = value;
             break;
         }
 
