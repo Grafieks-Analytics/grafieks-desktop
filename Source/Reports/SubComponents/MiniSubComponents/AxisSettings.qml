@@ -106,12 +106,13 @@ Rectangle{
     //    bold
     function boldToggleYLabel(){
 
+        d3PropertiesConfig.yAxisConfig = d3PropertiesConfig.yAxisConfig || {}; 
+        
         if(toggleBoldYLabel == false){
             toggleBoldYLabel = true;
             yAxisLabelBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
-
-
+            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
+            d3PropertiesConfig.yAxisConfig.bold = true; 
         }
         else if(toggleBoldYLabel == true){
             toggleBoldYLabel = false;
