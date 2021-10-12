@@ -10,7 +10,7 @@ Rectangle{
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
             let dashboardDimensions = DashboardParamsModel.getDashboardDimensions(dashboardId)
             widthId.value = dashboardDimensions[0]
