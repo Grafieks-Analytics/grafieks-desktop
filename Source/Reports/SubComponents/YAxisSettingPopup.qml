@@ -116,11 +116,11 @@ Popup {
         id: xAxisTickMarkColorDialog
         onColorChanged:{
 
-              Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
-//            if(!chartPropertyConfig.axisSettings){
-//                chartPropertyConfig.axisSettings={}
-//            }
-//            chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog = xAxisTickMarkColorDialog.color;
+            //   Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
+           if(!chartPropertyConfig.axisSettings){
+               chartPropertyConfig.axisSettings={}
+           }
+           chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog = xAxisTickMarkColorDialog.color;
 
             //            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+xAxisTickMarkColorDialog.color+"')")
             d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
