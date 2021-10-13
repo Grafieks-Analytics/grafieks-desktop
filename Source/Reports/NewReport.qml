@@ -1839,7 +1839,6 @@ Page {
         qmlChartConfig.activeChartIndex = activeChartIndex;
         qmlChartConfig.customizationsAvailable =customizationsAvailable;
         qmlChartConfig.subMenuCustomizationsAvailable = subMenuCustomizationsAvailable;
-        console.log('qmlChartConfig:debug:save',JSON.stringify(qmlChartConfig));
         ReportParamsModel.setQmlChartConfig(JSON.stringify(qmlChartConfig));
         ReportParamsModel.setOptionalConfig(JSON.stringify(optionalParams));
         ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);

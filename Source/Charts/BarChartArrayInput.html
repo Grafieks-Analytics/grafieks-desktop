@@ -40,7 +40,7 @@
         <div id="mainChartWindow" style="display: flex">
             <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
-            <div id="xAxisLabelId" style=""></div>
+            <div id="xAxisLabelId"></div>
         </div>
 
         <div id="tooltip"></div>
@@ -266,7 +266,7 @@
 
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#xAxisLabelId").style("bottom", 20+"px");
+                d3.select("#xAxisLabelId").style("bottom", 20 + "px");
 
                 // legends code starts
                 if (legendStatus) {
@@ -919,6 +919,7 @@
                 }
             }
             //  draw function defination starts
+
             drawChart(data, {
                 dataColumns: {
                     xAxisColumnDetails: [
@@ -939,6 +940,8 @@
                     colorByData: [],
                 },
             });
+
+            // drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
         </script>
         <!-- javascripts ends -->
     </body>
