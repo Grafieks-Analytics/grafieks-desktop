@@ -109,8 +109,8 @@
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
                     // xaxis setting
-                    xaxisLaabel = defaultD3Config.xAxisConfig.label,
-                    yaxisLaabel = defaultD3Config.yAxisConfig.label,
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
 
                 // plottingConfiguration restore from windows
@@ -144,10 +144,10 @@
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
-                if (!xaxisLaabel) {
+                if (!xAxisConfig.label) {
                     [xAxisLabel, yAxisLabel] = data[1];
                 } else {
-                    [xAxisLabel, yAxisLabel] = [xaxisLaabel, yaxisLaabel];
+                    [xAxisLabel, yAxisLabel] = [xAxisConfig.label, yAxisConfig.label];
                     // xAxisLabel = xaxisLaabel;
                 }
                 d3Colors = d3colorPalette;
@@ -930,6 +930,30 @@
             //  draw function defination starts
 
             drawChart(data, {
+                dataColumns: {
+                    xAxisColumnDetails: [
+                        {
+                            itemName: "Category",
+                            itemType: "Categorical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    yAxisColumnDetails: [
+                        {
+                            itemName: "Sales",
+                            itemType: "Numerical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    row3ColumnDetails: [],
+                    colorByData: [],
+                },
+            });
+
+            drawChart(data, {
+                chartType: "FitWidth",
+                xAxisConfig: { label: "Categoryas dasd as" },
+                yAxisConfig: { label: "Salesadsas dsad as" },
                 dataColumns: {
                     xAxisColumnDetails: [
                         {
