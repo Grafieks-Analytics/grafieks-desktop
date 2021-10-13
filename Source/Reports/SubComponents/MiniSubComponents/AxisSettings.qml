@@ -100,7 +100,7 @@ Rectangle{
 
     function onApplyClicked(){
         popup.visible = false
-        webEngineView.runJavaScript("changeChartAttributes(selector, attributeName, attributeValue)")
+        reDrawChart();
     }
 
     //    bold
@@ -393,7 +393,9 @@ Rectangle{
                                     text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
                                     onTextChanged: {
 
-                                        webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
+                                        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+                                        d3PropertyConfig.xAxisConfig.label = xAxisLabelNameBox.text;
+                                        // webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
 
                                     }
                                 }
@@ -420,7 +422,6 @@ Rectangle{
                                             //                                                webEngineView.runJavaScript("changeChartAttributes('.x_label','font-family', '"+xAxisLegendFonts.currentValue+"')")
 
                                             d3PropertyConfig.xLabelfontFamily=xAxisLegendFonts.currentValue;
-                                            reDrawChart();
                                         }
                                     }
                                 }
@@ -463,7 +464,6 @@ Rectangle{
                                                 //                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
 
                                                 d3PropertyConfig.xLabelfontSize=xAxisLabelFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -602,7 +602,6 @@ Rectangle{
                                             //                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-family', '"+xAxisTickMarkFonts.currentValue+"')")
 
                                             d3PropertyConfig.xTickfontFamily=xAxisTickMarkFonts.currentValue;
-                                            reDrawChart();
 
                                         }
                                     }
@@ -645,7 +644,6 @@ Rectangle{
                                                 console.log("fontsize"+xAxisTickMarkFontSize.currentValue);
                                                 //                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.x-axis .tick text','.x_label','y')")
                                                 d3PropertyConfig.xTickfontSize=xAxisTickMarkFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -813,7 +811,11 @@ Rectangle{
                                     text: qsTr(getAxisColumnNames(Constants.yAxisName)[0])
                                     onTextChanged: {
 
-                                        webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
+
+                                        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+                                        d3PropertyConfig.yAxisConfig.label = yAxisLabelNameBox.text;
+
+                                        // webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
 
                                     }
                                 }
@@ -838,7 +840,6 @@ Rectangle{
                                             //                                                webEngineView.runJavaScript("changeChartAttributes('.y_label','font-family', '"+yAxisLegendFonts.currentValue+"')")
 
                                             d3PropertyConfig.yLabelfontFamily=yAxisLegendFonts.currentValue;
-                                            reDrawChart();
                                         }
                                     }
                                 }
@@ -879,7 +880,6 @@ Rectangle{
                                                 console.log("fontsize"+yAxisLabelFontSize.currentValue);
                                                 //                                              webEngineView.runJavaScript("changeChartAttributes('.y_label','font-size', '"+yAxisLabelFontSize.currentValue+"')")
                                                 d3PropertyConfig.yLabelfontSize=yAxisLabelFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -1012,7 +1012,6 @@ Rectangle{
                                             //                                                      webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-family', '"+yAxisTickMarkFonts.currentValue+"')")
 
                                             d3PropertyConfig.yTickfontFamily=yAxisTickMarkFonts.currentValue;
-                                            reDrawChart();
                                         }
 
 
@@ -1056,7 +1055,6 @@ Rectangle{
                                                 //                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','y')")
 
                                                 d3PropertyConfig.yTickfontSize=yAxisTickMarkFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
