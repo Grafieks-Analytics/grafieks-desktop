@@ -80,12 +80,29 @@ const defaultD3Config = {
         gridStatus: true,
     },
 
+    xAxisConfig: {
+        label: null,
+        boldLabel: false,
+        italicLabel: false,
+        boldTick: false,
+        italicTick: false,
+        visible: true,
+    },
+    yAxisConfig: {
+        label: null,
+        bold: false,
+        italic: false,
+        boldTick: false,
+        italicTick: false,
+        visible: true,
+    },
+
     defaultTableChartConfig: {
         defaultCellBorderStatus: true,
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
-        defaultSearchStatus:true,
-        defaultGrandTotalStatus:false,
+        defaultSearchStatus: true,
+        defaultGrandTotalStatus: false,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50,
     },
@@ -124,5 +141,3 @@ const markerShapeConfig = {
         yPositionAttrName: "y",
     },
 };
-
-

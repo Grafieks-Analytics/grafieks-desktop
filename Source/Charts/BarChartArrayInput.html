@@ -72,7 +72,6 @@
 
                 // data values to be plot
                 var dataValues = data[0];
-                const [xAxisLabel, yAxisLabel] = data[1];
 
                 // Plot configuration contains all the config of report, these values are passed from QML,
                 // if no value is passed default value is taken from defaultConfig.js
@@ -109,6 +108,9 @@
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
+                    // xaxis setting
+                    xaxisLaabel = defaultD3Config.xAxisConfig.label,
+                    yaxisLaabel = defaultD3Config.yAxisConfig.label,
                 } = plottingConfiguration;
 
                 // plottingConfiguration restore from windows
@@ -141,6 +143,12 @@
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
+                }
+                if (!xaxisLaabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [xaxisLaabel, yaxisLaabel];
+                    // xAxisLabel = xaxisLaabel;
                 }
                 d3Colors = d3colorPalette;
                 // legends code starts
@@ -683,6 +691,7 @@
 
                 setLabel(
                     xAxisLabel,
+                    // xaxisLaabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
