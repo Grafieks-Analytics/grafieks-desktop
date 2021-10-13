@@ -57,16 +57,17 @@ Popup {
 
         function onPublishDSStatus(outputstatus){
 
-            if(outputstatus.code === 200){
+            errorMsg.text = outputstatus.msg
+        }
 
-                closePopup()
-                stacklayout_home.currentIndex = 7
+        function onDsUploadPercentage(percentage){
+            errorMsg.text = percentage + "% uploaded"
+        }
 
-            } else{
-
-                errorMsg.text = outputstatus.msg
-            }
-
+        function onDsUploadFinished(){
+            errorMsg.text = "Upload finished"
+            closePopup()
+            stacklayout_home.currentIndex = 7
         }
 
     }

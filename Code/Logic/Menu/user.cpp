@@ -26,8 +26,12 @@ void User::login()
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
     // Settings: set baseUrl
+    // Settings: set hostname
     QSettings settings;
     settings.setValue("general/baseUrl", host);
+
+    QUrl url(host);
+    settings.setValue("general/hostname", url.host());
 
     connect(m_networkReply, &QIODevice::readyRead, this, &User::reading, Qt::UniqueConnection);
     connect(m_networkReply, &QNetworkReply::finished, this, &User::loginReadComplete, Qt::UniqueConnection);

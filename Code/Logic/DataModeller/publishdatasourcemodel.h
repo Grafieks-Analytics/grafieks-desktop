@@ -13,6 +13,7 @@
 #include <QDebug>
 
 #include "../../statics.h"
+#include "../../secrets.h"
 
 
 class PublishDatasourceModel : public QObject
@@ -26,9 +27,12 @@ private slots:
     void reading();
     void readComplete();
     void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
+    void uploadFinished();
 
 signals:
     void publishDSStatus(QVariantMap status);
+    void dsUploadPercentage(int percentage);
+    void dsUploadFinished();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
