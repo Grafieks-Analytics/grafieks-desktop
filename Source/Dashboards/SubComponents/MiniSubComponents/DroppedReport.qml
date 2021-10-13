@@ -33,6 +33,9 @@ Item{
     property int dashboardId: 0
     property int reportsInCurrentDashboard: 0
 
+    property var originalHeight: 0
+    property var originalWidth: 0
+
     // Copied Properties from NewReport.qml
     // So that charts are displayed same as NewReport
 
@@ -254,8 +257,6 @@ Item{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
-
-
 
     function drawChartAfterReceivingSignal(dataValues){
         console.log("datavaluestest",dataValues)
@@ -487,8 +488,8 @@ Item{
         DashboardParamsModel.setCurrentReport(newItem.objectName)
         if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
         {
-            mainContainer.width = Constants.defaultDroppedReportWidth
-            mainContainer.height = Constants.defaultDroppedReportHeight
+            mainContainer.width = newItem.originalWidth
+            mainContainer.height = newItem.originalHeight
 
             // [Tag: Refactor]
             // Move this to constants
@@ -496,8 +497,6 @@ Item{
 
             mainContainer.y = originalPoint.y
             mainContainer.x = originalPoint.x
-
-
         }
         else{
             mainContainer.width= Qt.binding(function(){
@@ -507,8 +506,13 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
-            originalPoint.x = currnetPointReport.x
-            originalPoint.y = currnetPointReport.y
+            var coords = DashboardParamsModel.getDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport)
+
+            originalPoint.x = coords[0]
+            originalPoint.y = coords[1]
+
+            newItem.originalHeight = coords[3] - coords[1]
+            newItem.originalWidth = coords[2] - coords[0]
 
             // [Tag: Refactor]
             // Move this to constants
