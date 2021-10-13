@@ -90,8 +90,8 @@ const defaultD3Config = {
     },
     yAxisConfig: {
         label: null,
-        bold: false,
-        italic: false,
+        boldLabel: false,
+        italicLabel: false,
         boldTick: false,
         italicTick: false,
         visible: true,
