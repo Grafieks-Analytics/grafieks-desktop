@@ -106,69 +106,82 @@ Rectangle{
     //    bold
     function boldToggleYLabel(){
 
-        d3PropertiesConfig.yAxisConfig = d3PropertiesConfig.yAxisConfig || {}; 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
         
         if(toggleBoldYLabel == false){
             toggleBoldYLabel = true;
             yAxisLabelBold.color="lightGrey"
             // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
-            d3PropertiesConfig.yAxisConfig.bold = true; 
+            d3PropertyConfig.yAxisConfig.boldLabel = true;
         }
         else if(toggleBoldYLabel == true){
             toggleBoldYLabel = false;
             yAxisLabelBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','normal')")
+            d3PropertyConfig.yAxisConfig.boldLabel = false;
+            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','normal')")
         }
         console.log("bold"+toggleBoldYLabel)
 
     }
     function boldToggleXLabel(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleBoldXLabel == false){
             toggleBoldXLabel = true;
             xAxisLabelBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','bold')")
-
-
+            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','bold')")
+            d3PropertyConfig.xAxisConfig.boldLabel = true;
         }
+
         else if(toggleBoldXLabel == true){
             toggleBoldXLabel = false;
-            xAxisLabelBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','normal')")
+            xAxisLabelBold.color="transparent";
+            d3PropertyConfig.xAxisConfig.boldLabel = false;
+            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','normal')")
+
         }
         console.log("bold"+toggleBoldXLabel)
 
     }
     function boldToggleXTick(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleBoldXTick == false){
             toggleBoldXTick = true;
             xAxisTickBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','bold')")
+
+            d3PropertyConfig.xAxisConfig.boldTick = true;
+            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','bold')")
 
 
         }
         else if(toggleBoldXTick == true){
             toggleBoldXTick = false;
             xAxisTickBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','normal')")
+            d3PropertyConfig.xAxisConfig.boldTick = false;
+            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','normal')")
         }
         console.log("bold"+toggleBoldXTick)
 
     }
     function boldToggleYTick(){
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+
         if(toggleBoldYTick == false){
             toggleBoldYTick = true;
             yAxisTickBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','bold')")
-
+            d3PropertyConfig.yAxisConfig.boldTick = true;
+            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','bold')")
 
         }
         else if(toggleBoldYTick == true){
             toggleBoldYTick = false;
             yAxisTickBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','normal')")
+            d3PropertyConfig.yAxisConfig.boldTick = false;
+            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','normal')")
         }
         console.log("bold"+toggleBoldYTick)
 
@@ -177,68 +190,88 @@ Rectangle{
     //    italic
     function italicToggleXLabel(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleItalicXLabel == false){
             toggleItalicXLabel = true;
             xAxisLabelItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','italic')")
-
+            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','italic')")
+            d3PropertyConfig.xAxisConfig.italicLabel = true;
 
         }
         else if(toggleItalicXLabel == true){
             toggleItalicXLabel = false;
             xAxisLabelItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','normal')")
+            d3PropertyConfig.xAxisConfig.italicLabel = false;
+
+            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','normal')")
         }
         console.log("bold"+toggleItalicXLabel)
 
     }
     function italicToggleYLabel(){
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+
         if(toggleItalicYLabel == false){
             toggleItalicYLabel = true;
             yAxisLabelItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','italic')")
+            d3PropertyConfig.yAxisConfig.italicLabel = true;
+
+            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','italic')")
 
 
         }
         else if(toggleItalicYLabel == true){
             toggleItalicYLabel = false;
             yAxisLabelItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','normal')")
+            d3PropertyConfig.yAxisConfig.italicLabel = false;
+            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','normal')")
         }
         console.log("bold"+toggleItalicYLabel)
 
     }
     function italicToggleXTick(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleItalicXTick == false){
             toggleItalicXTick = true;
             xAxisTickItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','italic')")
+            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','italic')")
+            d3PropertyConfig.xAxisConfig.italicTick = true;
 
 
         }
         else if(toggleItalicXTick == true){
             toggleItalicXTick = false;
             xAxisTickItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','normal')")
+            d3PropertyConfig.xAxisConfig.italicTick = false;
+            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','normal')")
         }
         console.log("bold"+toggleItalicYLabel)
 
     }
     function italicToggleYTick(){
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+
         if(toggleItalicYTick == false){
             toggleItalicYTick = true;
             yAxisTickItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','italic')")
+
+            d3PropertyConfig.yAxisConfig.italicTick = true;
+
+            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','italic')")
 
 
         }
         else if(toggleItalicYTick == true){
             toggleItalicYTick = false;
             yAxisTickItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','normal')")
+            d3PropertyConfig.yAxisConfig.italicTick = false;
+
+            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','normal')")
         }
         console.log("bold"+toggleItalicYTick)
 
@@ -682,14 +715,14 @@ Rectangle{
                                 }
                                 Rectangle {
                                     color: Constants.defaultXAxisTickColor
-//                                    {
-//                                        Qt.binding(function() {console.log("testbinding",chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
-//                                            return Constants.defaultXAxisTickColor })}
-//                                    color:Constants.defaultXAxisTickColor
-//                                    {
-//                                        console.log("chartproperty",chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
-//                                         (chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog || Constants.defaultXAxisTickColor)
-//                                    }
+                                    //                                    {
+                                    //                                        Qt.binding(function() {console.log("testbinding",chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
+                                    //                                            return Constants.defaultXAxisTickColor })}
+                                    //                                    color:Constants.defaultXAxisTickColor
+                                    //                                    {
+                                    //                                        console.log("chartproperty",chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
+                                    //                                         (chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog || Constants.defaultXAxisTickColor)
+                                    //                                    }
                                     border.color: Constants.borderBlueColor
                                     width: 20
                                     height: 20
