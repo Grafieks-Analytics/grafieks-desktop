@@ -40,7 +40,7 @@
         <div id="mainChartWindow" style="display: flex">
             <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
-            <div id="xAxisLabelId" style=""></div>
+            <div id="xAxisLabelId"></div>
         </div>
 
         <div id="tooltip"></div>
@@ -72,7 +72,6 @@
 
                 // data values to be plot
                 var dataValues = data[0];
-                const [xAxisLabel, yAxisLabel] = data[1];
 
                 // Plot configuration contains all the config of report, these values are passed from QML,
                 // if no value is passed default value is taken from defaultConfig.js
@@ -109,6 +108,9 @@
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
+                    // xaxis setting
+                    xaxisLaabel = defaultD3Config.xAxisConfig.label,
+                    yaxisLaabel = defaultD3Config.yAxisConfig.label,
                 } = plottingConfiguration;
 
                 // plottingConfiguration restore from windows
@@ -141,6 +143,12 @@
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
+                }
+                if (!xaxisLaabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [xaxisLaabel, yaxisLaabel];
+                    // xAxisLabel = xaxisLaabel;
                 }
                 d3Colors = d3colorPalette;
                 // legends code starts
@@ -266,7 +274,7 @@
 
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#xAxisLabelId").style("bottom", 20);
+                d3.select("#xAxisLabelId").style("bottom", 20 + "px");
 
                 // legends code starts
                 if (legendStatus) {
@@ -683,6 +691,7 @@
 
                 setLabel(
                     xAxisLabel,
+                    // xaxisLaabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -919,7 +928,7 @@
                 }
             }
             //  draw function defination starts
-<<<<<<< HEAD
+
             drawChart(data, {
                 dataColumns: {
                     xAxisColumnDetails: [
@@ -940,9 +949,8 @@
                     colorByData: [],
                 },
             });
-=======
+
             // drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
->>>>>>> 811bb753d4646755980f20d14c1d37c16534aa40
         </script>
         <!-- javascripts ends -->
     </body>
