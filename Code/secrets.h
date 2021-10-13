@@ -34,7 +34,7 @@ namespace Secret
     // FTP
     const QString ftpUser = "admin";
     const QString ftpPass = "123456";
-    const int ftpPort = 5475;
+    const QString ftpPort = "5475";
 
 
 }

@@ -55,9 +55,6 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     obj.insert("IsFullExtract", isFullExtract);
     obj.insert("FileData", base64Image);
 
-    uploadFile();
-
-
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
@@ -97,14 +94,24 @@ void PublishDatasourceModel::readComplete()
         m_tempStorage->clear();
     }
 
-    emit publishDSStatus(outputStatus);
+    // If saving to database throws error, emit signal
+    // else start uploading the extract file
+    if(outputStatus.value("code") != 200){
+        emit publishDSStatus(outputStatus);
+    } else {
+        uploadFile();
+    }
 }
 
 void PublishDatasourceModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
-    qDebug() << "HERE";
-//    qint64 percentageUploaded = 100 * bytesSent/bytesTotal;
-    qDebug() << "Percentage Uploaded" << bytesSent << bytesTotal;
+    int percentageUploaded = 100 * bytesSent/bytesTotal;
+    emit dsUploadPercentage(percentageUploaded);
+}
+
+void PublishDatasourceModel::uploadFinished()
+{
+    emit dsUploadFinished();
 }
 
 void PublishDatasourceModel::uploadFile()
@@ -116,9 +123,11 @@ void PublishDatasourceModel::uploadFile()
     QFileInfo fileInfo(*dataFile);
     QString filename(fileInfo.fileName());
 
-    QUrl url("ftp://172.24.93.227:2121/datasources/" + filename);
-    url.setUserName("admin");
-    url.setPassword("123456");
+    QString baseUrl = settings.value("general/hostname").toString();
+
+    QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/datasources/" + filename);
+    url.setUserName(Secret::ftpUser);
+    url.setPassword(Secret::ftpPass);
     url.setScheme("ftp");
 
     if (dataFile->open(QIODevice::ReadOnly))
@@ -131,6 +140,7 @@ void PublishDatasourceModel::uploadFile()
         }
         // And connect to the progress upload signal
         connect(reply, &QNetworkReply::uploadProgress, this, &PublishDatasourceModel::uploadProgress);
+        connect(reply, &QNetworkReply::finished, this, &PublishDatasourceModel::uploadFinished);
     } else {
         qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
     }
