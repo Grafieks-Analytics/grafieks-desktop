@@ -16,8 +16,6 @@ FileDialog{
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName
 
-    property var ifPublish: false
-
 
     onAccepted: {
 

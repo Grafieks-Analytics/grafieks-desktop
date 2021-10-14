@@ -49,8 +49,11 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QVector<int> rejectIds;
     QMap<int, QString> matchedDateFormats;
 
+    bool m_ifPublish;
+
 public:
     explicit CSVJsonQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
+    Q_PROPERTY(bool ifPublish READ ifPublish WRITE setIfPublish NOTIFY ifPublishChanged);
 
     Q_INVOKABLE void setHideParams(QString hideParams);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
@@ -62,10 +65,12 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    bool ifPublish() const;
 
 public slots:
     void getAllFilters(FilterCategoricalListModel *categoricalFilter = nullptr, FilterNumericalListModel *numericalFilter = nullptr, FilterDateListModel *dateFilter = nullptr);
     void extractSaved(QString errorMessage);
+    void setIfPublish(bool ifPublish);
 
 private:
 
@@ -79,9 +84,10 @@ signals:
     void errorSignal(QString errMsg);
     void clearTablePreview();
     void showSaveExtractWaitPopup();
-    void extractFileExceededLimit(bool freeLimit);
+    void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
 
+    void ifPublishChanged(bool ifPublish);
 };
 
 #endif // CSVJSONQUERYMODEL_H

@@ -92,6 +92,11 @@ void GeneralParamsModel::setExtractPath(QString extractsPath)
 
 }
 
+QString GeneralParamsModel::getExtractPath()
+{
+    return Statics::extractPath;
+}
+
 void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName, QString newColumnType)
 {
 
