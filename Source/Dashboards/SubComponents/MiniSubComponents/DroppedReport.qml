@@ -33,6 +33,9 @@ Item{
     property int dashboardId: 0
     property int reportsInCurrentDashboard: 0
 
+    property var originalHeight: 0
+    property var originalWidth: 0
+
     // Copied Properties from NewReport.qml
     // So that charts are displayed same as NewReport
 
@@ -255,8 +258,6 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
-
     function drawChartAfterReceivingSignal(dataValues){
         if(webEngineView.loading){
             return;
@@ -361,6 +362,7 @@ Item{
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.stackedAreaChartTitle:
+        case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
@@ -485,8 +487,8 @@ Item{
         DashboardParamsModel.setCurrentReport(newItem.objectName)
         if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
         {
-            mainContainer.width = Constants.defaultDroppedReportWidth
-            mainContainer.height = Constants.defaultDroppedReportHeight
+            mainContainer.width = newItem.originalWidth
+            mainContainer.height = newItem.originalHeight
 
             // [Tag: Refactor]
             // Move this to constants
@@ -494,8 +496,6 @@ Item{
 
             mainContainer.y = originalPoint.y
             mainContainer.x = originalPoint.x
-
-
         }
         else{
             mainContainer.width= Qt.binding(function(){
@@ -505,8 +505,13 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
-            originalPoint.x = currnetPointReport.x
-            originalPoint.y = currnetPointReport.y
+            var coords = DashboardParamsModel.getDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport)
+
+            originalPoint.x = coords[0]
+            originalPoint.y = coords[1]
+
+            newItem.originalHeight = coords[3] - coords[1]
+            newItem.originalWidth = coords[2] - coords[0]
 
             // [Tag: Refactor]
             // Move this to constants
@@ -795,9 +800,10 @@ Item{
                 ChartsModel.getAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
+            case Constants.multipleAreaChartTitle:
                 console.log('Stacked Area Chart')
-                console.log('Colour By columnName',columnName)
-                ChartsModel.getStackedAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                console.log('Colour By columnName',colorByColumnName)
+                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")

@@ -9,7 +9,7 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-        <script src="./Data/min/numeral.min.js"></script>
+
         <link rel="stylesheet" href="Data/general.css" />
 
         <style type="text/css">
@@ -1310,29 +1310,29 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            drawChart(dataset, {
-                chartType: "FitWidth",
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "Order Date",
-                            itemType: "Date",
-                            dateFormat: "%d",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [],
-                },
-                dateFormat: "%d",
-                gridConfig: { gridStatus: false },
-            });
+            // drawChart(dataset, {
+            //     chartType: "FitWidth",
+            //     dataColumns: {
+            //         xAxisColumnDetails: [
+            //             {
+            //                 itemName: "Order Date",
+            //                 itemType: "Date",
+            //                 dateFormat: "%d",
+            //             },
+            //         ],
+            //         yAxisColumnDetails: [
+            //             {
+            //                 itemName: "Sales",
+            //                 itemType: "Numerical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         row3ColumnDetails: [],
+            //         colorByData: [],
+            //     },
+            //     dateFormat: "%d",
+            //     gridConfig: { gridStatus: false },
+            // });
 
             function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;

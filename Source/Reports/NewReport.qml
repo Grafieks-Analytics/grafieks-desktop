@@ -62,8 +62,9 @@ Page {
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
     property var d3PropertyConfig: ({});
+    property var qmlChartConfig: ({});
 
-    // This object will contain all the extra param models 
+    // This object will contain all the extra param models
     /*
         {
             chartName: { param1: value1, param2: value2 }
@@ -100,6 +101,7 @@ Page {
     // Edit Report Flag
     property bool editReportFlag: false;
     property var dataValues : null;
+    property int activeChartIndex: 0;
 
     // Array List -> This will contain all the charts which can be converted to horizontal
     property var horizontalChartList: [];
@@ -136,6 +138,324 @@ Page {
         id: dataItemList
     }
 
+    ListModel{
+        id: allCharts
+        ListElement{
+            icon: "bar_chart.png"
+            chartHtml:"BarChartArrayInput.html"
+            name: "bar"
+            activeChart: true
+            title: "Bar Chart"
+            yAxisVisible: true
+            lineTypeChartVisible: false
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "categorical"
+        }
+        ListElement{
+            icon: "area.png"
+            chartHtml:"AreaChart.html"
+            name:"area"
+            activeChart: false
+            title: "Area Chart"
+            yAxisVisible: true
+            lineTypeChartVisible: false
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape"
+            colorByDropEligible: "categorical"
+        }
+        ListElement{
+            icon: "line_chart.png"
+            chartHtml:"LineChart.html"
+            activeChart: false
+            title: "Line Chart"
+            yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            lineTypeChartVisible: true
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line,marker shape,line type"
+            colorByDropEligible: "categorical"
+        }
+        ListElement{
+            // icon: "combination_chart.png"
+            icon: "combination_grey.png"
+            activeChart: false
+            chartHtml:"bar.html"
+            title:"Combination - Coming Soon"
+            yAxisVisible: true
+            maxDropOnXAxis: 1
+            disabled:true
+            lineTypeChartVisible: true
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            nonClickable: true
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "categorical"
+        }
+        ListElement{
+            icon: "heatmap.png"
+            chartHtml:"HeatmapChart.html"
+            activeChart: false
+            title: "Heat Map"
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            yAxisVisible: true
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "numerical"
+        }
+        ListElement{
+            icon: "scatter_plot.png"
+            chartHtml:"ScatterChart.html"
+            activeChart: false
+            title:"Scatter Plot"
+            yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: "categorical"
+        }
+        ListElement{
+            icon: "waterfall.png"
+            chartHtml:"WaterfallChart.html"
+            activeChart: false
+            title:"Waterfall"
+            yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "tool tip,size,data label,grid line"
+        }
+        ListElement{
+            icon: "pie_chart.png"
+            chartHtml:"PieChart.html"
+            activeChart: false
+            title: "Pie Chart"
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            yAxisVisible: false
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,data label"
+            colorByDropEligible: ""
+        }
+        ListElement{
+            icon: "donut.png"
+            chartHtml:"DoughnutChart.html"
+            activeChart: false
+            title:"Donut Chart"
+            xAxisLabelName: "Categorical"
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            yAxisLabelName: "Numerical"
+            yAxisVisible: false
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label"
+            colorByDropEligible: ""
+        }
+        ListElement{
+            icon: "radar.png"
+            chartHtml:"RadarChart.html"
+            activeChart: false
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
+            title:"Radar"
+            yAxisVisible: false
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            colorByDropEligible: ""
+        }
+        ListElement{
+            icon: "sunburst.png"
+            chartHtml:"SunburstChart.html"
+            activeChart: false
+            title:"Sunburst"
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
+            maxDropOnYAxis: 1
+            maxDropOnXAxis: 5
+            axisSettingsDisabled: true
+            yAxisVisible: false
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Reference Line"
+            subMenuCustomizations: "color by,tool tip,data label"
+            colorByDropEligible: ""
+        }
+        //        ListElement{
+        //            icon: "nightingales_rose.png"
+        //            activeChart: false
+        //            chartHtml:"bar.html"
+        //            title:"Nightingale Rose"
+        //            yAxisVisible: false
+        //            lineTypeChartVisible: false
+        //        }
+        //        ListElement{
+        //            icon: "chord_diagram.png"
+        //            chartHtml:"ChordChart.html"
+        //            activeChart: false
+        //            title:"Chord Diagram"
+        //            xAxisLabelName: "Source"
+        //            yAxisLabelName: "Numerical"
+        //            yAxisVisible: false
+        //            lineTypeChartVisible: false
+        //        }
+        ListElement{
+            icon: "funnel.png"
+            chartHtml:"FunnelChart.html"
+            activeChart: false
+            title: "Funnel Chart"
+            yAxisVisible: false
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
+            axisSettingsDisabled: true
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label,dynamic height,bottom pinch"
+            colorByDropEligible: ""
+        }
+        ListElement{
+            icon: "tree_chart.png"
+            chartHtml:"TreeChart.html"
+            activeChart: false
+            title:"Tree Chart"
+            maxDropOnYAxis: 1
+
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
+            yAxisVisible: false
+            lineTypeChartVisible: false
+            mainCustomizations: "Properties,Reference Line"
+            subMenuCustomizations: "tool tip,data label"
+            colorByDropEligible: ""
+        }
+        // ListElement{
+        //     icon: "force_directed.png"
+        //     chartHtml:"bar.html"
+        //     activeChart: false
+        //     title:"Force Directed"
+        //     mainCustomizations: "Properties,Legend,Reference Line"
+        // }
+        ListElement{
+            // icon: "sankey.png"
+            icon: "sankey_grey.png"
+            chartHtml:"SankeyChart.html"
+            elementHeight: 24
+            activeChart: false
+            disabled:true
+            title:"Sankey"
+            xAxisLabelName: "Source"
+            yAxisLabelName: "Target"
+            mainCustomizations: "Properties,Legend,Reference Line"
+            colorByDropEligible: ""
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+        }
+        ListElement{
+            // icon: "tree_map.png"
+            icon: "treemap_grey.png"
+            chartHtml:"TreeMapChart.html"
+            elementHeight: 24
+            activeChart: false
+            disabled:true
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
+            title: "Tree Map"
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
+            colorByDropEligible: ""
+            mainCustomizations: "Properties,Legend,Reference Line"
+            subMenuCustomizations: "color by,tool tip,size,data label"
+        }
+        //        ListElement{
+        //            icon: "condegram.png"
+        //            chartHtml:"bar.html"
+        //            activeChart: false
+        //            title:"Condegram"
+        //        }
+        ListElement{
+            // icon: "map.png"
+            icon: "geo_grey.png"
+            chartHtml:"GeoChart.html"
+            elementHeight: 22
+            elementWidth:40
+            activeChart: false
+            disabled:true
+            xAxisLabelName: "Location"
+            yAxisLabelName: "Numerical"
+            title:"Map - Coming Soon"
+            mainCustomizations: "Properties,Legend"
+            nonClickable: true
+            colorByDropEligible: ""
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+        }
+        ListElement{
+            icon: "gauge_chart.png"
+            chartHtml:"GaugeChart.html"
+            elementHeight: 22
+            elementWidth:30
+            activeChart: false
+            title:"Gauge Chart"
+            mainCustomizations: ""
+            subMenuCustomizations: "color by,tool tip,size,data label,grid line"
+            axisSettingsDisabled: true
+            colorByDropEligible: ""
+        }
+        ListElement{
+            icon: "pivot.png"
+            chartHtml:"PivotTable.html"
+            activeChart: false
+            title:"Pivot"
+            xAxisLabelName: "Rows"
+            yAxisLabelName: "Columns"
+            maxDropOnXAxis: 5
+            maxDropOnYAxis: 5
+            maxDropOnRow3Axis: 5
+            themeVisible: true
+            mainCustomizations: "Properties,Total"
+            colorByDropEligible: ""
+            subMenuCustomizations: "pivot theme,grand total,row total,sub total"
+            axisSettingsDisabled: true
+        }
+        ListElement{
+            icon: "table.png"
+            chartHtml:"TableChart.html"
+            xAxisLabelName: "Columns"
+            yAxisLabelName: "Columns"
+            elementWidth: 30
+            activeChart: false
+            maxDropOnXAxis: 5
+            title:"Table"
+            mainCustomizations: "Total,Table Customization"
+            subMenuCustomizations: "tool tip,size,data label,grand total"
+            axisSettingsDisabled: true
+        }
+        ListElement{
+            icon: "kpi.png"
+            chartHtml:"KPI.html"
+            elementWidth: 30
+            elementHeight: 20
+            activeChart: false
+            title:"KPI"
+            xAxisLabelName: "Values"
+            mainCustomizations: "KPI Properties"
+            subMenuCustomizations: "data label"
+            axisSettingsDisabled: true
+        }
+    }
+
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -168,7 +488,7 @@ Page {
                 setValuesOnEditReport(reportId);
             }else{
                 addReportButton.text = "Add";
-//                ReportParamsModel.setReportId(reportIdMain);
+                //                ReportParamsModel.setReportId(reportIdMain);
                 
                 ReportParamsModel.setChartType(Constants.barChartTitle);
                 ReportParamsModel.setChartTitle(Constants.barChartTitle);
@@ -415,7 +735,7 @@ Page {
         case Constants.stackedAreaChartTitle:
         case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
-            console.log(Constants.multiLineChartTitle,"CLICKED");
+            console.log(chartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
             dataValues[1].splice(1,0,colorByColumnName);
             colorData = (dataValues && dataValues[1]) || [];
@@ -431,9 +751,9 @@ Page {
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
             console.log(chartTitle,"CLICKED");
-           var dataValuesTemp = dataValues && JSON.parse(dataValues);
-           colorData = Object.keys(dataValuesTemp[0]);
-           delete dataValuesTemp;
+            var dataValuesTemp = dataValues && JSON.parse(dataValues);
+            colorData = Object.keys(dataValuesTemp[0]);
+            delete dataValuesTemp;
             break;
         case Constants.funnelChartTitle:
             console.log(chartTitle,"CLICKED");
@@ -445,7 +765,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             var dataValuesTemp = dataValues && JSON.parse(dataValues);
             colorData = [dataValuesTemp[1][0]];
-           delete dataValuesTemp;
+            delete dataValuesTemp;
             break;
         case Constants.scatterChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -552,6 +872,7 @@ Page {
         // Check if can be removed [TAG: Optimization]
         xAxisListModel.clear();
         yAxisListModel.clear();
+        initializeQmlChartConfig();
 
         // Pushing all the horiontal type chart
         horizontalChartList.push(Constants.barChartTitle);
@@ -573,6 +894,8 @@ Page {
         horizontalChartList.push(Constants.multipleHorizontalAreaChartTitle);
 
     }
+
+
 
 
     onIsHorizontalGraphChanged: {
@@ -663,7 +986,6 @@ Page {
         }
     }
 
-
     onChartTitleChanged: {
 
         console.log('Chart Title Changed',chartTitle);
@@ -740,7 +1062,7 @@ Page {
             if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails)  )){
                 yAxisListModel.clear();
             }
-        
+
             row3Visible =  true;
             xAxisVisible = true
             yAxisVisible = true
@@ -764,16 +1086,19 @@ Page {
             row3Visible =  false
             break;
         case Constants.kpiTitle:
+            if(!allNumericalValues(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
             yAxisVisible = false
             xAxisVisible = true
             row3Visible = false
             row4Visible = false
             break;
-        
+
         case Constants.barChartTitle:
         case Constants.lineChartTitle:
         case Constants.areaChartTitle:
-           if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.heatMapChartTitle || previousChartTitle == Constants.tableTitle){
+            if(previousChartTitle == Constants.scatterChartTitle || previousChartTitle == Constants.kpiTitle || previousChartTitle == Constants.heatMapChartTitle || previousChartTitle == Constants.tableTitle){
                 if(!allNonMeasures(xAxisColumnDetails)){
                     xAxisListModel.clear();
                 }
@@ -795,7 +1120,7 @@ Page {
         case Constants.sunburstChartTitle:
         case Constants.treeChartTitle:
         case Constants.waterfallChartTitle:
-        
+
         case Constants.multiLineChartTitle:
         case Constants.multipleAreaChartTitle:
         case Constants.groupBarChartTitle:
@@ -814,7 +1139,7 @@ Page {
             yAxisVisible = true
             row3Visible = false
             row4Visible = false
-        
+
             break;
         case Constants.horizontalBarChartTitle:
         case Constants.horizontalLineChartTitle:
@@ -824,7 +1149,7 @@ Page {
         case Constants.horizontalMultiLineChartTitle:
         case Constants.horizontalStackedBarChartTitle:
 
-             
+
             if(!(allCategoricalValues(yAxisColumnDetails) || allDateValues(yAxisColumnDetails))){
                 yAxisColumnDetails.clear();
             }
@@ -920,6 +1245,25 @@ Page {
             row3DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
         }
     }
+
+    function initializeQmlChartConfig(){
+        report_desiner_page.qmlChartConfig = {
+            customizationsAvailable: Constants.defaultCustomizationsAvailable,
+            subMenuCustomizationsAvailable:  Constants.defaultSubMenuCustomizationsAvailable
+        }
+    }
+
+    function resetQmlChartConfig(){
+        console.log('Reseting Chart');
+        customizationsAvailable = Constants.defaultCustomizationsAvailable;
+        subMenuCustomizationsAvailable = Constants.defaultSubMenuCustomizationsAvailable;
+        
+        allCharts.set(activeChartIndex,{activeChart: false})
+        activeChartIndex = 0;
+        allCharts.set(activeChartIndex,{activeChart: true})
+
+        initializeQmlChartConfig();
+    }
     
     function exportPivotChart(){
         webEngineView.runJavaScript('exportToExcel()');
@@ -931,35 +1275,35 @@ Page {
         var lastColorByValueItemType = (colorByData.length && colorByData[0].itemType) || "";
         console.log('Clear???', lastColorByValueItemType)
         switch(chartTitle){
-            case Constants.barChartTitle:
-            case Constants.lineChartTitle:
-            case Constants.areaChartTitle:
-            case Constants.multiLineChartTitle:
-            case Constants.multipleAreaChartTitle:
-            case Constants.groupBarChartTitle:
-            case Constants.stackedBarChartTitle:    
-            case Constants.horizontalBarChartTitle:
-            case Constants.horizontalLineChartTitle:
-            case Constants.horizontalAreaChartTitle:
-            case Constants.horizontalBarGroupedChartTitle:
-            case Constants.multipleHorizontalAreaChartTitle:
-            case Constants.horizontalMultiLineChartTitle:
-            case Constants.horizontalStackedBarChartTitle:
-            case Constants.scatterChartTitle:
+        case Constants.barChartTitle:
+        case Constants.lineChartTitle:
+        case Constants.areaChartTitle:
+        case Constants.multiLineChartTitle:
+        case Constants.multipleAreaChartTitle:
+        case Constants.groupBarChartTitle:
+        case Constants.stackedBarChartTitle:
+        case Constants.horizontalBarChartTitle:
+        case Constants.horizontalLineChartTitle:
+        case Constants.horizontalAreaChartTitle:
+        case Constants.horizontalBarGroupedChartTitle:
+        case Constants.multipleHorizontalAreaChartTitle:
+        case Constants.horizontalMultiLineChartTitle:
+        case Constants.horizontalStackedBarChartTitle:
+        case Constants.scatterChartTitle:
             
-                if(lastColorByValueItemType.toLowerCase() == "categorical"){
-                    clearFlag = false;
-                }
-                break;
-            case Constants.heatMapChartTitle:
-                if(lastColorByValueItemType.toLowerCase() == "numerical"){
-                    clearFlag = false;
-                }
-                break;
-        
+            if(lastColorByValueItemType.toLowerCase() == "categorical"){
+                clearFlag = false;
+            }
+            break;
+        case Constants.heatMapChartTitle:
+            if(lastColorByValueItemType.toLowerCase() == "numerical"){
+                clearFlag = false;
+            }
+            break;
+
         }
 
-        if(clearFlag){    
+        if(clearFlag){
             colorListModel.clear();
             colorByData = [];
             ReportParamsModel.setLastDropped(null);
@@ -976,7 +1320,7 @@ Page {
         ReportParamsModel.setLastDropped(null);
 
         // Setting the report title value to empty
-//        report_title_text.text = "";
+        //        report_title_text.text = "";
         report_desiner_page.reportIdMain = reportId;
 
         // Clear all the list models
@@ -992,6 +1336,16 @@ Page {
         var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
         var row3ColumnsReportData = JSON.parse(reportProperties.row3Columns);
         var colorListModelData = JSON.parse(reportProperties.colorByDataColoumns);
+
+        var qmlChartConfigValue = JSON.parse(reportProperties.qmlChartConfig);
+        report_desiner_page.qmlChartConfig = qmlChartConfigValue;
+        console.log('qmlChartConfig:debug',JSON.stringify(qmlChartConfig))
+        report_desiner_page.customizationsAvailable = qmlChartConfigValue.customizationsAvailable;
+        report_desiner_page.subMenuCustomizationsAvailable = qmlChartConfigValue.subMenuCustomizationsAvailable;
+        
+        allCharts.set(activeChartIndex,{activeChart: false})
+        report_desiner_page.activeChartIndex = qmlChartConfigValue.activeChartIndex;
+        allCharts.set(activeChartIndex,{activeChart: true})
 
         var chartTitleName = reportProperties.chartTitle;
         if(chartTitleName == Constants.gaugeChartTitle){
@@ -1119,11 +1473,11 @@ Page {
         case Constants.multipleHorizontalAreaChartTitle:
             chartUrl = Constants.multipleHorizontalAreaChartUrl;
             break;
-        
+
         case Constants.pieChartTitle:
             chartUrl = Constants.pieChartUrl;
             break;
-        
+
         case Constants.donutChartTitle:
             chartUrl = Constants.donutChartUrl;
             break;
@@ -1135,7 +1489,7 @@ Page {
         case Constants.sunburstChartTitle:
             chartUrl = Constants.sunburstChartUrl;
             break;
-        
+
         case Constants.funnelChartTitle:
             chartUrl = Constants.funnelChartUrl;
             break;
@@ -1143,7 +1497,7 @@ Page {
         case Constants.gaugeChartTitle:
             chartUrl = Constants.gaugeChartUrl;
             break;
-        
+
         case Constants.pivotTitle:
             chartUrl = Constants.pivotTableUrl;
             break;
@@ -1217,7 +1571,7 @@ Page {
     }
 
     function getDataPaneAllDetails(axisName){
-         var model = null;
+        var model = null;
         switch(axisName){
         case Constants.xAxisName:
             model = xAxisListModel;
@@ -1269,7 +1623,7 @@ Page {
         dragActiveObject= {};
         colorByData = [];
 
-// TODO:reset all constants for chart
+        // TODO:reset all constants for chart
 
         // Calling this redraw will clear the chart because no x and y columns will be available
         // [Tag: Optimization]
@@ -1449,10 +1803,10 @@ Page {
     function addReport(titleName){
 
         // Add report to dashboard
-//       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
-//            reportIdMain = generateReportId();
-//            ReportParamsModel.setReportId(reportIdMain);
-//       }
+        //       if(!ReportParamsModel.editReportToggle || ReportParamsModel.editReportToggle  == "false" || ReportParamsModel.editReportToggle == "-1"){
+        //            reportIdMain = generateReportId();
+        //            ReportParamsModel.setReportId(reportIdMain);
+        //       }
         
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
@@ -1478,6 +1832,11 @@ Page {
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
+        qmlChartConfig.activeChartIndex = activeChartIndex;
+        qmlChartConfig.customizationsAvailable =customizationsAvailable;
+        qmlChartConfig.subMenuCustomizationsAvailable = subMenuCustomizationsAvailable;
+        console.log('qmlChartConfig:debug:save',JSON.stringify(qmlChartConfig));
+        ReportParamsModel.setQmlChartConfig(JSON.stringify(qmlChartConfig));
         ReportParamsModel.setOptionalConfig(JSON.stringify(optionalParams));
         ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
@@ -1486,6 +1845,7 @@ Page {
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
         ReportParamsModel.addReport(reportIdMain);
+        resetQmlChartConfig()
 
         // Reset after chart is added
         input1Field.text = '';
@@ -1561,63 +1921,63 @@ Page {
         }
 
         switch(chartTitle){
-            case Constants.lineChartTitle:
-            case Constants.areaChartTitle:
-            case Constants.barChartTitle:
-                if(!yAxisColumns.length && !xAxisColumns.length ){
-                    return true;
-                }
-                if((itemType && itemType.toLowerCase() == "numerical")){
-                    return  false;
-                }
+        case Constants.lineChartTitle:
+        case Constants.areaChartTitle:
+        case Constants.barChartTitle:
+            if(!yAxisColumns.length && !xAxisColumns.length ){
                 return true;
-            case Constants.horizontalLineChartTitle:
-            case Constants.horizontalAreaChartTitle:
-            case Constants.horizontalBarChartTitle:
-                if(!yAxisColumns.length && !xAxisColumns.length ){
-                    return true;
-                }
-                if((itemType && itemType.toLowerCase() != "numerical")){
-                    return  false;
-                }
+            }
+            if((itemType && itemType.toLowerCase() == "numerical")){
+                return  false;
+            }
+            return true;
+        case Constants.horizontalLineChartTitle:
+        case Constants.horizontalAreaChartTitle:
+        case Constants.horizontalBarChartTitle:
+            if(!yAxisColumns.length && !xAxisColumns.length ){
                 return true;
-            case Constants.tableTitle:
-                console.log('Table tile',itemType);
-                if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
-                    return false;
-                }
-                return true;
-            case Constants.treeChartTitle:
-            case Constants.radarChartTitle:
-            case Constants.sunburstChartTitle:
-                if((itemType && itemType.toLowerCase()) != "categorical"){
-                    return false;
-                }
-                return true;
-            
-            case Constants.donutChartTitle:
-            case Constants.pieChartTitle:
-            case Constants.waterfallChartTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return false;
-                }
-                return true;
-            case Constants.pivotTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return false;
-                }
-                return true;
-            case Constants.heatMapChartTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return false;
-                }
-                return true;
-                           
-            case Constants.scatterChartTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return true;
-                }
+            }
+            if((itemType && itemType.toLowerCase() != "numerical")){
+                return  false;
+            }
+            return true;
+        case Constants.tableTitle:
+            console.log('Table tile',itemType);
+            if(!xAxisColumns.length && (itemType && itemType.toLowerCase()) == "numerical"){
                 return false;
+            }
+            return true;
+        case Constants.treeChartTitle:
+        case Constants.radarChartTitle:
+        case Constants.sunburstChartTitle:
+            if((itemType && itemType.toLowerCase()) != "categorical"){
+                return false;
+            }
+            return true;
+            
+        case Constants.donutChartTitle:
+        case Constants.pieChartTitle:
+        case Constants.waterfallChartTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return false;
+            }
+            return true;
+        case Constants.pivotTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return false;
+            }
+            return true;
+        case Constants.heatMapChartTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return false;
+            }
+            return true;
+
+        case Constants.scatterChartTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return true;
+            }
+            return false;
 
         }
         
@@ -1641,58 +2001,58 @@ Page {
         }
 
         switch(chartTitle){
-            case Constants.lineChartTitle:
-            case Constants.areaChartTitle:
-            case Constants.barChartTitle:
-                if(!yAxisColumns.length && !xAxisColumns.length ){
-                    return true;
-                }
-               if(itemType && itemType.toLowerCase() != "numerical"){
-                    return  false;
-                }
+        case Constants.lineChartTitle:
+        case Constants.areaChartTitle:
+        case Constants.barChartTitle:
+            if(!yAxisColumns.length && !xAxisColumns.length ){
                 return true;
-            case Constants.horizontalLineChartTitle:
-            case Constants.horizontalAreaChartTitle:
-            case Constants.horizontalBarChartTitle:
-                if(!yAxisColumns.length && !xAxisColumns.length ){
-                    return true;
-                }
-                if(itemType && itemType.toLowerCase() == "numerical"){
-                    return  false;
-                }
+            }
+            if(itemType && itemType.toLowerCase() != "numerical"){
+                return  false;
+            }
+            return true;
+        case Constants.horizontalLineChartTitle:
+        case Constants.horizontalAreaChartTitle:
+        case Constants.horizontalBarChartTitle:
+            if(!yAxisColumns.length && !xAxisColumns.length ){
                 return true;
+            }
+            if(itemType && itemType.toLowerCase() == "numerical"){
+                return  false;
+            }
+            return true;
             
-            case Constants.sunburstChartTitle:
-            case Constants.treeChartTitle:
-            case Constants.radarChartTitle:
-                if((itemType && itemType.toLowerCase()) != "numerical"){
-                    return false;
-                }
-                return true;
-            
-            case Constants.donutChartTitle:
-            case Constants.pieChartTitle:
-            case Constants.waterfallChartTitle:
-                if((itemType && itemType.toLowerCase()) != "numerical"){
-                    return false;
-                }
-                return true;
-            case Constants.pivotTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return false;
-                }
-                return true;
-            case Constants.heatMapChartTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return false;
-                }
-                return true;
-            
-            case Constants.scatterChartTitle:
-                if((itemType && itemType.toLowerCase()) == "numerical"){
-                    return true;
-                }
+        case Constants.sunburstChartTitle:
+        case Constants.treeChartTitle:
+        case Constants.radarChartTitle:
+            if((itemType && itemType.toLowerCase()) != "numerical"){
                 return false;
+            }
+            return true;
+            
+        case Constants.donutChartTitle:
+        case Constants.pieChartTitle:
+        case Constants.waterfallChartTitle:
+            if((itemType && itemType.toLowerCase()) != "numerical"){
+                return false;
+            }
+            return true;
+        case Constants.pivotTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return false;
+            }
+            return true;
+        case Constants.heatMapChartTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return false;
+            }
+            return true;
+            
+        case Constants.scatterChartTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return true;
+            }
+            return false;
         }
         
         if(multiChart){
@@ -1702,13 +2062,13 @@ Page {
     }
 
     function allNumericalValues(details){
-        var flag = true; 
+        var flag = true;
         console.log('detail',JSON.stringify(details));
-        details.forEach(detail =>{ 
-            if(detail.itemType && detail.itemType.toLowerCase() != "numerical"){
-                flag = false;
-            }
-        })
+        details.forEach(detail =>{
+                            if(detail.itemType && detail.itemType.toLowerCase() != "numerical"){
+                                flag = false;
+                            }
+                        })
         if(flag){
             return true;
         }
@@ -1716,14 +2076,14 @@ Page {
     }
 
     function allCategoricalValues(details){
-        var flag = true; 
+        var flag = true;
         console.log('detail',JSON.stringify(details));
-        details.forEach(detail =>{ 
-            console.log('detail',detail);
-            if(detail.itemType && detail.itemType.toLowerCase() != "categorical"){
-                flag = false;
-            }
-        })
+        details.forEach(detail =>{
+                            console.log('detail',detail);
+                            if(detail.itemType && detail.itemType.toLowerCase() != "categorical"){
+                                flag = false;
+                            }
+                        })
         if(flag){
             return true;
         }
@@ -1732,14 +2092,14 @@ Page {
 
 
     function allNonMeasures(details){
-        var flag = true; 
+        var flag = true;
         console.log('detail',JSON.stringify(details));
-        details.forEach(detail =>{ 
-            console.log('detail',detail);
-            if(detail.itemType && detail.itemType.toLowerCase() == "numerical"){
-                flag = false;
-            }
-        })
+        details.forEach(detail =>{
+                            console.log('detail',detail);
+                            if(detail.itemType && detail.itemType.toLowerCase() == "numerical"){
+                                flag = false;
+                            }
+                        })
         if(flag){
             return true;
         }
@@ -1748,12 +2108,12 @@ Page {
 
     function allDateValues(details){
         console.log('detail',JSON.stringify(details));
-        var flag = true; 
-        details.forEach(detail =>{ 
-            if(detail.itemType && detail.itemType.toLowerCase() != "date"){
-                flag = false;
-            }
-        })
+        var flag = true;
+        details.forEach(detail =>{
+                            if(detail.itemType && detail.itemType.toLowerCase() != "date"){
+                                flag = false;
+                            }
+                        })
         if(flag){
             return true;
         }
@@ -1868,7 +2228,7 @@ Page {
     }
 
     function isNumber(number){
-        return !!(number && number.trim() && !isNaN(number.trim().replace(/,/g,''))) 
+        return !!(number && number.trim() && !isNaN(number.trim().replace(/,/g,'')))
     }
 
     function isGaugeChart(){
@@ -1916,11 +2276,11 @@ Page {
         */
 
         if(
-            (xAxisColumns.length && yAxisColumns.length) || 
-            (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || 
-            (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
-            (chartTitle == Constants.pivotTitle && isPivotChart())
-        ) {
+                (xAxisColumns.length && yAxisColumns.length) ||
+                (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) ||
+                (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
+                (chartTitle == Constants.pivotTitle && isPivotChart())
+                ) {
 
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);
@@ -2034,7 +2394,7 @@ Page {
                 }
                 // profit category sales
                 // sales profit category
-                // profit sales category  
+                // profit sales category
                 ChartsModel.getScatterChartValues(reportIdMain, 0, Constants.reportScreen,  xAxisColumns[0], yAxisColumns[0], colorByColumnName);
                 break;
             case Constants.treeChartTitle:
@@ -2078,46 +2438,46 @@ Page {
             case Constants.tableTitle:
                 console.log("TABLE CLICKED");
                 var nonMeasures = xAxisColumnDetails.filter(d=>{
-                    if(d.itemType.toLowerCase() != "numerical"){
-                        return true;
-                    }
-                    return false;
-                }).map(d => d.itemName)
+                                                                if(d.itemType.toLowerCase() != "numerical"){
+                                                                    return true;
+                                                                }
+                                                                return false;
+                                                            }).map(d => d.itemName)
                 var measures = xAxisColumnDetails.filter(d=>{
-                    if(d.itemType.toLowerCase() == "numerical"){
-                        return true;
-                    }
-                    return false;
-                }).map(d=> d.itemName)
+                                                             if(d.itemType.toLowerCase() == "numerical"){
+                                                                 return true;
+                                                             }
+                                                             return false;
+                                                         }).map(d=> d.itemName)
                 var dateConversionOptions = xAxisColumnDetails.filter(d=>{
-                    if(d.itemType.toLowerCase() == "date"){
-                        return true;
-                    }
-                    return false;
-                }).map(d => {
-                    var format = d.dateFormat;
-                    switch(format){
-                        case "%Y":
-                            format = "Year";
-                            break; 
-                        case "%d":
-                            format = "Day";
-                            break; 
-                        case "%b":
-                            format = "month";
-                            break; 
-                        case "%d %b %Y":
-                            format = "day,month,year";
-                            break; 
-                        case "%b %Y":
-                            format = "month,year";
-                            break; 
-                        default:
-                            format = "Year";
-                            break;
-                    }
-                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
-                })
+                                                                          if(d.itemType.toLowerCase() == "date"){
+                                                                              return true;
+                                                                          }
+                                                                          return false;
+                                                                      }).map(d => {
+                                                                                 var format = d.dateFormat;
+                                                                                 switch(format){
+            case "%Y":
+                                                                                     format = "Year";
+                                                                                     break;
+            case "%d":
+                                                                                     format = "Day";
+                                                                                     break;
+            case "%b":
+                                                                                     format = "month";
+                                                                                     break;
+            case "%d %b %Y":
+                                                                                     format = "day,month,year";
+                                                                                     break;
+            case "%b %Y":
+                                                                                     format = "month,year";
+                                                                                     break;
+            default:
+                                                                                     format = "Year";
+                                                                                     break;
+                                                                                 }
+                                                                                 return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
+                                                                             })
                 console.log('Date Values',JSON.stringify(dateConversionOptions));
                 
                 dateConversionOptions = JSON.stringify(dateConversionOptions);
@@ -2134,34 +2494,34 @@ Page {
 
                 var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
                 var dateConversionOptions = tempDataValues.filter(d=>{
-                    if(d.itemType.toLowerCase() == "date"){
-                        return true;
-                    }
-                    return false;
-                }).map(d => {
-                    var format = d.dateFormat;
-                    switch(format){
-                        case "%Y":
-                            format = "Year";
-                            break; 
-                        case "%d":
-                            format = "Day";
-                            break; 
-                        case "%b":
-                            format = "month";
-                            break; 
-                        case "%d %b %Y":
-                            format = "day,month,year";
-                            break; 
-                        case "%b %Y":
-                            format = "month,year";
-                            break; 
-                        default:
-                            format = "Year";
-                            break;
-                    }
-                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
-                })
+                                                                      if(d.itemType.toLowerCase() == "date"){
+                                                                          return true;
+                                                                      }
+                                                                      return false;
+                                                                  }).map(d => {
+                                                                             var format = d.dateFormat;
+                                                                             switch(format){
+            case "%Y":
+                                                                                 format = "Year";
+                                                                                 break;
+            case "%d":
+                                                                                 format = "Day";
+                                                                                 break;
+            case "%b":
+                                                                                 format = "month";
+                                                                                 break;
+            case "%d %b %Y":
+                                                                                 format = "day,month,year";
+                                                                                 break;
+            case "%b %Y":
+                                                                                 format = "month,year";
+                                                                                 break;
+            default:
+                                                                                 format = "Year";
+                                                                                 break;
+                                                                             }
+                                                                             return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
+                                                                         })
                 
                 dateConversionOptions = JSON.stringify(dateConversionOptions);
                 // Temporary running function
@@ -2185,7 +2545,7 @@ Page {
                 ]
 
 
-                // Change required 
+                // Change required
                 // Group the dates according to date format and sum the values.
                 // Values can be multiple so we will have to sum all of the values
                 // Passing column name and type
@@ -2203,7 +2563,7 @@ Page {
             }
 
             /*
-            After changing to signals and slots this code is not required and 
+            After changing to signals and slots this code is not required and
             can be removed once confirmed that everything is copied to drawChartAfterReceivingSignal function
             
             console.log('Webengine View Loading Status:',webEngineView.loading);
