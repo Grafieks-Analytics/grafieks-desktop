@@ -75,7 +75,6 @@ Popup {
         target: QueryModel
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
-            console.log("--F Query", freeLimit, ifPublish)
             saveExtractLimit(freeLimit, ifPublish)
         }
     }
@@ -84,7 +83,6 @@ Popup {
         target: ForwardOnlyQueryModel
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
-            console.log("--F Forward", freeLimit, ifPublish)
             saveExtractLimit(freeLimit, ifPublish)
         }
     }
@@ -93,7 +91,6 @@ Popup {
         target: ExcelQueryModel
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
-            console.log("--F Excel", freeLimit, ifPublish)
             saveExtractLimit(freeLimit, ifPublish)
         }
     }
@@ -102,7 +99,6 @@ Popup {
         target: CSVJsonQueryModel
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
-            console.log("--F Csv", freeLimit, ifPublish)
             saveExtractLimit(freeLimit, ifPublish)
         }
     }
