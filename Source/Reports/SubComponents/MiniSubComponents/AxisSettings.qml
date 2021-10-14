@@ -131,13 +131,13 @@ Rectangle{
             toggleBoldXLabel = true;
             xAxisLabelBold.color="lightGrey"
             // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','bold')")
-            d3PropertyConfig.xAxisConfig.boldLabel = true;
+            d3PropertyConfig.xAxisConfig.xboldLabel = true;
         }
 
         else if(toggleBoldXLabel == true){
             toggleBoldXLabel = false;
             xAxisLabelBold.color="transparent";
-            d3PropertyConfig.xAxisConfig.boldLabel = false;
+            d3PropertyConfig.xAxisConfig.xboldLabel = false;
             // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','normal')")
 
         }
@@ -152,7 +152,7 @@ Rectangle{
             toggleBoldXTick = true;
             xAxisTickBold.color="lightGrey"
 
-            d3PropertyConfig.xAxisConfig.boldTick = true;
+            d3PropertyConfig.xAxisConfig.xboldTick = true;
             // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','bold')")
 
 
@@ -160,7 +160,7 @@ Rectangle{
         else if(toggleBoldXTick == true){
             toggleBoldXTick = false;
             xAxisTickBold.color="transparent"
-            d3PropertyConfig.xAxisConfig.boldTick = false;
+            d3PropertyConfig.xAxisConfig.xboldTick = false;
             // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','normal')")
         }
         console.log("bold"+toggleBoldXTick)
@@ -196,13 +196,13 @@ Rectangle{
             toggleItalicXLabel = true;
             xAxisLabelItalilc.color="lightGrey"
             // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','italic')")
-            d3PropertyConfig.xAxisConfig.italicLabel = true;
+            d3PropertyConfig.xAxisConfig.xitalicLabel = true;
 
         }
         else if(toggleItalicXLabel == true){
             toggleItalicXLabel = false;
             xAxisLabelItalilc.color="transparent"
-            d3PropertyConfig.xAxisConfig.italicLabel = false;
+            d3PropertyConfig.xAxisConfig.xitalicLabel = false;
 
             // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','normal')")
         }
@@ -239,14 +239,14 @@ Rectangle{
             toggleItalicXTick = true;
             xAxisTickItalilc.color="lightGrey"
             // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','italic')")
-            d3PropertyConfig.xAxisConfig.italicTick = true;
+            d3PropertyConfig.xAxisConfig.xitalicTick = true;
 
 
         }
         else if(toggleItalicXTick == true){
             toggleItalicXTick = false;
             xAxisTickItalilc.color="transparent"
-            d3PropertyConfig.xAxisConfig.italicTick = false;
+            d3PropertyConfig.xAxisConfig.xitalicTick = false;
             // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','normal')")
         }
         console.log("bold"+toggleItalicYLabel)
@@ -394,7 +394,7 @@ Rectangle{
                                     onTextChanged: {
 
                                         d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
-                                        d3PropertyConfig.xAxisConfig.label = xAxisLabelNameBox.text;
+                                        d3PropertyConfig.xAxisConfig.xlabel = xAxisLabelNameBox.text;
                                         // webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
 
                                     }

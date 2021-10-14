@@ -135,22 +135,33 @@
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
 
-                let { legendStatus, legendPosition } = legendConfig;
+                let { legendStatus, legendPosition } = xAxisConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
-
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xvisible,
+                } = xAxisConfig;
                 let { gridStatus } = gridConfig;
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
-                if (!xAxisConfig.label) {
+                if (!xAxisConfig.xlabel) {
                     [xAxisLabel, yAxisLabel] = data[1];
                 } else {
-                    [xAxisLabel, yAxisLabel] = [xAxisConfig.label, yAxisConfig.label];
-                    // xAxisLabel = xaxisLaabel;
+                    [xAxisLabel, yAxisLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.label,
+                    ];
                 }
+
                 d3Colors = d3colorPalette;
+
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -897,6 +908,16 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldLabel ? "bold" : "regular")
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 6);
 
                 function setYaxisWidth() {
                     var allYAxisTicks =
@@ -950,29 +971,29 @@
                 },
             });
 
-            drawChart(data, {
-                chartType: "FitWidth",
-                xAxisConfig: { label: "Categoryas dasd as" },
-                yAxisConfig: { label: "Salesadsas dsad as" },
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "Category",
-                            itemType: "Categorical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [],
-                },
-            });
+            // drawChart(data, {
+            //     chartType: "FitWidth",
+            //     xAxisConfig: { label: "Categoryas dasd as" },
+            //     yAxisConfig: { label: "Salesadsas dsad as" },
+            //     dataColumns: {
+            //         xAxisColumnDetails: [
+            //             {
+            //                 itemName: "Category",
+            //                 itemType: "Categorical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         yAxisColumnDetails: [
+            //             {
+            //                 itemName: "Sales",
+            //                 itemType: "Numerical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         row3ColumnDetails: [],
+            //         colorByData: [],
+            //     },
+            // });
 
             // drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
         </script>

@@ -81,12 +81,12 @@ const defaultD3Config = {
     },
 
     xAxisConfig: {
-        label: null,
-        boldLabel: false,
-        italicLabel: false,
-        boldTick: false,
-        italicTick: false,
-        visible: true,
+        xlabel: null,
+        xboldLabel: true,
+        xitalicLabel: false,
+        xboldTick: false,
+        xitalicTick: false,
+        xvisible: true,
     },
     yAxisConfig: {
         label: null,
