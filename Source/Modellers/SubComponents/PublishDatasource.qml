@@ -40,7 +40,6 @@ Popup {
     property string datasource_name_final : ""
 
 
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -70,6 +69,42 @@ Popup {
             stacklayout_home.currentIndex = 7
         }
 
+    }
+
+    Connections{
+        target: QueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            console.log("--F Query", freeLimit, ifPublish)
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            console.log("--F Forward", freeLimit, ifPublish)
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+    }
+
+    Connections{
+        target: ExcelQueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            console.log("--F Excel", freeLimit, ifPublish)
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+    }
+
+    Connections{
+        target: CSVJsonQueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            console.log("--F Csv", freeLimit, ifPublish)
+            saveExtractLimit(freeLimit, ifPublish)
+        }
     }
 
     // SIGNALS ENDS
@@ -105,6 +140,21 @@ Popup {
         // Call Cpp function to process &
         // Upload data to API
 
+        QueryModel.setIfPublish(true)
+        ForwardOnlyQueryModel.setIfPublish(true)
+        ExcelQueryModel.setIfPublish(true)
+        CSVJsonQueryModel.setIfPublish(true)
+
+        // First save the extract file
+        // Then publish the data and file
+        if(GeneralParamsModel.getExtractPath().length > 0){
+            publishData()
+        } else {
+            saveFilePrompt.open()
+        }
+    }
+
+    function publishData(){
         var dsName = datasource_name_field.text
         var description = description_field.text
         var uploadImage = fileDialog1.fileUrl
@@ -115,8 +165,16 @@ Popup {
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
+        if(dsName !== "" && description !== "")
+            PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
+    }
 
-        PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
+    function saveExtractLimit(freeLimit, ifPublish){
+
+        if(ifPublish){
+            publishData()
+        }
+
     }
 
 
@@ -134,15 +192,14 @@ Popup {
         title: "Select a file (*.jpg *.jpeg *.png  only)"
         selectMultiple: false
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
-
-        //        onAccepted: {
-        //            console.log("You chose: " + fileDialog1.fileUrls)
-        //        }
-        //        onRejected: {
-        //            console.log("file rejected")
-        //        }
     }
 
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveExtract{
+        id: saveFilePrompt
+    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -258,7 +315,6 @@ Popup {
             id: description_field
             boxWidth: 370
             boxHeight: 200
-
         }
 
     }

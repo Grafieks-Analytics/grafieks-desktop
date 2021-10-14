@@ -31,6 +31,8 @@ public:
     explicit QueryModel(GeneralParamsModel *gpm, QObject *parent = 0);
     ~QueryModel();
 
+    Q_PROPERTY(bool ifPublish READ ifPublish WRITE setIfPublish NOTIFY ifPublishChanged);
+
     // QSqlQueryModel method override
 
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
@@ -42,12 +44,16 @@ public:
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
 
+    bool ifPublish() const;
+
 public slots:
     void receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void extractSaved(QString errorMessage);
 
+
+    void setIfPublish(bool ifPublish);
 
 signals:
     void headerDataChanged(QStringList tableHeaders);
@@ -56,8 +62,10 @@ signals:
     void errorSignal(QString errMsg);
     void generateReports();
     void showSaveExtractWaitPopup();
-    void extractFileExceededLimit(bool freeLimit);
+    void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
+
+    void ifPublishChanged(bool ifPublish);
 
 private:
     QHash<int, QByteArray> m_roleNames;
@@ -84,6 +92,7 @@ private:
     QThread extractThread;
     GeneralParamsModel *generalParamsModel;
 
+    bool m_ifPublish;
 };
 
 #endif // QUERYMODELLERMAIN_H

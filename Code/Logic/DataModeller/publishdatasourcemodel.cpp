@@ -25,45 +25,48 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
 
     imageFile.open(QIODevice::ReadOnly);
 
-    // Extract the filename
-    QFileInfo fileInfo(imageFile.fileName());
-    QString filename(fileInfo.fileName());
+    if(imageFile.isOpen()){
 
-    // Convert filedata to base64
-    QByteArray imageData = imageFile.readAll();
-    QString base64Image = QString(imageData.toBase64());
+        // Extract the filename
+        QFileInfo fileInfo(imageFile.fileName());
+        QString filename(fileInfo.fileName());
 
-//    qDebug() << "IMAGE" << uploadImage << fileInfo << filename << base64Image;
+        // Convert filedata to base64
+        QByteArray imageData = imageFile.readAll();
+        QString base64Image = QString(imageData.toBase64());
 
-    QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
+        QNetworkRequest m_NetworkRequest;
+        m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
 
-    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
-                               "application/x-www-form-urlencoded");
-    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
-
-
-    QJsonObject obj;
-    obj.insert("ProfileID", profileId);
-    obj.insert("SchedulerID", schedulerId);
-    obj.insert("DatasourceName", dsName);
-    obj.insert("Description", description);
-    obj.insert("Image", base64Image);
-    obj.insert("Filename", filename);
-    obj.insert("SourceType", sourceType);
-    obj.insert("ColumnName", extractColumnName);
-    obj.insert("IsFullExtract", isFullExtract);
-    obj.insert("FileData", base64Image);
-
-    QJsonDocument doc(obj);
-    QString strJson(doc.toJson(QJsonDocument::Compact));
-
-    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+        m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                   "application/x-www-form-urlencoded");
+        m_NetworkRequest.setRawHeader("Authorization", sessionToken);
 
 
-    connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
-    connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readComplete, Qt::UniqueConnection);
+        QJsonObject obj;
+        obj.insert("ProfileID", profileId);
+        obj.insert("SchedulerID", schedulerId);
+        obj.insert("DatasourceName", dsName);
+        obj.insert("Description", description);
+        obj.insert("Image", base64Image);
+        obj.insert("Filename", filename);
+        obj.insert("SourceType", sourceType);
+        obj.insert("ColumnName", extractColumnName);
+        obj.insert("IsFullExtract", isFullExtract);
+        obj.insert("FileData", base64Image);
 
+
+        QJsonDocument doc(obj);
+        QString strJson(doc.toJson(QJsonDocument::Compact));
+
+        m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+        connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
+        connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readComplete, Qt::UniqueConnection);
+
+    } else {
+        qDebug() << Q_FUNC_INFO << __LINE__  << imageFile.errorString();
+    }
 }
 
 void PublishDatasourceModel::reading()
@@ -88,6 +91,7 @@ void PublishDatasourceModel::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
+        this->outputFileName = statusObj["fileName"].toString();
 
         qDebug() << Q_FUNC_INFO << resultJson;
 
@@ -120,12 +124,10 @@ void PublishDatasourceModel::uploadFile()
     QFile *dataFile = new QFile(Statics::extractPath, this);
 
     QSettings settings;
-    QFileInfo fileInfo(*dataFile);
-    QString filename(fileInfo.fileName());
 
     QString baseUrl = settings.value("general/hostname").toString();
 
-    QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/datasources/" + filename);
+    QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/datasources/" + this->outputFileName);
     url.setUserName(Secret::ftpUser);
     url.setPassword(Secret::ftpPass);
     url.setScheme("ftp");

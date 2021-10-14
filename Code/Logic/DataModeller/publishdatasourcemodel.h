@@ -40,6 +40,8 @@ private:
     QByteArray * m_tempStorage;
     QVariantMap outputStatus;
 
+    QString outputFileName;
+
     void uploadFile();
 };
 

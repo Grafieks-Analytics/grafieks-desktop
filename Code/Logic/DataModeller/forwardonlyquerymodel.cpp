@@ -94,6 +94,11 @@ QHash<int, QByteArray> ForwardOnlyQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
+bool ForwardOnlyQueryModel::ifPublish() const
+{
+    return m_ifPublish;
+}
+
 
 void ForwardOnlyQueryModel::receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
@@ -115,6 +120,15 @@ void ForwardOnlyQueryModel::extractSaved(QString errorMsg)
     } else {
         emit extractCreationError(errorMsg);
     }
+}
+
+void ForwardOnlyQueryModel::setIfPublish(bool ifPublish)
+{
+    if (m_ifPublish == ifPublish)
+        return;
+
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()
@@ -229,9 +243,9 @@ void ForwardOnlyQueryModel::extractSizeLimit()
             qDebug() << Q_FUNC_INFO << file.errorString();
         }
         Statics::freeLimitExtractSizeExceeded = true;
-        emit extractFileExceededLimit(true);
+        emit extractFileExceededLimit(true, m_ifPublish);
     } else {
-        emit extractFileExceededLimit(false);
+        emit extractFileExceededLimit(false, m_ifPublish);
     }
 
     emit showSaveExtractWaitPopup();
