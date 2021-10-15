@@ -82,19 +82,19 @@ const defaultD3Config = {
 
     xAxisConfig: {
         xlabel: null,
-        xboldLabel: true,
+        xboldLabel: false,
         xitalicLabel: false,
         xboldTick: false,
         xitalicTick: false,
         xvisible: true,
     },
     yAxisConfig: {
-        label: null,
-        boldLabel: false,
-        italicLabel: false,
-        boldTick: false,
-        italicTick: false,
-        visible: true,
+        ylabel: null,
+        yboldLabel: false,
+        yitalicLabel: false,
+        yboldTick: false,
+        yitalicTick: false,
+        yvisible: true,
     },
 
     defaultTableChartConfig: {
