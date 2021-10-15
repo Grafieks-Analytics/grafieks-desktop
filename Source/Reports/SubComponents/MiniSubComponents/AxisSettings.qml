@@ -112,12 +112,12 @@ Rectangle{
             toggleBoldYLabel = true;
             yAxisLabelBold.color="lightGrey"
             // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
-            d3PropertyConfig.yAxisConfig.boldLabel = true;
+            d3PropertyConfig.yAxisConfig.yboldLabel = true;
         }
         else if(toggleBoldYLabel == true){
             toggleBoldYLabel = false;
             yAxisLabelBold.color="transparent"
-            d3PropertyConfig.yAxisConfig.boldLabel = false;
+            d3PropertyConfig.yAxisConfig.yboldLabel = false;
             // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','normal')")
         }
         console.log("bold"+toggleBoldYLabel)
@@ -173,14 +173,14 @@ Rectangle{
         if(toggleBoldYTick == false){
             toggleBoldYTick = true;
             yAxisTickBold.color="lightGrey"
-            d3PropertyConfig.yAxisConfig.boldTick = true;
+            d3PropertyConfig.yAxisConfig.yboldTick = true;
             // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','bold')")
 
         }
         else if(toggleBoldYTick == true){
             toggleBoldYTick = false;
             yAxisTickBold.color="transparent"
-            d3PropertyConfig.yAxisConfig.boldTick = false;
+            d3PropertyConfig.yAxisConfig.yboldTick = false;
             // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','normal')")
         }
         console.log("bold"+toggleBoldYTick)
@@ -260,7 +260,7 @@ Rectangle{
             toggleItalicYTick = true;
             yAxisTickItalilc.color="lightGrey"
 
-            d3PropertyConfig.yAxisConfig.italicTick = true;
+            d3PropertyConfig.yAxisConfig.yitalicTick = true;
 
             // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','italic')")
 
@@ -269,7 +269,7 @@ Rectangle{
         else if(toggleItalicYTick == true){
             toggleItalicYTick = false;
             yAxisTickItalilc.color="transparent"
-            d3PropertyConfig.yAxisConfig.italicTick = false;
+            d3PropertyConfig.yAxisConfig.yitalicTick = false;
 
             // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','normal')")
         }
@@ -813,7 +813,7 @@ Rectangle{
 
 
                                         d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
-                                        d3PropertyConfig.yAxisConfig.label = yAxisLabelNameBox.text;
+                                        d3PropertyConfig.yAxisConfig.ylabel = yAxisLabelNameBox.text;
 
                                         // webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
 
