@@ -117,6 +117,8 @@ void ReportParamsModel::saveReport()
     QJsonObject dateFormatMapObj;
     QJsonObject actualDateValuesObj;
 
+    QJsonObject qmlChartConfigObj;
+
     QList<int> reportIds = this->reportsData.keys();
     QList<int> filterIds = this->filterColumnMap.keys();
 
@@ -201,6 +203,8 @@ void ReportParamsModel::saveReport()
         actualDateValuesObj.insert(QString::number(filterId), QJsonArray::fromStringList(this->actualDateValues.value(filterId)));
     }
 
+    qmlChartConfigObj.insert("qmlChartConfig", m_qmlChartConfig);
+
     QJsonObject finalObj;
     finalObj.insert("reportIdsCounter", reportIdsCounter);
 
@@ -229,6 +233,8 @@ void ReportParamsModel::saveReport()
     finalObj.insert("tmpFilterIndexList", QJsonArray::fromVariantList(tmpFilterIndexList));
     finalObj.insert("dateFormatMap", dateFormatMapObj);
     finalObj.insert("actualDateValues", actualDateValuesObj);
+
+    finalObj.insert("qmlChartConfig", qmlChartConfigObj);
 
 
     emit sendReportParams(finalObj);
@@ -1412,6 +1418,9 @@ void ReportParamsModel::getExtractReportParams(QJsonObject reportParams)
     foreach(QVariant tmp, variantList){
         this->tmpSelectedValues.append(tmp.toString());
     }
+
+    // qmlChartConfig
+    m_qmlChartConfig = reportParams.value("qmlChartConfig").toString();
 
 
     emit reportListChanged();
