@@ -1252,8 +1252,8 @@ void ChartsThread::getMultiLineChartValues()
 
     QJsonArray columns;
     columns.append(xAxisColumn);
-    columns.append(xSplitKey);
     columns.append(yAxisColumn);
+    columns.append(xSplitKey);
 
 
     data.append(colData);
