@@ -35,7 +35,22 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: ReportParamsModel
 
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
 
     ListModel{
         id: fontSizes
@@ -103,25 +118,115 @@ Rectangle{
         reDrawChart();
     }
 
+    function resetAllValues(){
+        toggleBoldYLabel = false; 
+        toggleBoldXLabel=false;
+        toggleBoldYTick= false;
+        toggleBoldXTick= false;
+        
+        toggleItalicYLabel= false;
+        toggleItalicXLabel= false;
+        toggleItalicYTick= false;
+        toggleItalicXTick= false;
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var chartPropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var { yAxisConfig, xAxisConfig  } = chartPropertyConfig || {};
+
+        toggleBoldYLabel = !!yAxisConfig.boldLabel; 
+        toggleBoldXLabel= !!xAxisConfig.boldLabel;
+        toggleBoldYTick= !!yAxisConfig.boldTick;
+        toggleBoldXTick= !!xAxisConfig.boldTick;
+        
+        toggleItalicYLabel= !!yAxisConfig.italicLabel;
+        toggleItalicXLabel= !!xAxisConfig.italicLabel;
+        toggleItalicYTick= !!yAxisConfig.italicTick;
+        toggleItalicXTick= !!xAxisConfig.italicTick;
+
+    }
+
+    onToggleBoldYLabelChanged:{
+        if(toggleBoldYLabel){
+            yAxisLabelBold.color="lightGrey"
+        }else{
+            yAxisLabelBold.color="transparent"
+        }
+    }
+
+    onToggleBoldXLabelChanged:{
+        if(toggleBoldXLabel){
+            xAxisLabelBold.color="lightGrey"
+        }else{
+            xAxisLabelBold.color="transparent"
+        }
+    }
+
+    onToggleItalicYLabelChanged:{
+        if(toggleItalicYLabel){
+            yAxisLabelItalilc.color="lightGrey"
+        }else{
+            yAxisLabelItalilc.color="transparent"
+        }
+    }
+
+    onToggleItalicXLabelChanged:{
+        if(toggleBoldXLabel){
+            xAxisLabelBold.color="lightGrey"
+        }else{
+            xAxisLabelBold.color="transparent"
+        }
+    }
+
+    onToggleBoldYTickChanged:{
+        if(toggleBoldYTick){
+            yAxisTickBold.color="lightGrey"
+        }else{
+            yAxisTickBold.color="transparent"
+        }
+    }
+
+    onToggleBoldXTickChanged:{
+        if(toggleBoldXTick){
+            xAxisTickBold.color="lightGrey"
+        }else{
+            xAxisTickBold.color="transparent"
+        }
+    }
+
+    onToggleItalicXTickChanged:{
+        if(toggleItalicXTick){
+            xAxisTickItalilc.color="lightGrey"
+        }else{
+            xAxisTickItalilc.color="transparent"
+        }
+    }
+
+    onToggleItalicYTickChanged:{
+        if(toggleItalicYTick){
+            yAxisTickItalilc.color="lightGrey"
+        }else{
+            yAxisTickItalilc.color="transparent"
+        }
+    }
+    
+
+
+
     //    bold
     function boldToggleYLabel(){
 
-        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
-        
-        if(toggleBoldYLabel == false){
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};        
+        if(!toggleBoldYLabel){
             toggleBoldYLabel = true;
-            yAxisLabelBold.color="lightGrey"
-            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
             d3PropertyConfig.yAxisConfig.boldLabel = true;
         }
-        else if(toggleBoldYLabel == true){
+        else{
             toggleBoldYLabel = false;
-            yAxisLabelBold.color="transparent"
             d3PropertyConfig.yAxisConfig.boldLabel = false;
-            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','normal')")
         }
-        console.log("bold"+toggleBoldYLabel)
-
     }
     function boldToggleXLabel(){
 
@@ -129,19 +234,14 @@ Rectangle{
 
         if(toggleBoldXLabel == false){
             toggleBoldXLabel = true;
-            xAxisLabelBold.color="lightGrey"
-            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','bold')")
             d3PropertyConfig.xAxisConfig.boldLabel = true;
         }
 
         else if(toggleBoldXLabel == true){
             toggleBoldXLabel = false;
-            xAxisLabelBold.color="transparent";
             d3PropertyConfig.xAxisConfig.boldLabel = false;
-            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','normal')")
 
         }
-        console.log("bold"+toggleBoldXLabel)
 
     }
     function boldToggleXTick(){
@@ -150,20 +250,13 @@ Rectangle{
 
         if(toggleBoldXTick == false){
             toggleBoldXTick = true;
-            xAxisTickBold.color="lightGrey"
-
             d3PropertyConfig.xAxisConfig.boldTick = true;
-            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','bold')")
-
 
         }
         else if(toggleBoldXTick == true){
             toggleBoldXTick = false;
-            xAxisTickBold.color="transparent"
             d3PropertyConfig.xAxisConfig.boldTick = false;
-            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','normal')")
         }
-        console.log("bold"+toggleBoldXTick)
 
     }
     function boldToggleYTick(){
@@ -172,18 +265,12 @@ Rectangle{
 
         if(toggleBoldYTick == false){
             toggleBoldYTick = true;
-            yAxisTickBold.color="lightGrey"
             d3PropertyConfig.yAxisConfig.boldTick = true;
-            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','bold')")
-
         }
         else if(toggleBoldYTick == true){
             toggleBoldYTick = false;
-            yAxisTickBold.color="transparent"
             d3PropertyConfig.yAxisConfig.boldTick = false;
-            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','normal')")
         }
-        console.log("bold"+toggleBoldYTick)
 
     }
 
@@ -194,20 +281,13 @@ Rectangle{
 
         if(toggleItalicXLabel == false){
             toggleItalicXLabel = true;
-            xAxisLabelItalilc.color="lightGrey"
-            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','italic')")
             d3PropertyConfig.xAxisConfig.italicLabel = true;
 
         }
         else if(toggleItalicXLabel == true){
             toggleItalicXLabel = false;
-            xAxisLabelItalilc.color="transparent"
             d3PropertyConfig.xAxisConfig.italicLabel = false;
-
-            // webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','normal')")
         }
-        console.log("bold"+toggleItalicXLabel)
-
     }
     function italicToggleYLabel(){
 
@@ -215,20 +295,12 @@ Rectangle{
 
         if(toggleItalicYLabel == false){
             toggleItalicYLabel = true;
-            yAxisLabelItalilc.color="lightGrey"
             d3PropertyConfig.yAxisConfig.italicLabel = true;
-
-            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','italic')")
-
-
         }
         else if(toggleItalicYLabel == true){
             toggleItalicYLabel = false;
-            yAxisLabelItalilc.color="transparent"
             d3PropertyConfig.yAxisConfig.italicLabel = false;
-            // webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','normal')")
         }
-        console.log("bold"+toggleItalicYLabel)
 
     }
     function italicToggleXTick(){
@@ -237,20 +309,12 @@ Rectangle{
 
         if(toggleItalicXTick == false){
             toggleItalicXTick = true;
-            xAxisTickItalilc.color="lightGrey"
-            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','italic')")
             d3PropertyConfig.xAxisConfig.italicTick = true;
-
-
         }
         else if(toggleItalicXTick == true){
             toggleItalicXTick = false;
-            xAxisTickItalilc.color="transparent"
             d3PropertyConfig.xAxisConfig.italicTick = false;
-            // webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','normal')")
         }
-        console.log("bold"+toggleItalicYLabel)
-
     }
     function italicToggleYTick(){
 
@@ -258,23 +322,13 @@ Rectangle{
 
         if(toggleItalicYTick == false){
             toggleItalicYTick = true;
-            yAxisTickItalilc.color="lightGrey"
-
             d3PropertyConfig.yAxisConfig.italicTick = true;
-
-            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','italic')")
-
 
         }
         else if(toggleItalicYTick == true){
             toggleItalicYTick = false;
-            yAxisTickItalilc.color="transparent"
             d3PropertyConfig.yAxisConfig.italicTick = false;
-
-            // webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','normal')")
         }
-        console.log("bold"+toggleItalicYTick)
-
     }
 
 
@@ -390,7 +444,8 @@ Rectangle{
                                     width: parent.width*3/4
                                     //                                    text: qsTr(ReportParamsModel.xAxisColumns[0])
                                     //                                    text: getAxisColumnNames(Constants.yAxisName)
-                                    text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
+                                    // text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
+                                    text: qsTr(getAxisColumnNames( (d3PropertyConfig.xAxisConfig && d3PropertyConfig.xAxisConfig.label) ||  Constants.xAxisName)[0])
                                     onTextChanged: {
 
                                         d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
@@ -808,7 +863,7 @@ Rectangle{
                                     id:yAxisLabelNameBox
                                     width: parent.width*3/4
                                     //                                      text: qsTr(ReportParamsModel.yAxisColumns[0])
-                                    text: qsTr(getAxisColumnNames(Constants.yAxisName)[0])
+                                    text: qsTr(getAxisColumnNames( (d3PropertyConfig.yAxisConfig && d3PropertyConfig.yAxisConfig.label) ||  Constants.yAxisName)[0])
                                     onTextChanged: {
 
 
