@@ -129,6 +129,8 @@ Rectangle{
         toggleItalicYTick= false;
         toggleItalicXTick= false;
 
+        xaxisCheckbox.checked =  true;
+        yaxisCheckbox.checked =  true
     }
 
     function setOldValues(reportProperties){
@@ -145,6 +147,9 @@ Rectangle{
         toggleItalicXLabel= !!xAxisConfig.italicLabel;
         toggleItalicYTick= !!yAxisConfig.italicTick;
         toggleItalicXTick= !!xAxisConfig.italicTick;
+
+        xaxisCheckbox.checked =  xAxisConfig.axisStatus == false ? false : true;
+        yaxisCheckbox.checked =  yAxisConfig.axisStatus == false ? false : true;
 
     }
 
@@ -381,6 +386,9 @@ Rectangle{
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
+                            d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+                            d3PropertyConfig.xAxisConfig.axisStatus = xaxisCheckbox.checked;
+
                             if(xaxisCheckbox.checked){
 
                                 webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');changeChartAttributes('.x_label','style','display: block');")
@@ -804,6 +812,9 @@ Rectangle{
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
+                            d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+                            d3PropertyConfig.yAxisConfig.axisStatus = yaxisCheckbox.checked;
+                            
                             if(yaxisCheckbox.checked){
 
                                 webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');changeChartAttributes('.y_label','style','display: block');")
