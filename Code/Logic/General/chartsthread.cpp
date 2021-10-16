@@ -1252,8 +1252,8 @@ void ChartsThread::getMultiLineChartValues()
 
     QJsonArray columns;
     columns.append(xAxisColumn);
-    columns.append(xSplitKey);
     columns.append(yAxisColumn);
+    columns.append(xSplitKey);
 
 
     data.append(colData);
@@ -1628,8 +1628,9 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         }
 
         QJsonArray columns;
-        columns.append(xSplitKey);
+        columns.append(xAxisColumn);
         columns.append(yAxisColumn);
+        columns.append(xSplitKey);
 
 
         data.append(colData);
