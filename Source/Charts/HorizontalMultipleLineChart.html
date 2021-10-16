@@ -655,6 +655,9 @@
                     markerShape = defaultD3Config.defaultMarkerShape,
                     filledStatus = true,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -683,6 +686,35 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xvisible,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yvisible,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel, colorData] = data[2];
+                } else {
+                    [xAxisLabel, yAxisLabel, colorData] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                        data[2][2],
+                    ];
+                }
 
                 // var dataValues = data[0];
                 // dataValues = transformData(data, dateFormat);
@@ -692,7 +724,7 @@
                 d3Colors = d3colorPalette;
                 var [dataValues, lineMainCategories, allKeys, label] =
                     transformData(data[0], dateFormat, dateFormat);
-                [xAxisLabel, colorData, yAxisLabel] = data[2];
+                // [xAxisLabel, colorData, yAxisLabel] = data[2];
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
@@ -1418,6 +1450,8 @@
                 d3.selectAll(".y-axis g text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     // .attr("fill", "red")
                     .attr("fill", yTickfontColor)
                     .attr("x", -8);
@@ -1425,6 +1459,8 @@
                 d3.selectAll(".x-axis g text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
 
