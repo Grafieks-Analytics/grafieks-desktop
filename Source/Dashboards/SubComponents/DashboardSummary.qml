@@ -162,6 +162,8 @@ Rectangle {
 
     function onDropAreaDropped(drag){
 
+        var backgroundColor = DashboardParamsModel.getDashboardBackgroundColor(DashboardParamsModel.currentDashboard);
+        dashboardArea.color = backgroundColor ? backgroundColor : Constants.dashboardDefaultBackgroundColor
         // check if the report is added
         // don't allow the user to drop the repot 
         if(!isReportDropEligbile()){

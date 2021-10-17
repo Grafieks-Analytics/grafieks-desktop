@@ -38,6 +38,78 @@ Column{
     // Connections Starts
 
 
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+
+        legendStatusCheckbox.checked = false;
+        
+        right_radio.radio_checked = false;
+        left_radio.radio_checked = false;
+        top_radio.radio_checked = false;
+        bottom_radio.radio_checked = false;
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var {  legendConfig = {}  } = d3PropertiesConfig || {};
+        var { legendStatus, legendPosition } = legendConfig;
+
+        legendStatusCheckbox.checked = legendStatus ? true : false 
+        if(legendPosition){
+            switch(legendPosition){
+                case "right":
+                    right_radio.radio_checked = true;
+                    left_radio.radio_checked = false;
+                    top_radio.radio_checked = false;
+                    bottom_radio.radio_checked = false;
+                    break;
+                case "left":
+                    right_radio.radio_checked = false;
+                    left_radio.radio_checked = true;
+                    top_radio.radio_checked = false;
+                    bottom_radio.radio_checked = false;
+                    break;
+                case "bottom":
+                    right_radio.radio_checked = false;
+                    left_radio.radio_checked = false;
+                    top_radio.radio_checked = false;
+                    bottom_radio.radio_checked = true;
+                    break;
+                case "top":
+                    right_radio.radio_checked = false;
+                    left_radio.radio_checked = false;
+                    top_radio.radio_checked = true;
+                    bottom_radio.radio_checked = false;
+                    break;
+            }
+            // legendStatusCheckbox.checked = legendStatusCheckbox.checked ? true : false 
+        }else{
+            right_radio.radio_checked = false;
+            left_radio.radio_checked = false;
+            top_radio.radio_checked = false;
+            bottom_radio.radio_checked = false;
+        }
+
+    }
+    
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -134,7 +206,7 @@ Column{
             }
 
             CheckBoxTpl{
-
+                id: legendStatusCheckbox
                 checked: false
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right

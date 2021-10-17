@@ -130,13 +130,39 @@ Rectangle{
         toggleItalicXTick= false;
 
         xaxisCheckbox.checked =  true;
-        yaxisCheckbox.checked =  true
+        yaxisCheckbox.checked =  true;
+                
+        xAxisLabelNameBox.text = null
+        yAxisLabelNameBox.text = null
+
+        xAxisLegendFonts.currentIndex = xAxisLegendFonts.find("Arial");
+        xAxisTickMarkFonts.currentIndex = xAxisTickMarkFonts.find("Arial");
+        yAxisLegendFonts.currentIndex = yAxisLegendFonts.find("Arial");
+        yAxisTickMarkFonts.currentIndex = yAxisTickMarkFonts.find("Arial");
+
+        xAxisLabelFontSize.currentIndex = xAxisLabelFontSize.find('12');
+        xAxisTickMarkFontSize.currentIndex = xAxisTickMarkFontSize.find('12');
+        yAxisLabelFontSize.currentIndex = yAxisLabelFontSize.find('12');
+        yAxisTickMarkFontSize.currentIndex = yAxisTickMarkFontSize.find('12');
+
+        
+        xLabelFontColor.color = Constants.defaultXAxisLabelColor;
+        yLabelFontColor.color = Constants.defaultXAxisLabelColor;
+        xTickFontColor.color = Constants.defaultXAxisTickColor;
+        yTickFontColor.color = Constants.defaultXAxisTickColor;
+
+
+
     }
 
     function setOldValues(reportProperties){
         
         var chartPropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
-        var { yAxisConfig, xAxisConfig  } = chartPropertyConfig || {};
+        var {   
+                dataColumns, yAxisConfig = {}, xAxisConfig = {}, xLabelfontSize, xTickfontSize, yLabelfontSize, yTickfontSize, 
+                xLabelfontFamily, yLabelfontFamily, xTickfontFamily, yTickfontFamily,
+                xLabelfontColor, yLabelfontColor, xTickfontColor, yTickfontColor
+            } = chartPropertyConfig || {};
 
         toggleBoldYLabel = !!yAxisConfig.boldLabel; 
         toggleBoldXLabel= !!xAxisConfig.boldLabel;
@@ -150,6 +176,48 @@ Rectangle{
 
         xaxisCheckbox.checked =  xAxisConfig.axisStatus == false ? false : true;
         yaxisCheckbox.checked =  yAxisConfig.axisStatus == false ? false : true;
+
+        xAxisLabelNameBox.text = xAxisConfig.label ? xAxisConfig.label : dataColumns.xAxisColumnDetails[0].itemName;
+        yAxisLabelNameBox.text = yAxisConfig.label ? yAxisConfig.label : (dataColumns.yAxisColumnDetails[0] && dataColumns.yAxisColumnDetails[0].itemName);
+    
+        if(xLabelfontColor){
+            xLabelFontColor.color = xLabelfontColor;
+        }
+        if(yLabelfontColor){
+            yLabelFontColor.color = yLabelfontColor;
+        }
+        if(xTickfontColor){
+            xTickFontColor.color = xTickfontColor;
+        }
+        if(yTickfontColor){
+            yTickFontColor.color = yTickfontColor;
+        }
+
+        if(xLabelfontFamily){
+            xAxisLegendFonts.currentIndex = xAxisLegendFonts.find(xLabelfontFamily);
+        }
+        if(xTickfontFamily){
+            xAxisTickMarkFonts.currentIndex = xAxisTickMarkFonts.find(xTickfontFamily);
+        }
+        if(yLabelfontFamily){
+            yAxisLegendFonts.currentIndex = yAxisLegendFonts.find(yLabelfontFamily);
+        }
+        if(yTickfontFamily){
+            yAxisTickMarkFonts.currentIndex = yAxisTickMarkFonts.find(yTickfontFamily);
+        }
+
+        if(xLabelfontSize){
+            xAxisLabelFontSize.currentIndex = xAxisLabelFontSize.find(xLabelfontSize);
+        }
+        if(xTickfontSize){
+            xAxisTickMarkFontSize.currentIndex = xAxisTickMarkFontSize.find(xTickfontSize);
+        }
+        if(yLabelfontSize){
+            yAxisLabelFontSize.currentIndex = yAxisLabelFontSize.find(yLabelfontSize);
+        }
+        if(yTickfontSize){
+            yAxisTickMarkFontSize.currentIndex = yAxisTickMarkFontSize.find(yTickfontSize);
+        }
 
     }
 
@@ -178,10 +246,10 @@ Rectangle{
     }
 
     onToggleItalicXLabelChanged:{
-        if(toggleBoldXLabel){
-            xAxisLabelBold.color="lightGrey"
+        if(toggleItalicXLabel){
+            xAxisLabelItalilc.color="lightGrey"
         }else{
-            xAxisLabelBold.color="transparent"
+            xAxisLabelItalilc.color="transparent"
         }
     }
 
@@ -338,6 +406,66 @@ Rectangle{
 
 
 
+    function openColorDialog(dialogName){
+        switch(dialogName){
+        case "xAxisLegend": xAxisLegendColorDialog.open();
+            break;
+        case "xAxisTickMark": xAxisTickMarkColorDialog.open();
+            break;
+        case "yAxisLegend": yAxisLegendColorDialog.open();
+            break;
+        case "yAxisTickMark": yAxisTickMarkColorDialog.open();
+            break;
+        }
+    }
+
+    ColorDialog{
+        id: xAxisLegendColorDialog
+
+        onColorChanged:{
+            //            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
+            d3PropertyConfig.xLabelfontColor=xAxisLegendColorDialog.color+"";
+            xLabelFontColor.color = xAxisLegendColorDialog.color;
+            reDrawChart();
+        }
+
+    }
+
+    ColorDialog{
+        id: xAxisTickMarkColorDialog
+        onColorChanged:{
+
+            //   Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;            
+            d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
+            xTickFontColor.color = xAxisTickMarkColorDialog.color;
+
+            reDrawChart();
+        }
+    }
+
+    ColorDialog{
+        id: yAxisLegendColorDialog
+        onColorChanged:{
+
+
+            //            webEngineView.runJavaScript("changeChartAttributes('.y_label','fill', '"+yAxisLegendColorDialog.color+"')")
+            d3PropertyConfig.yLabelfontColor=yAxisLegendColorDialog.color+"";
+            yLabelFontColor.color = yAxisLegendColorDialog.color;
+
+            reDrawChart();
+        }
+    }
+
+    ColorDialog{
+        id: yAxisTickMarkColorDialog
+        onColorChanged:{
+
+            d3PropertyConfig.yTickfontColor=yAxisTickMarkColorDialog.color+"";
+            yTickFontColor.color = yAxisTickMarkColorDialog.color;
+
+            reDrawChart();
+        }
+    }
 
 
     Component.onCompleted: {
@@ -448,11 +576,12 @@ Rectangle{
                                 }
                                 CustomTextBox {
 
-                                    id:xAxisLabelNameBox
+                                    id: xAxisLabelNameBox
                                     width: parent.width*3/4
                                     //                                    text: qsTr(ReportParamsModel.xAxisColumns[0])
                                     //                                    text: getAxisColumnNames(Constants.yAxisName)
                                     // text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
+                                    // text: getAxisColumnNames( (d3PropertyConfig.xAxisConfig && d3PropertyConfig.xAxisConfig.label) ||  Constants.xAxisName)[0]
                                     text: qsTr(getAxisColumnNames( (d3PropertyConfig.xAxisConfig && d3PropertyConfig.xAxisConfig.label) ||  Constants.xAxisName)[0])
                                     onTextChanged: {
 
@@ -596,7 +725,7 @@ Rectangle{
                                 }
                                 Rectangle {
 
-
+                                    id: xLabelFontColor
                                     color:  Constants.defaultXAxisLabelColor
                                     border.color: Constants.borderBlueColor
                                     width: 20
@@ -775,6 +904,7 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: xTickFontColor
                                     color: Constants.defaultXAxisTickColor
                                     //                                    {
                                     //                                        Qt.binding(function() {console.log("testbinding",chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
@@ -874,7 +1004,7 @@ Rectangle{
                                     id:yAxisLabelNameBox
                                     width: parent.width*3/4
                                     //                                      text: qsTr(ReportParamsModel.yAxisColumns[0])
-                                    text: qsTr(getAxisColumnNames( (d3PropertyConfig.yAxisConfig && d3PropertyConfig.yAxisConfig.label) ||  Constants.yAxisName)[0])
+                                    text: getAxisColumnNames( (d3PropertyConfig.yAxisConfig && d3PropertyConfig.yAxisConfig.label) ||  Constants.yAxisName)[0]
                                     onTextChanged: {
 
 
@@ -1012,6 +1142,7 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: yLabelFontColor
                                     color: Constants.defaultYAxisLabelColor
                                     border.color: Constants.borderBlueColor
                                     width: 20
@@ -1187,6 +1318,7 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: yTickFontColor
                                     color: Constants.defaultYAxisTickColor
                                     border.color: Constants.borderBlueColor
                                     width: 20
