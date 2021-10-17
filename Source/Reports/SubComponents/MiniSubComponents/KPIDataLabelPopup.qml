@@ -102,6 +102,62 @@ Popup {
     }
 
 
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            console.log('KPI Debug',reportId)
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+        dataLabelDialogKpi.color = Constants.defaultDataLabelColor;
+        dataLabelKpiColorBox.color = Constants.defaultDataLabelColor;
+
+        fontFamily.currentIndex = fontFamily.find("Arial");
+        fontSizescombo.currentIndex = fontSizescombo.find("32");
+
+        boldStatus.checked = false;
+        italicStatus.checked = false;
+        underlineStatus.checked = false;
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var { labelFontStylings = {} } = d3PropertiesConfig || {};
+        var { bold, underline, italic, fontFamily:fontFamilyValue, fontSize:fontSizeValue, dataLabelColorKpi } = labelFontStylings;
+        
+        boldStatus.checked = !!bold;
+        underlineStatus.checked = !!underline;
+        italicStatus.checked = !!italic;
+        
+        if(dataLabelColorKpi){
+            dataLabelDialogKpi.color = dataLabelColorKpi;
+            dataLabelKpiColorBox.color = dataLabelColorKpi;
+        }
+
+        if(fontFamilyValue){
+            fontFamily.currentIndex = fontFamily.find(fontFamilyValue);
+        }
+
+        if(fontSizeValue){
+            fontSizescombo.currentIndex = fontSizescombo.find(fontSizeValue);
+        }
+
+    }
+
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
@@ -151,12 +207,12 @@ Popup {
 
         onColorChanged:{
 
-            Constants.defaultDataLabelColor =  dataLabelDialogKpi.color;
-
             if(!d3PropertyConfig.labelFontStylings){
                 d3PropertyConfig.labelFontStylings = {}
             }
             d3PropertyConfig.labelFontStylings.dataLabelColorKpi = dataLabelDialogKpi.color+"";
+            dataLabelKpiColorBox.color = dataLabelDialogKpi.color;
+
             reDrawChart();
         }
 
@@ -193,6 +249,7 @@ Popup {
 
                     CheckBoxTpl{
 
+                        id: boldStatus
                         checked: false
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
@@ -228,6 +285,7 @@ Popup {
 
                     CheckBoxTpl{
 
+                        id: italicStatus
                         checked: false
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
@@ -263,6 +321,7 @@ Popup {
 
                     CheckBoxTpl{
 
+                        id: underlineStatus
                         checked: false
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
@@ -286,6 +345,7 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Rectangle {
+                    id: dataLabelKpiColorBox
                     color: Constants.defaultDataLabelColor
                     border.color: Constants.borderBlueColor
                     width: 15

@@ -529,7 +529,6 @@ Page {
 
         function onClearScreenSignal(){
             clearValuesOnAddNewReport();
-            clearAllChartValues()
         }
 
     }
@@ -666,7 +665,9 @@ Page {
             break;
         case Constants.barChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+            dataValues = dataValues && JSON.parse(dataValues);
+            colorData = (dataValues && dataValues[1] && [dataValues[1][0]]) || [];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -1883,7 +1884,12 @@ Page {
         if(addReportButton.text == "Add"){
             console.log('Deleting Report',reportIdMain)
             ReportParamsModel.deleteReport(reportIdMain,false);
+        }else{
+            ReportParamsModel.setEditReportToggle("0");
         }
+
+        clearValuesOnAddNewReport();
+        resetQmlChartConfig();
 
         input1Field.text = '';
         input2Field.text = '';
