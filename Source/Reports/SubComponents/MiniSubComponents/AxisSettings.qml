@@ -164,60 +164,38 @@ Rectangle{
                 xLabelfontColor, yLabelfontColor, xTickfontColor, yTickfontColor
             } = chartPropertyConfig || {};
 
-        toggleBoldYLabel = !!yAxisConfig.boldLabel; 
-        toggleBoldXLabel= !!xAxisConfig.boldLabel;
-        toggleBoldYTick= !!yAxisConfig.boldTick;
-        toggleBoldXTick= !!xAxisConfig.boldTick;
-        
-        toggleItalicYLabel= !!yAxisConfig.italicLabel;
-        toggleItalicXLabel= !!xAxisConfig.italicLabel;
-        toggleItalicYTick= !!yAxisConfig.italicTick;
-        toggleItalicXTick= !!xAxisConfig.italicTick;
+        toggleBoldXLabel= !!xAxisConfig.xboldLabel;
+        toggleBoldXTick= !!xAxisConfig.xboldTick;        
+        toggleItalicXLabel= !!xAxisConfig.xitalicLabel;
+        toggleItalicXTick= !!xAxisConfig.xitalicTick;
+
+        toggleBoldYLabel = !!yAxisConfig.yboldLabel; 
+        toggleBoldYTick= !!yAxisConfig.yboldTick;
+        toggleItalicYLabel= !!yAxisConfig.yitalicLabel;
+        toggleItalicYTick= !!yAxisConfig.yitalicTick;
+
 
         xaxisCheckbox.checked =  xAxisConfig.axisStatus == false ? false : true;
         yaxisCheckbox.checked =  yAxisConfig.axisStatus == false ? false : true;
 
-        xAxisLabelNameBox.text = xAxisConfig.label ? xAxisConfig.label : dataColumns.xAxisColumnDetails[0].itemName;
-        yAxisLabelNameBox.text = yAxisConfig.label ? yAxisConfig.label : (dataColumns.yAxisColumnDetails[0] && dataColumns.yAxisColumnDetails[0].itemName);
+        xAxisLabelNameBox.text = xAxisConfig.xlabel ? xAxisConfig.xlabel : dataColumns.xAxisColumnDetails[0].itemName;
+        yAxisLabelNameBox.text = yAxisConfig.ylabel ? yAxisConfig.ylabel : (dataColumns.yAxisColumnDetails[0] && dataColumns.yAxisColumnDetails[0].itemName);
     
-        if(xLabelfontColor){
-            xLabelFontColor.color = xLabelfontColor;
-        }
-        if(yLabelfontColor){
-            yLabelFontColor.color = yLabelfontColor;
-        }
-        if(xTickfontColor){
-            xTickFontColor.color = xTickfontColor;
-        }
-        if(yTickfontColor){
-            yTickFontColor.color = yTickfontColor;
-        }
-
-        if(xLabelfontFamily){
-            xAxisLegendFonts.currentIndex = xAxisLegendFonts.find(xLabelfontFamily);
-        }
-        if(xTickfontFamily){
-            xAxisTickMarkFonts.currentIndex = xAxisTickMarkFonts.find(xTickfontFamily);
-        }
-        if(yLabelfontFamily){
-            yAxisLegendFonts.currentIndex = yAxisLegendFonts.find(yLabelfontFamily);
-        }
-        if(yTickfontFamily){
-            yAxisTickMarkFonts.currentIndex = yAxisTickMarkFonts.find(yTickfontFamily);
-        }
-
-        if(xLabelfontSize){
-            xAxisLabelFontSize.currentIndex = xAxisLabelFontSize.find(xLabelfontSize);
-        }
-        if(xTickfontSize){
-            xAxisTickMarkFontSize.currentIndex = xAxisTickMarkFontSize.find(xTickfontSize);
-        }
-        if(yLabelfontSize){
-            yAxisLabelFontSize.currentIndex = yAxisLabelFontSize.find(yLabelfontSize);
-        }
-        if(yTickfontSize){
-            yAxisTickMarkFontSize.currentIndex = yAxisTickMarkFontSize.find(yTickfontSize);
-        }
+    
+        xLabelFontColor.color = xLabelfontColor ? xLabelfontColor : Constants.defaultXAxisLabelColor;
+        yLabelFontColor.color = yLabelfontColor ? yLabelfontColor : Constants.defaultXAxisLabelColor;
+        xTickFontColor.color = xTickfontColor ? xTickfontColor : Constants.defaultXAxisTickColor;
+        yTickFontColor.color = yTickfontColor ? yTickfontColor : Constants.defaultXAxisTickColor;
+    
+        xAxisLegendFonts.currentIndex = xLabelfontFamily ? xAxisLegendFonts.find(xLabelfontFamily) : xAxisLegendFonts.find("Arial");
+        xAxisTickMarkFonts.currentIndex = xTickfontFamily ? xAxisTickMarkFonts.find(xTickfontFamily) : xAxisTickMarkFonts.find("Arial");
+        yAxisLegendFonts.currentIndex = yLabelfontFamily ? yAxisLegendFonts.find(yLabelfontFamily) : yAxisLegendFonts.find("Arial");
+        yAxisTickMarkFonts.currentIndex = yTickfontFamily ? yAxisTickMarkFonts.find(yTickfontFamily) : yAxisTickMarkFonts.find("Arial");
+        
+        xAxisLabelFontSize.currentIndex = xLabelfontSize ? xAxisLabelFontSize.find(xLabelfontSize) : xAxisLabelFontSize.find('12');
+        xAxisTickMarkFontSize.currentIndex = xTickfontSize ? xAxisTickMarkFontSize.find(xTickfontSize) : xAxisTickMarkFontSize.find('12');
+        yAxisLabelFontSize.currentIndex = yLabelfontSize ? yAxisLabelFontSize.find(yLabelfontSize) : yAxisLabelFontSize.find('12');
+        yAxisTickMarkFontSize.currentIndex = yTickfontSize ? yAxisTickMarkFontSize.find(yTickfontSize) : xAxisLabelFontSize.find('12');
 
     }
 
@@ -294,11 +272,13 @@ Rectangle{
         d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};        
         if(!toggleBoldYLabel){
             toggleBoldYLabel = true;
-            d3PropertyConfig.yAxisConfig.boldLabel = true;
+            yAxisLabelBold.color="lightGrey"
+            d3PropertyConfig.yAxisConfig.yboldLabel = true;
         }
         else{
             toggleBoldYLabel = false;
-            d3PropertyConfig.yAxisConfig.boldLabel = false;
+            yAxisLabelBold.color="transparent"
+            d3PropertyConfig.yAxisConfig.yboldLabel = false;
         }
     }
     function boldToggleXLabel(){
@@ -307,13 +287,12 @@ Rectangle{
 
         if(toggleBoldXLabel == false){
             toggleBoldXLabel = true;
-            d3PropertyConfig.xAxisConfig.boldLabel = true;
+            d3PropertyConfig.xAxisConfig.xboldLabel = true;
         }
 
         else if(toggleBoldXLabel == true){
             toggleBoldXLabel = false;
-            d3PropertyConfig.xAxisConfig.boldLabel = false;
-
+            d3PropertyConfig.xAxisConfig.xboldLabel = false;
         }
 
     }
@@ -323,12 +302,11 @@ Rectangle{
 
         if(toggleBoldXTick == false){
             toggleBoldXTick = true;
-            d3PropertyConfig.xAxisConfig.boldTick = true;
-
+            d3PropertyConfig.xAxisConfig.xboldTick = true;
         }
         else if(toggleBoldXTick == true){
             toggleBoldXTick = false;
-            d3PropertyConfig.xAxisConfig.boldTick = false;
+            d3PropertyConfig.xAxisConfig.xboldTick = false;
         }
 
     }
@@ -338,11 +316,11 @@ Rectangle{
 
         if(toggleBoldYTick == false){
             toggleBoldYTick = true;
-            d3PropertyConfig.yAxisConfig.boldTick = true;
+            d3PropertyConfig.yAxisConfig.yboldTick = true;
         }
         else if(toggleBoldYTick == true){
             toggleBoldYTick = false;
-            d3PropertyConfig.yAxisConfig.boldTick = false;
+            d3PropertyConfig.yAxisConfig.yboldTick = false;
         }
 
     }
@@ -354,12 +332,12 @@ Rectangle{
 
         if(toggleItalicXLabel == false){
             toggleItalicXLabel = true;
-            d3PropertyConfig.xAxisConfig.italicLabel = true;
+            d3PropertyConfig.xAxisConfig.xitalicLabel = true;
 
         }
         else if(toggleItalicXLabel == true){
             toggleItalicXLabel = false;
-            d3PropertyConfig.xAxisConfig.italicLabel = false;
+            d3PropertyConfig.xAxisConfig.xitalicLabel = false;
         }
     }
     function italicToggleYLabel(){
@@ -368,11 +346,11 @@ Rectangle{
 
         if(toggleItalicYLabel == false){
             toggleItalicYLabel = true;
-            d3PropertyConfig.yAxisConfig.italicLabel = true;
+            d3PropertyConfig.yAxisConfig.yitalicLabel = true;
         }
-        else if(toggleItalicYLabel == true){
+        else{
             toggleItalicYLabel = false;
-            d3PropertyConfig.yAxisConfig.italicLabel = false;
+            d3PropertyConfig.yAxisConfig.yitalicLabel = false;
         }
 
     }
@@ -382,11 +360,11 @@ Rectangle{
 
         if(toggleItalicXTick == false){
             toggleItalicXTick = true;
-            d3PropertyConfig.xAxisConfig.italicTick = true;
+            d3PropertyConfig.xAxisConfig.xitalicTick = true;
         }
-        else if(toggleItalicXTick == true){
+        else{
             toggleItalicXTick = false;
-            d3PropertyConfig.xAxisConfig.italicTick = false;
+            d3PropertyConfig.xAxisConfig.xitalicTick = false;
         }
     }
     function italicToggleYTick(){
@@ -395,15 +373,13 @@ Rectangle{
 
         if(toggleItalicYTick == false){
             toggleItalicYTick = true;
-            d3PropertyConfig.yAxisConfig.italicTick = true;
-
+            d3PropertyConfig.yAxisConfig.yitalicTick = true;
         }
-        else if(toggleItalicYTick == true){
+        else{
             toggleItalicYTick = false;
-            d3PropertyConfig.yAxisConfig.italicTick = false;
+            d3PropertyConfig.yAxisConfig.yitalicTick = false;
         }
     }
-
 
 
     function openColorDialog(dialogName){
@@ -515,7 +491,7 @@ Rectangle{
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
                             d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
-                            d3PropertyConfig.xAxisConfig.axisStatus = xaxisCheckbox.checked;
+                            d3PropertyConfig.xAxisConfig.xaxisStatus = xaxisCheckbox.checked;
 
                             if(xaxisCheckbox.checked){
 
@@ -586,7 +562,7 @@ Rectangle{
                                     onTextChanged: {
 
                                         d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
-                                        d3PropertyConfig.xAxisConfig.label = xAxisLabelNameBox.text;
+                                        d3PropertyConfig.xAxisConfig.xlabel = xAxisLabelNameBox.text;
                                         // webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
 
                                     }
@@ -943,7 +919,7 @@ Rectangle{
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
                             d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
-                            d3PropertyConfig.yAxisConfig.axisStatus = yaxisCheckbox.checked;
+                            d3PropertyConfig.yAxisConfig.yaxisStatus = yaxisCheckbox.checked;
                             
                             if(yaxisCheckbox.checked){
 
@@ -1009,7 +985,7 @@ Rectangle{
 
 
                                         d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
-                                        d3PropertyConfig.yAxisConfig.label = yAxisLabelNameBox.text;
+                                        d3PropertyConfig.yAxisConfig.ylabel = yAxisLabelNameBox.text;
 
                                         // webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
 

@@ -115,7 +115,7 @@ Item{
                 newItem.visible = false
             }
 
-            reDrawChart();
+            // reDrawChart();
         }
 
         function onReportUrlChanged(refDashboardId, refReportId, url){

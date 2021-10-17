@@ -673,7 +673,7 @@ Page {
             console.log(chartTitle,"CLICKED")
 
             dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
+            // dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
             break;
@@ -681,7 +681,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             
             dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
+            // dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
             break;

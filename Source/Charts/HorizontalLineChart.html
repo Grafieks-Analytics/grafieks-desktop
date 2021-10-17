@@ -116,6 +116,7 @@
             //     ["Countries", "Population"],
             // ];
 
+            var dataset =[[["Furniture",27550],["Office Supplies",13384],["Technology",9310]],["Category","Sales"]]
             // var dataset = [
             //     [
             //         ["a", 1],
@@ -222,6 +223,9 @@
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdHeight = defaultD3Config.standardThresholdHeight,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -247,6 +251,34 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xvisible,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yvisible,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                    ];
+                }
                 var { yAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 d3Colors = d3colorPalette;
@@ -255,7 +287,7 @@
                 // Checking date values
                 dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
-                [xAxisLabel, yAxisLabel] = data[1];
+                // [xAxisLabel, yAxisLabel] = data[1];
 
                 // clear chart
                 window.clearChart && clearChart();
@@ -813,11 +845,15 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
                 // axis setting ends
 
@@ -885,8 +921,8 @@
                 };
                 if (!toolTip) {
                     toolTip = {
-                        textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel,
+                        textColumn1: yAxisLabel,
+                        textColumn2: xAxisLabel,
                     };
                 }
 
@@ -1045,6 +1081,30 @@
                             .attr("width", initialBoxDimension);
                     });
             }
+            drawChart(dataset, {
+                chartType: "FitWidth",
+                xAxisConfig: { xlabel: "Sales" },
+                yAxisConfig: { ylabel: "Category" },
+                dataColumns: {
+                    xAxisColumnDetails: [
+                        {
+                            itemName: "Sales",
+                            itemType: "Numerical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    yAxisColumnDetails: [
+                        {
+                            itemName: "Category",
+                            itemType: "Categorical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    row3ColumnDetails: [],
+                    colorByData: [],
+                },
+  
+            });
         </script>
     </body>
 </html>
