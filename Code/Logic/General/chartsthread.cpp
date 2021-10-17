@@ -1628,9 +1628,9 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         }
 
         QJsonArray columns;
-        columns.append(xAxisColumn);
-        columns.append(yAxisColumn);
         columns.append(xSplitKey);
+        columns.append(yAxisColumn);
+        columns.append(xAxisColumn);
 
 
         data.append(colData);
