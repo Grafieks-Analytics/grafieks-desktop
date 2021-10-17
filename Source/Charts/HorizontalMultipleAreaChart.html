@@ -717,9 +717,9 @@
                 window.xitalicLabel = xitalicLabel;
                 window.yitalicLabel = yitalicLabel;
                 if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
-                    [xAxisLabel, yAxisLabel, colorData] = data[2];
+                    [yAxisLabel, xAxisLabel, colorData] = data[2];
                 } else {
-                    [xAxisLabel, yAxisLabel, colorData] = [
+                    [yAxisLabel, xAxisLabel, colorData] = [
                         xAxisConfig.xlabel,
                         yAxisConfig.ylabel,
                         data[2][2],
@@ -1370,7 +1370,7 @@
 
                             d3.select("#tooltip")
                                 // .style("left", x_pos + "px")
-                                .style("top", y_pos - 20 + "px")
+                                .style("top", y_pos - 70 + "px")
                                 // .style("top", y_pos + "px")
                                 .style("display", "block")
                                 // .html(xValue + ", " + yValue.toFixed(2));
@@ -1396,7 +1396,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        toolTip.textColumn2 +
+                                        toolTip.colorData +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1404,7 +1404,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        toolTip.colorData +
+                                        toolTip.textColumn2 +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
@@ -1445,7 +1445,7 @@
                             } else {
                                 d3.select("#tooltip").style(
                                     "left",
-                                    x_pos + 110 + 0 + "px"
+                                    x_pos + 155 + 0 + "px"
                                 );
 
                                 d3.select(".arrowTooltip").attr(
