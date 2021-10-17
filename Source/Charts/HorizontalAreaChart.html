@@ -174,7 +174,7 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            // drawChart(dataset);
+            // drawChart(dataset,{"chartType":"FitWidth","yAxisConfig":{"ylabel":"Category"},"xAxisConfig":{"xlabel":"Sales"},"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]}});
 
             function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
@@ -951,8 +951,8 @@
                 };
                 if (!toolTip) {
                     toolTip = {
-                        textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel,
+                        textColumn1: yAxisLabel,
+                        textColumn2: xAxisLabel,
                     };
                 }
 
@@ -1084,7 +1084,7 @@
                         } else {
                             d3.select("#tooltip").style(
                                 "left",
-                                x_pos + 110 + 0 + "px"
+                                x_pos + 150 + 0 + "px"
                             );
 
                             d3.select(".arrowTooltip").attr(

@@ -142,14 +142,14 @@
             var allKeys = uniqueKey2;
             const yAxisUniqueKeys = uniqueKey;
 
-            return [response, allKeys, yAxisUniqueKeys, data[2]];
+            return [response, allKeys, yAxisUniqueKeys, data[3]];
         }
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             var keys = data[1];
 
-            let [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
+            // let [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
 
             let {
                 d3colorPalette = defaultD3Config.d3ColorPalette,
@@ -793,7 +793,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                toolTip.textColumn2 +
+                                toolTip.colorData +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -801,7 +801,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                toolTip.colorData +
+                                toolTip.textColumn2 +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +

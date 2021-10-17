@@ -116,6 +116,7 @@
             //     ["Countries", "Population"],
             // ];
 
+            var dataset =[[["Furniture",27550],["Office Supplies",13384],["Technology",9310]],["Category","Sales"]]
             // var dataset = [
             //     [
             //         ["a", 1],
@@ -920,8 +921,8 @@
                 };
                 if (!toolTip) {
                     toolTip = {
-                        textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel,
+                        textColumn1: yAxisLabel,
+                        textColumn2: xAxisLabel,
                     };
                 }
 
@@ -1080,6 +1081,30 @@
                             .attr("width", initialBoxDimension);
                     });
             }
+            drawChart(dataset, {
+                chartType: "FitWidth",
+                xAxisConfig: { xlabel: "Sales" },
+                yAxisConfig: { ylabel: "Category" },
+                dataColumns: {
+                    xAxisColumnDetails: [
+                        {
+                            itemName: "Sales",
+                            itemType: "Numerical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    yAxisColumnDetails: [
+                        {
+                            itemName: "Category",
+                            itemType: "Categorical",
+                            dateFormat: "%Y",
+                        },
+                    ],
+                    row3ColumnDetails: [],
+                    colorByData: [],
+                },
+  
+            });
         </script>
     </body>
 </html>
