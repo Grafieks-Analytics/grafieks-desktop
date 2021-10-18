@@ -1114,6 +1114,8 @@ Page {
             yAxisVisible = true
             row3Visible = false
             row4Visible = false
+            xAxisLabelName = Constants.xAxisName;
+            yAxisLabelName = Constants.yAxisName;
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
