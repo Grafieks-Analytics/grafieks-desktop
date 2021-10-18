@@ -182,6 +182,8 @@ function setLabel(
             .attr("y", heightXLabelId / 2 + xLabelfontSize / 2)
             .attr("font-size", xLabelfontSize)
             .attr("font-family", xLabelfontFamily)
+            .attr("font-weight", xboldLabel ? "bold" : "regular")
+            .attr("font-style", xitalicLabel ? "italic" : "regular")
             .attr("fill", xLabelfontColor)
             .attr("class", labelType);
     } else {
@@ -192,6 +194,8 @@ function setLabel(
             .attr("y", 5)
             .attr("font-size", yLabelfontSize)
             .attr("font-family", yLabelfontFamily)
+            .attr("font-weight", yboldLabel ? "bold" : "regular")
+            .attr("font-style", yitalicLabel ? "italic" : "regular")
             .attr("fill", yLabelfontColor)
             .attr("x", -(heightYLabelId / 2) + (label.length - 5) / 2)
             .attr("dy", ".75em")

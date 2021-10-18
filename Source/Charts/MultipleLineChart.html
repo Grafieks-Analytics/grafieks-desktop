@@ -150,6 +150,8 @@
                 return [responseData, lineMainCategories, allKeys, data[2]];
             }
 
+            
+
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
                 let {
@@ -186,6 +188,9 @@
 
                     markerShape = defaultD3Config.defaultMarkerShape,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
 
                     filledStatus = true,
                 } = plottingConfiguration;
@@ -225,14 +230,6 @@
                 d3Colors = d3colorPalette;
 
                 stroke = d3Colors[0];
-                [xAxisLabel, yAxisLabel, colorData] = data[2];
-                if (!toolTip) {
-                    toolTip = {
-                        textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel,
-                        colorData: colorData,
-                    };
-                }
 
                 // colorData = "colorData";
                 // console.log({ data });
@@ -243,7 +240,43 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
-
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xvisible,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yvisible,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel, colorData] = data[2];
+                } else {
+                    [xAxisLabel, yAxisLabel, colorData] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                        data[2][2],
+                    ];
+                }
+                // [xAxisLabel, yAxisLabel, colorData] = data[2];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                        colorData: colorData,
+                    };
+                }
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -789,7 +822,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        toolTip.textColumn2 +
+                                        toolTip.colorData +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -797,7 +830,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        toolTip.colorData +
+                                        toolTip.textColumn2 +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
@@ -1045,11 +1078,15 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
                 function setXaxisWidth() {
                     var allYAxisTicks =

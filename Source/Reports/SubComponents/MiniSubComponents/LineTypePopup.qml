@@ -36,6 +36,37 @@ Popup {
         border.color: Constants.darkThemeColor
     }
 
+    
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+        lineTypeBox.currentIndex = lineTypeBox.find("Smooth Line");
+    }
+
+    function setOldValues(reportProperties){
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var { curveType  } = d3PropertiesConfig || {};
+        if(curveType){
+            lineTypeBox.currentIndex = lineTypeBox.find(curveType);
+        }
+    }
+
+
     function onLineTypeSelected(curve){
         d3PropertyConfig.curveType = lineTypeBox.currentValue;
         reDrawChart();

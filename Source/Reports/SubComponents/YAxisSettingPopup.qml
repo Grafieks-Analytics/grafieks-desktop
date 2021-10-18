@@ -76,18 +76,6 @@ Popup {
         axisSettings.visible = false
     }
 
-    function openColorDialog(dialogName){
-        switch(dialogName){
-        case "xAxisLegend": xAxisLegendColorDialog.open();
-            break;
-        case "xAxisTickMark": xAxisTickMarkColorDialog.open();
-            break;
-        case "yAxisLegend": yAxisLegendColorDialog.open();
-            break;
-        case "yAxisTickMark": yAxisTickMarkColorDialog.open();
-            break;
-        }
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -97,55 +85,6 @@ Popup {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
-
-    ColorDialog{
-        id: xAxisLegendColorDialog
-
-        onColorChanged:{
-
-             Constants.defaultXAxisLabelColor =  xAxisLegendColorDialog.color;
-
-//            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
-            d3PropertyConfig.xLabelfontColor=xAxisLegendColorDialog.color+"";
-            reDrawChart();
-        }
-
-    }
-
-    ColorDialog{
-        id: xAxisTickMarkColorDialog
-        onColorChanged:{
-
-             Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
-
-//            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+xAxisTickMarkColorDialog.color+"')")
-            d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
-            reDrawChart();
-        }
-    }
-
-    ColorDialog{
-        id: yAxisLegendColorDialog
-        onColorChanged:{
-
-             Constants.defaultYAxisLabelColor = yAxisLegendColorDialog.color;
-
-//            webEngineView.runJavaScript("changeChartAttributes('.y_label','fill', '"+yAxisLegendColorDialog.color+"')")
-            d3PropertyConfig.yLabelfontColor=yAxisLegendColorDialog.color+"";
-            reDrawChart();
-        }
-    }
-
-    ColorDialog{
-        id: yAxisTickMarkColorDialog
-        onColorChanged:{
-
-             Constants.defaultYAxisTickColor = yAxisTickMarkColorDialog.color;
-//            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','fill', '"+yAxisTickMarkColorDialog.color+"')")
-            d3PropertyConfig.yTickfontColor=yAxisTickMarkColorDialog.color+"";
-            reDrawChart();
-        }
-    }
 
 
     // SubComponents Ends
