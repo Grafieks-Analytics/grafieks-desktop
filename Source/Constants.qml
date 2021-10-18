@@ -96,6 +96,7 @@ QtObject {
     property color dataModelBorderColor: "#66009b8f"
 
     property color dropHighlightColor: "ivory"
+    property color dropIneligibleHighlightColor: "#ffdfdb"
 
     property color lightGrayTextColor: "#454545"
     property color dropAreaHighlightColor: "ivory"

@@ -66,6 +66,45 @@ Column{
     // Connections Starts
 
 
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+
+        bottomPinchValue.text = "1";
+        dynamicHeightCheckbox.checked = false;
+        gridLineStatus.checked = true
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var qmlChartConfigProperties = JSON.parse(reportProperties.qmlChartConfig);
+        var { bottomPinch, dynamicHeight, gridLineStatus :gridLineStatusValue  } = qmlChartConfigProperties || {};
+
+        if(bottomPinch){
+            bottomPinchValue.text = bottomPinch;
+        }
+
+        dynamicHeightCheckbox.checked = !!dynamicHeight;
+        gridLineStatus.checked = gridLineStatusValue == false ?  false: true;
+        
+
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -217,10 +256,11 @@ Column{
     }
 
 
-    function resizePaddingInner(value){
+    function resizePaddingInner(value, actualValue){
         d3PropertyConfig.paddingInner = value;
-        d3PropertyConfig.innerRadius = (1-value)*200;
+        d3PropertyConfig.innerRadius = (1-value)*200;        
         //        console.log("value"+value);
+        qmlChartConfig.sizePopupValue = actualValue;
         reDrawChart();
     }
 
@@ -229,11 +269,13 @@ Column{
         var gridConfig = d3PropertyConfig.gridConfig || {};
         gridConfig['gridStatus'] = checked;
         d3PropertyConfig.gridConfig = gridConfig;
+        qmlChartConfig.gridLineStatus = checked;
         reDrawChart();
     }
 
     function toggleDynamicheight(checked){
         d3PropertyConfig.dynamicHeight = checked;
+        qmlChartConfig.dynamicHeight = checked;
         reDrawChart();
     }
 
@@ -244,6 +286,7 @@ Column{
             }
             d3PropertyConfig.bottomPinch = +bottomPinchValue.text;
         }
+        qmlChartConfig.bottomPinch = bottomPinch;
         reDrawChart();
     }
 
@@ -637,7 +680,8 @@ Column{
 
             CheckBoxTpl{
 
-                checked: true
+                id: gridLineStatus
+                checked: qmlChartConfig.gridLineStatus != undefined ? qmlChartConfig.gridLineStatus : true
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -675,7 +719,7 @@ Column{
             }
 
             CheckBoxTpl{
-
+                id: dynamicHeightCheckbox
                 checked: false
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right

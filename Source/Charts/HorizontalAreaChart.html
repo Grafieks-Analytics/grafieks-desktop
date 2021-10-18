@@ -174,7 +174,7 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            // drawChart(dataset);
+            // drawChart(dataset,{"chartType":"FitWidth","yAxisConfig":{"ylabel":"Category"},"xAxisConfig":{"xlabel":"Sales"},"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Category","itemType":"Categorical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]}});
 
             function transformData(dataValues, dataColumns = {}, dateFormat) {
                 var valueDateType = false;
@@ -254,6 +254,9 @@
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdHeight = defaultD3Config.standardThresholdHeight,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -279,6 +282,34 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xvisible,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yvisible,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                    ];
+                }
 
                 d3Colors = d3colorPalette;
 
@@ -286,7 +317,7 @@
                 // Checking date values
                 dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
-                [xAxisLabel, yAxisLabel] = data[1];
+                // [xAxisLabel, yAxisLabel] = data[1];
 
                 // clear chart
                 window.clearChart && clearChart();
@@ -844,11 +875,15 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
                 // axis setting ends
 
@@ -916,8 +951,8 @@
                 };
                 if (!toolTip) {
                     toolTip = {
-                        textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel,
+                        textColumn1: yAxisLabel,
+                        textColumn2: xAxisLabel,
                     };
                 }
 
@@ -1049,7 +1084,7 @@
                         } else {
                             d3.select("#tooltip").style(
                                 "left",
-                                x_pos + 110 + 0 + "px"
+                                x_pos + 150 + 0 + "px"
                             );
 
                             d3.select(".arrowTooltip").attr(

@@ -73,19 +73,36 @@ const defaultD3Config = {
         legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: false,
+        labelStatus: true,
         labelFormat: constants.labelFormat.ROUND,
     },
     defaultGridConfig: {
         gridStatus: true,
     },
 
+    xAxisConfig: {
+        xlabel: null,
+        xboldLabel: false,
+        xitalicLabel: false,
+        xboldTick: false,
+        xitalicTick: false,
+        xvisible: true,
+    },
+    yAxisConfig: {
+        ylabel: null,
+        yboldLabel: false,
+        yitalicLabel: false,
+        yboldTick: false,
+        yitalicTick: false,
+        yvisible: true,
+    },
+
     defaultTableChartConfig: {
         defaultCellBorderStatus: true,
         defaultCellHoverStatus: true,
         defaultCompactStatus: false,
-        defaultSearchStatus:true,
-        defaultGrandTotalStatus:false,
+        defaultSearchStatus: true,
+        defaultGrandTotalStatus: false,
         defaultRowAlternateStatus: true,
         defaultBatchsize: 50,
     },
@@ -124,5 +141,3 @@ const markerShapeConfig = {
         yPositionAttrName: "y",
     },
 };
-
-

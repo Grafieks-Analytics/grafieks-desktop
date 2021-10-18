@@ -90,6 +90,59 @@ Popup {
     }
 
 
+    
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+        dataLabeleDialog.color = Constants.defaultDataLabelColor;
+        dataLabelFontColorBox.color = Constants.defaultDataLabelColor;
+
+        fontFamily.currentIndex = fontFamily.find("Arial");
+        fontSizescombo.currentIndex = fontSizescombo.find("12");
+
+        dataLabelStatus.checked = false;
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var { dataLabelColor, labelConfig = {}, dataLabelfontFamily, dataLabelfontSize  } = d3PropertiesConfig || {};
+        var { labelStatus, labelFormat } = labelConfig;
+
+        dataLabelStatus.checked = !!labelStatus;
+        
+        if(dataLabelColor){
+            dataLabeleDialog.color = dataLabelColor;
+            dataLabelFontColorBox.color = dataLabelColor;
+        }
+
+        if(dataLabelfontFamily){
+            fontFamily.currentIndex = fontFamily.find(dataLabelfontFamily);
+        }
+
+        if(dataLabelfontSize){
+            fontSizescombo.currentIndex = fontSizescombo.find(dataLabelfontSize);
+        }
+
+    }
+
+
     function showLabel(checked){
         var labelConfig = d3PropertyConfig.labelConfig || {};
         labelConfig.labelStatus = checked;
@@ -109,11 +162,9 @@ Popup {
 
         onColorChanged:{
 
-             Constants.defaultDataLabelColor =  dataLabeleDialog.color;
-
-//            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
             d3PropertyConfig.dataLabelColor = dataLabeleDialog.color+"";
-            // d3PropertyConfig.dataLabelColor = "";
+            dataLabelFontColorBox.color = dataLabeleDialog.color;
+
             reDrawChart();
         }
 
@@ -152,6 +203,7 @@ Popup {
 
                     CheckBoxTpl{
 
+                        id: dataLabelStatus
                         checked: false
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
@@ -175,6 +227,7 @@ Popup {
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: dataLabelFontColorBox
                                     color: Constants.defaultDataLabelColor
                                     border.color: Constants.borderBlueColor
                                     width: 15

@@ -115,7 +115,7 @@ Item{
                 newItem.visible = false
             }
 
-            reDrawChart();
+            // reDrawChart();
         }
 
         function onReportUrlChanged(refDashboardId, refReportId, url){
@@ -259,6 +259,7 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     function drawChartAfterReceivingSignal(dataValues){
+        console.log("datavaluestest",dataValues)
         if(webEngineView.loading){
             return;
         }
