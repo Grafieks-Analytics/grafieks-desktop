@@ -79,7 +79,7 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            drawChart(dataset);
+            // drawChart(dataset);
 
             function transformData(dataValues, dateFormat) {
                 var valueDateType = false;
@@ -197,7 +197,7 @@
                     yitalicLabel,
                     yboldTick,
                     yitalicTick,
-                    yvisible,
+                    yaxisStatus,
                 } = yAxisConfig;
                 window.yboldLabel = yboldLabel;
                 window.xboldLabel = xboldLabel;
@@ -739,6 +739,16 @@
                     .attr("font-weight", yboldTick ? "bold" : "regular")
                     .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
                 // axis setting ends
 
                 if (chartType === constants.chartType.FIT_WIDTH) {

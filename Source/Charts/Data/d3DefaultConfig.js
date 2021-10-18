@@ -86,7 +86,7 @@ const defaultD3Config = {
         xitalicLabel: false,
         xboldTick: false,
         xitalicTick: false,
-        xvisible: true,
+        xaxisStatus: true,
     },
     yAxisConfig: {
         ylabel: null,
@@ -94,7 +94,7 @@ const defaultD3Config = {
         yitalicLabel: false,
         yboldTick: false,
         yitalicTick: false,
-        yvisible: true,
+        yaxisStatus: true,
     },
 
     defaultTableChartConfig: {
