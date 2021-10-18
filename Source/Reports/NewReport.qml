@@ -146,6 +146,8 @@ Page {
             name: "bar"
             activeChart: true
             title: "Bar Chart"
+            xAxisLabelName: "X Axis"
+            yAxisLabelName: "Y Axis"
             yAxisVisible: true
             lineTypeChartVisible: false
             maxDropOnXAxis: 2
@@ -1012,6 +1014,9 @@ Page {
         var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
         var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
 
+        xAxisLabelName = allChartsMapping[chartTitle].xAxisLabelName ? allChartsMapping[chartTitle].xAxisLabelName : Constants.xAxisName;
+        yAxisLabelName = allChartsMapping[chartTitle].yAxisLabelName ? allChartsMapping[chartTitle].yAxisLabelName : Constants.yAxisName;
+        valuesLabelName = allChartsMapping[chartTitle].row3Name ? allChartsMapping[chartTitle].row3Name : "Values";
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -1069,6 +1074,11 @@ Page {
             yAxisVisible = true
             row4Visible = false
             pivotThemeVisible=true
+
+            xAxisLabelName = "Rows";
+            yAxisLabelName = "Columns";
+            valuesLabelName = "Values";
+
             break;
         case Constants.tableTitle:
             var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
@@ -1079,6 +1089,7 @@ Page {
             xAxisVisible = true
             row3Visible = false
             row4Visible = false
+            xAxisLabelName = "Columns";
             break;
         case Constants.gaugeChartTitle:
             row4Visible = true
@@ -1094,6 +1105,7 @@ Page {
             xAxisVisible = true
             row3Visible = false
             row4Visible = false
+            xAxisLabelName = "Values";
             break;
 
         case Constants.barChartTitle:
@@ -1119,6 +1131,22 @@ Page {
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
+            xAxisLabelName = "Categorical";
+            yAxisLabelName = "Numerical";
+            if(!allNonMeasures(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
+            
+            if(!allNumericalValues(yAxisColumnDetails)){
+                yAxisListModel.clear();
+            }
+            
+            clearColorByList();
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         case Constants.radarChartTitle:
         case Constants.sunburstChartTitle:
         case Constants.treeChartTitle:
