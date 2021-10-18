@@ -21,10 +21,23 @@
             #xAxisLabelId {
                 position: fixed;
                 bottom: 0px;
-                z-index: -1;
+                z-index: 100;
                 height: 40px;
                 /* background-color: red; */
             }
+                /* #my_dataviz {
+                overflow-x: scroll;
+                margin-left: 72px;
+                height: 100vh;
+            } */
+
+            /* #xAxisLabelId {
+                position: fixed;
+                bottom: 20px;
+                z-index: 100;
+                height: 40px;
+                /* background-color: red; */
+            } */
         </style>
     </head>
     <body>
@@ -272,7 +285,7 @@
                     xitalicLabel,
                     xboldTick,
                     xitalicTick,
-                    xvisible,
+                    xaxisStatus,
                 } = xAxisConfig;
                 let {
                     ylabel,
@@ -280,7 +293,7 @@
                     yitalicLabel,
                     yboldTick,
                     yitalicTick,
-                    yvisible,
+                    yaxisStatus,
                 } = yAxisConfig;
                 window.yboldLabel = yboldLabel;
                 window.xboldLabel = xboldLabel;
@@ -734,6 +747,16 @@
                     .attr("font-weight", yboldTick ? "bold" : "regular")
                     .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
                 a = document.querySelectorAll(".x-axis text");
                 var textWidth = (a[0] && a[0].getBBox().height) || 20;
                 var barWidth = x.bandwidth();
