@@ -237,7 +237,7 @@
                     xitalicLabel,
                     xboldTick,
                     xitalicTick,
-                    xvisible,
+                    xaxisStatus,
                 } = xAxisConfig;
                 let {
                     ylabel,
@@ -245,7 +245,7 @@
                     yitalicLabel,
                     yboldTick,
                     yitalicTick,
-                    yvisible,
+                    yaxisStatus,
                 } = yAxisConfig;
                 window.yboldLabel = yboldLabel;
                 window.xboldLabel = xboldLabel;
@@ -991,6 +991,16 @@
                     .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
 
                 function getBars(d) {
                     const bars = [];
