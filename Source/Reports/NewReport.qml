@@ -1542,6 +1542,9 @@ Page {
         case Constants.kpiTitle:
             chartUrl = Constants.kpiChartUrl;
             break;
+        case Constants.waterfallChartTitle:
+            chartUrl = Constants.waterfallChartUrl;
+            break;
         case Constants.treeChartTitle:
             chartUrl = Constants.treeChartUrl;
             allowedXAxisDataPanes = 5;
