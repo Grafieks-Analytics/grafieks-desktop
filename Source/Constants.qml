@@ -296,6 +296,8 @@ QtObject {
     // Chart Urls
     property string baseChartUrl: "qrc:/Source/Charts/";
 
+    property string waterfallChartUrl: "WaterfallChart.html"
+
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
