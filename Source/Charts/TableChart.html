@@ -5,28 +5,27 @@
         <meta charset="utf-8" />
         <title>Table</title>
 
-        <script src="./Data/jquery-3.5.1.min.js"></script>
-        <script src="./Data/dataTables.min.js"></script>
+        <!-- <script src="./Data/jquery-3.5.1.min.js"></script> -->
+        <!-- <script src="./Data/dataTables.min.js"></script> -->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/r-2.2.9/datatables.min.css"/> -->
 
-        <script src="./Data/dataTables.semanticui.min.js"></script>
-        <script src="./Data/semantic.min.js"></script>
 
-        <link rel="stylesheet" href="Data/semantic.min.css" />
+        <!-- <script src="./Data/dataTables.semanticui.min.js"></script>
+        <script src="./Data/semantic.min.js"></script> -->
+
+        <!-- <link rel="stylesheet" href="Data/semantic.min.css" />
         <link rel="stylesheet" href="Data/semantic-icons.css" />
-        <link rel="stylesheet" href="Data/dataTables.semanticui.min.css" />
+        <link rel="stylesheet" href="Data/dataTables.semanticui.min.css" /> -->
         <script src="./Data/d3DefaultConfig.js"></script>
 
-
+        <link href="./Data/tabulator.min.css" rel="stylesheet">
+        <script type="text/javascript" src="./Data/tabulator.min.js"></script>
+        <link rel="stylesheet" href="./Data/tabulator_style.css" /> 
+        
         <script src="./Data/utils.js"></script>
 
         <style>
-            .dataTables_scrollBody {
-                height: auto !important;
-            }
-
-            th {
-                text-transform: capitalize !important;
-            }
+            
         </style>
     </head>
 
@@ -42,7 +41,7 @@
                         "Edinburgh",
                         "61",
                         "2011/04/25",
-                        "$320,800",
+                        "320,800",
                     ],
                     [
                         "Garrett Winters",
@@ -50,7 +49,7 @@
                         "Tokyo",
                         "63",
                         "2011/07/25",
-                        "$170,750",
+                        "170,750",
                     ],
                     [
                         "Ashton Cox",
@@ -58,7 +57,7 @@
                         "San Francisco",
                         "66",
                         "2009/01/12",
-                        "$86,000",
+                        "86,000",
                     ],
                     [
                         "Cedric Kelly",
@@ -66,7 +65,7 @@
                         "Edinburgh",
                         "22",
                         "2012/03/29",
-                        "$433,060",
+                        "433,060",
                     ],
                     [
                         "Airi Satou",
@@ -74,7 +73,7 @@
                         "Tokyo",
                         "33",
                         "2008/11/28",
-                        "$162,700",
+                        "162,700",
                     ],
                     [
                         "Brielle Williamson",
@@ -82,7 +81,7 @@
                         "New York",
                         "61",
                         "2012/12/02",
-                        "$372,000",
+                        "372,000",
                     ],
                     [
                         "Herrod Chandler",
@@ -90,7 +89,7 @@
                         "San Francisco",
                         "59",
                         "2012/08/06",
-                        "$137,500",
+                        "137,500",
                     ],
                     [
                         "Rhona Davidson",
@@ -98,7 +97,7 @@
                         "Tokyo",
                         "55",
                         "2010/10/14",
-                        "$327,900",
+                        "327,900",
                     ],
                     [
                         "Colleen Hurst",
@@ -106,7 +105,7 @@
                         "San Francisco",
                         "39",
                         "2009/09/15",
-                        "$205,500",
+                        "205,500",
                     ],
                     [
                         "Sonya Frost",
@@ -114,7 +113,7 @@
                         "Edinburgh",
                         "23",
                         "2008/12/13",
-                        "$103,600",
+                        "103,600",
                     ],
                     [
                         "Jena Gaines",
@@ -122,7 +121,7 @@
                         "London",
                         "30",
                         "2008/12/19",
-                        "$90,560",
+                        "90,560",
                     ],
                     [
                         "Quinn Flynn",
@@ -130,7 +129,7 @@
                         "Edinburgh",
                         "22",
                         "2013/03/03",
-                        "$342,000",
+                        "342,000",
                     ],
                     [
                         "Charde Marshall",
@@ -138,7 +137,7 @@
                         "San Francisco",
                         "36",
                         "2008/10/16",
-                        "$470,600",
+                        "470,600",
                     ],
                     [
                         "Haley Kennedy",
@@ -146,7 +145,7 @@
                         "London",
                         "43",
                         "2012/12/18",
-                        "$313,500",
+                        "313,500",
                     ],
                     [
                         "Tatyana Fitzpatrick",
@@ -154,7 +153,7 @@
                         "London",
                         "19",
                         "2010/03/17",
-                        "$385,750",
+                        "385,750",
                     ],
                     [
                         "Michael Silva",
@@ -162,7 +161,7 @@
                         "London",
                         "66",
                         "2012/11/27",
-                        "$198,500",
+                        "198,500",
                     ],
                     [
                         "Paul Byrd",
@@ -170,7 +169,7 @@
                         "New York",
                         "64",
                         "2010/06/09",
-                        "$725,000",
+                        "725,000",
                     ],
                     [
                         "Gloria Little",
@@ -178,7 +177,7 @@
                         "New York",
                         "59",
                         "2009/04/10",
-                        "$237,500",
+                        "237,500",
                     ],
                     [
                         "Bradley Greer",
@@ -186,7 +185,7 @@
                         "London",
                         "41",
                         "2012/10/13",
-                        "$132,000",
+                        "132,000",
                     ],
                     [
                         "Dai Rios",
@@ -194,7 +193,7 @@
                         "Edinburgh",
                         "35",
                         "2012/09/26",
-                        "$217,500",
+                        "217,500",
                     ],
                     [
                         "Jenette Caldwell",
@@ -202,7 +201,7 @@
                         "New York",
                         "30",
                         "2011/09/03",
-                        "$345,000",
+                        "345,000",
                     ],
                     [
                         "Yuri Berry",
@@ -210,7 +209,7 @@
                         "New York",
                         "40",
                         "2009/06/25",
-                        "$675,000",
+                        "675,000",
                     ],
                     [
                         "Caesar Vance",
@@ -218,7 +217,7 @@
                         "New York",
                         "21",
                         "2011/12/12",
-                        "$106,450",
+                        "106,450",
                     ],
                     [
                         "Doris Wilder",
@@ -226,7 +225,7 @@
                         "Sydney",
                         "23",
                         "2010/09/20",
-                        "$85,600",
+                        "85,600",
                     ],
                     [
                         "Angelica Ramos",
@@ -234,7 +233,7 @@
                         "London",
                         "47",
                         "2009/10/09",
-                        "$1,200,000",
+                        "1,200,000",
                     ],
                     [
                         "Gavin Joyce",
@@ -242,7 +241,7 @@
                         "Edinburgh",
                         "42",
                         "2010/12/22",
-                        "$92,575",
+                        "92,575",
                     ],
                     [
                         "Jennifer Chang",
@@ -250,7 +249,7 @@
                         "Singapore",
                         "28",
                         "2010/11/14",
-                        "$357,650",
+                        "357,650",
                     ],
                     [
                         "Brenden Wagner",
@@ -258,7 +257,7 @@
                         "San Francisco",
                         "28",
                         "2011/06/07",
-                        "$206,850",
+                        "206,850",
                     ],
                     [
                         "Fiona Green",
@@ -266,7 +265,7 @@
                         "San Francisco",
                         "48",
                         "2010/03/11",
-                        "$850,000",
+                        "850,000",
                     ],
                     [
                         "Shou Itou",
@@ -274,7 +273,7 @@
                         "Tokyo",
                         "20",
                         "2011/08/14",
-                        "$163,000",
+                        "163,000",
                     ],
                     [
                         "Michelle House",
@@ -282,7 +281,7 @@
                         "Sydney",
                         "37",
                         "2011/06/02",
-                        "$95,400",
+                        "95,400",
                     ],
                     [
                         "Suki Burks",
@@ -290,7 +289,7 @@
                         "London",
                         "53",
                         "2009/10/22",
-                        "$114,500",
+                        "114,500",
                     ],
                     [
                         "Prescott Bartlett",
@@ -298,7 +297,7 @@
                         "London",
                         "27",
                         "2011/05/07",
-                        "$145,000",
+                        "145,000",
                     ],
                     [
                         "Gavin Cortez",
@@ -306,7 +305,7 @@
                         "San Francisco",
                         "22",
                         "2008/10/26",
-                        "$235,500",
+                        "235,500",
                     ],
                     [
                         "Martena Mccray",
@@ -314,7 +313,7 @@
                         "Edinburgh",
                         "46",
                         "2011/03/09",
-                        "$324,050",
+                        "324,050",
                     ],
                     [
                         "Unity Butler",
@@ -322,7 +321,7 @@
                         "San Francisco",
                         "47",
                         "2009/12/09",
-                        "$85,675",
+                        "85,675",
                     ],
                     [
                         "Howard Hatfield",
@@ -330,7 +329,7 @@
                         "San Francisco",
                         "51",
                         "2008/12/16",
-                        "$164,500",
+                        "164,500",
                     ],
                     [
                         "Hope Fuentes",
@@ -338,7 +337,7 @@
                         "San Francisco",
                         "41",
                         "2010/02/12",
-                        "$109,850",
+                        "109,850",
                     ],
                     [
                         "Vivian Harrell",
@@ -346,7 +345,7 @@
                         "San Francisco",
                         "62",
                         "2009/02/14",
-                        "$452,500",
+                        "452,500",
                     ],
                     [
                         "Timothy Mooney",
@@ -354,7 +353,7 @@
                         "London",
                         "37",
                         "2008/12/11",
-                        "$136,200",
+                        "136,200",
                     ],
                     [
                         "Jackson Bradshaw",
@@ -362,7 +361,7 @@
                         "New York",
                         "65",
                         "2008/09/26",
-                        "$645,750",
+                        "645,750",
                     ],
                     [
                         "Olivia Liang",
@@ -370,7 +369,7 @@
                         "Singapore",
                         "64",
                         "2011/02/03",
-                        "$234,500",
+                        "234,500",
                     ],
                     [
                         "Bruno Nash",
@@ -378,7 +377,7 @@
                         "London",
                         "38",
                         "2011/05/03",
-                        "$163,500",
+                        "163,500",
                     ],
                     [
                         "Sakura Yamamoto",
@@ -386,7 +385,7 @@
                         "Tokyo",
                         "37",
                         "2009/08/19",
-                        "$139,575",
+                        "139,575",
                     ],
                     [
                         "Thor Walton",
@@ -394,7 +393,7 @@
                         "New York",
                         "61",
                         "2013/08/11",
-                        "$98,540",
+                        "98,540",
                     ],
                     [
                         "Finn Camacho",
@@ -402,7 +401,7 @@
                         "San Francisco",
                         "47",
                         "2009/07/07",
-                        "$87,500",
+                        "87,500",
                     ],
                     [
                         "Serge Baldwin",
@@ -410,7 +409,7 @@
                         "Singapore",
                         "64",
                         "2012/04/09",
-                        "$138,575",
+                        "138,575",
                     ],
                     [
                         "Zenaida Frank",
@@ -418,7 +417,7 @@
                         "New York",
                         "63",
                         "2010/01/04",
-                        "$125,250",
+                        "125,250",
                     ],
                     [
                         "Zorita Serrano",
@@ -426,7 +425,7 @@
                         "San Francisco",
                         "56",
                         "2012/06/01",
-                        "$115,000",
+                        "115,000",
                     ],
                     [
                         "Jennifer Acosta",
@@ -434,7 +433,7 @@
                         "Edinburgh",
                         "43",
                         "2013/02/01",
-                        "$75,650",
+                        "75,650",
                     ],
                     [
                         "Cara Stevens",
@@ -442,7 +441,7 @@
                         "New York",
                         "46",
                         "2011/12/06",
-                        "$145,600",
+                        "145,600",
                     ],
                     [
                         "Hermione Butler",
@@ -450,7 +449,7 @@
                         "London",
                         "47",
                         "2011/03/21",
-                        "$356,250",
+                        "356,250",
                     ],
                     [
                         "Lael Greer",
@@ -458,7 +457,7 @@
                         "London",
                         "21",
                         "2009/02/27",
-                        "$103,500",
+                        "103,500",
                     ],
                     [
                         "Jonas Alexander",
@@ -466,7 +465,7 @@
                         "San Francisco",
                         "30",
                         "2010/07/14",
-                        "$86,500",
+                        "86,500",
                     ],
                     [
                         "Shad Decker",
@@ -474,7 +473,7 @@
                         "Edinburgh",
                         "51",
                         "2008/11/13",
-                        "$183,000",
+                        "183,000",
                     ],
                     [
                         "Michael Bruce",
@@ -482,7 +481,7 @@
                         "Singapore",
                         "29",
                         "2011/06/27",
-                        "$183,000",
+                        "183,000",
                     ],
                     [
                         "Donna Snider",
@@ -490,10 +489,10 @@
                         "New York",
                         "27",
                         "2011/01/25",
-                        "$112,000",
+                        "112,000",
                     ],
                 ],
-                ["", "", "", "", "", "$ 4000"],
+                ["", "", "", "3", "", "4000"],
                 ["name", "position", "office", "age", "Start Date", "Salary"],
             ];
             function generateNewTr(row, type = "td") {
@@ -562,16 +561,16 @@
             function init() {
                 document.querySelector(
                     "#my_dataviz"
-                ).innerHTML = `<table id="example" class="ui celled table" style="width: 100%">
+                ).innerHTML = `<table id="example" class="ui celled table very compact">
                             <thead></thead>
                             <tbody></tbody>
                             <tfoot></tfoot>
                         </table>`;
 
-                removeCellBorder();
-                removeHoverBackground();
-                removeRowAlternateColor();
-                setCompact(false);
+                // removeCellBorder();
+                // removeHoverBackground();
+                // removeRowAlternateColor();
+                // setCompact(false);
             }
 
             function clearChart() {
@@ -603,8 +602,8 @@
                     totalStatus = defaultGrandTotalStatus,
                 } = plotConfiguration;
 
-                addHeader();
-                addFooter();
+                // addHeader();
+                // addFooter();
 
                 if (!cellBorderStatus) {
                     removeCellBorder();
@@ -627,26 +626,59 @@
                 setCompact(compactStatus);
                 grandTotalStatus(totalStatus);
 
-                window.dataTableValues = createBatches(data[0], batchSize);
+                // window.dataTableValues = createBatches(data[0], batchSize);
                 window.counter = 0;
 
-                window.tableInstance = $("#example").DataTable({
-                    scrollY: "calc(100vh - 180px)",
-                    bPaginate: false,
-                    scroller: {
-                        loadingIndicator: true,
-                    },
-                    scroller: true,
-                    deferRender: true,
-                    data: window.dataTableValues[window.counter++],
-                    bInfo: false,
-                });
 
-                setLazyLoadHandler();
-                searchToggle(searchStatus);
+
+                var newData = data[0].map((d)=>{
+                        var obj = {};
+                        data[2].forEach((d1,i)=>{
+                            obj[d1] = d[i];
+                        })
+                        return obj;
+                    });
+                console.log(newData)
+
+                var table = new Tabulator("#example", {
+                    layout:"fitColumns",
+                    height: "calc(100vh - 70px)",
+                    movableColumns:true,
+                    columns: data[2].map((d,i)=> {
+                        var obj = { title: d, field: d }
+                        console.log('Value',data[1][i])
+                        if(data[1][i]){
+                            obj['bottomCalc']="sum";
+                        }
+                        return obj;
+                    })
+                });
+                // var tableData = [
+                //     {id:1, name:"Billy Bob", age:"12", gender:"male", height:1, col:"red", dob:"", cheese:1},
+                //     {id:2, name:"Mary May", age:"1", gender:"female", height:2, col:"blue", dob:"14/05/1982", cheese:true},
+                // ]
+
+                table.setData(newData);
+                
+
+                // window.tableInstance = $("#example").DataTable({
+                //     scrollY: "calc(100vh - 180px)",
+                //     bPaginate: false,
+                //     // scroller: {
+                //     //     loadingIndicator: true,
+                //     // },
+                //     scroller: true,
+                //     deferRender: true,
+                //     data: window.dataTableValues[window.counter++],
+                //     bInfo: false,
+                //     responsive: false
+                // });
+
+                // setLazyLoadHandler();
+                // searchToggle(searchStatus);
             }
 
-            // drawChart(data);
+            drawChart(data);
             
 
             function updateTable() {
