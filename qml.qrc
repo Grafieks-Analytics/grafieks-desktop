@@ -44,7 +44,6 @@
         <file>Source/Dashboards/NewDashboard.qml</file>
         <file>Source/Reports/NewReport.qml</file>
         <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
-        <file>Source/Modellers/SubComponents/PublishDatasource.qml</file>
         <file>Source/Modellers/SubComponents/CategoricalFilter.qml</file>
         <file>Source/Modellers/SubComponents/TestQueryResultsTable.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent.qml</file>
@@ -293,5 +292,6 @@
         <file>Source/Others/About.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TooltipInputControl.qml</file>
         <file>Source/Others/License.qml</file>
+        <file>Source/MainSubComponents/PublishDatasource.qml</file>
     </qresource>
 </RCC>

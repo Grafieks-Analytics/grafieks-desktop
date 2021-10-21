@@ -64,9 +64,9 @@ int GeneralParamsModel::getOnlineStorageType()
 
 QString GeneralParamsModel::returnPlainTextFromHtml(QString s)
 {
-        QTextDocument td;
-        td.setHtml(s);
-        return td.toPlainText();
+    QTextDocument td;
+    td.setHtml(s);
+    return td.toPlainText();
 }
 
 void GeneralParamsModel::loadingComplete()
@@ -114,6 +114,22 @@ QString GeneralParamsModel::urlToFilePath(QUrl url)
 {
     QString path = url.toLocalFile();
     return path;
+}
+
+QString GeneralParamsModel::randomStringGenerator()
+{
+    const QString possibleCharacters("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+    const int randomStringLength = 12; // assuming you want random strings of 12 characters
+
+    QString randomString;
+    for(int i=0; i<randomStringLength; ++i)
+    {
+        QRandomGenerator rand;
+        int index = QRandomGenerator::global()->generate() % possibleCharacters.length();
+        QChar nextChar = possibleCharacters.at(index);
+        randomString.append(nextChar);
+    }
+    return randomString;
 }
 
 void GeneralParamsModel::setMenuType(int menuType)

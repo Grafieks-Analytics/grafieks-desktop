@@ -13,6 +13,7 @@
 #include <QDebug>
 
 #include "../../General/datatype.h"
+#include "../../General/generalparamsmodel.h"
 
 #include "../../../duckdb.hpp"
 #include "../../../statics.h"

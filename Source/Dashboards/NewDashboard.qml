@@ -282,8 +282,24 @@ Page {
     }
 
     function onPublishDashboardClicked(){
-        console.log("Publish dashboard coming soon")
-        publishWorkbook.open()
+        // If already logged in, dont prompt
+        if (typeof settings.value("user/sessionToken") == "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+            publishWorkbook.open()
+        }
+    }
+
+    function publishDatasourceNow(){
+
+        console.log("Publish datasource")
+        publishDs.open()
+
+    }
+
+    function publishWorkbookNow(){
+
+        console.log("Publish workbook")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -298,10 +314,18 @@ Page {
 
     MessageDialog {
         id: publishWorkbook
-        title: "Publish Datasource"
+        title: "Publish Dashboard"
         icon: StandardIcon.Information
-        text: "Publish datasource coming soon"
+        text: "Do you want to publish the datasource?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: publishDatasourceNow()
+        onNo:publishWorkbookNow()
     }
+
+    PublishDatasource{
+        id: publishDs
+    }
+
     // SubComponents Ends
     /***********************************************************************************************************************/
 
@@ -788,7 +812,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Datasource")
+                    ToolTip.text: qsTr("Publish Dashboard")
 
                 }
 

@@ -12,6 +12,7 @@
 #include <QDate>
 
 #include "../../General/datatype.h"
+#include "../../General/generalparamsmodel.h"
 
 #include "../../../statics.h"
 #include "../../../constants.h"
