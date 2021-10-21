@@ -121,8 +121,7 @@ void User::loginReadComplete()
             settings.setValue("user/lastname", dataObj["lastname"].toString());
             settings.setValue("user/photoLink", dataObj["photoLink"].toString());
             settings.setValue("user/sessionToken", dataObj["sessionToken"].toString());
-
-
+            settings.setValue("user/sitename", dataObj["sitename"].toString());
         }
 
         emit loginStatus(outputStatus);

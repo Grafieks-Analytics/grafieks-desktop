@@ -17,9 +17,7 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
-
     // Extract the exact file path
-
     // Open file for reading
     QFile imageFile(uploadImage);
 
@@ -115,6 +113,31 @@ void PublishDatasourceModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
 
 void PublishDatasourceModel::uploadFinished()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString baseUrl = settings.value("general/baseUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    int profileId = settings.value("user/profileId").toInt();
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/copyfiles");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+
+    QJsonObject obj;
+    obj.insert("ProfileID", profileId);
+    obj.insert("Extract", this->outputFileName);
+    obj.insert("Live", "");
+    obj.insert("Workbook", "");
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
     emit dsUploadFinished();
 }
 
@@ -126,8 +149,9 @@ void PublishDatasourceModel::uploadFile()
     QSettings settings;
 
     QString baseUrl = settings.value("general/hostname").toString();
+    QString siteName = settings.value("user/sitename").toString();
 
-    QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/datasources/" + this->outputFileName);
+    QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/" + siteName + "/tmp/" + this->outputFileName);
     url.setUserName(Secret::ftpUser);
     url.setPassword(Secret::ftpPass);
     url.setScheme("ftp");
