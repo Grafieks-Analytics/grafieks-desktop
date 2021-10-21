@@ -1194,7 +1194,7 @@ void ChartsThread::getTableChartValues()
     QStringList xAxisData;
     QStringList yAxisData;
 
-    QVariantList tmpData;
+    QVariantMap tmpData;
     QJsonArray colData;
     int index;
 
@@ -1280,17 +1280,16 @@ void ChartsThread::getTableChartValues()
                 masterKeyword.append(xAxisDataPointer->value(j).at(i));
             }
 
-
             if(!uniqueHashKeywords->contains(masterKeyword)){
                 uniqueHashKeywords->insert(masterKeyword, counter);
                 counter++;
 
                 for(int j = 0; j < xAxisLength; j++){
-                    tmpData.append(xAxisDataPointer->value(j).at(i));
+                    tmpData.insert(xAxisColumnList.at(j).toString(), xAxisDataPointer->value(j).at(i));
                 }
 
                 for(int j = 0; j < yAxisLength; j++){
-                    tmpData.append(yAxisDataPointer->value(j).at(i).toFloat());
+                    tmpData.insert(yAxisColumnList.at(j).toString(), yAxisDataPointer->value(j).at(i).toFloat());
                     if(masterTotal.length() < yAxisLength){
                         masterTotal.append(yAxisDataPointer->value(j).at(i).toFloat());
                     } else{
@@ -1298,18 +1297,19 @@ void ChartsThread::getTableChartValues()
                     }
                 }
 
-                colData.append(QJsonArray::fromVariantList(tmpData));
+                colData.append(QJsonObject::fromVariantMap(tmpData));
 
             } else{
 
                 index = uniqueHashKeywords->value(masterKeyword);
-                tmpData.append(colData.at(index).toArray().toVariantList());
+                tmpData = colData.at(index).toObject().toVariantMap();
 
                 for(int j = 0; j < yAxisLength; j++){
-                    tmpData[xAxisLength + j] = tmpData[xAxisLength + j].toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    float tmpVal = tmpData.value(yAxisColumnList.at(j).toString()).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    tmpData.insert(yAxisColumnList.at(j).toString(), tmpVal);
                     masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
                 }
-                colData.replace(index, QJsonArray::fromVariantList(tmpData));
+                colData.replace(index, QJsonObject::fromVariantMap(tmpData));
             }
 
         }
@@ -1538,10 +1538,6 @@ void ChartsThread::getPivotChartValues()
     QString strData = doc.toJson(QJsonDocument::Compact);
 
     emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-
-    if(identifier == "getTableChartValues"){
-        emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    }
 }
 
 void ChartsThread::getStackedAreaChartValues()
