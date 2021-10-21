@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include "../../General/datatype.h"
+#include "../../General/generalparamsmodel.h"
 #include "../filtercategoricallistmodel.h"
 #include "../filternumericallistmodel.h"
 #include "../filterdatelistmodel.h"

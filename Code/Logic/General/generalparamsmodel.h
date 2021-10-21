@@ -7,6 +7,7 @@
 #include <QTextDocument>
 #include <QDebug>
 #include <QUrl>
+#include <QRandomGenerator>
 #include <QProcess>
 
 #include "../../statics.h"
@@ -59,6 +60,8 @@ public:
     Q_INVOKABLE QVariantMap getChangedColumnTypes();
 
     Q_INVOKABLE QString urlToFilePath(QUrl url);
+
+    QString randomStringGenerator();
 
 public slots:
 

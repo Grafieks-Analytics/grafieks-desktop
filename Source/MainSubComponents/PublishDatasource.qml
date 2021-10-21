@@ -16,7 +16,6 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
 
 Popup {
     id: popup
