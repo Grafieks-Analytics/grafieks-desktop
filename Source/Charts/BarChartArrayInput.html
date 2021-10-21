@@ -4,7 +4,6 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-        <script src="./Data/min/numeral.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
         <!-- styles -->
         <style type="text/css">
@@ -23,12 +22,13 @@
             #my_dataviz {
                 overflow-x: scroll;
                 margin-left: 72px;
+                height: 100vh;
             }
 
             #xAxisLabelId {
                 position: fixed;
                 bottom: 20px;
-                z-index: -1;
+                z-index: 100;
                 height: 40px;
                 /* background-color: red; */
             }
@@ -40,7 +40,7 @@
         <div id="mainChartWindow" style="display: flex">
             <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
-            <div id="xAxisLabelId" style="position: fixed"></div>
+            <div id="xAxisLabelId"></div>
         </div>
 
         <div id="tooltip"></div>
@@ -54,6 +54,13 @@
             var redrawn = false;
             var extraHeight = 0;
 
+            var data = [
+                [
+                    ["Furniture", "Office Supplies", "Technology"],
+                    [741999.0625, 719048.25, 836155.4375],
+                ],
+                ["Category", "Sales"],
+            ];
 
             //  draw function defination starts
             function drawChart(data, plottingConfiguration = {}) {
@@ -65,7 +72,6 @@
 
                 // data values to be plot
                 var dataValues = data[0];
-                const [xAxisLabel, yAxisLabel] = data[1];
 
                 // Plot configuration contains all the config of report, these values are passed from QML,
                 // if no value is passed default value is taken from defaultConfig.js
@@ -102,6 +108,9 @@
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
 
                 // plottingConfiguration restore from windows
@@ -129,13 +138,42 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
-
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xaxisStatus,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yaxisStatus,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
                 let { gridStatus } = gridConfig;
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                    ];
+                }
+
                 d3Colors = d3colorPalette;
+
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -156,7 +194,7 @@
                         .html((d, i) => {
                             return (
                                 '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                d3Colors[i % data[1][1].length] +
+                                d3Colors[i % d3Colors.length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
                                 d +
@@ -193,7 +231,12 @@
                 }
 
                 const { top, right, bottom, left } = constants.chartMargins;
-                var margin = { top, right, bottom, left };
+                var margin = {
+                    top,
+                    right,
+                    bottom,
+                    left,
+                };
                 var width = window.innerWidth - 100;
 
                 var xAxisDataSet = dataValues[0];
@@ -210,7 +253,6 @@
 
                 if (valueDateType && !redrawn) {
                     xAxisDataSet.forEach((d, i) => {
-                        
                         var requiredTypeData = getDateFormattedData(
                             d,
                             dateFormat
@@ -220,7 +262,7 @@
                             xAxisDateWiseValues[requiredTypeData] = 0;
                         }
 
-                        console.log(requiredTypeData, redrawn);
+                        // console.log(requiredTypeData, redrawn);
                         xAxisDateWiseValues[requiredTypeData] +=
                             dataValues[1][i];
                     });
@@ -255,7 +297,7 @@
 
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#xAxisLabelId").style("bottom", 20);
+                d3.select("#xAxisLabelId").style("bottom", 20 + "px");
 
                 // legends code starts
                 if (legendStatus) {
@@ -310,7 +352,7 @@
                             );
                             d3.select("#mainChartWindow").style(
                                 "margin-left",
-                                legendWidth
+                                legendWidth + "px"
                             );
                             d3.select("#xAxisLabelId").style("bottom", 20);
 
@@ -348,7 +390,7 @@
                             var legendWidth = legendElement.offsetWidth;
                             y_pos_x_label = 20;
 
-                            d3.select("#xAxisLabelId").style("bottom", 60);
+                            d3.select("#xAxisLabelId").style("bottom", "60px");
                             d3.select("#mainChartWindow").attr("style", null);
 
                             // d3.select("#mainChartWindow").style("width", width);
@@ -486,16 +528,14 @@
                     .attr("class", "y-axis")
                     .call(yAxis);
 
-                d3.selectAll("#my_dataviz svg")
-                    .append("g")
-                    .data(["1", "2", "3"])
-
-                    .append("text")
-                    .enter()
-
-                    .html((d, i) => {
-                        return d;
-                    });
+                // d3.selectAll("#my_dataviz svg")
+                //     .append("g")
+                //     .data(["1", "2", "3"])
+                //     .append("text")
+                //     .enter()
+                //     .html((d, i) => {
+                //         return d;
+                //     });
 
                 if (gridStatus) {
                     svg.append("g")
@@ -672,47 +712,9 @@
                     .attr("class", "x-axis axis")
                     .attr("transform", "translate(0," + height + ")");
 
-                if (labelStatus) {
-                    svg.append("g")
-                        .call(xAxis.tickSize(0))
-                        .attr("class", "axis label")
-                        // .attr("font-family", xDataLabelfontFamily)
-                        .attr("font-family", dataLabelfontFamily)
-                        .attr("font-size", dataLabelfontSize);
-
-                    // .attr("transform", "translate(0,0)");
-                    var labelSelector =
-                        document.querySelectorAll(".axis.label text");
-                    d3.select(".axis.label path").remove();
-
-                    labelSelector.forEach((label, i) => {
-                        var labelValue = label.textContent;
-
-                        var labelYPosition = yScale(data[0][1][i]);
-                        // console.log(labelYPosition);
-
-                        // console.log(dataset[i]);
-                        label.setAttribute("y", labelYPosition - 12);
-                        label.setAttribute("fill", dataLabelColor);
-                        label.textContent = labelFormatSet(
-                            dataset[i],
-                            labelFormat
-                        );
-                        label.setAttribute(
-                            "display",
-                            labelYPosition > 500 ? "none" : ""
-                        );
-                        // label.setAttribute("y", function (d) {
-                        //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
-                        //     console.log({height})
-                        //     return 10;
-                        // })
-                        //  label.textContent = textColumn2[1];
-                    });
-                }
-
                 setLabel(
                     xAxisLabel,
+                    // xaxisLaabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -721,13 +723,8 @@
                     y_pos_x_label,
                     false
                 );
-                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
 
-                d3.selectAll(".x-axis text")
-                    .attr("font-size", xTickfontSize)
-                    .attr("font-family", xTickfontFamily)
-                    .attr("fill", xTickfontColor)
-                    .attr("y", 8);
+                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
 
                 setYaxisWidth();
 
@@ -741,9 +738,9 @@
                     setXaxisWidth();
                 }
 
-                if (chartType == constants.chartType.STANDARD) {
-                    setStandardTickWidths();
-                }
+                // if (chartType == constants.chartType.STANDARD) {
+                //     setStandardTickWidths();
+                // }
 
                 function setStandardTickWidths() {
                     var a = document.querySelectorAll(".x-axis .tick text");
@@ -759,13 +756,13 @@
 
                         var tickWidth = tick && tick.getBBox().width;
                         if (tickWidth > barWidth) {
-                            console.log("Length is long", numOfCharacters);
+                            // console.log("Length is long", numOfCharacters);
                             var tickValue = tick.innerHTML;
                             tickValue =
                                 tickValue &&
                                 tickValue.substr(0, numOfCharacters - 3) +
                                     "...";
-                            console.log(tickValue);
+                            // console.log(tickValue);
                             tick.innerHTML = tickValue;
                         }
                     }
@@ -817,6 +814,51 @@
                         }
                     }
                 }
+                if (labelStatus) {
+                    console.log("FrontEnd-Debug:Label Status is on");
+                    svg.append("g")
+                        .call(xAxis.tickSize(0))
+                        .attr("class", "axis label")
+                        // .attr("font-family", xDataLabelfontFamily)
+                        .attr("font-family", dataLabelfontFamily)
+                        .attr("font-size", dataLabelfontSize);
+
+                    // .attr("transform", "translate(0,0)");
+                    var labelSelector =
+                        document.querySelectorAll(".axis.label text");
+
+                    d3.select(".axis.label path").remove();
+
+                    labelSelector.forEach((label, i) => {
+                        var labelValue = label.textContent;
+
+                        var labelYPosition = yScale(data[0][1][i]);
+                        // console.log(labelYPosition);
+
+                        // console.log(dataset[i]);
+                        label.setAttribute("y", labelYPosition - 12);
+                        label.setAttribute("fill", dataLabelColor);
+                        label.textContent = labelFormatSet(
+                            dataset[i],
+                            labelFormat
+                        );
+                        console.log(
+                            "FrontEnd-Debug:Label Status labelYPosition",
+                            labelYPosition
+                        );
+
+                        label.setAttribute(
+                            "display",
+                            labelYPosition > 500 ? "none" : ""
+                        );
+                        // label.setAttribute("y", function (d) {
+                        //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
+                        //     console.log({height})
+                        //     return 10;
+                        // })
+                        //  label.textContent = textColumn2[1];
+                    });
+                }
 
                 if (chartType === constants.chartType.FIT_WIDTH) {
                     var allXAxisTexts =
@@ -843,7 +885,7 @@
                                 xAxisTick.length > numOfCharacters
                             ) {
                                 if (Math.ceil(numOfCharacters) > 3) {
-                                    console.log(xAxisTick);
+                                    // console.log(xAxisTick);
                                     allXAxisTexts[i].innerHTML =
                                         (xAxisTick &&
                                             xAxisTick.substr(
@@ -878,6 +920,32 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
+                d3.selectAll(".y-axis text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
+                    .attr("fill", yTickfontColor);
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 6);
+
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                }
+                else{
+                     d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                }
+                else{
+                     d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
 
                 function setYaxisWidth() {
                     var allYAxisTicks =
@@ -903,11 +971,59 @@
                 function make_x_gridlines(x) {
                     return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
                 }
+
                 function make_y_gridlines(y) {
                     return d3.axisLeft(y).ticks(yaxisTicks);
                 }
             }
             //  draw function defination starts
+
+            // drawChart(data, {
+            //     dataColumns: {
+            //         xAxisColumnDetails: [
+            //             {
+            //                 itemName: "Category",
+            //                 itemType: "Categorical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         yAxisColumnDetails: [
+            //             {
+            //                 itemName: "Sales",
+            //                 itemType: "Numerical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         row3ColumnDetails: [],
+            //         colorByData: [],
+            //     },
+            // });
+
+            // drawChart(data, {
+            //     chartType: "FitWidth",
+            //     xAxisConfig: { label: "Categoryas dasd as" },
+            //     yAxisConfig: { label: "Salesadsas dsad as" },
+            //     dataColumns: {
+            //         xAxisColumnDetails: [
+            //             {
+            //                 itemName: "Category",
+            //                 itemType: "Categorical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         yAxisColumnDetails: [
+            //             {
+            //                 itemName: "Sales",
+            //                 itemType: "Numerical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         row3ColumnDetails: [],
+            //         colorByData: [],
+            //     },
+            // });
+
+            // drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
         </script>
         <!-- javascripts ends -->
     </body>

@@ -1344,7 +1344,6 @@
                 var dateWiseResponse = {};
 
                 if (valueDateType) {
-                    
                     dataValues.forEach((dataRow) => {
                         var requiredTypeData = getDateFormattedData(
                             dataRow[0],
@@ -1410,6 +1409,9 @@
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -1438,10 +1440,38 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xaxisStatus,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yaxisStatus,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                    ];
+                }
 
                 dataValues = transformData(dataValues, dataColumns, dateFormat);
                 window.chartDataValues = dataValues;
-                [xAxisLabel, yAxisLabel] = data[1];
+                // [xAxisLabel, yAxisLabel] = data[1];
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
@@ -1957,12 +1987,26 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
                 // axis setting ends
 
                 if (chartType === constants.chartType.FIT_WIDTH) {

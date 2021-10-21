@@ -82,6 +82,8 @@ Popup {
         id: license
         text: "End User License Agreement"
         font.pointSize: 8
+        color:"blue"
+        font.underline :true
         font.family: Constants.fontDefault
         anchors.top: learn.bottom
         anchors.horizontalCenter:parent.horizontalCenter
