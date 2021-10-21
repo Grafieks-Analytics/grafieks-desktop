@@ -55,5 +55,3 @@ FileDialog{
         console.log("file rejected")
     }
 }
-
-
