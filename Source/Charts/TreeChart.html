@@ -259,6 +259,7 @@
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             var labels = data[1];
+            numerical = data[1][data[1].length-1];
             labels = labels.slice(0, -1);
 
             data = data[0];
@@ -448,7 +449,7 @@
                             return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
-                                "label1" +
+                                d.data.label +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -456,7 +457,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                "label2" +
+                                numerical +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +

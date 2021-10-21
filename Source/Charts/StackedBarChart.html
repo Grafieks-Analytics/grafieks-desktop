@@ -39,14 +39,15 @@
         #my_dataviz {
             overflow-x: scroll;
             margin-left: 72px;
+            height: 100vh;
         }
 
         #xAxisLabelId {
             position: fixed;
-            /* bottom: 30px; */
-            bottom: 15px;
-            z-index: -1;
+            bottom: 20px;
+            z-index: 100;
             height: 40px;
+            /* background-color: red; */
         }
     </style>
 </head>
@@ -330,6 +331,74 @@
         //     ["Order_Date", "category", "Sales"],
         // ];
 
+        var data = [
+            [
+                ["Bookcases", "Furniture", 8016],
+                ["Bookcases", "Office Supplies", 0],
+                ["Bookcases", "Technology", 0],
+                ["Chairs", "Furniture", 6906],
+                ["Chairs", "Office Supplies", 0],
+                ["Chairs", "Technology", 0],
+                ["Labels", "Furniture", 0],
+                ["Labels", "Office Supplies", 192],
+                ["Labels", "Technology", 0],
+                ["Tables", "Furniture", 10230],
+                ["Tables", "Office Supplies", 0],
+                ["Tables", "Technology", 0],
+                ["Storage", "Furniture", 0],
+                ["Storage", "Office Supplies", 4638],
+                ["Storage", "Technology", 0],
+                ["Furnishings", "Furniture", 2398],
+                ["Furnishings", "Office Supplies", 0],
+                ["Furnishings", "Technology", 0],
+                ["Art", "Furniture", 0],
+                ["Art", "Office Supplies", 2756],
+                ["Art", "Technology", 0],
+                ["Phones", "Furniture", 0],
+                ["Phones", "Office Supplies", 0],
+                ["Phones", "Technology", 8372],
+                ["Binders", "Furniture", 0],
+                ["Binders", "Office Supplies", 2114],
+                ["Binders", "Technology", 0],
+                ["Appliances", "Furniture", 0],
+                ["Appliances", "Office Supplies", 1060],
+                ["Appliances", "Technology", 0],
+                ["Paper", "Furniture", 0],
+                ["Paper", "Office Supplies", 1198],
+                ["Paper", "Technology", 0],
+                ["Envelopes", "Furniture", 0],
+                ["Envelopes", "Office Supplies", 1134],
+                ["Envelopes", "Technology", 0],
+                ["Accessories", "Furniture", 0],
+                ["Accessories", "Office Supplies", 0],
+                ["Accessories", "Technology", 938],
+                ["Fasteners", "Furniture", 0],
+                ["Fasteners", "Office Supplies", 160],
+                ["Fasteners", "Technology", 0],
+                ["Supplies", "Furniture", 0],
+                ["Supplies", "Office Supplies", 132],
+                ["Supplies", "Technology", 0],
+            ],
+            [
+                "Bookcases",
+                "Chairs",
+                "Labels",
+                "Tables",
+                "Storage",
+                "Furnishings",
+                "Art",
+                "Phones",
+                "Binders",
+                "Appliances",
+                "Paper",
+                "Envelopes",
+                "Accessories",
+                "Fasteners",
+                "Supplies",
+            ],
+            ["Furniture", "Office Supplies", "Technology"],
+            ["Category", "Sales", "Sub_Category"],
+        ];
         var extraHeightWorked = false;
         var redrawn = false;
         var extraHeight = 0;
@@ -400,7 +469,7 @@
 
             var allKeys = uniqueKey2;
 
-            return [response, allKeys, data[2]];
+            return [response, allKeys, data[3]];
         }
 
         function drawChart(data, plottingConfiguration = {}) {
@@ -413,7 +482,7 @@
             var parseDate = d3.timeParse("%Y");
             var tooltipColumn1 = "test1";
             var tooltipColumn2 = "test2";
-            var [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
+            // var [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
 
             let {
                 d3colorPalette,
@@ -447,6 +516,9 @@
                 xTickfontColor = defaultD3Config.fontColor,
                 yTickfontColor = defaultD3Config.fontColor,
                 dataLabelColor = defaultD3Config.fontColor,
+                // xaxis setting
+                xAxisConfig = defaultD3Config.xAxisConfig,
+                yAxisConfig = defaultD3Config.yAxisConfig,
             } = plottingConfiguration;
 
             // plottingConfiguration restore from windows
@@ -471,6 +543,34 @@
             let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus, labelFormat } = labelConfig;
             let { gridStatus } = gridConfig;
+            let {
+                xlabel,
+                xboldLabel,
+                xitalicLabel,
+                xboldTick,
+                xitalicTick,
+                xaxisStatus,
+            } = xAxisConfig;
+            let {
+                ylabel,
+                yboldLabel,
+                yitalicLabel,
+                yboldTick,
+                yitalicTick,
+                yaxisStatus,
+            } = yAxisConfig;
+            window.yboldLabel = yboldLabel;
+            window.xboldLabel = xboldLabel;
+            window.xitalicLabel = xitalicLabel;
+            window.yitalicLabel = yitalicLabel;
+            if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                [xAxisLabel, yAxisLabel] = data[2];
+            } else {
+                [xAxisLabel, yAxisLabel] = [
+                    xAxisConfig.xlabel,
+                    yAxisConfig.ylabel,
+                ];
+            }
 
             d3.selectAll("#my_dataviz").html("");
             d3.selectAll("#yAxisDiv").html("");
@@ -990,7 +1090,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                toolTip.textColumn2 +
+                                toolTip.colorData +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -998,7 +1098,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                toolTip.colorData +
+                                toolTip.textColumn2 +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
@@ -1083,12 +1183,26 @@
             d3.selectAll("#yAxisDiv text")
                 .attr("font-size", yTickfontSize)
                 .attr("font-family", yTickfontFamily)
+                .attr("font-weight", yboldTick ? "bold" : "regular")
+                .attr("font-style", yitalicTick ? "italic" : "regular")
                 .attr("fill", yTickfontColor);
             d3.selectAll(".x-axis text")
                 .attr("font-size", xTickfontSize)
                 .attr("font-family", xTickfontFamily)
+                .attr("font-weight", xboldTick ? "bold" : "regular")
+                .attr("font-style", xitalicTick ? "italic" : "regular")
                 .attr("fill", xTickfontColor)
                 .attr("y", 6);
+            if (xaxisStatus) {
+                d3.selectAll("g .x-axis").attr("style", "display: block");
+            } else {
+                d3.selectAll("g .x-axis").attr("style", "display: none");
+            }
+            if (yaxisStatus) {
+                d3.selectAll("g .y-axis").attr("style", "display: block");
+            } else {
+                d3.selectAll("g .y-axis").attr("style", "display: none");
+            }
 
             setYaxisWidth();
 
@@ -1303,9 +1417,31 @@
 
         // window.addEventListener("resize", function () {
         //     window.clearChart && clearChart();
-        //     drawChart(data);
+        // drawChart(data, {
+        //     chartType: "FitWidth",
+        //     xAxisConfig: { xlabel: "Category" },
+        //     yAxisConfig: { ylabel: "Sales" },
+        //     dataColumns: {
+        //         xAxisColumnDetails: [
+        //             {
+        //                 itemName: "Category",
+        //                 itemType: "Categorical",
+        //                 dateFormat: "%Y",
+        //             },
+        //         ],
+        //         yAxisColumnDetails: [
+        //             {
+        //                 itemName: "Sales",
+        //                 itemType: "Numerical",
+        //                 dateFormat: "%Y",
+        //             },
+        //         ],
+        //         row3ColumnDetails: [],
+        //         colorByData: [
+        //             { columnName: "Sub_Category", itemType: "Categorical" },
+        //         ],
+        //     },
         // });
-
-        
+        // });
     </script>
 </body>
