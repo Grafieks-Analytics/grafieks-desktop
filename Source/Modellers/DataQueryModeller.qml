@@ -1173,8 +1173,8 @@ Page {
                 id: radio_live
                 radio_text: qsTr("Live")
                 radio_checked: false
-                enabled: false
-                visible: false
+                enabled: true
+                visible: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onLiveSelected()

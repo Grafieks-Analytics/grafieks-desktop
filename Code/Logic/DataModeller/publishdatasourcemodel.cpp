@@ -42,16 +42,16 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
 
 
         QJsonObject obj;
-        obj.insert("ProfileID", profileId);
-        obj.insert("SchedulerID", schedulerId);
-        obj.insert("DatasourceName", dsName);
-        obj.insert("Description", description);
-        obj.insert("Image", base64Image);
-        obj.insert("Filename", filename);
-        obj.insert("SourceType", sourceType);
-        obj.insert("ColumnName", extractColumnName);
-        obj.insert("IsFullExtract", isFullExtract);
-        obj.insert("FileData", base64Image);
+        obj.insert("profileId", profileId);
+        obj.insert("schedulerId", schedulerId);
+        obj.insert("datasourceName", dsName);
+        obj.insert("description", description);
+        obj.insert("image", base64Image);
+        obj.insert("fileName", filename);
+        obj.insert("sourceType", sourceType);
+        obj.insert("columnName", extractColumnName);
+        obj.insert("isFullExtract", isFullExtract);
+        obj.insert("inMemory", true);
 
 
         QJsonDocument doc(obj);

@@ -55,11 +55,6 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
-
-    Component.onCompleted: {
-        SchedulerDS.fetchSchedulers()
-    }
-
     Connections{
         target: TableSchemaModel
 
@@ -79,6 +74,11 @@ Popup {
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    Component.onCompleted: {
+        SchedulerDS.fetchSchedulers()
+        DSParamsModel.setSchedulerId(0)
+    }
 
 
     function closePopup(){
@@ -102,7 +102,13 @@ Popup {
     }
 
     function onSchedulerIndexChanged(currentValue, currentText, currentIndex){
-        DSParamsModel.setSchedulerId(currentValue)
+        if(currentValue === "undefined"){
+            DSParamsModel.setSchedulerId(0)
+        } else {
+            DSParamsModel.setSchedulerId(currentValue)
+        }
+
+
     }
 
     function onIncrementalIndexChanged(currentText, currentIndex){
