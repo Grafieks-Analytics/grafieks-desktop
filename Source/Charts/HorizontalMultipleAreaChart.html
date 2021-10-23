@@ -702,7 +702,7 @@
                     xitalicLabel,
                     xboldTick,
                     xitalicTick,
-                    xvisible,
+                    xaxisStatus,
                 } = xAxisConfig;
                 let {
                     ylabel,
@@ -710,7 +710,7 @@
                     yitalicLabel,
                     yboldTick,
                     yitalicTick,
-                    yvisible,
+                    yaxisStatus,
                 } = yAxisConfig;
                 window.yboldLabel = yboldLabel;
                 window.xboldLabel = xboldLabel;
@@ -1472,6 +1472,16 @@
                     .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
 
                 if (chartType == constants.chartType.FIT_HEIGHT) {
                     removeAxisTicks(
