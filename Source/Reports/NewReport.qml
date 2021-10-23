@@ -508,7 +508,7 @@ Page {
                 // console.log(chartTitle);
 
                 // switch(chartTitle){
-                //     case Constants.horizontalStackedBarChartTitle:
+                //     case Constants.horizontalFedBarChartTitle:
                 //     case Constants.stackedBarChartTitle:
                 //         switchChart(Constants.barChartTitle);
                 //         break;

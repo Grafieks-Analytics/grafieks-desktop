@@ -640,7 +640,7 @@
                 var color = d3.scaleOrdinal().domain(res).range(d3Colors);
 
                 setLabel(
-                    xAxisLabel,
+                    yAxisLabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -649,7 +649,7 @@
                     y_pos_x_label,
                     false
                 );
-                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
+                setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
                 // Draw the line
                 svg.selectAll(".line")
                     .data(sumstat)
