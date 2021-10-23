@@ -5,497 +5,27 @@
         <meta charset="utf-8" />
         <title>Table</title>
 
-        <script src="./Data/jquery-3.5.1.min.js"></script>
-        <script src="./Data/dataTables.min.js"></script>
-
-        <script src="./Data/dataTables.semanticui.min.js"></script>
-        <script src="./Data/semantic.min.js"></script>
-
-        <link rel="stylesheet" href="Data/semantic.min.css" />
-        <link rel="stylesheet" href="Data/semantic-icons.css" />
-        <link rel="stylesheet" href="Data/dataTables.semanticui.min.css" />
         <script src="./Data/d3DefaultConfig.js"></script>
 
-
+        <link href="./Data/tabulator.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="./Data/tabulator.min.js"></script>
+        <link rel="stylesheet" href="./Data/tabulator_style.css" />
         <script src="./Data/utils.js"></script>
 
         <style>
-            .dataTables_scrollBody {
-                height: auto !important;
+            body {
+                margin: 0px;
+                padding: 0px;
             }
-
-            th {
-                text-transform: capitalize !important;
+            #my_dataviz {
+                margin-top: -4px;
             }
         </style>
     </head>
 
     <body>
-        <div id="my_dataviz" style="padding: 10px"></div>
-
+        <div id="my_dataviz" style="padding: 0 10px"></div>
         <script>
-            var data = [
-                [
-                    [
-                        "Tiger Nixon",
-                        "System Architect",
-                        "Edinburgh",
-                        "61",
-                        "2011/04/25",
-                        "$320,800",
-                    ],
-                    [
-                        "Garrett Winters",
-                        "Accountant",
-                        "Tokyo",
-                        "63",
-                        "2011/07/25",
-                        "$170,750",
-                    ],
-                    [
-                        "Ashton Cox",
-                        "Junior Technical Author",
-                        "San Francisco",
-                        "66",
-                        "2009/01/12",
-                        "$86,000",
-                    ],
-                    [
-                        "Cedric Kelly",
-                        "Senior Javascript Developer",
-                        "Edinburgh",
-                        "22",
-                        "2012/03/29",
-                        "$433,060",
-                    ],
-                    [
-                        "Airi Satou",
-                        "Accountant",
-                        "Tokyo",
-                        "33",
-                        "2008/11/28",
-                        "$162,700",
-                    ],
-                    [
-                        "Brielle Williamson",
-                        "Integration Specialist",
-                        "New York",
-                        "61",
-                        "2012/12/02",
-                        "$372,000",
-                    ],
-                    [
-                        "Herrod Chandler",
-                        "Sales Assistant",
-                        "San Francisco",
-                        "59",
-                        "2012/08/06",
-                        "$137,500",
-                    ],
-                    [
-                        "Rhona Davidson",
-                        "Integration Specialist",
-                        "Tokyo",
-                        "55",
-                        "2010/10/14",
-                        "$327,900",
-                    ],
-                    [
-                        "Colleen Hurst",
-                        "Javascript Developer",
-                        "San Francisco",
-                        "39",
-                        "2009/09/15",
-                        "$205,500",
-                    ],
-                    [
-                        "Sonya Frost",
-                        "Software Engineer",
-                        "Edinburgh",
-                        "23",
-                        "2008/12/13",
-                        "$103,600",
-                    ],
-                    [
-                        "Jena Gaines",
-                        "Office Manager",
-                        "London",
-                        "30",
-                        "2008/12/19",
-                        "$90,560",
-                    ],
-                    [
-                        "Quinn Flynn",
-                        "Support Lead",
-                        "Edinburgh",
-                        "22",
-                        "2013/03/03",
-                        "$342,000",
-                    ],
-                    [
-                        "Charde Marshall",
-                        "Regional Director",
-                        "San Francisco",
-                        "36",
-                        "2008/10/16",
-                        "$470,600",
-                    ],
-                    [
-                        "Haley Kennedy",
-                        "Senior Marketing Designer",
-                        "London",
-                        "43",
-                        "2012/12/18",
-                        "$313,500",
-                    ],
-                    [
-                        "Tatyana Fitzpatrick",
-                        "Regional Director",
-                        "London",
-                        "19",
-                        "2010/03/17",
-                        "$385,750",
-                    ],
-                    [
-                        "Michael Silva",
-                        "Marketing Designer",
-                        "London",
-                        "66",
-                        "2012/11/27",
-                        "$198,500",
-                    ],
-                    [
-                        "Paul Byrd",
-                        "Chief Financial Officer (CFO)",
-                        "New York",
-                        "64",
-                        "2010/06/09",
-                        "$725,000",
-                    ],
-                    [
-                        "Gloria Little",
-                        "Systems Administrator",
-                        "New York",
-                        "59",
-                        "2009/04/10",
-                        "$237,500",
-                    ],
-                    [
-                        "Bradley Greer",
-                        "Software Engineer",
-                        "London",
-                        "41",
-                        "2012/10/13",
-                        "$132,000",
-                    ],
-                    [
-                        "Dai Rios",
-                        "Personnel Lead",
-                        "Edinburgh",
-                        "35",
-                        "2012/09/26",
-                        "$217,500",
-                    ],
-                    [
-                        "Jenette Caldwell",
-                        "Development Lead",
-                        "New York",
-                        "30",
-                        "2011/09/03",
-                        "$345,000",
-                    ],
-                    [
-                        "Yuri Berry",
-                        "Chief Marketing Officer (CMO)",
-                        "New York",
-                        "40",
-                        "2009/06/25",
-                        "$675,000",
-                    ],
-                    [
-                        "Caesar Vance",
-                        "Pre-Sales Support",
-                        "New York",
-                        "21",
-                        "2011/12/12",
-                        "$106,450",
-                    ],
-                    [
-                        "Doris Wilder",
-                        "Sales Assistant",
-                        "Sydney",
-                        "23",
-                        "2010/09/20",
-                        "$85,600",
-                    ],
-                    [
-                        "Angelica Ramos",
-                        "Chief Executive Officer (CEO)",
-                        "London",
-                        "47",
-                        "2009/10/09",
-                        "$1,200,000",
-                    ],
-                    [
-                        "Gavin Joyce",
-                        "Developer",
-                        "Edinburgh",
-                        "42",
-                        "2010/12/22",
-                        "$92,575",
-                    ],
-                    [
-                        "Jennifer Chang",
-                        "Regional Director",
-                        "Singapore",
-                        "28",
-                        "2010/11/14",
-                        "$357,650",
-                    ],
-                    [
-                        "Brenden Wagner",
-                        "Software Engineer",
-                        "San Francisco",
-                        "28",
-                        "2011/06/07",
-                        "$206,850",
-                    ],
-                    [
-                        "Fiona Green",
-                        "Chief Operating Officer (COO)",
-                        "San Francisco",
-                        "48",
-                        "2010/03/11",
-                        "$850,000",
-                    ],
-                    [
-                        "Shou Itou",
-                        "Regional Marketing",
-                        "Tokyo",
-                        "20",
-                        "2011/08/14",
-                        "$163,000",
-                    ],
-                    [
-                        "Michelle House",
-                        "Integration Specialist",
-                        "Sydney",
-                        "37",
-                        "2011/06/02",
-                        "$95,400",
-                    ],
-                    [
-                        "Suki Burks",
-                        "Developer",
-                        "London",
-                        "53",
-                        "2009/10/22",
-                        "$114,500",
-                    ],
-                    [
-                        "Prescott Bartlett",
-                        "Technical Author",
-                        "London",
-                        "27",
-                        "2011/05/07",
-                        "$145,000",
-                    ],
-                    [
-                        "Gavin Cortez",
-                        "Team Leader",
-                        "San Francisco",
-                        "22",
-                        "2008/10/26",
-                        "$235,500",
-                    ],
-                    [
-                        "Martena Mccray",
-                        "Post-Sales support",
-                        "Edinburgh",
-                        "46",
-                        "2011/03/09",
-                        "$324,050",
-                    ],
-                    [
-                        "Unity Butler",
-                        "Marketing Designer",
-                        "San Francisco",
-                        "47",
-                        "2009/12/09",
-                        "$85,675",
-                    ],
-                    [
-                        "Howard Hatfield",
-                        "Office Manager",
-                        "San Francisco",
-                        "51",
-                        "2008/12/16",
-                        "$164,500",
-                    ],
-                    [
-                        "Hope Fuentes",
-                        "Secretary",
-                        "San Francisco",
-                        "41",
-                        "2010/02/12",
-                        "$109,850",
-                    ],
-                    [
-                        "Vivian Harrell",
-                        "Financial Controller",
-                        "San Francisco",
-                        "62",
-                        "2009/02/14",
-                        "$452,500",
-                    ],
-                    [
-                        "Timothy Mooney",
-                        "Office Manager",
-                        "London",
-                        "37",
-                        "2008/12/11",
-                        "$136,200",
-                    ],
-                    [
-                        "Jackson Bradshaw",
-                        "Director",
-                        "New York",
-                        "65",
-                        "2008/09/26",
-                        "$645,750",
-                    ],
-                    [
-                        "Olivia Liang",
-                        "Support Engineer",
-                        "Singapore",
-                        "64",
-                        "2011/02/03",
-                        "$234,500",
-                    ],
-                    [
-                        "Bruno Nash",
-                        "Software Engineer",
-                        "London",
-                        "38",
-                        "2011/05/03",
-                        "$163,500",
-                    ],
-                    [
-                        "Sakura Yamamoto",
-                        "Support Engineer",
-                        "Tokyo",
-                        "37",
-                        "2009/08/19",
-                        "$139,575",
-                    ],
-                    [
-                        "Thor Walton",
-                        "Developer",
-                        "New York",
-                        "61",
-                        "2013/08/11",
-                        "$98,540",
-                    ],
-                    [
-                        "Finn Camacho",
-                        "Support Engineer",
-                        "San Francisco",
-                        "47",
-                        "2009/07/07",
-                        "$87,500",
-                    ],
-                    [
-                        "Serge Baldwin",
-                        "Data Coordinator",
-                        "Singapore",
-                        "64",
-                        "2012/04/09",
-                        "$138,575",
-                    ],
-                    [
-                        "Zenaida Frank",
-                        "Software Engineer",
-                        "New York",
-                        "63",
-                        "2010/01/04",
-                        "$125,250",
-                    ],
-                    [
-                        "Zorita Serrano",
-                        "Software Engineer",
-                        "San Francisco",
-                        "56",
-                        "2012/06/01",
-                        "$115,000",
-                    ],
-                    [
-                        "Jennifer Acosta",
-                        "Junior Javascript Developer",
-                        "Edinburgh",
-                        "43",
-                        "2013/02/01",
-                        "$75,650",
-                    ],
-                    [
-                        "Cara Stevens",
-                        "Sales Assistant",
-                        "New York",
-                        "46",
-                        "2011/12/06",
-                        "$145,600",
-                    ],
-                    [
-                        "Hermione Butler",
-                        "Regional Director",
-                        "London",
-                        "47",
-                        "2011/03/21",
-                        "$356,250",
-                    ],
-                    [
-                        "Lael Greer",
-                        "Systems Administrator",
-                        "London",
-                        "21",
-                        "2009/02/27",
-                        "$103,500",
-                    ],
-                    [
-                        "Jonas Alexander",
-                        "Developer",
-                        "San Francisco",
-                        "30",
-                        "2010/07/14",
-                        "$86,500",
-                    ],
-                    [
-                        "Shad Decker",
-                        "Regional Director",
-                        "Edinburgh",
-                        "51",
-                        "2008/11/13",
-                        "$183,000",
-                    ],
-                    [
-                        "Michael Bruce",
-                        "Javascript Developer",
-                        "Singapore",
-                        "29",
-                        "2011/06/27",
-                        "$183,000",
-                    ],
-                    [
-                        "Donna Snider",
-                        "Customer Support",
-                        "New York",
-                        "27",
-                        "2011/01/25",
-                        "$112,000",
-                    ],
-                ],
-                ["", "", "", "", "", "$ 4000"],
-                ["name", "position", "office", "age", "Start Date", "Salary"],
-            ];
             function generateNewTr(row, type = "td") {
                 var tr = document.createElement("tr");
                 var rowValues = Object.values(row);
@@ -540,13 +70,13 @@
             }
             function grandTotalStatus(totalStatus) {
                 if (totalStatus) {
-                    document.querySelectorAll("tfoot").forEach((e) =>{e.style.display =
-                        "table-footer-group";
-                    })
+                    document.querySelectorAll("tfoot").forEach((e) => {
+                        e.style.display = "table-footer-group";
+                    });
                 } else {
-                    document.querySelectorAll("tfoot").forEach(e =>{e.style.display =
-                        "none";
-                    })
+                    document.querySelectorAll("tfoot").forEach((e) => {
+                        e.style.display = "none";
+                    });
                 }
             }
             function searchToggle(searchStatus) {
@@ -562,16 +92,16 @@
             function init() {
                 document.querySelector(
                     "#my_dataviz"
-                ).innerHTML = `<table id="example" class="ui celled table" style="width: 100%">
+                ).innerHTML = `<table id="example" class="ui celled table very compact">
                             <thead></thead>
                             <tbody></tbody>
                             <tfoot></tfoot>
                         </table>`;
 
-                removeCellBorder();
-                removeHoverBackground();
-                removeRowAlternateColor();
-                setCompact(false);
+                // removeCellBorder();
+                // removeHoverBackground();
+                // removeRowAlternateColor();
+                // setCompact(false);
             }
 
             function clearChart() {
@@ -603,8 +133,8 @@
                     totalStatus = defaultGrandTotalStatus,
                 } = plotConfiguration;
 
-                addHeader();
-                addFooter();
+                // addHeader();
+                // addFooter();
 
                 if (!cellBorderStatus) {
                     removeCellBorder();
@@ -627,27 +157,143 @@
                 setCompact(compactStatus);
                 grandTotalStatus(totalStatus);
 
-                window.dataTableValues = createBatches(data[0], batchSize);
+                // window.dataTableValues = createBatches(data[0], batchSize);
                 window.counter = 0;
 
-                window.tableInstance = $("#example").DataTable({
-                    scrollY: "calc(100vh - 180px)",
-                    bPaginate: false,
-                    scroller: {
-                        loadingIndicator: true,
-                    },
-                    scroller: true,
-                    deferRender: true,
-                    data: window.dataTableValues[window.counter++],
-                    bInfo: false,
-                });
+                //custom max min header filter
+                //custom max min header filter
+                var minMaxFilterEditor = function (
+                    cell,
+                    onRendered,
+                    success,
+                    cancel,
+                    editorParams
+                ) {
+                    var end;
 
-                setLazyLoadHandler();
-                searchToggle(searchStatus);
+                    var container = document.createElement("span");
+
+                    //create and style inputs
+                    var start = document.createElement("input");
+                    start.setAttribute("type", "number");
+                    start.setAttribute("placeholder", "Min");
+
+                    start.style.padding = "4px";
+                    start.style.width = "50%";
+                    start.style.boxSizing = "border-box";
+
+                    start.value = cell.getValue();
+
+                    function buildValues() {
+                        success({
+                            start: start.value,
+                            end: end.value,
+                        });
+                    }
+
+                    function keypress(e) {
+                        if (e.keyCode == 13) {
+                            buildValues();
+                        }
+
+                        if (e.keyCode == 27) {
+                            cancel();
+                        }
+                    }
+
+                    end = start.cloneNode();
+                    end.setAttribute("placeholder", "Max");
+
+                    start.addEventListener("change", buildValues);
+                    start.addEventListener("blur", buildValues);
+                    start.addEventListener("keydown", keypress);
+
+                    end.addEventListener("change", buildValues);
+                    end.addEventListener("blur", buildValues);
+                    end.addEventListener("keydown", keypress);
+
+                    container.appendChild(start);
+                    container.appendChild(end);
+
+                    return container;
+                };
+
+                //custom max min filter function
+                function minMaxFilterFunction(
+                    headerValue,
+                    rowValue,
+                    rowData,
+                    filterParams
+                ) {
+                    //headerValue - the value of the header filter element
+                    //rowValue - the value of the column in this row
+                    //rowData - the data for the row being filtered
+                    //filterParams - params object passed to the headerFilterFuncParams property
+
+                    if (rowValue) {
+                        if (headerValue.start != "") {
+                            if (headerValue.end != "") {
+                                return (
+                                    rowValue >= headerValue.start &&
+                                    rowValue <= headerValue.end
+                                );
+                            } else {
+                                return rowValue >= headerValue.start;
+                            }
+                        } else {
+                            if (headerValue.end != "") {
+                                return rowValue <= headerValue.end;
+                            }
+                        }
+                    }
+
+                    return true; //must return a boolean, true if it passes the filter.
+                }
+
+                var table = new Tabulator("#example", {
+                    layout: "fitColumns",
+                    height: "calc(100vh - 26px)",
+                    movableColumns: true,
+                    columns: data[2].map((d, i) => {
+                        var obj = { title: d, field: d };
+                        if (data[1][i] !== "") {
+                            console.log("Value", data[1][i]);
+                            obj["bottomCalc"] = "sum";
+
+                            (obj.headerFilter = minMaxFilterEditor),
+                                (obj.headerFilterFunc = minMaxFilterFunction);
+                            obj.headerFilterLiveFilter = false;
+                        } else {
+                            obj.headerFilter = "input";
+                        }
+                        return obj;
+                    }),
+                });
+                // var tableData = [
+                //     {id:1, name:"Billy Bob", age:"12", gender:"male", height:1, col:"red", dob:"", cheese:1},
+                //     {id:2, name:"Mary May", age:"1", gender:"female", height:2, col:"blue", dob:"14/05/1982", cheese:true},
+                // ]
+
+                table.setData(data[0]);
+
+                // window.tableInstance = $("#example").DataTable({
+                //     scrollY: "calc(100vh - 180px)",
+                //     bPaginate: false,
+                //     // scroller: {
+                //     //     loadingIndicator: true,
+                //     // },
+                //     scroller: true,
+                //     deferRender: true,
+                //     data: window.dataTableValues[window.counter++],
+                //     bInfo: false,
+                //     responsive: false
+                // });
+
+                // setLazyLoadHandler();
+                // searchToggle(searchStatus);
             }
 
-            // drawChart(data);
-            
+            drawChart(data);
 
             function updateTable() {
                 addDataToRow();
@@ -688,7 +334,7 @@
                 var styleTag = document.createElement("style");
                 styleTag.id = "alternateRow";
                 styleTag.innerHTML =
-                    "tr:nth-child(even) { background-color: #d9d9d933; }";
+                    ".tabulator-row-odd { background-color: #d9d9d933; }";
                 document.head.appendChild(styleTag);
             }
 

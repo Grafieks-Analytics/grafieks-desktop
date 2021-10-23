@@ -586,7 +586,10 @@ Item{
 
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(parseInt(newItem.objectName));
-        setReportName(reportProperties.reportTitle);
+        if(!DashboardParamsModel.getReportName(dashboardId, newItem.objectName)){
+            DashboardParamsModel.setReportName(dashboardId, newItem.objectName, reportProperties.reportTitle)
+        }
+        setReportName(DashboardParamsModel.getReportName(dashboardId, newItem.objectName));
         console.log("Chart title", reportProperties, reportProperties.reportTitle);
         console.log("Chart title xe")
         drawChart(reportProperties);

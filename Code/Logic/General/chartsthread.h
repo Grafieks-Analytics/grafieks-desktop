@@ -86,15 +86,14 @@ public slots:
     void getTreeChartValues(); // getTreeSunburstValues
     void getTreeMapChartValues(); // getTreeSunburstValues
     void getKPIChartValues(); // float
-    void getTableChartValues(); // getTablePivotValues
-    void getPivotChartValues(); // getTablePivotValues
+    void getTableChartValues();
+    void getPivotChartValues();
     void getStackedAreaChartValues(); // getStackedBarAreaValues
     void getMultiLineChartValues();
 
     void getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn, QString identifier = "");
     void getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier = "");
     void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
-    void getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn, QString identifier = "");
 
 private:
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryFunction(QString mainQuery);
@@ -130,7 +129,6 @@ signals:
     void signalLineAreaWaterfallValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalTreeSunburstValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalStackedBarAreaValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalTablePivotValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
 
 };
 

@@ -159,7 +159,7 @@ Rectangle{
         
         var chartPropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         var {   
-                dataColumns, yAxisConfig = {}, xAxisConfig = {}, xLabelfontSize, xTickfontSize, yLabelfontSize, yTickfontSize, 
+                dataColumns = {}, yAxisConfig = {}, xAxisConfig = {}, xLabelfontSize, xTickfontSize, yLabelfontSize, yTickfontSize,
                 xLabelfontFamily, yLabelfontFamily, xTickfontFamily, yTickfontFamily,
                 xLabelfontColor, yLabelfontColor, xTickfontColor, yTickfontColor
             } = chartPropertyConfig || {};
