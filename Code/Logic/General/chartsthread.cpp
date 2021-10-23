@@ -1144,12 +1144,400 @@ void ChartsThread::getKPIChartValues()
 
 void ChartsThread::getTableChartValues()
 {
-    this->getTablePivotValues(xAxisColumnList, yAxisColumnList, "getTableChartValues");
+    QJsonArray data;
+    QString masterKeyword;
+    QVariantList masterTotal;
+    QVariantList masterOutput;
+    QMap<QString, QMap<QString, QString>> dateConversionParams;
+
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
+    QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
+    QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+
+    // Process date conversions, if any
+    foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
+
+        QMap<QString, QString> itemDetails;
+        QJsonObject dateConversionObj = dateConversionValue.toObject();
+
+        itemDetails.insert("separator", dateConversionObj.value("separator").toString());
+        itemDetails.insert("formats", dateConversionObj.value("dateFormat").toString());
+
+        QString columnName = dateConversionObj.value("itemName").toString();
+        dateConversionParams.insert(columnName, itemDetails);
+    }
+
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+
+
+    QString xQueryString =  "SELECT ";
+    foreach(QVariant xCols, xAxisColumnList){
+        xQueryString += "\"" + xCols.toString() + "\", ";
+    }
+
+    xQueryString.chop(2);
+    xQueryString += " FROM " + tableName;
+
+    QString yQueryString =  "SELECT ";
+    foreach(QVariant yCols, yAxisColumnList){
+        yQueryString += "\"" + yCols.toString() + "\", ";
+    }
+
+    yQueryString.chop(2);
+    yQueryString += " FROM " + tableName;
+
+    auto xDataList = this->queryFunction(xQueryString);
+    auto yDataList = this->queryFunction(yQueryString);
+
+
+    QStringList xAxisData;
+    QStringList yAxisData;
+
+    QVariantMap tmpData;
+    QJsonArray colData;
+    int index;
+
+    QJsonArray columns;
+    QVector<int> xKey;
+    QVector<int> yKey;
+    int xAxisLength;
+    int yAxisLength;
+
+    int totalRows = xDataList->collection.Count();
+
+    xAxisLength = xAxisColumnList.length();
+    yAxisLength = yAxisColumnList.length();
+
+    // Fetch data from db
+    try{
+        for(int i = 0; i < xAxisLength; i++){
+            QStringList data;
+            for(int j = 0; j < totalRows; j++){
+
+                QString columnName = xAxisColumnList.at(i).toString();
+                QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                if(dateConversionParams.contains(columnName)){
+
+                    QString convertedDate;
+                    QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                    foreach(QString format, list){
+                        QDateTime dateTime = QDateTime::fromString(xDataList->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
+
+                        if(format.toLower() == "day"){
+                            convertedDate += QString::number(dateTime.date().day()) + separator;
+                        } else if(format.toLower() == "month"){
+                            convertedDate += dateTime.date().toString("MMM")  + separator;
+                        } else {
+                            convertedDate += QString::number(dateTime.date().year())  + separator;
+                        }
+                    }
+
+                    convertedDate.chop(separator.length());
+                    data.append(convertedDate);
+
+                } else {
+                    data.append(xDataList->GetValue(i, j).ToString().c_str());
+                }
+            }
+
+            xAxisDataPointer->insert(i, data);
+
+            // Append to output columns -- all x axis names
+            columns.append(xAxisColumnList.at(i).toString());
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    try{
+        for(int i = 0; i < yAxisLength; i++){
+            QStringList data;
+            for(int j = 0; j < totalRows; j++)
+                data.append(yDataList->GetValue(i, j).ToString().c_str());
+
+            yAxisDataPointer->insert(i, data);
+
+            // Append to output columns -- all y axis names
+            columns.append(yAxisColumnList.at(i).toString());
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    // Actual values
+    try{
+        int counter = 0;
+        for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
+
+            tmpData.clear();
+            masterKeyword.clear();
+
+            for(int j = 0; j < xAxisLength; j++){
+                masterKeyword.append(xAxisDataPointer->value(j).at(i));
+            }
+
+            if(!uniqueHashKeywords->contains(masterKeyword)){
+                uniqueHashKeywords->insert(masterKeyword, counter);
+                counter++;
+
+                for(int j = 0; j < xAxisLength; j++){
+                    tmpData.insert(xAxisColumnList.at(j).toString(), xAxisDataPointer->value(j).at(i));
+                }
+
+                for(int j = 0; j < yAxisLength; j++){
+                    tmpData.insert(yAxisColumnList.at(j).toString(), yAxisDataPointer->value(j).at(i).toFloat());
+                    if(masterTotal.length() < yAxisLength){
+                        masterTotal.append(yAxisDataPointer->value(j).at(i).toFloat());
+                    } else{
+                        masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    }
+                }
+
+                colData.append(QJsonObject::fromVariantMap(tmpData));
+
+            } else{
+
+                index = uniqueHashKeywords->value(masterKeyword);
+                tmpData = colData.at(index).toObject().toVariantMap();
+
+                for(int j = 0; j < yAxisLength; j++){
+                    float tmpVal = tmpData.value(yAxisColumnList.at(j).toString()).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    tmpData.insert(yAxisColumnList.at(j).toString(), tmpVal);
+                    masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                }
+                colData.replace(index, QJsonObject::fromVariantMap(tmpData));
+            }
+
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+
+    // Master total
+    for(int i = 0; i < xAxisLength; i++){
+        masterOutput.append("");
+    }
+
+    for(int i = 0; i < yAxisLength; i++){
+        masterOutput.append(masterTotal.at(i).toFloat());
+    }
+
+
+    data.append(colData);
+    data.append(QJsonArray::fromVariantList(masterOutput));
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+
 }
 
 void ChartsThread::getPivotChartValues()
 {
-    this->getTablePivotValues(xAxisColumnList, yAxisColumnList, "getPivotChartValues");
+
+    QJsonArray data;
+    QString masterKeyword;
+    QVariantList masterTotal;
+    QVariantList masterOutput;
+    QMap<QString, QMap<QString, QString>> dateConversionParams;
+
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
+    QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
+    QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+
+    // Process date conversions, if any
+    foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
+
+        QMap<QString, QString> itemDetails;
+        QJsonObject dateConversionObj = dateConversionValue.toObject();
+
+        itemDetails.insert("separator", dateConversionObj.value("separator").toString());
+        itemDetails.insert("formats", dateConversionObj.value("dateFormat").toString());
+
+        QString columnName = dateConversionObj.value("itemName").toString();
+        dateConversionParams.insert(columnName, itemDetails);
+    }
+
+    // Fetch data from extract
+    QString tableName = this->getTableName();
+
+
+    QString xQueryString =  "SELECT ";
+    foreach(QVariant xCols, xAxisColumnList){
+        xQueryString += "\"" + xCols.toString() + "\", ";
+    }
+
+    xQueryString.chop(2);
+    xQueryString += " FROM " + tableName;
+
+    QString yQueryString =  "SELECT ";
+    foreach(QVariant yCols, yAxisColumnList){
+        yQueryString += "\"" + yCols.toString() + "\", ";
+    }
+
+    yQueryString.chop(2);
+    yQueryString += " FROM " + tableName;
+
+    auto xDataList = this->queryFunction(xQueryString);
+    auto yDataList = this->queryFunction(yQueryString);
+
+
+    QStringList xAxisData;
+    QStringList yAxisData;
+
+    QVariantList tmpData;
+    QJsonArray colData;
+    int index;
+
+    QJsonArray columns;
+    QVector<int> xKey;
+    QVector<int> yKey;
+    int xAxisLength;
+    int yAxisLength;
+
+    int totalRows = xDataList->collection.Count();
+
+    xAxisLength = xAxisColumnList.length();
+    yAxisLength = yAxisColumnList.length();
+
+    // Fetch data from db
+    try{
+        for(int i = 0; i < xAxisLength; i++){
+            QStringList data;
+            for(int j = 0; j < totalRows; j++){
+
+                QString columnName = xAxisColumnList.at(i).toString();
+                QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                if(dateConversionParams.contains(columnName)){
+
+                    QString convertedDate;
+                    QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                    foreach(QString format, list){
+                        QDateTime dateTime = QDateTime::fromString(xDataList->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
+
+                        if(format.toLower() == "day"){
+                            convertedDate += QString::number(dateTime.date().day()) + separator;
+                        } else if(format.toLower() == "month"){
+                            convertedDate += dateTime.date().toString("MMM")  + separator;
+                        } else {
+                            convertedDate += QString::number(dateTime.date().year())  + separator;
+                        }
+                    }
+
+                    convertedDate.chop(separator.length());
+                    data.append(convertedDate);
+
+                } else {
+                    data.append(xDataList->GetValue(i, j).ToString().c_str());
+                }
+            }
+
+            xAxisDataPointer->insert(i, data);
+
+            // Append to output columns -- all x axis names
+            columns.append(xAxisColumnList.at(i).toString());
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    try{
+        for(int i = 0; i < yAxisLength; i++){
+            QStringList data;
+            for(int j = 0; j < totalRows; j++)
+                data.append(yDataList->GetValue(i, j).ToString().c_str());
+
+            yAxisDataPointer->insert(i, data);
+
+            // Append to output columns -- all y axis names
+            columns.append(yAxisColumnList.at(i).toString());
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    // Actual values
+    try{
+        int counter = 0;
+        for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
+
+            tmpData.clear();
+            masterKeyword.clear();
+
+            for(int j = 0; j < xAxisLength; j++){
+                masterKeyword.append(xAxisDataPointer->value(j).at(i));
+            }
+
+
+            if(!uniqueHashKeywords->contains(masterKeyword)){
+                uniqueHashKeywords->insert(masterKeyword, counter);
+                counter++;
+
+                for(int j = 0; j < xAxisLength; j++){
+                    tmpData.append(xAxisDataPointer->value(j).at(i));
+                }
+
+                for(int j = 0; j < yAxisLength; j++){
+                    tmpData.append(yAxisDataPointer->value(j).at(i).toFloat());
+                    if(masterTotal.length() < yAxisLength){
+                        masterTotal.append(yAxisDataPointer->value(j).at(i).toFloat());
+                    } else{
+                        masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    }
+                }
+
+                colData.append(QJsonArray::fromVariantList(tmpData));
+
+            } else{
+
+                index = uniqueHashKeywords->value(masterKeyword);
+                tmpData.append(colData.at(index).toArray().toVariantList());
+
+                for(int j = 0; j < yAxisLength; j++){
+                    tmpData[xAxisLength + j] = tmpData[xAxisLength + j].toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                }
+                colData.replace(index, QJsonArray::fromVariantList(tmpData));
+            }
+
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+
+    // Master total
+    for(int i = 0; i < xAxisLength; i++){
+        masterOutput.append("");
+    }
+
+    for(int i = 0; i < yAxisLength; i++){
+        masterOutput.append(masterTotal.at(i).toFloat());
+    }
+
+
+    data.append(colData);
+    data.append(QJsonArray::fromVariantList(masterOutput));
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getStackedAreaChartValues()
@@ -1650,212 +2038,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         } else{
             emit signalStackedBarAreaValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
         }
-
-}
-
-void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn, QString identifier)
-{
-
-    QJsonArray data;
-    QString masterKeyword;
-    QVariantList masterTotal;
-    QVariantList masterOutput;
-    QMap<QString, QMap<QString, QString>> dateConversionParams;
-
-    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
-    QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
-    QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
-
-    // Process date conversions, if any
-    foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
-
-        QMap<QString, QString> itemDetails;
-        QJsonObject dateConversionObj = dateConversionValue.toObject();
-
-        itemDetails.insert("separator", dateConversionObj.value("separator").toString());
-        itemDetails.insert("formats", dateConversionObj.value("dateFormat").toString());
-
-        QString columnName = dateConversionObj.value("itemName").toString();
-        dateConversionParams.insert(columnName, itemDetails);
-    }
-
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-
-
-    QString xQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumn){
-        xQueryString += "\"" + xCols.toString() + "\", ";
-    }
-
-    xQueryString.chop(2);
-    xQueryString += " FROM " + tableName;
-
-    QString yQueryString =  "SELECT ";
-    foreach(QVariant xCols, yAxisColumn){
-        yQueryString += "\"" + xCols.toString() + "\", ";
-    }
-
-    yQueryString.chop(2);
-    yQueryString += " FROM " + tableName;
-
-    auto xDataList = this->queryFunction(xQueryString);
-    auto yDataList = this->queryFunction(yQueryString);
-
-
-    QStringList xAxisData;
-    QStringList yAxisData;
-
-    QVariantList tmpData;
-    QJsonArray colData;
-    int index;
-
-    QJsonArray columns;
-    QVector<int> xKey;
-    QVector<int> yKey;
-    int xAxisLength;
-    int yAxisLength;
-
-    int totalRows = xDataList->collection.Count();
-
-    xAxisLength = xAxisColumn.length();
-    yAxisLength = yAxisColumn.length();
-
-    // Fetch data from db
-    try{
-        for(int i = 0; i < xAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++){
-
-                QString columnName = xAxisColumn.at(i).toString();
-                QString separator = dateConversionParams.value(columnName).value("separator");
-
-
-                if(dateConversionParams.contains(columnName)){
-
-                    QString convertedDate;
-                    QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
-
-                    foreach(QString format, list){
-                        QDateTime dateTime = QDateTime::fromString(xDataList->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
-
-                        if(format.toLower() == "day"){
-                            convertedDate += QString::number(dateTime.date().day()) + separator;
-                        } else if(format.toLower() == "month"){
-                            convertedDate += dateTime.date().toString("MMM")  + separator;
-                        } else {
-                            convertedDate += QString::number(dateTime.date().year())  + separator;
-                        }
-                    }
-
-                    convertedDate.chop(separator.length());
-                    data.append(convertedDate);
-
-                } else {
-                    data.append(xDataList->GetValue(i, j).ToString().c_str());
-                }
-            }
-
-            xAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all x axis names
-            columns.append(xAxisColumn.at(i).toString());
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    try{
-        for(int i = 0; i < yAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++)
-                data.append(yDataList->GetValue(i, j).ToString().c_str());
-
-            yAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all y axis names
-            columns.append(yAxisColumn.at(i).toString());
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    // Actual values
-    try{
-        int counter = 0;
-        for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
-
-            tmpData.clear();
-            masterKeyword.clear();
-
-            for(int j = 0; j < xAxisLength; j++){
-                masterKeyword.append(xAxisDataPointer->value(j).at(i));
-            }
-
-
-            if(!uniqueHashKeywords->contains(masterKeyword)){
-                uniqueHashKeywords->insert(masterKeyword, counter);
-                counter++;
-
-                for(int j = 0; j < xAxisLength; j++){
-                    tmpData.append(xAxisDataPointer->value(j).at(i));
-                }
-
-                for(int j = 0; j < yAxisLength; j++){
-                    tmpData.append(yAxisDataPointer->value(j).at(i).toFloat());
-                    if(masterTotal.length() < yAxisLength){
-                        masterTotal.append(yAxisDataPointer->value(j).at(i).toFloat());
-                    } else{
-                        masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
-                    }
-                }
-
-                colData.append(QJsonArray::fromVariantList(tmpData));
-
-            } else{
-
-                index = uniqueHashKeywords->value(masterKeyword);
-                tmpData.append(colData.at(index).toArray().toVariantList());
-
-                for(int j = 0; j < yAxisLength; j++){
-                    tmpData[xAxisLength + j] = tmpData[xAxisLength + j].toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
-                    masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
-                }
-                colData.replace(index, QJsonArray::fromVariantList(tmpData));
-            }
-
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-
-    // Master total
-    for(int i = 0; i < xAxisLength; i++){
-        masterOutput.append("");
-    }
-
-    for(int i = 0; i < yAxisLength; i++){
-        masterOutput.append(masterTotal.at(i).toFloat());
-    }
-
-
-    data.append(colData);
-    data.append(QJsonArray::fromVariantList(masterOutput));
-    data.append(columns);
-
-    QJsonDocument doc;
-    doc.setArray(data);
-
-    QString strData = doc.toJson(QJsonDocument::Compact);
-
-    if(identifier == "getTableChartValues"){
-        emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    } else if(identifier == "getPivotChartValues"){
-        emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    } else {
-        emit signalTablePivotValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
-    }
 
 }
 
