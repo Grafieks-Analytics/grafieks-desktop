@@ -287,22 +287,11 @@ Page {
             connectGrafieks1.visible = true
         } else{
             ProjectsListModel.fetchProjectList()
-            publishWorkbook.open()
+            publishWorkbookPopup.open()
         }
     }
 
-    function publishDatasourceNow(){
 
-        console.log("Publish datasource")
-        publishDs.open()
-
-    }
-
-    function publishWorkbookNow(){
-
-        console.log("Publish workbook")
-        publishWb.open()
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -313,23 +302,8 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
-
-    MessageDialog {
-        id: publishWorkbook
-        title: "Publish Dashboard"
-        icon: StandardIcon.Information
-        text: "Do you want to publish the datasource?"
-        standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: publishDatasourceNow()
-        onNo:publishWorkbookNow()
-    }
-
-    PublishDatasource{
-        id: publishDs
-    }
-
-    PublishWorkbook{
-        id: publishWb
+    SaveWorkbookPopup{
+        id: publishWorkbookPopup
     }
 
     // SubComponents Ends

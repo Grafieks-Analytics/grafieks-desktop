@@ -295,5 +295,6 @@
         <file>Source/MainSubComponents/SaveExtract.qml</file>
         <file>Source/MainSubComponents/PublishWorkbook.qml</file>
         <file>Source/MainSubComponents/SaveWorkbook.qml</file>
+        <file>Source/Dashboards/SubComponents/SaveWorkbookPopup.qml</file>
     </qresource>
 </RCC>
