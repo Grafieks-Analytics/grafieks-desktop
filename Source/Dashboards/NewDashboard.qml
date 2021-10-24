@@ -281,11 +281,12 @@ Page {
         dashboardList.contentX = 0;
     }
 
-    function onPublishDashboardClicked(){
+    function onPublishWorkbookClicked(){
         // If already logged in, dont prompt
         if (typeof settings.value("user/sessionToken") == "undefined"){
             connectGrafieks1.visible = true
         } else{
+            ProjectsListModel.fetchProjectList()
             publishWorkbook.open()
         }
     }
@@ -300,6 +301,7 @@ Page {
     function publishWorkbookNow(){
 
         console.log("Publish workbook")
+        publishWb.open()
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -324,6 +326,10 @@ Page {
 
     PublishDatasource{
         id: publishDs
+    }
+
+    PublishWorkbook{
+        id: publishWb
     }
 
     // SubComponents Ends
@@ -802,7 +808,7 @@ Page {
                         anchors.centerIn: parent
                     }
 
-                    onClicked: onPublishDashboardClicked()
+                    onClicked: onPublishWorkbookClicked()
 
                     background: Rectangle{
                         color: Constants.grafieksLightGreenColor

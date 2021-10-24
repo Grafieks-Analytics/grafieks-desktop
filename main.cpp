@@ -56,6 +56,8 @@
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 #include "Code/Logic/Dashboards/tablecolumnsmodel.h"
+#include "Code/Logic/Dashboards/projectslistmodel.h"
+#include "Code/Logic/Dashboards/publishworkbookmodel.h"
 
 #include "Code/Logic/Readers/extractprocessor.h"
 #include "Code/Logic/Readers/liveprocessor.h"
@@ -311,6 +313,9 @@ int main(int argc, char *argv[])
     TableSchemaModel tableSchemaModel;
     NewTableColumnsModel newTableColumnsModel;
 
+    PublishWorkbookModel publishWorkbookModel;
+    ProjectsListModel projectsListModel;
+
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
     DatasourceDS *datasource = new DatasourceDS(&app);
@@ -478,6 +483,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
     engine.rootContext()->setContextProperty("ExtractProcessor", &extractProcessor);
     engine.rootContext()->setContextProperty("WorkbookProcessor", &workbookProcessor);
+    engine.rootContext()->setContextProperty("PublishWorkbookModel", &publishWorkbookModel);
+    engine.rootContext()->setContextProperty("ProjectsListModel", &projectsListModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
