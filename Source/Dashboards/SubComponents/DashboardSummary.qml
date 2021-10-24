@@ -147,14 +147,28 @@ Rectangle {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function isReportDropEligbile(){
+        if(listViewElem.itemName == "Text" || listViewElem.itemName == "Image" || listViewElem.itemName == "Blank"){
+            return true;
+        }
+        return !DashboardParamsModel.getDashboardReportMap(listViewElem.reportId)
+    }
+
 
 
     function onDropAreaEntered(drag){
-
-        dashboardArea.color = Constants.dropHighlightColor
+       dashboardArea.color = isReportDropEligbile() ? Constants.dropHighlightColor : Constants.dropIneligibleHighlightColor 
     }
 
     function onDropAreaDropped(drag){
+
+        var backgroundColor = DashboardParamsModel.getDashboardBackgroundColor(DashboardParamsModel.currentDashboard);
+        dashboardArea.color = backgroundColor ? backgroundColor : Constants.dashboardDefaultBackgroundColor
+        // check if the report is added
+        // don't allow the user to drop the repot 
+        if(!isReportDropEligbile()){
+            return;
+        }
         is_dashboard_blank = is_dashboard_blank + 1
 
         let x1 = drag.x

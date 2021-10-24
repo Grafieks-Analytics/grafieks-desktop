@@ -665,6 +665,9 @@
                     markerShape = defaultD3Config.defaultMarkerShape,
                     filledStatus = true,
                     markerStatus = defaultD3Config.defaultMarkerStatus,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -693,6 +696,43 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xaxisStatus,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yaxisStatus,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [yAxisLabel, xAxisLabel, colorData] = data[2];
+                } else {
+                    [yAxisLabel, xAxisLabel, colorData] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                        data[2][2],
+                    ];
+                }
+                // [xAxisLabel, yAxisLabel, colorData] = data[2];
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                        colorData: colorData,
+                    };
+                }
 
                 // var dataValues = data[0];
                 // dataValues = transformData(data, dateFormat);
@@ -702,7 +742,7 @@
                 d3Colors = d3colorPalette;
                 var [dataValues, lineMainCategories, allKeys, label] =
                     transformData(data[0], dataColumns, dateFormat, dateFormat);
-                [xAxisLabel, colorData, yAxisLabel] = data[2];
+                // [xAxisLabel, colorData, yAxisLabel] = data[2];
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
@@ -1330,7 +1370,7 @@
 
                             d3.select("#tooltip")
                                 // .style("left", x_pos + "px")
-                                .style("top", y_pos - 20 + "px")
+                                .style("top", y_pos - 70 + "px")
                                 // .style("top", y_pos + "px")
                                 .style("display", "block")
                                 // .html(xValue + ", " + yValue.toFixed(2));
@@ -1356,7 +1396,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        toolTip.textColumn2 +
+                                        toolTip.colorData +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -1364,7 +1404,7 @@
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        toolTip.colorData +
+                                        toolTip.textColumn2 +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
@@ -1405,7 +1445,7 @@
                             } else {
                                 d3.select("#tooltip").style(
                                     "left",
-                                    x_pos + 110 + 0 + "px"
+                                    x_pos + 155 + 0 + "px"
                                 );
 
                                 d3.select(".arrowTooltip").attr(
@@ -1419,6 +1459,8 @@
                 d3.selectAll(".y-axis g text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     // .attr("fill", "red")
                     .attr("fill", yTickfontColor)
                     .attr("x", -8);
@@ -1426,8 +1468,20 @@
                 d3.selectAll(".x-axis g text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
 
                 if (chartType == constants.chartType.FIT_HEIGHT) {
                     removeAxisTicks(
