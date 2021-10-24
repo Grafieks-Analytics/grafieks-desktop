@@ -79,8 +79,7 @@ Popup {
         target: ProjectsListModel
 
         function onSignalProjectList(projects){
-            console.log(JSON.stringify(projects))
-
+            projectsModel.clear()
             Object.keys(projects).forEach((projectName) => {
                                               projectsModel.append({projectName: projectName, projectId: projects[projectName]})
                                           })
