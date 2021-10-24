@@ -68,6 +68,7 @@ class DashboardParamsModel: public QObject
     Q_PROPERTY(int tmpCanvasHeight READ tmpCanvasHeight WRITE setTmpCanvasHeight NOTIFY tmpCanvasHeightChanged)
     Q_PROPERTY(int tmpCanvasWidth READ tmpCanvasWidth WRITE setTmpCanvasWidth NOTIFY tmpCanvasWidthChanged)
     Q_PROPERTY(QString currentColumnType READ currentColumnType WRITE setCurrentColumnType NOTIFY currentColumnTypeChanged)
+    Q_PROPERTY(QString wbName READ wbName WRITE setWbName NOTIFY wbNameChanged)
 
     // Filter
     Q_PROPERTY(QString currentSelectedColumn READ currentSelectedColumn WRITE setCurrentSelectedColumn NOTIFY currentSelectedColumnChanged)
@@ -82,12 +83,11 @@ class DashboardParamsModel: public QObject
     int m_tmpCanvasHeight;
     int m_tmpCanvasWidth;
     QString m_currentColumnType;
+    QString m_wbName;
 
     QString m_currentSelectedColumn;
 
     GeneralParamsModel generalParamsModel;
-
-
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -215,11 +215,14 @@ public:
     int tmpCanvasHeight() const;
     int tmpCanvasWidth() const;
     QString currentColumnType() const;
+    QString wbName() const;
 
     QString currentSelectedColumn() const;
 
     // Function to call to emit a signal to hide all right columns in dashboard
     Q_INVOKABLE void hideAllDashboardRight();
+
+
 
 
 
@@ -234,6 +237,7 @@ public slots:
     void setTmpCanvasHeight(int tmpCanvasHeight);
     void setTmpCanvasWidth(int tmpCanvasWidth);
     void setCurrentColumnType(QString currentColumnType);
+    void setWbName(QString wbName);
 
     // Filter column names
     void getColumnNames(int dashboardId, QStringList columnNames);
@@ -241,6 +245,8 @@ public slots:
 
     // Receive extract workbook data params
     void getExtractDashboardParams(QJsonObject dashboardParams);
+
+
 
 
 
@@ -276,6 +282,7 @@ signals:
     void tmpCanvasHeightChanged(int tmpCanvasHeight);
     void tmpCanvasWidthChanged(int tmpCanvasWidth);
     void currentColumnTypeChanged(QString currentColumnType);
+    void wbNameChanged(QString wbName);
     void currentSelectedColumnChanged(QString currentSelectedColumn);
 
     // Save Dashboard Params

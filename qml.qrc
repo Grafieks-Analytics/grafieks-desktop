@@ -293,5 +293,7 @@
         <file>Source/Others/License.qml</file>
         <file>Source/MainSubComponents/PublishDatasource.qml</file>
         <file>Source/MainSubComponents/SaveExtract.qml</file>
+        <file>Source/MainSubComponents/PublishWorkbook.qml</file>
+        <file>Source/MainSubComponents/SaveWorkbook.qml</file>
     </qresource>
 </RCC>

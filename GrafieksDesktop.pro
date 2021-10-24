@@ -51,6 +51,8 @@ SOURCES += \
     Code/Logic/Dashboards/Workers/saveworkbookworker.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
+    Code/Logic/Dashboards/projectslistmodel.cpp \
+    Code/Logic/Dashboards/publishworkbookmodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
@@ -168,6 +170,8 @@ HEADERS += \
     Code/Logic/Dashboards/Workers/saveworkbookworker.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
+    Code/Logic/Dashboards/projectslistmodel.h \
+    Code/Logic/Dashboards/publishworkbookmodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \

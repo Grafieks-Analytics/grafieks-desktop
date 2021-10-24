@@ -1258,6 +1258,11 @@ QString DashboardParamsModel::currentColumnType() const
     return m_currentColumnType;
 }
 
+QString DashboardParamsModel::wbName() const
+{
+    return m_wbName;
+}
+
 QString DashboardParamsModel::currentSelectedColumn() const
 {
     return m_currentSelectedColumn;
@@ -1373,6 +1378,15 @@ void DashboardParamsModel::setCurrentColumnType(QString currentColumnType)
 
     m_currentColumnType = currentColumnType;
     emit currentColumnTypeChanged(m_currentColumnType);
+}
+
+void DashboardParamsModel::setWbName(QString wbName)
+{
+    if (m_wbName == wbName)
+        return;
+
+    m_wbName = wbName;
+    emit wbNameChanged(m_wbName);
 }
 
 void DashboardParamsModel::getColumnNames(int dashboardId, QStringList columnNames)
