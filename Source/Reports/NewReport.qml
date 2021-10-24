@@ -529,7 +529,6 @@ Page {
 
         function onClearScreenSignal(){
             clearValuesOnAddNewReport();
-            clearAllChartValues()
         }
 
     }
@@ -666,13 +665,15 @@ Page {
             break;
         case Constants.barChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+            dataValues = dataValues && JSON.parse(dataValues);
+            colorData = (dataValues && dataValues[1] && [dataValues[1][0]]) || [];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
 
             dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
+            // dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
             break;
@@ -680,7 +681,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             
             dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
+            // dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
             break;
@@ -1388,6 +1389,10 @@ Page {
         let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
         console.log(reportInstance);
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
+    //    drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
+
+        console.log("properties",JSON.stringify(reportProperties))
+
         var reportUrl = reportInstance.getChartUrl();
 
         // Check if on updating the graph chart url was changed.
@@ -1835,7 +1840,6 @@ Page {
         qmlChartConfig.activeChartIndex = activeChartIndex;
         qmlChartConfig.customizationsAvailable =customizationsAvailable;
         qmlChartConfig.subMenuCustomizationsAvailable = subMenuCustomizationsAvailable;
-        console.log('qmlChartConfig:debug:save',JSON.stringify(qmlChartConfig));
         ReportParamsModel.setQmlChartConfig(JSON.stringify(qmlChartConfig));
         ReportParamsModel.setOptionalConfig(JSON.stringify(optionalParams));
         ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
@@ -1880,7 +1884,12 @@ Page {
         if(addReportButton.text == "Add"){
             console.log('Deleting Report',reportIdMain)
             ReportParamsModel.deleteReport(reportIdMain,false);
+        }else{
+            ReportParamsModel.setEditReportToggle("0");
         }
+
+        clearValuesOnAddNewReport();
+        resetQmlChartConfig();
 
         input1Field.text = '';
         input2Field.text = '';

@@ -57,7 +57,9 @@
                         italic,
                         underline,
                         labelConfig = defaultD3Config.defaultlabelConfig,
+                        dataValueColorKpi = defaultD3Config.fontColor,
                     } = valueFontStylings;
+                    window.dataValueColorKpi = dataValueColorKpi;
                     var { labelStatus, labelFormat } = labelConfig;
 
                     var valueStyling = document.getElementById("valueStyling");
@@ -89,10 +91,8 @@
                         italic,
                         underline,
                         dataLabelColorKpi = defaultD3Config.fontColor,
-                        dataValueColorKpi = defaultD3Config.fontColor,
                     } = labelFontStylings;
                     window.dataLabelColorKpi = dataLabelColorKpi;
-                    window.dataValueColorKpi = dataValueColorKpi;
 
                     var labelStyling = document.getElementById("labelStyling");
                     if (labelStyling) {

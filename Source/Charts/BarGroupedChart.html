@@ -39,12 +39,13 @@
             #my_dataviz {
                 overflow-x: scroll;
                 margin-left: 72px;
+                height: 100vh;
             }
 
             #xAxisLabelId {
                 position: fixed;
                 bottom: 20px;
-                z-index: -1;
+                z-index: 100;
                 height: 40px;
                 /* background-color: red; */
             }
@@ -209,6 +210,9 @@
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                     // standardThresholdWidth,
                     options,
                     fontSize = defaultD3Config.fontSize,
@@ -241,6 +245,34 @@
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { gridStatus } = gridConfig;
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xaxisStatus,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yaxisStatus,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel] = data[1];
+                } else {
+                    [xAxisLabel, yAxisLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                    ];
+                }
 
                 var { groupBarChartColorBy } = options || {};
 
@@ -1017,12 +1049,26 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll("#yAxisDiv text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
 
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
@@ -1185,7 +1231,6 @@
                 ],
                 ["Category", "Sub-category", "Sales"],
             ];
-
         </script>
     </body>
 </html>

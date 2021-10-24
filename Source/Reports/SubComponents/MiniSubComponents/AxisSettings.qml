@@ -35,7 +35,22 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: ReportParamsModel
 
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
 
     ListModel{
         id: fontSizes
@@ -100,151 +115,333 @@ Rectangle{
 
     function onApplyClicked(){
         popup.visible = false
-        webEngineView.runJavaScript("changeChartAttributes(selector, attributeName, attributeValue)")
+        reDrawChart();
     }
+
+    function resetAllValues(){
+        toggleBoldYLabel = false; 
+        toggleBoldXLabel=false;
+        toggleBoldYTick= false;
+        toggleBoldXTick= false;
+        
+        toggleItalicYLabel= false;
+        toggleItalicXLabel= false;
+        toggleItalicYTick= false;
+        toggleItalicXTick= false;
+
+        xaxisCheckbox.checked =  true;
+        yaxisCheckbox.checked =  true;
+                
+        xAxisLabelNameBox.text = null
+        yAxisLabelNameBox.text = null
+
+        xAxisLegendFonts.currentIndex = xAxisLegendFonts.find("Arial");
+        xAxisTickMarkFonts.currentIndex = xAxisTickMarkFonts.find("Arial");
+        yAxisLegendFonts.currentIndex = yAxisLegendFonts.find("Arial");
+        yAxisTickMarkFonts.currentIndex = yAxisTickMarkFonts.find("Arial");
+
+        xAxisLabelFontSize.currentIndex = xAxisLabelFontSize.find('12');
+        xAxisTickMarkFontSize.currentIndex = xAxisTickMarkFontSize.find('12');
+        yAxisLabelFontSize.currentIndex = yAxisLabelFontSize.find('12');
+        yAxisTickMarkFontSize.currentIndex = yAxisTickMarkFontSize.find('12');
+
+        
+        xLabelFontColor.color = Constants.defaultXAxisLabelColor;
+        yLabelFontColor.color = Constants.defaultXAxisLabelColor;
+        xTickFontColor.color = Constants.defaultXAxisTickColor;
+        yTickFontColor.color = Constants.defaultXAxisTickColor;
+
+
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var chartPropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var {   
+                dataColumns, yAxisConfig = {}, xAxisConfig = {}, xLabelfontSize, xTickfontSize, yLabelfontSize, yTickfontSize, 
+                xLabelfontFamily, yLabelfontFamily, xTickfontFamily, yTickfontFamily,
+                xLabelfontColor, yLabelfontColor, xTickfontColor, yTickfontColor
+            } = chartPropertyConfig || {};
+
+        toggleBoldXLabel= !!xAxisConfig.xboldLabel;
+        toggleBoldXTick= !!xAxisConfig.xboldTick;        
+        toggleItalicXLabel= !!xAxisConfig.xitalicLabel;
+        toggleItalicXTick= !!xAxisConfig.xitalicTick;
+
+        toggleBoldYLabel = !!yAxisConfig.yboldLabel; 
+        toggleBoldYTick= !!yAxisConfig.yboldTick;
+        toggleItalicYLabel= !!yAxisConfig.yitalicLabel;
+        toggleItalicYTick= !!yAxisConfig.yitalicTick;
+
+
+        xaxisCheckbox.checked =  xAxisConfig.axisStatus == false ? false : true;
+        yaxisCheckbox.checked =  yAxisConfig.axisStatus == false ? false : true;
+
+        xAxisLabelNameBox.text = xAxisConfig.xlabel ? xAxisConfig.xlabel : dataColumns.xAxisColumnDetails[0].itemName;
+        yAxisLabelNameBox.text = yAxisConfig.ylabel ? yAxisConfig.ylabel : (dataColumns.yAxisColumnDetails[0] && dataColumns.yAxisColumnDetails[0].itemName);
+    
+    
+        xLabelFontColor.color = xLabelfontColor ? xLabelfontColor : Constants.defaultXAxisLabelColor;
+        yLabelFontColor.color = yLabelfontColor ? yLabelfontColor : Constants.defaultXAxisLabelColor;
+        xTickFontColor.color = xTickfontColor ? xTickfontColor : Constants.defaultXAxisTickColor;
+        yTickFontColor.color = yTickfontColor ? yTickfontColor : Constants.defaultXAxisTickColor;
+    
+        xAxisLegendFonts.currentIndex = xLabelfontFamily ? xAxisLegendFonts.find(xLabelfontFamily) : xAxisLegendFonts.find("Arial");
+        xAxisTickMarkFonts.currentIndex = xTickfontFamily ? xAxisTickMarkFonts.find(xTickfontFamily) : xAxisTickMarkFonts.find("Arial");
+        yAxisLegendFonts.currentIndex = yLabelfontFamily ? yAxisLegendFonts.find(yLabelfontFamily) : yAxisLegendFonts.find("Arial");
+        yAxisTickMarkFonts.currentIndex = yTickfontFamily ? yAxisTickMarkFonts.find(yTickfontFamily) : yAxisTickMarkFonts.find("Arial");
+        
+        xAxisLabelFontSize.currentIndex = xLabelfontSize ? xAxisLabelFontSize.find(xLabelfontSize) : xAxisLabelFontSize.find('12');
+        xAxisTickMarkFontSize.currentIndex = xTickfontSize ? xAxisTickMarkFontSize.find(xTickfontSize) : xAxisTickMarkFontSize.find('12');
+        yAxisLabelFontSize.currentIndex = yLabelfontSize ? yAxisLabelFontSize.find(yLabelfontSize) : yAxisLabelFontSize.find('12');
+        yAxisTickMarkFontSize.currentIndex = yTickfontSize ? yAxisTickMarkFontSize.find(yTickfontSize) : xAxisLabelFontSize.find('12');
+
+    }
+
+    onToggleBoldYLabelChanged:{
+        if(toggleBoldYLabel){
+            yAxisLabelBold.color="lightGrey"
+        }else{
+            yAxisLabelBold.color="transparent"
+        }
+    }
+
+    onToggleBoldXLabelChanged:{
+        if(toggleBoldXLabel){
+            xAxisLabelBold.color="lightGrey"
+        }else{
+            xAxisLabelBold.color="transparent"
+        }
+    }
+
+    onToggleItalicYLabelChanged:{
+        if(toggleItalicYLabel){
+            yAxisLabelItalilc.color="lightGrey"
+        }else{
+            yAxisLabelItalilc.color="transparent"
+        }
+    }
+
+    onToggleItalicXLabelChanged:{
+        if(toggleItalicXLabel){
+            xAxisLabelItalilc.color="lightGrey"
+        }else{
+            xAxisLabelItalilc.color="transparent"
+        }
+    }
+
+    onToggleBoldYTickChanged:{
+        if(toggleBoldYTick){
+            yAxisTickBold.color="lightGrey"
+        }else{
+            yAxisTickBold.color="transparent"
+        }
+    }
+
+    onToggleBoldXTickChanged:{
+        if(toggleBoldXTick){
+            xAxisTickBold.color="lightGrey"
+        }else{
+            xAxisTickBold.color="transparent"
+        }
+    }
+
+    onToggleItalicXTickChanged:{
+        if(toggleItalicXTick){
+            xAxisTickItalilc.color="lightGrey"
+        }else{
+            xAxisTickItalilc.color="transparent"
+        }
+    }
+
+    onToggleItalicYTickChanged:{
+        if(toggleItalicYTick){
+            yAxisTickItalilc.color="lightGrey"
+        }else{
+            yAxisTickItalilc.color="transparent"
+        }
+    }
+    
+
+
 
     //    bold
     function boldToggleYLabel(){
 
-        if(toggleBoldYLabel == false){
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};        
+        if(!toggleBoldYLabel){
             toggleBoldYLabel = true;
             yAxisLabelBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
-
-
+            d3PropertyConfig.yAxisConfig.yboldLabel = true;
         }
-        else if(toggleBoldYLabel == true){
+        else{
             toggleBoldYLabel = false;
             yAxisLabelBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','normal')")
+            d3PropertyConfig.yAxisConfig.yboldLabel = false;
         }
-        console.log("bold"+toggleBoldYLabel)
-
     }
     function boldToggleXLabel(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleBoldXLabel == false){
             toggleBoldXLabel = true;
-            xAxisLabelBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','bold')")
-
-
+            d3PropertyConfig.xAxisConfig.xboldLabel = true;
         }
+
         else if(toggleBoldXLabel == true){
             toggleBoldXLabel = false;
-            xAxisLabelBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','normal')")
+            d3PropertyConfig.xAxisConfig.xboldLabel = false;
         }
-        console.log("bold"+toggleBoldXLabel)
 
     }
     function boldToggleXTick(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleBoldXTick == false){
             toggleBoldXTick = true;
-            xAxisTickBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','bold')")
-
-
+            d3PropertyConfig.xAxisConfig.xboldTick = true;
         }
         else if(toggleBoldXTick == true){
             toggleBoldXTick = false;
-            xAxisTickBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','normal')")
+            d3PropertyConfig.xAxisConfig.xboldTick = false;
         }
-        console.log("bold"+toggleBoldXTick)
 
     }
     function boldToggleYTick(){
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+
         if(toggleBoldYTick == false){
             toggleBoldYTick = true;
-            yAxisTickBold.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','bold')")
-
-
+            d3PropertyConfig.yAxisConfig.yboldTick = true;
         }
         else if(toggleBoldYTick == true){
             toggleBoldYTick = false;
-            yAxisTickBold.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','normal')")
+            d3PropertyConfig.yAxisConfig.yboldTick = false;
         }
-        console.log("bold"+toggleBoldYTick)
 
     }
 
     //    italic
     function italicToggleXLabel(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleItalicXLabel == false){
             toggleItalicXLabel = true;
-            xAxisLabelItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','italic')")
-
+            d3PropertyConfig.xAxisConfig.xitalicLabel = true;
 
         }
         else if(toggleItalicXLabel == true){
             toggleItalicXLabel = false;
-            xAxisLabelItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','normal')")
+            d3PropertyConfig.xAxisConfig.xitalicLabel = false;
         }
-        console.log("bold"+toggleItalicXLabel)
-
     }
     function italicToggleYLabel(){
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+
         if(toggleItalicYLabel == false){
             toggleItalicYLabel = true;
-            yAxisLabelItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','italic')")
-
-
+            d3PropertyConfig.yAxisConfig.yitalicLabel = true;
         }
-        else if(toggleItalicYLabel == true){
+        else{
             toggleItalicYLabel = false;
-            yAxisLabelItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','normal')")
+            d3PropertyConfig.yAxisConfig.yitalicLabel = false;
         }
-        console.log("bold"+toggleItalicYLabel)
 
     }
     function italicToggleXTick(){
 
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+
         if(toggleItalicXTick == false){
             toggleItalicXTick = true;
-            xAxisTickItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','italic')")
-
-
+            d3PropertyConfig.xAxisConfig.xitalicTick = true;
         }
-        else if(toggleItalicXTick == true){
+        else{
             toggleItalicXTick = false;
-            xAxisTickItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','normal')")
+            d3PropertyConfig.xAxisConfig.xitalicTick = false;
         }
-        console.log("bold"+toggleItalicYLabel)
-
     }
     function italicToggleYTick(){
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+
         if(toggleItalicYTick == false){
             toggleItalicYTick = true;
-            yAxisTickItalilc.color="lightGrey"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','italic')")
-
-
+            d3PropertyConfig.yAxisConfig.yitalicTick = true;
         }
-        else if(toggleItalicYTick == true){
+        else{
             toggleItalicYTick = false;
-            yAxisTickItalilc.color="transparent"
-            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','normal')")
+            d3PropertyConfig.yAxisConfig.yitalicTick = false;
         }
-        console.log("bold"+toggleItalicYTick)
-
     }
 
 
+    function openColorDialog(dialogName){
+        switch(dialogName){
+        case "xAxisLegend": xAxisLegendColorDialog.open();
+            break;
+        case "xAxisTickMark": xAxisTickMarkColorDialog.open();
+            break;
+        case "yAxisLegend": yAxisLegendColorDialog.open();
+            break;
+        case "yAxisTickMark": yAxisTickMarkColorDialog.open();
+            break;
+        }
+    }
 
+    ColorDialog{
+        id: xAxisLegendColorDialog
+
+        onColorChanged:{
+            //            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
+            d3PropertyConfig.xLabelfontColor=xAxisLegendColorDialog.color+"";
+            xLabelFontColor.color = xAxisLegendColorDialog.color;
+            reDrawChart();
+        }
+
+    }
+
+    ColorDialog{
+        id: xAxisTickMarkColorDialog
+        onColorChanged:{
+
+            //   Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;            
+            d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
+            xTickFontColor.color = xAxisTickMarkColorDialog.color;
+
+            reDrawChart();
+        }
+    }
+
+    ColorDialog{
+        id: yAxisLegendColorDialog
+        onColorChanged:{
+
+
+            //            webEngineView.runJavaScript("changeChartAttributes('.y_label','fill', '"+yAxisLegendColorDialog.color+"')")
+            d3PropertyConfig.yLabelfontColor=yAxisLegendColorDialog.color+"";
+            yLabelFontColor.color = yAxisLegendColorDialog.color;
+
+            reDrawChart();
+        }
+    }
+
+    ColorDialog{
+        id: yAxisTickMarkColorDialog
+        onColorChanged:{
+
+            d3PropertyConfig.yTickfontColor=yAxisTickMarkColorDialog.color+"";
+            yTickFontColor.color = yAxisTickMarkColorDialog.color;
+
+            reDrawChart();
+        }
+    }
 
 
     Component.onCompleted: {
@@ -293,14 +490,17 @@ Rectangle{
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
+                            d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+                            d3PropertyConfig.xAxisConfig.xaxisStatus = xaxisCheckbox.checked;
+
                             if(xaxisCheckbox.checked){
 
-                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');changeChartAttributes('.x_label','style','display: block');")
+                                // webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');changeChartAttributes('.x_label','style','display: block');")
 
 
                             }
                             else{
-                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: none');changeChartAttributes('.x_label','style','display: none');")
+                                // webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: none');changeChartAttributes('.x_label','style','display: none');")
 
 
                             }
@@ -352,14 +552,18 @@ Rectangle{
                                 }
                                 CustomTextBox {
 
-                                    id:xAxisLabelNameBox
+                                    id: xAxisLabelNameBox
                                     width: parent.width*3/4
                                     //                                    text: qsTr(ReportParamsModel.xAxisColumns[0])
                                     //                                    text: getAxisColumnNames(Constants.yAxisName)
-                                    text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
+                                    // text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
+                                    // text: getAxisColumnNames( (d3PropertyConfig.xAxisConfig && d3PropertyConfig.xAxisConfig.label) ||  Constants.xAxisName)[0]
+                                    text: qsTr(getAxisColumnNames( (d3PropertyConfig.xAxisConfig && d3PropertyConfig.xAxisConfig.label) ||  Constants.xAxisName)[0])
                                     onTextChanged: {
 
-                                        webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
+                                        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+                                        d3PropertyConfig.xAxisConfig.xlabel = xAxisLabelNameBox.text;
+                                        // webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
 
                                     }
                                 }
@@ -386,7 +590,6 @@ Rectangle{
                                             //                                                webEngineView.runJavaScript("changeChartAttributes('.x_label','font-family', '"+xAxisLegendFonts.currentValue+"')")
 
                                             d3PropertyConfig.xLabelfontFamily=xAxisLegendFonts.currentValue;
-                                            reDrawChart();
                                         }
                                     }
                                 }
@@ -429,7 +632,6 @@ Rectangle{
                                                 //                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
 
                                                 d3PropertyConfig.xLabelfontSize=xAxisLabelFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -499,7 +701,7 @@ Rectangle{
                                 }
                                 Rectangle {
 
-
+                                    id: xLabelFontColor
                                     color:  Constants.defaultXAxisLabelColor
                                     border.color: Constants.borderBlueColor
                                     width: 20
@@ -568,7 +770,6 @@ Rectangle{
                                             //                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-family', '"+xAxisTickMarkFonts.currentValue+"')")
 
                                             d3PropertyConfig.xTickfontFamily=xAxisTickMarkFonts.currentValue;
-                                            reDrawChart();
 
                                         }
                                     }
@@ -611,7 +812,6 @@ Rectangle{
                                                 console.log("fontsize"+xAxisTickMarkFontSize.currentValue);
                                                 //                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.x-axis .tick text','.x_label','y')")
                                                 d3PropertyConfig.xTickfontSize=xAxisTickMarkFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -680,7 +880,16 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: xTickFontColor
                                     color: Constants.defaultXAxisTickColor
+                                    //                                    {
+                                    //                                        Qt.binding(function() {console.log("testbinding",chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
+                                    //                                            return Constants.defaultXAxisTickColor })}
+                                    //                                    color:Constants.defaultXAxisTickColor
+                                    //                                    {
+                                    //                                        console.log("chartproperty",chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog)
+                                    //                                         (chartPropertyConfig.axisSettings && chartPropertyConfig.axisSettings.xAxisTickMarkColorDialog || Constants.defaultXAxisTickColor)
+                                    //                                    }
                                     border.color: Constants.borderBlueColor
                                     width: 20
                                     height: 20
@@ -709,13 +918,16 @@ Rectangle{
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
+                            d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+                            d3PropertyConfig.yAxisConfig.yaxisStatus = yaxisCheckbox.checked;
+                            
                             if(yaxisCheckbox.checked){
 
-                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');changeChartAttributes('.y_label','style','display: block');")
+                                // webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');changeChartAttributes('.y_label','style','display: block');")
 
                             }
                             else{
-                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: none');changeChartAttributes('.y_label','style','display: none');")
+                                // webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: none');changeChartAttributes('.y_label','style','display: none');")
 
 
                             }
@@ -768,10 +980,14 @@ Rectangle{
                                     id:yAxisLabelNameBox
                                     width: parent.width*3/4
                                     //                                      text: qsTr(ReportParamsModel.yAxisColumns[0])
-                                    text: qsTr(getAxisColumnNames(Constants.yAxisName)[0])
+                                    text: getAxisColumnNames( (d3PropertyConfig.yAxisConfig && d3PropertyConfig.yAxisConfig.label) ||  Constants.yAxisName)[0]
                                     onTextChanged: {
 
-                                        webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
+
+                                        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+                                        d3PropertyConfig.yAxisConfig.ylabel = yAxisLabelNameBox.text;
+
+                                        // webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
 
                                     }
                                 }
@@ -796,7 +1012,6 @@ Rectangle{
                                             //                                                webEngineView.runJavaScript("changeChartAttributes('.y_label','font-family', '"+yAxisLegendFonts.currentValue+"')")
 
                                             d3PropertyConfig.yLabelfontFamily=yAxisLegendFonts.currentValue;
-                                            reDrawChart();
                                         }
                                     }
                                 }
@@ -837,7 +1052,6 @@ Rectangle{
                                                 console.log("fontsize"+yAxisLabelFontSize.currentValue);
                                                 //                                              webEngineView.runJavaScript("changeChartAttributes('.y_label','font-size', '"+yAxisLabelFontSize.currentValue+"')")
                                                 d3PropertyConfig.yLabelfontSize=yAxisLabelFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -904,6 +1118,7 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: yLabelFontColor
                                     color: Constants.defaultYAxisLabelColor
                                     border.color: Constants.borderBlueColor
                                     width: 20
@@ -970,7 +1185,6 @@ Rectangle{
                                             //                                                      webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-family', '"+yAxisTickMarkFonts.currentValue+"')")
 
                                             d3PropertyConfig.yTickfontFamily=yAxisTickMarkFonts.currentValue;
-                                            reDrawChart();
                                         }
 
 
@@ -1014,7 +1228,6 @@ Rectangle{
                                                 //                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','y')")
 
                                                 d3PropertyConfig.yTickfontSize=yAxisTickMarkFontSize.currentValue;
-                                                reDrawChart();
                                             }
                                         }
 
@@ -1081,6 +1294,7 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
+                                    id: yTickFontColor
                                     color: Constants.defaultYAxisTickColor
                                     border.color: Constants.borderBlueColor
                                     width: 20

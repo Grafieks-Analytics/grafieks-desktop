@@ -61,7 +61,7 @@
             var extraHeightWorked = false;
             var redrawn = false;
             var extraHeight = 0;
-            
+
             var d3colors = [
                 "#ffffff",
                 "#f7fbff",
@@ -6582,6 +6582,9 @@
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
                     dataLabelColor = defaultD3Config.fontColor,
+                    // xaxis setting
+                    xAxisConfig = defaultD3Config.xAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -6610,12 +6613,40 @@
                     dateFormat,
                     dateFormat1
                 );
-                
-                [xAxisLabel, yAxisLabel, valueLabel] = data[2] || [
-                    "xAxisLabel",
-                    "yAxisLabel",
-                    "Value",
-                ];
+                let {
+                    xlabel,
+                    xboldLabel,
+                    xitalicLabel,
+                    xboldTick,
+                    xitalicTick,
+                    xaxisStatus,
+                } = xAxisConfig;
+                let {
+                    ylabel,
+                    yboldLabel,
+                    yitalicLabel,
+                    yboldTick,
+                    yitalicTick,
+                    yaxisStatus,
+                } = yAxisConfig;
+                window.yboldLabel = yboldLabel;
+                window.xboldLabel = xboldLabel;
+                window.xitalicLabel = xitalicLabel;
+                window.yitalicLabel = yitalicLabel;
+                if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                    [xAxisLabel, yAxisLabel, valueLabel] = data[2];
+                } else {
+                    [xAxisLabel, yAxisLabel, valueLabel] = [
+                        xAxisConfig.xlabel,
+                        yAxisConfig.ylabel,
+                        data[2][2],
+                    ];
+                }
+                // [xAxisLabel, yAxisLabel, valueLabel] = data[2] || [
+                //     "xAxisLabel",
+                //     "yAxisLabel",
+                //     "Value",
+                // ];
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
@@ -6645,7 +6676,11 @@
                     (width =
                         window.innerWidth - margin.left - margin.right - 20),
                     (height =
-                        window.innerHeight - margin.top - margin.bottom - 20 - extraHeight);
+                        window.innerHeight -
+                        margin.top -
+                        margin.bottom -
+                        20 -
+                        extraHeight);
 
                 // var margin = { top: 30, right: 30, bottom: 30, left: 30 },
                 //     width = 1300 - margin.left - margin.right,
@@ -6938,7 +6973,10 @@
                     .select("#my_dataviz")
                     .append("svg")
                     .attr("width", width - 25 + margin.right)
-                    .attr("height", height + margin.top + margin.bottom + extraHeight)
+                    .attr(
+                        "height",
+                        height + margin.top + margin.bottom + extraHeight
+                    )
                     .append("g")
                     .attr(
                         "transform",
@@ -6999,12 +7037,26 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
+                    .attr("font-weight", xboldTick ? "bold" : "regular")
+                    .attr("font-style", xitalicTick ? "italic" : "regular")
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll("#yAxisDiv text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
+                    .attr("font-weight", yboldTick ? "bold" : "regular")
+                    .attr("font-style", yitalicTick ? "italic" : "regular")
                     .attr("fill", yTickfontColor);
+                if (xaxisStatus) {
+                    d3.selectAll("g .x-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .x-axis").attr("style", "display: none");
+                }
+                if (yaxisStatus) {
+                    d3.selectAll("g .y-axis").attr("style", "display: block");
+                } else {
+                    d3.selectAll("g .y-axis").attr("style", "display: none");
+                }
 
                 svg.selectAll()
                     .data(dataValues, function (d) {
@@ -7270,8 +7322,6 @@
                     redrawn = false;
                 }
             }
-
-            
         </script>
     </body>
 </html>
