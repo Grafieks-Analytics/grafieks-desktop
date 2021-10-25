@@ -640,7 +640,7 @@
                 var color = d3.scaleOrdinal().domain(res).range(d3Colors);
 
                 setLabel(
-                    yAxisLabel,
+                    xAxisLabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -649,7 +649,7 @@
                     y_pos_x_label,
                     false
                 );
-                setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
+                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
                 // Draw the line
                 svg.selectAll(".line")
                     .data(sumstat)
@@ -706,6 +706,15 @@
                             this.setAttribute("data-value-y", d[2]);
 
                             return x(d[0]) + x.bandwidth() / 2;
+                        })
+                        .attr("display", function (d) {
+                            var dataLabelLimit = height - window.innerHeight / 8;
+                            // var labelYPosition = yScale(dataValues[i][1]);
+                            if ((y(d[2])) > dataLabelLimit) {
+                                return "none";
+                            } else {
+                                return "";
+                            }
                         })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
