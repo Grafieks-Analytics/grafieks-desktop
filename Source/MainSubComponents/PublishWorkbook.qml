@@ -24,7 +24,7 @@ Popup {
     modal: true
     visible: false
     x: (parent.width - popup.width) / 2
-    y: 100
+    y: parent.y
     padding: 0
 
     closePolicy: Popup.NoAutoClose
@@ -64,12 +64,12 @@ Popup {
         }
 
         function onWbUploadPercentage(percentage){
-            errorMsg.text = percentage + "% uploaded"
+            errorMsg.text = "Uploading Workbook " + percentage + "%"
         }
 
         function onWbUploadFinished(){
-            errorMsg.text = "Upload finished"
-            closePopup()
+            errorMsg.text = "Workbook upload finished"
+//            closePopup()
         }
 
     }
@@ -92,6 +92,14 @@ Popup {
 
         function onWbNameChanged(wbName){
             popup.showSaveWbPrompt = true
+        }
+    }
+
+    Connections {
+        target: WorkbookProcessor
+
+        function onWorkbookSaved(){
+            uploadWorkbook()
         }
     }
 
@@ -131,22 +139,36 @@ Popup {
             fileDialog2.open()
 
         } else {
-
-            var projectName = projectNameCombo.currentValue
-            var wbName = wbNamefield.text
-            var description = description_field.text
-            var uploadImage = fileDialog1.fileUrl
-            var workbookFile = fileDialog2.fileUrl
-            var sourceType = DSParamsModel.dsType
-            var schedulerId = DSParamsModel.schedulerId
-            var isFullExtract = DSParamsModel.isFullExtract
-            var extractColumnName = DSParamsModel.extractColName
-
-            var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
-
-            if(dsName !== "" && description !== "")
-                PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
+            uploadWorkbook()
         }
+    }
+
+    function uploadWorkbook(){
+        var projectId = projectNameCombo.currentValue
+        var wbName = wbNamefield.text
+        var description = description_field.text
+        var uploadImage = fileDialog1.fileUrl
+        var dashboardCount = DashboardParamsModel.dashboardCount
+
+        var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
+
+        // Dashboard name, report count, image name, image data
+        var dashboardDetails = "["
+        var dashboardNames = DashboardParamsModel.fetchAllDashboards()
+
+        Object.keys(dashboardNames).forEach(dashboardId => {
+                                                let reportsCount = DashboardParamsModel.getDasbboardReportCount(dashboardId)
+                                                dashboardDetails += '{
+                                                                          "name" : "' + dashboardNames[dashboardId] + '",
+                                                                          "count" : '+ reportsCount + ',
+                                                                          "image" : "",
+                                                                          "imageData" : ""
+                                                                      }'
+                                            })
+
+        dashboardDetails += "]"
+        if(wbName !== "" && description !== "")
+            PublishWorkbookModel.publishWorkbook(projectId, wbName, description, readerFile, dashboardCount, dashboardDetails)
     }
 
 
@@ -252,12 +274,6 @@ Popup {
             valueRole: "projectId"
             width: 370
             model: projectsModel
-
-            onActivated: {
-                //                onAddMenuItemTriggered(currentText, currentValue, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
-                //                onAddMenuItemClicked()
-
-            }
         }
 
     }
@@ -388,7 +404,7 @@ Popup {
 
         CustomButton{
 
-            id: btn_signin
+            id: btn_publish
             textValue: "Publish"
             onClicked: onPublishWorkbookClicked()
         }

@@ -1895,3 +1895,9 @@ bool DashboardParamsModel::getDashboardReportMap(int reportId)
     }
     return output;
 }
+
+int DashboardParamsModel::getDasbboardReportCount(int dashboardId)
+{
+    QVector<int> reports = this->dashboardReportMap.value(dashboardId);
+    return reports.count();
+}

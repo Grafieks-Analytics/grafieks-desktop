@@ -16,31 +16,30 @@
 #include "../../constants.h"
 #include "../General/generalparamsmodel.h"
 
-class DashboardParamsModel: public QObject
+class DashboardParamsModel : public QObject
 {
     Q_OBJECT
 
     // Dashboard Report Mapping
     // QMap<int, QVector<int>> dashboardWidgetsMap; // <dashboardId, <widgetId>>
-    QMap<int, QVector<int>> dashboardWidgetsMap; // <dashboardId, <widgetId>>
-    QMap<int, QMap<int, int>> dashboardWidgetsZorder; // <dashboardId, <widgetId, zId>>
+    QMap<int, QVector<int>> dashboardWidgetsMap;                   // <dashboardId, <widgetId>>
+    QMap<int, QMap<int, int>> dashboardWidgetsZorder;              // <dashboardId, <widgetId, zId>>
     QMap<int, QMap<int, QVariantList>> dashboardWidgetCoordinates; // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
-    QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
-    QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
-    QMap<int, QVariantMap> dashboardUniqueWidgetMap; // <dashboardId, <uniqueHash, widgetId>>
+    QMap<int, QMap<int, int>> dashboardWidgetTypeMap;              // <dashboardId, <widgetId, reportTypeId (constant)>>
+    QMap<int, QMap<int, QUrl>> dashboardWidgetUrl;                 // <dashboardId, <widgetId, URI Link>>
+    QMap<int, QVariantMap> dashboardUniqueWidgetMap;               // <dashboardId, <uniqueHash, widgetId>>
 
     QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
     // NEW
-    QMap<int, QMap<int, QString>> dashboardReportUrl; // <dashboardId, <reportId, url of image/text>>
+    QMap<int, QMap<int, QString>> dashboardReportUrl;          // <dashboardId, <reportId, url of image/text>>
     QMap<int, QMap<int, QVariantMap>> textReportParametersMap; // <dashboardId, <reportId, Object>>
 
     // Filter parameters
-    QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
-    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
-    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
-    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
-    QMap<int, QMap<QString, QStringList>> columnValueMap;      // dashboardId - <Column name - value list>
-
+    QMap<int, QStringList> showColumns;                   // dashboardId - List of column names to be shown from the list
+    QMap<int, QVariantMap> columnAliasMap;                // dashboardId - Alias name which will appear instead of actual column name in reports
+    QMap<int, QVariantMap> columnFilterType;              // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
+    QMap<int, QVariantMap> columnIncludeExcludeMap;       // dashboardId - If the filter data is to be included or excluded
+    QMap<int, QMap<QString, QStringList>> columnValueMap; // dashboardId - <Column name - value list>
 
     // Customize Dashboard parameters
     QMap<int, QString> dashboardName;
@@ -49,13 +48,11 @@ class DashboardParamsModel: public QObject
     QMap<int, bool> dashboardGrid;
     QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
 
-
     // Customize Report parameters
-    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <widgetId, reportName>>
+    QMap<int, QMap<int, QString>> reportName;            // <dashboardId, <widgetId, reportName>>
     QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <widgetId, backgroundColor>>
-    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <widgetId, lineColor>>
-    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <widgetId, opacityValue>>
-
+    QMap<int, QMap<int, QString>> reportLineColor;       // <dashboardId, <widgetId, lineColor>>
+    QMap<int, QMap<int, int>> reportOpacity;             // <dashboardId, <widgetId, opacityValue>>
 
     // General
     Q_PROPERTY(QString lastContainerType READ lastContainerType WRITE setLastContainerType NOTIFY lastContainerTypeChanged)
@@ -92,7 +89,6 @@ class DashboardParamsModel: public QObject
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
 
-
     Q_INVOKABLE bool dragNewReport(int dashboardId, int widgetId);
     Q_INVOKABLE bool removeReport(int dashboardId, int widgetId);
 
@@ -105,7 +101,6 @@ public:
     Q_INVOKABLE QVariantMap fetchAllReportUrls(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportTypeMap(int dashboardId);
     Q_INVOKABLE void deleteReport(int reportId, int dashboardId = -1);
-
 
     // Dashboard Report Mapping
 
@@ -154,10 +149,9 @@ public:
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
     Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
 
-
     // Customize Dashboard parameters
 
-    Q_INVOKABLE void setDashboardName(int dashboardId,QString dashboardName);
+    Q_INVOKABLE void setDashboardName(int dashboardId, QString dashboardName);
     Q_INVOKABLE QString getDashboardName(int dashboardId);
 
     Q_INVOKABLE void setDashboardBackgroundColor(int dashboardId, QString color);
@@ -194,7 +188,6 @@ public:
     Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
     Q_INVOKABLE void deleteDashboardReportUrl(int dashboardId, int reportId);
 
-
     // Save and read files
 
     Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
@@ -203,6 +196,7 @@ public:
 
     Q_INVOKABLE void deleteDashboardReportMap(int dashboardId, int reportId);
     Q_INVOKABLE bool getDashboardReportMap(int reportId);
+    Q_INVOKABLE int getDasbboardReportCount(int dashboardId);
 
     // General
     QString lastContainerType() const;
@@ -221,10 +215,6 @@ public:
 
     // Function to call to emit a signal to hide all right columns in dashboard
     Q_INVOKABLE void hideAllDashboardRight();
-
-
-
-
 
 public slots:
     void setLastContainerType(QString lastContainerType);
@@ -246,10 +236,6 @@ public slots:
     // Receive extract workbook data params
     void getExtractDashboardParams(QJsonObject dashboardParams);
 
-
-
-
-
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
     void positionYChanged(int positionY);
@@ -263,7 +249,7 @@ signals:
     void hideAllDashboardParams();
 
     // Filter parameters
-//    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
+    //    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
     void aliasChanged(QString newAlias, QString columnName, int dashboardId);
     void columnFilterTypeChanged();
     void filterValuesChanged(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
@@ -272,7 +258,6 @@ signals:
     void dashboardNameChanged(int dashboardId, QString dashboardName);
     void dashboardBackgroundColorChanged(int dashboardId, QString color);
     void selectAllChanged(bool status, QString columnName, int dashboardId);
-
 
     // Customize Report parameters
     void reportNameChanged(int dashboardId, int widgetId, QString reportName);
@@ -283,13 +268,13 @@ signals:
     void tmpCanvasWidthChanged(int tmpCanvasWidth);
     void currentColumnTypeChanged(QString currentColumnType);
     void wbNameChanged(QString wbName);
+
     void currentSelectedColumnChanged(QString currentSelectedColumn);
 
     // Save Dashboard Params
     void sendDashboardParams(QJsonObject dashboardParamsObj);
     void moveToDashboardScreen();
     void generateDashboards();
-
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

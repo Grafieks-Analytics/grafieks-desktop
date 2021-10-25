@@ -8,7 +8,7 @@ PublishWorkbookModel::PublishWorkbookModel(QObject *parent) : QObject(parent),
 
 }
 
-void PublishWorkbookModel::publishDatasource(QString wbName, QString description, QString uploadImage, QString sourceType, int schedulerId, bool isFullExtract, QString extractColumnName)
+void PublishWorkbookModel::publishWorkbook(int projectId, QString wbName, QString description, QString uploadImage, int dashboardCount, QString dashboardDetails)
 {
     // Fetch value from settings
     QSettings settings;
@@ -33,7 +33,7 @@ void PublishWorkbookModel::publishDatasource(QString wbName, QString description
         QString base64Image = QString(imageData.toBase64());
 
         QNetworkRequest m_NetworkRequest;
-        m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
+        m_NetworkRequest.setUrl(baseUrl+"/desk_newworkbook");
 
         m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                    "application/x-www-form-urlencoded");
@@ -42,16 +42,14 @@ void PublishWorkbookModel::publishDatasource(QString wbName, QString description
 
         QJsonObject obj;
         obj.insert("profileId", profileId);
-        obj.insert("schedulerId", schedulerId);
-        obj.insert("datasourceName", wbName);
+        obj.insert("projectID", projectId);
+        obj.insert("workbookFile", this->workbookFilePath);
+        obj.insert("workbookName", wbName);
         obj.insert("description", description);
         obj.insert("image", base64Image);
         obj.insert("fileName", filename);
-        obj.insert("sourceType", sourceType);
-        obj.insert("columnName", extractColumnName);
-        obj.insert("isFullExtract", isFullExtract);
-        obj.insert("inMemory", true);
-
+        obj.insert("dashboardCount", dashboardCount);
+        obj.insert("dashboardDetails", dashboardDetails);
 
         QJsonDocument doc(obj);
         QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -93,7 +91,7 @@ void PublishWorkbookModel::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
-        this->outputFileName = statusObj["fileName"].toString();
+        this->outputFileName = statusObj["workbook"].toString();
 
         qDebug() << Q_FUNC_INFO << resultJson;
 
@@ -133,9 +131,9 @@ void PublishWorkbookModel::uploadFinished()
 
     QJsonObject obj;
     obj.insert("ProfileID", profileId);
-    obj.insert("Extract", this->outputFileName);
+    obj.insert("Extract", "");
     obj.insert("Live", "");
-    obj.insert("Workbook", "");
+    obj.insert("Workbook", this->outputFileName);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -148,7 +146,7 @@ void PublishWorkbookModel::uploadFinished()
 void PublishWorkbookModel::uploadFile()
 {
     //    QFile dataFile(Statics::extractPath);
-        QFile *dataFile = new QFile(Statics::extractPath, this);
+        QFile *dataFile = new QFile(this->workbookFilePath, this);
 
         QSettings settings;
 
