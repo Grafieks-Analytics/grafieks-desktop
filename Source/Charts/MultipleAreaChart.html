@@ -1544,6 +1544,16 @@
 
                             return x(d[0]) + x.bandwidth() / 2;
                         })
+                        .attr("display", function (d) {
+                            var dataLabelLimit =
+                                height - window.innerHeight / 8;
+                            // var labelYPosition = yScale(dataValues[i][1]);
+                            if (y(d[2]) > dataLabelLimit) {
+                                return "none";
+                            } else {
+                                return "";
+                            }
+                        })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)
@@ -2160,29 +2170,29 @@
                     .html(tooltipDataText);
             }
 
-            drawChart(data, {
-                chartType: "FitWidth",
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "Category",
-                            itemType: "Categorical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [
-                        { columnName: "Sub_Category", itemType: "Categorical" },
-                    ],
-                },
-            });
+            // drawChart(data, {
+            //     chartType: "FitWidth",
+            //     dataColumns: {
+            //         xAxisColumnDetails: [
+            //             {
+            //                 itemName: "Category",
+            //                 itemType: "Categorical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         yAxisColumnDetails: [
+            //             {
+            //                 itemName: "Sales",
+            //                 itemType: "Numerical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         row3ColumnDetails: [],
+            //         colorByData: [
+            //             { columnName: "Sub_Category", itemType: "Categorical" },
+            //         ],
+            //     },
+            // });
         </script>
     </body>
 </html>

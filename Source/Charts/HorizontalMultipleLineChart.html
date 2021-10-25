@@ -1268,6 +1268,15 @@
 
                             return x(d[2]);
                         })
+                        .attr("display", function (d) {
+                            var dataLabelLimit = width /5;
+                            // var labelYPosition = yScale(dataValues[i][1]);
+                            if ((x(d[2])) > dataLabelLimit) {
+                                return "";
+                            } else {
+                                return "none";
+                            }
+                        })
                         .attr("y", function (d) {
                             return y(d[0]) + y.bandwidth() / 2;
                         })

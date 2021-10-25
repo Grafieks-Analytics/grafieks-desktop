@@ -1236,6 +1236,7 @@
                     })
                     .attr("x", x.bandwidth() / 2 - 15)
                     .attr("display", function (d) {
+                        
                         if (Math.abs(y(d.y0) - y(d.y1)) < 20) {
                             return "none";
                         } else {
