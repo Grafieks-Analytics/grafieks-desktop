@@ -287,7 +287,6 @@
         <file>Source/Charts/Data/semantic.min.js</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/KPICustomization.qml</file>
-        <file>Source/Dashboards/SubComponents/SaveWorkbook.qml</file>
         <file>Source/Others/About.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TooltipInputControl.qml</file>
         <file>Source/Others/License.qml</file>
