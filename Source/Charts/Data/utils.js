@@ -322,7 +322,9 @@ function rgba2hex(orig) {
 }
 
 function setSvgBackground(backgroundColor, opacity) {
-    d3.selectAll("#dashboardStyle").remove();
+    if(window.d3){
+        d3.selectAll("#dashboardStyle").remove();
+    }
     if (opacity == 0 || opacity) {
         var rgb = hexToRgbNew(backgroundColor);
         var rgba = "rgba(" + rgb + "," + opacity + ")";
@@ -364,19 +366,23 @@ function removeAxisTicks(axis = "xAxis", dataValues, range, options = {}) {
         selector = ".y-axis text";
     }
 
+
     var dataLabels = [];
     if (constants.chartTitles.waterfallChart == chartTitle) {
         dataLabels = document.querySelectorAll(".bar text");
     }
 
+
     // Remove Text in case they are large in number
-    var allXAxisTexts = document.querySelectorAll(selector);
+    var allXAxisTexts = document.querySelectorAll(selector);    
+    range = allXAxisTexts.length;
+
     for (var i = 0; i < allXAxisTexts.length - 1; i++) {
         if (!Math.floor(range * 0.02)) {
             break;
         }
 
-        if (i % Math.floor(range * 0.04) != 0) {
+        if (i % Math.floor(range * 0.04)!= 0) {
             allXAxisTexts[i].remove();
             if (constants.chartTitles.waterfallChart == chartTitle) {
                 dataLabels[i].remove();
