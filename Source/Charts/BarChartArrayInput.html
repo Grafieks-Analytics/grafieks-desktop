@@ -1738,37 +1738,6 @@
                 ["City", "Sales"],
             ];
 
-            drawChart(data, {
-                dataLabelColor: "#000000",
-                paddingInner: 0.25,
-                innerRadius: 150,
-                chartType: "FitWidth",
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "City",
-                            itemType: "Categorical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [],
-                },
-                gridConfig: { gridStatus: true },
-                pivotTheme: "Blue",
-                curveType: "curveBasis",
-                dataLabelfontSize: 12,
-                dataLabelfontFamily: "Arial",
-            });
-
-            // drawChart(data, {"dataColumns":{"xAxisColumnDetails":[{"itemName":"Sub_Category","itemType":"Categorical","dateFormat":"%Y"}],"yAxisColumnDetails":[{"itemName":"Sales","itemType":"Numerical","dateFormat":"%Y"}],"row3ColumnDetails":[],"colorByData":[]},"xLabelfontColor":"#33f1bb"})
         </script>
         <!-- javascripts ends -->
     </body>

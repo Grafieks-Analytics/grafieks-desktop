@@ -75,7 +75,7 @@ const defaultD3Config = {
         legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: true,
+        labelStatus: false,
         labelFormat: constants.labelFormat.ROUND,
     },
     defaultGridConfig: {
