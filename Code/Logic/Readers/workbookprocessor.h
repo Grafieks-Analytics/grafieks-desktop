@@ -48,6 +48,7 @@ public slots:
     void getWhereParams(QJsonObject whereParams);
 
 
+
 signals:
     void extractMissing();
     void processExtractFromWorkbook(QString filePath);
@@ -56,6 +57,8 @@ signals:
     void sendExtractDashboardParams(QJsonObject dashboardParams);
     void sendExtractTableColumns(QJsonObject tableColumns);
     void sendExtractWhereParams(QJsonObject whereParams);
+
+    void workbookSaved();
 
 };
 

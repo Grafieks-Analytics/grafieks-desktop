@@ -89,7 +89,7 @@ void PublishDatasourceModel::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
-        this->outputFileName = statusObj["fileName"].toString();
+        this->outputFileName = statusObj["datasource"].toString();
 
         qDebug() << Q_FUNC_INFO << resultJson;
 

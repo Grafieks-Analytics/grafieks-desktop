@@ -20,7 +20,7 @@ class PublishWorkbookModel : public QObject
     Q_OBJECT
 public:
     explicit PublishWorkbookModel(QObject *parent = nullptr);
-    Q_INVOKABLE void publishDatasource(QString wbName, QString description, QString uploadImage, QString sourceType,  int schedulerId = 0, bool isFullExtract = false, QString extractColumnName = "");
+    Q_INVOKABLE void publishWorkbook(int projectId, QString wbName, QString description, QString uploadImage,  int dashboardCount = 0, QString dashboardDetails = "");
     Q_INVOKABLE void workbookFile(QString workbookFilePath);
 
 private slots:

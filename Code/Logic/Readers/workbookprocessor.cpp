@@ -171,6 +171,8 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
         fileWorkbook.flush();
         fileWorkbook.close();
     }
+
+    emit workbookSaved();
 }
 
 void WorkbookProcessor::getReportParams(QJsonObject reportParams)

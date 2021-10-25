@@ -37,6 +37,8 @@ Popup {
         } else {
             publishWorkbookNow()
         }
+
+        popupSave.close()
     }
 
     function publishDatasourceNow(){
@@ -57,17 +59,6 @@ Popup {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
-
-
-//    MessageDialog {
-//        id: publishWorkbook
-//        title: "Publish Dashboard"
-//        icon: StandardIcon.Information
-//        text: "Do you want to publish the datasource?"
-//        standardButtons: StandardButton.Yes | StandardButton.No
-//        onYes: publishDatasourceNow()
-//        onNo:publishWorkbookNow()
-//    }
 
     PublishDatasource{
         id: publishDs

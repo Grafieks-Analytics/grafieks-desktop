@@ -59,13 +59,22 @@ Popup {
         }
 
         function onDsUploadPercentage(percentage){
-            errorMsg.text = percentage + "% uploaded"
+            errorMsg.text = "Uploading Datasource " + percentage + "%"
         }
 
         function onDsUploadFinished(){
-            errorMsg.text = "Upload finished"
+            errorMsg.text = "Datasource upload finished"
             closePopup()
-            stacklayout_home.currentIndex = 7
+
+            // If called from modelere screen, then redirect to reports screen
+            // Else open publish workbook modal
+            if(GeneralParamsModel.currentScreen === Constants.modelerScreen){
+                stacklayout_home.currentIndex = 7
+            } else {
+
+                // In the parent page
+                popupSave.publishWorkbookNow()
+            }
         }
 
     }
