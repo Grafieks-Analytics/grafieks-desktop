@@ -229,8 +229,6 @@ HEADERS += \
     Code/OS/odbcdriversmodel.h \
     Code/OS/osentries.h \
     Code/duckdb.hpp \
-    Code/jsoncons/include/jsoncons/json.hpp \
-    Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \
     Code/messages.h \
     Code/constants.h \
     Code/parquet-extension.hpp \
@@ -247,6 +245,3 @@ DEPENDPATH += $$PWD/Libraries
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 win32: LIBS += $$PWD/Libraries/duckdb.lib
-
-macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
-macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a
