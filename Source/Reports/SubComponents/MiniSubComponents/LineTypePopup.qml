@@ -22,12 +22,12 @@ Popup {
     ListModel{
         id: lineTypeModel
         ListElement{
-            lineType: "Smooth Line"
-            d3LineCurve: 'curveBasis'
-        }
-        ListElement{
             lineType: "Straight Line"
             d3LineCurve : 'curveLinear'
+        }
+        ListElement{
+            lineType: "Smooth Line"
+            d3LineCurve: 'curveBasis'
         }
     }
 
@@ -55,20 +55,21 @@ Popup {
     }
     
     function resetAllValues(){
-        lineTypeBox.currentIndex = lineTypeBox.find("Smooth Line");
+        lineTypeBox.currentIndex = lineTypeBox.find("Straight Line");
     }
 
     function setOldValues(reportProperties){
-        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
-        var { curveType  } = d3PropertiesConfig || {};
+        var qmlChartConfig = JSON.parse(reportProperties.qmlChartConfig);
+        var { curveType  } = qmlChartConfig || {};
         if(curveType){
             lineTypeBox.currentIndex = lineTypeBox.find(curveType);
         }
     }
 
 
-    function onLineTypeSelected(curve){
+    function onLineTypeSelected(currentIndex){
         d3PropertyConfig.curveType = lineTypeBox.currentValue;
+        qmlChartConfig.curveType = lineTypeModel.get(currentIndex).lineType;
         reDrawChart();
     }
 
@@ -101,7 +102,7 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.rightMargin: leftMargin
                     anchors.top: parent.top
-                    onCurrentValueChanged: onLineTypeSelected()
+                    onCurrentValueChanged: onLineTypeSelected(currentIndex)
                 }
 
             }

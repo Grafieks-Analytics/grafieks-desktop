@@ -8,6 +8,7 @@ Row{
     id:toolTipRow
      property alias textValue: xAxisToolTipLabelText.text
      property var textLabel1: ""
+     property alias value: toolTipText.text;
      property alias textLabel: toolTipRow.textLabel1
     width:500
     height:50

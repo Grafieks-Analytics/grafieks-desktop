@@ -19,6 +19,12 @@ Popup {
     modal: false
     visible: false
 
+
+    property bool boldCheckStatus:false;
+    property bool italicCheckStatus:false;
+    property bool underlineCheckStatus:false;
+
+
     ListModel{
         id: outlined
         ListElement{
@@ -128,9 +134,9 @@ Popup {
         fontFamily.currentIndex = fontFamily.find("Arial");
         fontSizescombo.currentIndex = fontSizescombo.find("32");
 
-        boldStatus.checked = false;
-        italicStatus.checked = false;
-        underlineStatus.checked = false;
+        boldCheckStatus = false;
+        italicCheckStatus = false;
+        underlineCheckStatus = false;
 
     }
 
@@ -139,10 +145,10 @@ Popup {
         var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         var { valueFontStylings = {} } = d3PropertiesConfig || {};
         var { bold, underline, italic, fontFamily:fontFamilyValue, fontSize:fontSizeValue, dataValueColorKpi } = valueFontStylings;
-        
-        boldStatus.checked = !!bold;
-        underlineStatus.checked = !!underline;
-        italicStatus.checked = !!italic;
+
+        boldCheckStatus = !!bold;
+        italicCheckStatus = !!italic;
+        underlineCheckStatus = !!underline;
         
         if(dataValueColorKpi){
             dataValueDialogKpi.color = dataValueColorKpi;
@@ -247,7 +253,7 @@ Popup {
 
                     CheckBoxTpl{
                         id: boldStatus
-                        checked: false
+                        checked: boldCheckStatus
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -282,7 +288,7 @@ Popup {
 
                     CheckBoxTpl{
                         id: italicStatus
-                        checked: false
+                        checked: italicCheckStatus
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -318,7 +324,7 @@ Popup {
                     CheckBoxTpl{
 
                         id: underlineStatus
-                        checked: false
+                        checked: underlineCheckStatus
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
