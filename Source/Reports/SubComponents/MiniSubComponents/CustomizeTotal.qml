@@ -59,10 +59,12 @@ Column{
         report_desiner_page.d3PropertyConfig['columnWiseGrandTotal'] = checkedStatus;
         qmlChartConfig.columnGrandTotalStatus = checkedStatus;
         report_desiner_page.reDrawChart();
+        totalRowTotalCheckStatus = checkedStatus;
     }
     function showColumnTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['rowWiseGrandTotal'] = checkedStatus;
-         report_desiner_page.d3PropertyConfig['totalStatus'] = checkedStatus;
+        // report_desiner_page.d3PropertyConfig['totalStatus'] = checkedStatus;
+        tableGrandTotalCheckStatus = checkedStatus;
         report_desiner_page.reDrawChart();
         qmlChartConfig.grandTotalStatus = checkedStatus;
         //        report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
@@ -71,6 +73,7 @@ Column{
     function showSubTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['subTotalVisible'] = checkedStatus;
         qmlChartConfig.subTotalStatus = checkedStatus;
+        totalSubTotalCheckStatus = checkedStatus;
         report_desiner_page.reDrawChart();
     }
 
@@ -127,7 +130,7 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: totalRowTotalCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -256,7 +259,7 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: tableGrandTotalCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -399,7 +402,7 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: totalSubTotalCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter

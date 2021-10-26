@@ -720,6 +720,11 @@
                         // })
                         //  label.textContent = textColumn2[1];
                         label.textContent = Math.round(dataValues[i][1]);
+                        var dataLabelLimit = height - window.innerHeight / 3;
+                        label.setAttribute(
+                            "display",
+                            labelYPosition > dataLabelLimit ? "none" : ""
+                        );
                     });
                 }
                 d3.select(".axis.label path").remove();

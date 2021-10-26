@@ -707,6 +707,15 @@
 
                             return x(d[0]) + x.bandwidth() / 2;
                         })
+                        .attr("display", function (d) {
+                            var dataLabelLimit = height - window.innerHeight / 8;
+                            // var labelYPosition = yScale(dataValues[i][1]);
+                            if ((y(d[2])) > dataLabelLimit) {
+                                return "none";
+                            } else {
+                                return "";
+                            }
+                        })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor)

@@ -1978,6 +1978,11 @@
                             dataValues[i][1],
                             labelFormat
                         );
+                        var dataLabelLimit = height - window.innerHeight / 3;
+                        label.setAttribute(
+                            "display",
+                            labelYPosition > dataLabelLimit ? "none" : ""
+                        );
                     });
                 }
                 d3.select(".axis.label path").remove();

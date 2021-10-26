@@ -794,6 +794,11 @@
                         // })
                         //  label.textContent = textColumn2[1];
                         label.textContent = Math.round(dataValues[i][1]);
+                        var dataLabelLimit = width / 5;
+                        label.setAttribute(
+                            "display",
+                            labelYPosition > dataLabelLimit ? "" : "none"
+                        );
                     });
                 }
 

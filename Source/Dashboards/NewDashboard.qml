@@ -282,7 +282,7 @@ Page {
     }
 
     function onPublishDashboardClicked(){
-        console.log("Publish dashboard coming soon")
+        console.log("Publish workbook coming soon")
         publishWorkbook.open()
     }
 
@@ -298,9 +298,9 @@ Page {
 
     MessageDialog {
         id: publishWorkbook
-        title: "Publish Datasource"
+        title: "Publish Workbook"
         icon: StandardIcon.Information
-        text: "Publish datasource coming soon"
+        text: "Publish workbook coming soon"
     }
     // SubComponents Ends
     /***********************************************************************************************************************/
