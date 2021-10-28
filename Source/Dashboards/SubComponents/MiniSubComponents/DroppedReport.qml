@@ -75,7 +75,7 @@ Item{
         target: DashboardParamsModel
 
         function onReportNameChanged(refDashboardId, refReportId, reportName){
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
+            if(DashboardParamsModel.currentDashboard === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 setReportName(reportName);
             }
         }
@@ -586,12 +586,11 @@ Item{
 
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(parseInt(newItem.objectName));
-        if(!DashboardParamsModel.getReportName(dashboardId, newItem.objectName)){
-            DashboardParamsModel.setReportName(dashboardId, newItem.objectName, reportProperties.reportTitle)
+
+        if(!DashboardParamsModel.getReportName(DashboardParamsModel.currentDashboard, newItem.objectName)){
+            DashboardParamsModel.setReportName(DashboardParamsModel.currentDashboard, newItem.objectName, reportProperties.reportTitle)
         }
-        setReportName(DashboardParamsModel.getReportName(dashboardId, newItem.objectName));
-        console.log("Chart title", reportProperties, reportProperties.reportTitle);
-        console.log("Chart title xe")
+        setReportName(DashboardParamsModel.getReportName(DashboardParamsModel.currentDashboard, newItem.objectName));
         drawChart(reportProperties);
     }
 
