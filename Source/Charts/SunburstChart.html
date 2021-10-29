@@ -1442,7 +1442,8 @@
                     text.append("textPath")
                         .attr("startOffset", "50%")
                         .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
-                        .text((d) => labelFormatSet(d.data.name, labelFormat))
+                        // .text((d) => labelFormatSet(d.data.name, labelFormat))
+                        .text((d) => d.data.name)
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
                         .attr("fill", dataLabelColor);
