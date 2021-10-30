@@ -63,6 +63,7 @@ Item{
         // Re render column list model when
         // a column is checked/unchecked in the right panel
         function onHideColumnsChanged(hideColumns){
+            console.log("HEYWIRE 1", hideColumns,tableNameProperty,newItem.name)
 
             if(tableNameProperty === newItem.name)
                 displayColumns(allColumnsProperty, newItem.name)
@@ -115,16 +116,25 @@ Item{
 
     function displayColumns(allColumns, tableName){
 
-        const searchKey = tableName + "."
-        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
+        let searchKey = ""
+        if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            searchKey = "[" + tableName + "$]."
+        } else {
+            searchKey = tableName + "."
+        }
 
+        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
         displayColList.clear()
 
         allColumns.forEach(function(item){
+            var searchEntity = ""
+            if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                searchEntity = "[" + tableName + "$].["+item[0]+"]"
+            } else {
+                searchEntity = tableName + "." + item[0]
+            }
 
-            var regex = new RegExp("[.]" + item[0] + "$");
-
-            if(!toHideCols.find(value => regex.test(value))){
+            if(!toHideCols.includes(searchEntity)){
                 var columnType = ""
                 if(typeof newItem.changeColumnTypes.get(item[0]) !== "undefined"){
                     columnType = newItem.changeColumnTypes.get(item[0])
