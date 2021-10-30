@@ -63,7 +63,6 @@ Item{
         // Re render column list model when
         // a column is checked/unchecked in the right panel
         function onHideColumnsChanged(hideColumns){
-            console.log("HEYWIRE 1", hideColumns,tableNameProperty,newItem.name)
 
             if(tableNameProperty === newItem.name)
                 displayColumns(allColumnsProperty, newItem.name)
@@ -91,7 +90,6 @@ Item{
     function changedTypes(){
         var changedVariableTypes = GeneralParamsModel.getChangedColumnTypes()
         for (const [key, value] of Object.entries(changedVariableTypes)) {
-          console.log(key, value);
             var prefix = newItem.name + "."
 
             if(key.includes(prefix)){
@@ -141,7 +139,6 @@ Item{
                 } else {
                     columnType = item[1]
                 }
-                console.log(columnType)
 
                 displayColList.append({colName: item[0], colType: columnType})
             }
