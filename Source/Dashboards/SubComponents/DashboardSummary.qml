@@ -217,8 +217,10 @@ Rectangle {
 
         rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
+        var reportTitle = ReportParamsModel.getReport(listViewElem.reportId).reportTitle;
+
         DashboardParamsModel.setDashboardUniqueWidget(DashboardParamsModel.currentDashboard, newReportId, randHash)
-        DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, newReportId)
+        DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, newReportId, reportTitle)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
         DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, newReportId, x1, y1, x2, y2)
         DashboardParamsModel.setDashboardWidgetTypeMap(DashboardParamsModel.currentDashboard, newReportId, reportType)
@@ -228,8 +230,6 @@ Rectangle {
 
         if(reportType === Constants.reportTypeChart){
             DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, newReportId, chartUrl);
-            var reportTitle = ReportParamsModel.getReport(listViewElem.reportId).reportTitle;
-            DashboardParamsModel.setReportName(DashboardParamsModel.currentDashboard, newReportId, reportTitle)
         }
 
         DashboardParamsModel.setPositionX(x1);
