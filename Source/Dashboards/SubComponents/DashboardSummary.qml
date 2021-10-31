@@ -217,7 +217,10 @@ Rectangle {
 
         rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
-        var reportTitle = ReportParamsModel.getReport(listViewElem.reportId).reportTitle;
+        var reportTitle = "";
+        if(reportType === Constants.reportTypeChart){
+            reportTitle = ReportParamsModel.getReport(listViewElem.reportId).reportTitle;
+        }
 
         DashboardParamsModel.setDashboardUniqueWidget(DashboardParamsModel.currentDashboard, newReportId, randHash)
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, newReportId, reportTitle)
