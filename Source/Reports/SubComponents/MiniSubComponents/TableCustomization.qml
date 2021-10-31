@@ -38,43 +38,6 @@ Column{
     // Connections Starts
 
 
-   Connections{
-        target: ReportParamsModel
-
-        function onEditReportToggleChanged(reportId){
-            console.log('Table time!? Editing?');
-            
-            if(reportId=="-1"){
-                 return;
-            }
-            if(reportId != "false"){
-                var reportProperties = ReportParamsModel.getReport(reportIdMain);
-                setOldValues(reportProperties)
-            }
-            else{
-                resetAllValues();
-            }
-        }
-    }
-    
-    function resetAllValues(){
-
-        console.log('Table time!? Resetting');
-        dynamicHeightCheckbox.checked = false;
-        alternateRowsCheckStatus = true
-        searchCheckStatus = true
-        compactStatusCheckStatus = false
-
-
-    }
-
-    function setOldValues(reportProperties){
-        
-        console.log('Tablee time!? :grin:');
-        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
-
-    }
-
 
     // Connections Ends
     /***********************************************************************************************************************/

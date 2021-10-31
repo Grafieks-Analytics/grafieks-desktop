@@ -84,6 +84,10 @@ Popup {
        }
 
         axisModel.remove(index);
+
+        tempXModel.clear();
+        tempYModel.clear();
+        tempColorByModel.clear();
        reDrawChart();
        
     }
