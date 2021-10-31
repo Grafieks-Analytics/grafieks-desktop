@@ -157,7 +157,7 @@
                 dateFormat = defaultD3Config.dateFormat,
                 dateFormat1 = defaultD3Config.dateFormat,
                 chartType = defaultD3Config.horizontalChartType,
-                toolTip,
+                toolTip = {},
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig = defaultD3Config.defaultlabelConfig,
                 gridConfig = defaultD3Config.defaultGridConfig,
@@ -350,13 +350,11 @@
             if (chartType !== constants.chartType.STANDARD) {
                 height -= 5;
             }
-            if (!toolTip) {
-                toolTip = {
-                    textColumn1: labels[0],
-                    textColumn2: labels[1],
-                    colorData: labels[2],
-                };
-            }
+
+            toolTip.textColumn1 = toolTip.textColumn1 || (labels && labels[0]);
+            toolTip.textColumn2 = toolTip.textColumn2 || (labels && labels[1]);
+            toolTip.colorData = toolTip.colorData || (labels && labels[2]);
+
 
             const yAxisWidth = document.querySelector("#yAxisDiv").clientWidth;
 
