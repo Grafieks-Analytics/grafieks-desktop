@@ -463,6 +463,8 @@ Item{
         webEngineView.runJavaScript(runScriptString);
         if(backgroundColorValue){
             setChartBackgroundColor(backgroundColorValue);
+        }else{
+            droppedReportId.color = "transparent";
         }
     }
 
