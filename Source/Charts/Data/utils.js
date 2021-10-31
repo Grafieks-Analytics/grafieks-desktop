@@ -441,7 +441,7 @@ function labelFormatSet(labelValue, labelFormat) {
 // Open this function when in production
 (function () {
     // [Tag: Mandatory]
-    // oncontextmenu = function () {
-    //     return false;
-    // };
+    oncontextmenu = function () {
+        return false;
+    };
 })();
