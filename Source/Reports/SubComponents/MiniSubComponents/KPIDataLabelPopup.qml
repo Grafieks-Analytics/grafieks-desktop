@@ -13,10 +13,6 @@ Popup {
     property int shapeWidth: 20
     property int shapeHeight: 20
 
-    property bool boldCheckStatus:false;
-    property bool italicCheckStatus:false;
-    property bool underlineCheckStatus:false;
-
     width: 160
     height: 280
     x: 10
@@ -131,37 +127,14 @@ Popup {
         fontFamily.currentIndex = fontFamily.find("Arial");
         fontSizescombo.currentIndex = fontSizescombo.find("32");
 
-        boldCheckStatus = false;
-        italicCheckStatus = false;
-        underlineCheckStatus = false;
+        boldCheckKPILabelStatus = false;
+        italicCheckKPILabelStatus = false;
+        underlineCheckKPILabelStatus = false;
 
     }
 
     function setOldValues(reportProperties){
         
-        
-        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
-        var { labelFontStylings = {} } = d3PropertiesConfig || {};
-        var { bold, underline, italic, fontFamily:fontFamilyValue, fontSize:fontSizeValue, dataLabelColorKpi } = labelFontStylings;
-        
-        boldCheckStatus = !!bold;
-        italicCheckStatus = !!italic;
-        underlineCheckStatus = !!underline;
-        
-        
-        if(dataLabelColorKpi){
-            dataLabelDialogKpi.color = dataLabelColorKpi;
-            dataLabelKpiColorBox.color = dataLabelColorKpi;
-        }
-
-        if(fontFamilyValue){
-            fontFamily.currentIndex = fontFamily.find(fontFamilyValue);
-        }
-
-        if(fontSizeValue){
-            fontSizescombo.currentIndex = fontSizescombo.find(fontSizeValue);
-        }
-
     }
 
 
@@ -216,8 +189,8 @@ Popup {
             if(!d3PropertyConfig.labelFontStylings){
                 d3PropertyConfig.labelFontStylings = {}
             }
-            d3PropertyConfig.labelFontStylings.dataLabelColorKpi = dataLabelDialogKpi.color+"";
-            dataLabelKpiColorBox.color = dataLabelDialogKpi.color;
+            d3PropertyConfig.labelFontStylings.dataLabelColorKpi = color+"";
+            dataLabelKpiColorBoxColor = color;
 
             reDrawChart();
         }
@@ -256,7 +229,7 @@ Popup {
                     CheckBoxTpl{
 
                         id: boldStatus
-                        checked: boldCheckStatus
+                        checked: boldCheckKPILabelStatus
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -292,7 +265,7 @@ Popup {
                     CheckBoxTpl{
 
                         id: italicStatus
-                        checked: italicCheckStatus
+                        checked: italicCheckKPILabelStatus
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -328,7 +301,7 @@ Popup {
                     CheckBoxTpl{
 
                         id: underlineStatus
-                        checked: underlineCheckStatus
+                        checked: underlineCheckKPILabelStatus
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter

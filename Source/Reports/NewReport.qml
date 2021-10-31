@@ -79,6 +79,22 @@ Page {
     property bool xAxisLabelStatus: true
     property bool yAxisLabelStatus: true
 
+    // KPI Values!!
+    property bool boldCheckKPILabelStatus: false
+    property bool italicCheckKPILabelStatus: false
+    property bool underlineCheckKPILabelStatus:false
+
+    property var dataLabelDialogKpiColor: '#000000'
+    property var dataLabelKpiColorBoxColor: '#000000'
+
+    property bool boldCheckKPIValueStatus: false
+    property bool italicCheckKPIValueStatus: false
+    property bool underlineCheckKPIValueStatus:false
+
+    property var dataValueDialogKpiColor: '#000000'
+    property var dataValueKpiColorBoxColor: '#000000'
+
+
     // This object will contain all the extra param models
     /*
         {
@@ -152,6 +168,19 @@ Page {
     ListModel{
         id: dataItemList
     }
+
+    // *** Temp Models to be refactored
+    // *** Models used in tooltips
+    ListModel{
+        id: tempXModel
+    }
+    ListModel{
+        id: tempYModel
+    }
+    ListModel{
+        id: tempColorByModel
+    }
+
 
     ListModel{
         id: allCharts
@@ -1009,7 +1038,11 @@ Page {
         console.log('Chart Title Changed',chartTitle);
 
         if(d3PropertyConfig.toolTip){
+            console.log('debug: tooltip deleting because of chart change',JSON.stringify(d3PropertyConfig.toolTip))
             delete d3PropertyConfig.toolTip;
+            tempXModel.clear();
+            tempYModel.clear();
+            tempColorByModel.clear();
         }
 
         // Charts Mapping
@@ -1431,7 +1464,10 @@ Page {
 
         switchChart(reportProperties.chartTitle);
 
-        var { compactStatus, searchStatus, rowAlternateStatus, rowWiseGrandTotal, totalSubTotalCheckStatus, columnWiseGrandTotal, xAxisConfig = {}, yAxisConfig = {} } = d3PropertyConfig || {};
+        var { compactStatus, searchStatus, rowAlternateStatus, rowWiseGrandTotal, totalSubTotalCheckStatus, columnWiseGrandTotal, 
+                labelFontStylings = {}, valueFontStylings = {}, xAxisConfig = {}, yAxisConfig = {},
+                toolTip = {}, dataColumns = {}
+            } = JSON.parse(reportProperties.d3PropertiesConfig) || {};
         console.log('Edit d3PropertyCondfig',JSON.stringify(d3PropertyConfig));
 
         if(rowAlternateStatus != undefined){
@@ -1461,8 +1497,57 @@ Page {
             yAxisLabelStatus = yAxisConfig.yaxisStatus;
             console.log('Y Axis Label Status', yAxisLabelStatus)
         }
+
+        var { bold:KPILabelBold, underline:KPILabelUnderline, italic:KPILabelItalic, fontFamily:fontFamilyValueKPILabel, fontSize:fontSizeValueKPILabel, dataLabelColorKpi } = labelFontStylings;
+        var { bold:KPIValueBold, underline:KPIValueUnderline, italic:KPIValueItalic, fontFamily:fontFamilyValueKPIValue, fontSize:fontSizeValueKPIValue, dataValueColorKpi } = valueFontStylings;
         
+        boldCheckKPILabelStatus = !!KPILabelBold;
+        italicCheckKPILabelStatus = !!KPILabelItalic;
+        underlineCheckKPILabelStatus = !!KPILabelUnderline;
         
+        if(dataLabelColorKpi){
+            dataLabelDialogKpiColor = dataLabelColorKpi;
+            dataLabelKpiColorBoxColor = dataLabelColorKpi;
+        }
+
+        boldCheckKPIValueStatus = !!KPIValueBold;
+        italicCheckKPIValueStatus = !!KPIValueItalic;
+        underlineCheckKPIValueStatus = !!KPIValueUnderline;
+        
+        if(dataValueColorKpi){
+            dataValueDialogKpiColor = dataValueColorKpi;
+            dataValueKpiColorBoxColor = dataValueColorKpi;
+        }
+        
+        var { xAxisColumnDetails = [], yAxisColumnDetails = [], colorByData = [] } = dataColumns;
+        var allToolTips = Object.keys(toolTip); 
+
+        console.log('Debug: tooltip',allToolTips);
+
+        var i = 0, k=0;
+        while(i < xAxisColumnDetails.length){
+            var obj = { itemName: xAxisColumnDetails[i].itemName, dataValue: toolTip['textColumn'+(i+1)], textLabel: 'textColumn'+(i+1) };
+            console.log('debug: tooltip',JSON.stringify(obj));
+            tempXModel.append(obj);
+            i++;
+        }
+        k=i;
+        while(i < xAxisColumnDetails.length + yAxisColumnDetails.length ){
+            var obj = { itemName: yAxisColumnDetails[i-k].itemName ,dataValue: toolTip['textColumn'+(i+1)], textLabel: 'textColumn'+(i+1) };
+            console.log('debug: tooltip',JSON.stringify(obj));
+            tempYModel.append(obj)
+            i++;
+        }
+        k=i;
+        while(i < xAxisColumnDetails.length + yAxisColumnDetails.length + colorByData.length ){
+            var obj = { itemName: colorByData[0].itemName , dataValue: toolTip['colorData'], textLabel: 'textColumn'+(i+1) };
+            console.log('debug: tooltip',JSON.stringify(obj));
+            tempColorByModel.append(obj)
+            i++;
+        }
+        
+        d3PropertyConfig.toolTip = toolTip;
+        console.log('debug: tooltip',JSON.stringify(d3PropertyConfig.toolTip),'I am redrawing');
         reDrawChart();
     }
 
@@ -1511,6 +1596,13 @@ Page {
         previousChartTitle = chartTitle;
         chartTitle = chartTitleValue;
         var chartUrl = '';
+        if(d3PropertyConfig.toolTip){
+            console.log('Deleiing while switching charts!')
+            delete d3PropertyConfig.toolTip;
+            tempXModel.clear();
+            tempYModel.clear();
+            tempColorByModel.clear();
+        }
         if(!allChartsMapping[chartTitle]){
             allChartsMapping[chartTitle] = {}
         }
@@ -1723,8 +1815,21 @@ Page {
         totalSubTotalCheckStatus = false
         totalRowTotalCheckStatus = false
 
+        // KPI Values!!
+        boldCheckKPILabelStatus = false
+        italicCheckKPILabelStatus = false
+        underlineCheckKPILabelStatus = false
+
+        dataLabelDialogKpiColor =  '#000000'
+        dataLabelKpiColorBoxColor = '#000000'
+
         xAxisLabelStatus = true;
         yAxisLabelStatus = true;
+
+        tempXModel.clear();
+        tempYModel.clear();
+        tempColorByModel.clear();
+        
         // TODO:reset all constants for chart
 
         // Calling this redraw will clear the chart because no x and y columns will be available
@@ -1962,6 +2067,10 @@ Page {
             reDrawDashboardChart(reportIdMain);
         }
         editReportFlag = false;
+
+        tempXModel.clear();
+        tempYModel.clear();
+        tempColorByModel.clear();
 
         // Setting it to -1 so that editReportToggle signal is called
         // After this editReportToggle is set to false
