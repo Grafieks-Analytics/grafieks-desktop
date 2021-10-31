@@ -226,8 +226,11 @@ Rectangle {
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
 
-        if(reportType === Constants.reportTypeChart)
+        if(reportType === Constants.reportTypeChart){
             DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, newReportId, chartUrl);
+            var reportTitle = ReportParamsModel.getReport(listViewElem.reportId).reportTitle;
+            DashboardParamsModel.setReportName(DashboardParamsModel.currentDashboard, newReportId, reportTitle)
+        }
 
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);
