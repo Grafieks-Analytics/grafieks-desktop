@@ -968,7 +968,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Modeler"
+                text: "Query Editor"
                 width:100
 
                 onClicked: onQueryModellerClicked()
