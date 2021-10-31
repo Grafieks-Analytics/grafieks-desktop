@@ -8,7 +8,7 @@ Row{
     id:toolTipRow
      property alias textValue: xAxisToolTipLabelText.text
      property var textLabel1: ""
-     property alias value: toolTipText.text;
+     property alias dataValue: toolTipText.text;
      property alias textLabel: toolTipRow.textLabel1
     width:500
     height:50
@@ -53,9 +53,13 @@ Row{
                         var obj = d3PropertyConfig.toolTip || {}
                         obj[textLabel1]=toolTipText.text;
                         d3PropertyConfig.toolTip=obj;
-                        // console.log("textlabel1"+textLabel1)
+                        if(d3PropertyConfig.toolTip && d3PropertyConfig.toolTip['']){
+                            // Deleting empty keys value
+                            // [Tag: Refactor]
+                            // Check why empty values are coming
+                            delete d3PropertyConfig.toolTip[''];
+                        }
                         console.log(JSON.stringify(d3PropertyConfig.toolTip))
-                        reDrawChart();
 
                     }
                     

@@ -562,7 +562,7 @@
                 dateFormat,
                 dateFormat1,
                 chartType,
-                toolTip,
+                toolTip = {},
                 dataColumns, // [Tag: Date Change]
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig = defaultD3Config.defaultlabelConfig,
@@ -935,13 +935,9 @@
 
             // legends code ends
 
-            if (!toolTip) {
-                toolTip = {
-                    textColumn1: labels && labels[0],
-                    textColumn2: labels && labels[1],
-                    colorData: labels && labels[2],
-                };
-            }
+            toolTip.textColumn1 = toolTip.textColumn1 || (labels && labels[0]);
+            toolTip.textColumn2 = toolTip.textColumn2 || (labels && labels[1]);
+            toolTip.colorData = toolTip.colorData || (labels && labels[2]);
 
             if (chartType == constants.chartType.STANDARD) {
                 width = data.length * standardThresholdWidth;
@@ -1236,7 +1232,7 @@
                     })
                     .attr("x", x.bandwidth() / 2 - 15)
                     .attr("display", function (d) {
-                        
+
                         if (Math.abs(y(d.y0) - y(d.y1)) < 20) {
                             return "none";
                         } else {
