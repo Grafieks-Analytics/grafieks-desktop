@@ -64,6 +64,37 @@ Page {
     property var d3PropertyConfig: ({});
     property var qmlChartConfig: ({});
 
+    
+    // Table Customization values
+    property bool alternateRowsCheckStatus: true
+    property bool searchCheckStatus: true
+    property bool compactStatusCheckStatus: false
+
+    // table total customization
+    property bool tableGrandTotalCheckStatus: false
+    property bool totalSubTotalCheckStatus: false
+    property bool totalRowTotalCheckStatus: false
+        
+    // axis settings value
+    property bool xAxisLabelStatus: true
+    property bool yAxisLabelStatus: true
+
+    // KPI Values!!
+    property bool boldCheckKPILabelStatus: false
+    property bool italicCheckKPILabelStatus: false
+    property bool underlineCheckKPILabelStatus:false
+
+    property var dataLabelDialogKpiColor: '#000000'
+    property var dataLabelKpiColorBoxColor: '#000000'
+
+    property bool boldCheckKPIValueStatus: false
+    property bool italicCheckKPIValueStatus: false
+    property bool underlineCheckKPIValueStatus:false
+
+    property var dataValueDialogKpiColor: '#000000'
+    property var dataValueKpiColorBoxColor: '#000000'
+
+
     // This object will contain all the extra param models
     /*
         {
@@ -138,6 +169,19 @@ Page {
         id: dataItemList
     }
 
+    // *** Temp Models to be refactored
+    // *** Models used in tooltips
+    ListModel{
+        id: tempXModel
+    }
+    ListModel{
+        id: tempYModel
+    }
+    ListModel{
+        id: tempColorByModel
+    }
+
+
     ListModel{
         id: allCharts
         ListElement{
@@ -146,6 +190,8 @@ Page {
             name: "bar"
             activeChart: true
             title: "Bar Chart"
+            xAxisLabelName: "X Axis"
+            yAxisLabelName: "Y Axis"
             yAxisVisible: true
             lineTypeChartVisible: false
             maxDropOnXAxis: 2
@@ -508,7 +554,7 @@ Page {
                 // console.log(chartTitle);
 
                 // switch(chartTitle){
-                //     case Constants.horizontalStackedBarChartTitle:
+                //     case Constants.horizontalFedBarChartTitle:
                 //     case Constants.stackedBarChartTitle:
                 //         switchChart(Constants.barChartTitle);
                 //         break;
@@ -992,7 +1038,11 @@ Page {
         console.log('Chart Title Changed',chartTitle);
 
         if(d3PropertyConfig.toolTip){
+            console.log('debug: tooltip deleting because of chart change',JSON.stringify(d3PropertyConfig.toolTip))
             delete d3PropertyConfig.toolTip;
+            tempXModel.clear();
+            tempYModel.clear();
+            tempColorByModel.clear();
         }
 
         // Charts Mapping
@@ -1012,6 +1062,9 @@ Page {
         var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
         var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
 
+        xAxisLabelName = allChartsMapping[chartTitle].xAxisLabelName ? allChartsMapping[chartTitle].xAxisLabelName : Constants.xAxisName;
+        yAxisLabelName = allChartsMapping[chartTitle].yAxisLabelName ? allChartsMapping[chartTitle].yAxisLabelName : Constants.yAxisName;
+        valuesLabelName = allChartsMapping[chartTitle].row3Name ? allChartsMapping[chartTitle].row3Name : "Values";
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -1069,6 +1122,11 @@ Page {
             yAxisVisible = true
             row4Visible = false
             pivotThemeVisible=true
+
+            xAxisLabelName = "Rows";
+            yAxisLabelName = "Columns";
+            valuesLabelName = "Values";
+
             break;
         case Constants.tableTitle:
             var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
@@ -1079,6 +1137,7 @@ Page {
             xAxisVisible = true
             row3Visible = false
             row4Visible = false
+            xAxisLabelName = "Columns";
             break;
         case Constants.gaugeChartTitle:
             row4Visible = true
@@ -1094,6 +1153,7 @@ Page {
             xAxisVisible = true
             row3Visible = false
             row4Visible = false
+            xAxisLabelName = "Values";
             break;
 
         case Constants.barChartTitle:
@@ -1114,9 +1174,27 @@ Page {
             yAxisVisible = true
             row3Visible = false
             row4Visible = false
+            xAxisLabelName = Constants.xAxisName;
+            yAxisLabelName = Constants.yAxisName;
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
+            xAxisLabelName = "Categorical";
+            yAxisLabelName = "Numerical";
+            if(!allNonMeasures(xAxisColumnDetails)){
+                xAxisListModel.clear();
+            }
+            
+            if(!allNumericalValues(yAxisColumnDetails)){
+                yAxisListModel.clear();
+            }
+            
+            clearColorByList();
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         case Constants.radarChartTitle:
         case Constants.sunburstChartTitle:
         case Constants.treeChartTitle:
@@ -1205,6 +1283,10 @@ Page {
             row3Visible = false
             row4Visible = false
             clearColorByList();
+        }
+
+        if(chartTitle == Constants.sunburstChartTitle){
+            allowedXAxisDataPanes = 5;
         }
 
         // If any column is removed on changing the chart name
@@ -1380,7 +1462,92 @@ Page {
         report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
 
-        switchChart(reportProperties.chartTitle)
+        switchChart(reportProperties.chartTitle);
+
+        var { compactStatus, searchStatus, rowAlternateStatus, rowWiseGrandTotal, totalSubTotalCheckStatus, columnWiseGrandTotal, 
+                labelFontStylings = {}, valueFontStylings = {}, xAxisConfig = {}, yAxisConfig = {},
+                toolTip = {}, dataColumns = {}
+            } = JSON.parse(reportProperties.d3PropertiesConfig) || {};
+        console.log('Edit d3PropertyCondfig',JSON.stringify(d3PropertyConfig));
+
+        if(rowAlternateStatus != undefined){
+            alternateRowsCheckStatus = rowAlternateStatus
+        }
+        if(searchStatus != undefined){
+            searchCheckStatus = searchStatus
+        }
+        if(compactStatus != undefined){
+            compactStatusCheckStatus = compactStatus
+        }
+
+        if(rowWiseGrandTotal != undefined){
+            tableGrandTotalCheckStatus = rowWiseGrandTotal
+        }
+        if(totalSubTotalCheckStatus != undefined){
+            totalSubTotalCheckStatus = totalSubTotalCheckStatus
+        }
+        if(columnWiseGrandTotal != undefined){
+            totalRowTotalCheckStatus = columnWiseGrandTotal
+        }
+        if(xAxisConfig.xaxisStatus  != undefined){
+            xAxisLabelStatus = xAxisConfig.xaxisStatus;
+            console.log('X Axis Label Status', xAxisLabelStatus)
+        }
+        if(yAxisConfig.yaxisStatus != undefined){
+            yAxisLabelStatus = yAxisConfig.yaxisStatus;
+            console.log('Y Axis Label Status', yAxisLabelStatus)
+        }
+
+        var { bold:KPILabelBold, underline:KPILabelUnderline, italic:KPILabelItalic, fontFamily:fontFamilyValueKPILabel, fontSize:fontSizeValueKPILabel, dataLabelColorKpi } = labelFontStylings;
+        var { bold:KPIValueBold, underline:KPIValueUnderline, italic:KPIValueItalic, fontFamily:fontFamilyValueKPIValue, fontSize:fontSizeValueKPIValue, dataValueColorKpi } = valueFontStylings;
+        
+        boldCheckKPILabelStatus = !!KPILabelBold;
+        italicCheckKPILabelStatus = !!KPILabelItalic;
+        underlineCheckKPILabelStatus = !!KPILabelUnderline;
+        
+        if(dataLabelColorKpi){
+            dataLabelDialogKpiColor = dataLabelColorKpi;
+            dataLabelKpiColorBoxColor = dataLabelColorKpi;
+        }
+
+        boldCheckKPIValueStatus = !!KPIValueBold;
+        italicCheckKPIValueStatus = !!KPIValueItalic;
+        underlineCheckKPIValueStatus = !!KPIValueUnderline;
+        
+        if(dataValueColorKpi){
+            dataValueDialogKpiColor = dataValueColorKpi;
+            dataValueKpiColorBoxColor = dataValueColorKpi;
+        }
+        
+        var { xAxisColumnDetails = [], yAxisColumnDetails = [], colorByData = [] } = dataColumns;
+        var allToolTips = Object.keys(toolTip); 
+
+        console.log('Debug: tooltip',allToolTips);
+
+        var i = 0, k=0;
+        while(i < xAxisColumnDetails.length){
+            var obj = { itemName: xAxisColumnDetails[i].itemName, dataValue: toolTip['textColumn'+(i+1)], textLabel: 'textColumn'+(i+1) };
+            console.log('debug: tooltip',JSON.stringify(obj));
+            tempXModel.append(obj);
+            i++;
+        }
+        k=i;
+        while(i < xAxisColumnDetails.length + yAxisColumnDetails.length ){
+            var obj = { itemName: yAxisColumnDetails[i-k].itemName ,dataValue: toolTip['textColumn'+(i+1)], textLabel: 'textColumn'+(i+1) };
+            console.log('debug: tooltip',JSON.stringify(obj));
+            tempYModel.append(obj)
+            i++;
+        }
+        k=i;
+        while(i < xAxisColumnDetails.length + yAxisColumnDetails.length + colorByData.length ){
+            var obj = { itemName: colorByData[0].itemName , dataValue: toolTip['colorData'], textLabel: 'textColumn'+(i+1) };
+            console.log('debug: tooltip',JSON.stringify(obj));
+            tempColorByModel.append(obj)
+            i++;
+        }
+        
+        d3PropertyConfig.toolTip = toolTip;
+        console.log('debug: tooltip',JSON.stringify(d3PropertyConfig.toolTip),'I am redrawing');
         reDrawChart();
     }
 
@@ -1429,6 +1596,13 @@ Page {
         previousChartTitle = chartTitle;
         chartTitle = chartTitleValue;
         var chartUrl = '';
+        if(d3PropertyConfig.toolTip){
+            console.log('Deleiing while switching charts!')
+            delete d3PropertyConfig.toolTip;
+            tempXModel.clear();
+            tempYModel.clear();
+            tempColorByModel.clear();
+        }
         if(!allChartsMapping[chartTitle]){
             allChartsMapping[chartTitle] = {}
         }
@@ -1511,6 +1685,9 @@ Page {
             break;
         case Constants.kpiTitle:
             chartUrl = Constants.kpiChartUrl;
+            break;
+        case Constants.waterfallChartTitle:
+            chartUrl = Constants.waterfallChartUrl;
             break;
         case Constants.treeChartTitle:
             chartUrl = Constants.treeChartUrl;
@@ -1628,6 +1805,31 @@ Page {
         dragActiveObject= {};
         colorByData = [];
 
+        // Clearing all the properties values
+        alternateRowsCheckStatus = true
+        searchCheckStatus = true
+        compactStatusCheckStatus = false
+
+        // table total customization
+        tableGrandTotalCheckStatus = false
+        totalSubTotalCheckStatus = false
+        totalRowTotalCheckStatus = false
+
+        // KPI Values!!
+        boldCheckKPILabelStatus = false
+        italicCheckKPILabelStatus = false
+        underlineCheckKPILabelStatus = false
+
+        dataLabelDialogKpiColor =  '#000000'
+        dataLabelKpiColorBoxColor = '#000000'
+
+        xAxisLabelStatus = true;
+        yAxisLabelStatus = true;
+
+        tempXModel.clear();
+        tempYModel.clear();
+        tempColorByModel.clear();
+        
         // TODO:reset all constants for chart
 
         // Calling this redraw will clear the chart because no x and y columns will be available
@@ -1695,7 +1897,6 @@ Page {
 
         
         if(chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle){
-            console.log('Start plotting ',chartTitle,'chart')
             if(xAxisColumns.length > 0 ){
                 console.log(xAxisColumns)
                 drawChart();
@@ -1867,6 +2068,10 @@ Page {
         }
         editReportFlag = false;
 
+        tempXModel.clear();
+        tempYModel.clear();
+        tempColorByModel.clear();
+
         // Setting it to -1 so that editReportToggle signal is called
         // After this editReportToggle is set to false
         // Gets called again which creates a new id and add it to map
@@ -1987,7 +2192,11 @@ Page {
                 return true;
             }
             return false;
-
+        case Constants.kpiTitle:
+            if((itemType && itemType.toLowerCase()) == "numerical"){
+                return true;
+            }
+            return false;
         }
         
 
@@ -2274,6 +2483,13 @@ Page {
             return;
         }
 
+        d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
+        d3PropertyConfig.yAxisConfig.yaxisStatus = !!yAxisLabelStatus
+
+        d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
+        d3PropertyConfig.xAxisConfig.xaxisStatus = !!xAxisLabelStatus
+
+        console.log('Start plotting ',chartTitle,'chart')
         console.log(JSON.stringify(d3PropertyConfig));
 
         /*

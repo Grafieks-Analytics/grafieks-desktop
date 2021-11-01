@@ -1209,16 +1209,16 @@
                         var numOfCharacters = maxWidth / singleCharacterLength;
 
                         if (a[i].innerHTML.length > numOfCharacters) {
-                            a[i].innerHTML =
+                            a[i].innerHTML = 
                                 a[i].innerHTML.substr(0, numOfCharacters - 3) +
                                 "...";
                         }
                     }
                 }
 
-                setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
+                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
                 setLabel(
-                    yAxisLabel,
+                    xAxisLabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -1290,6 +1290,15 @@
                             this.setAttribute("data-value-y", d[0]);
 
                             return x(d[2]);
+                        })
+                        .attr("display", function (d) {
+                            var dataLabelLimit = width /5;
+                            // var labelYPosition = yScale(dataValues[i][1]);
+                            if ((x(d[2])) > dataLabelLimit) {
+                                return "";
+                            } else {
+                                return "none";
+                            }
                         })
                         .attr("y", function (d) {
                             return y(d[0]) + y.bandwidth() / 2;

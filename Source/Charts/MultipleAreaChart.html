@@ -61,839 +61,6 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var data = [
-                [
-                    ["2019-11-08", "Furniture", 566],
-                    ["2019-11-08", "Office Supplies", 0],
-                    ["2019-11-08", "Technology", 0],
-                    ["2019-06-12", "Furniture", 36],
-                    ["2019-06-12", "Office Supplies", 400],
-                    ["2019-06-12", "Technology", 40],
-                    ["2018-10-11", "Furniture", -766],
-                    ["2018-10-11", "Office Supplies", 6],
-                    ["2018-10-11", "Technology", 0],
-                    ["2017-06-09", "Furniture", 198],
-                    ["2017-06-09", "Office Supplies", 84],
-                    ["2017-06-09", "Technology", 182],
-                    ["2020-04-15", "Furniture", 0],
-                    ["2020-04-15", "Office Supplies", 10],
-                    ["2020-04-15", "Technology", 0],
-                    ["2019-12-05", "Furniture", 0],
-                    ["2019-12-05", "Office Supplies", 266],
-                    ["2019-12-05", "Technology", 0],
-                    ["2018-11-22", "Furniture", 0],
-                    ["2018-11-22", "Office Supplies", -256],
-                    ["2018-11-22", "Technology", 0],
-                    ["2017-11-11", "Furniture", 0],
-                    ["2017-11-11", "Office Supplies", 26],
-                    ["2017-11-11", "Technology", 0],
-                    ["2017-05-13", "Furniture", 0],
-                    ["2017-05-13", "Office Supplies", 20],
-                    ["2017-05-13", "Technology", 0],
-                    ["2017-08-27", "Furniture", 0],
-                    ["2017-08-27", "Office Supplies", 18],
-                    ["2017-08-27", "Technology", 32],
-                    ["2019-12-09", "Furniture", 0],
-                    ["2019-12-09", "Office Supplies", 42],
-                    ["2019-12-09", "Technology", 0],
-                    ["2020-07-16", "Furniture", -2],
-                    ["2020-07-16", "Office Supplies", 0],
-                    ["2020-07-16", "Technology", 0],
-                    ["2018-09-25", "Furniture", 480],
-                    ["2018-09-25", "Office Supplies", 0],
-                    ["2018-09-25", "Technology", 0],
-                    ["2019-01-16", "Furniture", 0],
-                    ["2019-01-16", "Office Supplies", 8],
-                    ["2019-01-16", "Technology", 0],
-                    ["2018-09-17", "Furniture", -3298],
-                    ["2018-09-17", "Office Supplies", 4],
-                    ["2018-09-17", "Technology", 0],
-                    ["2020-10-19", "Furniture", 0],
-                    ["2020-10-19", "Office Supplies", 20],
-                    ["2020-10-19", "Technology", 0],
-                    ["2019-12-08", "Furniture", -296],
-                    ["2019-12-08", "Office Supplies", 0],
-                    ["2019-12-08", "Technology", 246],
-                    ["2018-12-27", "Furniture", -124],
-                    ["2018-12-27", "Office Supplies", 70],
-                    ["2018-12-27", "Technology", 84],
-                    ["2020-09-10", "Furniture", 0],
-                    ["2020-09-10", "Office Supplies", 0],
-                    ["2020-09-10", "Technology", 34],
-                    ["2019-07-17", "Furniture", 0],
-                    ["2019-07-17", "Office Supplies", 8],
-                    ["2019-07-17", "Technology", 0],
-                    ["2020-09-19", "Furniture", 0],
-                    ["2020-09-19", "Office Supplies", 20],
-                    ["2020-09-19", "Technology", 0],
-                    ["2019-03-11", "Furniture", 0],
-                    ["2019-03-11", "Office Supplies", 16],
-                    ["2019-03-11", "Technology", 40],
-                    ["2017-10-20", "Furniture", 0],
-                    ["2017-10-20", "Office Supplies", 16],
-                    ["2017-10-20", "Technology", 0],
-                    ["2019-06-20", "Furniture", 0],
-                    ["2019-06-20", "Office Supplies", 0],
-                    ["2019-06-20", "Technology", 12],
-                    ["2018-04-18", "Furniture", 40],
-                    ["2018-04-18", "Office Supplies", 106],
-                    ["2018-04-18", "Technology", 0],
-                    ["2019-12-11", "Furniture", 0],
-                    ["2019-12-11", "Office Supplies", 12],
-                    ["2019-12-11", "Technology", 598],
-                    ["2019-06-17", "Furniture", 14],
-                    ["2019-06-17", "Office Supplies", 184],
-                    ["2019-06-17", "Technology", 0],
-                    ["2018-11-24", "Furniture", 44],
-                    ["2018-11-24", "Office Supplies", 156],
-                    ["2018-11-24", "Technology", 12],
-                    ["2018-04-30", "Furniture", -30],
-                    ["2018-04-30", "Office Supplies", 0],
-                    ["2018-04-30", "Technology", 0],
-                    ["2017-12-05", "Furniture", 0],
-                    ["2017-12-05", "Office Supplies", 222],
-                    ["2017-12-05", "Technology", 126],
-                    ["2019-06-04", "Furniture", 0],
-                    ["2019-06-04", "Office Supplies", 72],
-                    ["2019-06-04", "Technology", 0],
-                    ["2019-09-18", "Furniture", 0],
-                    ["2019-09-18", "Office Supplies", 4],
-                    ["2019-09-18", "Technology", 0],
-                    ["2020-09-14", "Furniture", 0],
-                    ["2020-09-14", "Office Supplies", 18],
-                    ["2020-09-14", "Technology", 0],
-                    ["2018-04-26", "Furniture", -226],
-                    ["2018-04-26", "Office Supplies", -36],
-                    ["2018-04-26", "Technology", 0],
-                    ["2020-12-09", "Furniture", -12],
-                    ["2020-12-09", "Office Supplies", 2],
-                    ["2020-12-09", "Technology", 0],
-                    ["2017-11-26", "Furniture", -28],
-                    ["2017-11-26", "Office Supplies", 0],
-                    ["2017-11-26", "Technology", 0],
-                    ["2017-10-12", "Furniture", 0],
-                    ["2017-10-12", "Office Supplies", 20],
-                    ["2017-10-12", "Technology", 0],
-                    ["2018-09-03", "Furniture", 0],
-                    ["2018-09-03", "Office Supplies", 126],
-                    ["2018-09-03", "Technology", 0],
-                    ["2020-11-13", "Furniture", 0],
-                    ["2020-11-13", "Office Supplies", -98],
-                    ["2020-11-13", "Technology", 0],
-                    ["2020-05-28", "Furniture", 66],
-                    ["2020-05-28", "Office Supplies", 0],
-                    ["2020-05-28", "Technology", 0],
-                    ["2020-10-26", "Furniture", 0],
-                    ["2020-10-26", "Office Supplies", 6],
-                    ["2020-10-26", "Technology", 0],
-                    ["2019-04-05", "Furniture", 0],
-                    ["2019-04-05", "Office Supplies", 28],
-                    ["2019-04-05", "Technology", 0],
-                    ["2019-09-17", "Furniture", 0],
-                    ["2019-09-17", "Office Supplies", 20],
-                    ["2019-09-17", "Technology", 16],
-                    ["2018-01-31", "Furniture", 34],
-                    ["2018-01-31", "Office Supplies", 44],
-                    ["2018-01-31", "Technology", 0],
-                    ["2020-11-06", "Furniture", 0],
-                    ["2020-11-06", "Office Supplies", -8],
-                    ["2020-11-06", "Technology", 0],
-                    ["2020-11-09", "Furniture", 82],
-                    ["2020-11-09", "Office Supplies", 0],
-                    ["2020-11-09", "Technology", 0],
-                    ["2020-06-17", "Furniture", 0],
-                    ["2020-06-17", "Office Supplies", 36],
-                    ["2020-06-17", "Technology", 0],
-                    ["2019-09-06", "Furniture", 0],
-                    ["2019-09-06", "Office Supplies", 46],
-                    ["2019-09-06", "Technology", 0],
-                    ["2019-08-29", "Furniture", 0],
-                    ["2019-08-29", "Office Supplies", 40],
-                    ["2019-08-29", "Technology", -22],
-                    ["2019-12-01", "Furniture", 0],
-                    ["2019-12-01", "Office Supplies", 24],
-                    ["2019-12-01", "Technology", 0],
-                    ["2018-11-13", "Furniture", -8],
-                    ["2018-11-13", "Office Supplies", -52],
-                    ["2018-11-13", "Technology", -54],
-                    ["2020-11-23", "Furniture", 0],
-                    ["2020-11-23", "Office Supplies", 2],
-                    ["2020-11-23", "Technology", 40],
-                    ["2020-12-25", "Furniture", 22],
-                    ["2020-12-25", "Office Supplies", 0],
-                    ["2020-12-25", "Technology", 0],
-                    ["2019-11-03", "Furniture", 0],
-                    ["2019-11-03", "Office Supplies", 72],
-                    ["2019-11-03", "Technology", 0],
-                    ["2017-08-25", "Furniture", 0],
-                    ["2017-08-25", "Office Supplies", 136],
-                    ["2017-08-25", "Technology", 0],
-                    ["2018-03-02", "Furniture", 330],
-                    ["2018-03-02", "Office Supplies", 0],
-                    ["2018-03-02", "Technology", 0],
-                    ["2018-04-05", "Furniture", 0],
-                    ["2018-04-05", "Office Supplies", -232],
-                    ["2018-04-05", "Technology", 0],
-                    ["2017-12-26", "Furniture", -18],
-                    ["2017-12-26", "Office Supplies", 0],
-                    ["2017-12-26", "Technology", 0],
-                    ["2017-09-20", "Furniture", -816],
-                    ["2017-09-20", "Office Supplies", 0],
-                    ["2017-09-20", "Technology", 0],
-                    ["2020-11-05", "Furniture", 0],
-                    ["2020-11-05", "Office Supplies", 56],
-                    ["2020-11-05", "Technology", 0],
-                    ["2019-11-06", "Furniture", 34],
-                    ["2019-11-06", "Office Supplies", 0],
-                    ["2019-11-06", "Technology", 0],
-                    ["2020-02-02", "Furniture", 0],
-                    ["2020-02-02", "Office Supplies", 72],
-                    ["2020-02-02", "Technology", -24],
-                    ["2019-10-13", "Furniture", 42],
-                    ["2019-10-13", "Office Supplies", 154],
-                    ["2019-10-13", "Technology", 0],
-                ],
-                [
-                    "2019-11-08",
-                    "2019-06-12",
-                    "2018-10-11",
-                    "2017-06-09",
-                    "2020-04-15",
-                    "2019-12-05",
-                    "2018-11-22",
-                    "2017-11-11",
-                    "2017-05-13",
-                    "2017-08-27",
-                    "2019-12-09",
-                    "2020-07-16",
-                    "2018-09-25",
-                    "2019-01-16",
-                    "2018-09-17",
-                    "2020-10-19",
-                    "2019-12-08",
-                    "2018-12-27",
-                    "2020-09-10",
-                    "2019-07-17",
-                    "2020-09-19",
-                    "2019-03-11",
-                    "2017-10-20",
-                    "2019-06-20",
-                    "2018-04-18",
-                    "2019-12-11",
-                    "2019-06-17",
-                    "2018-11-24",
-                    "2018-04-30",
-                    "2017-12-05",
-                    "2019-06-04",
-                    "2019-09-18",
-                    "2020-09-14",
-                    "2018-04-26",
-                    "2020-12-09",
-                    "2017-11-26",
-                    "2017-10-12",
-                    "2018-09-03",
-                    "2020-11-13",
-                    "2020-05-28",
-                    "2020-10-26",
-                    "2019-04-05",
-                    "2019-09-17",
-                    "2018-01-31",
-                    "2020-11-06",
-                    "2020-11-09",
-                    "2020-06-17",
-                    "2019-09-06",
-                    "2019-08-29",
-                    "2019-12-01",
-                    "2018-11-13",
-                    "2020-11-23",
-                    "2020-12-25",
-                    "2019-11-03",
-                    "2017-08-25",
-                    "2018-03-02",
-                    "2018-04-05",
-                    "2017-12-26",
-                    "2017-09-20",
-                    "2020-11-05",
-                    "2019-11-06",
-                    "2020-02-02",
-                    "2019-10-13",
-                ],
-                ["Order_Date", "Category", "Profit"],
-            ];
-
-            // var data = [
-            //     [
-            //         ["Furniture", "A", -3636],
-            //         ["Furniture", "B", 0],
-            //         ["Furniture", "Technology", 0],
-            //         ["OfficeSupplies", "Furniture", 0],
-            //         ["OfficeSupplies", "OfficeSupplies", 2010],
-            //         ["OfficeSupplies", "Technology", 0],
-            //         ["Technology", "Furniture", 0],
-            //         ["Technology", "OfficeSupplies", 0],
-            //         ["Technology", "Technology", 1362],
-            //     ],
-            //     ["Furniture", "OfficeSupplies", "Technology"],
-            //     ["Category", "Profit"],
-            // ];
-
-            var data = [
-                [
-                    ["Henderson", "Furniture", 7],
-                    ["Henderson", "OfficeSupplies", 0],
-                    ["Henderson", "Technology", 0],
-                    ["LosAngeles", "Furniture", 684],
-                    ["LosAngeles", "OfficeSupplies", 818],
-                    ["LosAngeles", "Technology", 324],
-                    ["FortLauderdale", "Furniture", 8],
-                    ["FortLauderdale", "OfficeSupplies", 10],
-                    ["FortLauderdale", "Technology", 0],
-                    ["Concord", "Furniture", 0],
-                    ["Concord", "OfficeSupplies", 26],
-                    ["Concord", "Technology", 0],
-                    ["Seattle", "Furniture", 236],
-                    ["Seattle", "OfficeSupplies", 28],
-                    ["Seattle", "Technology", 0],
-                    ["FortWorth", "Furniture", 0],
-                    ["FortWorth", "OfficeSupplies", 62],
-                    ["FortWorth", "Technology", 0],
-                    ["Madison", "Furniture", 0],
-                    ["Madison", "OfficeSupplies", 34],
-                    ["Madison", "Technology", 0],
-                    ["WestJordan", "Furniture", 0],
-                    ["WestJordan", "OfficeSupplies", 36],
-                    ["WestJordan", "Technology", 0],
-                    ["SanFrancisco", "Furniture", 0],
-                    ["SanFrancisco", "OfficeSupplies", 606],
-                    ["SanFrancisco", "Technology", 40],
-                    ["Fremont", "Furniture", 0],
-                    ["Fremont", "OfficeSupplies", 90],
-                    ["Fremont", "Technology", 0],
-                    ["Philadelphia", "Furniture", 164],
-                    ["Philadelphia", "OfficeSupplies", 318],
-                    ["Philadelphia", "Technology", 0],
-                    ["Orem", "Furniture", 50],
-                    ["Orem", "OfficeSupplies", 0],
-                    ["Orem", "Technology", 0],
-                    ["Houston", "Furniture", 720],
-                    ["Houston", "OfficeSupplies", 632],
-                    ["Houston", "Technology", 82],
-                    ["Richardson", "Furniture", 74],
-                    ["Richardson", "OfficeSupplies", 0],
-                    ["Richardson", "Technology", 72],
-                    ["Naperville", "Furniture", 0],
-                    ["Naperville", "OfficeSupplies", 0],
-                    ["Naperville", "Technology", 84],
-                    ["Melbourne", "Furniture", 0],
-                    ["Melbourne", "OfficeSupplies", 88],
-                    ["Melbourne", "Technology", 0],
-                    ["Eagan", "Furniture", 0],
-                    ["Eagan", "OfficeSupplies", 92],
-                    ["Eagan", "Technology", 90],
-                    ["Westland", "Furniture", 0],
-                    ["Westland", "OfficeSupplies", 94],
-                    ["Westland", "Technology", 0],
-                    ["Dover", "Furniture", 0],
-                    ["Dover", "OfficeSupplies", 0],
-                    ["Dover", "Technology", 98],
-                    ["NewAlbany", "Furniture", 210],
-                    ["NewAlbany", "OfficeSupplies", 202],
-                    ["NewAlbany", "Technology", 0],
-                    ["NewYorkCity", "Furniture", 416],
-                    ["NewYorkCity", "OfficeSupplies", 250],
-                    ["NewYorkCity", "Technology", 110],
-                    ["Troy", "Furniture", 116],
-                    ["Troy", "OfficeSupplies", 590],
-                    ["Troy", "Technology", 0],
-                    ["Chicago", "Furniture", 134],
-                    ["Chicago", "OfficeSupplies", 574],
-                    ["Chicago", "Technology", 202],
-                    ["Gilbert", "Furniture", 0],
-                    ["Gilbert", "OfficeSupplies", 136],
-                    ["Gilbert", "Technology", 138],
-                    ["Springfield", "Furniture", 0],
-                    ["Springfield", "OfficeSupplies", 140],
-                    ["Springfield", "Technology", 0],
-                    ["Jackson", "Furniture", 0],
-                    ["Jackson", "OfficeSupplies", 144],
-                    ["Jackson", "Technology", 0],
-                    ["Memphis", "Furniture", 294],
-                    ["Memphis", "OfficeSupplies", 150],
-                    ["Memphis", "Technology", 0],
-                    ["Decatur", "Furniture", 0],
-                    ["Decatur", "OfficeSupplies", 322],
-                    ["Decatur", "Technology", 0],
-                    ["Durham", "Furniture", 0],
-                    ["Durham", "OfficeSupplies", 168],
-                    ["Durham", "Technology", 0],
-                    ["Columbia", "Furniture", 172],
-                    ["Columbia", "OfficeSupplies", 0],
-                    ["Columbia", "Technology", 0],
-                    ["Rochester", "Furniture", 0],
-                    ["Rochester", "OfficeSupplies", 382],
-                    ["Rochester", "Technology", 0],
-                    ["Minneapolis", "Furniture", 188],
-                    ["Minneapolis", "OfficeSupplies", 376],
-                    ["Minneapolis", "Technology", 0],
-                    ["Portland", "Furniture", 0],
-                    ["Portland", "OfficeSupplies", 192],
-                    ["Portland", "Technology", 0],
-                    ["SaintPaul", "Furniture", 0],
-                    ["SaintPaul", "OfficeSupplies", 198],
-                    ["SaintPaul", "Technology", 0],
-                    ["Aurora", "Furniture", 210],
-                    ["Aurora", "OfficeSupplies", 212],
-                    ["Aurora", "Technology", 208],
-                    ["Charlotte", "Furniture", 0],
-                    ["Charlotte", "OfficeSupplies", 218],
-                    ["Charlotte", "Technology", 430],
-                    ["Urbandale", "Furniture", 0],
-                    ["Urbandale", "OfficeSupplies", 450],
-                    ["Urbandale", "Technology", 0],
-                    ["Columbus", "Furniture", 0],
-                    ["Columbus", "OfficeSupplies", 1454],
-                    ["Columbus", "Technology", 262],
-                    ["Bristol", "Furniture", 0],
-                    ["Bristol", "OfficeSupplies", 238],
-                    ["Bristol", "Technology", 0],
-                    ["Wilmington", "Furniture", 240],
-                    ["Wilmington", "OfficeSupplies", 732],
-                    ["Wilmington", "Technology", 248],
-                    ["Bloomington", "Furniture", 252],
-                    ["Bloomington", "OfficeSupplies", 0],
-                    ["Bloomington", "Technology", 0],
-                    ["Phoenix", "Furniture", 0],
-                    ["Phoenix", "OfficeSupplies", 510],
-                    ["Phoenix", "Technology", 0],
-                    ["Roseville", "Furniture", 280],
-                    ["Roseville", "OfficeSupplies", 1638],
-                    ["Roseville", "Technology", 0],
-                ],
-                [
-                    "Henderson",
-                    "LosAngeles",
-                    "FortLauderdale",
-                    "Concord",
-                    "Seattle",
-                    "FortWorth",
-                    "Madison",
-                    "WestJordan",
-                    "SanFrancisco",
-                    "Fremont",
-                    "Philadelphia",
-                    "Orem",
-                    "Houston",
-                    "Richardson",
-                    "Naperville",
-                    "Melbourne",
-                    "Eagan",
-                    "Westland",
-                    "Dover",
-                    "NewAlbany",
-                    "NewYorkCity",
-                    "Troy",
-                    "Chicago",
-                    "Gilbert",
-                    "Springfield",
-                    "Jackson",
-                    "Memphis",
-                    "Decatur",
-                    "Durham",
-                    "Columbia",
-                    "Rochester",
-                    "Minneapolis",
-                    "Portland",
-                    "SaintPaul",
-                    "Aurora",
-                    "Charlotte",
-                    "Urbandale",
-                    "Columbus",
-                    "Bristol",
-                    "Wilmington",
-                    "Bloomington",
-                    "Phoenix",
-                    "Roseville",
-                ],
-                ["Category", "Row_ID", "city"],
-            ];
-
-            var data = [
-                [
-                    ["Furniture", "Henderson", 2250],
-                    ["Furniture", "Los Angeles", 4310],
-                    ["Furniture", "Fort Lauderdale", 1916],
-                    ["Furniture", "Concord", 0],
-                    ["Furniture", "Seattle", 1576],
-                    ["Furniture", "Fort Worth", 0],
-                    ["Furniture", "Madison", 0],
-                    ["Furniture", "West Jordan", 0],
-                    ["Furniture", "San Francisco", 0],
-                    ["Furniture", "Fremont", 0],
-                    ["Furniture", "Philadelphia", 6556],
-                    ["Furniture", "Orem", 2090],
-                    ["Furniture", "Houston", 2748],
-                    ["Furniture", "Richardson", 382],
-                    ["Furniture", "Naperville", 0],
-                    ["Furniture", "Melbourne", 0],
-                    ["Furniture", "Eagan", 0],
-                    ["Furniture", "Westland", 0],
-                    ["Furniture", "Dover", 0],
-                    ["Furniture", "New Albany", 192],
-                    ["Furniture", "New York City", 278],
-                    ["Furniture", "Troy", 638],
-                    ["Furniture", "Chicago", 426],
-                    ["Furniture", "Gilbert", 0],
-                    ["Furniture", "Springfield", 0],
-                    ["Furniture", "Jackson", 0],
-                    ["Furniture", "Memphis", 1858],
-                    ["Furniture", "Decatur", 0],
-                    ["Furniture", "Durham", 0],
-                    ["Furniture", "Columbia", 604],
-                    ["Furniture", "Rochester", 0],
-                    ["Furniture", "Minneapolis", 106],
-                    ["Furniture", "Portland", 0],
-                    ["Furniture", "Saint Paul", 0],
-                    ["Furniture", "Aurora", 204],
-                    ["Furniture", "Charlotte", 0],
-                    ["Furniture", "Urbandale", 0],
-                    ["Furniture", "Columbus", 0],
-                    ["Furniture", "Bristol", 0],
-                    ["Furniture", "Wilmington", 94],
-                    ["Furniture", "Bloomington", 1236],
-                    ["Furniture", "Phoenix", 0],
-                    ["Furniture", "Roseville", 86],
-                    ["Office Supplies", "Henderson", 0],
-                    ["Office Supplies", "Los Angeles", 890],
-                    ["Office Supplies", "Fort Lauderdale", 44],
-                    ["Office Supplies", "Concord", 32],
-                    ["Office Supplies", "Seattle", 816],
-                    ["Office Supplies", "Fort Worth", 144],
-                    ["Office Supplies", "Madison", 1332],
-                    ["Office Supplies", "West Jordan", 112],
-                    ["Office Supplies", "San Francisco", 238],
-                    ["Office Supplies", "Fremont", 158],
-                    ["Office Supplies", "Philadelphia", 244],
-                    ["Office Supplies", "Orem", 0],
-                    ["Office Supplies", "Houston", 656],
-                    ["Office Supplies", "Richardson", 0],
-                    ["Office Supplies", "Naperville", 0],
-                    ["Office Supplies", "Melbourne", 192],
-                    ["Office Supplies", "Eagan", 34],
-                    ["Office Supplies", "Westland", 424],
-                    ["Office Supplies", "Dover", 0],
-                    ["Office Supplies", "New Albany", 226],
-                    ["Office Supplies", "New York City", 40],
-                    ["Office Supplies", "Troy", 612],
-                    ["Office Supplies", "Chicago", 594],
-                    ["Office Supplies", "Gilbert", 2226],
-                    ["Office Supplies", "Springfield", 152],
-                    ["Office Supplies", "Jackson", 38],
-                    ["Office Supplies", "Memphis", 146],
-                    ["Office Supplies", "Decatur", 450],
-                    ["Office Supplies", "Durham", 402],
-                    ["Office Supplies", "Columbia", 0],
-                    ["Office Supplies", "Rochester", 60],
-                    ["Office Supplies", "Minneapolis", 92],
-                    ["Office Supplies", "Portland", 12],
-                    ["Office Supplies", "Saint Paul", 156],
-                    ["Office Supplies", "Aurora", 74],
-                    ["Office Supplies", "Charlotte", 6],
-                    ["Office Supplies", "Urbandale", 206],
-                    ["Office Supplies", "Columbus", 596],
-                    ["Office Supplies", "Bristol", 316],
-                    ["Office Supplies", "Wilmington", 746],
-                    ["Office Supplies", "Bloomington", 0],
-                    ["Office Supplies", "Phoenix", 492],
-                    ["Office Supplies", "Roseville", 426],
-                    ["Technology", "Henderson", 0],
-                    ["Technology", "Los Angeles", 1990],
-                    ["Technology", "Fort Lauderdale", 0],
-                    ["Technology", "Concord", 0],
-                    ["Technology", "Seattle", 0],
-                    ["Technology", "Fort Worth", 0],
-                    ["Technology", "Madison", 0],
-                    ["Technology", "West Jordan", 0],
-                    ["Technology", "San Francisco", 426],
-                    ["Technology", "Fremont", 0],
-                    ["Technology", "Philadelphia", 0],
-                    ["Technology", "Orem", 0],
-                    ["Technology", "Houston", 742],
-                    ["Technology", "Richardson", 2196],
-                    ["Technology", "Naperville", 294],
-                    ["Technology", "Melbourne", 0],
-                    ["Technology", "Eagan", 92],
-                    ["Technology", "Westland", 0],
-                    ["Technology", "Dover", 44],
-                    ["Technology", "New Albany", 0],
-                    ["Technology", "New York City", 2060],
-                    ["Technology", "Troy", 0],
-                    ["Technology", "Chicago", 192],
-                    ["Technology", "Gilbert", 336],
-                    ["Technology", "Springfield", 0],
-                    ["Technology", "Jackson", 0],
-                    ["Technology", "Memphis", 0],
-                    ["Technology", "Decatur", 0],
-                    ["Technology", "Durham", 0],
-                    ["Technology", "Columbia", 0],
-                    ["Technology", "Rochester", 0],
-                    ["Technology", "Minneapolis", 0],
-                    ["Technology", "Portland", 0],
-                    ["Technology", "Saint Paul", 0],
-                    ["Technology", "Aurora", 478],
-                    ["Technology", "Charlotte", 204],
-                    ["Technology", "Urbandale", 0],
-                    ["Technology", "Columbus", 120],
-                    ["Technology", "Bristol", 0],
-                    ["Technology", "Wilmington", 136],
-                    ["Technology", "Bloomington", 0],
-                    ["Technology", "Phoenix", 0],
-                    ["Technology", "Roseville", 0],
-                ],
-                [
-                    "Henderson",
-                    "City",
-                    "Los Angeles",
-                    "Fort Lauderdale",
-                    "Concord",
-                    "Seattle",
-                    "Fort Worth",
-                    "Madison",
-                    "West Jordan",
-                    "San Francisco",
-                    "Fremont",
-                    "Philadelphia",
-                    "Orem",
-                    "Houston",
-                    "Richardson",
-                    "Naperville",
-                    "Melbourne",
-                    "Eagan",
-                    "Westland",
-                    "Dover",
-                    "New Albany",
-                    "New York City",
-                    "Troy",
-                    "Chicago",
-                    "Gilbert",
-                    "Springfield",
-                    "Jackson",
-                    "Memphis",
-                    "Decatur",
-                    "Durham",
-                    "Columbia",
-                    "Rochester",
-                    "Minneapolis",
-                    "Portland",
-                    "Saint Paul",
-                    "Aurora",
-                    "Charlotte",
-                    "Urbandale",
-                    "Columbus",
-                    "Bristol",
-                    "Wilmington",
-                    "Bloomington",
-                    "Phoenix",
-                    "Roseville",
-                ],
-                ["Category", "City", "Sales"],
-            ];
-
-            var data = [
-                [
-                    ["2019-11-08", "Furniture", 2250],
-                    ["2019-11-08", "Office Supplies", 0],
-                    ["2019-11-08", "Technology", 0],
-                    ["2019-06-12", "Furniture", 94],
-                    ["2019-06-12", "Office Supplies", 1226],
-                    ["2019-06-12", "Technology", 136],
-                    ["2018-10-11", "Furniture", 1916],
-                    ["2018-10-11", "Office Supplies", 44],
-                    ["2018-10-11", "Technology", 0],
-                    ["2017-06-09", "Furniture", 3510],
-                    ["2017-06-09", "Office Supplies", 282],
-                    ["2017-06-09", "Technology", 1814],
-                    ["2020-04-15", "Furniture", 0],
-                    ["2020-04-15", "Office Supplies", 32],
-                    ["2020-04-15", "Technology", 0],
-                    ["2019-12-05", "Furniture", 0],
-                    ["2019-12-05", "Office Supplies", 816],
-                    ["2019-12-05", "Technology", 0],
-                    ["2018-11-22", "Furniture", 0],
-                    ["2018-11-22", "Office Supplies", 144],
-                    ["2018-11-22", "Technology", 0],
-                    ["2017-11-11", "Furniture", 0],
-                    ["2017-11-11", "Office Supplies", 1332],
-                    ["2017-11-11", "Technology", 0],
-                    ["2017-05-13", "Furniture", 0],
-                    ["2017-05-13", "Office Supplies", 112],
-                    ["2017-05-13", "Technology", 0],
-                    ["2017-08-27", "Furniture", 0],
-                    ["2017-08-27", "Office Supplies", 64],
-                    ["2017-08-27", "Technology", 426],
-                    ["2019-12-09", "Furniture", 0],
-                    ["2019-12-09", "Office Supplies", 158],
-                    ["2019-12-09", "Technology", 0],
-                    ["2020-07-16", "Furniture", 142],
-                    ["2020-07-16", "Office Supplies", 0],
-                    ["2020-07-16", "Technology", 0],
-                    ["2018-09-25", "Furniture", 2090],
-                    ["2018-09-25", "Office Supplies", 0],
-                    ["2018-09-25", "Technology", 0],
-                    ["2019-01-16", "Furniture", 0],
-                    ["2019-01-16", "Office Supplies", 24],
-                    ["2019-01-16", "Technology", 0],
-                    ["2018-09-17", "Furniture", 6414],
-                    ["2018-09-17", "Office Supplies", 244],
-                    ["2018-09-17", "Technology", 0],
-                    ["2020-10-19", "Furniture", 0],
-                    ["2020-10-19", "Office Supplies", 58],
-                    ["2020-10-19", "Technology", 0],
-                    ["2019-12-08", "Furniture", 382],
-                    ["2019-12-08", "Office Supplies", 0],
-                    ["2019-12-08", "Technology", 2196],
-                    ["2018-12-27", "Furniture", 1488],
-                    ["2018-12-27", "Office Supplies", 226],
-                    ["2018-12-27", "Technology", 742],
-                    ["2020-09-10", "Furniture", 0],
-                    ["2020-09-10", "Office Supplies", 0],
-                    ["2020-09-10", "Technology", 294],
-                    ["2019-07-17", "Furniture", 0],
-                    ["2019-07-17", "Office Supplies", 156],
-                    ["2019-07-17", "Technology", 0],
-                    ["2020-09-19", "Furniture", 0],
-                    ["2020-09-19", "Office Supplies", 192],
-                    ["2020-09-19", "Technology", 0],
-                    ["2019-03-11", "Furniture", 0],
-                    ["2019-03-11", "Office Supplies", 34],
-                    ["2019-03-11", "Technology", 92],
-                    ["2017-10-20", "Furniture", 0],
-                    ["2017-10-20", "Office Supplies", 424],
-                    ["2017-10-20", "Technology", 0],
-                    ["2019-06-20", "Furniture", 0],
-                    ["2019-06-20", "Office Supplies", 0],
-                    ["2019-06-20", "Technology", 44],
-                    ["2018-04-18", "Furniture", 192],
-                    ["2018-04-18", "Office Supplies", 226],
-                    ["2018-04-18", "Technology", 0],
-                    ["2019-12-11", "Furniture", 0],
-                    ["2019-12-11", "Office Supplies", 30],
-                    ["2019-12-11", "Technology", 2060],
-                    ["2019-06-17", "Furniture", 638],
-                    ["2019-06-17", "Office Supplies", 612],
-                    ["2019-06-17", "Technology", 0],
-                    ["2018-11-24", "Furniture", 160],
-                    ["2018-11-24", "Office Supplies", 346],
-                    ["2018-11-24", "Technology", 28],
-                    ["2018-04-30", "Furniture", 426],
-                    ["2018-04-30", "Office Supplies", 0],
-                    ["2018-04-30", "Technology", 0],
-                    ["2017-12-05", "Furniture", 0],
-                    ["2017-12-05", "Office Supplies", 2226],
-                    ["2017-12-05", "Technology", 336],
-                    ["2019-06-04", "Furniture", 0],
-                    ["2019-06-04", "Office Supplies", 152],
-                    ["2019-06-04", "Technology", 0],
-                    ["2019-09-18", "Furniture", 0],
-                    ["2019-09-18", "Office Supplies", 10],
-                    ["2019-09-18", "Technology", 0],
-                    ["2020-09-14", "Furniture", 0],
-                    ["2020-09-14", "Office Supplies", 38],
-                    ["2020-09-14", "Technology", 0],
-                    ["2018-04-26", "Furniture", 1858],
-                    ["2018-04-26", "Office Supplies", 146],
-                    ["2018-04-26", "Technology", 0],
-                    ["2020-12-09", "Furniture", 20],
-                    ["2020-12-09", "Office Supplies", 56],
-                    ["2020-12-09", "Technology", 0],
-                    ["2017-11-26", "Furniture", 38],
-                    ["2017-11-26", "Office Supplies", 0],
-                    ["2017-11-26", "Technology", 0],
-                    ["2017-10-12", "Furniture", 0],
-                    ["2017-10-12", "Office Supplies", 72],
-                    ["2017-10-12", "Technology", 0],
-                    ["2018-09-03", "Furniture", 0],
-                    ["2018-09-03", "Office Supplies", 402],
-                    ["2018-09-03", "Technology", 0],
-                    ["2020-11-13", "Furniture", 0],
-                    ["2020-11-13", "Office Supplies", 460],
-                    ["2020-11-13", "Technology", 0],
-                    ["2020-05-28", "Furniture", 604],
-                    ["2020-05-28", "Office Supplies", 0],
-                    ["2020-05-28", "Technology", 0],
-                    ["2020-10-26", "Furniture", 0],
-                    ["2020-10-26", "Office Supplies", 12],
-                    ["2020-10-26", "Technology", 0],
-                    ["2019-04-05", "Furniture", 0],
-                    ["2019-04-05", "Office Supplies", 316],
-                    ["2019-04-05", "Technology", 0],
-                    ["2019-09-17", "Furniture", 0],
-                    ["2019-09-17", "Office Supplies", 52],
-                    ["2019-09-17", "Technology", 148],
-                    ["2018-01-31", "Furniture", 106],
-                    ["2018-01-31", "Office Supplies", 92],
-                    ["2018-01-31", "Technology", 0],
-                    ["2020-11-06", "Furniture", 0],
-                    ["2020-11-06", "Office Supplies", 12],
-                    ["2020-11-06", "Technology", 0],
-                    ["2020-11-09", "Furniture", 194],
-                    ["2020-11-09", "Office Supplies", 0],
-                    ["2020-11-09", "Technology", 0],
-                    ["2020-06-17", "Furniture", 0],
-                    ["2020-06-17", "Office Supplies", 102],
-                    ["2020-06-17", "Technology", 0],
-                    ["2019-09-06", "Furniture", 0],
-                    ["2019-09-06", "Office Supplies", 156],
-                    ["2019-09-06", "Technology", 0],
-                    ["2019-08-29", "Furniture", 0],
-                    ["2019-08-29", "Office Supplies", 134],
-                    ["2019-08-29", "Technology", 192],
-                    ["2019-12-01", "Furniture", 0],
-                    ["2019-12-01", "Office Supplies", 48],
-                    ["2019-12-01", "Technology", 0],
-                    ["2018-11-13", "Furniture", 204],
-                    ["2018-11-13", "Office Supplies", 74],
-                    ["2018-11-13", "Technology", 478],
-                    ["2020-11-23", "Furniture", 0],
-                    ["2020-11-23", "Office Supplies", 6],
-                    ["2020-11-23", "Technology", 204],
-                    ["2020-12-25", "Furniture", 84],
-                    ["2020-12-25", "Office Supplies", 0],
-                    ["2020-12-25", "Technology", 0],
-                    ["2019-11-03", "Furniture", 0],
-                    ["2019-11-03", "Office Supplies", 206],
-                    ["2019-11-03", "Technology", 0],
-                    ["2017-08-25", "Furniture", 0],
-                    ["2017-08-25", "Office Supplies", 398],
-                    ["2017-08-25", "Technology", 0],
-                    ["2018-03-02", "Furniture", 1576],
-                    ["2018-03-02", "Office Supplies", 0],
-                    ["2018-03-02", "Technology", 0],
-                    ["2018-04-05", "Furniture", 0],
-                    ["2018-04-05", "Office Supplies", 316],
-                    ["2018-04-05", "Technology", 0],
-                    ["2017-12-26", "Furniture", 1202],
-                    ["2017-12-26", "Office Supplies", 0],
-                    ["2017-12-26", "Technology", 0],
-                    ["2017-09-20", "Furniture", 1236],
-                    ["2017-09-20", "Office Supplies", 0],
-                    ["2017-09-20", "Technology", 0],
-                    ["2020-11-05", "Furniture", 0],
-                    ["2020-11-05", "Office Supplies", 492],
-                    ["2020-11-05", "Technology", 0],
-                    ["2019-11-06", "Furniture", 640],
-                    ["2019-11-06", "Office Supplies", 0],
-                    ["2019-11-06", "Technology", 0],
-                    ["2020-02-02", "Furniture", 0],
-                    ["2020-02-02", "Office Supplies", 198],
-                    ["2020-02-02", "Technology", 120],
-                    ["2019-10-13", "Furniture", 86],
-                    ["2019-10-13", "Office Supplies", 426],
-                    ["2019-10-13", "Technology", 0],
-                ],
-                ["Furniture", "Category", "Office Supplies", "Technology"],
-                ["Order_Date", "Category", "Sales"],
-            ];
-
             var {
                 initialCircleRadius,
                 initialBoxDimension,
@@ -904,25 +71,27 @@
 
             function transformData(
                 dataValue,
-                dataColumns = {},
+                dataColumns,
                 dateFormat,
                 dateFormat1
             ) {
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
+
                 // [Tag: Date Change]
                 var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
                 // [Tag: Date Change]
                 if (xAxisColumnDetails[0].itemType == "Date") {
                     isKey2Date = true;
+                    dateFormat = xAxisColumnDetails[0].dateFormat;
                 }
                 // [Tag: Date Change]
                 if (colorByData[0].itemType == "Date") {
                     isKey1Date = true;
+                    dateFormat1 = colorByData[0].dateFormat;
                 }
-
                 var uniqueKey2 = [];
                 var lineMainCategories = [];
                 dataValue.forEach((d) => {
@@ -991,6 +160,7 @@
                     chartType = defaultD3Config.chartType,
                     curveType = defaultLineCurve,
                     toolTip,
+                    dataColumns,
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     legendConfig = defaultD3Config.defaultLegendConfig,
                     labelConfig = defaultD3Config.defaultlabelConfig,
@@ -1019,7 +189,6 @@
                     // xaxis setting
                     xAxisConfig = defaultD3Config.xAxisConfig,
                     yAxisConfig = defaultD3Config.yAxisConfig,
-                    dataColumns,
 
                     filledStatus = true,
                 } = plottingConfiguration;
@@ -1098,7 +267,7 @@
                         data[2][2],
                     ];
                 }
-                // [xAxisLabel, colorData, yAxisLabel] = data[2];
+                // [xAxisLabel, yAxisLabel, colorData] = data[2];
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
@@ -1106,7 +275,6 @@
                         colorData: colorData,
                     };
                 }
-
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -1534,7 +702,7 @@
                             if (!d[2]) {
                                 return "";
                             }
-                            return d[2];
+                            return labelFormatSet(d[2], labelFormat);
                         })
                         .attr("x", function (d, i) {
                             this.setAttribute("data-value-x", d[0]);
@@ -1543,6 +711,15 @@
                             this.setAttribute("data-value-y", d[2]);
 
                             return x(d[0]) + x.bandwidth() / 2;
+                        })
+                        .attr("display", function (d) {
+                            var dataLabelLimit = height - window.innerHeight / 8;
+                            // var labelYPosition = yScale(dataValues[i][1]);
+                            if ((y(d[2])) > dataLabelLimit) {
+                                return "none";
+                            } else {
+                                return "";
+                            }
                         })
                         .attr("font-family", dataLabelfontFamily)
                         .attr("font-size", dataLabelfontSize)
@@ -1736,168 +913,168 @@
                 }
 
                 /*
-                            var mouseG = svg
-                                .append("g")
-                                .attr("class", "mouse-over-effects");
+                                        var mouseG = svg
+                                            .append("g")
+                                            .attr("class", "mouse-over-effects");
 
-                            mouseG
-                                .append("path") // this is the black vertical line to follow mouse
-                                .attr("class", "mouse-line")
-                                .style("stroke", "#999")
-                                .style("stroke-width", "1px")
-                                .style("opacity", "0.5");
+                                        mouseG
+                                            .append("path") // this is the black vertical line to follow mouse
+                                            .attr("class", "mouse-line")
+                                            .style("stroke", "#999")
+                                            .style("stroke-width", "1px")
+                                            .style("opacity", "0.5");
 
-                            var lines = document.getElementsByClassName("line");
+                                        var lines = document.getElementsByClassName("line");
 
-                            var mousePerLine = mouseG
-                                .selectAll(".mouse-per-line")
-                                .data(sumstat)
-                                .enter()
-                                .append("g")
-                                .attr("class", "mouse-per-line");
+                                        var mousePerLine = mouseG
+                                            .selectAll(".mouse-per-line")
+                                            .data(sumstat)
+                                            .enter()
+                                            .append("g")
+                                            .attr("class", "mouse-per-line");
 
-                            mousePerLine
-                                .append("circle")
-                                .attr("r", 3)
-                                .style("stroke", function (d) {
-                                    return color(d.key);
-                                })
-                                .style("fill", function (d) {
-                                    return color(d.key);
-                                })
-                                .style("stroke-width", "1px")
-                                .style("opacity", "0");
+                                        mousePerLine
+                                            .append("circle")
+                                            .attr("r", 3)
+                                            .style("stroke", function (d) {
+                                                return color(d.key);
+                                            })
+                                            .style("fill", function (d) {
+                                                return color(d.key);
+                                            })
+                                            .style("stroke-width", "1px")
+                                            .style("opacity", "0");
 
-                            mousePerLine
-                                .append("text")
-                                .attr("transform", "translate(10,3)");
+                                        mousePerLine
+                                            .append("text")
+                                            .attr("transform", "translate(10,3)");
 
-                            mouseG
-                                .append("svg:rect") // append a rect to catch mouse movements on canvas
-                                .attr("width", width) // can't catch mouse events on a g element
-                                .attr("height", height)
-                                .attr("fill", "none")
-                                .attr("pointer-events", "all")
-                                .on("mouseout", function () {
-                                    d3.select(".mouse-line").style("opacity", "0");
-                                    d3.selectAll(".mouse-per-line circle").style(
-                                        "opacity",
-                                        "0"
-                                    );
-                                    d3.selectAll(".mouse-per-line text").style(
-                                        "opacity",
-                                        "0"
-                                    );
-                                    d3.select("#tooltip")
-                                        .style("display", "none")
-                                        .style("opacity", "0");
-                                })
-                                .on("mouseover", function () {
-                                    // on mouse in show line, circles and text
-                                    d3.select(".mouse-line").style("opacity", "1");
-                                    d3.selectAll(".mouse-per-line circle").style(
-                                        "opacity",
-                                        "1"
-                                    );
-                                    d3.selectAll(".mouse-per-line text").style(
-                                        "opacity",
-                                        "1"
-                                    );
-                                })
-                                .on("mousemove", function () {
-                                    // mouse moving over canvas
+                                        mouseG
+                                            .append("svg:rect") // append a rect to catch mouse movements on canvas
+                                            .attr("width", width) // can't catch mouse events on a g element
+                                            .attr("height", height)
+                                            .attr("fill", "none")
+                                            .attr("pointer-events", "all")
+                                            .on("mouseout", function () {
+                                                d3.select(".mouse-line").style("opacity", "0");
+                                                d3.selectAll(".mouse-per-line circle").style(
+                                                    "opacity",
+                                                    "0"
+                                                );
+                                                d3.selectAll(".mouse-per-line text").style(
+                                                    "opacity",
+                                                    "0"
+                                                );
+                                                d3.select("#tooltip")
+                                                    .style("display", "none")
+                                                    .style("opacity", "0");
+                                            })
+                                            .on("mouseover", function () {
+                                                // on mouse in show line, circles and text
+                                                d3.select(".mouse-line").style("opacity", "1");
+                                                d3.selectAll(".mouse-per-line circle").style(
+                                                    "opacity",
+                                                    "1"
+                                                );
+                                                d3.selectAll(".mouse-per-line text").style(
+                                                    "opacity",
+                                                    "1"
+                                                );
+                                            })
+                                            .on("mousemove", function () {
+                                                // mouse moving over canvas
 
-                                    var mouse = d3.mouse(this);
-                                    d3.select(".mouse-line").attr("d", function () {
-                                        var d = "M" + mouse[0] + "," + height;
-                                        d += " " + mouse[0] + "," + 0;
-                                        return d;
-                                    });
+                                                var mouse = d3.mouse(this);
+                                                d3.select(".mouse-line").attr("d", function () {
+                                                    var d = "M" + mouse[0] + "," + height;
+                                                    d += " " + mouse[0] + "," + 0;
+                                                    return d;
+                                                });
 
-                                    d3.selectAll(".mouse-per-line").attr(
-                                        "transform",
-                                        function (d, i) {
-                                            var xValue = mouse[0];
+                                                d3.selectAll(".mouse-per-line").attr(
+                                                    "transform",
+                                                    function (d, i) {
+                                                        var xValue = mouse[0];
 
-                                            bisect = d3.bisector(function (d) {
-                                                return d.key;
-                                            }).right;
+                                                        bisect = d3.bisector(function (d) {
+                                                            return d.key;
+                                                        }).right;
 
-                                            idx = bisect(d.values, xValue);
+                                                        idx = bisect(d.values, xValue);
 
-                                            var beginning = 0,
-                                                end = lines[i].getTotalLength(),
-                                                target = null;
+                                                        var beginning = 0,
+                                                            end = lines[i].getTotalLength(),
+                                                            target = null;
 
-                                            while (true) {
-                                                target = Math.floor((beginning + end) / 2);
-                                                pos = lines[i].getPointAtLength(target);
-                                                if (
-                                                    (target === end ||
-                                                        target === beginning) &&
-                                                    pos.x !== mouse[0]
-                                                ) {
-                                                    break;
-                                                }
-                                                if (pos.x > mouse[0]) end = target;
-                                                else if (pos.x < mouse[0])
-                                                    beginning = target;
-                                                else break; //position found
-                                            }
+                                                        while (true) {
+                                                            target = Math.floor((beginning + end) / 2);
+                                                            pos = lines[i].getPointAtLength(target);
+                                                            if (
+                                                                (target === end ||
+                                                                    target === beginning) &&
+                                                                pos.x !== mouse[0]
+                                                            ) {
+                                                                break;
+                                                            }
+                                                            if (pos.x > mouse[0]) end = target;
+                                                            else if (pos.x < mouse[0])
+                                                                beginning = target;
+                                                            else break; //position found
+                                                        }
 
-                                            tooltipData[d.key] = {
-                                                xAxis: xValue,
-                                                yAxis: pos.y,
-                                                yPos: mouse[1],
-                                                dataValue: y.invert(pos.y).toFixed(2),
-                                            };
+                                                        tooltipData[d.key] = {
+                                                            xAxis: xValue,
+                                                            yAxis: pos.y,
+                                                            yPos: mouse[1],
+                                                            dataValue: y.invert(pos.y).toFixed(2),
+                                                        };
 
-                                            drawToolTip(color, mouse);
+                                                        drawToolTip(color, mouse);
 
-                                            // d3.select(this)
-                                            //     .select("text")
-                                            //     .text(y.invert(pos.y).toFixed(2));
+                                                        // d3.select(this)
+                                                        //     .select("text")
+                                                        //     .text(y.invert(pos.y).toFixed(2));
 
-                                            return (
-                                                "translate(" + mouse[0] + "," + pos.y + ")"
-                                            );
-                                        }
-                                    );
-                                });
+                                                        return (
+                                                            "translate(" + mouse[0] + "," + pos.y + ")"
+                                                        );
+                                                    }
+                                                );
+                                            });
 
-                                */
+                                            */
                 /*
-                            if (chartType == constants.chartType.STANDARD) {
-                                setStandardTickWidths();
-                            }
+                                        if (chartType == constants.chartType.STANDARD) {
+                                            setStandardTickWidths();
+                                        }
 
-                            function setStandardTickWidths() {
-                                var a = document.querySelectorAll(".x-axis .tick text");
+                                        function setStandardTickWidths() {
+                                            var a = document.querySelectorAll(".x-axis .tick text");
 
-                                for (var i = 0; i < a.length; i++) {
-                                    var singleCharacterLength =
-                                        a[i].getBBox().width / a[i].innerHTML.length;
-                                    var numOfCharacters = Math.floor(
-                                        barWidth / singleCharacterLength
-                                    );
+                                            for (var i = 0; i < a.length; i++) {
+                                                var singleCharacterLength =
+                                                    a[i].getBBox().width / a[i].innerHTML.length;
+                                                var numOfCharacters = Math.floor(
+                                                    barWidth / singleCharacterLength
+                                                );
 
-                                    var tick = a[i];
+                                                var tick = a[i];
 
-                                    var tickWidth = tick && tick.getBBox().width;
-                                    if (tickWidth > barWidth) {
-                                        console.log("Length is long", numOfCharacters);
-                                        var tickValue = tick.innerHTML;
-                                        tickValue =
-                                            tickValue &&
-                                            tickValue.substr(0, numOfCharacters - 3) +
-                                                "...";
-                                        console.log(tickValue);
-                                        tick.innerHTML = tickValue;
-                                    }
-                                }
-                            }
+                                                var tickWidth = tick && tick.getBBox().width;
+                                                if (tickWidth > barWidth) {
+                                                    console.log("Length is long", numOfCharacters);
+                                                    var tickValue = tick.innerHTML;
+                                                    tickValue =
+                                                        tickValue &&
+                                                        tickValue.substr(0, numOfCharacters - 3) +
+                                                            "...";
+                                                    console.log(tickValue);
+                                                    tick.innerHTML = tickValue;
+                                                }
+                                            }
+                                        }
 
-                            */
+                                        */
 
                 setYaxisWidth();
 
@@ -1913,9 +1090,9 @@
                 d3.selectAll(".x-axis text")
                     .attr("font-size", xTickfontSize)
                     .attr("font-family", xTickfontFamily)
-                    .attr("fill", xTickfontColor)
                     .attr("font-weight", xboldTick ? "bold" : "regular")
                     .attr("font-style", xitalicTick ? "italic" : "regular")
+                    .attr("fill", xTickfontColor)
                     .attr("y", 8);
                 d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
@@ -2061,7 +1238,7 @@
                     .attr("font-family", xTickfontFamily)
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
-                d3.selectAll("#yAxisDiv text")
+                d3.selectAll(".y-axis text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
@@ -2159,30 +1336,6 @@
                     .style("opacity", "1")
                     .html(tooltipDataText);
             }
-
-            drawChart(data, {
-                chartType: "FitWidth",
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "Category",
-                            itemType: "Categorical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [
-                        { columnName: "Sub_Category", itemType: "Categorical" },
-                    ],
-                },
-            });
         </script>
     </body>
 </html>

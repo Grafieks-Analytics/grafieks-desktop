@@ -75,7 +75,7 @@ Item{
         target: DashboardParamsModel
 
         function onReportNameChanged(refDashboardId, refReportId, reportName){
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
+            if(DashboardParamsModel.currentDashboard === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 setReportName(reportName);
             }
         }
@@ -115,7 +115,7 @@ Item{
                 newItem.visible = false
             }
 
-            // reDrawChart();
+            reDrawChart();
         }
 
         function onReportUrlChanged(refDashboardId, refReportId, url){
@@ -463,6 +463,8 @@ Item{
         webEngineView.runJavaScript(runScriptString);
         if(backgroundColorValue){
             setChartBackgroundColor(backgroundColorValue);
+        }else{
+            droppedReportId.color = "transparent";
         }
     }
 
@@ -585,10 +587,8 @@ Item{
     }
 
     function reDrawChart(){
-        const reportProperties = ReportParamsModel.getReport(parseInt(newItem.objectName));
-        setReportName(reportProperties.reportTitle);
-        console.log("Chart title", reportProperties, reportProperties.reportTitle);
-        console.log("Chart title xe")
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        setReportName(DashboardParamsModel.getReportName(DashboardParamsModel.currentDashboard, reportId));
         drawChart(reportProperties);
     }
 

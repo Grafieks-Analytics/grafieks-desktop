@@ -38,7 +38,7 @@ Rectangle{
 
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
+//            opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
 //            gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
         }
     }
@@ -56,8 +56,8 @@ Rectangle{
 
         function onGenerateWorkbookReports(){
 
-            var dashboardOpacityFetch = DashboardParamsModel.getDashboardOpacity(DashboardParamsModel.currentDashboard)
-            opacitySpinBox.value = dashboardOpacityFetch
+            // var dashboardOpacityFetch = DashboardParamsModel.getDashboardOpacity(DashboardParamsModel.currentDashboard)
+            // opacitySpinBox.value = dashboardOpacityFetch
         }
     }
 

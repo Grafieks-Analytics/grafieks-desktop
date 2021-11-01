@@ -1,6 +1,8 @@
 const constants = {
     chartTitles: {
         waterfallChart: "Waterfall Chart",
+        horizontalBarChart: "Horizontal Bar Chart",
+        barChart: "Bar Chart",
     },
     redColor: "#E15759",
     yellowColor: "#EDC949",
@@ -73,7 +75,7 @@ const defaultD3Config = {
         legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: true,
+        labelStatus: false,
         labelFormat: constants.labelFormat.ROUND,
     },
     defaultGridConfig: {

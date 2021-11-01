@@ -157,7 +157,7 @@
                 dateFormat = defaultD3Config.dateFormat,
                 dateFormat1 = defaultD3Config.dateFormat,
                 chartType = defaultD3Config.horizontalChartType,
-                toolTip,
+                toolTip = {},
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig = defaultD3Config.defaultlabelConfig,
                 gridConfig = defaultD3Config.defaultGridConfig,
@@ -234,15 +234,16 @@
             window.xboldLabel = xboldLabel;
             window.xitalicLabel = xitalicLabel;
             window.yitalicLabel = yitalicLabel;
-            if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
-                [xAxisLabel, yAxisLabel] = data[1];
+           if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
+                [xAxisLabel, yAxisLabel, colorData] = data[3];
+                 console.log(data)
             } else {
-                [xAxisLabel, yAxisLabel] = [
+                [xAxisLabel, yAxisLabel, colorData] = [
                     xAxisConfig.xlabel,
                     yAxisConfig.ylabel,
+                    data[3][2],
                 ];
             }
-
             d3Colors = d3colorPalette;
             var [data, keys, yAxisUniqueKeys, labels] = transformData(
                 data[0],
@@ -349,13 +350,11 @@
             if (chartType !== constants.chartType.STANDARD) {
                 height -= 5;
             }
-            if (!toolTip) {
-                toolTip = {
-                    textColumn1: labels[0],
-                    textColumn2: labels[1],
-                    colorData: labels[2],
-                };
-            }
+
+            toolTip.textColumn1 = toolTip.textColumn1 || (labels && labels[0]);
+            toolTip.textColumn2 = toolTip.textColumn2 || (labels && labels[1]);
+            toolTip.colorData = toolTip.colorData || (labels && labels[2]);
+
 
             const yAxisWidth = document.querySelector("#yAxisDiv").clientWidth;
 
@@ -373,7 +372,7 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html(colorbyLabel + "&nbsp;")
+                    .html(colorData + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");

@@ -113,6 +113,22 @@ Rectangle{
 
     //javascript function
 
+    onVisibleChanged:{
+        xaxisCheckbox.checked = xAxisLabelStatus;
+        yaxisCheckbox.checked = yAxisLabelStatus;
+
+        var { xAxisConfig = {}, yAxisConfig = {} }  = d3PropertyConfig;
+        var xLabel =  xAxisConfig.xlabel
+        var yLabel =  yAxisConfig.ylabel
+        
+        var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+        var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
+
+        xAxisLabelNameBox.text = xLabel || (xAxisColumnDetails[0] && xAxisColumnDetails[0].itemName);
+        yAxisLabelNameBox.text = yLabel || (yAxisColumnDetails[0] && yAxisColumnDetails[0].itemName);
+
+    }
+    
     function onApplyClicked(){
         popup.visible = false
         reDrawChart();
@@ -129,8 +145,8 @@ Rectangle{
         toggleItalicYTick= false;
         toggleItalicXTick= false;
 
-        xaxisCheckbox.checked =  true;
-        yaxisCheckbox.checked =  true;
+        xAxisLabelStatus =  true;
+        yAxisLabelStatus =  true;
                 
         xAxisLabelNameBox.text = null
         yAxisLabelNameBox.text = null
@@ -159,7 +175,7 @@ Rectangle{
         
         var chartPropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         var {   
-                dataColumns, yAxisConfig = {}, xAxisConfig = {}, xLabelfontSize, xTickfontSize, yLabelfontSize, yTickfontSize, 
+                dataColumns = {}, yAxisConfig = {}, xAxisConfig = {}, xLabelfontSize, xTickfontSize, yLabelfontSize, yTickfontSize,
                 xLabelfontFamily, yLabelfontFamily, xTickfontFamily, yTickfontFamily,
                 xLabelfontColor, yLabelfontColor, xTickfontColor, yTickfontColor
             } = chartPropertyConfig || {};
@@ -174,9 +190,15 @@ Rectangle{
         toggleItalicYLabel= !!yAxisConfig.yitalicLabel;
         toggleItalicYTick= !!yAxisConfig.yitalicTick;
 
-
-        xaxisCheckbox.checked =  xAxisConfig.axisStatus == false ? false : true;
-        yaxisCheckbox.checked =  yAxisConfig.axisStatus == false ? false : true;
+        if(yAxisConfig.yaxisStatus != undefined){
+            yAxisLabelStatus = yAxisConfig.yaxisStatus
+        }
+        
+        if(xAxisConfig.xaxisStatus != undefined){
+            xAxisLabelStatus = xAxisConfig.xaxisStatus
+        }
+        console.log('Y Axis',yAxisLabelStatus);
+        console.log('X Axis',xAxisLabelStatus);
 
         xAxisLabelNameBox.text = xAxisConfig.xlabel ? xAxisConfig.xlabel : dataColumns.xAxisColumnDetails[0].itemName;
         yAxisLabelNameBox.text = yAxisConfig.ylabel ? yAxisConfig.ylabel : (dataColumns.yAxisColumnDetails[0] && dataColumns.yAxisColumnDetails[0].itemName);
@@ -486,24 +508,13 @@ Rectangle{
                     height: 50
                     CheckBoxTpl{
                         id: xaxisCheckbox
-                        checked: true
+                        checked: xAxisLabelStatus
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
                             d3PropertyConfig.xAxisConfig = d3PropertyConfig.xAxisConfig || {};
-                            d3PropertyConfig.xAxisConfig.xaxisStatus = xaxisCheckbox.checked;
-
-                            if(xaxisCheckbox.checked){
-
-                                // webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');changeChartAttributes('.x_label','style','display: block');")
-
-
-                            }
-                            else{
-                                // webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: none');changeChartAttributes('.x_label','style','display: none');")
-
-
-                            }
+                            d3PropertyConfig.xAxisConfig.xaxisStatus = checked;
+                            xAxisLabelStatus = checked;
                         }
                     }
 
@@ -914,23 +925,13 @@ Rectangle{
 
                     CheckBoxTpl{
                         id:yaxisCheckbox
-                        checked: true
+                        checked: yAxisLabelStatus
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
                         onCheckStateChanged: {
                             d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
-                            d3PropertyConfig.yAxisConfig.yaxisStatus = yaxisCheckbox.checked;
-                            
-                            if(yaxisCheckbox.checked){
-
-                                // webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');changeChartAttributes('.y_label','style','display: block');")
-
-                            }
-                            else{
-                                // webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: none');changeChartAttributes('.y_label','style','display: none');")
-
-
-                            }
+                            d3PropertyConfig.yAxisConfig.yaxisStatus = checked;
+                            yAxisLabelStatus = checked;
                         }
                     }
 

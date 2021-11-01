@@ -24,7 +24,7 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
     this->setTmpCanvasHeight(Constants::defaultCanvasHeight);
 }
 
-bool DashboardParamsModel::dragNewReport(int dashboardId, int widgetId)
+bool DashboardParamsModel::dragNewReport(int dashboardId, int widgetId, QString reportName)
 {
 
     QVector<int> widgetIds;
@@ -45,7 +45,7 @@ bool DashboardParamsModel::dragNewReport(int dashboardId, int widgetId)
     }
 
     widgetIds.append(widgetId);
-    reportNames.insert(widgetId, "Report " + QString::number(widgetId));
+    reportNames.insert(widgetId, reportName);
     reportBackgroundColors.insert(widgetId, Constants::DefaultBackgroundColor);
     reportLineColors.insert(widgetId, Constants::DefaultBackgroundColor);
     reportOpacities.insert(widgetId, 0);

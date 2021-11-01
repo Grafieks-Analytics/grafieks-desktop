@@ -90,7 +90,6 @@ Item{
     function changedTypes(){
         var changedVariableTypes = GeneralParamsModel.getChangedColumnTypes()
         for (const [key, value] of Object.entries(changedVariableTypes)) {
-          console.log(key, value);
             var prefix = newItem.name + "."
 
             if(key.includes(prefix)){
@@ -115,23 +114,31 @@ Item{
 
     function displayColumns(allColumns, tableName){
 
-        const searchKey = tableName + "."
-        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
+        let searchKey = ""
+        if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            searchKey = "[" + tableName + "$]."
+        } else {
+            searchKey = tableName + "."
+        }
 
+        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
         displayColList.clear()
 
         allColumns.forEach(function(item){
+            var searchEntity = ""
+            if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                searchEntity = "[" + tableName + "$].["+item[0]+"]"
+            } else {
+                searchEntity = tableName + "." + item[0]
+            }
 
-            var regex = new RegExp("[.]" + item[0] + "$");
-
-            if(!toHideCols.find(value => regex.test(value))){
+            if(!toHideCols.includes(searchEntity)){
                 var columnType = ""
                 if(typeof newItem.changeColumnTypes.get(item[0]) !== "undefined"){
                     columnType = newItem.changeColumnTypes.get(item[0])
                 } else {
                     columnType = item[1]
                 }
-                console.log(columnType)
 
                 displayColList.append({colName: item[0], colType: columnType})
             }

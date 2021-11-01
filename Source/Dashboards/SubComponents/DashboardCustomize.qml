@@ -341,7 +341,7 @@ Item{
                         }
                          Row{
 
-                anchors.right: tableImg.right
+                // anchors.right: tableImg.right
                 anchors.top: toggleMenuIcon.bottom
                 anchors.rightMargin: -70
                 width: parent.width-30
