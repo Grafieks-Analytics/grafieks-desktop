@@ -984,7 +984,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Modeler"
+                text: "Query Editor"
                 width:100
 
                 onClicked: onQueryModellerClicked()
@@ -1389,7 +1389,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Datasource")
+                    ToolTip.text: qsTr("Publish Workbook")
 
                 }
 

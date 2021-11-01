@@ -59,15 +59,18 @@ Column{
     }
     function toggleCompactStatus(checkedStatus){
         report_desiner_page.d3PropertyConfig['compactStatus'] = checkedStatus;
+        compactStatusCheckStatus = checkedStatus;
         report_desiner_page.reDrawChart();
     }
     function toggleSearch(checkedStatus){
         report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
+        searchCheckStatus = checkedStatus;
         report_desiner_page.reDrawChart();
     }
     function toggleRowAlternateStatus(checkedStatus){
         console.log('Debug:: Alternate changed? ', checkedStatus);
         report_desiner_page.d3PropertyConfig['rowAlternateStatus'] = checkedStatus;
+        alternateRowsCheckStatus = checkedStatus
         report_desiner_page.reDrawChart();
     }
 
@@ -115,7 +118,8 @@ Column{
 
             CheckBoxTpl{
 
-                checked: true
+                id: alternateRows
+                checked: alternateRowsCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -139,6 +143,7 @@ Column{
 
         height: 35
         width: 150
+        visible: false
 
         Rectangle{
             anchors.fill: parent
@@ -176,11 +181,12 @@ Column{
 
     // Row Total Starts
 
+    // Hiding hover status for future release
     Rectangle{
 
         height: 35
         width: 150
-
+        visible: false
         Rectangle{
             anchors.fill: parent
             anchors.horizontalCenter: parent.horizontalCenter
@@ -236,7 +242,8 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                id: compactStatusCheckbox
+                checked: compactStatusCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -259,7 +266,7 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Search Status")
+                text: qsTr("Quick Search")
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -268,7 +275,8 @@ Column{
 
             CheckBoxTpl{
 
-                checked: true
+                id: searchStatusCheckBox
+                checked: searchCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter

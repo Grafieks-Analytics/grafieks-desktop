@@ -89,7 +89,7 @@ class DashboardParamsModel : public QObject
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE bool dragNewReport(int dashboardId, int widgetId);
+    Q_INVOKABLE bool dragNewReport(int dashboardId, int widgetId, QString reportName);
     Q_INVOKABLE bool removeReport(int dashboardId, int widgetId);
 
     Q_INVOKABLE bool createNewDashboard(int dashboardId);

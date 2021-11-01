@@ -9,6 +9,7 @@ import "../../../MainSubComponents"
 Column{
 
     id: propertiesFilter
+    width:150
 
     property int leftMargin: 15
 
@@ -311,13 +312,14 @@ Column{
     // Page Design Starts
 
 
-
     // Color By Component Starts
+    
     Rectangle {
-        id: colorByComponent
+        id: colorByComponents
         height: allParameter.height + colorByText.height + 2*colorListTopMargin
         visible: colorByComponentVisible
-        width: 150
+        // visible: false
+        width: parent.width
         Text {
             id: colorByText
             x: leftMargin
@@ -415,6 +417,7 @@ Column{
 
         height: 20
         width: parent.width
+        
         visible: tooltipVisible
 
         Rectangle{

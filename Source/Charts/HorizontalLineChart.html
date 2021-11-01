@@ -768,8 +768,13 @@
                         // })
                         //  label.textContent = textColumn2[1];
                         label.textContent = labelFormatSet(
-                            dataValues[i][1],
+                            dataValues[i][1], 
                             labelFormat
+                        );
+                        var dataLabelLimit = width /5;
+                        label.setAttribute(
+                            "display",
+                            labelYPosition > dataLabelLimit ? "" : "none"
                         );
                     });
                 }
@@ -1098,29 +1103,29 @@
                             .attr("width", initialBoxDimension);
                     });
             }
-            drawChart(dataset, {
-                chartType: "FitWidth",
-                xAxisConfig: { xlabel: "Sales" },
-                yAxisConfig: { ylabel: "Category" },
-                dataColumns: {
-                    xAxisColumnDetails: [
-                        {
-                            itemName: "Sales",
-                            itemType: "Numerical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    yAxisColumnDetails: [
-                        {
-                            itemName: "Category",
-                            itemType: "Categorical",
-                            dateFormat: "%Y",
-                        },
-                    ],
-                    row3ColumnDetails: [],
-                    colorByData: [],
-                },
-            });
+            // drawChart(dataset, {
+            //     chartType: "FitWidth",
+            //     xAxisConfig: { xlabel: "Sales" },
+            //     yAxisConfig: { ylabel: "Category" },
+            //     dataColumns: {
+            //         xAxisColumnDetails: [
+            //             {
+            //                 itemName: "Sales",
+            //                 itemType: "Numerical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         yAxisColumnDetails: [
+            //             {
+            //                 itemName: "Category",
+            //                 itemType: "Categorical",
+            //                 dateFormat: "%Y",
+            //             },
+            //         ],
+            //         row3ColumnDetails: [],
+            //         colorByData: [],
+            //     },
+            // });
         </script>
     </body>
 </html>
