@@ -404,7 +404,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_signin
                 text: Constants.signInText
-                enabled: false
+                enabled: true
 
                 onTriggered: {
                     if(typeof settings.value("user/sessionToken") !== "undefined"){
@@ -424,7 +424,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_publish_datasource
                 text: qsTr("Publish Datasource")
-                enabled: false
+                enabled: true
 
                 onTriggered: {
                     Datasources.setSourceType(Constants.liveDS)
@@ -437,7 +437,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_publish_workbook
                 text: qsTr("Publish Workbook")
-                enabled: false
+                enabled: true
             }
         }
 

@@ -14,7 +14,7 @@ FileDialog{
     title: "Save Workbook As"
     nameFilters: ["Workbook (*."+ Constants.workbookFileExt+" )"];
     fileMode: FileDialog.SaveFile
-    currentFile: ""
+    currentFile: "file:///" + DashboardParamsModel.wbName
 
     onAccepted: {
 
@@ -32,6 +32,10 @@ FileDialog{
 
         // Save workbook file
         let fileName = GeneralParamsModel.urlToFilePath(saveWorkbookPromptDialog.currentFile)
+
+        // Workbook file
+        PublishWorkbookModel.workbookFile(fileName)
+
         WorkbookProcessor.saveWorkbooks(fileName);
     }
     onRejected: {

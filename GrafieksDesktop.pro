@@ -51,6 +51,8 @@ SOURCES += \
     Code/Logic/Dashboards/Workers/saveworkbookworker.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
+    Code/Logic/Dashboards/projectslistmodel.cpp \
+    Code/Logic/Dashboards/publishworkbookmodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
@@ -60,9 +62,6 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
     Code/Logic/DataModeller/csvjsondatamodel.cpp \
     Code/Logic/DataModeller/csvjsonquerymodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
@@ -171,6 +170,8 @@ HEADERS += \
     Code/Logic/Dashboards/Workers/saveworkbookworker.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
+    Code/Logic/Dashboards/projectslistmodel.h \
+    Code/Logic/Dashboards/publishworkbookmodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
@@ -180,9 +181,6 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
     Code/Logic/DataModeller/csvjsondatamodel.h \
     Code/Logic/DataModeller/csvjsonquerymodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
@@ -231,8 +229,6 @@ HEADERS += \
     Code/OS/odbcdriversmodel.h \
     Code/OS/osentries.h \
     Code/duckdb.hpp \
-    Code/jsoncons/include/jsoncons/json.hpp \
-    Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \
     Code/messages.h \
     Code/constants.h \
     Code/parquet-extension.hpp \
@@ -249,6 +245,3 @@ DEPENDPATH += $$PWD/Libraries
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 win32: LIBS += $$PWD/Libraries/duckdb.lib
-
-macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
-macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a

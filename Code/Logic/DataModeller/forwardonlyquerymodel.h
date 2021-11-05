@@ -27,6 +27,8 @@ public:
     explicit ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
     ~ForwardOnlyQueryModel();
 
+    Q_PROPERTY(bool ifPublish READ ifPublish WRITE setIfPublish NOTIFY ifPublishChanged)
+
     Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
@@ -37,9 +39,13 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    bool ifPublish() const;
+
 public slots:
     void receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void extractSaved(QString errorMsg);
+
+    void setIfPublish(bool ifPublish);
 
 private:
     void generateRoleNames();
@@ -71,6 +77,8 @@ private:
     QString newWhereConditions;
     bool queriedFromDataModeler;
 
+    bool m_ifPublish;
+
 signals:
 
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
@@ -79,11 +87,12 @@ signals:
     void errorSignal(QString errMsg);
     void generateReports();
     void showSaveExtractWaitPopup();
-    void extractFileExceededLimit(bool freeLimit);
+    void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
 
 
 
+    void ifPublishChanged(bool ifPublish);
 };
 
 #endif // FORWARDONLYQUERYMODEL_H

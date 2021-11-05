@@ -114,6 +114,21 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
 
     }
 
+    // Current timestamp
+    quint64 currentTimestamp = QDateTime::currentMSecsSinceEpoch();
+
+    // This is to identify the extract irrespective of its filename
+    // This will not change when updated
+    QString uniqueHash = generalParamsModel->randomStringGenerator();
+
+    // File Headers
+    finalObj.insert("app_version", Constants::appVersion);
+    finalObj.insert("mode", Constants::currentMode);
+    finalObj.insert("workbook_version", Constants::workbookVersion);
+    finalObj.insert("unique_hash", uniqueHash); // This is to identify the extract irrespective of its filename
+    finalObj.insert("last_update", QString::number(currentTimestamp));
+    finalObj.insert("connectionType", Statics::dsType);
+
     finalObj.insert("reportParams", this->reportParams);
     finalObj.insert("dashboardParams", this->dashboardParams);
     finalObj.insert("tableColumns", this->tableColumnParams);
@@ -156,6 +171,8 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
         fileWorkbook.flush();
         fileWorkbook.close();
     }
+
+    emit workbookSaved();
 }
 
 void WorkbookProcessor::getReportParams(QJsonObject reportParams)

@@ -16,6 +16,7 @@ FileDialog{
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName
 
+
     onAccepted: {
 
         let fileName = GeneralParamsModel.urlToFilePath(saveFilePromptDialog.currentFile)
@@ -54,5 +55,3 @@ FileDialog{
         console.log("file rejected")
     }
 }
-
-

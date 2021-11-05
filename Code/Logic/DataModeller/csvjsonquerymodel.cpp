@@ -69,6 +69,11 @@ QHash<int, QByteArray> CSVJsonQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
+bool CSVJsonQueryModel::ifPublish() const
+{
+    return m_ifPublish;
+}
+
 void CSVJsonQueryModel::getAllFilters(FilterCategoricalListModel *categoricalFilter, FilterNumericalListModel *numericalFilter, FilterDateListModel *dateFilter)
 {
     this->categoricalFilter = categoricalFilter;
@@ -95,6 +100,15 @@ void CSVJsonQueryModel::extractSaved(QString errorMessage)
     } else {
         emit extractCreationError(errorMessage);
     }
+}
+
+void CSVJsonQueryModel::setIfPublish(bool ifPublish)
+{
+    if (m_ifPublish == ifPublish)
+        return;
+
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
 }
 
 
@@ -241,9 +255,9 @@ void CSVJsonQueryModel::extractSizeLimit()
             qDebug() << Q_FUNC_INFO << file.errorString();
 
         Statics::freeLimitExtractSizeExceeded = true;
-        emit extractFileExceededLimit(true);
+        emit extractFileExceededLimit(true, m_ifPublish);
     } else {
-        emit extractFileExceededLimit(false);
+        emit extractFileExceededLimit(false, m_ifPublish);
     }
 
     emit showSaveExtractWaitPopup();

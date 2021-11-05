@@ -16,7 +16,6 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
 
 Popup {
     id: popup
@@ -40,7 +39,6 @@ Popup {
     property string datasource_name_final : ""
 
 
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -57,18 +55,60 @@ Popup {
 
         function onPublishDSStatus(outputstatus){
 
-            if(outputstatus.code === 200){
-
-                closePopup()
-                stacklayout_home.currentIndex = 7
-
-            } else{
-
-                errorMsg.text = outputstatus.msg
-            }
-
+            errorMsg.text = outputstatus.msg
         }
 
+        function onDsUploadPercentage(percentage){
+            errorMsg.text = "Uploading Datasource " + percentage + "%"
+        }
+
+        function onDsUploadFinished(){
+            errorMsg.text = "Datasource upload finished"
+            closePopup()
+
+            // If called from modelere screen, then redirect to reports screen
+            // Else open publish workbook modal
+            if(GeneralParamsModel.currentScreen === Constants.modelerScreen){
+                stacklayout_home.currentIndex = 7
+            } else {
+
+                // In the parent page
+                popupSave.publishWorkbookNow()
+            }
+        }
+
+    }
+
+    Connections{
+        target: QueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+    }
+
+    Connections{
+        target: ExcelQueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+    }
+
+    Connections{
+        target: CSVJsonQueryModel
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
     }
 
     // SIGNALS ENDS
@@ -104,6 +144,21 @@ Popup {
         // Call Cpp function to process &
         // Upload data to API
 
+        QueryModel.setIfPublish(true)
+        ForwardOnlyQueryModel.setIfPublish(true)
+        ExcelQueryModel.setIfPublish(true)
+        CSVJsonQueryModel.setIfPublish(true)
+
+        // First save the extract file
+        // Then publish the data and file
+        if(GeneralParamsModel.getExtractPath().length > 0){
+            publishData()
+        } else {
+            saveFilePrompt.open()
+        }
+    }
+
+    function publishData(){
         var dsName = datasource_name_field.text
         var description = description_field.text
         var uploadImage = fileDialog1.fileUrl
@@ -112,8 +167,18 @@ Popup {
         var isFullExtract = DSParamsModel.isFullExtract
         var extractColumnName = DSParamsModel.extractColName
 
+        var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
-        PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
+        if(dsName !== "" && description !== "")
+            PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
+    }
+
+    function saveExtractLimit(freeLimit, ifPublish){
+
+        if(ifPublish){
+            publishData()
+        }
+
     }
 
 
@@ -131,15 +196,14 @@ Popup {
         title: "Select a file (*.jpg *.jpeg *.png  only)"
         selectMultiple: false
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
-
-        //        onAccepted: {
-        //            console.log("You chose: " + fileDialog1.fileUrls)
-        //        }
-        //        onRejected: {
-        //            console.log("file rejected")
-        //        }
     }
 
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveExtract{
+        id: saveFilePrompt
+    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -255,7 +319,6 @@ Popup {
             id: description_field
             boxWidth: 370
             boxHeight: 200
-
         }
 
     }

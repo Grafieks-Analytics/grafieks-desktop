@@ -44,7 +44,6 @@
         <file>Source/Dashboards/NewDashboard.qml</file>
         <file>Source/Reports/NewReport.qml</file>
         <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
-        <file>Source/Modellers/SubComponents/PublishDatasource.qml</file>
         <file>Source/Modellers/SubComponents/CategoricalFilter.qml</file>
         <file>Source/Modellers/SubComponents/TestQueryResultsTable.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent.qml</file>
@@ -291,10 +290,13 @@
         <file>Source/Charts/Data/semantic.min.js</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/KPICustomization.qml</file>
-        <file>Source/Modellers/SubComponents/SaveExtract.qml</file>
-        <file>Source/Dashboards/SubComponents/SaveWorkbook.qml</file>
         <file>Source/Others/About.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TooltipInputControl.qml</file>
         <file>Source/Others/License.qml</file>
+        <file>Source/MainSubComponents/PublishDatasource.qml</file>
+        <file>Source/MainSubComponents/SaveExtract.qml</file>
+        <file>Source/MainSubComponents/PublishWorkbook.qml</file>
+        <file>Source/MainSubComponents/SaveWorkbook.qml</file>
+        <file>Source/Dashboards/SubComponents/SaveWorkbookPopup.qml</file>
     </qresource>
 </RCC>

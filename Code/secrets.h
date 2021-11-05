@@ -31,6 +31,11 @@ namespace Secret
     const QString githubSecret = "f13ef7cd7c634af523ea8d0a759393b535b1d190";
     const int githubPort = 5481;
 
+    // FTP
+    const QString ftpUser = "admin";
+    const QString ftpPass = "123456";
+    const QString ftpPort = "5475";
+
 
 }
 
