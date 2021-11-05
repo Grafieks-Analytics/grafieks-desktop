@@ -1,5 +1,5 @@
-#ifndef PUBLISHDATASOURCEMODEL_H
-#define PUBLISHDATASOURCEMODEL_H
+#ifndef PUBLISHWORKBOOKMODEL_H
+#define PUBLISHWORKBOOKMODEL_H
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -15,13 +15,13 @@
 #include "../../statics.h"
 #include "../../secrets.h"
 
-
-class PublishDatasourceModel : public QObject
+class PublishWorkbookModel : public QObject
 {
     Q_OBJECT
 public:
-    explicit PublishDatasourceModel(QObject *parent = nullptr);
-    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId = 0, bool isFullExtract = false, QString extractColumnName = "");
+    explicit PublishWorkbookModel(QObject *parent = nullptr);
+    Q_INVOKABLE void publishWorkbook(int projectId, QString wbName, QString description, QString uploadImage,  int dashboardCount = 0, QString dashboardDetails = "");
+    Q_INVOKABLE void workbookFile(QString workbookFilePath);
 
 private slots:
     void reading();
@@ -30,9 +30,9 @@ private slots:
     void uploadFinished();
 
 signals:
-    void publishDSStatus(QVariantMap status);
-    void dsUploadPercentage(int percentage);
-    void dsUploadFinished();
+    void publishWbStatus(QVariantMap status);
+    void wbUploadPercentage(int percentage);
+    void wbUploadFinished();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
@@ -41,8 +41,10 @@ private:
     QVariantMap outputStatus;
 
     QString outputFileName;
+    QString workbookFilePath;
 
     void uploadFile();
+
 };
 
-#endif // PUBLISHDATASOURCEMODEL_H
+#endif // PUBLISHWORKBOOKMODEL_H

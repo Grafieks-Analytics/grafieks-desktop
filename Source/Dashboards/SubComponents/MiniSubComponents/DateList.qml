@@ -10,13 +10,13 @@ ListView {
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     interactive: true
-     clip: true
+    clip: true
     height: parent.height-dataTypeDate.height-5
     width: parent.width-15
     ScrollBar.vertical: ScrollBar {}
     property var currentDashboardId: 0
-   
-   
+
+
 
     Connections{
         target : TableColumnsModel
@@ -48,8 +48,8 @@ ListView {
 
     delegate: CheckBoxTpl{
         id: checkBox1
-       height: 30
-         checkbox_checked: DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard).indexOf(modelData) < 0 ? false: true
+        height: 30
+        checkbox_checked: DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard).indexOf(modelData) < 0 ? false: true
         checkbox_text: modelData
         parent_dimension: 16
         onCheckedChanged: handleCheckChange(checkBox1.checkbox_text, checked)

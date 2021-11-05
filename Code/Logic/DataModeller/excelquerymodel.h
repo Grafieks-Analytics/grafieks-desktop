@@ -44,6 +44,7 @@ class ExcelQueryModel : public QAbstractTableModel
 
 public:
     explicit ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
+    Q_PROPERTY(bool ifPublish READ ifPublish WRITE setIfPublish NOTIFY ifPublishChanged)
 
     Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
@@ -56,13 +57,19 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    bool ifPublish() const;
+
 public slots:
     void receiveExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void extractSaved(QString errorMsg);
 
+    void setIfPublish(bool ifPublish);
+
 private:
     void generateRoleNames();
     void extractSizeLimit();
+
+    bool m_ifPublish;
 
 signals:
     void excelHeaderDataChanged(QStringList tableHeaders);
@@ -72,9 +79,10 @@ signals:
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void generateReports();
     void showSaveExtractWaitPopup();
-    void extractFileExceededLimit(bool freeLimit);
+    void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
 
+    void ifPublishChanged(bool ifPublish);
 };
 
 #endif // EXCELQUERYMODEL_H

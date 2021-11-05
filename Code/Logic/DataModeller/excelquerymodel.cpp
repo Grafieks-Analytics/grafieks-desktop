@@ -138,6 +138,11 @@ QHash<int, QByteArray> ExcelQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
+bool ExcelQueryModel::ifPublish() const
+{
+    return m_ifPublish;
+}
+
 void ExcelQueryModel::receiveExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
 
@@ -160,6 +165,15 @@ void ExcelQueryModel::extractSaved(QString errorMsg)
     }
 }
 
+void ExcelQueryModel::setIfPublish(bool ifPublish)
+{
+    if (m_ifPublish == ifPublish)
+        return;
+
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
+}
+
 void ExcelQueryModel::extractSizeLimit()
 {
     QString extractPath = Statics::extractPath;
@@ -179,9 +193,9 @@ void ExcelQueryModel::extractSizeLimit()
             qDebug() << Q_FUNC_INFO << file.errorString();
 
         Statics::freeLimitExtractSizeExceeded = true;
-        emit extractFileExceededLimit(true);
+        emit extractFileExceededLimit(true, m_ifPublish);
     } else {
-        emit extractFileExceededLimit(false);
+        emit extractFileExceededLimit(false, m_ifPublish);
     }
 
     emit showSaveExtractWaitPopup();

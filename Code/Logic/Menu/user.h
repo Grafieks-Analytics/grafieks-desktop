@@ -27,7 +27,6 @@ public:
 private slots:
     void reading();
     void loginReadComplete();
-    void logoutReadComplete();
 
 signals:
     void loginStatus(QVariantMap status);

@@ -95,8 +95,17 @@ void SaveExtractExcelWorker::run()
                 // Create a master table to refer the name of actual extract tableName
                 // while running an extract later on
 
-                QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER)";
-                QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "')";
+                // Current timestamp
+                quint64 currentTimestamp = QDateTime::currentMSecsSinceEpoch();
+
+                // This is to identify the extract irrespective of its filename
+                // This will not change when updated
+                GeneralParamsModel generalParamsModel;
+                QString uniqueHash = generalParamsModel.randomStringGenerator();
+
+                QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER,  unique_hash VARCHAR, last_update VARCHAR)";
+                QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
+
 
                 auto x = con.Query(tableCreateQuery.toStdString());
                 if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;

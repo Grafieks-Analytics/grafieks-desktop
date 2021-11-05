@@ -26,8 +26,12 @@ void User::login()
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
     // Settings: set baseUrl
+    // Settings: set hostname
     QSettings settings;
     settings.setValue("general/baseUrl", host);
+
+    QUrl url(host);
+    settings.setValue("general/hostname", url.host());
 
     connect(m_networkReply, &QIODevice::readyRead, this, &User::reading, Qt::UniqueConnection);
     connect(m_networkReply, &QNetworkReply::finished, this, &User::loginReadComplete, Qt::UniqueConnection);
@@ -61,8 +65,13 @@ void User::logout()
 
     m_networkReply = m_networkAccessManager->post(m_networkRequest, strJson.toUtf8());
 
-    connect(m_networkReply, &QIODevice::readyRead, this, &User::reading);
-    connect(m_networkReply, &QNetworkReply::finished, this, &User::logoutReadComplete);
+    // We wont wait for the logout read status
+    // Just clear the settings and we are good for a logout
+    outputStatus.insert("code", 200);
+    outputStatus.insert("msg", "Success");
+
+    emit logoutStatus(outputStatus);
+
 }
 
 void User::setHost(const QString &value)
@@ -117,8 +126,7 @@ void User::loginReadComplete()
             settings.setValue("user/lastname", dataObj["lastname"].toString());
             settings.setValue("user/photoLink", dataObj["photoLink"].toString());
             settings.setValue("user/sessionToken", dataObj["sessionToken"].toString());
-
-
+            settings.setValue("user/sitename", dataObj["sitename"].toString());
         }
 
         emit loginStatus(outputStatus);
@@ -127,35 +135,4 @@ void User::loginReadComplete()
     }
 }
 
-void User::logoutReadComplete()
-{
 
-
-    if(m_networkReply->error()){
-        qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
-
-        // Set the output
-        outputStatus.insert("code", m_networkReply->error());
-        outputStatus.insert("msg", m_networkReply->errorString());
-
-    } else{
-        QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
-        QJsonObject resultObj = resultJson.object();
-        QJsonObject statusObj = resultObj["status"].toObject();
-
-        // Set the output
-        outputStatus.insert("code", statusObj["code"].toInt());
-        outputStatus.insert("msg", statusObj["msg"].toString());
-
-        // If successful, remove the user variables in settings
-        if(statusObj["code"].toInt() == 200){
-
-            //            QSettings settings;
-            //            settings.remove("user");
-        }
-
-        emit logoutStatus(outputStatus);
-        m_tempStorage->clear();
-    }
-
-}

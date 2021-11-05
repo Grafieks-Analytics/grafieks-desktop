@@ -191,8 +191,8 @@ Page {
             saveExtractPopupFunction(false)
         }
 
-        function onExtractFileExceededLimit(freeLimit){
-            saveExtractLimit(freeLimit)
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
         }
 
         function onExtractCreationError(errorMessage){
@@ -209,8 +209,8 @@ Page {
             saveExtractPopupFunction(false)
         }
 
-        function onExtractFileExceededLimit(freeLimit){
-            saveExtractLimit(freeLimit)
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
         }
 
         function onExtractCreationError(errorMessage){
@@ -228,8 +228,8 @@ Page {
 
         }
 
-        function onExtractFileExceededLimit(freeLimit){
-            saveExtractLimit(freeLimit)
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
         }
 
         function onExtractCreationError(errorMessage){
@@ -246,8 +246,8 @@ Page {
             saveExtractPopupFunction(false)
         }
 
-        function onExtractFileExceededLimit(freeLimit){
-            saveExtractLimit(freeLimit)
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
         }
 
         function onExtractCreationError(errorMessage){
@@ -430,6 +430,11 @@ Page {
 
     function onCreateDashboardClicked(){
 
+        QueryModel.setIfPublish(false)
+        ForwardOnlyQueryModel.setIfPublish(false)
+        ExcelQueryModel.setIfPublish(false)
+        CSVJsonQueryModel.setIfPublish(false)
+
         if(DSParamsModel.dsName !== ""){
             saveFilePrompt.open()
         } else {
@@ -444,10 +449,18 @@ Page {
         if (typeof settings.value("user/sessionToken") == "undefined"){
             connectGrafieks1.visible = true
         } else{
-            publishDatasource.visible = true
 
-            QueryStatsModel.setProfiling(false)
-            QueryStatsModel.setProfileStatus(false)
+            // See if the DS Name is not blank
+            if(DSParamsModel.dsName !== ""){
+                publishDatasource.visible = true
+
+                QueryStatsModel.setProfiling(false)
+                QueryStatsModel.setProfileStatus(false)
+
+            } else {
+                datasourceNameWarningModal.open();
+            }
+
         }
     }
 
@@ -615,7 +628,7 @@ Page {
         }
     }
 
-    function saveExtractLimit(freeLimit){
+    function saveExtractLimit(freeLimit, ifPublish){
 
         queryModellerPage.timeElapsed = 0
         waitTimer.stop()
@@ -623,10 +636,13 @@ Page {
         if(freeLimit){
             freeLimitExtractWarning.open()
         } else {
-            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
 
-            let currentDashboard = DashboardParamsModel.currentDashboard
+            if(!ifPublish){
+                GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+                let currentDashboard = DashboardParamsModel.currentDashboard
+            }
 
         }
     }
@@ -1157,8 +1173,8 @@ Page {
                 id: radio_live
                 radio_text: qsTr("Live")
                 radio_checked: false
-                enabled: false
-                visible: false
+                enabled: true
+                visible: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onLiveSelected()

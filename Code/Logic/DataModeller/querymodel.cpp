@@ -79,6 +79,11 @@ void QueryModel::saveExtractData()
 
 }
 
+bool QueryModel::ifPublish() const
+{
+    return m_ifPublish;
+}
+
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
@@ -174,6 +179,15 @@ void QueryModel::extractSaved(QString errorMessage)
     }
 }
 
+void QueryModel::setIfPublish(bool ifPublish)
+{
+    if (m_ifPublish == ifPublish)
+        return;
+
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
+}
+
 void QueryModel::extractSizeLimit()
 {
     QString extractPath = Statics::extractPath;
@@ -193,9 +207,9 @@ void QueryModel::extractSizeLimit()
             qDebug() << Q_FUNC_INFO << file.errorString();
         }
         Statics::freeLimitExtractSizeExceeded = true;
-        emit extractFileExceededLimit(true);
+        emit extractFileExceededLimit(true, m_ifPublish);
     } else {
-        emit extractFileExceededLimit(false);
+        emit extractFileExceededLimit(false, m_ifPublish);
     }
 
     emit showSaveExtractWaitPopup();

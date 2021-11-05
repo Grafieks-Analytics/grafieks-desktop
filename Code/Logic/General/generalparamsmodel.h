@@ -7,6 +7,7 @@
 #include <QTextDocument>
 #include <QDebug>
 #include <QUrl>
+#include <QRandomGenerator>
 #include <QProcess>
 
 #include "../../statics.h"
@@ -51,11 +52,16 @@ public:
     //! Set Static Extracts Path
     Q_INVOKABLE void setExtractPath(QString extractsPath);
 
+    //! Get Extract Path
+    Q_INVOKABLE QString getExtractPath();
+
     //! Change column types
     Q_INVOKABLE void changeColumnTypes(QString columnName, QString tableName, QString newColumnType);
     Q_INVOKABLE QVariantMap getChangedColumnTypes();
 
     Q_INVOKABLE QString urlToFilePath(QUrl url);
+
+    QString randomStringGenerator();
 
 public slots:
 

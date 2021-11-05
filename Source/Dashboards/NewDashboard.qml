@@ -281,10 +281,17 @@ Page {
         dashboardList.contentX = 0;
     }
 
-    function onPublishDashboardClicked(){
-        console.log("Publish workbook coming soon")
-        publishWorkbook.open()
+    function onPublishWorkbookClicked(){
+        // If already logged in, dont prompt
+        if (typeof settings.value("user/sessionToken") == "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+            ProjectsListModel.fetchProjectList()
+            publishWorkbookPopup.open()
+        }
     }
+
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -295,13 +302,10 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
-
-    MessageDialog {
-        id: publishWorkbook
-        title: "Publish Workbook"
-        icon: StandardIcon.Information
-        text: "Publish workbook coming soon"
+    SaveWorkbookPopup{
+        id: publishWorkbookPopup
     }
+
     // SubComponents Ends
     /***********************************************************************************************************************/
 
@@ -778,7 +782,7 @@ Page {
                         anchors.centerIn: parent
                     }
 
-                    onClicked: onPublishDashboardClicked()
+                    onClicked: onPublishWorkbookClicked()
 
                     background: Rectangle{
                         color: Constants.grafieksLightGreenColor
@@ -788,7 +792,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Datasource")
+                    ToolTip.text: qsTr("Publish Dashboard")
 
                 }
 
