@@ -844,3 +844,72 @@ function dataLabel(svg, xAxis, yScale, dataset, labelFormat) {
         );
     });
 }
+
+function removeOverlappingValues(){
+    var labels = document.querySelectorAll('.label .tick text');
+    var lastTickShown = labels[0];
+    labels.forEach((label, i)=>{
+        if(!i) return;
+        if(isElementsOverlapping(label, lastTickShown)){
+            label.remove();
+        }else{
+            lastTickShown = label;
+        }    
+    })
+}
+
+function removeDataLabels(){
+    // removeOverlappingValues();
+    removeDataLabelsByDistance();
+}
+
+function removeDataLabelsByDistance(){
+    var labels = document.querySelectorAll('.label .tick text');
+    var lastTickShown = labels[0];
+    var lastTickShown1 = null;
+    var lastTickShown2 = null;
+    labels.forEach((label, i)=>{
+        if(!i) return;
+        if(
+            getDistanceBetweenElements(label, lastTickShown) < 40 ||
+            (lastTickShown1 && getDistanceBetweenElements(label, lastTickShown1) < 40) || 
+            (lastTickShown2 && getDistanceBetweenElements(label, lastTickShown2) < 40)
+        ){
+            label.remove();
+        }else{
+            lastTickShown2 = lastTickShown1
+            lastTickShown1 = lastTickShown
+            lastTickShown = label;
+        }    
+    })
+
+}
+
+const getDistance = (x1, x2, y1, y2) => { 
+    return Math.sqrt( Math.pow((x1 - x2),2) + Math.pow((y1 - y2), 2));
+}
+
+
+const getDistanceBetweenElements = (rect1, rect2) => {
+    rect1 = rect1.getClientRects()[0];
+    rect2 = rect2.getClientRects()[0];
+    let { x:x1, y:y1, width:width1, height: height1 } = rect1;
+    x1 = x1 +  width1/2;
+    y1 = y1 +  height1/2;
+
+    let { x:x2, y:y2, width:width2, height: height2 } = rect2;
+    x2 = x2 +  width2/2;
+    y2 = y2 +  height2/2;
+
+    const distanceValue = getDistance(x1, x2, y1, y2);
+    return distanceValue;
+}
+
+const isElementsOverlapping = (rect1, rect2) => {
+    rect1 = rect1.getClientRects()[0];
+    rect2 = rect2.getClientRects()[0];
+    return !(rect1.right < rect2.left || 
+    rect1.left > rect2.right || 
+    rect1.bottom < rect2.top || 
+    rect1.top > rect2.bottom)
+}
