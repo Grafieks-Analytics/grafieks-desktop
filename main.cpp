@@ -89,6 +89,7 @@ QString Statics::currentDbClassification;
 int Statics::onlineStorageType;
 QString Statics::driverName;
 QString Statics::extractPath;
+QString Statics::livePath;
 QString Statics::csvJsonPath;
 bool Statics::freeLimitExtractSizeExceeded;
 bool Statics::modeProcessReader;
