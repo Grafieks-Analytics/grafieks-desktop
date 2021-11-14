@@ -69,7 +69,7 @@ Popup {
         d3PropertyConfig.filledStatus = filledStatus;
         d3PropertyConfig.markerShape = markerShape;
         d3PropertyConfig.markerStatus = true;
-        reDrawChart();
+        updateChart();
     }
 
     Rectangle{

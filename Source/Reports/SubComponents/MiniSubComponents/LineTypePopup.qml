@@ -70,7 +70,7 @@ Popup {
     function onLineTypeSelected(currentIndex){
         d3PropertyConfig.curveType = lineTypeBox.currentValue;
         qmlChartConfig.curveType = lineTypeModel.get(currentIndex).lineType;
-        reDrawChart();
+        updateChart();
     }
 
     Rectangle{

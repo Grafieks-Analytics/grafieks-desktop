@@ -256,7 +256,7 @@ Popup {
             textValue: "Apply"
             onClicked: {
                 
-                reDrawChart();
+                updateChart();
                 toolTipPopup.visible = false
             }
         }
