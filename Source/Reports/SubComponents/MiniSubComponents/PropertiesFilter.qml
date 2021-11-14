@@ -262,7 +262,7 @@ Column{
         d3PropertyConfig.innerRadius = (1-value)*200;        
         //        console.log("value"+value);
         qmlChartConfig.sizePopupValue = actualValue;
-        reDrawChart();
+        updateChart();
     }
 
 
@@ -271,13 +271,13 @@ Column{
         gridConfig['gridStatus'] = checked;
         d3PropertyConfig.gridConfig = gridConfig;
         qmlChartConfig.gridLineStatus = checked;
-        reDrawChart();
+        updateChart();
     }
 
     function toggleDynamicheight(checked){
         d3PropertyConfig.dynamicHeight = checked;
         qmlChartConfig.dynamicHeight = checked;
-        reDrawChart();
+        updateChart();
     }
 
     function updateBottomPinchValue(){
@@ -288,7 +288,7 @@ Column{
             d3PropertyConfig.bottomPinch = +bottomPinchValue.text;
         }
         qmlChartConfig.bottomPinch = bottomPinch;
-        reDrawChart();
+        updateChart();
     }
 
     // JAVASCRIPT FUNCTION ENDS

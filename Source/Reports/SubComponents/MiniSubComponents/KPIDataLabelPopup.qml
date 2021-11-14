@@ -145,30 +145,30 @@ Popup {
     function toggleItalic(checkedStatus){
         report_desiner_page.d3PropertyConfig['labelFontStylings'] = report_desiner_page.d3PropertyConfig['labelFontStylings'] || {}
         report_desiner_page.d3PropertyConfig['labelFontStylings'].italic = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function toggleBold(checkedStatus){
         report_desiner_page.d3PropertyConfig['labelFontStylings'] = report_desiner_page.d3PropertyConfig['labelFontStylings'] || {}
         report_desiner_page.d3PropertyConfig['labelFontStylings'].bold = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function toggleUnderline(checkedStatus){
         report_desiner_page.d3PropertyConfig['labelFontStylings'] = report_desiner_page.d3PropertyConfig['labelFontStylings'] || {}
         report_desiner_page.d3PropertyConfig['labelFontStylings'].underline = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
 
     
     function updateFontFamily(fontFamily){
         report_desiner_page.d3PropertyConfig['labelFontStylings'] = report_desiner_page.d3PropertyConfig['labelFontStylings'] || {}
         report_desiner_page.d3PropertyConfig['labelFontStylings'].fontFamily = fontFamily;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     
     function updateFontSize(fontSize){
         report_desiner_page.d3PropertyConfig['labelFontStylings'] = report_desiner_page.d3PropertyConfig['labelFontStylings'] || {}
         report_desiner_page.d3PropertyConfig['labelFontStylings'].fontSize = fontSize;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function openColorDialog(dialogName){
         switch(dialogName){
@@ -192,7 +192,7 @@ Popup {
             d3PropertyConfig.labelFontStylings.dataLabelColorKpi = color+"";
             dataLabelKpiColorBoxColor = color;
 
-            reDrawChart();
+            updateChart();
         }
 
     }

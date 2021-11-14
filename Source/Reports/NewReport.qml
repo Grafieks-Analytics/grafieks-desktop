@@ -896,13 +896,18 @@ Page {
                 clearTimeout(timer);
                 timer = setTimeout(function () {
                     window.clearChart && clearChart();
-                    drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
+                    drawChart(window.data,'+JSON.stringify(d3PropertyConfig)+');
                 }, 200);
             });
         ';
 
         clearChartValue();
         var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+        webEngineView.runJavaScript(runScriptString);
+    }
+
+    function updateChart(){
+        var runScriptString = 'drawChart(window.data,'+JSON.stringify(d3PropertyConfig)+'); ';
         webEngineView.runJavaScript(runScriptString);
     }
 
@@ -1547,7 +1552,6 @@ Page {
         }
         
         d3PropertyConfig.toolTip = toolTip;
-        console.log('debug: tooltip',JSON.stringify(d3PropertyConfig.toolTip),'I am redrawing');
         reDrawChart();
     }
 
@@ -3502,7 +3506,7 @@ Page {
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
-                        onTextChanged: reDrawChart()
+                        onTextChanged: updateChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -3568,7 +3572,7 @@ Page {
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
-                        onTextChanged: reDrawChart()
+                        onTextChanged: updateChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -3638,7 +3642,7 @@ Page {
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
-                        onTextChanged: reDrawChart()
+                        onTextChanged: updateChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }

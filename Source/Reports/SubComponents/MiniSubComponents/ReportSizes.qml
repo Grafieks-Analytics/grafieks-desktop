@@ -123,7 +123,7 @@ Column{
         }
 
         clearChartValue();
-        reDrawChart();
+        updateChart();
     }
 
 
