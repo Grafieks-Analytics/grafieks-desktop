@@ -381,6 +381,8 @@
                 var barWidth = document.querySelector(".bar") && document.querySelector(".bar").getBBox().width;
                 if (chartType == constants.chartType.FIT_WIDTH && barWidth < 40) {
                     setXaxisWidth();
+                } else {
+                    setStandardTickWidths(barWidth);
                 }
 
                 // Remove Text in case they are large in number
@@ -472,10 +474,9 @@
             //  draw function defination starts
 
             // redraw chart
-            redrawChartBarVerticle();
+            // redrawChartBarVerticle();
 
             drawChartBarVerticle();
-
         </script>
         <!-- javascripts ends -->
     </body>

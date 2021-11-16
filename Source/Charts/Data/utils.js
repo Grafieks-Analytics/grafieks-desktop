@@ -26,20 +26,7 @@ function arraySum(arr) {
 }
 
 function isInMonth(value) {
-    var shortMonths = [
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "may",
-        "jun",
-        "jul",
-        "aug",
-        "sept",
-        "oct",
-        "nov",
-        "dec",
-    ];
+    var shortMonths = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sept", "oct", "nov", "dec"];
     var fullMonths = [
         "january",
         "february",
@@ -52,7 +39,7 @@ function isInMonth(value) {
         "september",
         "october",
         "november",
-        "december",
+        "december"
     ];
 
     value = value && value.toString().toLowerCase();
@@ -75,36 +62,21 @@ function changeChartAttributes(selector, attributeName, attributeValue) {
     d3.selectAll(selector).attr(attributeName, attributeValue);
 }
 
-function changeLabelPostionsAttributes(
-    selectorTick,
-    selectorLabel,
-    attributeName
-) {
+function changeLabelPostionsAttributes(selectorTick, selectorLabel, attributeName) {
     var value = getAttributesValues(selectorTick);
     var isFirstInitialValueSet = window["initialLabelPosition" + attributeName];
     if (!isFirstInitialValueSet) {
-        window["initialLabelPosition" + attributeName] = d3
-            .selectAll(selectorLabel)
-            .attr(attributeName);
+        window["initialLabelPosition" + attributeName] = d3.selectAll(selectorLabel).attr(attributeName);
 
         window.isFirstInitialValueSet = true;
     }
 
-    console.log(
-        "window['initialLabelPosition' + attributeName]" +
-            window["initialLabelPosition" + attributeName]
-    );
+    console.log("window['initialLabelPosition' + attributeName]" + window["initialLabelPosition" + attributeName]);
 
     if (selectorLabel == ".y_label") {
-        d3.selectAll(selectorLabel).attr(
-            attributeName,
-            +window["initialLabelPosition" + attributeName] - +value
-        );
+        d3.selectAll(selectorLabel).attr(attributeName, +window["initialLabelPosition" + attributeName] - +value);
     } else if (selectorLabel == ".x_label") {
-        d3.selectAll(selectorLabel).attr(
-            attributeName,
-            +window["initialLabelPosition" + attributeName] + +value
-        );
+        d3.selectAll(selectorLabel).attr(attributeName, +window["initialLabelPosition" + attributeName] + +value);
     }
 }
 
@@ -132,20 +104,10 @@ function setText(selector, textValue) {
     d3.selectAll(selector).text(textValue);
 }
 
-function setLabel(
-    label = "xLabel",
-    labelType = "x_label",
-    svg,
-    y_pos,
-    x_tick_fontSize,
-    y_tick_fontSize
-) {
+function setLabel(label = "xLabel", labelType = "x_label", svg, y_pos, x_tick_fontSize, y_tick_fontSize) {
     // debugger;
     const margin = { top: 30, right: 30, bottom: 70, left: 60 };
-    if (
-        document.querySelector("#my_dataviz svg").clientWidth >
-        document.documentElement.clientWidth
-    ) {
+    if (document.querySelector("#my_dataviz svg").clientWidth > document.documentElement.clientWidth) {
         width = document.querySelector("#my_dataviz").clientWidth;
     } else {
         width = document.querySelector("#my_dataviz svg").clientWidth;
@@ -156,14 +118,8 @@ function setLabel(
     heightXLabelId = document.querySelector("#xAxisLabelId").clientHeight;
     // heightYLabelId = 250;
     if (document.querySelector("#my_dataviz svg g g.grid") != null) {
-        if (
-            document
-                .querySelector("#my_dataviz svg g g.grid")
-                .getBoundingClientRect().height < 600
-        ) {
-            heightYLabelId = document
-                .querySelector("#my_dataviz svg g g.grid")
-                .getBoundingClientRect().height;
+        if (document.querySelector("#my_dataviz svg g g.grid").getBoundingClientRect().height < 600) {
+            heightYLabelId = document.querySelector("#my_dataviz svg g g.grid").getBoundingClientRect().height;
         } else {
             heightYLabelId = document.querySelector("#my_dataviz").clientHeight;
         }
@@ -299,9 +255,7 @@ function hexToRgbNew(hex) {
 
 function rgba2hex(orig) {
     var a,
-        rgb = orig
-            .replace(/\s/g, "")
-            .match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+        rgb = orig.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
         alpha = ((rgb && rgb[4]) || "").trim(),
         hex = rgb
             ? (rgb[1] | (1 << 8)).toString(16).slice(1) +
@@ -332,10 +286,7 @@ function setSvgBackground(backgroundColor, opacity) {
     }
     var styleTag = document.createElement("style");
     styleTag.id = "dashboardStyle";
-    styleTag.innerHTML =
-        "body, #my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " +
-        backgroundColor +
-        " }";
+    styleTag.innerHTML = "body, #my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " + backgroundColor + " }";
     document.head.append(styleTag);
 }
 
@@ -445,12 +396,11 @@ function labelFormatSet(labelValue, labelFormat) {
 })();
 
 // ui fix functions
-function setStandardTickWidths() {
+function setStandardTickWidths(barWidth = 40) {
     var a = document.querySelectorAll(".x-axis .tick text");
 
     for (var i = 0; i < a.length; i++) {
-        var singleCharacterLength =
-            a[i].getBBox().width / a[i].innerHTML.length;
+        var singleCharacterLength = a[i].getBBox().width / a[i].innerHTML.length;
         var numOfCharacters = Math.floor(barWidth / singleCharacterLength);
 
         var tick = a[i];
@@ -459,8 +409,7 @@ function setStandardTickWidths() {
         if (tickWidth > barWidth) {
             // console.log("Length is long", numOfCharacters);
             var tickValue = tick.innerHTML;
-            tickValue =
-                tickValue && tickValue.substr(0, numOfCharacters - 3) + "...";
+            tickValue = tickValue && tickValue.substr(0, numOfCharacters - 3) + "...";
             // console.log(tickValue);
             tick.innerHTML = tickValue;
         }
@@ -479,7 +428,11 @@ function setXaxisWidth() {
 
     extraHeightWorked = true;
     maxWidth = maxWidth < 100 ? maxWidth : 100;
-    extraHeight = maxWidth;
+    if(window.innerHeight < 400){
+        extraHeight = Math.min(maxWidth, window.innerHeight/8);
+    }else{
+        extraHeight = maxWidth;
+    }
 
     d3.select(".x-axis").attr("text-anchor", "right");
     d3.selectAll(".x-axis text")
@@ -505,10 +458,7 @@ function setYaxisWidth(margin) {
     var yAxisDiv = document.querySelector("#yAxisDiv svg");
 
     yAxisDiv.setAttribute("width", maxWidth);
-    yAxisDiv.setAttribute(
-        "transform",
-        "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
-    );
+    yAxisDiv.setAttribute("transform", "translate(" + (maxWidth - margin.left) + "," + 0 + ")");
 }
 function make_x_gridlines(x) {
     return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
@@ -518,14 +468,7 @@ function make_y_gridlines(y) {
     return d3.axisLeft(y).ticks(yaxisTicks);
 }
 // legend
-function legendGenerate(
-    legendStatus,
-    legendPosition,
-    yAxisWidth,
-    width,
-    margin,
-    height
-) {
+function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin, height) {
     var legendElement = document.querySelector("#legend");
     var legendHeight = legendElement.offsetHeight;
     var legendWidth = legendElement.offsetWidth;
@@ -599,14 +542,8 @@ function legendGenerate(
 
                 d3.select("#mainChartWindow").attr("style", null);
 
-                d3.select("#mainChartWindow").style(
-                    "width",
-                    widthOld - legendWidth + yAxisWidth
-                );
-                d3.select("#mainChartWindow").style(
-                    "margin-left",
-                    legendWidth + "px"
-                );
+                d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
+                d3.select("#mainChartWindow").style("margin-left", legendWidth + "px");
                 d3.select("#xAxisLabelId").style("bottom", 20);
 
                 break;
@@ -691,10 +628,7 @@ function legendGenerate(
                     .style("text-overflow", "ellipsis");
 
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#mainChartWindow").style(
-                    "width",
-                    widthOld - legendWidth + yAxisWidth - 10
-                );
+                d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth - 10);
                 d3.select("#mainChartWindow").style("margin-left", 0);
                 d3.select("#xAxisLabelId").style("bottom", 20);
         }
@@ -702,16 +636,7 @@ function legendGenerate(
 }
 
 // tooltip
-function tooltipGenerate(
-    xpos,
-    ypos,
-    xValue,
-    yValue,
-    legendHeightTop,
-    d,
-    toolTip,
-    legendWidthLeft
-) {
+function tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip, legendWidthLeft) {
     d3.select("#tooltip")
         // .style("left", xpos + "px")
         // .style("left", xpos -500+ "px")
@@ -745,19 +670,10 @@ function tooltipGenerate(
         });
     var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
 
-    if (
-        xpos - scrollVal >
-        document.documentElement.clientWidth -
-            document.querySelector("#tooltip").clientWidth
-    ) {
+    if (xpos - scrollVal > document.documentElement.clientWidth - document.querySelector("#tooltip").clientWidth) {
         d3.select("#tooltip").style(
             "left",
-            xpos -
-                scrollVal -
-                document.querySelector("#tooltip").clientWidth -
-                10 +
-                legendWidthLeft +
-                "px"
+            xpos - scrollVal - document.querySelector("#tooltip").clientWidth - 10 + legendWidthLeft + "px"
         );
 
         d3.select(".arrowTooltip")
@@ -769,10 +685,7 @@ function tooltipGenerate(
                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
             );
     } else {
-        d3.select("#tooltip").style(
-            "left",
-            xpos - scrollVal + 12 + legendWidthLeft + "px"
-        );
+        d3.select("#tooltip").style("left", xpos - scrollVal + 12 + legendWidthLeft + "px");
 
         d3.select(".arrowTooltip").attr(
             "style",
@@ -782,13 +695,7 @@ function tooltipGenerate(
 }
 
 // ticks customisation
-function XAxisTicksConfig(
-    xTickfontSize,
-    xTickfontFamily,
-    xboldTick,
-    xitalicTick,
-    xTickfontColor
-) {
+function XAxisTicksConfig(xTickfontSize, xTickfontFamily, xboldTick, xitalicTick, xTickfontColor) {
     d3.selectAll(".x-axis text")
         .attr("font-size", xTickfontSize)
         .attr("font-family", xTickfontFamily)
@@ -797,13 +704,7 @@ function XAxisTicksConfig(
         .attr("fill", xTickfontColor)
         .attr("y", 6);
 }
-function YAxisTicksConfig(
-    yTickfontSize,
-    yTickfontFamily,
-    yboldTick,
-    yitalicTick,
-    yTickfontColor
-) {
+function YAxisTicksConfig(yTickfontSize, yTickfontFamily, yboldTick, yitalicTick, yTickfontColor) {
     d3.selectAll(".y-axis text")
         .attr("font-size", yTickfontSize)
         .attr("font-family", yTickfontFamily)
@@ -838,78 +739,75 @@ function dataLabel(svg, xAxis, yScale, dataset, labelFormat) {
         //     dataLabelLimit = 20;
         // }
 
-        label.setAttribute(
-            "display",
-            labelYPosition > dataLabelLimit ? "none" : ""
-        );
+        label.setAttribute("display", labelYPosition > dataLabelLimit ? "none" : "");
     });
 }
 
-function removeOverlappingValues(){
-    var labels = document.querySelectorAll('.label .tick text');
+function removeOverlappingValues() {
+    var labels = document.querySelectorAll(".label .tick text");
     var lastTickShown = labels[0];
-    labels.forEach((label, i)=>{
-        if(!i) return;
-        if(isElementsOverlapping(label, lastTickShown)){
+    labels.forEach((label, i) => {
+        if (!i) return;
+        if (isElementsOverlapping(label, lastTickShown)) {
             label.remove();
-        }else{
+        } else {
             lastTickShown = label;
-        }    
-    })
+        }
+    });
 }
 
-function removeDataLabels(){
+function removeDataLabels() {
     // removeOverlappingValues();
     removeDataLabelsByDistance();
 }
 
-function removeDataLabelsByDistance(){
-    var labels = document.querySelectorAll('.label .tick text');
+function removeDataLabelsByDistance() {
+    var labels = document.querySelectorAll(".label .tick text");
     var lastTickShown = labels[0];
     var lastTickShown1 = null;
     var lastTickShown2 = null;
-    labels.forEach((label, i)=>{
-        if(!i) return;
-        if(
+    labels.forEach((label, i) => {
+        if (!i) return;
+        if (
             getDistanceBetweenElements(label, lastTickShown) < 40 ||
-            (lastTickShown1 && getDistanceBetweenElements(label, lastTickShown1) < 40) || 
+            (lastTickShown1 && getDistanceBetweenElements(label, lastTickShown1) < 40) ||
             (lastTickShown2 && getDistanceBetweenElements(label, lastTickShown2) < 40)
-        ){
+        ) {
             label.remove();
-        }else{
-            lastTickShown2 = lastTickShown1
-            lastTickShown1 = lastTickShown
+        } else {
+            lastTickShown2 = lastTickShown1;
+            lastTickShown1 = lastTickShown;
             lastTickShown = label;
-        }    
-    })
-
+        }
+    });
 }
 
-const getDistance = (x1, x2, y1, y2) => { 
-    return Math.sqrt( Math.pow((x1 - x2),2) + Math.pow((y1 - y2), 2));
-}
-
+const getDistance = (x1, x2, y1, y2) => {
+    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+};
 
 const getDistanceBetweenElements = (rect1, rect2) => {
     rect1 = rect1.getClientRects()[0];
     rect2 = rect2.getClientRects()[0];
-    let { x:x1, y:y1, width:width1, height: height1 } = rect1;
-    x1 = x1 +  width1/2;
-    y1 = y1 +  height1/2;
+    let { x: x1, y: y1, width: width1, height: height1 } = rect1;
+    x1 = x1 + width1 / 2;
+    y1 = y1 + height1 / 2;
 
-    let { x:x2, y:y2, width:width2, height: height2 } = rect2;
-    x2 = x2 +  width2/2;
-    y2 = y2 +  height2/2;
+    let { x: x2, y: y2, width: width2, height: height2 } = rect2;
+    x2 = x2 + width2 / 2;
+    y2 = y2 + height2 / 2;
 
     const distanceValue = getDistance(x1, x2, y1, y2);
     return distanceValue;
-}
+};
 
 const isElementsOverlapping = (rect1, rect2) => {
     rect1 = rect1.getClientRects()[0];
     rect2 = rect2.getClientRects()[0];
-    return !(rect1.right < rect2.left || 
-    rect1.left > rect2.right || 
-    rect1.bottom < rect2.top || 
-    rect1.top > rect2.bottom)
-}
+    return !(
+        rect1.right < rect2.left ||
+        rect1.left > rect2.right ||
+        rect1.bottom < rect2.top ||
+        rect1.top > rect2.bottom
+    );
+};
