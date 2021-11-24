@@ -391,7 +391,7 @@ function labelFormatSet(labelValue, labelFormat) {
 (function () {
     // [Tag: Mandatory]
     oncontextmenu = function () {
-        return false;
+        // return false;
     };
 })();
 
@@ -734,6 +734,35 @@ function dataLabel(svg, xAxis, yScale, dataset, labelFormat) {
         label.setAttribute("y", labelYPosition - 12);
         label.setAttribute("fill", dataLabelColor);
         label.textContent = labelFormatSet(dataset[i], labelFormat);
+        var dataLabelLimit = height - window.innerHeight / 8;
+        // if(window.innerWidth < 600 || window.innerHeight < 300){
+        //     dataLabelLimit = 20;
+        // }
+
+        label.setAttribute("display", labelYPosition > dataLabelLimit ? "none" : "");
+    });
+}
+function dataLabelLineChart(svg, xAxis, yScale, dataset, labelFormat) {
+    svg.append("g")
+        .call(xAxis.tickSize(0))
+        .attr("class", "axis label")
+        // .attr("font-family", xDataLabelfontFamily)
+        .attr("font-family", dataLabelfontFamily)
+        .attr("font-size", dataLabelfontSize);
+
+    // .attr("transform", "translate(0,0)");
+    var labelSelector = document.querySelectorAll(".axis.label text");
+
+    d3.select(".axis.label path").remove();
+
+    labelSelector.forEach((label, i) => {
+        var labelValue = label.textContent;
+
+        var labelYPosition = yScale(dataset[i][1]);
+
+        label.setAttribute("y", labelYPosition + 13);
+        label.setAttribute("fill", dataLabelColor);
+        label.textContent = labelFormatSet(dataset[i][1], labelFormat);
         var dataLabelLimit = height - window.innerHeight / 8;
         // if(window.innerWidth < 600 || window.innerHeight < 300){
         //     dataLabelLimit = 20;
