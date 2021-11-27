@@ -33,6 +33,9 @@
                 stroke: #bfbfbf;
                 stroke-width: 1px;
             }
+            #my_dataviz {
+                margin-left: 0;
+            }
         </style>
     </head>
     <body>
@@ -50,8 +53,8 @@
                             { name: "Hobo Spider" },
                             { name: "Giant House Spider" },
                             { name: "Domestic House Spider" },
-                            { name: "Dust Spider" },
-                        ],
+                            { name: "Dust Spider" }
+                        ]
                     },
                     {
                         name: "Araneidae",
@@ -60,38 +63,32 @@
                             { name: "Cross Orb Weaver" },
                             { name: "Banded Garden Spider" },
                             { name: "Golden Orb Weaver Spider" },
-                            { name: "Long-Jawed Orb Weaver Spider" },
-                        ],
+                            { name: "Long-Jawed Orb Weaver Spider" }
+                        ]
                     },
                     {
                         name: "Ctenidae",
-                        children: [
-                            { name: "Brazilian Wandering Spider" },
-                            { name: "Fishing Spider" },
-                        ],
+                        children: [{ name: "Brazilian Wandering Spider" }, { name: "Fishing Spider" }]
                     },
                     {
                         name: "Desidae",
                         children: [
                             { name: "Black House Spider" },
                             { name: "Brown House Spider" },
-                            { name: "Hollow Twig Spider" },
-                        ],
+                            { name: "Hollow Twig Spider" }
+                        ]
                     },
                     {
                         name: "Filistatidae",
-                        children: [
-                            { name: "Southern House Spider" },
-                            { name: "Arizona Black Hole Spider" },
-                        ],
+                        children: [{ name: "Southern House Spider" }, { name: "Arizona Black Hole Spider" }]
                     },
                     {
                         name: "Lycosidae",
                         children: [
                             { name: "Carolina Wolf Spider" },
                             { name: "Brown Wolf Spider" },
-                            { name: "Texas Wolf Spider" },
-                        ],
+                            { name: "Texas Wolf Spider" }
+                        ]
                     },
                     {
                         name: "Pholcidae",
@@ -99,23 +96,20 @@
                             { name: "Cellar Spider" },
                             { name: "Yellow Sac Spider" },
                             { name: "Ground Spider" },
-                            { name: "Banded Garden Spider" },
-                        ],
+                            { name: "Banded Garden Spider" }
+                        ]
                     },
                     {
                         name: "Salticidae",
                         children: [
                             { name: "Bold Jumping Spider" },
                             { name: "Zebra Jumping Spider" },
-                            { name: "Gray Wall Jumping Spider" },
-                        ],
+                            { name: "Gray Wall Jumping Spider" }
+                        ]
                     },
                     {
                         name: "Sicariidae",
-                        children: [
-                            { name: "Brown Spider" },
-                            { name: "Brown Recluse Spider" },
-                        ],
+                        children: [{ name: "Brown Spider" }, { name: "Brown Recluse Spider" }]
                     },
                     {
                         name: "Theraphosidae",
@@ -123,18 +117,18 @@
                             { name: "King Baboon Spider" },
                             { name: "Bird Eating Spider" },
                             { name: "Pinktoe Tarantula Spider" },
-                            { name: "Indian Ornamental Tree Spider" },
-                        ],
+                            { name: "Indian Ornamental Tree Spider" }
+                        ]
                     },
                     {
                         name: "Theridiidae",
                         children: [
                             { name: "Black Widow Spider" },
                             { name: "Brown Widow Spider" },
-                            { name: "Red Widow Spider" },
-                        ],
-                    },
-                ],
+                            { name: "Red Widow Spider" }
+                        ]
+                    }
+                ]
             };
 
             function drawChart(data, plottingConfiguration = {}) {
@@ -153,11 +147,9 @@
                         return (a.parent == b.parent ? 1 : 2) / a.depth;
                     });
 
-                var diagonal = d3.svg.diagonal
-                    .radial()
-                    .projection(function (d) {
-                        return [d.y, (d.x / 180) * Math.PI];
-                    });
+                var diagonal = d3.svg.diagonal.radial().projection(function (d) {
+                    return [d.y, (d.x / 180) * Math.PI];
+                });
 
                 var svg = d3
                     .select("#my_dataviz")
@@ -165,10 +157,7 @@
                     .attr("width", diameter + 20)
                     .attr("height", diameter - 40)
                     .append("g")
-                    .attr(
-                        "transform",
-                        "translate(" + diameter / 2 + "," + diameter / 2 + ")"
-                    );
+                    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
                 var nodes = tree.nodes(data),
                     links = tree.links(nodes);
@@ -188,9 +177,7 @@
                     .append("g")
                     .attr("class", "node")
                     .attr("transform", function (d) {
-                        return (
-                            "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"
-                        );
+                        return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";
                     });
 
                 node.append("circle").attr("r", 5);
@@ -201,18 +188,13 @@
                         return d.x < 180 ? "start" : "end";
                     })
                     .attr("transform", function (d) {
-                        return d.x < 180
-                            ? "translate(8)"
-                            : "rotate(180)translate(-8)";
+                        return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)";
                     })
                     .text(function (d) {
                         return d.name;
                     });
 
-                d3.select(self.frameElement).style(
-                    "height",
-                    diameter - 150 + "px"
-                );
+                d3.select(self.frameElement).style("height", diameter - 150 + "px");
             }
 
             window.addEventListener("resize", function () {
