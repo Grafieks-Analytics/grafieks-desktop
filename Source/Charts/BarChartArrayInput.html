@@ -100,6 +100,7 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
+                d3.selectAll("#xAxisLabelId").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
@@ -262,6 +263,7 @@
 
                 //add x and y axis
                 var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks).tickFormat(d3.format(".2s"));
+                var xAxisLabelSvg=d3.select("#xAxisLabelId").append("svg").attr("width", window.innerWidth).attr("height", 40);
 
                 d3.select("#yAxisDiv")
                     .append("svg")
@@ -369,7 +371,7 @@
                 setLabel(
                     xAxisLabel,
                     "x_label",
-                    d3.select("#xAxisLabelId").append("svg").attr("width", window.innerWidth).attr("height", 40),
+                    xAxisLabelSvg,
                     y_pos_x_label,
                     false
                 );
@@ -476,7 +478,7 @@
             // redraw chart
             // redrawChartBarVerticle();
 
-            // drawChartBarVerticle();
+            drawChartBarVerticle();
         </script>
         <!-- javascripts ends -->
     </body>

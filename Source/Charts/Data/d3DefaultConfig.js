@@ -69,7 +69,7 @@ const defaultD3Config = {
     standardThresholdHeight: 100,
     fontSize: 12,
     fontFamily: "MS Sans Serif",
-    fontColor: "black",
+    fontColor: "red",
     defaultLegendConfig: {
         legendStatus: true,
         legendPosition: "right"
@@ -153,7 +153,7 @@ const dataConstant = {
         ],
         ["Category", "Sales"]
     ],
-    dataBarChart1: [
+    dataBarChart: [
         [
             [
                 "HendersonHendersonHendersonHendersonHendersonHenderson HendersonHenderson",
