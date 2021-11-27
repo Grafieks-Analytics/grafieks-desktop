@@ -56,7 +56,7 @@ const defaultD3Config = {
     initialBoxDimension: 6,
     onHoverBoxDimension: 8,
     defaultLineCurve: constants.cureveType.LINEAR,
-    innerRadius: 150,
+    innerRadius: 0.50,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
@@ -71,7 +71,7 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "right"
     },
     defaultlabelConfig: {
@@ -2047,7 +2047,7 @@ function drawChartBarVerticle() {
         xAxisConfig: { xaxisStatus: true },
         dataLabelColor: "#000000",
         paddingInner: 0.25,
-        innerRadius: 150,
+        innerRadius: 0.8,
         chartType: "FitWidth",
         dataColumns: {
             xAxisColumnDetails: [
