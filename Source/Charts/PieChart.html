@@ -66,9 +66,9 @@
                 Phones: 8372,
                 Storage: 4638,
                 Supplies: 132,
-                Tables: 10230,
+                Tables: 10230
             },
-            ["sub_category", "sales"],
+            ["sub_category", "sales"]
         ];
 
         function transformData(dataValues, dataColumns = {}, dateFormat) {
@@ -80,7 +80,7 @@
 
             var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
-            if (xAxisColumnDetails[0].itemType == "Date") {
+            if (xAxisColumnDetails.length && xAxisColumnDetails[0].itemType == "Date") {
                 isKey1Date = true;
             }
 
@@ -124,7 +124,7 @@
         function drawChart(data, plottingConfiguration = {}) {
             let {
                 d3colorPalette,
-                dataColumns,
+                dataColumns = {},
                 paddingInner,
                 legendConfig = defaultD3Config.defaultLegendConfig,
                 labelConfig,
@@ -134,13 +134,13 @@
                 dateFormat = defaultD3Config.dateFormat,
 
                 dataLabelfontFamily = defaultD3Config.fontFamily,
-                dataLabelColor = defaultD3Config.fontColor,
+                dataLabelColor = defaultD3Config.fontColor
             } = plottingConfiguration;
             window.dataLabelfontSize = dataLabelfontSize;
             window.dataLabelfontFamily = dataLabelfontFamily;
             window.dataLabelfontSize = dataLabelfontSize;
 
-            var data = transformData(data,dataColumns, dateFormat);
+            var data = transformData(data, dataColumns, dateFormat);
 
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -173,7 +173,7 @@
             if (!toolTip) {
                 toolTip = {
                     textColumn1: xAxisLabel,
-                    textColumn2: yAxisLabel,
+                    textColumn2: yAxisLabel
                 };
             }
 
@@ -206,8 +206,7 @@
 
             d3.select("#legend").attr("style", null);
             if (legendStatus) {
-                var legendHeight =
-                    document.querySelector("#legend").offsetHeight;
+                var legendHeight = document.querySelector("#legend").offsetHeight;
                 var legendElement = document.querySelector("#legend");
 
                 // topPosition = "calc(50vh - " + legendHeight + "px)";
@@ -323,18 +322,11 @@
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" +
-                        (width + translateSvg) / 2 +
-                        "," +
-                        (height + translateSvgTop) / 2 +
-                        ")"
+                    "translate(" + (width + translateSvg) / 2 + "," + (height + translateSvgTop) / 2 + ")"
                 );
 
             // set the color scale
-            var color = d3
-                .scaleOrdinal()
-                .domain(Object.keys(data))
-                .range(d3Colors);
+            var color = d3.scaleOrdinal().domain(Object.keys(data)).range(d3Colors);
             var totalSum = arraySum(Object.values(data[0]));
 
             // Compute the position of each group on the pie:
@@ -367,10 +359,7 @@
                 .attr("fill", function (d) {
                     this.setAttribute("data-label-name", d.data.key);
                     this.setAttribute("data-value", d.data.value);
-                    this.setAttribute(
-                        "data-percentage",
-                        ((d.data.value / totalSum) * 100).toFixed(2)
-                    );
+                    this.setAttribute("data-percentage", ((d.data.value / totalSum) * 100).toFixed(2));
 
                     return color(d.data.key);
                 })
@@ -472,12 +461,10 @@
                 .outerRadius(radius * 0.9);
             if (labelStatus) {
                 // Add the polylines b etween chart and labels:
-                percentageValuePrev =
-                    (data_ready[0].data.value / totalSum) * 100;
+                percentageValuePrev = (data_ready[0].data.value / totalSum) * 100;
                 data_ready[0].showLabel = false;
                 for (var i = 0; i < data_ready.length; i++) {
-                    percentageValueNext =
-                        (data_ready[i].data.value / totalSum) * 100;
+                    percentageValueNext = (data_ready[i].data.value / totalSum) * 100;
 
                     if (percentageValueNext < 3 && percentageValuePrev < 3) {
                         data_ready[i].showLabel = false;
@@ -497,7 +484,7 @@
                             return [
                                 [0, 0],
                                 [0, 0],
-                                [0, 0],
+                                [0, 0]
                             ];
                         }
                         var posA = outerArc.centroid(d); // line insertion in the slice
@@ -507,8 +494,7 @@
                         console.log({ posA });
                         var posB = outerArc.centroid(d); // line break: we use the other arc generator that has been built only for that
                         var posC = outerArc.centroid(d); // Label position = almost the same as posB
-                        var midangle =
-                            d.startAngle + (d.endAngle - d.startAngle) / 2; // we need the angle to see if the X position will be at the extreme right or extreme left
+                        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2; // we need the angle to see if the X position will be at the extreme right or extreme left
                         posC[0] = radius * 1.1 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
                         return [posA, posB, posC];
                     });
@@ -536,14 +522,12 @@
                     })
                     .attr("transform", function (d) {
                         var pos = outerArc.centroid(d);
-                        var midangle =
-                            d.startAngle + (d.endAngle - d.startAngle) / 2;
+                        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
                         pos[0] = radius * 1.12 * (midangle < Math.PI ? 1 : -1);
                         return "translate(" + pos + ")";
                     })
                     .style("text-anchor", function (d) {
-                        var midangle =
-                            d.startAngle + (d.endAngle - d.startAngle) / 2;
+                        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
                         return midangle < Math.PI ? "start" : "end";
                     });
             }
@@ -562,6 +546,6 @@
         }
 
         // Initialize the plot with the first dataset
-        drawChart(data);
+        // drawChart(data);
     </script>
 </body>
