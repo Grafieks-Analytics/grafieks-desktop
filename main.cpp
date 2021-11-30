@@ -1,3 +1,5 @@
+// GCS Bugfixes -- Fix Keyword
+
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
@@ -262,6 +264,9 @@ int main(int argc, char *argv[])
     // Random session token for tmp file writing purposes
     QSettings settings;
     settings.setValue("general/fileToken", QDateTime::currentMSecsSinceEpoch());
+    // GCS Bugfixes -- Fix Keyword
+    // wont required this when charts url is replaced with base url
+    settings.setValue("general/chartsUrl", "http://localhost:5473/"); // Delete this later when the API is resolved finally
 
     // Delete existing tmp folder storing dashboard files
     QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";

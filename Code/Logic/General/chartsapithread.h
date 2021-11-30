@@ -1,0 +1,95 @@
+#ifndef CHARTSAPITHREAD_H
+#define CHARTSAPITHREAD_H
+
+#include <QObject>
+#include <QDebug>
+#include <QSettings>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
+#include "../../constants.h"
+#include "../../statics.h"
+
+class ChartsAPIThread : public QObject
+{
+    Q_OBJECT
+
+    QString reportWhereConditions;
+    QString dashboardWhereConditions;
+    int currentChartSource;
+    int currentDashboardId;
+    int currentReportId;
+
+    QString xAxisColumn;
+    QString yAxisColumn;
+    QString xSplitKey;
+    QVariantList xAxisColumnList;
+    QVariantList yAxisColumnList;
+    QString sourceColumn;
+    QString destinationColumn;
+    QString measureColumn;
+    QString calculateColumn;
+    QJsonArray dateConversionOptions;
+
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_dataBuffer;
+
+public:
+    explicit ChartsAPIThread(QObject *parent = nullptr);
+    ~ChartsAPIThread();
+
+    void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0);
+    void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
+    void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
+    void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
+    void setGaugeKpiDetails(QString &calculateColumn);
+    void setTablePivotDateConversionOptions(QString dateConversionOptions);
+
+signals:
+    void signalBarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+
+public slots:
+    void start();
+    void dataReadyRead();
+    void dataReadFinished();
+
+    void getBarChartValues();
+    void getStackedBarChartValues(); // getStackedBarAreaValues
+    void getGroupedBarChartValues();
+    void getNewGroupedBarChartValues();
+    void getAreaChartValues(); // getLineAreaWaterfallValues
+    void getLineChartValues(); // getLineAreaWaterfallValues
+    void getLineBarChartValues();
+    void getPieChartValues();
+    void getFunnelChartValues();
+    void getRadarChartValues();
+    void getScatterChartValues();
+    void getScatterChartNumericalValues();
+
+    void getHeatMapChartValues();
+
+    void getSunburstChartValues(); // getTreeSunburstValues
+    void getWaterfallChartValues(); // getLineAreaWaterfallValues
+    void getGaugeChartValues(); // float
+    void getSankeyChartValues();
+
+    void getTreeChartValues(); // getTreeSunburstValues
+    void getTreeMapChartValues(); // getTreeSunburstValues
+    void getKPIChartValues(); // float
+    void getTableChartValues();
+    void getPivotChartValues();
+    void getStackedAreaChartValues(); // getStackedBarAreaValues
+    void getMultiLineChartValues();
+
+    void getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn, QString identifier = "");
+    void getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier = "");
+    void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
+
+};
+
+#endif // CHARTSAPITHREAD_H
