@@ -6,6 +6,10 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSettings>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 #include <QRegularExpression>
 
 #include "../../constants.h"
@@ -30,6 +34,10 @@ class ReportsDataModel : public QObject
     QStringList columnData;
     QString whereConditions;
 
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_dataBuffer;
+
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
 
@@ -48,6 +56,9 @@ public slots:
     void generateColumnsForExtract();
     void generateColumnsForReader(duckdb::Connection *con);
 
+    void dataReadyRead();
+    void dataReadFinished();
+
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void reportWhereConditions(QString whereConditions, int currentReportId);
@@ -57,6 +68,7 @@ signals:
 private:
     QVariant convertToDateFormatTimeFromString(QString stringDateFormat);
     void generateColumns(duckdb::Connection *con);
+    void generateColumnsFromAPI();
 
 };
 

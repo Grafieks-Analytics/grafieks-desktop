@@ -9,6 +9,7 @@ ChartsModel::ChartsModel(QObject *parent, ChartsThread *chartsThread) : QObject(
     threadName = "Grafieks Charts";
 
     connect(&chartsThreadThread, &QThread::started, this->chartsThread, &ChartsThread::start, Qt::QueuedConnection);
+//    connect(&chartsAPIThreadThread, &QThread::started, this->chartsAPIThread, &ChartsAPIThread::start, Qt::QueuedConnection);
 
 
     connect(this->chartsThread, &ChartsThread::signalBarChartValues, this, &ChartsModel::slotBarChartValues, Qt::QueuedConnection);
@@ -36,6 +37,8 @@ ChartsModel::ChartsModel(QObject *parent, ChartsThread *chartsThread) : QObject(
     connect(this->chartsThread, &ChartsThread::signalStackedAreaChartValues, this, &ChartsModel::slotStackedAreaChartValues, Qt::QueuedConnection);
     connect(this->chartsThread, &ChartsThread::signalMultiLineChartValues, this, &ChartsModel::slotMultiLineChartValues, Qt::QueuedConnection);
 
+
+//    connect(this->chartsAPIThread, &ChartsAPIThread::signalBarChartValues, this, &ChartsModel::slotBarChartValues, Qt::QueuedConnection);
 }
 
 ChartsModel::~ChartsModel()
@@ -369,7 +372,6 @@ void ChartsModel::callThread()
         chartsThreadThread.start(QThread::InheritPriority);
     }
 }
-
 
 void ChartsModel::slotBarChartValues(QString output, int reportId, int dashboardId, int chartSource)
 {

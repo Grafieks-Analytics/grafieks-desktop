@@ -9,12 +9,19 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include <QSettings>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+
 #include "chartsthread.h"
+#include "chartsapithread.h"
 
 class ChartsModel : public QObject
 {
     Q_OBJECT
     ChartsThread *chartsThread;
+    ChartsAPIThread *chartsAPIThread;
     QString threadName;
     QMap<int, QString> reportWhereConditions;
     QMap<int, QString> dashboardWhereConditions;
@@ -24,6 +31,7 @@ class ChartsModel : public QObject
     int currentChartSource;
 
     QThread chartsThreadThread;
+    QThread chartsAPIThreadThread;
     QThread threadBarChartValues;
     QThread threadStackedBarChartValues;
     QThread threadGroupedBarChartValues;
@@ -119,6 +127,7 @@ public slots:
     void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
 
     void getExtractWhereParams(QJsonObject whereParams);
+
 signals:
 
     void signalBarChartValues(QString output, int reportId, int dashboardId, int chartSource);

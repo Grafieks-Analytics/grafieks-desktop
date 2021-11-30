@@ -95,6 +95,7 @@ SOURCES += \
     Code/Logic/FreeTier/freetierchartsmanager.cpp \
     Code/Logic/FreeTier/freetierconnectorsmanager.cpp \
     Code/Logic/FreeTier/freetierextractsmanager.cpp \
+    Code/Logic/General/chartsapithread.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
@@ -216,6 +217,7 @@ HEADERS += \
     Code/Logic/FreeTier/freetierchartsmanager.h \
     Code/Logic/FreeTier/freetierconnectorsmanager.h \
     Code/Logic/FreeTier/freetierextractsmanager.h \
+    Code/Logic/General/chartsapithread.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \
