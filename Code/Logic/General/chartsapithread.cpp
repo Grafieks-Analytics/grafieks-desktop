@@ -21,6 +21,7 @@ void ChartsAPIThread::methodSelector(QString functionName, QString reportWhereCo
     this->currentChartSource = chartSource;
     this->currentDashboardId = dashboardId;
     this->currentReportId = reportId;
+    this->currentFunctionName = functionName;
 
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
@@ -137,24 +138,73 @@ void ChartsAPIThread::dataReadFinished()
         QJsonObject resultObj = resultJson.object();
 
         QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+        QString msg = resultObj["msg"].toString();
+        int code = resultObj["code"].toInt();
         QString strJson(dataDoc.toJson(QJsonDocument::Compact));
 
-        qDebug() << "JSON DOC" << strJson;
-        emit signalBarChartValues(strJson,3, 0, 5);
+        if(code != 200){
+            qDebug() << this->currentFunctionName << "Error code" << code << ": " << msg;
+        } else {
+            if(this->currentFunctionName == "getBarChartValues"){
+                emit signalBarChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getStackedBarChartValues"){
+                emit signalStackedBarChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getGroupedBarChartValues"){
+                emit signalGroupedBarChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getNewGroupedBarChartValues"){
+                emit signalNewGroupedBarChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getAreaChartValues"){
+                emit signalAreaChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getLineChartValues"){
+                emit signalLineChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getLineBarChartValues"){
+                emit signalLineBarChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getPieChartValues"){
+                emit signalPieChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getFunnelChartValues"){
+                emit signalFunnelChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getRadarChartValues"){
+                emit signalRadarChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getScatterChartValues"){
+                emit signalScatterChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getScatterChartNumericalValues"){
+                emit signalScatterChartNumericalValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getHeatMapChartValues"){
+                emit signalHeatMapChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getSunburstChartValues"){
+                emit signalSunburstChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getWaterfallChartValues"){
+                emit signalWaterfallChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getGaugeChartValues"){
+                emit signalGaugeChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getSankeyChartValues"){
+                emit signalSankeyChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getTreeChartValues"){
+                emit signalTreeChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getTreeMapChartValues"){
+                emit signalTreeMapChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getKPIChartValues"){
+                emit signalKPIChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getTableChartValues"){
+                emit signalTableChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getPivotChartValues"){
+                emit signalPivotChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getStackedAreaChartValues"){
+                emit signalStackedAreaChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else if(this->currentFunctionName == "getMultiLineChartValues"){
+                emit signalMultiLineChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            } else {}
+        }
     }
 }
 
 void ChartsAPIThread::getBarChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getBarChartValues");
 
-    // MAIN CODE
-
-    QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getBarChartValues");
-
-    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
-                               "application/x-www-form-urlencoded");
-    m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
 
     QJsonObject obj;
     obj.insert("profileId", this->profileId);
@@ -166,11 +216,15 @@ void ChartsAPIThread::getBarChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", "extract");
     obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
-    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
 
     connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
@@ -179,131 +233,744 @@ void ChartsAPIThread::getBarChartValues()
 void ChartsAPIThread::getStackedBarChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getStackedBarChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getGroupedBarChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getGroupedBarChartValues");
 
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getNewGroupedBarChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getNewGroupedBarChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 
 }
 
 void ChartsAPIThread::getAreaChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getAreaChartValues");
 
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getLineChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getLineChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getLineBarChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getLineBarChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getPieChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getPieChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getFunnelChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getFunnelChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getRadarChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getRadarChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getScatterChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getScatterChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getScatterChartNumericalValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getScatterChartNumericalValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getHeatMapChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getHeatMapChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getSunburstChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getSunburstChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getWaterfallChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getWaterfallChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getGaugeChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getGaugeChartValues");
 
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("calculateColumn", this->calculateColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getSankeyChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getSankeyChartValues");
 
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("sourceColumn", this->sourceColumn);
+    obj.insert("destinationColumn", this->destinationColumn);
+    obj.insert("measureColumn", this->measureColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getTreeChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getTreeChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    qDebug() << "TREE OBJ" << obj;
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getTreeMapChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getTreeMapChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getKPIChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getKPIChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("calculateColumn", this->calculateColumn);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getTableChartValues()
 {
 
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getTableChartValues");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
+    obj.insert("yAxisColumn", QJsonArray::fromVariantList(this->yAxisColumnList));
+    obj.insert("dateConversionParameters", this->dateConversionOptions);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    qDebug() << obj << "OBJ";
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
+
 }
 
 void ChartsAPIThread::getPivotChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getPivotChartValues");
 
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
+    obj.insert("yAxisColumn", QJsonArray::fromVariantList(this->yAxisColumnList));
+    obj.insert("dateConversionParameters", this->dateConversionOptions);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getStackedAreaChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getStackedAreaChartValues");
 
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::getMultiLineChartValues()
 {
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getMultiLineChartValues");
 
-}
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
 
-void ChartsAPIThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QString identifier)
-{
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("reportId", this->currentReportId);
+    obj.insert("dashboardId", this->currentDashboardId);
+    obj.insert("chartSource", this->currentChartSource);
+    obj.insert("xAxisColumn", this->xAxisColumn);
+    obj.insert("yAxisColumn", this->yAxisColumn);
+    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("dbType", "extract");
+    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
 
-}
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
 
-void ChartsAPIThread::getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier)
-{
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
 
-}
-
-void ChartsAPIThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
-{
-
+    connect(m_networkReply,&QIODevice::readyRead,this,&ChartsAPIThread::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ChartsAPIThread::dataReadFinished);
 }
 
 void ChartsAPIThread::fetchSettings()

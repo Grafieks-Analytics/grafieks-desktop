@@ -33,31 +33,6 @@ class ChartsModel : public QObject
     QThread chartsThreadThread;
     QThread chartsAPIThreadThread;
 
-    QThread threadBarChartValues;
-    QThread threadStackedBarChartValues;
-    QThread threadGroupedBarChartValues;
-    QThread threadNewGroupedBarChartValues;
-    QThread threadAreaChartValues;
-    QThread threadLineChartValues;
-    QThread threadLineBarChartValues;
-    QThread threadPieChartValues;
-    QThread threadFunnelChartValues;
-    QThread threadRadarChartValues;
-    QThread threadScatterChartValues;
-    QThread threadScatterChartNumericalValues;
-    QThread threadHeatMapChartValues;
-    QThread threadSunburstChartValues;
-    QThread threadWaterfallChartValues;
-    QThread threadGaugeChartValues;
-    QThread threadSankeyChartValues;
-    QThread threadTreeChartValues;
-    QThread threadTreeMapChartValues;
-    QThread threadKPIChartValues;
-    QThread threadTableChartValues;
-    QThread threadPivotChartValues;
-    QThread threadStackedAreaChartValues;
-    QThread threadMultiLineChartValues;
-
     QString nullString;
     QVariantList nullList;
 

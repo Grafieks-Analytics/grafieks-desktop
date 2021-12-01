@@ -6,6 +6,9 @@
 namespace Constants
 {
 
+    // Test params
+    const bool apiSwitch = true;
+
     // General Constants
     const QString appName = "Grafieks Desktop";
     const QString appVersion = "Beta";
