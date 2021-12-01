@@ -39,6 +39,10 @@ class ChartsAPIThread : public QObject
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
 
+    QString baseUrl;
+    QByteArray sessionToken;
+    int profileId;
+
 public:
     explicit ChartsAPIThread(QObject *parent = nullptr);
     ~ChartsAPIThread();
@@ -52,6 +56,33 @@ public:
 
 signals:
     void signalBarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalStackedBarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalGroupedBarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalNewGroupedBarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalAreaChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalLineChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalLineBarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalPieChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalFunnelChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalRadarChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalScatterChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalScatterChartNumericalValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalHeatMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalSunburstChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalWaterfallChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalGaugeChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalSankeyChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalTreeChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalTreeMapChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalKPIChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalTableChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalPivotChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalStackedAreaChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalMultiLineChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+
+    void signalLineAreaWaterfallValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalTreeSunburstValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
+    void signalStackedBarAreaValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
 
 public slots:
     void start();
@@ -89,6 +120,9 @@ public slots:
     void getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn, QString identifier = "");
     void getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier = "");
     void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
+
+private:
+    void fetchSettings();
 
 };
 

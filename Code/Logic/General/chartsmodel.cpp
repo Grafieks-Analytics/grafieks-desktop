@@ -1,15 +1,16 @@
 #include "chartsmodel.h"
 
-ChartsModel::ChartsModel(QObject *parent, ChartsThread *chartsThread) : QObject(parent)
+ChartsModel::ChartsModel(QObject *parent, ChartsThread *chartsThread, ChartsAPIThread *chartsAPIThread) : QObject(parent)
 {
     this->chartsThread = chartsThread;
+    this->chartsAPIThread = chartsAPIThread;
 
     nullString = "";
     nullList.clear();
     threadName = "Grafieks Charts";
 
     connect(&chartsThreadThread, &QThread::started, this->chartsThread, &ChartsThread::start, Qt::QueuedConnection);
-//    connect(&chartsAPIThreadThread, &QThread::started, this->chartsAPIThread, &ChartsAPIThread::start, Qt::QueuedConnection);
+    connect(&chartsAPIThreadThread, &QThread::started, this->chartsAPIThread, &ChartsAPIThread::start, Qt::QueuedConnection);
 
 
     connect(this->chartsThread, &ChartsThread::signalBarChartValues, this, &ChartsModel::slotBarChartValues, Qt::QueuedConnection);
@@ -38,7 +39,7 @@ ChartsModel::ChartsModel(QObject *parent, ChartsThread *chartsThread) : QObject(
     connect(this->chartsThread, &ChartsThread::signalMultiLineChartValues, this, &ChartsModel::slotMultiLineChartValues, Qt::QueuedConnection);
 
 
-//    connect(this->chartsAPIThread, &ChartsAPIThread::signalBarChartValues, this, &ChartsModel::slotBarChartValues, Qt::QueuedConnection);
+    connect(this->chartsAPIThread, &ChartsAPIThread::signalBarChartValues, this, &ChartsModel::slotBarChartValues, Qt::QueuedConnection);
 }
 
 ChartsModel::~ChartsModel()
