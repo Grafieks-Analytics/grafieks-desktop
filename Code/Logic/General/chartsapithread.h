@@ -20,6 +20,8 @@ class ChartsAPIThread : public QObject
 
     QString reportWhereConditions;
     QString dashboardWhereConditions;
+    QString joinConditions;
+    QString currentFunctionName;
     int currentChartSource;
     int currentDashboardId;
     int currentReportId;
@@ -38,6 +40,7 @@ class ChartsAPIThread : public QObject
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
+    QNetworkRequest m_NetworkRequest;
 
     QString baseUrl;
     QByteArray sessionToken;
@@ -80,10 +83,6 @@ signals:
     void signalStackedAreaChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
     void signalMultiLineChartValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
 
-    void signalLineAreaWaterfallValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalTreeSunburstValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-    void signalStackedBarAreaValues(QString output, int currentReportId, int currentDashboardId, int currentChartSource);
-
 public slots:
     void start();
     void dataReadyRead();
@@ -116,10 +115,6 @@ public slots:
     void getPivotChartValues();
     void getStackedAreaChartValues(); // getStackedBarAreaValues
     void getMultiLineChartValues();
-
-    void getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn, QString identifier = "");
-    void getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier = "");
-    void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
 
 private:
     void fetchSettings();

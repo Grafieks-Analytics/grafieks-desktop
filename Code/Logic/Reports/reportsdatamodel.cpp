@@ -394,7 +394,7 @@ void ReportsDataModel::generateColumnsForExtract()
 
     // GCS Bugfixes -- Fix Keyword
     // if condition is fictitious and needs fixing
-    if(true){
+    if(Constants::apiSwitch == true){
         this->generateColumnsFromAPI();
     } else {
         this->generateColumns(&con);
@@ -406,7 +406,7 @@ void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
 {
     // GCS Bugfixes -- Fix Keyword
     // if condition is fictitious and needs fixing
-    if(true){
+    if(Constants::apiSwitch == true){
         this->generateColumnsFromAPI();
     } else {
         this->generateColumns(con);
