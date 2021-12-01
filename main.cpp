@@ -70,6 +70,7 @@
 
 #include "Code/Logic/General/chartsmodel.h"
 #include "Code/Logic/General/chartsthread.h"
+#include "Code/Logic/General/chartsapithread.h"
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
@@ -303,7 +304,8 @@ int main(int argc, char *argv[])
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
     ChartsThread chartsThread;
-    ChartsModel chartsModel(nullptr, &chartsThread);
+    ChartsAPIThread chartsAPIThread;
+    ChartsModel chartsModel(nullptr, &chartsThread, &chartsAPIThread);
 
 
     GeneralParamsModel generalParamsModel;

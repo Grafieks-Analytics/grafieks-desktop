@@ -32,6 +32,7 @@ class ChartsModel : public QObject
 
     QThread chartsThreadThread;
     QThread chartsAPIThreadThread;
+
     QThread threadBarChartValues;
     QThread threadStackedBarChartValues;
     QThread threadGroupedBarChartValues;
@@ -61,7 +62,7 @@ class ChartsModel : public QObject
     QVariantList nullList;
 
 public:
-    explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr);
+    explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr, ChartsAPIThread *chartsAPIThread = nullptr);
     ~ChartsModel();
 
     Q_INVOKABLE void getBarChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn);

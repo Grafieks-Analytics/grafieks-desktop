@@ -5,7 +5,7 @@ ChartsAPIThread::ChartsAPIThread(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
-
+    this->fetchSettings();
 }
 
 ChartsAPIThread::~ChartsAPIThread()
@@ -147,23 +147,17 @@ void ChartsAPIThread::dataReadFinished()
 void ChartsAPIThread::getBarChartValues()
 {
 
-    // Fetch value from settings
-    QSettings settings;
-    QString chartsUrl = settings.value("general/chartsUrl").toString();
-    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
-    int profileId = settings.value("user/profileId").toInt();
-
     // MAIN CODE
 
     QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(chartsUrl+"/getchart/getBarChartValues");
+    m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getBarChartValues");
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
-    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+    m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
 
     QJsonObject obj;
-    obj.insert("profileId", profileId);
+    obj.insert("profileId", this->profileId);
     obj.insert("uniqueHash", "hash");
     obj.insert("reportId", this->currentReportId);
     obj.insert("dashboardId", this->currentDashboardId);
@@ -309,5 +303,15 @@ void ChartsAPIThread::getTreeSunburstValues(QVariantList &xAxisColumn, QString &
 
 void ChartsAPIThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
 {
+
+}
+
+void ChartsAPIThread::fetchSettings()
+{
+    // Fetch value from settings
+    QSettings settings;
+    this->baseUrl = settings.value("general/chartsUrl").toString();
+    this->sessionToken = settings.value("user/sessionToken").toByteArray();
+    this->profileId = settings.value("user/profileId").toInt();
 
 }
