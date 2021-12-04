@@ -428,9 +428,9 @@ function setXaxisWidth() {
 
     extraHeightWorked = true;
     maxWidth = maxWidth < 100 ? maxWidth : 60;
-    if(window.innerHeight < 400){
-        extraHeight = Math.min(maxWidth, window.innerHeight/8);
-    }else{
+    if (window.innerHeight < 400) {
+        extraHeight = Math.min(maxWidth, window.innerHeight / 8);
+    } else {
         extraHeight = maxWidth;
     }
 
