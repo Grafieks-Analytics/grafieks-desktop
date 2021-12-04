@@ -1697,6 +1697,12 @@ Page {
             chartUrl = Constants.treeChartUrl;
             allowedXAxisDataPanes = 5;
             break;
+        case Constants.scatterChartTitle:
+            chartUrl = Constants.scatterChartUrl;
+            break;
+        case Constants.heatMapChartTitle:
+            chartUrl = Constants.heatMapChartUrl;
+            break;
         }
 
         webEngineView.url = Constants.baseChartUrl+chartUrl;

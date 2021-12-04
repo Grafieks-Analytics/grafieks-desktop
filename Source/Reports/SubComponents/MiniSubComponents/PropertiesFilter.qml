@@ -259,7 +259,7 @@ Column{
 
     function resizePaddingInner(value, actualValue){
         d3PropertyConfig.paddingInner = value;
-        d3PropertyConfig.innerRadius = (1-value)*200;        
+        d3PropertyConfig.innerRadius = (1-value);        
         //        console.log("value"+value);
         qmlChartConfig.sizePopupValue = actualValue;
         updateChart();
