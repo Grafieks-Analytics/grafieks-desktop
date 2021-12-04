@@ -468,7 +468,10 @@ function make_y_gridlines(y) {
     return d3.axisLeft(y).ticks(yaxisTicks);
 }
 // legend
-function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin, height) {
+function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin, height, data) {
+    if(!data){
+        data = [window.data[1][0]];
+    }
     var legendElement = document.querySelector("#legend");
     var legendHeight = legendElement.offsetHeight;
     var legendWidth = legendElement.offsetWidth;
@@ -484,7 +487,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
 
         d3.select("#legend")
             .selectAll("div")
-            .data([data[1][0]])
+            .data(data)
             .enter()
             .append("div")
             .html((d, i) => {
@@ -502,7 +505,8 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
     }
     if (legendStatus) {
         if (legendHeight < document.querySelector("html").offsetHeight) {
-            topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
+            // topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
+            topPosition = "50%";
         } else {
             topPosition = 0;
         }
@@ -526,8 +530,9 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                     // .style("right", "5px")
                     .style("display", "block")
                     .style("max-height", "100vh")
-                    .style("overflow", "scroll")
+                    .style("overflow", "auto")
                     .style("border", "none")
+                    .style("transform", "translateY(-50%)")
                     .style("position", "fixed");
                 d3.selectAll("#legend div span")
                     .style("max-width", "160px")
@@ -560,7 +565,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                     .style("left", "auto")
                     .style("display", "flex")
                     .style("max-width", "99vw")
-                    .style("overflow", "scroll")
+                    .style("overflow", "auto")
                     .style("border", "none");
                 d3.selectAll("#legend div span")
                     .style("max-width", "160px")
@@ -594,7 +599,7 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                     // .style("left", margin.left + "px")
                     .style("display", "flex")
                     .style("max-width", "99vw")
-                    .style("overflow", "scroll")
+                    .style("overflow", "auto")
                     .style("border", "none");
 
                 d3.selectAll("#legend div span")
@@ -617,7 +622,8 @@ function legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin,
                     .style("position", "fixed")
                     .style("top", topPosition)
                     .style("max-height", "100vh")
-                    .style("overflow", "scroll")
+                    .style("transform", "translateY(-50%)")
+                    .style("overflow", "auto")
                     .style("border", "none")
                     .style("bottom", "auto")
                     .style("display", "block");
