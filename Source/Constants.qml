@@ -355,6 +355,8 @@ QtObject {
     property string treeChartUrl: "TreeChart.html";
     property string sankeyChartUrl: "SankeyChart.html";
 
+    property string scatterChartUrl: "ScatterChart.html";
+    property string heatMapChartUrl: "HeatmapChart.html";
     property string gaugeChartUrl: "GaugeChart.html";
     property string pivotTableUrl: "PivotTable.html";
     property string tableChartUrl: "TableChart.html";
