@@ -236,7 +236,7 @@
                 var svg = d3
                     .selectAll("#my_dataviz")
                     .append("svg")
-                    .attr("width", width)
+                    .attr("width", width+10)
                     .attr("height", height + extraHeight + margin.top + margin.bottom)
                     .append("g") //add group to leave margin for axis
                     .attr("transform", "translate(0," + margin.top + ")");

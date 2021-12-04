@@ -420,10 +420,10 @@
             var svg = d3
                 .select("#my_dataviz")
                 .append("svg")
-                .attr("width", width + margin.left + margin.right+20 )
+                .attr("width", width + margin.left + margin.right + 20)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + (margin.left+25) + "," + margin.top + ")");
+                .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
 
             // legends code starts
 
@@ -589,7 +589,7 @@
 
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).tickSizeOuter(0))
+                .call(d3.axisBottom(x).tickSizeOuter(0).tickFormat(d3.format(".2s")))
                 .attr("class", "x-axis");
 
             // svg.append("g")
@@ -609,7 +609,7 @@
 
             // Add Y axis
             var y = d3.scaleLinear().domain(yRange).range([height, 0]).nice();
-            svg.append("g").call(d3.axisLeft(y).tickSizeOuter(0)).attr("class", "y-axis");
+            svg.append("g").call(d3.axisLeft(y).tickSizeOuter(0).tickFormat(d3.format(".2s"))).attr("class", "y-axis");
 
             if (gridStatus) {
                 svg.append("g")

@@ -69,9 +69,9 @@ const defaultD3Config = {
     standardThresholdHeight: 100,
     fontSize: 12,
     fontFamily: "MS Sans Serif",
-    fontColor: "red",
+    fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "right"
     },
     defaultlabelConfig: {
