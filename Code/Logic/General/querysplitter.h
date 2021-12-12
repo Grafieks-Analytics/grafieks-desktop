@@ -22,6 +22,7 @@ public:
     QString getWhereCondition();
     QString getMainTable();
     QStringList getJoinTables();
+    QString getJoinConditions();
     QString getAliasName(QString columnString);
 
     QString query() const;
