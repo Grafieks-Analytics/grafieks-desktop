@@ -80,6 +80,7 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: widthId
+                    // [TODO: set saved value]
                     value: 1280
                     minimumValue :100
                     maximumValue:5000
@@ -96,6 +97,7 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: heightId
+                    // [TODO: set saved value]
                     value: 800
                     minimumValue :100
                     maximumValue:5000

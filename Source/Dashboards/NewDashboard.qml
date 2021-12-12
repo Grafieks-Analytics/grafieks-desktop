@@ -75,6 +75,14 @@ Page {
             column_filter_newdashboard.visible = false
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
+
+            // [TODO: Required]
+            // Update height and width of dashboard area
+            // Get and Set old values
+            // Or Set value by default
+            // dashboard_summary.height = Constants.defaultDashboardHeight
+            // dashboard_summary.width = Constants.defaultDashboardWidth
+            
         }
 
         function onDashboardContentDestroyed(dashboardId){
@@ -869,35 +877,68 @@ Page {
         height: parent.height
         width:parent.width
 
-        DashboardSummary{
-            id: dashboard_summary
-            //        height: parent.height
-            //        width: parent.width
+        Flickable {
+            id: dashboardMain
 
-            // [Tag: Refector]
-            // Move this to constants
-            // Initial Chart Dimension
-            height: 800
-            width: 1280
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.topMargin: 0
+            height: parent.height
+            width:parent.width
 
-            Text{
-                id:hintText
-                text:  !is_dashboard_blank ? "Add Reports and Widgets Here" : ""
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: Constants.grayColor
+            contentHeight: dashboard_summary.height
+            contentWidth: dashboard_summary.width
+            
+            clip: true
+
+            ScrollBar.horizontal: ScrollBar {
+                policy: ScrollBar.AlwaysOn
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                implicitHeight: dashboard_summary.width > parent.width ? 10 : 0
+                implicitWidth: dashboard_summary.width
             }
 
-            // [Tag: Refactor]
-            // Remove Commented Code
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AlwaysOn
+                anchors.right: parent.right
+                anchors.rightMargin: 50
+                implicitHeight: dashboard_summary.height
+                implicitWidth: dashboard_summary.height > parent.height ? 10 : 0
+            }
 
-            //        anchors.left: left_menubar.right
-            //        anchors.top: toolsep1.bottom
-            //        anchors.topMargin: -6
+            boundsMovement: Flickable.StopAtBounds
 
-            //        width: parent.width  - left_menubar.width
+            DashboardSummary{
+                id: dashboard_summary
+                //        height: parent.height
+                //        width: parent.width
+
+                // [Tag: Refector]
+                // Move this to constants
+                // Initial Chart Dimension
+                height: Constants.defaultDashboardHeight
+                width: Constants.defaultDashboardWidth
+
+
+                Text{
+                    id:hintText
+                    text:  !is_dashboard_blank ? "Add Reports and Widgets Here" : ""
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: Constants.grayColor
+                }
+
+                // [Tag: Refactor]
+                // Remove Commented Code
+
+                //        anchors.left: left_menubar.right
+                //        anchors.top: toolsep1.bottom
+                //        anchors.topMargin: -6
+
+                //        width: parent.width  - left_menubar.width
+            }
         }
-
     }
     // Center Panel Ends
 
