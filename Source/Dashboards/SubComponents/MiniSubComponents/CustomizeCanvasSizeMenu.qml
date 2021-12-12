@@ -30,26 +30,19 @@ Rectangle{
 
     function onWidthValueChanged(value){
 
-        // Old function to set dimensions in individual canvas
-        // Do not delete. Might be required later
 
-        // let dashboardHeight = heightId.value
-        // let dashboardId = DashboardParamsModel.currentDashboard
-        // DashboardParamsModel.setDashboardDimensions(dashboardId, value, dashboardHeight)
+        let dashboardHeight = heightId.value
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardDimensions(dashboardId, value, dashboardHeight)
 
-        DashboardParamsModel.setTmpCanvasWidth(value)
         dashboard_summary.width=value
     }
     function onHeightValueChanged(value){
 
-        // Old function to set dimensions in individual canvas
-        // Do not delete. Might be required later
+        let dashboardWidth = widthId.value
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardDimensions(dashboardId, dashboardWidth, value)
 
-        // let dashboardWidth = widthId.value
-        // let dashboardId = DashboardParamsModel.currentDashboard
-        // DashboardParamsModel.setDashboardDimensions(dashboardId, dashboardWidth, value)
-
-        DashboardParamsModel.setTmpCanvasHeight(value)
         dashboard_summary.height=value
     }
 
