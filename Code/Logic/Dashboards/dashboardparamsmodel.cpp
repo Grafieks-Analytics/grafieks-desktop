@@ -20,8 +20,6 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
     this->dashboardGrid.insert(0, false);
 
     this->dashboardCanvasDimensions.insert(0, canvasDimensions);
-    this->setTmpCanvasWidth(Constants::defaultCanvasWidth);
-    this->setTmpCanvasHeight(Constants::defaultCanvasHeight);
 }
 
 bool DashboardParamsModel::dragNewReport(int dashboardId, int widgetId, QString reportName)
@@ -91,8 +89,8 @@ bool DashboardParamsModel::createNewDashboard(int dashboardId)
 {
 
     QVariantList canvasDimensions;
-    canvasDimensions.append(this->tmpCanvasWidth()); // default width
-    canvasDimensions.append(this->tmpCanvasHeight()); // default height
+    canvasDimensions.append(Constants::defaultCanvasWidth); // default width
+    canvasDimensions.append(Constants::defaultCanvasHeight); // default height
 
     this->dashboardName.insert(dashboardId, "Dashboard " + QString::number(dashboardId + 1));
     this->dashboardBackgroundColor.insert(dashboardId, "#FFFFFF");
@@ -185,8 +183,6 @@ bool DashboardParamsModel::destroyDashboard(int dashboardId, bool destroyAll)
         this->dashboardGrid.insert(0, false);
 
         this->dashboardCanvasDimensions.insert(0, canvasDimensions);
-        this->setTmpCanvasWidth(Constants::defaultCanvasWidth);
-        this->setTmpCanvasHeight(Constants::defaultCanvasHeight);
 
         emit dashboardContentDestroyed(-1);
     }
