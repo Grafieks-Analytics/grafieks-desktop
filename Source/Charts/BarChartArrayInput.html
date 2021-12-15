@@ -144,7 +144,7 @@
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth;
                 }
 
-                if (!toolTip) {
+                if (!toolTip || !Object.keys(toolTip).length ) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel
