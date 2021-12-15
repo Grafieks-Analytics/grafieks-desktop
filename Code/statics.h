@@ -20,6 +20,7 @@ public:
     static int onlineStorageType;
     static QString driverName;
     static QString extractPath;
+    static QString livePath;
     static QString csvJsonPath;
     static bool freeLimitExtractSizeExceeded;
     static bool modeProcessReader;
