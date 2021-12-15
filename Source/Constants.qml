@@ -397,4 +397,7 @@ QtObject {
     property var defaultCustomizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
     property var defaultSubMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
     
+    // Dashboard Constasts
+    property var defaultDashboardHeight: 800;
+    property var defaultDashboardWidth: 1280;
 }

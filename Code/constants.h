@@ -26,6 +26,8 @@ namespace Constants
 
     // Master Extract Table
     const QString masterExtractTable = "gahc_master_table";
+    const QString masterLiveTable = "gahc_master_table";
+    const QString masterCredentialsTable = "gahc_credentials_table";
 
     // File extensions
     const QString extractExt = "gadse";
