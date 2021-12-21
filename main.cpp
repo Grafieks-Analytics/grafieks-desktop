@@ -400,6 +400,7 @@ int main(int argc, char *argv[])
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
+    QObject::connect(&reportsDataModel, &ReportsDataModel::generateFiltersForAPI, &tableSchemaModel, &TableSchemaModel::generateSchemaForApi);
 
     // Charts
     // Data for charts

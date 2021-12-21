@@ -10,6 +10,7 @@
 #include <QDateTime>
 
 #include "../../General/generalparamsmodel.h"
+#include "../../General/querysplitter.h"
 
 #include "../../../constants.h"
 #include "../../../statics.h"
@@ -19,6 +20,8 @@ class SaveLiveQueryWorker : public QThread
 {
     Q_OBJECT
     bool ifSavePassword;
+
+    QuerySplitter querySplitter;
 
 public:
     explicit SaveLiveQueryWorker(bool ifSavePassword = false);

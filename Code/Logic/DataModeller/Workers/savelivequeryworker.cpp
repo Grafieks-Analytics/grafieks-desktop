@@ -147,13 +147,29 @@ void SaveLiveQueryWorker::run()
     QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR)";
     QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '" + connection.port() + "', '" + connection.databaseName() + "')";
 
+    QStringList selectParams = this->querySplitter.getSelectParams();
+    QString selectParamsString;
+    foreach(QString selectParam, selectParams){
+        selectParamsString += selectParam + ", ";
+    }
+    selectParamsString.chop(2);
+
+    QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
+    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + this->querySplitter.getWhereCondition() + "', '" + this->querySplitter.getJoinConditions() + "', '" + this->querySplitter.getMainTable() + "')";
+
     auto tableCreate = con.Query(tableCreateQuery.toStdString());
     if(!tableCreate->success) qDebug() << tableCreate->error.c_str() << tableCreateQuery;
     auto tableInsert = con.Query(tableInserQuery.toStdString());
     if(!tableInsert->success) qDebug() << tableInsert->error.c_str() << tableInserQuery;
 
-    auto credentialsCreate = con.Query(tableCreateQuery.toStdString());
+    auto credentialsCreate = con.Query(credentialsCreateQuery.toStdString());
     if(!credentialsCreate->success) qDebug() << credentialsCreate->error.c_str() << credentialsCreateQuery;
-    auto credentialsInsert = con.Query(tableInserQuery.toStdString());
+    auto credentialsInsert = con.Query(credentialsInsertQuery.toStdString());
     if(!credentialsInsert->success) qDebug() << credentialsInsert->error.c_str() << credentialsInsertQuery;
+
+    auto queryPartCreate = con.Query(queryPartCreateQuery.toStdString());
+    if(!queryPartCreate->success) qDebug() << queryPartCreate->error.c_str() << queryPartCreateQuery;
+    auto queryPartInsert = con.Query(queryPartInsertQuery.toStdString());
+    if(!queryPartInsert->success) qDebug() << queryPartInsert->error.c_str() << queryPartInsertQuery;
+
 }

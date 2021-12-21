@@ -117,25 +117,11 @@ Popup {
 
         // Set the model of the `Add Button` in each tab
         function onExtractSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+        }
 
-            categoricalModel.clear()
-            numericalModel.clear()
-            datesModel.clear()
-
-            allCategorical.forEach(function (element) {
-                categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
-            });
-
-            allNumerical.forEach(function (element) {
-                numericalModel.append({"tableName" : element[0], "colName" : element[1]});
-            });
-
-            allDates.forEach(function (element) {
-                datesModel.append({"tableName" : element[0], "colName" : element[1]});
-            });
-
-            add_btn_1.model =  categoricalModel
-
+        function onAPISchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
         function onTableSchemaCleared(){
@@ -219,6 +205,27 @@ Popup {
         ReportParamsModel.setSubCategory(Constants.categorySubMulti)
     }
 
+
+    function filterColumns(allList, allCategorical, allNumerical, allDates, allOthers){
+
+        categoricalModel.clear()
+        numericalModel.clear()
+        datesModel.clear()
+
+        allCategorical.forEach(function (element) {
+            categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
+        });
+
+        allNumerical.forEach(function (element) {
+            numericalModel.append({"tableName" : element[0], "colName" : element[1]});
+        });
+
+        allDates.forEach(function (element) {
+            datesModel.append({"tableName" : element[0], "colName" : element[1]});
+        });
+
+        add_btn_1.model =  categoricalModel
+    }
 
     function onAddMenuItemTriggered(colName,tableName, section, category, subCategory){
 

@@ -586,7 +586,7 @@ void ReportsDataModel::generateColumnsFromAPI()
     // unique hash, dbPath
     QJsonObject obj;
     obj.insert("profileId", profileId);
-    obj.insert("conType", "extract");
+    obj.insert("dbType", "extract");
     obj.insert("uniqueHash", "hash");
     obj.insert("dbPath", "C:/Users/chill/Desktop/orders1500.gadse");
 
@@ -597,5 +597,7 @@ void ReportsDataModel::generateColumnsFromAPI()
 
     connect(m_networkReply,&QIODevice::readyRead,this,&ReportsDataModel::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::dataReadFinished);
+
+    emit generateFiltersForAPI();
 
 }

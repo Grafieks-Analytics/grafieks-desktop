@@ -63,6 +63,7 @@ signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void reportWhereConditions(QString whereConditions, int currentReportId);
     void columnDataChanged(QStringList columnData, QString options);
+    void generateFiltersForAPI();
 
 
 private:
