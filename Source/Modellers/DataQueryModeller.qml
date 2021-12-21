@@ -62,12 +62,14 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                radio_live.visible = true
             }
         }
         function onMssqlLoginStatus(status){
@@ -75,12 +77,14 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
             }
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                radio_live.visible = false
             }
         }
 
@@ -96,6 +100,7 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = false
             }
         }
         function onMongoLoginStatus(status){
@@ -103,6 +108,7 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
             }
         }
         function onSnowflakeLoginStatus(status){
@@ -110,6 +116,7 @@ Page {
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
             }
         }
         function onRedshiftLoginStatus(status){
@@ -117,6 +124,7 @@ Page {
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
             }
         }
 
@@ -125,6 +133,7 @@ Page {
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
             }
         }
         function onExcelLoginStatus(status){
@@ -132,6 +141,7 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
             }
         }
 
@@ -140,6 +150,7 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
             }
         }
 
@@ -148,6 +159,7 @@ Page {
                 // Call functions
                 tableslist.model = CSVJsonDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
             }
         }
 
@@ -156,6 +168,7 @@ Page {
                 // Call functions
                 tableslist.model = CSVJsonDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
             }
         }
     }
@@ -1174,7 +1187,6 @@ Page {
                 radio_text: qsTr("Live")
                 radio_checked: false
                 enabled: true
-                visible: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onLiveSelected()

@@ -22,6 +22,7 @@ QString GeneralParamsModel::getTmpPath()
 
 QString GeneralParamsModel::getDbClassification()
 {
+    qDebug() << "DB CLASS" << Statics::currentDbClassification;
     return Statics::currentDbClassification;
 }
 
