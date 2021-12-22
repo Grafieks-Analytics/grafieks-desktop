@@ -12,13 +12,13 @@
 
     <title>Scatter Chart</title>
     <style>
-        #xAxisLabelId {
+        /* #xAxisLabelId {
             position: fixed;
             bottom: 15px;
             z-index: -1;
             height: 40px;
-            /* background-color: red; */
-        }
+             background-color: red; 
+        } */
         #my_dataviz {
             margin-left: 0;
         }
@@ -352,7 +352,7 @@
             if (!innerRadius) {
                 innerRadius = defaultD3Config.innerRadius;
             }
-            if (!toolTip) {
+            if (!toolTip || !Object.keys(toolTip).length ) {
                 toolTip = {
                     textColumn1: xAxisLabel,
                     textColumn2: yAxisLabel,
