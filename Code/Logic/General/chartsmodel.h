@@ -9,12 +9,19 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include <QSettings>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+
 #include "chartsthread.h"
+#include "chartsapithread.h"
 
 class ChartsModel : public QObject
 {
     Q_OBJECT
     ChartsThread *chartsThread;
+    ChartsAPIThread *chartsAPIThread;
     QString threadName;
     QMap<int, QString> reportWhereConditions;
     QMap<int, QString> dashboardWhereConditions;
@@ -24,36 +31,13 @@ class ChartsModel : public QObject
     int currentChartSource;
 
     QThread chartsThreadThread;
-    QThread threadBarChartValues;
-    QThread threadStackedBarChartValues;
-    QThread threadGroupedBarChartValues;
-    QThread threadNewGroupedBarChartValues;
-    QThread threadAreaChartValues;
-    QThread threadLineChartValues;
-    QThread threadLineBarChartValues;
-    QThread threadPieChartValues;
-    QThread threadFunnelChartValues;
-    QThread threadRadarChartValues;
-    QThread threadScatterChartValues;
-    QThread threadScatterChartNumericalValues;
-    QThread threadHeatMapChartValues;
-    QThread threadSunburstChartValues;
-    QThread threadWaterfallChartValues;
-    QThread threadGaugeChartValues;
-    QThread threadSankeyChartValues;
-    QThread threadTreeChartValues;
-    QThread threadTreeMapChartValues;
-    QThread threadKPIChartValues;
-    QThread threadTableChartValues;
-    QThread threadPivotChartValues;
-    QThread threadStackedAreaChartValues;
-    QThread threadMultiLineChartValues;
+    QThread chartsAPIThreadThread;
 
     QString nullString;
     QVariantList nullList;
 
 public:
-    explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr);
+    explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr, ChartsAPIThread *chartsAPIThread = nullptr);
     ~ChartsModel();
 
     Q_INVOKABLE void getBarChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn);
@@ -119,6 +103,7 @@ public slots:
     void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
 
     void getExtractWhereParams(QJsonObject whereParams);
+
 signals:
 
     void signalBarChartValues(QString output, int reportId, int dashboardId, int chartSource);

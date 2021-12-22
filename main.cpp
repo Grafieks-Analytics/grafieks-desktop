@@ -1,3 +1,5 @@
+// GCS Bugfixes -- Fix Keyword
+
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
@@ -68,6 +70,7 @@
 
 #include "Code/Logic/General/chartsmodel.h"
 #include "Code/Logic/General/chartsthread.h"
+#include "Code/Logic/General/chartsapithread.h"
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
@@ -262,6 +265,9 @@ int main(int argc, char *argv[])
     // Random session token for tmp file writing purposes
     QSettings settings;
     settings.setValue("general/fileToken", QDateTime::currentMSecsSinceEpoch());
+    // GCS Bugfixes -- Fix Keyword
+    // wont required this when charts url is replaced with base url
+    settings.setValue("general/chartsUrl", "http://localhost:5473/"); // Delete this later when the API is resolved finally
 
     // Delete existing tmp folder storing dashboard files
     QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
@@ -298,7 +304,8 @@ int main(int argc, char *argv[])
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
     ChartsThread chartsThread;
-    ChartsModel chartsModel(nullptr, &chartsThread);
+    ChartsAPIThread chartsAPIThread;
+    ChartsModel chartsModel(nullptr, &chartsThread, &chartsAPIThread);
 
 
     GeneralParamsModel generalParamsModel;
@@ -393,6 +400,7 @@ int main(int argc, char *argv[])
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
+    QObject::connect(&reportsDataModel, &ReportsDataModel::generateFiltersForAPI, &tableSchemaModel, &TableSchemaModel::generateSchemaForApi);
 
     // Charts
     // Data for charts

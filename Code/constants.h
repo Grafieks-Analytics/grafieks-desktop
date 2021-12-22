@@ -6,6 +6,9 @@
 namespace Constants
 {
 
+    // Test params
+    const bool apiSwitch = false;
+
     // General Constants
     const QString appName = "Grafieks Desktop";
     const QString appVersion = "Beta";
@@ -27,6 +30,7 @@ namespace Constants
     // Master Extract Table
     const QString masterExtractTable = "gahc_master_table";
     const QString masterLiveTable = "gahc_master_table";
+    const QString masterQueryPartLiveTable = "gahc_query_part_table";
     const QString masterCredentialsTable = "gahc_credentials_table";
 
     // File extensions

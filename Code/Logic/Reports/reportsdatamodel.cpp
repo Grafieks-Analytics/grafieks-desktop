@@ -1,6 +1,9 @@
 #include "reportsdatamodel.h"
 
-ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent)
+ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent),
+    m_networkAccessManager(new QNetworkAccessManager(this)),
+    m_networkReply(nullptr),
+    m_dataBuffer(new QByteArray)
 {
 
 }
@@ -18,10 +21,10 @@ QStringList ReportsDataModel::fetchColumnData(QString columnName, QString option
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-//    }
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
 
     QString joiner = "\"";
     QString query = "SELECT DISTINCT " + joiner + columnName + joiner + " FROM " + joiner + tableName + joiner;
@@ -389,12 +392,78 @@ void ReportsDataModel::generateColumnsForExtract()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-    this->generateColumns(&con);
+    // GCS Bugfixes -- Fix Keyword
+    // if condition is fictitious and needs fixing
+    if(Constants::apiSwitch == true){
+        this->generateColumnsFromAPI();
+    } else {
+        this->generateColumns(&con);
+    }
+
 }
 
 void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
 {
-    this->generateColumns(con);
+    // GCS Bugfixes -- Fix Keyword
+    // if condition is fictitious and needs fixing
+    if(Constants::apiSwitch == true){
+        this->generateColumnsFromAPI();
+    } else {
+        this->generateColumns(con);
+    }
+}
+
+void ReportsDataModel::dataReadyRead()
+{
+    m_dataBuffer->append(m_networkReply->readAll());
+}
+
+void ReportsDataModel::dataReadFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+
+        // Clear existing chart headers data
+        this->numericalList.clear();
+        this->categoryList.clear();
+        this->dateList.clear();
+        this->newChartHeader.clear();
+
+        QJsonObject json = dataDoc.object();
+        int i = 0;
+        QJsonArray value = json.value("all").toArray();
+
+        foreach(QJsonValue data, value){
+            QJsonArray finalValue = data.toArray();
+
+
+            if(finalValue.at(3).toString() == "categorical"){
+                this->categoryList.append(finalValue.at(1).toString());
+            } else if(finalValue.at(3).toString() == "numerical"){
+                this->numericalList.append(finalValue.at(1).toString());
+            } else if(finalValue.at(3).toString() == "dateformat"){
+                this->dateList.append(finalValue.at(1).toString());
+            }
+
+            this->newChartHeader.insert(i, finalValue.at(1).toString());
+            i++;
+        }
+
+
+        this->categoryList.sort(Qt::CaseInsensitive);
+        this->numericalList.sort(Qt::CaseInsensitive);
+        this->dateList.sort(Qt::CaseInsensitive);
+        emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+    }
 }
 
 QVariant ReportsDataModel::convertToDateFormatTimeFromString(QString stringDateFormat)
@@ -448,10 +517,10 @@ void ReportsDataModel::generateColumns(duckdb::Connection *con)
     // Fetch data from duckdb
     QString tableName = Statics::currentDbName;
 
-//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-//    }
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
 
     // Clear existing chart headers data
     this->numericalList.clear();
@@ -494,4 +563,41 @@ void ReportsDataModel::generateColumns(duckdb::Connection *con)
     this->numericalList.sort(Qt::CaseInsensitive);
     this->dateList.sort(Qt::CaseInsensitive);
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+}
+
+void ReportsDataModel::generateColumnsFromAPI()
+{
+    // Fetch value from settings
+    QSettings settings;
+    // GCS Bugfixes -- Fix Keyword
+    // charts url to be replaced with actual base url
+    QString chartsUrl = settings.value("general/chartsUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    int profileId = settings.value("user/profileId").toInt();
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(chartsUrl+"/fetch_table_columns");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    // GCS Bugfixes -- Fix Keyword
+    // unique hash, dbPath
+    QJsonObject obj;
+    obj.insert("profileId", profileId);
+    obj.insert("dbType", "extract");
+    obj.insert("uniqueHash", "hash");
+    obj.insert("dbPath", "C:/Users/chill/Desktop/orders1500.gadse");
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ReportsDataModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::dataReadFinished);
+
+    emit generateFiltersForAPI();
+
 }
