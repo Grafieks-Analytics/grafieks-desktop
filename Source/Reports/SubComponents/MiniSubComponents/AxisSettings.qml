@@ -131,7 +131,7 @@ Rectangle{
     
     function onApplyClicked(){
         popup.visible = false
-        reDrawChart();
+        updateChart();
     }
 
     function resetAllValues(){
@@ -424,7 +424,7 @@ Rectangle{
             //            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
             d3PropertyConfig.xLabelfontColor=xAxisLegendColorDialog.color+"";
             xLabelFontColor.color = xAxisLegendColorDialog.color;
-            reDrawChart();
+            updateChart();
         }
 
     }
@@ -437,7 +437,7 @@ Rectangle{
             d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
             xTickFontColor.color = xAxisTickMarkColorDialog.color;
 
-            reDrawChart();
+            updateChart();
         }
     }
 
@@ -450,7 +450,7 @@ Rectangle{
             d3PropertyConfig.yLabelfontColor=yAxisLegendColorDialog.color+"";
             yLabelFontColor.color = yAxisLegendColorDialog.color;
 
-            reDrawChart();
+            updateChart();
         }
     }
 
@@ -461,7 +461,7 @@ Rectangle{
             d3PropertyConfig.yTickfontColor=yAxisTickMarkColorDialog.color+"";
             yTickFontColor.color = yAxisTickMarkColorDialog.color;
 
-            reDrawChart();
+            updateChart();
         }
     }
 

@@ -12,12 +12,15 @@
 
     <title>Scatter Chart</title>
     <style>
-        #xAxisLabelId {
+        /* #xAxisLabelId {
             position: fixed;
             bottom: 15px;
             z-index: -1;
             height: 40px;
-            /* background-color: red; */
+             background-color: red; 
+        } */
+        #my_dataviz {
+            margin-left: 0;
         }
     </style>
 </head>
@@ -189,10 +192,10 @@
                 ["6.3", "5", "virginica"],
                 ["6.5", "5.2", "virginica"],
                 ["6.2", "5.4", "virginica"],
-                ["5.9", "5.1", "virginica"],
+                ["5.9", "5.1", "virginica"]
             ],
             ["Sepal_Length", "Sepal_Width", "Petal_Length"],
-            categories,
+            categories
         ];
 
         // When only numericals are passed
@@ -200,9 +203,9 @@
         data = [
             [
                 [0, 0], // This element is fixed
-                [2121, 10], // Sum of population, sum of id
+                [2121, 10] // Sum of population, sum of id
             ],
-            ["population", "id"],
+            ["population", "id"]
         ];
 
         // when categorical is also passed with numerical
@@ -210,10 +213,10 @@
             [
                 [524, 10, "India"], // Group them on the basis of categorical
                 [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"],
+                [10, "13", "Bhutan"]
             ],
             ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"],
+            ["Nepal", "India", "Bhutan"]
         ];
 
         // when categorical is also passed with numerical
@@ -221,10 +224,47 @@
             [
                 [524, 10, "India"], // Group them on the basis of categorical
                 [4712, "12", "Bhutan"],
-                [10, "13", "Bhutan"],
+                [10, "13", "Bhutan"]
             ],
             ["population", "id", "country"],
-            ["Nepal", "India", "Bhutan"],
+            ["Nepal", "India", "Bhutan"]
+        ];
+        data = [
+            [
+                [-3298, 8016, "Bookcases"],
+                [228, 6906, "Chairs"],
+                [90, 192, "Labels"],
+                [-602, 10230, "Tables"],
+                [298, 4638, "Storage"],
+                [36, 2398, "Furnishings"],
+                [346, 2756, "Art"],
+                [1350, 8372, "Phones"],
+                [258, 2114, "Binders"],
+                [10, 1060, "Appliances"],
+                [518, 1198, "Paper"],
+                [394, 1134, "Envelopes"],
+                [12, 938, "Accessories"],
+                [60, 160, "Fasteners"],
+                [36, 132, "Supplies"]
+            ],
+            ["Profit", "Sales", "Sub_Category"],
+            [
+                "Bookcases",
+                "Chairs",
+                "Labels",
+                "Tables",
+                "Storage",
+                "Furnishings",
+                "Art",
+                "Phones",
+                "Binders",
+                "Appliances",
+                "Paper",
+                "Envelopes",
+                "Accessories",
+                "Fasteners",
+                "Supplies"
+            ]
         ];
 
         function drawChart(data, plottingConfiguration = {}) {
@@ -263,7 +303,7 @@
                 dataLabelColor = defaultD3Config.fontColor,
                 // xaxis setting
                 xAxisConfig = defaultD3Config.xAxisConfig,
-                yAxisConfig = defaultD3Config.yAxisConfig,
+                yAxisConfig = defaultD3Config.yAxisConfig
             } = plottingConfiguration;
             window.xLabelfontSize = xLabelfontSize;
             window.yLabelfontSize = yLabelfontSize;
@@ -286,22 +326,8 @@
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
             let { labelStatus, labelFormat } = labelConfig;
-            let {
-                xlabel,
-                xboldLabel,
-                xitalicLabel,
-                xboldTick,
-                xitalicTick,
-                xaxisStatus,
-            } = xAxisConfig;
-            let {
-                ylabel,
-                yboldLabel,
-                yitalicLabel,
-                yboldTick,
-                yitalicTick,
-                yaxisStatus,
-            } = yAxisConfig;
+            let { xlabel, xboldLabel, xitalicLabel, xboldTick, xitalicTick, xaxisStatus } = xAxisConfig;
+            let { ylabel, yboldLabel, yitalicLabel, yboldTick, yitalicTick, yaxisStatus } = yAxisConfig;
             window.yboldLabel = yboldLabel;
             window.xboldLabel = xboldLabel;
             window.xitalicLabel = xitalicLabel;
@@ -309,10 +335,7 @@
             if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
                 [xAxisLabel, yAxisLabel] = data[1];
             } else {
-                [xAxisLabel, yAxisLabel] = [
-                    xAxisConfig.xlabel,
-                    yAxisConfig.ylabel,
-                ];
+                [xAxisLabel, yAxisLabel] = [xAxisConfig.xlabel, yAxisConfig.ylabel];
             }
             const d3Colors = d3colorPalette;
             // set the dimensions and margins of the graph
@@ -329,11 +352,11 @@
             if (!innerRadius) {
                 innerRadius = defaultD3Config.innerRadius;
             }
-            if (!toolTip) {
+            if (!toolTip || !Object.keys(toolTip).length ) {
                 toolTip = {
                     textColumn1: xAxisLabel,
                     textColumn2: yAxisLabel,
-                    colorData: colorData,
+                    colorData: colorData
                 };
             }
 
@@ -397,20 +420,15 @@
             var svg = d3
                 .select("#my_dataviz")
                 .append("svg")
-                .attr("width", width + margin.left + margin.right)
+                .attr("width", width + margin.left + margin.right + 20)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
-                );
+                .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
 
             // legends code starts
 
             if (legendStatus) {
-                if (
-                    legendHeight < document.querySelector("html").offsetHeight
-                ) {
+                if (legendHeight < document.querySelector("html").offsetHeight) {
                     topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
                 } else {
                     topPosition = 0;
@@ -452,19 +470,10 @@
 
                         d3.select("#mainChartWindow").attr("style", null);
 
-                        d3.select("#mainChartWindow").style(
-                            "width",
-                            widthOld - legendWidth + yAxisWidth
-                        );
-                        d3.select("#mainChartWindow").style(
-                            "margin-left",
-                            legendWidth + "px"
-                        );
+                        d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth);
+                        d3.select("#mainChartWindow").style("margin-left", legendWidth + "px");
                         d3.select("#xAxisLabelId").style("bottom", 10 + "px");
-                        d3.selectAll("#my_dataviz").style(
-                            "height",
-                            "calc(100vh)"
-                        );
+                        d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
 
                         break;
                     case "top":
@@ -488,14 +497,8 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
                         d3.select("#xAxisLabelId").style("bottom", 10 + "px");
-                        d3.selectAll("#my_dataviz").style(
-                            "height",
-                            "calc(100vh - 72px) "
-                        );
-                        d3.selectAll("#my_dataviz").style(
-                            "margin-top",
-                            50 + "px"
-                        );
+                        d3.selectAll("#my_dataviz").style("height", "calc(100vh - 72px) ");
+                        d3.selectAll("#my_dataviz").style("margin-top", 50 + "px");
 
                         // d3.selectAll("#legend div").style(
                         //     "padding",
@@ -530,10 +533,7 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
-                        d3.selectAll("#my_dataviz").style(
-                            "height",
-                            "calc(100vh - 42px)"
-                        );
+                        d3.selectAll("#my_dataviz").style("height", "calc(100vh - 42px)");
 
                         break;
                     // For Right Legened
@@ -561,16 +561,10 @@
                             .style("text-overflow", "ellipsis");
 
                         d3.select("#mainChartWindow").attr("style", null);
-                        d3.select("#mainChartWindow").style(
-                            "width",
-                            widthOld - legendWidth + yAxisWidth - 10 + "px"
-                        );
+                        d3.select("#mainChartWindow").style("width", widthOld - legendWidth + yAxisWidth - 10 + "px");
                         d3.select("#mainChartWindow").style("margin-left", 0);
                         d3.select("#xAxisLabelId").style("bottom", 10 + "px");
-                        d3.selectAll("#my_dataviz").style(
-                            "height",
-                            "calc(100vh)"
-                        );
+                        d3.selectAll("#my_dataviz").style("height", "calc(100vh)");
                 }
             }
 
@@ -595,7 +589,7 @@
 
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).tickSizeOuter(0))
+                .call(d3.axisBottom(x).tickSizeOuter(0).tickFormat(d3.format(".2s")))
                 .attr("class", "x-axis");
 
             // svg.append("g")
@@ -615,9 +609,7 @@
 
             // Add Y axis
             var y = d3.scaleLinear().domain(yRange).range([height, 0]).nice();
-            svg.append("g")
-                .call(d3.axisLeft(y).tickSizeOuter(0))
-                .attr("class", "y-axis");
+            svg.append("g").call(d3.axisLeft(y).tickSizeOuter(0).tickFormat(d3.format(".2s"))).attr("class", "y-axis");
 
             if (gridStatus) {
                 svg.append("g")
@@ -704,22 +696,15 @@
                                 "</span>"
                             );
                         });
-                    var scrollVal =
-                        document.querySelector("#my_dataviz").scrollLeft;
+                    var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
 
                     if (
                         x_pos - scrollVal >
-                        document.documentElement.clientWidth -
-                            document.querySelector("#tooltip").clientWidth -
-                            40
+                        document.documentElement.clientWidth - document.querySelector("#tooltip").clientWidth - 40
                     ) {
                         d3.select("#tooltip").style(
                             "left",
-                            x_pos -
-                                scrollVal -
-                                document.querySelector("#tooltip").clientWidth +
-                                70 +
-                                "px"
+                            x_pos - scrollVal - document.querySelector("#tooltip").clientWidth + 70 + "px"
                         );
 
                         d3.select(".arrowTooltip")
@@ -731,10 +716,7 @@
                                 "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
                             );
                     } else {
-                        d3.select("#tooltip").style(
-                            "left",
-                            x_pos - scrollVal + 95 + "px"
-                        );
+                        d3.select("#tooltip").style("left", x_pos - scrollVal + 95 + "px");
 
                         d3.select(".arrowTooltip").attr(
                             "style",
@@ -813,16 +795,16 @@
                 .attr("font-style", xitalicTick ? "italic" : "regular")
                 .attr("fill", xTickfontColor)
                 .attr("y", 8);
-                 if (xaxisStatus) {
-                    d3.selectAll("g .x-axis").attr("style", "display: block");
-                } else {
-                    d3.selectAll("g .x-axis").attr("style", "display: none");
-                }
-                if (yaxisStatus) {
-                    d3.selectAll("g .y-axis").attr("style", "display: block");
-                } else {
-                    d3.selectAll("g .y-axis").attr("style", "display: none");
-                }
+            if (xaxisStatus) {
+                d3.selectAll("g .x-axis").attr("style", "display: block");
+            } else {
+                d3.selectAll("g .x-axis").attr("style", "display: none");
+            }
+            if (yaxisStatus) {
+                d3.selectAll("g .y-axis").attr("style", "display: block");
+            } else {
+                d3.selectAll("g .y-axis").attr("style", "display: none");
+            }
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);
@@ -833,17 +815,14 @@
             setLabel(
                 xAxisLabel,
                 "x_label",
-                d3
-                    .select("#xAxisLabelId")
-                    .append("svg")
-                    .attr("width", window.innerWidth, "height", 150),
+                d3.select("#xAxisLabelId").append("svg").attr("width", window.innerWidth, "height", 150),
                 30,
                 false
             );
             setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
         }
 
-        // drawChart(data);
+        drawChart(data);
 
         // Generate Grid ends
         // });

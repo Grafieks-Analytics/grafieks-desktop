@@ -148,7 +148,7 @@ Popup {
         labelConfig.labelStatus = checked;
         labelConfig.labelFormat = "symbol";
         d3PropertyConfig.labelConfig = labelConfig;
-        reDrawChart();
+        updateChart();
     }
       function openColorDialog(dialogName){
         switch(dialogName){
@@ -165,7 +165,7 @@ Popup {
             d3PropertyConfig.dataLabelColor = dataLabeleDialog.color+"";
             dataLabelFontColorBox.color = dataLabeleDialog.color;
 
-            reDrawChart();
+            updateChart();
         }
 
     }
@@ -270,7 +270,7 @@ Popup {
                     onCurrentValueChanged: {
                         console.log("labelfont"+fontFamily.currentValue)
                         d3PropertyConfig.dataLabelfontFamily=fontFamily.currentValue;
-                        reDrawChart();
+                        updateChart();
                     }
                     //                    popup: Popup {
                     //                //                            y: control.height - 1
@@ -330,7 +330,7 @@ Popup {
                     onCurrentValueChanged: {
               
                         d3PropertyConfig.dataLabelfontSize=fontSizescombo.currentValue;
-                        reDrawChart();
+                        updateChart();
                     }
 
                     model: fontSizes

@@ -355,6 +355,8 @@ QtObject {
     property string treeChartUrl: "TreeChart.html";
     property string sankeyChartUrl: "SankeyChart.html";
 
+    property string scatterChartUrl: "ScatterChart.html";
+    property string heatMapChartUrl: "HeatmapChart.html";
     property string gaugeChartUrl: "GaugeChart.html";
     property string pivotTableUrl: "PivotTable.html";
     property string tableChartUrl: "TableChart.html";
@@ -395,4 +397,7 @@ QtObject {
     property var defaultCustomizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
     property var defaultSubMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
     
+    // Dashboard Constasts
+    property var defaultDashboardHeight: 800;
+    property var defaultDashboardWidth: 1280;
 }

@@ -95,7 +95,7 @@ Rectangle{
         for(var reportIdValue in allReportInstances){
             // Redrawing charts one by one;
             var instance = allReportInstances[reportIdValue]; 
-            instance && instance.reDrawChart();
+            instance && instance.updateChart();
         }
     }
 

@@ -135,7 +135,7 @@ Column{
         }
         d3PropertyConfig.legendConfig = legendConfig;
         qmlChartConfig.legendStatus = checked;
-        reDrawChart();
+        updateChart();
     }
 
     function changeLegendPosition(checked,position){
@@ -151,7 +151,7 @@ Column{
             top_radio: top_radio.radio_checked, 
             bottom_radio: bottom_radio.radio_checked
         } ;
-        reDrawChart();
+        updateChart();
     }
 
 

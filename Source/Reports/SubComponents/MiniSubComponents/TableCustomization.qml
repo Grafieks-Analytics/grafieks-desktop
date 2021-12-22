@@ -51,27 +51,27 @@ Column{
 
     function toggleCellBorders(checkedStatus){
         report_desiner_page.d3PropertyConfig['cellBorderStatus'] = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function toggleHoverStatus(checkedStatus){
         report_desiner_page.d3PropertyConfig['hoverStatus'] = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function toggleCompactStatus(checkedStatus){
         report_desiner_page.d3PropertyConfig['compactStatus'] = checkedStatus;
         compactStatusCheckStatus = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function toggleSearch(checkedStatus){
         report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
         searchCheckStatus = checkedStatus;
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
     function toggleRowAlternateStatus(checkedStatus){
         console.log('Debug:: Alternate changed? ', checkedStatus);
         report_desiner_page.d3PropertyConfig['rowAlternateStatus'] = checkedStatus;
         alternateRowsCheckStatus = checkedStatus
-        report_desiner_page.reDrawChart();
+        report_desiner_page.updateChart();
     }
 
     
