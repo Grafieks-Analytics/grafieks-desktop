@@ -12,7 +12,7 @@ import com.grafieks.singleton.constants 1.0
 FileDialog{
     id: saveFilePromptDialog
     title: "Save Extract As"
-    nameFilters: ["Extract (*."+ Constants.extractFileExt+" )"];
+    nameFilters: DSParamsModel.dsType === Constants.extractDS ? ["Extract (*."+ Constants.extractFileExt+" )"] : ["Live (*."+ Constants.liveFileExt+" )"];
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName
 
@@ -27,11 +27,12 @@ FileDialog{
         case Constants.accessType:
             console.log("SQL save extract")
             QueryModel.saveExtractData()
+            DSParamsModel.dsType === Constants.extractDS ? QueryModel.saveExtractData() : QueryModel.saveLiveData()
             break;
 
         case Constants.forwardType:
             console.log("FOWARD")
-            ForwardOnlyQueryModel.saveExtractData()
+            DSParamsModel.dsType === Constants.extractDS ? ForwardOnlyQueryModel.saveExtractData() : ForwardOnlyQueryModel.saveLiveData()
             break;
 
         case Constants.excelType:

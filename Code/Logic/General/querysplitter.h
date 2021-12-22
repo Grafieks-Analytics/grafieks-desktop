@@ -40,7 +40,7 @@ private:
 
 signals:
 
-void queryChanged(QString query);
+    void queryChanged(QString query);
 };
 
 #endif // QUERYSPLITTER_H

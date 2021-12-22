@@ -1,8 +1,11 @@
 #include "tableschemamodel.h"
 
-TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
+TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent),
+    m_networkAccessManager(new QNetworkAccessManager(this)),
+    m_networkReply(nullptr),
+    m_dataBuffer(new QByteArray)
 {
-
+    this->fetchSettings();
 }
 
 
@@ -18,7 +21,8 @@ void TableSchemaModel::showSchema(QString query)
 {
 
     QString explainQueryString, describeQueryString;
-    QStringList tableList, outputDataList;
+    QStringList tableList;
+    QVariantList outputDataList;
 
     switch(Statics::currentDbIntType){
 
@@ -446,7 +450,7 @@ void TableSchemaModel::showSchema(QString query)
                 if(lineCounter == 0){
                     setHeaders(line, Statics::separator);
                 } else {
-                    QMap<QString, QList<QStringList>> allColumns = detectHeaderTypes(line, Statics::separator, Statics::currentDbName);
+                    QMap<QString, QList<QVariantList>> allColumns = detectHeaderTypes(line, Statics::separator, Statics::currentDbName);
                 }
                 lineCounter++;
             }
@@ -483,12 +487,100 @@ void TableSchemaModel::generateSchemaForExtract()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-    this->extractSchema(&con);
+    if(Constants::apiSwitch == true){
+        qDebug() << "Extract schema should be called for API 2";
+    } else {
+        this->extractSchema(&con);
+    }
 }
 
 void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
 {
-    this->extractSchema(con);
+    if(Constants::apiSwitch == true){
+        qDebug() << "Extract schema should be called for API";
+    } else {
+        this->extractSchema(con);
+    }
+}
+
+void TableSchemaModel::generateSchemaForApi()
+{
+
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/fetch_table_columns");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", "hash");
+    obj.insert("dbType", "extract");
+    obj.insert("dbPath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
+
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&TableSchemaModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&TableSchemaModel::dataReadFinished);
+}
+
+void TableSchemaModel::dataReadyRead()
+{
+    m_dataBuffer->clear();
+    m_dataBuffer->append(m_networkReply->readAll());
+}
+
+void TableSchemaModel::dataReadFinished()
+{
+    //Parse the JSON
+    qDebug() << "x1xqx";
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(*m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+        QString msg = resultObj["msg"].toString();
+        int code = resultObj["code"].toInt();
+
+        QJsonObject dataDocObj = dataDoc.object();
+
+        if(code != 200){
+            qDebug() << "Error code" << code << ": " << msg;
+        } else {
+            qDebug() << "OSM" << dataDocObj["categorical"].toArray();
+
+            QJsonArray value = dataDocObj.value("all").toArray();
+
+            foreach(QJsonValue data, value){
+                QJsonArray finalValue = data.toArray();
+
+                qDebug() << value.at(1).toString() << "VALUE";
+
+                if(finalValue.at(3).toString() == "categorical"){
+                    this->allCategorical.append(value.toVariantList());
+                } else if(finalValue.at(3).toString() == "numerical"){
+                    this->allNumerical.append(value.toVariantList());
+                } else if(finalValue.at(3).toString() == "dateformat"){
+                    this->allDates.append(value.toVariantList());
+                }
+
+//                this->newChartHeader.insert(i, finalValue.at(1).toString());
+//                i++;
+            }
+            // apiSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers);
+        }
+    }
 }
 
 void TableSchemaModel::clearSchema()
@@ -517,15 +609,15 @@ void TableSchemaModel::setHeaders(const QByteArray line, QString delimiter)
     }
 }
 
-QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName)
+QMap<QString, QList<QVariantList>> TableSchemaModel::detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName)
 {
     QList<QByteArray> lineData = line.split(*delimiter.toStdString().c_str());
 
     QStringList output;
     QString fieldName;
     QString fieldType;
-    QStringList outputDataList;
-    QMap<QString, QList<QStringList>> allColumns;
+    QVariantList outputDataList;
+    QMap<QString, QList<QVariantList>> allColumns;
 
     QString fileName = QFileInfo(tableName).baseName().toLower();
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
@@ -567,13 +659,13 @@ QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByt
 
 void TableSchemaModel::extractSchema(duckdb::Connection *con)
 {
-    QStringList outputDataList;
+    QVariantList outputDataList;
     QString tableName = Statics::currentDbName;
 
-//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType || Statics::currentDbIntType == Constants::accessIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-//    }
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType || Statics::currentDbIntType == Constants::accessIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
 
     auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
 
@@ -623,4 +715,14 @@ void TableSchemaModel::extractSchema(duckdb::Connection *con)
     extractAllDates.clear();
     extractAllOthers.clear();
     extractAllList.clear();
+}
+
+
+void TableSchemaModel::fetchSettings()
+{
+    // Fetch value from settings
+    QSettings settings;
+    this->baseUrl = settings.value("general/chartsUrl").toString();
+    this->sessionToken = settings.value("user/sessionToken").toByteArray();
+    this->profileId = settings.value("user/profileId").toInt();
 }

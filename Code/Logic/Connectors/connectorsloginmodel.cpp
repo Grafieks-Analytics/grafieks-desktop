@@ -282,6 +282,8 @@ void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, 
     Statics::currentDbStrType = strType;
     Statics::driverName = driverName;
 
+    qDebug() << "STATIC SETTER" << classification;
+
     this->setConnectedDB(dbName);
     emit dSSelected(true);
     emit connectedDBType(classification);
