@@ -19,17 +19,24 @@
 class SaveLiveQueryWorker : public QThread
 {
     Q_OBJECT
+    QString tmpSql;
+    QStringList columnStringTypes;
+    QVariantMap changedColumnTypes;
     bool ifSavePassword;
 
     QuerySplitter querySplitter;
+    GeneralParamsModel generalParamsModel;
+
+    int colCount;
 
 public:
-    explicit SaveLiveQueryWorker(bool ifSavePassword = false);
+    explicit SaveLiveQueryWorker(QString tmpSql = "", QVariantMap changedColumnTypes = QVariantMap(), bool ifSavePassword = false);
 
 protected:
     void run() override;
 
 signals:
+    void saveLiveComplete(QString errorMsg);
 
 };
 

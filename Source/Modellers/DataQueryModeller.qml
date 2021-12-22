@@ -660,6 +660,15 @@ Page {
         }
     }
 
+    function saveLiveAndProceedDashboard(ifPublish){
+        if(!ifPublish){
+            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+            let currentDashboard = DashboardParamsModel.currentDashboard
+        }
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
