@@ -17,6 +17,7 @@
 #include "./Workers/setchartdataqueryworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractqueryworker.h"
+#include "./Workers/savelivequeryworker.h"
 #include "../General/generalparamsmodel.h"
 
 #include "../../duckdb.hpp"
@@ -43,6 +44,7 @@ public:
     Q_INVOKABLE void callSql(QString tmpSql, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
+    Q_INVOKABLE void saveLiveData();
 
     bool ifPublish() const;
 
@@ -51,6 +53,7 @@ public slots:
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void extractSaved(QString errorMessage);
+    void liveSaved(QString errorMessage);
 
 
     void setIfPublish(bool ifPublish);
@@ -63,7 +66,9 @@ signals:
     void generateReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
+    void liveFileSaved(bool ifPublish);
     void extractCreationError(QString errorMessage);
+    void liveCreationError(QString errorMessage);
 
     void ifPublishChanged(bool ifPublish);
 
@@ -72,6 +77,7 @@ private:
     void generateRoleNames();
     void executeQuery(QString & query);
     void extractSizeLimit();
+    void liveSizeLimit();
 
     // Data variables for Charts
     QMap<int, QStringList*> sqlChartData;

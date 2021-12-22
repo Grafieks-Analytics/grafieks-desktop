@@ -1,8 +1,12 @@
 #include "savelivequeryworker.h"
 
-SaveLiveQueryWorker::SaveLiveQueryWorker(bool ifSavePassword)
+SaveLiveQueryWorker::SaveLiveQueryWorker(QString tmpSql, QVariantMap changedColumnTypes, bool ifSavePassword)
 {
+    this->tmpSql = tmpSql;
+    this->changedColumnTypes = changedColumnTypes;
     this->ifSavePassword = ifSavePassword;
+
+    querySplitter.setQuery(this->tmpSql);
 }
 
 void SaveLiveQueryWorker::run()
@@ -11,7 +15,7 @@ void SaveLiveQueryWorker::run()
     QString livePath = Statics::livePath;
     QString tableName = Statics::currentDbName;
 
-    // Remove extract file if already exists
+    // Remove live file if already exists
     QFile fileRemove(livePath);
     if(fileRemove.exists()) {
         QString tmpFile = livePath;
@@ -144,8 +148,10 @@ void SaveLiveQueryWorker::run()
     QString tableInserQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
     QString password = this->ifSavePassword ? connection.password() : "";
-    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '" + connection.port() + "', '" + connection.databaseName() + "')";
+    int portTmp = connection.port();
+    QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);
+    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR)";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;
@@ -171,5 +177,11 @@ void SaveLiveQueryWorker::run()
     if(!queryPartCreate->success) qDebug() << queryPartCreate->error.c_str() << queryPartCreateQuery;
     auto queryPartInsert = con.Query(queryPartInsertQuery.toStdString());
     if(!queryPartInsert->success) qDebug() << queryPartInsert->error.c_str() << queryPartInsertQuery;
+
+    if(tableCreate->success && tableInsert->success && credentialsCreate->success && credentialsInsert->success && queryPartCreate->success && queryPartInsert->success){
+        emit saveLiveComplete("");
+    } else {
+        emit saveLiveComplete("Some error occured while saving live file");
+    }
 
 }

@@ -79,6 +79,21 @@ void QueryModel::saveExtractData()
 
 }
 
+void QueryModel::saveLiveData()
+{
+    QString liveQuery;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
+        liveQuery = this->tmpSql +  " WHERE " + this->newWhereConditions;
+    } else {
+        liveQuery = this->tmpSql;
+    }
+    SaveLiveQueryWorker *saveLiveQueryWorker = new SaveLiveQueryWorker(liveQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveLiveQueryWorker, &SaveLiveQueryWorker::saveLiveComplete, this, &QueryModel::liveSaved, Qt::QueuedConnection);
+    connect(saveLiveQueryWorker, &SaveExtractQueryWorker::finished, saveLiveQueryWorker, &SaveLiveQueryWorker::deleteLater, Qt::QueuedConnection);
+
+    saveLiveQueryWorker->start();
+}
+
 bool QueryModel::ifPublish() const
 {
     return m_ifPublish;
@@ -179,6 +194,18 @@ void QueryModel::extractSaved(QString errorMessage)
     }
 }
 
+void QueryModel::liveSaved(QString errorMessage)
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    if(errorMessage.length() == 0){
+        liveSizeLimit();
+    } else {
+        emit liveCreationError(errorMessage);
+    }
+}
+
 void QueryModel::setIfPublish(bool ifPublish)
 {
     if (m_ifPublish == ifPublish)
@@ -219,6 +246,23 @@ void QueryModel::extractSizeLimit()
     } else {
         emit generateReports();
     }
+}
+
+void QueryModel::liveSizeLimit()
+{
+
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    emit liveFileSaved(m_ifPublish);
+//    emit generateReports();
 }
 
 
