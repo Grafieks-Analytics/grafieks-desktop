@@ -20,6 +20,13 @@
             -webkit-filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.3));
             filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.25));
         } */
+        body {
+            overflow: hidden;
+        }
+        #my_dataviz {
+            margin-left: 0px;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -75,23 +82,29 @@
                 "2020-03-01": 120,
                 "2020-04-01": 120,
 
-                "2021-01-01": 1220,
-                "2021-02-02": -220,
-                "2021-03-03": -220,
-                "2021-04-01": -220,
+                "2021-01-01": 120,
+                "2021-02-02": 120,
+                "2021-03-03": 120,
+                "2021-04-01": 120
             },
-            ["order-date", "sales"],
+            ["order-date", "sales"]
         ];
-        function transformData(dataValues,dataColumns, dateFormat) {
-            var isKey1Date = false;
 
-            // if (isDateFormat(Object.keys(dataValues[0])[0])) {
-            //     isKey1Date = true;
-            // }
+        data = [
+            {
+                Furniture: 741999.7952914548,
+                "Office Supplies Supplies Supplies": 719047.0319998885,
+                Technology: 836154.0329775356
+            },
+            ["Category", "Sales"]
+        ];
+
+        function transformData(dataValues, dataColumns = {}, dateFormat) {
+            var isKey1Date = false;
 
             var { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
 
-             if (xAxisColumnDetails[0].itemType == "Date") {
+            if (xAxisColumnDetails.length && xAxisColumnDetails[0].itemType == "Date") {
                 isKey1Date = true;
             }
 
@@ -132,229 +145,108 @@
         }
 
         function drawChart(data, plottingConfiguration = {}) {
-            // debugger;
             let {
-                d3colorPalette,
+                d3colorPalette = defaultD3Config.d3ColorPalette,
                 paddingInner,
                 dataColumns,
                 legendConfig = defaultD3Config.defaultLegendConfig,
-                labelConfig,
+                labelConfig = defaultD3Config.defaultlabelConfig,
                 dateFormat = defaultD3Config.dateFormat,
-                innerRadius,
+                innerRadius = defaultD3Config.innerRadius,
                 toolTip,
                 dataLabelfontSize = defaultD3Config.fontSize,
                 dataLabelfontFamily = defaultD3Config.fontFamily,
-                dataLabelColor = defaultD3Config.fontColor,
+                dataLabelColor = defaultD3Config.fontColor
             } = plottingConfiguration;
             window.dataLabelfontSize = dataLabelfontSize;
             window.dataLabelfontFamily = dataLabelfontFamily;
             window.dataLabelfontSize = dataLabelfontSize;
 
-            if (!d3colorPalette) {
-                d3colorPalette = defaultD3Config.d3ColorPalette;
-            }
-            if (!labelConfig) {
-                labelConfig = defaultD3Config.defaultlabelConfig;
-            }
-
-            const d3Colors = d3colorPalette;
-            var data = transformData(data,dataColumns, dateFormat);
+            d3Colors = d3colorPalette;
+            var data = transformData(data, dataColumns, dateFormat);
             // set the dimensions and margins of the graph
-            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                width = window.innerWidth - margin.left - margin.right + 80,
-                height = window.innerHeight - margin.top - margin.bottom - 20;
+            var margin = constants.chartMargins;
+            var width = window.innerWidth;
+            var height = window.innerHeight;
 
-            if (!legendConfig) {
-                legendConfig = { legendStatus: true };
-            }
-
-            if (!innerRadius) {
-                innerRadius = defaultD3Config.innerRadius;
-            }
             let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus, labelFormat } = labelConfig;
+
             d3.select("#legend").html("").style("padding", "");
 
-            var translateSvg = 0;
-            var translateSvgTop = 100;
-            var xAxisLabel = data[1][0];
-            var yAxisLabel = data[1][1];
+            var translateSvgTop = 0;
+            var translateSvgLeft = 0;
+
+            [xAxisLabel, yAxisLabel] = data[1];
+
             if (!toolTip) {
                 toolTip = {
                     textColumn1: xAxisLabel,
-                    textColumn2: yAxisLabel,
+                    textColumn2: yAxisLabel
                 };
             }
 
-            if (legendStatus) {
-                // d3.select("#legend").html("");
-                d3.select("#legend")
-                    .append("p")
-                    .html(xAxisLabel + "&nbsp;")
-                    .style("font-weight", "bold")
-                    .style("margin", "auto")
-                    .style("position", "sticky");
-                d3.select("#legend")
-                    .selectAll("div")
-                    .data(Object.keys(data[0]))
-                    .enter()
-                    .append("div")
-                    .html((d, i) => {
-                        return (
-                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                            d3Colors[i % d3Colors.length] +
-                            ';">  </div>' +
-                            "<span style='margin-left: 5px; max-width: 80px'>" +
-                            d +
-                            "</span>"
-                        );
-                    })
-                    .style("display", "flex")
-                    .style("padding", "2px");
+            if (window.innerWidth < 400) {
+                legendPosition = "top";
             }
 
+            // Adding Legend here
             d3.select("#legend").attr("style", null);
-            if (legendStatus) {
-                var legendHeight =
-                    document.querySelector("#legend").offsetHeight;
-                var legendWidth = document.querySelector("#legend").offsetWidth;
-
-                var legendElement = document.querySelector("#legend");
-
-                // topPosition = "calc(50vh - " + legendHeight + "px)";
-                console.log({ legendHeight });
-                console.log(window.innerHeight);
-
-                if (legendHeight < window.innerHeight) {
-                    console.log({ legendHeight });
-                    topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
-                } else {
-                    topPosition = 0;
-                }
-                rightPosition = "calc(45vw - " + legendWidth / 2 + "px)";
-                // rightPosition = "500px";
-                // console.log({ rightPosition });
-                legendElement.style.padding = "10px";
-
-                switch (legendPosition) {
-                    case "left":
-                        // margin.left += 100;
-                        // width -= 100;
-                        translateSvg += 150;
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("top", topPosition)
-                            .style("right", "auto")
-                            // .style("bottom", "auto")
-                            .style("width", "fit-content")
-                            .style("left", "0px")
-                            .style("display", "block")
-                            .style("max-height", "100vh")
-                            .style("overflow", "scroll")
-                            .style("border", "none")
-                            .style("position", "fixed");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-                        break;
-                    case "top":
-                        // margin.top += 80;
-                        height -= 10;
-                        translateSvgTop += 60;
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("top", "10px")
-                            // .style("right", rightPosition)
-                            .style("bottom", "auto")
-                            .style("left", "auto")
-                            .style("display", "flex")
-                            .style("max-width", "99vw")
-                            .style("overflow", "scroll");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-                        d3.selectAll("#legend div").style("padding", "2px 4px");
-                        break;
-                    case "bottom":
-                        height -= 60;
-                        // margin.bottom += 80;
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("top", "auto")
-                            // .style("right", rightPosition)
-                            .style("bottom", "0px")
-                            // .style("left", 0 + "px")
-                            .style("display", "flex")
-                            .style("max-width", "99vw")
-                            .style("overflow", "scroll");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-                        d3.selectAll("#legend div").style("padding", "2px 4px");
-
-                        break;
-                    // For Right Legened
-                    case "right":
-                    default:
-                        width -= 100;
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("right", "20px")
-                            .style("left", "auto")
-                            .style("top", topPosition)
-                            .style("bottom", "auto")
-                            .style("display", "block")
-                            .style("max-height", "100vh")
-                            .style("overflow", "scroll")
-                            .style("border", "none")
-                            .style("position", "fixed");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-                }
-            }
+            legendGenerate(legendStatus, legendPosition, 0, width, margin, height, Object.keys(data[0]));
 
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-            // var radius = Math.min(width, height) / 2;
-            var radius = Math.min(width, height) / 2 - 30;
-            if (radius == height / 2 && height > width) {
-                radius = radius - 100;
+            var legendElement = document.querySelector("#legend");
+            var legendWidth = (legendElement && legendElement.offsetWidth) || 0;
+            var legendHeight = (legendElement && legendElement.offsetHeight) || 0;
+
+            switch (legendPosition) {
+                case "top":
+                    height -= legendHeight;
+                    translateSvgTop = legendHeight + 5;
+                    break;
+                case "bottom":
+                    height -= legendHeight;
+                    translateSvgTop = -(legendHeight + 5);
+                    break;
+                case "right":
+                    width -= legendWidth;
+                    translateSvgLeft = 0;
+                    break;
+                case "left":
+                    width -= legendWidth;
+                    translateSvgLeft = legendWidth;
             }
-            if (innerRadius - radius >= 5) {
-                innerRadius = innerRadius / 2;
+
+            // ******* Actual Radius Formula
+            var radius = Math.min(width, height) / 2;
+            radius = radius * 0.8;
+
+            if (labelStatus && (legendPosition == "top" || legendPosition == "bottom")) {
+                radius = Math.abs(radius - (Math.min(radius * 0.3), 57));
+                if(radius < 25){
+                    radius = 25;
+                }
+            } else if (labelStatus && (legendPosition == "right" || legendPosition == "left")) {
+                radius = radius * 0.62;
+                // radius = radius - translateSvgLeft / 2;
             }
-            console.log({ radius });
+            innerRadius = radius * innerRadius;
 
             d3.selectAll("#my_dataviz").html("");
             // append the svg object to the div called 'my_dataviz'
             var svg = d3
                 .select("#my_dataviz")
                 .append("svg")
-                .attr("width", width)
-                .attr("height", height + 80)
+                .attr("width", width + translateSvgLeft)
+                .attr("height", height + translateSvgTop)
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" +
-                        (width + translateSvg) / 2 +
-                        "," +
-                        (height + translateSvgTop) / 2 +
-                        ")"
+                    "translate(" + (width / 2 + translateSvgLeft) + "," + (height / 2 + translateSvgTop) + ")"
                 );
 
             // set the color scale
-            var color = d3
-                .scaleOrdinal()
-                .domain(Object.keys(data[0]))
-                .range(d3Colors);
+            var color = d3.scaleOrdinal().domain(Object.keys(data[0])).range(d3Colors);
             var totalSum = arraySum(Object.values(data[0]));
 
             // Compute the position of each group on the pie:
@@ -368,14 +260,10 @@
                 }); // This make sure that group order remains the same in the pie chart
 
             var data_ready = pie(d3.entries(data[0]));
-            console.log(data_ready);
 
             // map to data
             var u = svg.selectAll("path").data(data_ready);
-            var arcOver = d3
-                .arc()
-                .innerRadius(innerRadius + 5)
-                .outerRadius(radius + 5);
+            var arcOver = d3.arc().innerRadius(innerRadius).outerRadius(radius);
 
             // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
             u.enter()
@@ -383,17 +271,11 @@
                 .merge(u)
                 // .transition()
                 // .duration(1000)
-                .attr(
-                    "d",
-                    d3.arc().innerRadius(innerRadius).outerRadius(radius)
-                )
+                .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
                 .attr("fill", function (d) {
                     this.setAttribute("data-label-name", d.data.key);
                     this.setAttribute("data-value", d.data.value);
-                    this.setAttribute(
-                        "data-percentage",
-                        ((d.data.value / totalSum) * 100).toFixed(2)
-                    );
+                    this.setAttribute("data-percentage", ((d.data.value / totalSum) * 100).toFixed(2));
 
                     return color(d.data.key);
                 })
@@ -461,7 +343,7 @@
                             d3
                                 .arc()
                                 .innerRadius(innerRadius + 0)
-                                .outerRadius(radius + 20)
+                                .outerRadius(radius * 1.1)
                         );
                     d3.select(this).style("opacity", 1);
                 })
@@ -472,13 +354,7 @@
                         // .select("path")
                         .transition()
                         .duration(200)
-                        .attr(
-                            "d",
-                            d3
-                                .arc()
-                                .innerRadius(innerRadius)
-                                .outerRadius(radius)
-                        );
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius));
 
                     d3.selectAll(".pie").style("opacity", 1);
                 });
@@ -501,13 +377,10 @@
                 .outerRadius(radius * 0.9);
             if (labelStatus) {
                 // Add the polylines between chart and labels:
-                percentageValuePrev =
-                    (data_ready[0].data.value / totalSum) * 100;
+                percentageValuePrev = (data_ready[0].data.value / totalSum) * 100;
                 data_ready[0].showLabel = false;
                 for (var i = 0; i < data_ready.length; i++) {
-                    percentageValueNext =
-                        (data_ready[i].data.value / totalSum) * 100;
-
+                    percentageValueNext = (data_ready[i].data.value / totalSum) * 100;
                     if (percentageValueNext < 3 && percentageValuePrev < 3) {
                         data_ready[i].showLabel = false;
                     } else {
@@ -529,11 +402,9 @@
                         // posA[1]= outerArc.centroid(d)[1]-20;
                         // posA[0]= outerArc.centroid(d)[0];
                         // var abc = posA * 2;
-                        console.log({ posA });
                         var posB = outerArc.centroid(d); // line break: we use the other arc generator that has been built only for that
                         var posC = outerArc.centroid(d); // Label position = almost the same as posB
-                        var midangle =
-                            d.startAngle + (d.endAngle - d.startAngle) / 2; // we need the angle to see if the X position will be at the extreme right or extreme left
+                        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2; // we need the angle to see if the X position will be at the extreme right or extreme left
                         posC[0] = radius * 1.1 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
                         return [posA, posB, posC];
                     });
@@ -548,7 +419,6 @@
                     .attr("font-size", dataLabelfontSize)
                     .attr("fill", dataLabelColor)
                     .text(function (d) {
-                        console.log(d.data.key);
                         if (!d.showLabel) {
                             return "";
                         }
@@ -561,19 +431,16 @@
                     })
                     .attr("transform", function (d) {
                         var pos = outerArc.centroid(d);
-                        var midangle =
-                            d.startAngle + (d.endAngle - d.startAngle) / 2;
-                        pos[0] = radius * 1.12 * (midangle < Math.PI ? 1 : -1);
+                        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+                        pos[0] = radius * 1.1 * (midangle < Math.PI ? 1 : -1);
                         return "translate(" + pos + ")";
                     })
                     .style("text-anchor", function (d) {
-                        var midangle =
-                            d.startAngle + (d.endAngle - d.startAngle) / 2;
+                        var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
                         return midangle < Math.PI ? "start" : "end";
                     });
             }
             var legendWidth = document.querySelector("#legend").offsetWidth;
-            console.log({ legendWidth });
             if (legendWidth <= window.innerWidth - 50) {
                 console.log(window.innerWidth);
                 console.log({ legendWidth });
@@ -587,6 +454,16 @@
         }
 
         // Initialize the plot with the first dataset
-        // drawChart(data);
+        // drawChart(data, {});
+
+        // var timer;
+        // window.addEventListener("resize", function () {
+        //     clearTimeout(timer);
+        //     timer = setTimeout(function () {
+        //         window.clearChart && clearChart();
+        //         drawChart(window.data);
+        //     }, 200);
+        // });
+        // console.log("Resize");
     </script>
 </body>

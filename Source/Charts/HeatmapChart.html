@@ -30,13 +30,13 @@
                 height: 100vh;
             }
 
-            #xAxisLabelId {
+            /* #xAxisLabelId {
                 position: fixed;
                 bottom: 15px;
                 z-index: -1;
                 height: 40px;
-                /* background-color: red; */
-            }
+                background-color: red; 
+            } */
             /* #legend{
                 display: flex;
                 flex-direction: column;
@@ -368,7 +368,7 @@
                 var isKey2Date = false;
 
                 // [Tag: Date Change]
-                var { xAxisColumnDetails = [], yAxisColumnDetails = [] } =
+                var { xAxisColumnDetails = [{}], yAxisColumnDetails = [{}] } =
                     dataColumns;
 
                 // [Tag: Date Change]
@@ -540,7 +540,7 @@
                 //     "yAxisLabel",
                 //     "Value",
                 // ];
-                if (!toolTip) {
+                if (!toolTip || !Object.keys(toolTip).length ) {
                     toolTip = {
                         textColumn1: xAxisLabel,
                         textColumn2: yAxisLabel,

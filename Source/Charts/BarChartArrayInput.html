@@ -5,34 +5,6 @@
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
-        <!-- styles -->
-        <style type="text/css">
-            body {
-                padding: 0;
-                margin: 0;
-            }
-
-            #tooltip {
-                font-size: 14px;
-                font-family: Arial, Helvetica, sans-serif;
-                min-width: fit-content;
-                max-width: max-content;
-            }
-
-            #my_dataviz {
-                overflow-x: scroll;
-                margin-left: 72px;
-                height: 100vh;
-            }
-
-            #xAxisLabelId {
-                position: fixed;
-                bottom: 20px;
-                z-index: 100;
-                height: 40px;
-                /* background-color: red; */
-            }
-        </style>
     </head>
 
     <body>
@@ -54,13 +26,7 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            var data = [
-                [
-                    ["Furniture", "Office Supplies", "Technology"],
-                    [741999.0625, 719048.25, 836155.4375],
-                ],
-                ["Category", "Sales"],
-            ];
+            var data = dataConstant.dataBarChart;
 
             //  draw function defination starts
             function drawChart(data, plottingConfiguration = {}) {
@@ -110,7 +76,7 @@
                     dataLabelColor = defaultD3Config.fontColor,
                     // xaxis setting
                     xAxisConfig = defaultD3Config.xAxisConfig,
-                    yAxisConfig = defaultD3Config.yAxisConfig,
+                    yAxisConfig = defaultD3Config.yAxisConfig
                 } = plottingConfiguration;
 
                 // plottingConfiguration restore from windows
@@ -134,26 +100,13 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
+                d3.selectAll("#xAxisLabelId").html("");
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus, labelFormat } = labelConfig;
                 let { xAxisColumnDetails = [], colorByData = [] } = dataColumns;
-                let {
-                    xlabel,
-                    xboldLabel,
-                    xitalicLabel,
-                    xboldTick,
-                    xitalicTick,
-                    xaxisStatus,
-                } = xAxisConfig;
-                let {
-                    ylabel,
-                    yboldLabel,
-                    yitalicLabel,
-                    yboldTick,
-                    yitalicTick,
-                    yaxisStatus,
-                } = yAxisConfig;
+                let { xlabel, xboldLabel, xitalicLabel, xboldTick, xitalicTick, xaxisStatus } = xAxisConfig;
+                let { ylabel, yboldLabel, yitalicLabel, yboldTick, yitalicTick, yaxisStatus } = yAxisConfig;
                 window.yboldLabel = yboldLabel;
                 window.xboldLabel = xboldLabel;
                 window.xitalicLabel = xitalicLabel;
@@ -166,44 +119,13 @@
                 if (!xAxisConfig.xlabel && !yAxisConfig.ylabel) {
                     [xAxisLabel, yAxisLabel] = data[1];
                 } else {
-                    [xAxisLabel, yAxisLabel] = [
-                        xAxisConfig.xlabel,
-                        yAxisConfig.ylabel,
-                    ];
+                    [xAxisLabel, yAxisLabel] = [xAxisConfig.xlabel, yAxisConfig.ylabel];
                 }
 
                 d3Colors = d3colorPalette;
 
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
-                if (legendStatus) {
-                    d3.select("#legend").html("");
-
-                    d3.select("#legend")
-                        .append("p")
-                        .html(xAxisLabel + "&nbsp;")
-                        .style("font-weight", "bold")
-                        .style("margin", "auto")
-                        .style("position", "sticky");
-
-                    d3.select("#legend")
-                        .selectAll("div")
-                        .data([data[1][0]])
-                        .enter()
-                        .append("div")
-                        .html((d, i) => {
-                            return (
-                                '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                d3Colors[i % d3Colors.length] +
-                                ';">  </div>' +
-                                "<span style='margin-left: 5px; max-width: 160px'>" +
-                                d +
-                                "</span>"
-                            );
-                        })
-                        .style("display", "flex")
-                        .style("padding", "2px");
-                }
 
                 // legends code ends
                 if (!paddingInner) {
@@ -219,14 +141,13 @@
                 }
 
                 if (!standardThresholdWidth) {
-                    standardThresholdWidth =
-                        defaultD3Config.standardThresholdWidth;
+                    standardThresholdWidth = defaultD3Config.standardThresholdWidth;
                 }
 
-                if (!toolTip) {
+                if (!toolTip || !Object.keys(toolTip).length ) {
                     toolTip = {
                         textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel,
+                        textColumn2: yAxisLabel
                     };
                 }
 
@@ -235,7 +156,7 @@
                     top,
                     right,
                     bottom,
-                    left,
+                    left
                 };
                 var width = window.innerWidth - 100;
 
@@ -253,26 +174,20 @@
 
                 if (valueDateType && !redrawn) {
                     xAxisDataSet.forEach((d, i) => {
-                        var requiredTypeData = getDateFormattedData(
-                            d,
-                            dateFormat
-                        );
+                        var requiredTypeData = getDateFormattedData(d, dateFormat);
 
                         if (!xAxisDateWiseValues[requiredTypeData]) {
                             xAxisDateWiseValues[requiredTypeData] = 0;
                         }
 
                         // console.log(requiredTypeData, redrawn);
-                        xAxisDateWiseValues[requiredTypeData] +=
-                            dataValues[1][i];
+                        xAxisDateWiseValues[requiredTypeData] += dataValues[1][i];
                     });
 
                     var sortedKeys = sortDates(xAxisDateWiseValues, dateFormat);
 
                     dataValues[0] = sortedKeys;
-                    dataValues[1] = sortedKeys.map(
-                        (d, i) => xAxisDateWiseValues[d]
-                    );
+                    dataValues[1] = sortedKeys.map((d, i) => xAxisDateWiseValues[d]);
                     data[0] = dataValues;
                 }
 
@@ -280,178 +195,22 @@
                     width = dataValues[0].length * standardThresholdWidth;
                 }
 
-                var height =
-                    window.innerHeight -
-                    margin.top -
-                    margin.bottom -
-                    extraHeight -
-                    20;
+                var height = window.innerHeight - margin.top - margin.bottom - extraHeight - 20;
 
                 // legends height ,width elements
-                var legendElement = document.querySelector("#legend");
-                var legendHeight = legendElement.offsetHeight;
-                var legendWidth = legendElement.offsetWidth;
 
-                const yAxisWidth =
-                    document.querySelector("#yAxisDiv").clientWidth;
+                const yAxisWidth = document.querySelector("#yAxisDiv").clientWidth;
 
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
                 d3.select("#xAxisLabelId").style("bottom", 20 + "px");
 
                 // legends code starts
-                if (legendStatus) {
-                    if (
-                        legendHeight <
-                        document.querySelector("html").offsetHeight
-                    ) {
-                        topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
-                    } else {
-                        topPosition = 0;
-                    }
-                    rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                var legendElement = document.querySelector("#legend");
+                var legendHeight = legendElement.offsetHeight;
+                var legendWidth = legendElement.offsetWidth;
 
-                    //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
-                    var widthOld =
-                        document.querySelector("html").clientWidth - 72;
-                    var heightOld = document.querySelector("html").clientHeight;
-
-                    // legendElement.style.padding = "10px";
-                    legendElement.style.border = "1px solid black";
-
-                    switch (legendPosition) {
-                        case "left":
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("top", topPosition)
-                                .style("right", "auto")
-                                // .style("bottom", "auto")
-                                .style("left", "0px")
-                                // .style("right", "5px")
-                                .style("display", "block")
-                                .style("max-height", "100vh")
-                                .style("overflow", "scroll")
-                                .style("border", "none")
-                                .style("position", "fixed");
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-
-                            var legendWidth = legendElement.offsetWidth;
-                            // margin.left += 100;
-                            // width -= 100;
-                            // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
-
-                            d3.select("#mainChartWindow").attr("style", null);
-
-                            d3.select("#mainChartWindow").style(
-                                "width",
-                                widthOld - legendWidth + yAxisWidth
-                            );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                legendWidth + "px"
-                            );
-                            d3.select("#xAxisLabelId").style("bottom", 20);
-
-                            break;
-                        case "top":
-                            d3.select("#mainChartWindow").attr("style", null);
-                            margin.top += 50;
-                            height -= 50;
-                            y_pos_x_label = 57;
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("top", "10px")
-                                .style("right", rightPosition)
-                                .style("bottom", "auto")
-                                .style("left", "auto")
-                                .style("display", "flex")
-                                .style("max-width", "99vw")
-                                .style("overflow", "scroll")
-                                .style("border", "none");
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-                            d3.select("#xAxisLabelId").style("bottom", 20);
-
-                            // d3.selectAll("#legend div").style(
-                            //     "padding",
-                            //     "2px 4px"
-                            // );
-                            break;
-                        case "bottom":
-                            height -= 50; // use legend client height
-                            margin.bottom += 10;
-                            var legendWidth = legendElement.offsetWidth;
-                            y_pos_x_label = 20;
-
-                            d3.select("#xAxisLabelId").style("bottom", "60px");
-                            d3.select("#mainChartWindow").attr("style", null);
-
-                            // d3.select("#mainChartWindow").style("width", width);
-                            //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                0
-                            );
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("top", "auto")
-                                .style("right", rightPosition)
-                                .style("bottom", "0px")
-                                // .style("left", margin.left + "px")
-                                .style("display", "flex")
-                                .style("max-width", "99vw")
-                                .style("overflow", "scroll")
-                                .style("border", "none");
-
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-                            break;
-                        // For Right Legened
-                        case "right":
-                        default:
-                            // width -= 220;
-                            // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
-                            var legendWidth = legendElement.offsetWidth;
-
-                            d3.select("#legend")
-                                .attr("style", null)
-                                .style("right", "0px")
-                                .style("left", "auto")
-                                .style("position", "fixed")
-                                .style("top", topPosition)
-                                .style("max-height", "100vh")
-                                .style("overflow", "scroll")
-                                .style("border", "none")
-                                .style("bottom", "auto")
-                                .style("display", "block");
-                            d3.selectAll("#legend div span")
-                                .style("max-width", "160px")
-                                .style("white-space", "nowrap")
-                                .style("overflow", "hidden")
-                                .style("text-overflow", "ellipsis");
-
-                            d3.select("#mainChartWindow").attr("style", null);
-                            d3.select("#mainChartWindow").style(
-                                "width",
-                                widthOld - legendWidth + yAxisWidth - 10
-                            );
-                            d3.select("#mainChartWindow").style(
-                                "margin-left",
-                                0
-                            );
-                            d3.select("#xAxisLabelId").style("bottom", 20);
-                    }
-                }
+                legendGenerate(legendStatus, legendPosition, yAxisWidth, width, margin, height);
 
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
@@ -469,8 +228,7 @@
                 }
 
                 // legends code ends
-                var mainChartWidth =
-                    document.querySelector("#mainChartWindow").clientWidth;
+                var mainChartWidth = document.querySelector("#mainChartWindow").clientWidth;
                 // console.log({ legendWidth, width, mainChartWidth });
 
                 //add svg with margin !important
@@ -478,11 +236,8 @@
                 var svg = d3
                     .selectAll("#my_dataviz")
                     .append("svg")
-                    .attr("width", width)
-                    .attr(
-                        "height",
-                        height + extraHeight + margin.top + margin.bottom
-                    )
+                    .attr("width", width+10)
+                    .attr("height", height + extraHeight + margin.top + margin.bottom)
                     .append("g") //add group to leave margin for axis
                     .attr("transform", "translate(0," + margin.top + ")");
 
@@ -501,21 +256,14 @@
 
                 // height = height - 100;
                 //set y scale
-                var yScale = d3
-                    .scaleLinear()
-                    .rangeRound([0, height])
-                    .domain([maxHeight, minHeight])
-                    .nice();
+                var yScale = d3.scaleLinear().rangeRound([0, height]).domain([maxHeight, minHeight]).nice();
                 //show negative
 
                 yaxisTicks = height / 70;
 
                 //add x and y axis
-                var yAxis = d3
-                    .axisLeft(yScale)
-                    .tickSize(0)
-                    .ticks(yaxisTicks)
-                    .tickFormat(d3.format(".2s"));
+                var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks).tickFormat(d3.format(".2s"));
+                var xAxisLabelSvg=d3.select("#xAxisLabelId").append("svg").attr("width", window.innerWidth).attr("height", 40);
 
                 d3.select("#yAxisDiv")
                     .append("svg")
@@ -528,24 +276,11 @@
                     .attr("class", "y-axis")
                     .call(yAxis);
 
-                // d3.selectAll("#my_dataviz svg")
-                //     .append("g")
-                //     .data(["1", "2", "3"])
-                //     .append("text")
-                //     .enter()
-                //     .html((d, i) => {
-                //         return d;
-                //     });
-
                 if (gridStatus) {
                     svg.append("g")
                         .attr("class", "grid")
                         .style("stroke-width", "1")
-                        .call(
-                            make_y_gridlines(yScale)
-                                .tickSize(-width)
-                                .tickFormat(d3.format(".2s"))
-                        );
+                        .call(make_y_gridlines(yScale).tickSize(-width).tickFormat(d3.format(".2s")));
                 } else {
                     svg.append("g")
                         .attr("class", "grid")
@@ -561,10 +296,6 @@
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
                     .attr("fill", yTickfontColor);
-                // .attr("dy", 40)
-
-                //  .text(d3.format("~s")(d3.selectAll("#yAxisDiv text").text()))
-                //  .text(d3.format(".2s")(1500))
 
                 //add x axis
                 var xScale = d3
@@ -603,10 +334,7 @@
                         }
                         return yValue;
                     }) //for bottom to top
-                    .attr(
-                        "width",
-                        xScale.bandwidth() /*width/dataset.length-barpadding*/
-                    )
+                    .attr("width", xScale.bandwidth() /*width/dataset.length-barpadding*/)
                     .attr("height", function (d) {
                         var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
                         if (!height) {
@@ -626,85 +354,13 @@
                         let xValue = this.getAttribute("data-value-x");
                         let yValue = this.getAttribute("data-value-y");
 
-                        d3.select("#tooltip")
-                            // .style("left", xpos + "px")
-                            // .style("left", xpos -500+ "px")
-                            .style("top", ypos - 22 + legendHeightTop + "px")
-                            .style("display", "block")
-                            // .text(dataset[i]);
-                            .html(function () {
-                                var textValue = d.y0 - d.y1;
-                                if (d.y1 < 0) {
-                                    textValue = d.y1 - d.y0;
-                                }
+                        // tooltip Ui fix
 
-                                return (
-                                    "<div class='arrowTooltip'></div>" +
-                                    "<span style='color:grey;''>" +
-                                    toolTip.textColumn1 +
-                                    ":&nbsp;&nbsp;" +
-                                    "</span>" +
-                                    "<span style='float: right;'>" +
-                                    xValue +
-                                    "</span>" +
-                                    "<br/> <br/>" +
-                                    "<span style='color:grey;''>" +
-                                    toolTip.textColumn2 +
-                                    ":" +
-                                    "</span>" +
-                                    "<span style='float: right;margin-left: 15px;'>" +
-                                    Math.round(yValue) +
-                                    "</span>"
-                                );
-                            });
-                        var scrollVal =
-                            document.querySelector("#my_dataviz").scrollLeft;
-
-                        if (
-                            xpos - scrollVal >
-                            document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth
-                        ) {
-                            d3.select("#tooltip").style(
-                                "left",
-                                xpos -
-                                    scrollVal -
-                                    document.querySelector("#tooltip")
-                                        .clientWidth -
-                                    10 +
-                                    legendWidthLeft +
-                                    "px"
-                            );
-
-                            d3.select(".arrowTooltip")
-                                //  document.querySelector("#tooltip:before")
-                                // .style("height","50px";"width","50px";"background-color","red";")
-
-                                .attr(
-                                    "style",
-                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
-                                );
-                        } else {
-                            d3.select("#tooltip").style(
-                                "left",
-                                xpos - scrollVal + 12 + legendWidthLeft + "px"
-                            );
-
-                            d3.select(".arrowTooltip").attr(
-                                "style",
-                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
-                            );
-                        }
+                        tooltipGenerate(xpos, ypos, xValue, yValue, legendHeightTop, d, toolTip, legendWidthLeft);
 
                         d3.selectAll(".bar").style("opacity", 0.3);
                         d3.select(this).style("opacity", 1);
                     });
-
-                // if (valueDateType) {
-                //     xAxis.tickFormat(d3.timeFormat(dateFormat));
-                // }
-
-                /*.tickFormat("");remove tick label*/
 
                 var xAxis = d3.axisBottom(xScale);
                 svg.append("g")
@@ -714,93 +370,28 @@
 
                 setLabel(
                     xAxisLabel,
-                    // xaxisLaabel,
                     "x_label",
-                    d3
-                        .select("#xAxisLabelId")
-                        .append("svg")
-                        .attr("width", window.innerWidth, "height", 150),
+                    xAxisLabelSvg,
                     y_pos_x_label,
                     false
                 );
 
                 setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
 
-                setYaxisWidth();
+                setYaxisWidth(margin);
 
-                var barWidth =
-                    document.querySelector(".bar") &&
-                    document.querySelector(".bar").getBBox().width;
-                if (
-                    chartType == constants.chartType.FIT_WIDTH &&
-                    barWidth < 40
-                ) {
+                var barWidth = document.querySelector(".bar") && document.querySelector(".bar").getBBox().width;
+                if (chartType == constants.chartType.FIT_WIDTH && barWidth < 40) {
                     setXaxisWidth();
-                }
-
-                // if (chartType == constants.chartType.STANDARD) {
-                //     setStandardTickWidths();
-                // }
-
-                function setStandardTickWidths() {
-                    var a = document.querySelectorAll(".x-axis .tick text");
-
-                    for (var i = 0; i < a.length; i++) {
-                        var singleCharacterLength =
-                            a[i].getBBox().width / a[i].innerHTML.length;
-                        var numOfCharacters = Math.floor(
-                            barWidth / singleCharacterLength
-                        );
-
-                        var tick = a[i];
-
-                        var tickWidth = tick && tick.getBBox().width;
-                        if (tickWidth > barWidth) {
-                            // console.log("Length is long", numOfCharacters);
-                            var tickValue = tick.innerHTML;
-                            tickValue =
-                                tickValue &&
-                                tickValue.substr(0, numOfCharacters - 3) +
-                                    "...";
-                            // console.log(tickValue);
-                            tick.innerHTML = tickValue;
-                        }
-                    }
-                }
-
-                function setXaxisWidth() {
-                    var allYAxisTicks =
-                        document.querySelectorAll(".x-axis .tick text");
-                    var maxWidth = 0;
-                    for (var i = 0; i < allYAxisTicks.length; i++) {
-                        var tick = allYAxisTicks[i];
-                        var width = tick && tick.getBBox().width;
-                        if (width > maxWidth) {
-                            maxWidth = width;
-                        }
-                    }
-
-                    extraHeightWorked = true;
-                    maxWidth = maxWidth < 100 ? maxWidth : 100;
-                    extraHeight = maxWidth;
-
-                    d3.select(".x-axis").attr("text-anchor", "right");
-                    d3.selectAll(".x-axis text")
-                        .attr("transform", "rotate(-90)")
-                        .attr("dy", "0.3em")
-                        .attr("text-anchor", "end")
-                        // .attr("x", "-" + (maxWidth + 3))
-                        .attr("x", "-" + 10)
-                        // .attr("font-size", fontSize)
-                        .attr("y", "8");
+                } else {
+                    setStandardTickWidths(barWidth);
                 }
 
                 // Remove Text in case they are large in number
                 var allXAxisTexts = document.querySelectorAll(".x-axis text");
                 var textWidth =
                     document.querySelector(".x-axis .tick text") &&
-                    document.querySelector(".x-axis .tick text").getBBox()
-                        .height;
+                    document.querySelector(".x-axis .tick text").getBBox().height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
                     for (var i = 0; i < allXAxisTexts.length; i++) {
@@ -816,54 +407,11 @@
                 }
                 if (labelStatus) {
                     console.log("FrontEnd-Debug:Label Status is on");
-                    svg.append("g")
-                        .call(xAxis.tickSize(0))
-                        .attr("class", "axis label")
-                        // .attr("font-family", xDataLabelfontFamily)
-                        .attr("font-family", dataLabelfontFamily)
-                        .attr("font-size", dataLabelfontSize);
-
-                    // .attr("transform", "translate(0,0)");
-                    var labelSelector =
-                        document.querySelectorAll(".axis.label text");
-
-                    d3.select(".axis.label path").remove();
-
-                    labelSelector.forEach((label, i) => {
-                        var labelValue = label.textContent;
-
-                        var labelYPosition = yScale(data[0][1][i]);
-                        // console.log(labelYPosition);
-
-                        // console.log(dataset[i]);
-                        label.setAttribute("y", labelYPosition - 12);
-                        label.setAttribute("fill", dataLabelColor);
-                        label.textContent = labelFormatSet(
-                            dataset[i],
-                            labelFormat
-                        );
-                        var dataLabelLimit = height - window.innerHeight / 8;
-                        // if(window.innerWidth < 600 || window.innerHeight < 300){
-                        //     dataLabelLimit = 20;
-                        // }
-
-                        label.setAttribute(
-                            "display",
-                            labelYPosition > dataLabelLimit ? "none" : ""
-                        );
-
-                        // label.setAttribute("y", function (d) {
-                        //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
-                        //     console.log({height})
-                        //     return 10;
-                        // })
-                        //  label.textContent = textColumn2[1];
-                    });
+                    dataLabel(svg, xAxis, yScale, dataset, labelFormat);
                 }
 
                 if (chartType === constants.chartType.FIT_WIDTH) {
-                    var allXAxisTexts =
-                        document.querySelectorAll(".x-axis text");
+                    var allXAxisTexts = document.querySelectorAll(".x-axis text");
                     for (var i = 0; i < allXAxisTexts.length; i++) {
                         var xAxisTick = allXAxisTexts[i].innerHTML;
                         // Check added to bypass all the names with length <= 2 from getting trimmed
@@ -872,31 +420,18 @@
                         }
                         if (xAxisTick) {
                             var singleCharacterLength =
-                                allXAxisTexts[i].getBBox().width /
-                                (xAxisTick && xAxisTick.length);
+                                allXAxisTexts[i].getBBox().width / (xAxisTick && xAxisTick.length);
 
                             var numOfCharacters =
-                                (extraHeight
-                                    ? extraHeight
-                                    : xScale.bandwidth()) /
-                                singleCharacterLength;
+                                (extraHeight ? extraHeight : xScale.bandwidth()) / singleCharacterLength;
 
-                            if (
-                                xAxisTick &&
-                                xAxisTick.length > numOfCharacters
-                            ) {
+                            if (xAxisTick && xAxisTick.length > numOfCharacters) {
                                 if (Math.ceil(numOfCharacters) > 3) {
                                     // console.log(xAxisTick);
                                     allXAxisTexts[i].innerHTML =
-                                        (xAxisTick &&
-                                            xAxisTick.substr(
-                                                0,
-                                                numOfCharacters - 3
-                                            )) + "...";
+                                        (xAxisTick && xAxisTick.substr(0, numOfCharacters - 3)) + "...";
                                 } else {
-                                    allXAxisTexts[i].innerHTML =
-                                        (xAxisTick && xAxisTick.substr(0, 2)) +
-                                        "...";
+                                    allXAxisTexts[i].innerHTML = (xAxisTick && xAxisTick.substr(0, 2)) + "...";
                                 }
                             }
                         }
@@ -921,19 +456,9 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
-                d3.selectAll(".y-axis text")
-                    .attr("font-size", yTickfontSize)
-                    .attr("font-family", yTickfontFamily)
-                    .attr("font-weight", yboldTick ? "bold" : "regular")
-                    .attr("font-style", yitalicTick ? "italic" : "regular")
-                    .attr("fill", yTickfontColor);
-                d3.selectAll(".x-axis text")
-                    .attr("font-size", xTickfontSize)
-                    .attr("font-family", xTickfontFamily)
-                    .attr("font-weight", xboldTick ? "bold" : "regular")
-                    .attr("font-style", xitalicTick ? "italic" : "regular")
-                    .attr("fill", xTickfontColor)
-                    .attr("y", 6);
+
+                YAxisTicksConfig(yTickfontSize, yTickfontFamily, yboldTick, yitalicTick, yTickfontColor);
+                XAxisTicksConfig(xTickfontSize, xTickfontFamily, xboldTick, xitalicTick, xTickfontColor);
 
                 if (xaxisStatus) {
                     d3.selectAll("g .x-axis").attr("style", "display: block");
@@ -946,798 +471,14 @@
                     d3.selectAll("g .y-axis").attr("style", "display: none");
                 }
 
-                function setYaxisWidth() {
-                    var allYAxisTicks =
-                        document.querySelectorAll(".y-axis .tick");
-                    var maxWidth = 72;
-                    for (var i = 0; i < allYAxisTicks.length; i++) {
-                        var tick = allYAxisTicks[i];
-                        var width = tick && tick.getBBox().width + 25;
-                        if (width > maxWidth) {
-                            maxWidth = width;
-                        }
-                    }
-
-                    var yAxisDiv = document.querySelector("#yAxisDiv svg");
-
-                    yAxisDiv.setAttribute("width", maxWidth);
-                    yAxisDiv.setAttribute(
-                        "transform",
-                        "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
-                    );
-                }
-
-                function make_x_gridlines(x) {
-                    return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
-                }
-
-                function make_y_gridlines(y) {
-                    return d3.axisLeft(y).ticks(yaxisTicks);
-                }
+                removeDataLabels();
             }
             //  draw function defination starts
 
-            // drawChart(data, {
-            //     dataColumns: {
-            //         xAxisColumnDetails: [
-            //             {
-            //                 itemName: "Category",
-            //                 itemType: "Categorical",
-            //                 dateFormat: "%Y",
-            //             },
-            //         ],
-            //         yAxisColumnDetails: [
-            //             {
-            //                 itemName: "Sales",
-            //                 itemType: "Numerical",
-            //                 dateFormat: "%Y",
-            //             },
-            //         ],
-            //         row3ColumnDetails: [],
-            //         colorByData: [],
-            //     },
-            // });
+            // redraw chart
+            // redrawChartBarVerticle();
 
-            data = [
-                [
-                    [
-                        "Henderson",
-                        "Los Angeles",
-                        "Fort Lauderdale",
-                        "Concord",
-                        "Seattle",
-                        "Fort Worth",
-                        "Madison",
-                        "West Jordan",
-                        "San Francisco",
-                        "Fremont",
-                        "Philadelphia",
-                        "Orem",
-                        "Houston",
-                        "Richardson",
-                        "Naperville",
-                        "Melbourne",
-                        "Eagan",
-                        "Westland",
-                        "Dover",
-                        "New Albany",
-                        "New York City",
-                        "Troy",
-                        "Chicago",
-                        "Gilbert",
-                        "Springfield",
-                        "Jackson",
-                        "Memphis",
-                        "Decatur",
-                        "Durham",
-                        "Columbia",
-                        "Rochester",
-                        "Minneapolis",
-                        "Portland",
-                        "Saint Paul",
-                        "Aurora",
-                        "Charlotte",
-                        "Orland Park",
-                        "Urbandale",
-                        "Columbus",
-                        "Bristol",
-                        "Wilmington",
-                        "Bloomington",
-                        "Phoenix",
-                        "Roseville",
-                        "Independence",
-                        "Pasadena",
-                        "Newark",
-                        "Franklin",
-                        "Scottsdale",
-                        "San Jose",
-                        "Edmond",
-                        "Carlsbad",
-                        "San Antonio",
-                        "Monroe",
-                        "Fairfield",
-                        "Grand Prairie",
-                        "Redlands",
-                        "Hamilton",
-                        "Westfield",
-                        "Akron",
-                        "Denver",
-                        "Dallas",
-                        "Whittier",
-                        "Saginaw",
-                        "Medina",
-                        "Dublin",
-                        "Detroit",
-                        "Tampa",
-                        "Santa Clara",
-                        "Lakeville",
-                        "San Diego",
-                        "Brentwood",
-                        "Chapel Hill",
-                        "Morristown",
-                        "Cincinnati",
-                        "Inglewood",
-                        "Tamarac",
-                        "Colorado Springs",
-                        "Belleville",
-                        "Taylor",
-                        "Lakewood",
-                        "Arlington",
-                        "Arvada",
-                        "Hackensack",
-                        "Saint Petersburg",
-                        "Long Beach",
-                        "Hesperia",
-                        "Murfreesboro",
-                        "Layton",
-                        "Austin",
-                        "Lowell",
-                        "Manchester",
-                        "Harlingen",
-                        "Tucson",
-                        "Quincy",
-                        "Pembroke Pines",
-                        "Des Moines",
-                        "Peoria",
-                        "Las Vegas",
-                        "Warwick",
-                        "Miami",
-                        "Huntington Beach",
-                        "Richmond",
-                        "Louisville",
-                        "Lawrence",
-                        "Canton",
-                        "New Rochelle",
-                        "Gastonia",
-                        "Jacksonville",
-                        "Auburn",
-                        "Norman",
-                        "Park Ridge",
-                        "Amarillo",
-                        "Lindenhurst",
-                        "Huntsville",
-                        "Fayetteville",
-                        "Costa Mesa",
-                        "Parker",
-                        "Atlanta",
-                        "Gladstone",
-                        "Great Falls",
-                        "Lakeland",
-                        "Montgomery",
-                        "Mesa",
-                        "Green Bay",
-                        "Anaheim",
-                        "Marysville",
-                        "Salem",
-                        "Laredo",
-                        "Grove City",
-                        "Dearborn",
-                        "Warner Robins",
-                        "Vallejo",
-                        "Mission Viejo",
-                        "Rochester Hills",
-                        "Plainfield",
-                        "Sierra Vista",
-                        "Vancouver",
-                        "Cleveland",
-                        "Tyler",
-                        "Burlington",
-                        "Waynesboro",
-                        "Chester",
-                        "Cary",
-                        "Palm Coast",
-                        "Mount Vernon",
-                        "Hialeah",
-                        "Oceanside",
-                        "Evanston",
-                        "Trenton",
-                        "Cottage Grove",
-                        "Bossier City",
-                        "Lancaster",
-                        "Asheville",
-                        "Lake Elsinore",
-                        "Omaha",
-                        "Edmonds",
-                        "Santa Ana",
-                        "Milwaukee",
-                        "Florence",
-                        "Lorain",
-                        "Linden",
-                        "Salinas",
-                        "New Brunswick",
-                        "Garland",
-                        "Norwich",
-                        "Alexandria",
-                        "Toledo",
-                        "Farmington",
-                        "Riverside",
-                        "Torrance",
-                        "Round Rock",
-                        "Boca Raton",
-                        "Virginia Beach",
-                        "Murrieta",
-                        "Olympia",
-                        "Washington",
-                        "Jefferson City",
-                        "Saint Peters",
-                        "Rockford",
-                        "Brownsville",
-                        "Yonkers",
-                        "Oakland",
-                        "Clinton",
-                        "Encinitas",
-                        "Roswell",
-                        "Jonesboro",
-                        "Antioch",
-                        "Homestead",
-                        "La Porte",
-                        "Lansing",
-                        "Cuyahoga Falls",
-                        "Reno",
-                        "Harrisonburg",
-                        "Escondido",
-                        "Royal Oak",
-                        "Rockville",
-                        "Coral Springs",
-                        "Buffalo",
-                        "Boynton Beach",
-                        "Gulfport",
-                        "Fresno",
-                        "Greenville",
-                        "Macon",
-                        "Cedar Rapids",
-                        "Providence",
-                        "Pueblo",
-                        "Deltona",
-                        "Murray",
-                        "Middletown",
-                        "Freeport",
-                        "Pico Rivera",
-                        "Provo",
-                        "Pleasant Grove",
-                        "Smyrna",
-                        "Parma",
-                        "Mobile",
-                        "New Bedford",
-                        "Irving",
-                        "Vineland",
-                        "Glendale",
-                        "Niagara Falls",
-                        "Thomasville",
-                        "Westminster",
-                        "Coppell",
-                        "Pomona",
-                        "North Las Vegas",
-                        "Allentown",
-                        "Tempe",
-                        "Laguna Niguel",
-                        "Bridgeton",
-                        "Everett",
-                        "Watertown",
-                        "Appleton",
-                        "Bellevue",
-                        "Allen",
-                        "El Paso",
-                        "Grapevine",
-                        "Carrollton",
-                        "Kent",
-                        "Lafayette",
-                        "Tigard",
-                        "Skokie",
-                        "Plano",
-                        "Suffolk",
-                        "Indianapolis",
-                        "Bayonne",
-                        "Greensboro",
-                        "Baltimore",
-                        "Kenosha",
-                        "Olathe",
-                        "Tulsa",
-                        "Redmond",
-                        "Raleigh",
-                        "Muskogee",
-                        "Meriden",
-                        "Bowling Green",
-                        "South Bend",
-                        "Spokane",
-                        "Keller",
-                        "Port Orange",
-                        "Medford",
-                        "Charlottesville",
-                        "Missoula",
-                        "Apopka",
-                        "Reading",
-                        "Broomfield",
-                        "Paterson",
-                        "Oklahoma City",
-                        "Chesapeake",
-                        "Lubbock",
-                        "Johnson City",
-                        "San Bernardino",
-                        "Leominster",
-                        "Bozeman",
-                        "Perth Amboy",
-                        "Ontario",
-                        "Rancho Cucamonga",
-                        "Moorhead",
-                        "Mesquite",
-                        "Stockton",
-                        "Ormond Beach",
-                        "Sunnyvale",
-                        "York",
-                        "College Station",
-                        "Saint Louis",
-                        "Manteca",
-                        "San Angelo",
-                        "Salt Lake City",
-                        "Knoxville",
-                        "Little Rock",
-                        "Lincoln Park",
-                        "Marion",
-                        "Littleton",
-                        "Bangor",
-                        "Southaven",
-                        "New Castle",
-                        "Midland",
-                        "Sioux Falls",
-                        "Fort Collins",
-                        "Clarksville",
-                        "Sacramento",
-                        "Thousand Oaks",
-                        "Malden",
-                        "Holyoke",
-                        "Albuquerque",
-                        "Sparks",
-                        "Coachella",
-                        "Elmhurst",
-                        "Passaic",
-                        "North Charleston",
-                        "Newport News",
-                        "Jamestown",
-                        "Mishawaka",
-                        "La Quinta",
-                        "Tallahassee",
-                        "Nashville",
-                        "Bellingham",
-                        "Woodstock",
-                        "Haltom City",
-                        "Wheeling",
-                        "Summerville",
-                        "Hot Springs",
-                        "Englewood",
-                        "Las Cruces",
-                        "Hoover",
-                        "Frisco",
-                        "Vacaville",
-                        "Waukesha",
-                        "Bakersfield",
-                        "Pompano Beach",
-                        "Corpus Christi",
-                        "Redondo Beach",
-                        "Orlando",
-                        "Orange",
-                        "Lake Charles",
-                        "Highland Park",
-                        "Hempstead",
-                        "Noblesville",
-                        "Apple Valley",
-                        "Mount Pleasant",
-                        "Sterling Heights",
-                        "Eau Claire",
-                        "Pharr",
-                        "Billings",
-                        "Gresham",
-                        "Chattanooga",
-                        "Meridian",
-                        "Bolingbrook",
-                        "Maple Grove",
-                        "Woodland",
-                        "Missouri City",
-                        "Pearland",
-                        "San Mateo",
-                        "Grand Rapids",
-                        "Visalia",
-                        "Overland Park",
-                        "Temecula",
-                        "Yucaipa",
-                        "Revere",
-                        "Conroe",
-                        "Tinley Park",
-                        "Dubuque",
-                        "Dearborn Heights",
-                        "Santa Fe",
-                        "Hickory",
-                        "Carol Stream",
-                        "Saint Cloud",
-                        "North Miami",
-                        "Plantation",
-                        "Port Saint Lucie",
-                        "Rock Hill",
-                        "Odessa",
-                        "West Allis",
-                        "Chula Vista",
-                        "Manhattan",
-                        "Altoona",
-                        "Thornton",
-                        "Champaign",
-                        "Texarkana",
-                        "Edinburg",
-                        "Baytown",
-                        "Greenwood",
-                        "Woonsocket",
-                        "Superior",
-                        "Bedford",
-                        "Covington",
-                        "Broken Arrow",
-                        "Miramar",
-                        "Hollywood",
-                        "Deer Park",
-                        "Wichita",
-                        "Mcallen",
-                        "Iowa City",
-                        "Boise",
-                        "Cranston",
-                        "Port Arthur",
-                        "Citrus Heights",
-                        "The Colony",
-                        "Daytona Beach",
-                        "Bullhead City",
-                        "Portage",
-                        "Fargo",
-                        "Elkhart",
-                        "San Gabriel",
-                        "Margate",
-                        "Sandy Springs",
-                        "Mentor",
-                        "Lawton",
-                        "Hampton",
-                        "Rome",
-                        "La Crosse",
-                        "Lewiston",
-                        "Hattiesburg",
-                        "Danville",
-                        "Logan",
-                        "Waterbury",
-                        "Athens",
-                        "Avondale",
-                        "Marietta",
-                        "Yuma",
-                        "Wausau",
-                        "Pasco",
-                        "Oak Park",
-                        "Pensacola",
-                        "League City",
-                        "Gaithersburg",
-                        "Lehi",
-                        "Tuscaloosa",
-                        "Moreno Valley",
-                        "Georgetown",
-                        "Loveland",
-                        "Chandler",
-                        "Helena",
-                        "Kirkwood",
-                        "Waco",
-                        "Frankfort",
-                        "Bethlehem",
-                        "Grand Island",
-                        "Woodbury",
-                        "Rogers",
-                        "Clovis",
-                        "Jupiter",
-                        "Santa Barbara",
-                        "Cedar Hill",
-                        "Norfolk",
-                        "Draper",
-                        "Ann Arbor",
-                        "La Mesa",
-                        "Pocatello",
-                        "Holland",
-                        "Milford",
-                        "Buffalo Grove",
-                        "Lake Forest",
-                        "Redding",
-                        "Chico",
-                        "Utica",
-                        "Conway",
-                        "Cheyenne",
-                        "Owensboro",
-                        "Caldwell",
-                        "Kenner",
-                        "Nashua",
-                        "Bartlett",
-                        "Redwood City",
-                        "Lebanon",
-                        "Santa Maria",
-                        "Des Plaines",
-                        "Longview",
-                        "Hendersonville",
-                        "Waterloo",
-                        "Cambridge",
-                        "Palatine",
-                        "Beverly",
-                        "Eugene",
-                        "Oxnard",
-                        "Renton",
-                        "Glenview",
-                        "Delray Beach",
-                        "Commerce City",
-                        "Texas City",
-                        "Wilson",
-                        "Rio Rancho",
-                        "Goldsboro",
-                        "Montebello",
-                        "El Cajon",
-                        "Beaumont",
-                        "West Palm Beach",
-                        "Abilene",
-                        "Normal",
-                        "Saint Charles",
-                        "Camarillo",
-                        "Hillsboro",
-                        "Burbank",
-                        "Modesto",
-                        "Garden City",
-                        "Atlantic City",
-                        "Longmont",
-                        "Davis",
-                        "Morgan Hill",
-                        "Clifton",
-                        "Sheboygan",
-                        "East Point",
-                        "Rapid City",
-                        "Andover",
-                        "Kissimmee",
-                        "Shelton",
-                        "Danbury",
-                        "Sanford",
-                        "San Marcos",
-                        "Greeley",
-                        "Mansfield",
-                        "Elyria",
-                        "Twin Falls",
-                        "Coral Gables",
-                        "Romeoville",
-                        "Marlborough",
-                        "Laurel",
-                        "Bryan",
-                        "Pine Bluff",
-                        "Aberdeen",
-                        "Hagerstown",
-                        "East Orange",
-                        "Arlington Heights",
-                        "Oswego",
-                        "Coon Rapids",
-                        "San Clemente",
-                        "San Luis Obispo",
-                        "Springdale",
-                        "Lodi",
-                        "Mason",
-                    ],
-                    [
-                        17549.068359375, 175851.4375, 4929.5322265625,
-                        10542.40234375, 119540.7734375, 6602.70654296875,
-                        5346.7900390625, 311.8500061035156, 112669.078125,
-                        1119.010009765625, 109077.0625, 2994.087890625,
-                        64504.76953125, 1288.4639892578125, 1288.302978515625,
-                        95.61599731445312, 214.27999877929688, 2057.97607421875,
-                        4878.07373046875, 209.54998779296875, 256368.015625,
-                        4507.09130859375, 48539.53515625, 4172.3818359375,
-                        43054.34765625, 24963.859375, 5942.34033203125,
-                        6544.29296875, 879.9600219726562, 25283.328125,
-                        7974.5302734375, 16870.541015625, 4051.868896484375,
-                        192.82998657226562, 11656.4794921875, 13693.337890625,
-                        339.9599914550781, 149.1199951171875, 38706.2421875,
-                        1251.18212890625, 7297.06103515625, 1567.7401123046875,
-                        11000.25390625, 3588.6259765625, 2417.369873046875,
-                        6590.146484375, 28576.119140625, 11257.0400390625,
-                        1466.306884765625, 6071.2294921875, 959.5499877929688,
-                        419.34002685546875, 21843.525390625, 2970.434326171875,
-                        9483.859375, 1012.4860229492188, 2891.02099609375,
-                        328.2239990234375, 519.719970703125, 2729.986083984375,
-                        12198.7919921875, 20131.93359375, 444.76800537109375,
-                        395.8599853515625, 2477.721923828125, 2401.15966796875,
-                        42446.94921875, 5196.08154296875, 222.19200134277344,
-                        4260.94921875, 47521.046875, 5090.1142578125,
-                        14.015999794006348, 5033.10009765625, 1611.97607421875,
-                        3479.328125, 1413.5098876953125, 3694.009033203125,
-                        1891.599853515625, 353.6999816894531, 18192.05078125,
-                        20214.53125, 503.3999938964844, 1456.1600341796875,
-                        1690.7921142578125, 13455.0302734375,
-                        1213.1715087890625, 337.3330078125, 4.960000038146973,
-                        6057.98193359375, 4837.93017578125, 2126.2802734375,
-                        471.40399169921875, 6313.015625, 1276.4588623046875,
-                        1714.3756103515625, 5463.27783203125,
-                        1842.8319091796875, 1834.02001953125, 2426.83984375,
-                        8673.07421875, 2527.820068359375, 18137.9296875,
-                        12345.806640625, 7654.19140625, 818.1300048828125,
-                        1255.2281494140625, 895.0599975585938, 44713.1875,
-                        3155.16796875, 1351.3299560546875, 685, 3773.0625,
-                        55.47999954223633, 9194.9873046875, 6925.92626953125,
-                        1497.6697998046875, 1067.94189453125, 17197.837890625,
-                        164.33999633789062, 4605.580078125, 5606.8876953125,
-                        3722.72998046875, 4037.740234375, 527.3200073242188,
-                        7986.87060546875, 102.18000030517578, 3444.2451171875,
-                        1024.3399658203125, 123.58800506591797,
-                        1603.3099365234375, 434.79998779296875,
-                        1221.4097900390625, 775.9859619140625,
-                        132.52000427246094, 4526.849609375, 76.0719985961914,
-                        686.8360595703125, 6346.18505859375, 347.20599365234375,
-                        21668.078125, 3058.77001953125, 1968.4788818359375,
-                        505.2080078125, 274.4280090332031, 2119.632080078125,
-                        2338.948974609375, 4350.73779296875, 1753.799072265625,
-                        1765.1949462890625, 144.36000061035156,
-                        1417.1800537109375, 9891.4638671875, 1475.3759765625,
-                        283.9200134277344, 6312.52978515625, 2523.69189453125,
-                        3366.31005859375, 11410.2216796875, 7621.7197265625,
-                        2015.1109619140625, 115.36000061035156,
-                        728.8910522460938, 14.770000457763672, 67.7040023803711,
-                        414.0400085449219, 5519.56982421875, 4466.052734375,
-                        718.719970703125, 1944.2457275390625, 3132.267822265625,
-                        4854.05322265625, 63.007999420166016, 5752.1298828125,
-                        484.6499938964844, 1020.447998046875, 2865.019775390625,
-                        86.62000274658203, 697.1599731445312, 3166.22802734375,
-                        1292.2266845703125, 7657.666015625, 5964.41796875,
-                        5514.2509765625, 591.9810180664062, 6652.31982421875,
-                        2915.320068359375, 19.440000534057617, 132.552001953125,
-                        1051.73193359375, 1610.285888671875, 29.09400177001953,
-                        644.06201171875, 4388.7099609375, 94.54800415039062,
-                        35.34000015258789, 469.77001953125, 824.991943359375,
-                        9063.49609375, 469.5849914550781, 166.5, 7888.529296875,
-                        2117.830078125, 364.0099792480469, 278.3999938964844,
-                        15980.650390625, 1686.9381103515625, 893.2400512695312,
-                        410.9380187988281, 1154.6099853515625,
-                        739.1499633789062, 145.89999389648438, 2761.23388671875,
-                        2138.177978515625, 3238.888916015625, 3879.756103515625,
-                        5462.98974609375, 235.9700164794922, 605.5000610351562,
-                        647.9659423828125, 2917.86474609375, 199.84201049804688,
-                        151.29200744628906, 3826.646240234375,
-                        135.93600463867188, 1482.501953125, 9801.0009765625,
-                        853.2520141601562, 1070.302001953125, 290.9830017089844,
-                        52.410003662109375, 5665.7333984375, 4044.997802734375,
-                        1671.31005859375, 103.62199401855469,
-                        290.20599365234375, 3546.0634765625, 41.52799987792969,
-                        2200.645751953125, 1697.555908203125, 25036.197265625,
-                        1393.781982421875, 568.83203125, 3530.37451171875,
-                        1597.9000244140625, 9306.4189453125, 183.39999389648438,
-                        2406.77978515625, 6156.841796875, 3906.72998046875,
-                        895.7899780273438, 5556.9697265625, 1098.2569580078125,
-                        4507.5400390625, 1721.7000732421875, 1550.68017578125,
-                        2077.375, 1238.330078125, 2027.9178466796875, 6,
-                        7.823999881744385, 90.21800231933594,
-                        102.61000061035156, 487.9840087890625, 904.553955078125,
-                        873.7120971679688, 793.5040283203125, 2243.210205078125,
-                        6596.81982421875, 5996.72021484375, 592.5640258789062,
-                        765.8479614257812, 979.2999877929688,
-                        217.49000549316406, 43.65999984741211,
-                        1717.0799560546875, 283.9200134277344,
-                        231.8520050048828, 543.8599853515625, 52.14799499511719,
-                        1227.60009765625, 2.808000087738037, 636.2100219726562,
-                        817.97802734375, 291.0420227050781, 285.96002197265625,
-                        452.1819763183594, 650.635986328125, 802.7760009765625,
-                        3928.165771484375, 3560.349365234375,
-                        387.60198974609375, 3369.345947265625,
-                        72.29399871826172, 1164.4500732421875,
-                        1455.3900146484375, 84.61000061035156, 5291.51171875,
-                        1137.4200439453125, 935.2520141601562,
-                        2217.729736328125, 7311.27734375, 238.8040008544922,
-                        228.37998962402344, 301.9599914550781,
-                        2220.159912109375, 2561.9599609375, 163.5500030517578,
-                        891.6279907226562, 1562.0859375, 284.25,
-                        3321.950439453125, 4708.7900390625, 776.239990234375,
-                        46.31999969482422, 7250.669921875, 6070.86279296875,
-                        3790.240234375, 1143.89990234375, 269.3280029296875,
-                        1946.9659423828125, 406.94000244140625,
-                        245.82998657226562, 124.05599975585938,
-                        98.7699966430664, 525.8499755859375, 57.503997802734375,
-                        423.2799987792969, 54.5, 1377.2899169921875,
-                        90.44000244140625, 220.5440216064453,
-                        1959.8031005859375, 1740.080078125, 211.11000061035156,
-                        547.4100341796875, 2035.095947265625, 2589.5859375,
-                        3091.179931640625, 2053.02099609375, 563.0800170898438,
-                        110.04000091552734, 1645.6500244140625, 1540.7080078125,
-                        8.288000106811523, 2133.424072265625, 988.802978515625,
-                        329.052001953125, 218.30799865722656, 882.8699951171875,
-                        264.6619873046875, 6.369999885559082, 494.9960021972656,
-                        75.18000030517578, 526.1300048828125, 318.7799987792969,
-                        606.9099731445312, 808.666015625, 50.79999923706055,
-                        833.260009765625, 111.6719970703125, 22.288000106811523,
-                        1687.2999267578125, 1051.570068359375,
-                        100.91999816894531, 40.763999938964844,
-                        1305.8099365234375, 1331.820068359375,
-                        22.128000259399414, 1436.8359375, 248.9499969482422,
-                        11.850000381469727, 976.1239624023438,
-                        250.48001098632812, 1041.6199951171875,
-                        273.9599914550781, 20.451000213623047,
-                        765.2479248046875, 151.9600067138672, 654.2400512695312,
-                        88.27599334716797, 10.368000030517578,
-                        1665.050048828125, 195.5500030517578,
-                        1299.7298583984375, 226.25601196289062,
-                        413.67999267578125, 2439.52978515625,
-                        1531.1920166015625, 1070.4739990234375,
-                        6.923999786376953, 825.27001953125, 866.716064453125,
-                        9.989999771118164, 1094.469970703125, 4024.915771484375,
-                        737.0527954101562, 129.38999938964844,
-                        142.16000366210938, 272.3315124511719,
-                        22.288000106811523, 16.280000686645508,
-                        919.9099731445312, 171.42999267578125,
-                        2061.010009765625, 15.552000045776367,
-                        1997.0299072265625, 693.1299438476562,
-                        1057.489990234375, 2722.259765625, 534.85205078125,
-                        830.4100341796875, 115.66400146484375,
-                        1722.8399658203125, 1202.2540283203125,
-                        280.2760009765625, 1326.059814453125, 1720.81005859375,
-                        946.8079833984375, 2938.6201171875, 840.864990234375,
-                        317.4800109863281, 2201.112060546875, 591.052001953125,
-                        2.2139999866485596, 875.367919921875,
-                        405.91998291015625, 1516.7259521484375,
-                        175.70001220703125, 1262.4659423828125,
-                        1786.420166015625, 20.964000701904297,
-                        1076.7469482421875, 443.8399963378906,
-                        241.33999633789062, 606.107177734375, 97.63199615478516,
-                        1689.634033203125, 15.960000038146973,
-                        607.6499633789062, 40.40999984741211,
-                        111.41999816894531, 2.063999891281128, 4289.23388671875,
-                        122.3759994506836, 17.43000030517578, 263.6499938964844,
-                        889.2730102539062, 367.5299987792969,
-                        1344.9420166015625, 137.86000061035156,
-                        961.739990234375, 831.3989868164062, 1625.5360107421875,
-                        333.57598876953125, 2050.177978515625,
-                        655.0399169921875, 301.9599914550781, 1603.135986328125,
-                        71.18000030517578, 455.63201904296875,
-                        89.32000732421875, 35.94000244140625, 88.95999908447266,
-                        41.90399932861328, 488.89599609375, 115.44000244140625,
-                        1493.2119140625, 119.20999908447266, 319.53802490234375,
-                        30.31999969482422, 502.09002685546875,
-                        116.31199645996094, 2583.190185546875,
-                        1465.031982421875, 1558.0999755859375,
-                        1242.6319580078125, 158.37600708007812,
-                        242.53599548339844, 146.3520050048828,
-                        790.9720458984375, 368.7320251464844,
-                        1114.1920166015625, 34.944000244140625,
-                        27.8799991607666, 865.615966796875, 472.1159973144531,
-                        141.3280029296875, 1.3919999599456787,
-                        366.7439880371094, 1659.650146484375, 1467.517578125,
-                        87.83799743652344, 3247.157958984375, 326.1499938964844,
-                        312.3800354003906, 23.360000610351562,
-                        915.0880126953125, 32.400001525878906, 545.010009765625,
-                        336.82000732421875, 79.74000549316406,
-                        268.3999938964844, 152.6400146484375, 435.8499755859375,
-                        751.9840087890625, 73.33000183105469,
-                        27.459999084472656, 225.54598999023438,
-                        108.44400024414062, 30.351999282836914,
-                        558.8770141601562, 1.8240000009536743,
-                        1148.8060302734375, 64.24800109863281, 8.95199966430664,
-                        206.6400146484375, 152.58999633789062, 616.656005859375,
-                        212.91000366210938, 25.5, 43.79999923706055,
-                        377.27001953125, 14.112000465393066, 321.9779968261719,
-                        503.1300048828125, 90.05799865722656, 3.619999885559082,
-                        4.300000190734863, 136.98001098632812,
-                        94.26399993896484,
-                    ],
-                ],
-                ["City", "Sales"],
-            ];
-
+            drawChartBarVerticle();
         </script>
         <!-- javascripts ends -->
     </body>

@@ -190,7 +190,7 @@ Popup {
         console.log("color"+d3PropertyConfig.d3colorPalette)
         console.log("colorData3",colorData)
         Constants.d3ColorPalette = JSON.parse(colorPallete)
-        reDrawChart();
+        updateChart();
     }
 
 

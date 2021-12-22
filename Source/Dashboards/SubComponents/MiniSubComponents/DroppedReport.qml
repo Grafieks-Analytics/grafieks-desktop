@@ -839,8 +839,12 @@ Item{
                 ChartsModel.getRadarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
-                console.log("SCATTER CLICKED")
-                ChartsModel.getScatterChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                console.log("SCATTER CLICKED");
+                if(!colorByColumnName){
+                    ChartsModel.getScatterChartNumericalValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen,  xAxisColumns[0], yAxisColumns[0]);
+                    break;
+                }
+                ChartsModel.getScatterChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0], yAxisColumns[0], colorByColumnName);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
@@ -851,7 +855,7 @@ Item{
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
-                ChartsModel.getHeatMapChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
+                ChartsModel.getHeatMapChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0], colorByColumnName, yAxisColumns[0]);
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED");
