@@ -40,6 +40,8 @@ QVariant DatasourceModel::data(const QModelIndex &index, int role) const
         return datasource->connectionType();
     if( role == DatasourceNameRole)
         return datasource->datasourceName();
+    if( role == DatabaseNameRole)
+        return datasource->databaseName();
     if( role == DescriptionsRole)
         return datasource->descriptions();
     if( role == ImageLinkRole)
@@ -89,6 +91,13 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
     case DatasourceNameRole:
         if ( datasource->datasourceName() != value.toString()){
             datasource->setDatasourceName(value.toString());
+            somethingChanged = true;
+        }
+        break;
+
+    case DatabaseNameRole:
+        if ( datasource->databaseName() != value.toString()){
+            datasource->setDatabaseName(value.toString());
             somethingChanged = true;
         }
         break;
@@ -198,6 +207,7 @@ QHash<int, QByteArray> DatasourceModel::roleNames() const
     roles[DSProfileIDRole] = "profileId";
     roles[ConnectionTypeRole] = "connectionType";
     roles[DatasourceNameRole] = "datasourceName";
+    roles[DatabaseNameRole] = "databaseName";
     roles[DescriptionsRole] = "descriptions";
     roles[SourceTypeRole] = "sourceType";
     roles[ImageLinkRole] = "imageLink";
