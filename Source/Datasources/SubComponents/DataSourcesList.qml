@@ -180,7 +180,7 @@ Page {
                         height: parent.height
 
                         Text {
-                            text: qsTr(datasourceName)
+                            text: qsTr(datasourceName + "-" + databaseName)
                             leftPadding: 10
                             anchors.verticalCenter: parent.verticalCenter
 
