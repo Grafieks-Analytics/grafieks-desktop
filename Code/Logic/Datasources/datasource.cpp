@@ -1,8 +1,8 @@
 #include "datasource.h"
 
-Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent) :
+Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString &databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent) :
 
-    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName)
+    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_databaseName(databaseName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName)
 {
 
 }
@@ -16,6 +16,11 @@ QString Datasource::connectionType() const
 QString Datasource::datasourceName() const
 {
     return m_datasourceName;
+}
+
+QString Datasource::databaseName() const
+{
+    return m_databaseName;
 }
 
 QString Datasource::descriptions() const
@@ -84,6 +89,15 @@ void Datasource::setDatasourceName(QString datasourceName)
 
     m_datasourceName = datasourceName;
     emit datasourceNameChanged(m_datasourceName);
+}
+
+void Datasource::setDatabaseName(QString databaseName)
+{
+    if (m_databaseName == databaseName)
+        return;
+
+    m_databaseName = databaseName;
+    emit databaseNameChanged(m_databaseName);
 }
 
 void Datasource::setDescriptions(QString descriptions)

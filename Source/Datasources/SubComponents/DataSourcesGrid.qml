@@ -131,7 +131,7 @@ Page {
 
                 Text{
                     id: title
-                    text:  datasourceName
+                    text:  datasourceName + "-" + databaseName
                     font.pointSize: Constants.fontCategoryHeaderSmall
                     anchors.centerIn: parent
                     opacity: enabled ? 1.0 : 0.3
