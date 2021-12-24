@@ -80,7 +80,7 @@ private:
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);
     void csvJsonHasData(bool hasData);
-    void generateReports();
+    void generateExtractReports();
     void errorSignal(QString errMsg);
     void clearTablePreview();
     void showSaveExtractWaitPopup();

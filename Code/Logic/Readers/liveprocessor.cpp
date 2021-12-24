@@ -50,7 +50,7 @@ void LiveProcessor::processLive()
 //    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
 //    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
-//    emit generateReports(&con);
+//    emit generateExtractReports(&con);
 //    if(this->moveToDashboardScreen)
 //        emit liveReaderProcessed();
 

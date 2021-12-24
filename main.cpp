@@ -375,11 +375,11 @@ int main(int argc, char *argv[])
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &forwardOnlyQueryModel, &ForwardOnlyQueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
-    QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForReader);
+    QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForReader);
 
     // Dashboards
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
@@ -389,17 +389,17 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &reportsDataModel, &ReportsDataModel::updateFilterData);
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &reportsDataModel, &ReportsDataModel::getReportId);
 
-    QObject::connect(&queryModel, &QueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
+    QObject::connect(&queryModel, &QueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
 
-    QObject::connect(&queryModel, &QueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
+    QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
     QObject::connect(&reportsDataModel, &ReportsDataModel::generateFiltersForAPI, &tableSchemaModel, &TableSchemaModel::generateSchemaForApi);
 
     // Charts
