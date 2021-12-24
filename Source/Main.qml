@@ -219,9 +219,14 @@ ApplicationWindow {
         onAccepted: {
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
             if(readerFile.includes(Constants.extractFileExt)){
+                console.log("Extract file")
                 ExtractProcessor.setArgumentsFromMenu(readerFile)
             } else if(readerFile.includes(Constants.workbookFileExt)){
+                console.log("Workbook file")
                 WorkbookProcessor.setArgumentsFromMenu(readerFile)
+            } else {
+                console.log("Live file")
+                LiveProcessor.setArgumentsFromMenu(readerFile)
             }
 
         }

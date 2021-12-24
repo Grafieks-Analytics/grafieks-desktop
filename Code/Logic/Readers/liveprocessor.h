@@ -18,12 +18,23 @@ class LiveProcessor : public QObject
     GeneralParamsModel *generalParamsModel;
     DSParamsModel *dsParamsModel;
 
+    bool receivedArgument;
+    bool moveToDashboardScreen;
+
+
 public:
     explicit LiveProcessor(GeneralParamsModel *gpm = nullptr, DSParamsModel *dsp = nullptr, QObject *parent = nullptr);
 
-    Q_INVOKABLE void setArguments(QString filePath);
+    Q_INVOKABLE void setArgumentsFromMenu(QString filePath);
+    Q_INVOKABLE void setArgumentsByFile(QString filePath);
+    Q_INVOKABLE bool receivedArgumentStatus();
 
 signals:
+    void generateReports(duckdb::Connection *con);
+    void liveReaderProcessed();
+
+private:
+    void processLive();
 
 };
 

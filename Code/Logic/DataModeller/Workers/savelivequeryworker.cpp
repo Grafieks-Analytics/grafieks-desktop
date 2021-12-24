@@ -145,7 +145,7 @@ void SaveLiveQueryWorker::run()
     QString uniqueHash = generalParamsModel.randomStringGenerator();
 
     QString tableCreateQuery = "CREATE TABLE " + Constants::masterLiveTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER, unique_hash VARCHAR,  last_update VARCHAR)";
-    QString tableInserQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
+    QString tableInsertQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
     QString password = this->ifSavePassword ? connection.password() : "";
     int portTmp = connection.port();
@@ -165,8 +165,8 @@ void SaveLiveQueryWorker::run()
 
     auto tableCreate = con.Query(tableCreateQuery.toStdString());
     if(!tableCreate->success) qDebug() << tableCreate->error.c_str() << tableCreateQuery;
-    auto tableInsert = con.Query(tableInserQuery.toStdString());
-    if(!tableInsert->success) qDebug() << tableInsert->error.c_str() << tableInserQuery;
+    auto tableInsert = con.Query(tableInsertQuery.toStdString());
+    if(!tableInsert->success) qDebug() << tableInsert->error.c_str() << tableInsertQuery;
 
     auto credentialsCreate = con.Query(credentialsCreateQuery.toStdString());
     if(!credentialsCreate->success) qDebug() << credentialsCreate->error.c_str() << credentialsCreateQuery;

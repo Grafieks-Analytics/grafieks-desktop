@@ -8,6 +8,7 @@ SaveExtractQueryWorker::SaveExtractQueryWorker(QString tmpSql, QVariantMap chang
 
 void SaveExtractQueryWorker::run()
 {
+    qDebug() << "EXTRACT SAVE CALLED";
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
 
