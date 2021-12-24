@@ -30,7 +30,7 @@ public:
     Q_INVOKABLE bool receivedArgumentStatus();
 
 signals:
-    void generateReports(duckdb::Connection *con);
+    void generateExtractReports(duckdb::Connection *con);
     void liveReaderProcessed();
 
 private:

@@ -35,6 +35,7 @@ void SaveLiveQueryWorker::run()
 
     QString errorMsg =  "";
     QSqlDatabase connection;
+    qDebug() << "CURRENT DB INT TYPE" << Statics::currentDbIntType << Statics::currentDbClassification;
 
     switch(Statics::currentDbIntType){
 
@@ -150,8 +151,8 @@ void SaveLiveQueryWorker::run()
     QString password = this->ifSavePassword ? connection.password() : "";
     int portTmp = connection.port();
     QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);
-    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "')";
+    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR)";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;

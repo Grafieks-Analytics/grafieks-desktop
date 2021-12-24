@@ -63,7 +63,8 @@ signals:
     void sqlHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports();
+    void generateExtractReports();
+    void generateLiveReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void liveFileSaved(bool ifPublish);

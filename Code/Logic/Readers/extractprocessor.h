@@ -38,7 +38,7 @@ public slots:
 signals:
 
     void extractReaderProcessed();
-    void generateReports(duckdb::Connection *con);
+    void generateExtractReports(duckdb::Connection *con);
 
 };
 

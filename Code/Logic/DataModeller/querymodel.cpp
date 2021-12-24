@@ -244,17 +244,17 @@ void QueryModel::extractSizeLimit()
     if(Statics::freeLimitExtractSizeExceeded == true){
         Statics::freeLimitExtractSizeExceeded = false;
     } else {
-        emit generateReports();
+        emit generateExtractReports();
     }
 }
 
 void QueryModel::liveSizeLimit()
 {
 
-    QString extractPath = Statics::extractPath;
+    QString livePath = Statics::livePath;
     int size = 0;
 
-    QFile fileInfo(extractPath);
+    QFile fileInfo(livePath);
     fileInfo.open(QFile::ReadWrite);
     fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
 
@@ -262,7 +262,7 @@ void QueryModel::liveSizeLimit()
     fileInfo.close();
 
     emit liveFileSaved(m_ifPublish);
-//    emit generateReports();
+    emit generateLiveReports();
 }
 
 

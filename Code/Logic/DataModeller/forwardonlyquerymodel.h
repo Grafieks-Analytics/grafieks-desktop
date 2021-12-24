@@ -85,7 +85,7 @@ signals:
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports();
+    void generateExtractReports();
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
