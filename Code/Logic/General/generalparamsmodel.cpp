@@ -92,6 +92,18 @@ void GeneralParamsModel::setExtractPath(QString extractsPath)
 
 }
 
+QString GeneralParamsModel::getLivePath()
+{
+    return Statics::livePath;
+}
+
+void GeneralParamsModel::setLivePath(QString livePath)
+{
+    Statics::livePath = livePath;
+    if(Statics::modeProcessReader == false)
+        emit showSaveExtractWaitPopup();
+}
+
 QString GeneralParamsModel::getExtractPath()
 {
     return Statics::extractPath;

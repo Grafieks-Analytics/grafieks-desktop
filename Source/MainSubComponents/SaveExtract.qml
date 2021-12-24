@@ -20,13 +20,13 @@ FileDialog{
     onAccepted: {
 
         let fileName = GeneralParamsModel.urlToFilePath(saveFilePromptDialog.currentFile)
-        GeneralParamsModel.setExtractPath(fileName)
+        DSParamsModel.dsType === Constants.extractDS ? GeneralParamsModel.setExtractPath(fileName) : GeneralParamsModel.setLivePath(fileName)
 
         switch(GeneralParamsModel.getDbClassification()){
         case Constants.sqlType:
         case Constants.accessType:
             console.log("SQL save extract")
-            QueryModel.saveExtractData()
+//            QueryModel.saveExtractData()
             DSParamsModel.dsType === Constants.extractDS ? QueryModel.saveExtractData() : QueryModel.saveLiveData()
             break;
 

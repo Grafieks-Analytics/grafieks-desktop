@@ -52,6 +52,12 @@ public:
     //! Set Static Extracts Path
     Q_INVOKABLE void setExtractPath(QString extractsPath);
 
+    //! Get Live Path
+    Q_INVOKABLE QString getLivePath();
+
+    //! Set Static Live Path
+    Q_INVOKABLE void setLivePath(QString livePath);
+
     //! Get Extract Path
     Q_INVOKABLE QString getExtractPath();
 

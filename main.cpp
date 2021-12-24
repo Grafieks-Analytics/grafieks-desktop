@@ -491,6 +491,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
     engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
     engine.rootContext()->setContextProperty("ExtractProcessor", &extractProcessor);
+    engine.rootContext()->setContextProperty("LiveProcessor", &liveProcessor);
     engine.rootContext()->setContextProperty("WorkbookProcessor", &workbookProcessor);
     engine.rootContext()->setContextProperty("PublishWorkbookModel", &publishWorkbookModel);
     engine.rootContext()->setContextProperty("ProjectsListModel", &projectsListModel);
@@ -511,7 +512,7 @@ int main(int argc, char *argv[])
         if(extension == Constants::extractExt){
             extractProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::liveExt){
-//            liveProcessor.setArgumentsByFile(fileToRead);
+            liveProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::workbookExt){
             workbookProcessor.setArgumentsByFile(fileToRead);
 
