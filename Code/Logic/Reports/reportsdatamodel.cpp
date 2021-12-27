@@ -402,6 +402,11 @@ void ReportsDataModel::generateColumnsForExtract()
 
 }
 
+void ReportsDataModel::generateColumnsForLive()
+{
+
+}
+
 void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
 {
     // GCS Bugfixes -- Fix Keyword

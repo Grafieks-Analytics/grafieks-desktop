@@ -64,7 +64,7 @@ signals:
     void clearTablePreview();
     void errorSignal(QString errMsg);
     void generateExtractReports();
-    void generateLiveReports();
+    void generateLiveReports(QString query);
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void liveFileSaved(bool ifPublish);
@@ -99,7 +99,9 @@ private:
     QThread extractThread;
     GeneralParamsModel *generalParamsModel;
 
+    QString liveQuery;
     bool m_ifPublish;
+    bool ifLive;
 };
 
 #endif // QUERYMODELLERMAIN_H

@@ -4,6 +4,7 @@
 QueryModel::QueryModel(GeneralParamsModel *gpm, QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
 {
     this->generalParamsModel = gpm;
+    this->ifLive = false;
 }
 
 QueryModel::~QueryModel()
@@ -71,6 +72,10 @@ void QueryModel::saveExtractData()
     } else {
         extractQuery = this->tmpSql;
     }
+
+    // For .gadse, we dont need to save headers
+    this->ifLive = false;
+
     SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
     connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
@@ -81,17 +86,23 @@ void QueryModel::saveExtractData()
 
 void QueryModel::saveLiveData()
 {
-    QString liveQuery;
+
     if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
-        liveQuery = this->tmpSql +  " WHERE " + this->newWhereConditions;
+        this->liveQuery = this->tmpSql +  " WHERE " + this->newWhereConditions;
     } else {
-        liveQuery = this->tmpSql;
+        this->liveQuery = this->tmpSql;
     }
-    SaveLiveQueryWorker *saveLiveQueryWorker = new SaveLiveQueryWorker(liveQuery, this->generalParamsModel->getChangedColumnTypes());
+
+    // For .gads, we need to save headers
+    this->ifLive = true;
+
+
+    SaveLiveQueryWorker *saveLiveQueryWorker = new SaveLiveQueryWorker(this->liveQuery, this->generalParamsModel->getChangedColumnTypes());
     connect(saveLiveQueryWorker, &SaveLiveQueryWorker::saveLiveComplete, this, &QueryModel::liveSaved, Qt::QueuedConnection);
     connect(saveLiveQueryWorker, &SaveExtractQueryWorker::finished, saveLiveQueryWorker, &SaveLiveQueryWorker::deleteLater, Qt::QueuedConnection);
 
     saveLiveQueryWorker->start();
+
 }
 
 bool QueryModel::ifPublish() const
@@ -176,8 +187,14 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
         emit sqlHasData(false);
     }
 
-    emit headerDataChanged(this->tableHeaders);
+    // For .gads file, we need to save headers and data types
+    if(this->ifLive){
+        qDebug() << this->sqlChartHeader << "X!";
+        SaveLiveQueryWorker *slqw = new SaveLiveQueryWorker();
+        slqw->saveDataTypes(this->sqlChartHeader);
+    }
 
+    emit headerDataChanged(this->tableHeaders);
 }
 
 
@@ -261,8 +278,12 @@ void QueryModel::liveSizeLimit()
     size = fileInfo.size();
     fileInfo.close();
 
+    // Generate headers to be saved for .gads file
+//    qDebug() << "LIVE SIZE LIMIT";
+//    this->setQuery(this->liveQuery);
+
     emit liveFileSaved(m_ifPublish);
-    emit generateLiveReports();
+    emit generateLiveReports(this->tmpSql);
 }
 
 

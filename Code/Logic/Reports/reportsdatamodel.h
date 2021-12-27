@@ -54,6 +54,7 @@ public slots:
     void currentScreenChanged(int currentScreen);
     void getReportId(int reportId);
     void generateColumnsForExtract();
+    void generateColumnsForLive();
     void generateColumnsForReader(duckdb::Connection *con);
 
     void dataReadyRead();

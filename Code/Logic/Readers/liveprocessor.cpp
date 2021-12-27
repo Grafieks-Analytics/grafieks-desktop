@@ -37,6 +37,10 @@ void LiveProcessor::processLive()
 
     QString partsQueryString = "SELECT * FROM " + Constants::masterQueryPartLiveTable;
     auto parts = con.Query(partsQueryString.toStdString());
+
+    QString headersQueryString = "SELECT * FROM " + Constants::masterHeadersTable;
+    auto headers = con.Query(headersQueryString.toStdString());
+
 //    QString tableName = masterDb->GetValue(0,0).ToString().c_str();
 
 //    Statics::currentDbName = tableName;
@@ -50,11 +54,12 @@ void LiveProcessor::processLive()
 //    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
 //    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
-//    emit generateExtractReports(&con);
+//    emit generateLiveReports(&con);
 //    if(this->moveToDashboardScreen)
 //        emit liveReaderProcessed();
 
     masterDb->Print();
     credentials->Print();
     parts->Print();
+    headers->Print();
 }

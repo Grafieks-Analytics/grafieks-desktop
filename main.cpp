@@ -381,6 +381,11 @@ int main(int argc, char *argv[])
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForReader);
 
+    // TODO
+    QObject::connect(&queryModel, &QueryModel::generateLiveReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+    //TODO
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateLiveReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+
     // Dashboards
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::filterValuesChanged, &tableColumnsModel, &TableColumnsModel::getFilterValues);
@@ -395,12 +400,22 @@ int main(int argc, char *argv[])
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
 
+    // TODO
+    QObject::connect(&queryModel, &QueryModel::generateLiveReports, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
+    //TODO
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateLiveReports, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
+
     QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
     QObject::connect(&reportsDataModel, &ReportsDataModel::generateFiltersForAPI, &tableSchemaModel, &TableSchemaModel::generateSchemaForApi);
+
+    // TODO X NEEDS TO CHECK
+    QObject::connect(&queryModel, &QueryModel::generateLiveReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForLive);
+    // TODO X NEEDS TO CHECK
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateLiveReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForLive);
 
     // Charts
     // Data for charts
