@@ -86,6 +86,7 @@ signals:
     void clearTablePreview();
     void errorSignal(QString errMsg);
     void generateExtractReports();
+    void generateLiveReports(QString query);
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);

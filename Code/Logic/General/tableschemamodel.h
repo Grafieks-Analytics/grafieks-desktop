@@ -65,6 +65,7 @@ signals:
 
 public slots:
     void generateSchemaForExtract();
+    void generateSchemaForLive(QString query);
     void generateSchemaForReader(duckdb::Connection *con);
     void generateSchemaForApi();
 

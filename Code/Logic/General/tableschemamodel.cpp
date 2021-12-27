@@ -494,6 +494,11 @@ void TableSchemaModel::generateSchemaForExtract()
     }
 }
 
+void TableSchemaModel::generateSchemaForLive(QString query)
+{
+    this->showSchema(query);
+}
+
 void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
 {
     if(Constants::apiSwitch == true){

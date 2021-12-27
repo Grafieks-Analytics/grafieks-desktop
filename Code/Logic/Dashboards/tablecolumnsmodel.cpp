@@ -321,6 +321,12 @@ void TableColumnsModel::generateColumnsForExtract()
     this->generateColumns(&con);
 }
 
+void TableColumnsModel::generateColumnsForLive(QString query)
+{
+
+}
+
+
 void TableColumnsModel::generateColumnsForReader(duckdb::Connection *con)
 {
     this->generateColumns(con);

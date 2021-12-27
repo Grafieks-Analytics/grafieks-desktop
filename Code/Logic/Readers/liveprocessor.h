@@ -30,7 +30,7 @@ public:
     Q_INVOKABLE bool receivedArgumentStatus();
 
 signals:
-    void generateExtractReports(duckdb::Connection *con);
+    void generateLiveReports(QString query);
     void liveReaderProcessed();
 
 private:

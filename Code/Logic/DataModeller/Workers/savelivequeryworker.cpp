@@ -7,6 +7,43 @@ SaveLiveQueryWorker::SaveLiveQueryWorker(QString tmpSql, QVariantMap changedColu
     this->ifSavePassword = ifSavePassword;
 
     querySplitter.setQuery(this->tmpSql);
+
+}
+
+SaveLiveQueryWorker::SaveLiveQueryWorker(QObject *parent)
+{
+    // DO NOT DELETE
+    // Default constructor for saving sql chart header
+    Q_UNUSED(parent);
+}
+
+void SaveLiveQueryWorker::saveDataTypes(QMap<int, QStringList> sqlChartHeader)
+{
+    QString livePath = Statics::livePath;
+    duckdb::DuckDB db(livePath.toStdString());
+    duckdb::Connection con(db);
+
+    QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
+    QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
+
+    foreach(QStringList values, sqlChartHeader){
+        headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
+    }
+    headersInsertQuery.chop(1);
+
+    qDebug() << headersCreateQuery << headersInsertQuery;
+
+    auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
+    if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
+//    auto queryHeaderInsert = con.Query(headersInsertQuery.toStdString());
+//    if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
+
+//    if(queryHeadersCreate->success && queryHeaderInsert->success){
+//        qDebug() << "SUCCESS WRITING HEADERS";
+//    } else {
+//        qDebug() << "HEADER WRITING FAILED";
+//    }
+
 }
 
 void SaveLiveQueryWorker::run()
@@ -35,7 +72,6 @@ void SaveLiveQueryWorker::run()
 
     QString errorMsg =  "";
     QSqlDatabase connection;
-    qDebug() << "CURRENT DB INT TYPE" << Statics::currentDbIntType << Statics::currentDbClassification;
 
     switch(Statics::currentDbIntType){
 
@@ -121,17 +157,6 @@ void SaveLiveQueryWorker::run()
         break;
     }
 
-    case Constants::accessIntType:{
-        connection = QSqlDatabase::addDatabase("QODBC", "accessQ");
-
-        connection.setDatabaseName(Statics::acDb);
-        connection.setUserName(Statics::acUsername);
-        connection.setPassword(Statics::acPassword);
-
-        connection.open();
-        break;
-    }
-
     }
 
     // Create a master table to refer the name of actual extract tableName
@@ -163,6 +188,7 @@ void SaveLiveQueryWorker::run()
 
     QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
     QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + this->querySplitter.getWhereCondition() + "', '" + this->querySplitter.getJoinConditions() + "', '" + this->querySplitter.getMainTable() + "')";
+
 
     auto tableCreate = con.Query(tableCreateQuery.toStdString());
     if(!tableCreate->success) qDebug() << tableCreate->error.c_str() << tableCreateQuery;
