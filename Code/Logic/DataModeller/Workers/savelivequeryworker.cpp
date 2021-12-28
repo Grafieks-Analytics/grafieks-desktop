@@ -10,42 +10,6 @@ SaveLiveQueryWorker::SaveLiveQueryWorker(QString tmpSql, QVariantMap changedColu
 
 }
 
-SaveLiveQueryWorker::SaveLiveQueryWorker(QObject *parent)
-{
-    // DO NOT DELETE
-    // Default constructor for saving sql chart header
-    Q_UNUSED(parent);
-}
-
-void SaveLiveQueryWorker::saveDataTypes(QMap<int, QStringList> sqlChartHeader)
-{
-    QString livePath = Statics::livePath;
-    duckdb::DuckDB db(livePath.toStdString());
-    duckdb::Connection con(db);
-
-    QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
-    QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
-
-    foreach(QStringList values, sqlChartHeader){
-        headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
-    }
-    headersInsertQuery.chop(1);
-
-    qDebug() << headersCreateQuery << headersInsertQuery;
-
-    auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
-    if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
-//    auto queryHeaderInsert = con.Query(headersInsertQuery.toStdString());
-//    if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
-
-//    if(queryHeadersCreate->success && queryHeaderInsert->success){
-//        qDebug() << "SUCCESS WRITING HEADERS";
-//    } else {
-//        qDebug() << "HEADER WRITING FAILED";
-//    }
-
-}
-
 void SaveLiveQueryWorker::run()
 {
 
