@@ -32,8 +32,6 @@ class SaveLiveQueryWorker : public QThread
 
 public:
     explicit SaveLiveQueryWorker(QString tmpSql = "", QVariantMap changedColumnTypes = QVariantMap(), bool ifSavePassword = false);
-    explicit SaveLiveQueryWorker(QObject *parent);
-    void saveDataTypes(QMap<int, QStringList> sqlChartHeader);
 
 protected:
     void run() override;

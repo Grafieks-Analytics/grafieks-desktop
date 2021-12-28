@@ -189,9 +189,35 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 
     // For .gads file, we need to save headers and data types
     if(this->ifLive){
-        qDebug() << this->sqlChartHeader << "X!";
-        SaveLiveQueryWorker *slqw = new SaveLiveQueryWorker();
-        slqw->saveDataTypes(this->sqlChartHeader);
+//        qDebug() << this->sqlChartHeader << "X!";
+//        SaveLiveQueryWorker *slqw = new SaveLiveQueryWorker();
+//        slqw->saveDataTypes(this->sqlChartHeader);
+
+        QString livePath = Statics::livePath;
+        duckdb::DuckDB db(livePath.toStdString());
+        duckdb::Connection con(db);
+
+        QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
+        QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
+
+        foreach(QStringList values, sqlChartHeader){
+            headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
+        }
+        headersInsertQuery.chop(1);
+
+        qDebug() << headersCreateQuery << headersInsertQuery;
+
+        auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
+        if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
+        auto queryHeaderInsert = con.Query(headersInsertQuery.toStdString());
+        if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
+
+        if(queryHeadersCreate->success && queryHeaderInsert->success){
+            qDebug() << "SUCCESS WRITING HEADERS";
+            emit showSaveExtractWaitPopup();
+        } else {
+            qDebug() << "HEADER WRITING FAILED";
+        }
     }
 
     emit headerDataChanged(this->tableHeaders);
@@ -280,7 +306,7 @@ void QueryModel::liveSizeLimit()
 
     // Generate headers to be saved for .gads file
 //    qDebug() << "LIVE SIZE LIMIT";
-//    this->setQuery(this->liveQuery);
+    this->setPreviewQuery(0);
 
     emit liveFileSaved(m_ifPublish);
     emit generateLiveReports(this->tmpSql);
