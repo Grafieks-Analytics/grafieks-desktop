@@ -189,9 +189,6 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 
     // For .gads file, we need to save headers and data types
     if(this->ifLive){
-//        qDebug() << this->sqlChartHeader << "X!";
-//        SaveLiveQueryWorker *slqw = new SaveLiveQueryWorker();
-//        slqw->saveDataTypes(this->sqlChartHeader);
 
         QString livePath = Statics::livePath;
         duckdb::DuckDB db(livePath.toStdString());
@@ -200,12 +197,10 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
         QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
         QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
 
-        foreach(QStringList values, sqlChartHeader){
+        foreach(QStringList values, this->sqlChartHeader){
             headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
         }
         headersInsertQuery.chop(1);
-
-        qDebug() << headersCreateQuery << headersInsertQuery;
 
         auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
         if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
@@ -213,10 +208,10 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
         if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
 
         if(queryHeadersCreate->success && queryHeaderInsert->success){
-            qDebug() << "SUCCESS WRITING HEADERS";
             emit showSaveExtractWaitPopup();
+            emit liveHeaderGenerated(this->sqlChartHeader);
         } else {
-            qDebug() << "HEADER WRITING FAILED";
+            qWarning() << Q_FUNC_INFO << "HEADER WRITING FAILED";
         }
     }
 

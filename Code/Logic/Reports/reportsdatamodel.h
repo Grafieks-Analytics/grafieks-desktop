@@ -54,7 +54,7 @@ public slots:
     void currentScreenChanged(int currentScreen);
     void getReportId(int reportId);
     void generateColumnsForExtract();
-    void generateColumnsForLive();
+    void generateColumnsForLive(QMap<int, QStringList> sqlHeaders);
     void generateColumnsForReader(duckdb::Connection *con);
 
     void dataReadyRead();

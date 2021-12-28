@@ -70,6 +70,7 @@ signals:
     void liveFileSaved(bool ifPublish);
     void extractCreationError(QString errorMessage);
     void liveCreationError(QString errorMessage);
+    void liveHeaderGenerated(QMap<int, QStringList> sqlHeaders);
 
     void ifPublishChanged(bool ifPublish);
 

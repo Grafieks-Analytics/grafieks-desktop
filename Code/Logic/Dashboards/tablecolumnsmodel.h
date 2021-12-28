@@ -59,7 +59,7 @@ public slots:
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
     void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
     void generateColumnsForExtract();
-    void generateColumnsForLive(QString query);
+    void generateColumnsForLive(QMap<int, QStringList> sqlHeaders);
     void generateColumnsForReader(duckdb::Connection *con);
 
     void getExtractTableColumns(QJsonObject tableColumnParams);
