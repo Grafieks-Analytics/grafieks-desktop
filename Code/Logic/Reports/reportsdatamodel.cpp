@@ -402,9 +402,42 @@ void ReportsDataModel::generateColumnsForExtract()
 
 }
 
-void ReportsDataModel::generateColumnsForLive()
+void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
 
+    // Clear existing chart headers data
+    this->numericalList.clear();
+    this->categoryList.clear();
+    this->dateList.clear();
+    this->newChartHeader.clear();
+
+    int i = 0;
+    foreach(QStringList headers, sqlHeaders){
+
+        if(headers.at(1).contains(Constants::categoricalType)){
+            this->categoryList.append(headers.at(0));
+        } else if(headers.at(1).contains(Constants::numericalType)){
+            this->numericalList.append(headers.at(0));
+        } else if(headers.at(1).contains(Constants::dateType)){
+            this->dateList.append(headers.at(0));
+        } else{
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" << headers.at(0);
+        }
+
+        this->newChartHeader.insert(i, headers.at(0));
+        i++;
+    }
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+
+    // Update new data
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
 void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
