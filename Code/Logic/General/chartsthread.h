@@ -16,6 +16,8 @@
 #include <QRegularExpression>
 #include <QElapsedTimer>
 #include <QFileInfo>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "jsoncons/json.hpp"
 #include "../../constants.h"
@@ -36,7 +38,11 @@ class ChartsThread : public QObject
     int currentChartSource;
     QTime myTimer;
     QElapsedTimer myTimer2;
+    QString masterTable;
+    QString masterJoinParams;
+    QString masterWhereParams;
 
+    QString datasourceType;
     QString xAxisColumn;
     QString yAxisColumn;
     QString xSplitKey;
@@ -52,7 +58,8 @@ public:
     explicit ChartsThread(QObject *parent = nullptr);
     ~ChartsThread();
 
-    void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0);
+    void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0, QString datasourceType = Constants::sqlType);
+    void queryParams(QString masterTable = "", QString masterWhereParams = "", QString masterJoinParams = "");
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
@@ -96,7 +103,8 @@ public slots:
     void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
 
 private:
-    duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryFunction(QString mainQuery);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryExtractFunction(QString mainQuery);
+    QSqlQuery queryLiveFunction(QString mainQuery);
     QString getTableName();
 
 signals:

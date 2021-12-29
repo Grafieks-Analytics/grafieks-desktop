@@ -428,6 +428,7 @@ int main(int argc, char *argv[])
     // Live Datasource headers
     QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
     QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+    QObject::connect(&queryModel, &QueryModel::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/

@@ -232,13 +232,13 @@ void QueryModel::extractSaved(QString errorMessage)
     }
 }
 
-void QueryModel::liveSaved(QString errorMessage)
+void QueryModel::liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
 {
     // Delete if the extract size is larger than the permissible limit
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     if(errorMessage.length() == 0){
-        liveSizeLimit();
+        liveSizeLimit(selectParams, whereConditions, joinConditions, masterTable);
     } else {
         emit liveCreationError(errorMessage);
     }
@@ -286,7 +286,7 @@ void QueryModel::extractSizeLimit()
     }
 }
 
-void QueryModel::liveSizeLimit()
+void QueryModel::liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
 {
 
     QString livePath = Statics::livePath;
@@ -300,11 +300,11 @@ void QueryModel::liveSizeLimit()
     fileInfo.close();
 
     // Generate headers to be saved for .gads file
-//    qDebug() << "LIVE SIZE LIMIT";
     this->setPreviewQuery(0);
 
     emit liveFileSaved(m_ifPublish);
     emit generateLiveReports(this->tmpSql);
+    emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
 }
 
 
