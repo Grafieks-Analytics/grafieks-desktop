@@ -18,13 +18,14 @@ ChartsThread::~ChartsThread()
 {
 }
 
-void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId)
+void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId, QString datasourceType)
 {
     this->reportWhereConditions = reportWhereConditions;
     this->dashboardWhereConditions = dashboardWhereConditions;
     this->currentChartSource = chartSource;
     this->currentDashboardId = dashboardId;
     this->currentReportId = reportId;
+    this->datasourceType = datasourceType;
 
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
@@ -75,6 +76,14 @@ void ChartsThread::methodSelector(QString functionName, QString reportWhereCondi
     } else if(functionName == "getMultiLineChartValues"){
         this->getMultiLineChartValues();
     } else {}
+}
+
+void ChartsThread::queryParams(QString masterTable, QString masterWhereParams, QString masterJoinParams)
+{
+    qDebug() << "ALL MASTERS" << masterTable << masterWhereParams << masterJoinParams;
+    this->masterTable = masterTable;
+    this->masterWhereParams = masterWhereParams;
+    this->masterJoinParams = masterJoinParams;
 }
 
 
@@ -133,20 +142,45 @@ void ChartsThread::getBarChartValues()
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
 
     int index;
-    int totalRows = dataList->collection.Count();
+    int totalRows = 0;
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+
+    if(this->datasourceType == Constants::duckType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
+    } else {
+        // For forward
     }
 
     try{
@@ -203,6 +237,9 @@ void ChartsThread::getGroupedBarChartValues()
     QVariantList tmpData;
     QVariantList tmpStringList;
 
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
     // Order of QMap - xAxisCol, SplitKey, Value
     QStringList masterKeywordXList;
     QStringList masterKeywordSplitList;
@@ -216,28 +253,55 @@ void ChartsThread::getGroupedBarChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
-
-
     QStringList xAxisData;
     QVariantList yAxisData;
     int splitIndex;
     QJsonArray colData;
     int xIndex;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    qDebug() << "DS TUPE";
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+    if(this->datasourceType == Constants::duckType){
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(1).toString());
+        }
+    } else {
+        // For forward
     }
 
 
@@ -310,7 +374,7 @@ void ChartsThread::getNewGroupedBarChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -414,7 +478,7 @@ void ChartsThread::getLineBarChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -491,7 +555,7 @@ void ChartsThread::getPieChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -551,7 +615,7 @@ void ChartsThread::getFunnelChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -625,7 +689,7 @@ void ChartsThread::getRadarChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -705,7 +769,7 @@ void ChartsThread::getScatterChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -796,7 +860,7 @@ void ChartsThread::getScatterChartNumericalValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT SUM(\"" + xAxisColumn + "\"), SUM(\"" + yAxisColumn + "\") FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QString xAxisValue = dataList->GetValue(0, 0).ToString().c_str();
     QString yAxisValue = dataList->GetValue(1, 0).ToString().c_str();
@@ -846,7 +910,7 @@ void ChartsThread::getHeatMapChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -953,7 +1017,7 @@ void ChartsThread::getGaugeChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString =  "SELECT \"" + calculateColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
 
     QStringList xAxisData;
@@ -1008,7 +1072,7 @@ void ChartsThread::getSankeyChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -1105,7 +1169,7 @@ void ChartsThread::getKPIChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
 
     QStringList xAxisData;
@@ -1187,8 +1251,8 @@ void ChartsThread::getTableChartValues()
     yQueryString.chop(2);
     yQueryString += " FROM " + tableName;
 
-    auto xDataList = this->queryFunction(xQueryString);
-    auto yDataList = this->queryFunction(yQueryString);
+    auto xDataList = this->queryExtractFunction(xQueryString);
+    auto yDataList = this->queryExtractFunction(yQueryString);
 
 
     QStringList xAxisData;
@@ -1387,8 +1451,8 @@ void ChartsThread::getPivotChartValues()
     yQueryString.chop(2);
     yQueryString += " FROM " + tableName;
 
-    auto xDataList = this->queryFunction(xQueryString);
-    auto yDataList = this->queryFunction(yQueryString);
+    auto xDataList = this->queryExtractFunction(xQueryString);
+    auto yDataList = this->queryExtractFunction(yQueryString);
 
 
     QStringList xAxisData;
@@ -1566,7 +1630,7 @@ void ChartsThread::getMultiLineChartValues()
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
 
     QStringList xAxisData;
@@ -1667,7 +1731,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -1775,8 +1839,8 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
     QString yQueryString =  "SELECT \"" + yAxisColumn + "\" FROM " + tableName;;
 
-    auto xDataList = this->queryFunction(xQueryString);
-    auto yDataList = this->queryFunction(yQueryString);
+    auto xDataList = this->queryExtractFunction(xQueryString);
+    auto yDataList = this->queryExtractFunction(yQueryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -1939,7 +2003,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     // Fetch data from extract
     QString tableName = this->getTableName();
     QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryFunction(queryString);
+    auto dataList = this->queryExtractFunction(queryString);
 
     // Order of QMap - xAxisCol, SplitKey, Value
     QHash<QString, int> masterKeywordList;
@@ -2041,7 +2105,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
 }
 
-duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(QString mainQuery)
+duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryExtractFunction(QString mainQuery)
 {
     // Fetch data here
     QString queryString;
@@ -2075,6 +2139,120 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryFunction(
         qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
 
     return dataList;
+
+}
+
+QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
+{
+
+    QString queryString;
+    QSqlDatabase connection;
+
+    // IF Reports
+    // Else Dashboards
+    if(this->currentChartSource == Constants::reportScreen){
+        if(this->reportWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
+    } else {
+        if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString =mainQuery + " WHERE " + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
+            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + " WHERE " + this->dashboardWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
+    }
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        connection = QSqlDatabase::addDatabase("QMYSQL", "mysqlQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::postgresIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "postgresQ");
+
+        connection.setDatabaseName(Statics::postgresDb);
+        connection.setHostName(Statics::postgresHost);
+        connection.setPort(Statics::postgresPort);
+        connection.setUserName(Statics::postgresUsername);
+        connection.setPassword(Statics::postgresPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mssqlQ");
+
+        connection.setDatabaseName(Statics::msDb);
+        connection.setHostName(Statics::msHost);
+        connection.setPort(Statics::msPort);
+        connection.setUserName(Statics::msUsername);
+        connection.setPassword(Statics::msPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "oracleQ");
+
+        connection.setDatabaseName(Statics::oracleDb);
+        connection.setHostName(Statics::oracleHost);
+        connection.setPort(Statics::oraclePort);
+        connection.setUserName(Statics::oracleUsername);
+        connection.setPassword(Statics::oraclePassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mongoIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mongoQ");
+
+        connection.setDatabaseName(Statics::mongoDb);
+        connection.setHostName(Statics::mongoHost);
+        connection.setPort(Statics::mongoPort);
+        connection.setUserName(Statics::mongoUsername);
+        connection.setPassword(Statics::mongoPassword);
+
+        connection.open();
+        break;
+    }
+    }
+
+    QSqlQuery query(queryString, connection);
+    if(!query.lastError().NoError){
+        qDebug() << Q_FUNC_INFO << query.lastQuery() << query.lastError();
+    }
+
+    return query;
 
 }
 

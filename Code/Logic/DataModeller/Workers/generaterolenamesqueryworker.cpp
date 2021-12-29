@@ -34,7 +34,5 @@ void GenerateRoleNamesQueryWorker::run()
         colInfo.clear();
     }
 
-    qDebug() << tableHeaders << sqlChartHeader << "CONTRA";
-
     emit signalGenerateRoleNames(tableHeaders, sqlChartHeader);
 }

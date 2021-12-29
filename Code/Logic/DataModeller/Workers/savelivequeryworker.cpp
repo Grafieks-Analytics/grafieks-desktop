@@ -150,8 +150,12 @@ void SaveLiveQueryWorker::run()
     }
     selectParamsString.chop(2);
 
+    QString whereConditions = this->querySplitter.getWhereCondition();
+    QString joinConditions = this->querySplitter.getJoinConditions();
+    QString masterTable = this->querySplitter.getMainTable();
+
     QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
-    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + this->querySplitter.getWhereCondition() + "', '" + this->querySplitter.getJoinConditions() + "', '" + this->querySplitter.getMainTable() + "')";
+    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + whereConditions + "', '" + joinConditions + "', '" + masterTable + "')";
 
 
     auto tableCreate = con.Query(tableCreateQuery.toStdString());
@@ -170,9 +174,9 @@ void SaveLiveQueryWorker::run()
     if(!queryPartInsert->success) qDebug() << queryPartInsert->error.c_str() << queryPartInsertQuery;
 
     if(tableCreate->success && tableInsert->success && credentialsCreate->success && credentialsInsert->success && queryPartCreate->success && queryPartInsert->success){
-        emit saveLiveComplete("");
+        emit saveLiveComplete("", selectParamsString, whereConditions, joinConditions, masterTable);
     } else {
-        emit saveLiveComplete("Some error occured while saving live file");
+        emit saveLiveComplete("Some error occured while saving live file", "", "", "", "");
     }
 
 }

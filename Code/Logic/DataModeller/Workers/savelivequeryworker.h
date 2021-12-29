@@ -37,7 +37,7 @@ protected:
     void run() override;
 
 signals:
-    void saveLiveComplete(QString errorMsg);
+    void saveLiveComplete(QString errorMsg, QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 };
 
