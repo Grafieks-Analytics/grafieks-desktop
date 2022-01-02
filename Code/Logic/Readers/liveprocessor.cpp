@@ -26,6 +26,23 @@ bool LiveProcessor::receivedArgumentStatus()
 void LiveProcessor::processLive()
 {
     qDebug() << "LIVE FILE READING";
+
+    QString selectParams;
+    QString whereParams;
+    QString joinParams;
+    QString masterTable;
+
+    QString username;
+    QString password;
+    QString host;
+    QString database;
+    QString port;
+    QString dbType;
+
+    QString colName;
+    QString tableName;
+    QString colType;
+
     duckdb::DuckDB db(this->filePath.toStdString());
     duckdb::Connection con(db);
 
@@ -43,16 +60,30 @@ void LiveProcessor::processLive()
     int headersColCount = headers->ColumnCount();
     int headersRowCount = headers->collection.Count();
 
-//    QString tableName = masterDb->GetValue(0,0).ToString().c_str();
-
     for(int i = 0; i < headersRowCount; i++){
         QStringList colInfo;
-        colInfo << headers->GetValue(0, i).ToString().c_str() << headers->GetValue(1, i).ToString().c_str() << headers->GetValue(2, i).ToString().c_str();
+        colName = headers->GetValue(0, i).ToString().c_str();
+        colType = headers->GetValue(1, i).ToString().c_str();
+        tableName = headers->GetValue(2, i).ToString().c_str();
+
+        colInfo << colName << colType << tableName;
         this->sqlChartHeader.insert(i, colInfo);
     }
 
 //    Statics::currentDbName = tableName;
     Statics::modeProcessReader = true;
+
+    selectParams = parts->GetValue(0,0).ToString().c_str();
+    whereParams = parts->GetValue(1,0).ToString().c_str();
+    joinParams = parts->GetValue(2,0).ToString().c_str();
+    masterTable = parts->GetValue(3,0).ToString().c_str();
+
+    username = credentials->GetValue(0,0).ToString().c_str();
+    password = credentials->GetValue(1,0).ToString().c_str();
+    host = credentials->GetValue(2,0).ToString().c_str();
+    port = credentials->GetValue(3,0).ToString().c_str();
+    database = credentials->GetValue(4,0).ToString().c_str();
+    dbType = credentials->GetValue(5,0).ToString().c_str();
 
     // Set datasource name
     this->dsParamsModel->setDsName(Statics::currentDbName);
@@ -63,11 +94,67 @@ void LiveProcessor::processLive()
     this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
     emit generateLiveReports(this->sqlChartHeader);
+    emit liveQueryParams(selectParams, whereParams, joinParams, masterTable);
+
+    Statics::currentDbIntType = dbType.toInt();
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
+        Statics::myHost = host;
+        Statics::myPort = port.toInt();
+        Statics::myDb = database;
+        Statics::myUsername = username;
+        Statics::myPassword = password;
+
+        break;
+    }
+
+    case Constants::postgresIntType:{
+        Statics::postgresHost = host;
+        Statics::postgresPort = port.toInt();
+        Statics::postgresDb = database;
+        Statics::postgresUsername = username;
+        Statics::postgresPassword = password;
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        Statics::msHost = host;
+        Statics::msPort = port.toInt();
+        Statics::msDb = database;
+        Statics::msUsername = username;
+        Statics::msPassword = password;
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        Statics::oracleHost = host;
+        Statics::oraclePort = port.toInt();
+        Statics::oracleDb = database;
+        Statics::oracleUsername = username;
+        Statics::oraclePassword = password;
+        break;
+    }
+
+    case Constants::mongoIntType:{
+
+        Statics::mongoHost = host;
+        Statics::mongoPort = port.toInt();
+        Statics::mongoDb = database;
+        Statics::mongoUsername = username;
+        Statics::mongoPassword = password;
+        break;
+    }
+    }
+
     if(this->moveToDashboardScreen)
         emit liveReaderProcessed();
 
-//    masterDb->Print();
-//    credentials->Print();
-//    parts->Print();
+    masterDb->Print();
+    credentials->Print();
+    parts->Print();
     headers->Print();
 }

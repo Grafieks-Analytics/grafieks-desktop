@@ -33,6 +33,7 @@ public:
 signals:
     void generateLiveReports(QMap<int, QStringList> sqlHeaders);
     void liveReaderProcessed();
+    void liveQueryParams(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 private:
     void processLive();
