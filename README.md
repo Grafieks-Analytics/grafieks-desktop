@@ -40,12 +40,11 @@ Download the binary from [https://github.com/JKSH/QtSdkRepoChooser/releases](htt
 ## How to get Charts: 
 ### When you clone for first time
 ``` 
-git clone --recurse-submodules https://github.com/Grafieks-Analytics/grs
+git clone --recurse-submodules https://github.com/Grafieks-Analytics/grafieks-desktop/
 ```
 
 ### Already cloned or missed cloning with -recurse-submodule flag
 ```
-git submodule init
-git submodule update
+git submodule update --init
 ```
 These commands will add a folder "Charts" at `Sources/` folder
