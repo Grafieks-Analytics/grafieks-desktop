@@ -471,6 +471,7 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
         chartsAPIThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsAPIThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
+        qDebug() << "XLISTS" << xAxisColumn << yAxisColumn;
         chartsThread->setLists(xAxisColumn, yAxisColumn);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);

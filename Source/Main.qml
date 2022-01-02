@@ -78,6 +78,14 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: LiveProcessor
+
+        function onLiveReaderProcessed(){
+            stacklayout_home.currentIndex = 6
+        }
+    }
+
     Connections{
         target: DashboardParamsModel
 
