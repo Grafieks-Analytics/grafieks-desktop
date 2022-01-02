@@ -20,6 +20,7 @@ class LiveProcessor : public QObject
 
     bool receivedArgument;
     bool moveToDashboardScreen;
+    QMap<int, QStringList> sqlChartHeader;
 
 
 public:
@@ -30,7 +31,7 @@ public:
     Q_INVOKABLE bool receivedArgumentStatus();
 
 signals:
-    void generateLiveReports(QString query);
+    void generateLiveReports(QMap<int, QStringList> sqlHeaders);
     void liveReaderProcessed();
 
 private:

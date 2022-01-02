@@ -168,8 +168,7 @@ void ChartsThread::getBarChartValues()
 
     } else if(this->datasourceType == Constants::sqlType){
 
-        // Fetch data from extract
-        QString tableName = this->getTableName();
+        // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
@@ -260,8 +259,6 @@ void ChartsThread::getGroupedBarChartValues()
     int xIndex;
     int totalRows;
 
-    qDebug() << "DS TUPE";
-
     if(this->datasourceType == Constants::duckType){
 
         // Fetch data from extract
@@ -283,8 +280,7 @@ void ChartsThread::getGroupedBarChartValues()
 
     } else if(this->datasourceType == Constants::sqlType){
 
-        // Fetch data from extract
-        QString tableName = this->getTableName();
+        // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
@@ -298,7 +294,7 @@ void ChartsThread::getGroupedBarChartValues()
 
             // To pre-populate json array
             xAxisDataPointerPre.append(dataListLive.value(0).toString());
-            splitDataPointerPre.append(dataListLive.value(1).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
         }
     } else {
         // For forward
@@ -366,34 +362,62 @@ void ChartsThread::getNewGroupedBarChartValues()
     QList<QString> uniqueSplitKeyData;
     QStringList reportChartDataVar;
 
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitKeyDataPointer(new QStringList);
-
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     QJsonObject obj;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitKeyDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
 
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
 
-        reportChartDataVar.append(dataList->GetValue(2, i).ToString().c_str());
-        reportChartDataVar.removeDuplicates();
-        uniqueSplitKeyData = reportChartDataVar;
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitKeyDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            reportChartDataVar.append(dataListExtract->GetValue(2, i).ToString().c_str());
+            reportChartDataVar.removeDuplicates();
+            uniqueSplitKeyData = reportChartDataVar;
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitKeyDataPointer->append(dataListLive.value(2).toString());
+
+            reportChartDataVar.append(dataListLive.value(2).toString());
+            reportChartDataVar.removeDuplicates();
+            uniqueSplitKeyData = reportChartDataVar;
+        }
+    } else {
+        // For forward
     }
+
 
     try{
         qint64 nanoSec;
@@ -475,24 +499,48 @@ void ChartsThread::getLineBarChartValues()
     QScopedPointer<QStringList> yBarAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yLineAxisDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QVariantList tmpData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yBarAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        yLineAxisDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+    if(this->datasourceType == Constants::duckType){
 
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yBarAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            yLineAxisDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yBarAxisDataPointer->append(dataListLive.value(1).toString());
+            yLineAxisDataPointer->append(dataListLive.value(2).toString());
+        }
+    } else {
+        // For forward
     }
 
     // Add data
@@ -552,23 +600,48 @@ void ChartsThread::getPieChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QVariantList tmpData;
     QJsonArray colData;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+    if(this->datasourceType == Constants::duckType){
 
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
+    } else {
+        // For forward
     }
+
 
     try{
         int counter = 0;
@@ -612,10 +685,8 @@ void ChartsThread::getFunnelChartValues()
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -623,13 +694,39 @@ void ChartsThread::getFunnelChartValues()
     QJsonArray colData;
     QJsonObject obj;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+    if(this->datasourceType == Constants::duckType){
 
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
+    } else {
+        // For forward
     }
 
     try{
@@ -677,19 +774,14 @@ void ChartsThread::getFunnelChartValues()
 
 void ChartsThread::getRadarChartValues()
 {
-
-
     QJsonArray data;
     QJsonArray axisDataArray;
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -697,13 +789,38 @@ void ChartsThread::getRadarChartValues()
     QJsonArray colData;
     QJsonObject obj;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
 
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
+    } else {
+        // For forward
     }
 
     try{
@@ -766,29 +883,56 @@ void ChartsThread::getScatterChartValues()
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + " FROM "+tableName;
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
+    } else {
+        // For forward
     }
-
-
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -857,13 +1001,34 @@ void ChartsThread::getScatterChartNumericalValues()
     QJsonArray colData;
     QVariantList tmpData;
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT SUM(\"" + xAxisColumn + "\"), SUM(\"" + yAxisColumn + "\") FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
-    QString xAxisValue = dataList->GetValue(0, 0).ToString().c_str();
-    QString yAxisValue = dataList->GetValue(1, 0).ToString().c_str();
+    QString xAxisValue;
+    QString yAxisValue;
+
+    if(this->datasourceType == Constants::duckType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT SUM(\"" + xAxisColumn + "\"), SUM(\"" + yAxisColumn + "\") FROM "+tableName;
+        dataListExtract = this->queryExtractFunction(queryString);
+
+        xAxisValue = dataListExtract->GetValue(0, 0).ToString().c_str();
+        yAxisValue = dataListExtract->GetValue(1, 0).ToString().c_str();
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT SUM(" + xAxisColumn + "), SUM(" + yAxisColumn + ") FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        dataListLive = this->queryLiveFunction(queryString);
+
+        xAxisValue = dataListLive.value(0).toString();
+        yAxisValue = dataListLive.value(1).toString();
+
+    } else {
+        // For forward
+    }
 
     tmpData.append(0);
     tmpData.append(0);
@@ -907,26 +1072,55 @@ void ChartsThread::getHeatMapChartValues()
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + " FROM "+tableName;
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
+    } else {
+        // For forward
     }
 
     // Fetch unique xAxisData & splitter
@@ -1014,20 +1208,41 @@ void ChartsThread::getGaugeChartValues()
 
     QStringList calculateColumnPointer;
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString =  "SELECT \"" + calculateColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
-
-
     QStringList xAxisData;
     QVariantList yAxisData;
 
-    float output = 0.0;
-    int totalRows = dataList->collection.Count();
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
-    for(int i = 0; i < totalRows; i++){
-        calculateColumnPointer.append(dataList->GetValue(0, i).ToString().c_str());
+    float output = 0.0;
+    int totalRows;
+
+    if(this->datasourceType == Constants::duckType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            calculateColumnPointer.append(dataListExtract->GetValue(0, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            calculateColumnPointer.append(dataListLive.value(0).toString());
+        }
+    } else {
+        // For forward
     }
 
     try{
@@ -1069,23 +1284,45 @@ void ChartsThread::getSankeyChartValues()
     QScopedPointer<QStringList> measureDataPointer(new QStringList);
     QString keyword;
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        sourceDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        destinationDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        measureDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
 
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            sourceDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            destinationDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            measureDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            sourceDataPointer->append(dataListLive.value(0).toString());
+            destinationDataPointer->append(dataListLive.value(1).toString());
+            measureDataPointer->append(dataListLive.value(2).toString());
+        }
+    } else {
+        // For forward
     }
 
     QStringList combinedList;
@@ -1166,21 +1403,43 @@ void ChartsThread::getKPIChartValues()
 
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
-
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
 
     float output = 0.0;
-    int totalRows = dataList->collection.Count();
+    int totalRows;
 
-    for(int i = 0; i < totalRows; i++){
-        calculateColumnPointer->append(dataList->GetValue(0, i).ToString().c_str());
+    if(this->datasourceType == Constants::duckType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            calculateColumnPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            calculateColumnPointer->append(dataListLive.value(0).toString());
+        }
+    } else {
+        // For forward
     }
+
 
     try{
         for(int i = 0; i < calculateColumnPointer->length(); i++){
@@ -1214,9 +1473,28 @@ void ChartsThread::getTableChartValues()
     QVariantList masterOutput;
     QMap<QString, QMap<QString, QString>> dateConversionParams;
 
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
+    QSqlQuery xDataListLive;
+    QSqlQuery yDataListLive;
+
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+
+    QStringList xAxisData;
+    QStringList yAxisData;
+
+    QVariantMap tmpData;
+    QJsonArray colData;
+    int index;
+
+    QJsonArray columns;
+    QVector<int> xKey;
+    QVector<int> yKey;
+    int xAxisLength;
+    int yAxisLength;
+    int totalRows;
 
     // Process date conversions, if any
     foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
@@ -1231,106 +1509,185 @@ void ChartsThread::getTableChartValues()
         dateConversionParams.insert(columnName, itemDetails);
     }
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
+
+    if(this->datasourceType == Constants::duckType){
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumnList){
+            xQueryString += "\"" + xCols.toString() + "\", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + tableName;
+
+        QString yQueryString =  "SELECT ";
+        foreach(QVariant yCols, yAxisColumnList){
+            yQueryString += "\"" + yCols.toString() + "\", ";
+        }
+
+        yQueryString.chop(2);
+        yQueryString += " FROM " + tableName;
+
+        xDataListExtract = this->queryExtractFunction(xQueryString);
+        yDataListExtract = this->queryExtractFunction(yQueryString);
+
+        totalRows = xDataListExtract->collection.Count();
+
+        xAxisLength = xAxisColumnList.length();
+        yAxisLength = yAxisColumnList.length();
+
+        // Fetch data from db
+        try{
+            for(int i = 0; i < xAxisLength; i++){
+                QStringList data;
+                for(int j = 0; j < totalRows; j++){
+
+                    QString columnName = xAxisColumnList.at(i).toString();
+                    QString separator = dateConversionParams.value(columnName).value("separator");
 
 
-    QString xQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumnList){
-        xQueryString += "\"" + xCols.toString() + "\", ";
-    }
+                    if(dateConversionParams.contains(columnName)){
 
-    xQueryString.chop(2);
-    xQueryString += " FROM " + tableName;
+                        QString convertedDate;
+                        QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
 
-    QString yQueryString =  "SELECT ";
-    foreach(QVariant yCols, yAxisColumnList){
-        yQueryString += "\"" + yCols.toString() + "\", ";
-    }
+                        foreach(QString format, list){
+                            QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
 
-    yQueryString.chop(2);
-    yQueryString += " FROM " + tableName;
-
-    auto xDataList = this->queryExtractFunction(xQueryString);
-    auto yDataList = this->queryExtractFunction(yQueryString);
-
-
-    QStringList xAxisData;
-    QStringList yAxisData;
-
-    QVariantMap tmpData;
-    QJsonArray colData;
-    int index;
-
-    QJsonArray columns;
-    QVector<int> xKey;
-    QVector<int> yKey;
-    int xAxisLength;
-    int yAxisLength;
-
-    int totalRows = xDataList->collection.Count();
-
-    xAxisLength = xAxisColumnList.length();
-    yAxisLength = yAxisColumnList.length();
-
-    // Fetch data from db
-    try{
-        for(int i = 0; i < xAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++){
-
-                QString columnName = xAxisColumnList.at(i).toString();
-                QString separator = dateConversionParams.value(columnName).value("separator");
-
-
-                if(dateConversionParams.contains(columnName)){
-
-                    QString convertedDate;
-                    QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
-
-                    foreach(QString format, list){
-                        QDateTime dateTime = QDateTime::fromString(xDataList->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
-
-                        if(format.toLower() == "day"){
-                            convertedDate += QString::number(dateTime.date().day()) + separator;
-                        } else if(format.toLower() == "month"){
-                            convertedDate += dateTime.date().toString("MMM")  + separator;
-                        } else {
-                            convertedDate += QString::number(dateTime.date().year())  + separator;
+                            if(format.toLower() == "day"){
+                                convertedDate += QString::number(dateTime.date().day()) + separator;
+                            } else if(format.toLower() == "month"){
+                                convertedDate += dateTime.date().toString("MMM")  + separator;
+                            } else {
+                                convertedDate += QString::number(dateTime.date().year())  + separator;
+                            }
                         }
+
+                        convertedDate.chop(separator.length());
+                        data.append(convertedDate);
+
+                    } else {
+                        data.append(xDataListExtract->GetValue(i, j).ToString().c_str());
                     }
-
-                    convertedDate.chop(separator.length());
-                    data.append(convertedDate);
-
-                } else {
-                    data.append(xDataList->GetValue(i, j).ToString().c_str());
                 }
+
+                xAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all x axis names
+                columns.append(xAxisColumnList.at(i).toString());
             }
-
-            xAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all x axis names
-            columns.append(xAxisColumnList.at(i).toString());
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
+
+        try{
+            for(int i = 0; i < yAxisLength; i++){
+                QStringList data;
+                for(int j = 0; j < totalRows; j++)
+                    data.append(yDataListExtract->GetValue(i, j).ToString().c_str());
+
+                yAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all y axis names
+                columns.append(yAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        qDebug() << xAxisColumnList << "LENKA2";
+
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumnList){
+            xQueryString += xCols.toString() + ", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        QString yQueryString =  "SELECT ";
+        foreach(QVariant yCols, yAxisColumnList){
+            yQueryString += yCols.toString() + ", ";
+        }
+
+        yQueryString.chop(2);
+        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        xDataListLive = this->queryLiveFunction(xQueryString);
+        xAxisLength = xAxisColumnList.length();
+
+        // Fetch data from db
+        try{
+            for(int i = 0; i < xAxisLength; i++){
+                QStringList data;
+                while(xDataListLive.next()){
+
+                    QString columnName = xAxisColumnList.at(i).toString();
+                    QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                    if(dateConversionParams.contains(columnName)){
+
+                        QString convertedDate;
+                        QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                        foreach(QString format, list){
+                            QDateTime dateTime = QDateTime::fromString(xDataListLive.value(i).toString(), "yyyy-MM-dd hh:mm:ss");
+
+                            if(format.toLower() == "day"){
+                                convertedDate += QString::number(dateTime.date().day()) + separator;
+                            } else if(format.toLower() == "month"){
+                                convertedDate += dateTime.date().toString("MMM")  + separator;
+                            } else {
+                                convertedDate += QString::number(dateTime.date().year())  + separator;
+                            }
+                        }
+
+                        convertedDate.chop(separator.length());
+                        data.append(convertedDate);
+
+                    } else {
+                        data.append(xDataListLive.value(i).toString());
+                    }
+                }
+
+                xAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all x axis names
+                columns.append(xAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+        yDataListLive = this->queryLiveFunction(yQueryString);
+        yAxisLength = yAxisColumnList.length();
+
+        try{
+            for(int i = 0; i < yAxisLength; i++){
+                QStringList data;
+                while(yDataListLive.next())
+                    data.append(yDataListLive.value(i).toString());
+
+                yAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all y axis names
+                columns.append(yAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+    } else {
+        // For forward
     }
 
-    try{
-        for(int i = 0; i < yAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++)
-                data.append(yDataList->GetValue(i, j).ToString().c_str());
-
-            yAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all y axis names
-            columns.append(yAxisColumnList.at(i).toString());
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
 
     // Actual values
     try{
@@ -1407,7 +1764,6 @@ void ChartsThread::getTableChartValues()
 
 void ChartsThread::getPivotChartValues()
 {
-
     QJsonArray data;
     QString masterKeyword;
     QVariantList masterTotal;
@@ -1417,6 +1773,11 @@ void ChartsThread::getPivotChartValues()
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
+    QSqlQuery xDataListLive;
+    QSqlQuery yDataListLive;
 
     // Process date conversions, if any
     foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
@@ -1431,30 +1792,6 @@ void ChartsThread::getPivotChartValues()
         dateConversionParams.insert(columnName, itemDetails);
     }
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-
-
-    QString xQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumnList){
-        xQueryString += "\"" + xCols.toString() + "\", ";
-    }
-
-    xQueryString.chop(2);
-    xQueryString += " FROM " + tableName;
-
-    QString yQueryString =  "SELECT ";
-    foreach(QVariant yCols, yAxisColumnList){
-        yQueryString += "\"" + yCols.toString() + "\", ";
-    }
-
-    yQueryString.chop(2);
-    yQueryString += " FROM " + tableName;
-
-    auto xDataList = this->queryExtractFunction(xQueryString);
-    auto yDataList = this->queryExtractFunction(yQueryString);
-
-
     QStringList xAxisData;
     QStringList yAxisData;
 
@@ -1465,72 +1802,192 @@ void ChartsThread::getPivotChartValues()
     QJsonArray columns;
     QVector<int> xKey;
     QVector<int> yKey;
-    int xAxisLength;
-    int yAxisLength;
+    int xAxisLength = 0;
+    int yAxisLength = 0;
+    int totalRows;
 
-    int totalRows = xDataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    xAxisLength = xAxisColumnList.length();
-    yAxisLength = yAxisColumnList.length();
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumnList){
+            xQueryString += "\"" + xCols.toString() + "\", ";
+        }
 
-    // Fetch data from db
-    try{
-        for(int i = 0; i < xAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++){
+        xQueryString.chop(2);
+        xQueryString += " FROM " + tableName;
 
-                QString columnName = xAxisColumnList.at(i).toString();
-                QString separator = dateConversionParams.value(columnName).value("separator");
+        QString yQueryString =  "SELECT ";
+        foreach(QVariant yCols, yAxisColumnList){
+            yQueryString += "\"" + yCols.toString() + "\", ";
+        }
+
+        yQueryString.chop(2);
+        yQueryString += " FROM " + tableName;
+
+        auto xDataListExtract = this->queryExtractFunction(xQueryString);
+        auto yDataListExtract = this->queryExtractFunction(yQueryString);
+
+        totalRows = xDataListExtract->collection.Count();
+
+        xAxisLength = xAxisColumnList.length();
+        yAxisLength = yAxisColumnList.length();
+
+        // Fetch data from db
+        try{
+            for(int i = 0; i < xAxisLength; i++){
+                QStringList data;
+                for(int j = 0; j < totalRows; j++){
+
+                    QString columnName = xAxisColumnList.at(i).toString();
+                    QString separator = dateConversionParams.value(columnName).value("separator");
 
 
-                if(dateConversionParams.contains(columnName)){
+                    if(dateConversionParams.contains(columnName)){
 
-                    QString convertedDate;
-                    QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+                        QString convertedDate;
+                        QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
 
-                    foreach(QString format, list){
-                        QDateTime dateTime = QDateTime::fromString(xDataList->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
+                        foreach(QString format, list){
+                            QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), "yyyy-MM-dd hh:mm:ss");
 
-                        if(format.toLower() == "day"){
-                            convertedDate += QString::number(dateTime.date().day()) + separator;
-                        } else if(format.toLower() == "month"){
-                            convertedDate += dateTime.date().toString("MMM")  + separator;
-                        } else {
-                            convertedDate += QString::number(dateTime.date().year())  + separator;
+                            if(format.toLower() == "day"){
+                                convertedDate += QString::number(dateTime.date().day()) + separator;
+                            } else if(format.toLower() == "month"){
+                                convertedDate += dateTime.date().toString("MMM")  + separator;
+                            } else {
+                                convertedDate += QString::number(dateTime.date().year())  + separator;
+                            }
                         }
+
+                        convertedDate.chop(separator.length());
+                        data.append(convertedDate);
+
+                    } else {
+                        data.append(xDataListExtract->GetValue(i, j).ToString().c_str());
+                    }
+                }
+
+                xAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all x axis names
+                columns.append(xAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+        try{
+            for(int i = 0; i < yAxisLength; i++){
+                QStringList data;
+                for(int j = 0; j < totalRows; j++)
+                    data.append(yDataListExtract->GetValue(i, j).ToString().c_str());
+
+                yAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all y axis names
+                columns.append(yAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumnList){
+            xQueryString += xCols.toString() + ", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        QString yQueryString =  "SELECT ";
+        foreach(QVariant yCols, yAxisColumnList){
+            yQueryString += yCols.toString() + ", ";
+        }
+
+        yQueryString.chop(2);
+        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        xDataListLive = this->queryLiveFunction(xQueryString);
+        xAxisLength = xAxisColumnList.length();
+
+
+        // Fetch data from db
+        try{
+
+            for(int i = 0; i < xAxisLength; i++){
+                QStringList data;
+                while(xDataListLive.next()){
+
+
+                    QString columnName = xAxisColumnList.at(i).toString();
+                    QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                    if(dateConversionParams.contains(columnName)){
+
+                        QString convertedDate;
+                        QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                        foreach(QString format, list){
+                            QDateTime dateTime = QDateTime::fromString(xDataListLive.value(i).toString(), "yyyy-MM-dd hh:mm:ss");
+
+                            if(format.toLower() == "day"){
+                                convertedDate += QString::number(dateTime.date().day()) + separator;
+                            } else if(format.toLower() == "month"){
+                                convertedDate += dateTime.date().toString("MMM")  + separator;
+                            } else {
+                                convertedDate += QString::number(dateTime.date().year())  + separator;
+                            }
+                        }
+
+                        convertedDate.chop(separator.length());
+                        data.append(convertedDate);
+
+                    } else {
+                        data.append(xDataListLive.value(i).toString());
                     }
 
-                    convertedDate.chop(separator.length());
-                    data.append(convertedDate);
-
-                } else {
-                    data.append(xDataList->GetValue(i, j).ToString().c_str());
                 }
+                xAxisDataPointer->insert(i, data);
+
+                // Append to output columns -- all x axis names
+                columns.append(xAxisColumnList.at(i).toString());
             }
-
-            xAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all x axis names
-            columns.append(xAxisColumnList.at(i).toString());
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
+
+
+        yDataListLive = this->queryLiveFunction(yQueryString);
+        yAxisLength = yAxisColumnList.length();
+
+        try{
+            for(int i = 0; i < yAxisLength; i++){
+                QStringList data;
+                while(yDataListLive.next()){
+
+                    data.append(yDataListLive.value(i).toString());
+                }
+
+                yAxisDataPointer->insert(i, data);
+
+
+                // Append to output columns -- all y axis names
+                columns.append(yAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+    } else {
+        // For forward
     }
 
-    try{
-        for(int i = 0; i < yAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++)
-                data.append(yDataList->GetValue(i, j).ToString().c_str());
 
-            yAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all y axis names
-            columns.append(yAxisColumnList.at(i).toString());
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
 
     // Actual values
     try{
@@ -1583,6 +2040,7 @@ void ChartsThread::getPivotChartValues()
 
 
     // Master total
+    qDebug() << "MASTER TOTAL" << masterTotal << columns << xAxisDataPointer->values() << yAxisDataPointer->values();
     for(int i = 0; i < xAxisLength; i++){
         masterOutput.append("");
     }
@@ -1611,8 +2069,6 @@ void ChartsThread::getStackedAreaChartValues()
 
 void ChartsThread::getMultiLineChartValues()
 {
-
-
     QJsonArray data;
     QVariantList tmpData;
     float yAxisTmpData;
@@ -1627,27 +2083,53 @@ void ChartsThread::getMultiLineChartValues()
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
-
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
+    } else {
+        // For forward
     }
 
 
@@ -1728,10 +2210,8 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -1739,12 +2219,37 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QJsonObject obj;
     QVariantList tmpData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::duckType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
+
+    } else {
+        // For forward
     }
 
 
@@ -1802,8 +2307,6 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 
 void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn, QString identifier)
 {
-
-
     int pointerSize;
 
     QJsonArray data;
@@ -1815,6 +2318,16 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     float measure = 0;
     float total = 0;
 
+    QString paramName = "";
+    QString hashKeyword = "";
+    QStringList xAxisData;
+    QVariantList yAxisData;
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
+    QSqlQuery xDataListLive;
+    QSqlQuery yDataListLive;
+
     json *jsonPointer = new json;
     json *jsonPointerMeasure = new json;
     QScopedPointer<QMap<QString, float>> totalCount(new QMap<QString, float>);
@@ -1823,135 +2336,263 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     // if there is an exact match with the hash, then it exists. Else create a new hash
     QScopedPointer<QHash<QString, int>> masterHash(new QHash<QString, int>);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
+    if(this->datasourceType == Constants::duckType){
 
-    QString paramName = "";
-    QString hashKeyword = "";
+        // Fetch data from extract
+        QString tableName = this->getTableName();
 
-    QString xQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumn){
-        xQueryString += "\"" + xCols.toString() + "\", ";
-    }
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumn){
+            xQueryString += "\"" + xCols.toString() + "\", ";
+        }
 
-    xQueryString.chop(2);
-    xQueryString += " FROM " + tableName;
+        xQueryString.chop(2);
+        xQueryString += " FROM " + tableName;
 
-    QString yQueryString =  "SELECT \"" + yAxisColumn + "\" FROM " + tableName;;
+        QString yQueryString =  "SELECT \"" + yAxisColumn + "\" FROM " + tableName;;
 
-    auto xDataList = this->queryExtractFunction(xQueryString);
-    auto yDataList = this->queryExtractFunction(yQueryString);
+        xDataListExtract = this->queryExtractFunction(xQueryString);
+        yDataListExtract = this->queryExtractFunction(yQueryString);
 
-    QStringList xAxisData;
-    QVariantList yAxisData;
-
-    int totalRows = xDataList->collection.Count();
-    int totalXCols = xDataList->ColumnCount();
+        int totalRows = xDataListExtract->collection.Count();
+        int totalXCols = xDataListExtract->ColumnCount();
 
 
-    // Considering the measure as string here to avoid unwanted errors in wrong casting
-    // The front in javascript can easily handle this
+        // Considering the measure as string here to avoid unwanted errors in wrong casting
+        // The front in javascript can easily handle this
 
-    try{
-        float x = 0;
-        for(int i = 0; i < totalRows; i++){
+        try{
+            float x = 0;
+            for(int i = 0; i < totalRows; i++){
 
-            QString measureString = yDataList->GetValue(0, i).ToString().c_str();
-            measure = measureString.toFloat();
-            x += measure;
-
-
-            json tmpOutput;
-            pastHashKeyword.clear();
-
-            int counter = 0;
-            for(int j = 0; j < totalXCols; j++){
-
-                paramName = xDataList->GetValue(j, i).ToString().c_str();
-
-                // Generate unique hash to strings to be stored in master hash
-                if( j == 0){
-                    hashKeyword.clear();
-                    hashKeyword = paramName;
-                } else{
-                    hashKeyword.append(paramName);
-                }
+                QString measureString = yDataListExtract->GetValue(0, i).ToString().c_str();
+                measure = measureString.toFloat();
+                x += measure;
 
 
-                // If the hash doesnt exist, add to hash
-                if(!masterHash->contains(hashKeyword)){
-                    masterHash->insert(hashKeyword, counter);
-                    counter++;
-                    totalCount->insert(hashKeyword, measure);
+                json tmpOutput;
+                pastHashKeyword.clear();
 
-                    tmpOutput["name"] = paramName.toStdString();
-                    tmpOutput["size"] = measure;
-                    tmpOutput["children"] = emptyJsonArray;
-                    tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
+                int counter = 0;
+                for(int j = 0; j < totalXCols; j++){
 
-                    // Check if first element of json is already there
-                    // If not, then add it according to the graph data
-                    if(j == 0){
-                        output.push_back(tmpOutput);
-                        positions.insert(hashKeyword, output.size() - 1);
-                        pastHashKeyword[0] = hashKeyword;
-                        total += measure;
+                    paramName = xDataListExtract->GetValue(j, i).ToString().c_str();
 
+                    // Generate unique hash to strings to be stored in master hash
+                    if( j == 0){
+                        hashKeyword.clear();
+                        hashKeyword = paramName;
                     } else{
+                        hashKeyword.append(paramName);
+                    }
 
-                        jsonPointer = &output;
-                        for(int k =0; k < j; k++){
 
-                            if(j - k == 1){
-                                try{
+                    // If the hash doesnt exist, add to hash
+                    if(!masterHash->contains(hashKeyword)){
+                        masterHash->insert(hashKeyword, counter);
+                        counter++;
+                        totalCount->insert(hashKeyword, measure);
 
-                                    jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
-                                    pastHashKeyword.insert(j, hashKeyword);
+                        tmpOutput["name"] = paramName.toStdString();
+                        tmpOutput["size"] = measure;
+                        tmpOutput["children"] = emptyJsonArray;
+                        tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
 
-                                    pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
-                                    positions.insert(hashKeyword, pointerSize);
-                                }catch (std::exception &e) {
-                                    qDebug() << "C2" << e.what();
-                                }
+                        // Check if first element of json is already there
+                        // If not, then add it according to the graph data
+                        if(j == 0){
+                            output.push_back(tmpOutput);
+                            positions.insert(hashKeyword, output.size() - 1);
+                            pastHashKeyword[0] = hashKeyword;
+                            total += measure;
 
-                            } else{
-                                try{
-                                    jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
+                        } else{
 
-                                }catch (std::exception &e) {
-                                    qDebug() << "C3" << e.what();
+                            jsonPointer = &output;
+                            for(int k =0; k < j; k++){
+
+                                if(j - k == 1){
+                                    try{
+
+                                        jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
+                                        pastHashKeyword.insert(j, hashKeyword);
+
+                                        pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
+                                        positions.insert(hashKeyword, pointerSize);
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C2" << e.what();
+                                    }
+
+                                } else{
+                                    try{
+                                        jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
+
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C3" << e.what();
+                                    }
                                 }
                             }
                         }
-                    }
 
-                } else{
+                    } else{
 
-                    float newValue = totalCount->value(hashKeyword) + measure;
-                    totalCount->insert(hashKeyword, newValue);
-                    pastHashKeyword.insert(j, hashKeyword);
+                        float newValue = totalCount->value(hashKeyword) + measure;
+                        totalCount->insert(hashKeyword, newValue);
+                        pastHashKeyword.insert(j, hashKeyword);
 
-                    if(j == 0){
-                        total += measure;
-                    }
+                        if(j == 0){
+                            total += measure;
+                        }
 
-                    jsonPointerMeasure = &output;
-                    for(int k = 0; k <= j; k++){
+                        jsonPointerMeasure = &output;
+                        for(int k = 0; k <= j; k++){
 
 
-                        if(k == j){
-                            jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
+                            if(k == j){
+                                jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
 
-                        } else{
-                            jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
+                            } else{
+                                jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
+                            }
                         }
                     }
                 }
             }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
+
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumn){
+            xQueryString += xCols.toString() + ", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        xDataListLive = this->queryLiveFunction(xQueryString);
+        yDataListLive = this->queryLiveFunction(yQueryString);
+
+        int totalXCols = xAxisColumn.length();
+
+
+        // Considering the measure as string here to avoid unwanted errors in wrong casting
+        // The front in javascript can easily handle this
+
+        try{
+            float x = 0;
+            while(xDataListLive.next()){
+
+//                QString measureString = yDataListLive->GetValue(0, i).ToString().c_str();
+                QString measureString = xDataListLive.value(0).toString();
+                qDebug() << "COVID" << yDataListLive.seek(6);
+                measure = measureString.toFloat();
+                x += measure;
+
+
+                json tmpOutput;
+                pastHashKeyword.clear();
+
+                int counter = 0;
+                for(int j = 0; j < totalXCols; j++){
+
+                    paramName = xDataListLive.value(j).toString();
+
+                    // Generate unique hash to strings to be stored in master hash
+                    if( j == 0){
+                        hashKeyword.clear();
+                        hashKeyword = paramName;
+                    } else{
+                        hashKeyword.append(paramName);
+                    }
+
+
+                    // If the hash doesnt exist, add to hash
+                    if(!masterHash->contains(hashKeyword)){
+                        masterHash->insert(hashKeyword, counter);
+                        counter++;
+                        totalCount->insert(hashKeyword, measure);
+
+                        tmpOutput["name"] = paramName.toStdString();
+                        tmpOutput["size"] = measure;
+                        tmpOutput["children"] = emptyJsonArray;
+                        tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
+
+                        // Check if first element of json is already there
+                        // If not, then add it according to the graph data
+                        if(j == 0){
+                            output.push_back(tmpOutput);
+                            positions.insert(hashKeyword, output.size() - 1);
+                            pastHashKeyword[0] = hashKeyword;
+                            total += measure;
+
+                        } else{
+
+                            jsonPointer = &output;
+                            for(int k =0; k < j; k++){
+
+                                if(j - k == 1){
+                                    try{
+
+                                        jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
+                                        pastHashKeyword.insert(j, hashKeyword);
+
+                                        pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
+                                        positions.insert(hashKeyword, pointerSize);
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C2" << e.what();
+                                    }
+
+                                } else{
+                                    try{
+                                        jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
+
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C3" << e.what();
+                                    }
+                                }
+                            }
+                        }
+
+                    } else{
+
+                        float newValue = totalCount->value(hashKeyword) + measure;
+                        totalCount->insert(hashKeyword, newValue);
+                        pastHashKeyword.insert(j, hashKeyword);
+
+                        if(j == 0){
+                            total += measure;
+                        }
+
+                        jsonPointerMeasure = &output;
+                        for(int k = 0; k <= j; k++){
+
+
+                            if(k == j){
+                                jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
+
+                            } else{
+                                jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+    } else {
+        // For forward
     }
+
+
 
     QString s = output.to_string().c_str();
     QJsonDocument d = QJsonDocument::fromJson(s.toUtf8());
@@ -2000,10 +2641,8 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
-    // Fetch data from extract
-    QString tableName = this->getTableName();
-    QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
-    auto dataList = this->queryExtractFunction(queryString);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     // Order of QMap - xAxisCol, SplitKey, Value
     QHash<QString, int> masterKeywordList;
@@ -2013,16 +2652,47 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     // Fetch data here
 
-    int totalRows = dataList->collection.Count();
+    int totalRows;
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+    if(this->datasourceType == Constants::duckType){
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else if(this->datasourceType == Constants::sqlType){
+
+        // Fetch data from live
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
+
+    } else {
+        // For forward
     }
 
     // Fetch unique xAxisData & splitter

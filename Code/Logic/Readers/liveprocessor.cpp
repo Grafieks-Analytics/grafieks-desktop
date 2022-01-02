@@ -40,26 +40,34 @@ void LiveProcessor::processLive()
 
     QString headersQueryString = "SELECT * FROM " + Constants::masterHeadersTable;
     auto headers = con.Query(headersQueryString.toStdString());
+    int headersColCount = headers->ColumnCount();
+    int headersRowCount = headers->collection.Count();
 
 //    QString tableName = masterDb->GetValue(0,0).ToString().c_str();
 
+    for(int i = 0; i < headersRowCount; i++){
+        QStringList colInfo;
+        colInfo << headers->GetValue(0, i).ToString().c_str() << headers->GetValue(1, i).ToString().c_str() << headers->GetValue(2, i).ToString().c_str();
+        this->sqlChartHeader.insert(i, colInfo);
+    }
+
 //    Statics::currentDbName = tableName;
-//    Statics::modeProcessReader = true;
+    Statics::modeProcessReader = true;
 
-//    // Set datasource name
-//    this->dsParamsModel->setDsName(Statics::currentDbName);
+    // Set datasource name
+    this->dsParamsModel->setDsName(Statics::currentDbName);
 
-//    // For values refer to Constants.qml
-//    this->generalParamsModel->setExtractPath(this->filePath);
-//    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
-//    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
+    // For values refer to Constants.qml
+    this->generalParamsModel->setExtractPath(this->filePath);
+    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
+    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
-//    emit generateLiveReports(&con);
-//    if(this->moveToDashboardScreen)
-//        emit liveReaderProcessed();
+    emit generateLiveReports(this->sqlChartHeader);
+    if(this->moveToDashboardScreen)
+        emit liveReaderProcessed();
 
-    masterDb->Print();
-    credentials->Print();
-    parts->Print();
+//    masterDb->Print();
+//    credentials->Print();
+//    parts->Print();
     headers->Print();
 }
