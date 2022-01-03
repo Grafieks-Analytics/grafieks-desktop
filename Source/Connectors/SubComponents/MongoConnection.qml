@@ -60,7 +60,6 @@ Popup {
                 if(setFromLiveFile){
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                    GeneralParamsModel.setFromLiveFile(false)
                     stacklayout_home.currentIndex = 6
 
                 } else {

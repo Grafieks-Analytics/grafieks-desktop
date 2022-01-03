@@ -433,6 +433,7 @@ int main(int argc, char *argv[])
     QObject::connect(&liveProcessor, &LiveProcessor::generateLiveReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
     QObject::connect(&liveProcessor, &LiveProcessor::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
     QObject::connect(&liveProcessor, &LiveProcessor::generateLiveSchema, &tableSchemaModel, &TableSchemaModel::generateSchemaForLive);
+    QObject::connect(&liveProcessor, &LiveProcessor::liveQueryParams, &reportsDataModel, &ReportsDataModel::receiveOriginalConditions);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/

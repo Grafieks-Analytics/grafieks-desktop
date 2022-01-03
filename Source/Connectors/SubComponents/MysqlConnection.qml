@@ -36,8 +36,6 @@ Popup {
 
         function onOpenConnection(dbType){
             if(dbType === "mysql"){
-                LiveProcessor.processLiveQueries()
-
                 let credentials = GeneralParamsModel.getCredentials();
 
                 server.text = credentials[0]
@@ -57,9 +55,10 @@ Popup {
             if(status.status === true){
                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
                 if(setFromLiveFile){
+                    LiveProcessor.processLiveQueries()
+
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                    GeneralParamsModel.setFromLiveFile(false)
                     stacklayout_home.currentIndex = 6
 
                 } else {
