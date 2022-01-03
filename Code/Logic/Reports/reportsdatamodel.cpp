@@ -57,6 +57,73 @@ QStringList ReportsDataModel::searchColumnData(QString keyword)
     return searchResults;
 }
 
+QStringList ReportsDataModel::fetchColumnDataLive(QString columnName, QString options)
+{
+    QString dbString;
+
+    this->columnData.clear();
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::oracleIntType:
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:
+    case Constants::mongoIntType:{
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::mysqlIntType:
+            dbString = Constants::mysqlStrQueryType;
+            break;
+        case Constants::mysqlOdbcIntType:
+            dbString = Constants::mysqlOdbcStrQueryType;
+            break;
+        case Constants::sqliteIntType:
+            dbString = Constants::sqliteStrQueryType;
+            break;
+        case Constants::postgresIntType:
+            dbString = Constants::postgresOdbcStrQueryType;
+            break;
+        case Constants::oracleIntType:
+            dbString = Constants::oracleOdbcStrQueryType;
+            break;
+        case Constants::mssqlIntType:
+            dbString = Constants::mssqlOdbcStrQueryType;
+            break;
+        case Constants::accessIntType:
+            dbString = Constants::accessOdbcStrQueryType;
+            break;
+        case Constants::mongoIntType:
+            dbString = Constants::mongoOdbcStrQueryType;
+            break;
+
+        }
+        qDebug() << "ALAC";
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnData.append(query.value(0).toString());
+        }
+
+        break;
+    }
+
+
+    }
+
+    emit columnDataChanged(this->columnData, options);
+    return this->columnData;
+}
+
+
 void ReportsDataModel::clearData()
 {
 
@@ -449,6 +516,14 @@ void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
     } else {
         this->generateColumns(con);
     }
+}
+
+void ReportsDataModel::receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable)
+{
+    this->liveSelectParams = selectParams;
+    this->liveMasterTable = masterTable;
+    this->liveWhereParams = whereParams;
+    this->liveJoinParams = joinParams;
 }
 
 void ReportsDataModel::dataReadyRead()

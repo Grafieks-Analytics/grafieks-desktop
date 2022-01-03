@@ -40,7 +40,6 @@ Page {
         target: LiveProcessor
 
         function onOpenConnection(dbType){
-            GeneralParamsModel.setFromLiveFile(true)
             selectAuthorization(dbType)
         }
     }
@@ -591,7 +590,10 @@ Page {
 
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: selectAuthorization(name)
+                    onClicked: {
+                        GeneralParamsModel.setFromLiveFile(false)
+                        selectAuthorization(name)
+                    }
                     enabled: isEnabled
 
                 }
@@ -609,7 +611,10 @@ Page {
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: selectAuthorization(name)
+                    onClicked: {
+                        GeneralParamsModel.setFromLiveFile(false)
+                        selectAuthorization(name)
+                    }
                     enabled: isEnabled
                 }
             }

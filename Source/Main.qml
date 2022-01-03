@@ -228,12 +228,15 @@ ApplicationWindow {
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
             if(readerFile.includes(Constants.extractFileExt)){
                 console.log("Extract file")
+                GeneralParamsModel.setFromLiveFile(false)
                 ExtractProcessor.setArgumentsFromMenu(readerFile)
             } else if(readerFile.includes(Constants.workbookFileExt)){
                 console.log("Workbook file")
+                GeneralParamsModel.setFromLiveFile(false)
                 WorkbookProcessor.setArgumentsFromMenu(readerFile)
             } else {
                 console.log("Live file")
+                GeneralParamsModel.setFromLiveFile(true)
                 LiveProcessor.setArgumentsFromMenu(readerFile)
             }
 

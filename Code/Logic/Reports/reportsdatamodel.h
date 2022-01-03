@@ -38,6 +38,11 @@ class ReportsDataModel : public QObject
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
 
+    QString liveMasterTable;
+    QString liveWhereParams;
+    QString liveJoinParams;
+    QString liveSelectParams;
+
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
 
@@ -45,6 +50,7 @@ public:
     Q_INVOKABLE void searchColumnNames(QString keyword);
     Q_INVOKABLE QStringList fetchColumnData(QString columnName, QString options = "");
     Q_INVOKABLE QStringList searchColumnData(QString keyword);
+    Q_INVOKABLE QStringList fetchColumnDataLive(QString columnName, QString options = "");
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void deleteReportData(int reportId, bool deleteAll = false);
@@ -56,6 +62,7 @@ public slots:
     void generateColumnsForExtract();
     void generateColumnsForLive(QMap<int, QStringList> sqlHeaders);
     void generateColumnsForReader(duckdb::Connection *con);
+    void receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
     void dataReadyRead();
     void dataReadFinished();

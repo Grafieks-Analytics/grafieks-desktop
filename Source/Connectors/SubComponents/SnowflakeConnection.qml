@@ -36,7 +36,6 @@ Popup {
 
         function onOpenConnection(dbType){
             if(dbType === "snowflake"){
-                LiveProcessor.processLiveQueries()
 
                 let credentials = GeneralParamsModel.getCredentials();
 
@@ -58,9 +57,11 @@ Popup {
 
                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
                 if(setFromLiveFile){
+
+                    LiveProcessor.processLiveQueries()
+
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                    GeneralParamsModel.setFromLiveFile(false)
                     stacklayout_home.currentIndex = 6
 
                 } else {

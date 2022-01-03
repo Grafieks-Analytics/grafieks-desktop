@@ -36,8 +36,6 @@ Popup {
 
         function onOpenConnection(dbType){
             if(dbType === "apache hive"){
-                LiveProcessor.processLiveQueries()
-
                 let credentials = GeneralParamsModel.getCredentials();
 
                 server.text = credentials[0]
@@ -58,6 +56,9 @@ Popup {
 
                  let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
                  if(setFromLiveFile){
+
+                     LiveProcessor.processLiveQueries()
+
                      popup.visible = false
                      GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
                      GeneralParamsModel.setFromLiveFile(false)

@@ -36,8 +36,6 @@ Popup {
 
         function onOpenConnection(dbType){
             if(dbType === "teradata"){
-                LiveProcessor.processLiveQueries()
-
                 let credentials = GeneralParamsModel.getCredentials();
 
                 server.text = credentials[0]
@@ -58,9 +56,11 @@ Popup {
 
                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
                 if(setFromLiveFile){
+
+                    LiveProcessor.processLiveQueries()
+
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                    GeneralParamsModel.setFromLiveFile(false)
                     stacklayout_home.currentIndex = 6
 
                 } else {
