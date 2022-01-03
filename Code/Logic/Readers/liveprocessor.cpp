@@ -23,14 +23,30 @@ bool LiveProcessor::receivedArgumentStatus()
     return true;
 }
 
+void LiveProcessor::processLiveQueries()
+{
+    this->masterQuery = "SELECT " + this->selectParams + " FROM " + this->masterTable + " " + this->joinParams + " " + this->whereParams;
+
+    // Set datasource name
+    this->dsParamsModel->setDsName(Statics::currentDbName);
+
+    // For values refer to Constants.qml
+    this->generalParamsModel->setExtractPath(this->filePath);
+    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
+    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
+
+    emit generateLiveReports(this->sqlChartHeader);
+    emit liveQueryParams(this->selectParams, this->whereParams, this->joinParams,this->masterTable);
+
+    if(this->moveToDashboardScreen){
+        emit liveReaderProcessed();
+        emit generateLiveSchema(this->masterQuery);
+    }
+}
+
 void LiveProcessor::processLive()
 {
     qDebug() << "LIVE FILE READING";
-
-    QString selectParams;
-    QString whereParams;
-    QString joinParams;
-    QString masterTable;
 
     QString username;
     QString password;
@@ -42,6 +58,7 @@ void LiveProcessor::processLive()
     QString colName;
     QString tableName;
     QString colType;
+    QString qmlDbName;
 
     duckdb::DuckDB db(this->filePath.toStdString());
     duckdb::Connection con(db);
@@ -49,15 +66,18 @@ void LiveProcessor::processLive()
     QString queryString = "SELECT * FROM " + Constants::masterLiveTable;
     auto masterDb = con.Query(queryString.toStdString());
 
-    QString credentialsQueryString = "SELECT * FROM " + Constants::masterCredentialsTable;
-    auto credentials = con.Query(credentialsQueryString.toStdString());
-
+    // Parts query table
     QString partsQueryString = "SELECT * FROM " + Constants::masterQueryPartLiveTable;
     auto parts = con.Query(partsQueryString.toStdString());
 
+    selectParams = parts->GetValue(0,0).ToString().c_str();
+    whereParams = parts->GetValue(1,0).ToString().c_str();
+    joinParams = parts->GetValue(2,0).ToString().c_str();
+    masterTable = parts->GetValue(3,0).ToString().c_str();
+
+    // Headers query table
     QString headersQueryString = "SELECT * FROM " + Constants::masterHeadersTable;
     auto headers = con.Query(headersQueryString.toStdString());
-    int headersColCount = headers->ColumnCount();
     int headersRowCount = headers->collection.Count();
 
     for(int i = 0; i < headersRowCount; i++){
@@ -70,13 +90,9 @@ void LiveProcessor::processLive()
         this->sqlChartHeader.insert(i, colInfo);
     }
 
-//    Statics::currentDbName = tableName;
-    Statics::modeProcessReader = true;
-
-    selectParams = parts->GetValue(0,0).ToString().c_str();
-    whereParams = parts->GetValue(1,0).ToString().c_str();
-    joinParams = parts->GetValue(2,0).ToString().c_str();
-    masterTable = parts->GetValue(3,0).ToString().c_str();
+    // Credentials table
+    QString credentialsQueryString = "SELECT * FROM " + Constants::masterCredentialsTable;
+    auto credentials = con.Query(credentialsQueryString.toStdString());
 
     username = credentials->GetValue(0,0).ToString().c_str();
     password = credentials->GetValue(1,0).ToString().c_str();
@@ -84,17 +100,6 @@ void LiveProcessor::processLive()
     port = credentials->GetValue(3,0).ToString().c_str();
     database = credentials->GetValue(4,0).ToString().c_str();
     dbType = credentials->GetValue(5,0).ToString().c_str();
-
-    // Set datasource name
-    this->dsParamsModel->setDsName(Statics::currentDbName);
-
-    // For values refer to Constants.qml
-    this->generalParamsModel->setExtractPath(this->filePath);
-    this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
-    this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
-
-    emit generateLiveReports(this->sqlChartHeader);
-    emit liveQueryParams(selectParams, whereParams, joinParams, masterTable);
 
     Statics::currentDbIntType = dbType.toInt();
     switch(Statics::currentDbIntType){
@@ -106,6 +111,7 @@ void LiveProcessor::processLive()
         Statics::myDb = database;
         Statics::myUsername = username;
         Statics::myPassword = password;
+        qmlDbName = Constants::mysqlQml;
 
         break;
     }
@@ -116,6 +122,7 @@ void LiveProcessor::processLive()
         Statics::postgresDb = database;
         Statics::postgresUsername = username;
         Statics::postgresPassword = password;
+        qmlDbName = Constants::postgresQml;
         break;
     }
 
@@ -126,6 +133,7 @@ void LiveProcessor::processLive()
         Statics::msDb = database;
         Statics::msUsername = username;
         Statics::msPassword = password;
+        qmlDbName = Constants::mssqlQml;
         break;
     }
 
@@ -136,6 +144,7 @@ void LiveProcessor::processLive()
         Statics::oracleDb = database;
         Statics::oracleUsername = username;
         Statics::oraclePassword = password;
+        qmlDbName = Constants::oracleQml;
         break;
     }
 
@@ -146,15 +155,16 @@ void LiveProcessor::processLive()
         Statics::mongoDb = database;
         Statics::mongoUsername = username;
         Statics::mongoPassword = password;
+        qmlDbName = Constants::mongoQml;
         break;
     }
     }
 
-    if(this->moveToDashboardScreen)
-        emit liveReaderProcessed();
+    Statics::modeProcessReader = true;
+    emit openConnection(qmlDbName);
 
-    masterDb->Print();
-    credentials->Print();
-    parts->Print();
-    headers->Print();
+//    masterDb->Print();
+//    credentials->Print();
+//    parts->Print();
+//    headers->Print();
 }

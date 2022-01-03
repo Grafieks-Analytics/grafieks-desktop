@@ -113,46 +113,59 @@ namespace Constants
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";
+    const QString mysqlQml = "mysql";
     const QString mysqlStrQueryType = "mysql_query";
     const QString mysqlOdbcStrType = "mysql_odbc";
     const QString mysqlOdbcStrQueryType = "mysql_odbc_query";
 
     const QString sqliteStrType = "sqlite";
+    const QString sqliteQml = "sqlite";
     const QString sqliteStrQueryType = "sqlite_query";
 
     const QString mssqlOdbcStrType = "mssql_odbc";
+    const QString mssqlQml = "sql server";
     const QString mssqlOdbcStrQueryType = "mssql_odbc_query";
 
     const QString excelStrType = "excel";
+    const QString excelQml = "microsoft excel";
     const QString excelStrQueryType = "excel_query";
     const QString excelOdbcStrType = "excel_odbc";
     const QString excelOdbcStrQueryType = "excel_odbc_query";
 
     const QString postgresOdbcStrType = "postgres_odbc";
+    const QString postgresQml = "postgres";
     const QString postgresOdbcStrQueryType = "postgres_odbc_query";
 
     const QString oracleOdbcStrType = "oracle_odbc";
+    const QString oracleQml = "oracle";
     const QString oracleOdbcStrQueryType = "oracle_odbc_query";
 
     const QString mongoOdbcStrType = "mongo_odbc";
+    const QString mongoQml = "mongodb";
     const QString mongoOdbcStrQueryType = "mongo_odbc_query";
 
     const QString redshiftOdbcStrType = "redshift_odbc";
+    const QString redshiftQml = "amazon redshift";
     const QString redshiftOdbcStrQueryType = "redshift_odbc_query";
 
     const QString impalaOdbcStrType = "impala_odbc";
+    const QString impalaQml = "impala";
     const QString impalaOdbcStrQueryType = "impala_odbc_query";
 
     const QString hiveOdbcStrType = "hive_odbc";
+    const QString hiveQml = "apache hive";
     const QString hiveOdbcStrQueryType = "hive_odbc_query";
 
     const QString snowflakeOdbcStrType = "snowflake_odbc";
+    const QString snowflakeQml = "snowflake";
     const QString snowflakeOdbcStrQueryType = "snowflake_odbc_query";
 
     const QString teradataOdbcStrType = "teradata_odbc";
+    const QString teradataQml = "teradata";
     const QString teradataOdbcStrQueryType = "teradata_odbc_query";
 
     const QString accessOdbcStrType = "access_odbc";
+    const QString accessQml = "microsoft access";
     const QString accessOdbcStrQueryType = "access_odbc_query";
 
     // Filter Sections

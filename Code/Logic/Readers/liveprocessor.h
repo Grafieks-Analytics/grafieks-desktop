@@ -22,6 +22,13 @@ class LiveProcessor : public QObject
     bool moveToDashboardScreen;
     QMap<int, QStringList> sqlChartHeader;
 
+    QString masterTable;
+    QString whereParams;
+    QString joinParams;
+    QString selectParams;
+
+    QString masterQuery;
+
 
 public:
     explicit LiveProcessor(GeneralParamsModel *gpm = nullptr, DSParamsModel *dsp = nullptr, QObject *parent = nullptr);
@@ -29,11 +36,14 @@ public:
     Q_INVOKABLE void setArgumentsFromMenu(QString filePath);
     Q_INVOKABLE void setArgumentsByFile(QString filePath);
     Q_INVOKABLE bool receivedArgumentStatus();
+    Q_INVOKABLE void processLiveQueries();
 
 signals:
     void generateLiveReports(QMap<int, QStringList> sqlHeaders);
     void liveReaderProcessed();
     void liveQueryParams(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
+    void generateLiveSchema(QString query);
+    void openConnection(QString dbType);
 
 private:
     void processLive();

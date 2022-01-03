@@ -124,6 +124,11 @@ Popup {
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
+        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
+            console.log("DID I HIT HERE", allList, allCategorical, allNumerical, queriedColumnNames);
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+        }
+
         function onTableSchemaCleared(){
             categoricalModel.clear()
             numericalModel.clear()
