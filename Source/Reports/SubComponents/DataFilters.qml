@@ -125,7 +125,6 @@ Popup {
         }
 
         function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
-            console.log("DID I HIT HERE", allList, allCategorical, allNumerical, queriedColumnNames);
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
@@ -403,7 +402,6 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
-        console.log("APPLU CLICKED HERE")
 
         reDrawChart()
 

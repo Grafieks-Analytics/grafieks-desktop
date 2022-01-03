@@ -768,7 +768,6 @@ void ChartsAPIThread::getTreeChartValues()
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
 
-    qDebug() << "TREE OBJ" << obj;
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
@@ -865,7 +864,6 @@ void ChartsAPIThread::getTableChartValues()
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
 
-    qDebug() << obj << "OBJ";
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));

@@ -80,7 +80,6 @@ void ChartsThread::methodSelector(QString functionName, QString reportWhereCondi
 
 void ChartsThread::queryParams(QString masterTable, QString masterWhereParams, QString masterJoinParams)
 {
-    qDebug() << "ALL MASTERS" << masterTable << masterWhereParams << masterJoinParams;
     this->masterTable = masterTable;
     this->masterWhereParams = masterWhereParams;
     this->masterJoinParams = masterJoinParams;
@@ -1601,8 +1600,6 @@ void ChartsThread::getTableChartValues()
     } else if(this->datasourceType == Constants::sqlType){
 
         // Fetch data from live
-        qDebug() << xAxisColumnList << "LENKA2";
-
         QString xQueryString =  "SELECT ";
         foreach(QVariant xCols, xAxisColumnList){
             xQueryString += xCols.toString() + ", ";

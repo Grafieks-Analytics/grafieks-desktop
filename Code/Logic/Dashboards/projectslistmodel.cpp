@@ -16,8 +16,6 @@ void ProjectsListModel::fetchProjectList()
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
-    qDebug() << "PROJECTS LIST URL" << baseUrl;
-
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(baseUrl+"/desk_listprojects");
 
