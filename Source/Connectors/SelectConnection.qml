@@ -36,6 +36,15 @@ Page {
     signal update_host_query_modeller(string new_host);
     signal update_data_sources_list();
 
+    Connections{
+        target: LiveProcessor
+
+        function onOpenConnection(dbType){
+            GeneralParamsModel.setFromLiveFile(true)
+            selectAuthorization(dbType)
+        }
+    }
+
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
