@@ -36,3 +36,15 @@ Download the binary from [https://github.com/JKSH/QtSdkRepoChooser/releases](htt
 # Application Dependencies
 
 -   Openssl - For calling HTTPS requests. On Linux/Mac, directly install from package repo manager. For Windows use the [link](https://slproweb.com/products/Win32OpenSSL.html)
+
+## How to get Charts: 
+### When you clone for first time
+``` 
+git clone --recurse-submodules https://github.com/Grafieks-Analytics/grafieks-desktop/
+```
+
+### Already cloned or missed cloning with -recurse-submodule flag
+```
+git submodule update --init
+```
+These commands will add a folder "Charts" at `Sources/` folder
