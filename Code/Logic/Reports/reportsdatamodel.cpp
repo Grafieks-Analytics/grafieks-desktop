@@ -103,7 +103,6 @@ QStringList ReportsDataModel::fetchColumnDataLive(QString columnName, QString op
             break;
 
         }
-        qDebug() << "ALAC";
 
         QSqlDatabase dbCon = QSqlDatabase::database(dbString);
         QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
