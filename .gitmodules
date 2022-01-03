@@ -1,0 +1,3 @@
+[submodule "Source/Charts"]
+	path = Source/Charts
+	url = https://github.com/Grafieks-Analytics/charts
