@@ -32,15 +32,42 @@ Popup {
     // Connection  Starts
 
     Connections{
+        target: LiveProcessor
+
+        function onOpenConnection(dbType){
+            if(dbType === "postgres"){
+                LiveProcessor.processLiveQueries()
+
+                let credentials = GeneralParamsModel.getCredentials();
+
+                server.text = credentials[0]
+                port.text = credentials[1]
+                database.text = credentials[2]
+                username.text = credentials[3]
+                password.text = credentials[4]
+            }
+        }
+    }
+
+    Connections{
         target: ConnectorsLoginModel
 
         function onPostgresLoginStatus(status){
 
             if(status.status === true){
 
-                popup.visible = false
-                GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                stacklayout_home.currentIndex = 5
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    GeneralParamsModel.setFromLiveFile(false)
+                    stacklayout_home.currentIndex = 6
+
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
             }
             else{
                 popup.visible = true
