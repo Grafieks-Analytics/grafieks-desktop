@@ -45,7 +45,7 @@ bool DashboardParamsModel::dragNewReport(int dashboardId, int widgetId, QString 
     widgetIds.append(widgetId);
     reportNames.insert(widgetId, reportName);
     reportBackgroundColors.insert(widgetId, Constants::DefaultBackgroundColor);
-    reportLineColors.insert(widgetId, Constants::DefaultBackgroundColor);
+    reportLineColors.insert(widgetId, Constants::DefaultReportLineColor);
     reportOpacities.insert(widgetId, 0);
 
     this->dashboardWidgetsMap[dashboardId] = widgetIds;
