@@ -268,9 +268,7 @@ QtObject {
 
     property string chartsBaseUrl: "qrc:/Source/Charts/"
 
-
     property string barChartTitle: "Bar Chart"
-    property string headMapChartTitle:"Heat Map"
     property string pieChartTitle: "Pie Chart"
     property string donutChartTitle:"Donut Chart"
     property string funnelChartTitle:"Funnel Chart"
@@ -292,77 +290,51 @@ QtObject {
     property string lineBarTitle: "Line Bar"
     property string sankeyChartTitle: "Sankey"
     property string stackedAreaChartTitle: "Stacked Area Chart"
+    property string horizontalStackedAreaChartTitle: "Horizontal Stacked Area Chart"
+    property string horizontalBarChartTitle: "HorizontalBarChart"
+    property string horizontalStackedBarChartTitle: "Horizontal Stack Bar Chart"
+    property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
+    property string lineChartTitle: "Line Chart"
+    property string horizontalLineChartTitle: "Horizontal Line Chart"
+    property string multiLineChartTitle: "Multi Line"
+    property string horizontalMultiLineChartTitle: "Horizontal Multi Line"
+    property string areaChartTitle:"Area Chart"
+    property string horizontalAreaChartTitle: "Horizontal Area Chart"
+    property string multipleAreaChartTitle: "Multiple Area Chart"
+    property string multipleHorizontalAreaChartTitle: "Multiple Horizontal Area Chart"
 
     // Chart Urls
     property string baseChartUrl: "qrc:/Source/Charts/";
-
     property string waterfallChartUrl: "WaterfallChart.html"
-
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
-
-    property string horizontalStackedAreaChartTitle: "Horizontal Stacked Area Chart"
     property string horizontalStackedAreaChartUrl: "HorizontalMultipleAreaChart.html"
-
-    property string horizontalBarChartTitle: "HorizontalBarChart"
     property string horizontalBarChartUrl: "HorizontalBarChart.html"
-
-    property string horizontalStackedBarChartTitle: "Horizontal Stack Bar Chart"
     property string horizontalStackedBarChartUrl: "HorizontalStackBarChart.html"
-
     property string horizontalBarGroupedChartUrl: "HorizontalBarGroupedChart.html"
-    property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
-
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
-
-
-    property string lineChartTitle: "Line Chart"
     property string lineChartUrl: "LineChart.html";
-    
-    property string horizontalLineChartTitle: "Horizontal Line Chart"
     property string horizontalLineChartUrl: "HorizontalLineChart.html"
-
-    
-    property string multiLineChartTitle: "Multi Line"
     property string multiLineChartUrl: "MultipleLineChart.html";
-    
-    property string horizontalMultiLineChartTitle: "Horizontal Multi Line"
-    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";
-
-    // Area Charts
-    property string areaChartTitle:"Area Chart"
+    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";    
     property string areaChartUrl: "AreaChart.html";
-    
-    // Horizontal Area Chart
-    property string horizontalAreaChartTitle: "Horizontal Area Chart"
     property string horizontalAreaChartUrl: "HorizontalAreaChart.html"
-
-    // Multiple Area Chart
-    property string multipleAreaChartTitle: "Multiple Area Chart"
     property string multipleAreaChartUrl: "MultipleAreaChart.html"
-    
-    // Multiple Horizontal Area Chart
-    property string multipleHorizontalAreaChartTitle: "Multiple Horizontal Area Chart"
     property string multipleHorizontalAreaChartUrl: "HorizontalMultipleAreaChart.html"
-
     property string pieChartUrl:"PieChart.html";
     property string donutChartUrl:"DoughnutChart.html";
     property string radarChartUrl:"RadarChart.html";
     property string sunburstChartUrl:"SunburstChart.html";
-
     property string funnelChartUrl:"FunnelChart.html";
     property string treeChartUrl: "TreeChart.html";
     property string sankeyChartUrl: "SankeyChart.html";
-
     property string scatterChartUrl: "ScatterChart.html";
     property string heatMapChartUrl: "HeatmapChart.html";
     property string gaugeChartUrl: "GaugeChart.html";
     property string pivotTableUrl: "PivotTable.html";
     property string tableChartUrl: "TableChart.html";
     property string kpiChartUrl : "KPI.html";
-
-    
 
 
     // Charts ends
