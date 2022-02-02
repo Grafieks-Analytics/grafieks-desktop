@@ -30,7 +30,8 @@ namespace Constants
     // Master Extract Table
     const QString masterExtractTable = "gahc_master_table";
     const QString masterLiveTable = "gahc_master_table";
-    const QString masterQueryPartLiveTable = "gahc_query_part_table";
+    const QString masterQueryPartLiveTable = "gahc_query_part_live_table";
+    const QString masterQueryPartExtractTable = "gahc_query_part_extract_table";
     const QString masterCredentialsTable = "gahc_credentials_table";
     const QString masterHeadersTable = "gahc_headers_table";
 
