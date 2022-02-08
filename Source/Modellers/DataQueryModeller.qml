@@ -213,6 +213,20 @@ Page {
             extractCreationError.open()
             saveExtractPopupFunction(false)
         }
+
+        function onShowSaveLiveWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onLiveFileSaved(ifPublish){
+            saveLiveLimit(ifPublish)
+        }
+
+        function onLiveCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
     }
 
     Connections{
@@ -660,7 +674,11 @@ Page {
         }
     }
 
-    function saveLiveAndProceedDashboard(ifPublish){
+    function saveLiveLimit(ifPublish){
+
+        queryModellerPage.timeElapsed = 0
+        waitTimer.stop()
+
         if(!ifPublish){
             GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
             stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
@@ -668,6 +686,7 @@ Page {
             let currentDashboard = DashboardParamsModel.currentDashboard
         }
     }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -737,11 +756,11 @@ Page {
                 anchors.verticalCenter: tableImg.verticalCenter
                 visible: tableShowToggle
 
-//                MouseArea{
-//                    anchors.fill: parent
-//                    onClicked: menuOptions.open()
+                //                MouseArea{
+                //                    anchors.fill: parent
+                //                    onClicked: menuOptions.open()
 
-//                }
+                //                }
             }
 
 
@@ -1624,7 +1643,7 @@ Page {
                             width: parent.width+1
                             color: Constants.themeColor
                             //            anchors.top: parent.top
-                                       x:-1
+                            x:-1
 
                             border.color: Constants.darkThemeColor
 
