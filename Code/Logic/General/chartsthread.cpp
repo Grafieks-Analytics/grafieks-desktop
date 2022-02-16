@@ -2047,7 +2047,6 @@ void ChartsThread::getPivotChartValues()
 
 
     // Master total
-    qDebug() << "MASTER TOTAL" << masterTotal << columns << xAxisDataPointer->values() << yAxisDataPointer->values();
     for(int i = 0; i < xAxisLength; i++){
         masterOutput.append("");
     }
@@ -2065,7 +2064,6 @@ void ChartsThread::getPivotChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
-    qDebug() << "STRDATA" << strData;
 
     emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
