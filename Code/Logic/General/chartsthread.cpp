@@ -1621,9 +1621,10 @@ void ChartsThread::getTableChartValues()
 
         // Fetch data from db
         try{
-            for(int i = 0; i < xAxisLength; i++){
-                QStringList data;
-                while(xDataListLive.next()){
+
+            QStringList data;
+            while(xDataListLive.next()){
+                for(int i = 0; i < xAxisLength; i++){
 
                     QString columnName = xAxisColumnList.at(i).toString();
                     QString separator = dateConversionParams.value(columnName).value("separator");
@@ -1647,17 +1648,23 @@ void ChartsThread::getTableChartValues()
                         }
 
                         convertedDate.chop(separator.length());
+                        data = xAxisDataPointer->value(i);
                         data.append(convertedDate);
 
                     } else {
+                        data = xAxisDataPointer->value(i);
                         data.append(xDataListLive.value(i).toString());
                     }
+
+                    xAxisDataPointer->insert(i, data);
                 }
 
-                xAxisDataPointer->insert(i, data);
-
                 // Append to output columns -- all x axis names
-                columns.append(xAxisColumnList.at(i).toString());
+                for(int i = 0; i < xAxisLength; i++){
+                    columns.append(xAxisColumnList.at(i).toString());
+                }
+
+
             }
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
@@ -1667,16 +1674,20 @@ void ChartsThread::getTableChartValues()
         yAxisLength = yAxisColumnList.length();
 
         try{
-            for(int i = 0; i < yAxisLength; i++){
-                QStringList data;
-                while(yDataListLive.next())
+
+            QStringList data;
+            while(yDataListLive.next()){
+                for(int i = 0; i < yAxisLength; i++){
                     data.append(yDataListLive.value(i).toString());
+                    yAxisDataPointer->insert(i, data);
+                }
+            }
 
-                yAxisDataPointer->insert(i, data);
-
-                // Append to output columns -- all y axis names
+            // Append to output columns -- all y axis names
+            for(int i = 0; i < yAxisLength; i++){
                 columns.append(yAxisColumnList.at(i).toString());
             }
+
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
         }
@@ -1918,7 +1929,7 @@ void ChartsThread::getPivotChartValues()
 
             while(xDataListLive.next()){
                 for(int i = 0; i < xAxisLength; i++){
-                     QStringList data;
+                    QStringList data;
 
                     QString columnName = xAxisColumnList.at(i).toString();
                     QString separator = dateConversionParams.value(columnName).value("separator");
@@ -2497,7 +2508,6 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
                 //                QString measureString = yDataListLive->GetValue(0, i).ToString().c_str();
                 QString measureString = xDataListLive.value(0).toString();
-                qDebug() << "COVID" << yDataListLive.seek(6);
                 measure = measureString.toFloat();
                 x += measure;
 
