@@ -1951,13 +1951,15 @@ void ChartsThread::getPivotChartValues()
                     }
 
                     xAxisDataPointer->insert(i, data);
-
-                    // Append to output columns -- all x axis names
-                    columns.append(xAxisColumnList.at(i).toString());
-
                 }
 
             }
+
+            for(int i = 0; i < xAxisLength; i++){
+                // Append to output columns -- all x axis names
+                columns.append(xAxisColumnList.at(i).toString());
+            }
+
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
         }
@@ -1976,12 +1978,13 @@ void ChartsThread::getPivotChartValues()
                     data.append(yDataListLive.value(i).toString());
 
                     yAxisDataPointer->insert(i, data);
-
-
-                    // Append to output columns -- all y axis names
-                    columns.append(yAxisColumnList.at(i).toString());
                 }
 
+            }
+
+            for(int i = 0; i < yAxisLength; i++){
+                // Append to output columns -- all x axis names
+                columns.append(yAxisColumnList.at(i).toString());
             }
 
         } catch(std::exception &e){
@@ -2929,126 +2932,6 @@ QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
 
     return query;
 
-}
-
-QMap<int, QHash<int, QString> > ChartsThread::queryLiveFunction2(QString mainQuery, int params)
-{
-    QString queryString;
-    QSqlDatabase connection;
-    QMap<int, QHash<int, QString>> output;
-
-    // IF Reports
-    // Else Dashboards
-    if(this->currentChartSource == Constants::reportScreen){
-        if(this->reportWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
-        } else {
-            queryString = mainQuery;
-        }
-    } else {
-        if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString =mainQuery + " WHERE " + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
-        } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
-        } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->dashboardWhereConditions;
-        } else {
-            queryString = mainQuery;
-        }
-    }
-
-    switch(Statics::currentDbIntType){
-
-    case Constants::mysqlIntType:{
-        connection = QSqlDatabase::addDatabase("QMYSQL", "mysqlQ");
-        connection.setHostName(Statics::myHost);
-        connection.setPort(Statics::myPort);
-        connection.setDatabaseName(Statics::myDb);
-        connection.setUserName(Statics::myUsername);
-        connection.setPassword(Statics::myPassword);
-
-        connection.open();
-        break;
-    }
-
-    case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
-        connection.setHostName(Statics::myHost);
-        connection.setPort(Statics::myPort);
-        connection.setDatabaseName(Statics::myDb);
-        connection.setUserName(Statics::myUsername);
-        connection.setPassword(Statics::myPassword);
-
-        connection.open();
-        break;
-    }
-
-    case Constants::postgresIntType:{
-        connection = QSqlDatabase::addDatabase("QODBC", "postgresQ");
-
-        connection.setDatabaseName(Statics::postgresDb);
-        connection.setHostName(Statics::postgresHost);
-        connection.setPort(Statics::postgresPort);
-        connection.setUserName(Statics::postgresUsername);
-        connection.setPassword(Statics::postgresPassword);
-
-        connection.open();
-        break;
-    }
-
-    case Constants::mssqlIntType:{
-        connection = QSqlDatabase::addDatabase("QODBC", "mssqlQ");
-
-        connection.setDatabaseName(Statics::msDb);
-        connection.setHostName(Statics::msHost);
-        connection.setPort(Statics::msPort);
-        connection.setUserName(Statics::msUsername);
-        connection.setPassword(Statics::msPassword);
-
-        connection.open();
-        break;
-    }
-
-    case Constants::oracleIntType:{
-        connection = QSqlDatabase::addDatabase("QODBC", "oracleQ");
-
-        connection.setDatabaseName(Statics::oracleDb);
-        connection.setHostName(Statics::oracleHost);
-        connection.setPort(Statics::oraclePort);
-        connection.setUserName(Statics::oracleUsername);
-        connection.setPassword(Statics::oraclePassword);
-
-        connection.open();
-        break;
-    }
-
-    case Constants::mongoIntType:{
-        connection = QSqlDatabase::addDatabase("QODBC", "mongoQ");
-
-        connection.setDatabaseName(Statics::mongoDb);
-        connection.setHostName(Statics::mongoHost);
-        connection.setPort(Statics::mongoPort);
-        connection.setUserName(Statics::mongoUsername);
-        connection.setPassword(Statics::mongoPassword);
-
-        connection.open();
-        break;
-    }
-    }
-
-    QSqlQuery query(queryString, connection);
-    QHash<int, QString> tmp;
-    int row = 0;
-    while(query.next()){
-        for(int i = 0; i < params; i++){
-            tmp = output.value(i);
-            tmp.insert(row, query.value(i).toString());
-            output.insert(i, tmp);
-        }
-        row++;
-    }
-
-    return output;
 }
 
 QString ChartsThread::getTableName()

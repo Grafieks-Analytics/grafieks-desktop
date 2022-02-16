@@ -105,7 +105,6 @@ public slots:
 private:
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryExtractFunction(QString mainQuery);
     QSqlQuery queryLiveFunction(QString mainQuery);
-    QMap<int, QHash<int, QString>> queryLiveFunction2(QString mainQuery, int params);
     QString getTableName();
 
 signals:
