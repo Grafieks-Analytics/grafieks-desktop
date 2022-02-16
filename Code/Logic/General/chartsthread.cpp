@@ -1793,6 +1793,7 @@ void ChartsThread::getPivotChartValues()
     QStringList yAxisData;
 
     QVariantList tmpData;
+
     QJsonArray colData;
     int index;
 
@@ -1912,14 +1913,12 @@ void ChartsThread::getPivotChartValues()
         xDataListLive = this->queryLiveFunction(xQueryString);
         xAxisLength = xAxisColumnList.length();
 
-
         // Fetch data from db
         try{
 
-            for(int i = 0; i < xAxisLength; i++){
-                QStringList data;
-                while(xDataListLive.next()){
-
+            while(xDataListLive.next()){
+                for(int i = 0; i < xAxisLength; i++){
+                     QStringList data;
 
                     QString columnName = xAxisColumnList.at(i).toString();
                     QString separator = dateConversionParams.value(columnName).value("separator");
@@ -1943,17 +1942,21 @@ void ChartsThread::getPivotChartValues()
                         }
 
                         convertedDate.chop(separator.length());
+                        data = xAxisDataPointer->value(i);
                         data.append(convertedDate);
 
                     } else {
+                        data = xAxisDataPointer->value(i);
                         data.append(xDataListLive.value(i).toString());
                     }
 
-                }
-                xAxisDataPointer->insert(i, data);
+                    xAxisDataPointer->insert(i, data);
 
-                // Append to output columns -- all x axis names
-                columns.append(xAxisColumnList.at(i).toString());
+                    // Append to output columns -- all x axis names
+                    columns.append(xAxisColumnList.at(i).toString());
+
+                }
+
             }
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
@@ -1964,19 +1967,23 @@ void ChartsThread::getPivotChartValues()
         yAxisLength = yAxisColumnList.length();
 
         try{
-            for(int i = 0; i < yAxisLength; i++){
-                QStringList data;
-                while(yDataListLive.next()){
 
+            while(yDataListLive.next()){
+                QStringList data;
+                for(int i = 0; i < yAxisLength; i++){
+
+                    data = yAxisDataPointer->value(i);
                     data.append(yDataListLive.value(i).toString());
+
+                    yAxisDataPointer->insert(i, data);
+
+
+                    // Append to output columns -- all y axis names
+                    columns.append(yAxisColumnList.at(i).toString());
                 }
 
-                yAxisDataPointer->insert(i, data);
-
-
-                // Append to output columns -- all y axis names
-                columns.append(yAxisColumnList.at(i).toString());
             }
+
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
         }
@@ -2055,6 +2062,7 @@ void ChartsThread::getPivotChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+    qDebug() << "STRDATA" << strData;
 
     emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
