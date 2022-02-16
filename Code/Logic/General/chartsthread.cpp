@@ -1622,8 +1622,9 @@ void ChartsThread::getTableChartValues()
         // Fetch data from db
         try{
 
-            QStringList data;
+
             while(xDataListLive.next()){
+                QStringList data;
                 for(int i = 0; i < xAxisLength; i++){
 
                     QString columnName = xAxisColumnList.at(i).toString();
@@ -1659,12 +1660,11 @@ void ChartsThread::getTableChartValues()
                     xAxisDataPointer->insert(i, data);
                 }
 
-                // Append to output columns -- all x axis names
-                for(int i = 0; i < xAxisLength; i++){
-                    columns.append(xAxisColumnList.at(i).toString());
-                }
+            }
 
-
+            // Append to output columns -- all x axis names
+            for(int i = 0; i < xAxisLength; i++){
+                columns.append(xAxisColumnList.at(i).toString());
             }
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
@@ -1678,6 +1678,7 @@ void ChartsThread::getTableChartValues()
             QStringList data;
             while(yDataListLive.next()){
                 for(int i = 0; i < yAxisLength; i++){
+                    data = yAxisDataPointer->value(i);
                     data.append(yDataListLive.value(i).toString());
                     yAxisDataPointer->insert(i, data);
                 }
