@@ -73,9 +73,7 @@ void TableSchemaModel::showSchema(QString query)
         QSqlDatabase dbCon = QSqlDatabase::database(dbString);
 
         for(QString tableName: tablesList){
-
             tableName = tableName.replace(QRegularExpression("[\"`'\\[\\]]"), "");
-
 
             QSqlRecord record = dbCon.record(tableName);
 
@@ -494,6 +492,11 @@ void TableSchemaModel::generateSchemaForExtract()
     }
 }
 
+void TableSchemaModel::generateSchemaForLive(QString query)
+{
+    this->showSchema(query);
+}
+
 void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
 {
     if(Constants::apiSwitch == true){
@@ -540,7 +543,6 @@ void TableSchemaModel::dataReadyRead()
 void TableSchemaModel::dataReadFinished()
 {
     //Parse the JSON
-    qDebug() << "x1xqx";
     if( m_networkReply->error()){
 
         qDebug() << "There was some error : " << m_networkReply->errorString();
@@ -558,14 +560,11 @@ void TableSchemaModel::dataReadFinished()
         if(code != 200){
             qDebug() << "Error code" << code << ": " << msg;
         } else {
-            qDebug() << "OSM" << dataDocObj["categorical"].toArray();
 
             QJsonArray value = dataDocObj.value("all").toArray();
 
             foreach(QJsonValue data, value){
                 QJsonArray finalValue = data.toArray();
-
-                qDebug() << value.at(1).toString() << "VALUE";
 
                 if(finalValue.at(3).toString() == "categorical"){
                     this->allCategorical.append(value.toVariantList());

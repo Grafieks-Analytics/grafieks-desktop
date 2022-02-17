@@ -120,10 +120,10 @@ QString QuerySplitter::getJoinConditions()
 {
     QString joinConditions;
 
+
     QRegularExpression joinConditionsRegex(R"(\s(?:INNER|LEFT|RIGHT|FULL)\s+(.*?)(?:\s+(?:WHERE|GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch joinConditionsIterator = joinConditionsRegex.match(m_query);
-    joinConditions = joinConditionsIterator.captured(1).trimmed();
-    joinConditions.prepend(joinConditionsIterator.captured(0));
+    joinConditions = joinConditionsIterator.captured(0).trimmed();
 
     return joinConditions;
 }

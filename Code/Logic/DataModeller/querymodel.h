@@ -53,7 +53,7 @@ public slots:
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
     void extractSaved(QString errorMessage);
-    void liveSaved(QString errorMessage);
+    void liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
 
 
     void setIfPublish(bool ifPublish);
@@ -63,12 +63,15 @@ signals:
     void sqlHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports();
+    void generateExtractReports();
+    void generateLiveReports(QString query);
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void liveFileSaved(bool ifPublish);
     void extractCreationError(QString errorMessage);
     void liveCreationError(QString errorMessage);
+    void liveHeaderGenerated(QMap<int, QStringList> sqlHeaders);
+    void liveQueryParams(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
     void ifPublishChanged(bool ifPublish);
 
@@ -77,7 +80,7 @@ private:
     void generateRoleNames();
     void executeQuery(QString & query);
     void extractSizeLimit();
-    void liveSizeLimit();
+    void liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
 
     // Data variables for Charts
     QMap<int, QStringList*> sqlChartData;
@@ -98,7 +101,9 @@ private:
     QThread extractThread;
     GeneralParamsModel *generalParamsModel;
 
+    QString liveQuery;
     bool m_ifPublish;
+    bool ifLive;
 };
 
 #endif // QUERYMODELLERMAIN_H

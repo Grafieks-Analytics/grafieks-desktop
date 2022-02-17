@@ -32,6 +32,7 @@ QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
     return this->allColumnVisibleMap.value(dashboardId);
 }
 
+
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
 {
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
@@ -59,6 +60,70 @@ QStringList TableColumnsModel::fetchColumnData(QString colName)
     for(int i = 0; i < totalRows; i++){
         this->columnDataList.append(dataList->GetValue(0, i).ToString().c_str());
     }
+    return this->columnDataList;
+}
+
+QStringList TableColumnsModel::fetchColumnDataLive(QString colName)
+{
+    QString dbString;
+
+    this->columnDataList.clear();
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::oracleIntType:
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:
+    case Constants::mongoIntType:{
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::mysqlIntType:
+            dbString = Constants::mysqlStrQueryType;
+            break;
+        case Constants::mysqlOdbcIntType:
+            dbString = Constants::mysqlOdbcStrQueryType;
+            break;
+        case Constants::sqliteIntType:
+            dbString = Constants::sqliteStrQueryType;
+            break;
+        case Constants::postgresIntType:
+            dbString = Constants::postgresOdbcStrQueryType;
+            break;
+        case Constants::oracleIntType:
+            dbString = Constants::oracleOdbcStrQueryType;
+            break;
+        case Constants::mssqlIntType:
+            dbString = Constants::mssqlOdbcStrQueryType;
+            break;
+        case Constants::accessIntType:
+            dbString = Constants::accessOdbcStrQueryType;
+            break;
+        case Constants::mongoIntType:
+            dbString = Constants::mongoOdbcStrQueryType;
+            break;
+
+        }
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + colName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnDataList.append(query.value(0).toString());
+        }
+
+        break;
+    }
+
+
+    }
+
     return this->columnDataList;
 }
 
@@ -321,6 +386,49 @@ void TableColumnsModel::generateColumnsForExtract()
     this->generateColumns(&con);
 }
 
+void TableColumnsModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
+{
+
+    // Clear existing chart headers data
+    this->numericalList.clear();
+    this->categoryList.clear();
+    this->dateList.clear();
+    this->newChartHeader.clear();
+
+    int i = 0;
+    foreach(QStringList headers, sqlHeaders){
+
+        if(headers.at(1).contains(Constants::categoricalType)){
+            this->categoryList.append(headers.at(0));
+            this->columnTypes.insert(headers.at(0), Constants::categoricalType);
+        } else if(headers.at(1).contains(Constants::numericalType)){
+            this->numericalList.append(headers.at(0));
+            this->columnTypes.insert(headers.at(0), Constants::numericalType);
+        } else if(headers.at(1).contains(Constants::dateType)){
+            this->dateList.append(headers.at(0));
+            this->columnTypes.insert(headers.at(0), Constants::dateType);
+        } else{
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" << headers.at(0);
+        }
+
+        this->newChartHeader.insert(i, headers.at(0));
+        i++;
+    }
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+
+    // Update new data
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+    emit sendFilteredColumn(this->dashboardId, this->categoryList, this->numericalList, this->dateList);
+
+}
+
+
 void TableColumnsModel::generateColumnsForReader(duckdb::Connection *con)
 {
     this->generateColumns(con);
@@ -359,6 +467,14 @@ void TableColumnsModel::getExtractTableColumns(QJsonObject tableColumnParams)
         this->allColumnVisibleMap.insert(dashboardId.toInt(), tmpMap);
         this->applyColumnVisibility(dashboardId.toInt());
     }
+}
+
+void TableColumnsModel::receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable)
+{
+    this->liveSelectParams = selectParams;
+    this->liveMasterTable = masterTable;
+    this->liveWhereParams = whereParams;
+    this->liveJoinParams = joinParams;
 }
 
 

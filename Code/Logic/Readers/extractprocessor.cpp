@@ -34,6 +34,7 @@ void ExtractProcessor::processExtract()
     auto masterDb = con.Query(queryString.toStdString());
     QString tableName = masterDb->GetValue(0,0).ToString().c_str();
 
+    qDebug() << "I AM HERE";
     Statics::currentDbName = tableName;
     Statics::modeProcessReader = true;
 
@@ -45,7 +46,7 @@ void ExtractProcessor::processExtract()
     this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
     this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
-    emit generateReports(&con);
+    emit generateExtractReports(&con);
     if(this->moveToDashboardScreen)
         emit extractReaderProcessed();
 }
