@@ -2501,8 +2501,6 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         xDataListLive = this->queryLiveFunction(xQueryString);
 
 
-        qDebug() << Q_FUNC_INFO << "SELECT" << "WATER" << totalXCols << xQueryString << yQueryString;
-
 
         // Considering the measure as string here to avoid unwanted errors in wrong casting
         // The front in javascript can easily handle this
@@ -2511,12 +2509,9 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
             float x = 0;
             int i = -1;
             while(xDataListLive.next()){
-                qDebug() << "WTF" << xDataListLive.value(0);
                 i++;
 
-                //                QString measureString = yDataListLive->GetValue(0, i).ToString().c_str();
                 QString measureString = yDataListLive.value(0).value(i);
-                qDebug() << "MEASURE  S" << measureString;
                 measure = measureString.toFloat();
                 x += measure;
 
