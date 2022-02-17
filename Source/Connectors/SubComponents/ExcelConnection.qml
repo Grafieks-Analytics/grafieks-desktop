@@ -38,6 +38,8 @@ Popup {
         displayTime.text = ""
     }
 
+    // LIVE CONNECTION not possible
+
     Connections{
         target: ConnectorsLoginModel
 

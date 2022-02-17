@@ -42,6 +42,8 @@ Popup {
     /***********************************************************************************************************************/
     // Connection  Starts
 
+    // LIVE CONNECTION not possible
+
     Connections{
         target: ConnectorsLoginModel
 

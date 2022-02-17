@@ -23,6 +23,7 @@ class SaveLiveQueryWorker : public QThread
     QStringList columnStringTypes;
     QVariantMap changedColumnTypes;
     bool ifSavePassword;
+    QMap<int, QStringList> sqlChartHeader;
 
     QuerySplitter querySplitter;
     GeneralParamsModel generalParamsModel;
@@ -36,7 +37,7 @@ protected:
     void run() override;
 
 signals:
-    void saveLiveComplete(QString errorMsg);
+    void saveLiveComplete(QString errorMsg, QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 };
 

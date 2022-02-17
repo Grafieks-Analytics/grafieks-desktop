@@ -203,7 +203,7 @@ void ExcelQueryModel::extractSizeLimit()
     if(Statics::freeLimitExtractSizeExceeded == true){
         Statics::freeLimitExtractSizeExceeded = false;
     } else {
-        emit generateReports();
+        emit generateExtractReports();
     }
 }
 

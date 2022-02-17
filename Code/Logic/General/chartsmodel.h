@@ -26,6 +26,11 @@ class ChartsModel : public QObject
     QMap<int, QString> reportWhereConditions;
     QMap<int, QString> dashboardWhereConditions;
 
+    QString originalSelectParams;
+    QString originalWhereConditions;
+    QString originalJoinConditions;
+    QString originalMasterTable;
+
     int currentReportId;
     int currentDashboardId;
     int currentChartSource;
@@ -101,7 +106,7 @@ public slots:
 
     void receiveReportConditions(QString whereConditions, int currentReportId);
     void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
-
+    void receiveOriginalConditions(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
     void getExtractWhereParams(QJsonObject whereParams);
 
 signals:

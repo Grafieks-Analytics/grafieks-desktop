@@ -36,6 +36,11 @@ class TableColumnsModel : public QObject
     DataType dataType;
     int dashboardId;
 
+    QString liveMasterTable;
+    QString liveWhereParams;
+    QString liveJoinParams;
+    QString liveSelectParams;
+
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
 
@@ -46,6 +51,7 @@ public:
     Q_INVOKABLE void deleteDashboard(int dashboardId, bool deleteAll = false);
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
+    Q_INVOKABLE QStringList fetchColumnDataLive(QString colName);
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
     Q_INVOKABLE void searchColumnNames(int dashboardId, QString keyword);
     Q_INVOKABLE QString findColumnType(QString columnName);
@@ -59,9 +65,11 @@ public slots:
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
     void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
     void generateColumnsForExtract();
+    void generateColumnsForLive(QMap<int, QStringList> sqlHeaders);
     void generateColumnsForReader(duckdb::Connection *con);
 
     void getExtractTableColumns(QJsonObject tableColumnParams);
+    void receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);

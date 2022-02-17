@@ -105,7 +105,11 @@ Rectangle{
         }
 
         //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        if(GeneralParamsModel.getFromLiveFile() === true){
+            ReportsDataModel.fetchColumnDataLive(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        } else {
+            ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        }
         console.log("EDIT CLICKED date", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex, ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
 
 

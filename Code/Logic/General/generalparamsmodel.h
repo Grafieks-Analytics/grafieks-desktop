@@ -23,6 +23,8 @@ class GeneralParamsModel : public QObject
     int m_currentScreen;
     QVariantMap changedHeaderTypes; // QMap<tableName.columnName, newColumnType>
 
+    bool setForLiveFile;
+
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
 
@@ -52,6 +54,12 @@ public:
     //! Set Static Extracts Path
     Q_INVOKABLE void setExtractPath(QString extractsPath);
 
+    //! Get Live Path
+    Q_INVOKABLE QString getLivePath();
+
+    //! Set Static Live Path
+    Q_INVOKABLE void setLivePath(QString livePath);
+
     //! Get Extract Path
     Q_INVOKABLE QString getExtractPath();
 
@@ -60,6 +68,11 @@ public:
     Q_INVOKABLE QVariantMap getChangedColumnTypes();
 
     Q_INVOKABLE QString urlToFilePath(QUrl url);
+
+    Q_INVOKABLE void setFromLiveFile(bool setForLiveFile);
+    Q_INVOKABLE bool getFromLiveFile();
+
+    Q_INVOKABLE QStringList getCredentials();
 
     QString randomStringGenerator();
 

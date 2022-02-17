@@ -29,6 +29,7 @@ Popup {
 
     property var selectedFile: ""
 
+    // LIVE CONNECTION not possible
 
     Connections{
         target: ConnectorsLoginModel

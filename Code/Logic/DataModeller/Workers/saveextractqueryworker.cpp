@@ -4,6 +4,9 @@ SaveExtractQueryWorker::SaveExtractQueryWorker(QString tmpSql, QVariantMap chang
 {
     this->tmpSql = tmpSql;
     this->changedColumnTypes = changedColumnTypes;
+    this->ifSavePassword = true;
+
+    querySplitter.setQuery(this->tmpSql);
 }
 
 void SaveExtractQueryWorker::run()
@@ -199,10 +202,43 @@ void SaveExtractQueryWorker::run()
         QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER, unique_hash VARCHAR,  last_update VARCHAR)";
         QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
+        QString password = this->ifSavePassword ? connection.password() : "";
+        int portTmp = connection.port();
+        QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);
+        QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR)";
+        QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
+
+        QStringList selectParams = this->querySplitter.getSelectParams();
+        QString selectParamsString;
+        foreach(QString selectParam, selectParams){
+            selectParamsString += selectParam + ", ";
+        }
+        selectParamsString.chop(2);
+
+        QString whereConditions = this->querySplitter.getWhereCondition();
+        QString joinConditions = this->querySplitter.getJoinConditions();
+        QString masterTable = this->querySplitter.getMainTable();
+
+        QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartExtractTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
+        QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartExtractTable + " VALUES ('" + selectParamsString + "', '" + whereConditions + "', '" + joinConditions + "', '" + masterTable + "')";
+
+
         auto x = con.Query(tableCreateQuery.toStdString());
         if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
         auto z = con.Query(tableInserQuery.toStdString());
         if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
+
+        auto credentialsCreate = con.Query(credentialsCreateQuery.toStdString());
+        if(!credentialsCreate->success) qDebug() << credentialsCreate->error.c_str() << credentialsCreateQuery;
+        auto credentialsInsert = con.Query(credentialsInsertQuery.toStdString());
+        if(!credentialsInsert->success) qDebug() << credentialsInsert->error.c_str() << credentialsInsertQuery;
+
+        auto queryPartCreate = con.Query(queryPartCreateQuery.toStdString());
+        if(!queryPartCreate->success) qDebug() << queryPartCreate->error.c_str() << queryPartCreateQuery;
+        auto queryPartInsert = con.Query(queryPartInsertQuery.toStdString());
+        if(!queryPartInsert->success) qDebug() << queryPartInsert->error.c_str() << queryPartInsertQuery;
+
+        qDebug() << "SPLITTER" << whereConditions << joinConditions << masterTable;
 
         // Start appending data in table
         duckdb::Appender appender(con, fileName.toStdString());

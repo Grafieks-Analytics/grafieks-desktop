@@ -32,15 +32,40 @@ Popup {
     // Connection  Starts
 
     Connections{
+        target: LiveProcessor
+
+        function onOpenConnection(dbType){
+            if(dbType === "mysql"){
+                let credentials = GeneralParamsModel.getCredentials();
+
+                server.text = credentials[0]
+                port.text = credentials[1]
+                database.text = credentials[2]
+                username.text = credentials[3]
+                password.text = credentials[4]
+            }
+        }
+    }
+
+    Connections{
         target: ConnectorsLoginModel
 
         function onMysqlLoginStatus(status){
 
             if(status.status === true){
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
+                    LiveProcessor.processLiveQueries()
 
-                popup.visible = false
-                GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                stacklayout_home.currentIndex = 5
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    stacklayout_home.currentIndex = 6
+
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
             }
             else{
                 popup.visible = true

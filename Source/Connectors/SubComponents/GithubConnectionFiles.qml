@@ -82,6 +82,7 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    // LIVE CONNECTION not possible
 
     Connections{
         target: GithubDS

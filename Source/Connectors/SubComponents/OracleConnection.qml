@@ -38,9 +38,17 @@ Popup {
 
              if(status.status === true){
 
-                 popup.visible = false
-                 GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                 stacklayout_home.currentIndex = 5
+                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                 if(setFromLiveFile){
+                     popup.visible = false
+                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                     stacklayout_home.currentIndex = 6
+
+                 } else {
+                     popup.visible = false
+                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                     stacklayout_home.currentIndex = 5
+                 }
              }
              else{
                  popup.visible = true
