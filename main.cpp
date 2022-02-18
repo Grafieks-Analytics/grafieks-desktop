@@ -429,6 +429,9 @@ int main(int argc, char *argv[])
     QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
     QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
     QObject::connect(&queryModel, &QueryModel::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveHeaderGenerated, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveHeaderGenerated, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
     QObject::connect(&liveProcessor, &LiveProcessor::generateLiveReports, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
     QObject::connect(&liveProcessor, &LiveProcessor::generateLiveReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
     QObject::connect(&liveProcessor, &LiveProcessor::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);

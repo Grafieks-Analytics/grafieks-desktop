@@ -389,6 +389,7 @@ void TableColumnsModel::generateColumnsForExtract()
 void TableColumnsModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
 
+    qDebug() << "I HAVE RECEIVED" << sqlHeaders;
     // Clear existing chart headers data
     this->numericalList.clear();
     this->categoryList.clear();
@@ -471,6 +472,7 @@ void TableColumnsModel::getExtractTableColumns(QJsonObject tableColumnParams)
 
 void TableColumnsModel::receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable)
 {
+    qDebug() << "I HAVE RECEIVED ORIGINAL CONDITONS" << selectParams << whereParams << joinParams << masterTable;
     this->liveSelectParams = selectParams;
     this->liveMasterTable = masterTable;
     this->liveWhereParams = whereParams;

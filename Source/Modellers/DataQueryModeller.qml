@@ -214,10 +214,6 @@ Page {
             saveExtractPopupFunction(false)
         }
 
-        function onShowSaveLiveWaitPopup(){
-            saveExtractPopupFunction(false)
-        }
-
         function onLiveFileSaved(ifPublish){
             saveLiveLimit(ifPublish)
         }
@@ -241,6 +237,16 @@ Page {
         }
 
         function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+
+        function onLiveFileSaved(ifPublish){
+            saveLiveLimit(ifPublish)
+        }
+
+        function onLiveCreationError(errorMessage){
             extractCreationError.text = errorMessage
             extractCreationError.open()
             saveExtractPopupFunction(false)
