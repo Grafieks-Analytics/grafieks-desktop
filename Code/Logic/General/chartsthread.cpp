@@ -165,7 +165,7 @@ void ChartsThread::getBarChartValues()
             yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -177,8 +177,6 @@ void ChartsThread::getBarChartValues()
             xAxisDataPointer->append(dataListLive.value(0).toString());
             yAxisDataPointer->append(dataListLive.value(1).toString());
         }
-    } else {
-        // For forward
     }
 
     try{

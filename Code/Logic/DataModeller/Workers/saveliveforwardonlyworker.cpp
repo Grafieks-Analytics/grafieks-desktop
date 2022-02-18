@@ -1,8 +1,12 @@
 #include "saveliveforwardonlyworker.h"
 
-SaveLiveForwardOnlyWorker::SaveLiveForwardOnlyWorker(bool ifSavePassword)
+SaveLiveForwardOnlyWorker::SaveLiveForwardOnlyWorker(QString tmpSql, QVariantMap changedColumnTypes, bool ifSavePassword)
 {
+    this->tmpSql = tmpSql;
+    this->changedColumnTypes = changedColumnTypes;
     this->ifSavePassword = ifSavePassword;
+
+    querySplitter.setQuery(this->tmpSql);
 }
 
 void SaveLiveForwardOnlyWorker::run()
@@ -82,8 +86,10 @@ void SaveLiveForwardOnlyWorker::run()
     QString tableInsertQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
     QString password = this->ifSavePassword ? dbForward.password() : "";
+    QString port = QString::number(dbForward.port());
+
     QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + dbForward.userName() + "', '" + password + "', '" + dbForward.hostName() + "', '" + dbForward.port() + "', '" + dbForward.databaseName() + "')";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + dbForward.userName() + "', '" + password + "', '" + dbForward.hostName() + "', '" + port + "', '" + dbForward.databaseName() + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;
@@ -92,8 +98,12 @@ void SaveLiveForwardOnlyWorker::run()
     }
     selectParamsString.chop(2);
 
+    QString whereConditions = this->querySplitter.getWhereCondition();
+    QString joinConditions = this->querySplitter.getJoinConditions();
+    QString masterTable = this->querySplitter.getMainTable();
+
     QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
-    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + this->querySplitter.getWhereCondition() + "', '" + this->querySplitter.getJoinConditions() + "', '" + this->querySplitter.getMainTable() + "')";
+    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + whereConditions + "', '" + joinConditions + "', '" + masterTable + "')";
 
 
     auto tableCreate = con.Query(tableCreateQuery.toStdString());
@@ -110,4 +120,10 @@ void SaveLiveForwardOnlyWorker::run()
     if(!queryPartCreate->success) qDebug() << queryPartCreate->error.c_str() << queryPartCreateQuery;
     auto queryPartInsert = con.Query(queryPartInsertQuery.toStdString());
     if(!queryPartInsert->success) qDebug() << queryPartInsert->error.c_str() << queryPartInsertQuery;
+
+    if(tableCreate->success && tableInsert->success && credentialsCreate->success && credentialsInsert->success && queryPartCreate->success && queryPartInsert->success){
+        emit saveLiveComplete("", selectParamsString, whereConditions, joinConditions, masterTable);
+    } else {
+        emit saveLiveComplete("Some error occured while saving live file", "", "", "", "");
+    }
 }

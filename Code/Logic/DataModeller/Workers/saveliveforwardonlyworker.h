@@ -20,16 +20,20 @@ class SaveLiveForwardOnlyWorker : public QThread
 {
     Q_OBJECT
     bool ifSavePassword;
+    QString tmpSql;
+    QStringList columnStringTypes;
+    QVariantMap changedColumnTypes;
 
     QuerySplitter querySplitter;
 
 public:
-    explicit SaveLiveForwardOnlyWorker(bool ifSavePassword = false);
+    explicit SaveLiveForwardOnlyWorker(QString tmpSql = "", QVariantMap changedColumnTypes = QVariantMap(), bool ifSavePassword = false);
 
 protected:
     void run() override;
 
 signals:
+    void saveLiveComplete(QString errorMsg, QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 };
 
