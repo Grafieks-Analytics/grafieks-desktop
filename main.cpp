@@ -419,6 +419,7 @@ int main(int argc, char *argv[])
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
     QObject::connect(&tableColumnsModel, &TableColumnsModel::signalSaveTableColumns, &workbookProcessor, &WorkbookProcessor::getTableColumns);
     QObject::connect(&chartsModel, &ChartsModel::sendWhereParams, &workbookProcessor, &WorkbookProcessor::getWhereParams);
+
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
