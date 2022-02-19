@@ -64,7 +64,7 @@ Rectangle{
                 var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 ReportParamsModel.removeTmpSelectedValues(0, true)
 
-                if(GeneralParamsModel.getFromLiveFile() === true){
+                if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
                     colData = ReportsDataModel.fetchColumnDataLive(colName)
                 } else {
                     colData = ReportsDataModel.fetchColumnData(colName)

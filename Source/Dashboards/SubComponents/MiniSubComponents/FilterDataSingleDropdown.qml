@@ -23,7 +23,7 @@ Item{
 
 
     onComponentNameChanged: {
-        if(GeneralParamsModel.getFromLiveFile()){
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
         } else {
             modelContent = TableColumnsModel.fetchColumnData(componentName)
