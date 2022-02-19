@@ -3,6 +3,7 @@
 GeneralParamsModel::GeneralParamsModel(QObject *parent) : QObject(parent)
 {
     this->setForLiveFile = false;
+    this->setForLiveQuery = false;
 }
 
 QString GeneralParamsModel::getFileToken()
@@ -131,6 +132,16 @@ QString GeneralParamsModel::urlToFilePath(QUrl url)
 bool GeneralParamsModel::getFromLiveFile()
 {
     return this->setForLiveFile;
+}
+
+void GeneralParamsModel::setFromLiveQuery(bool setForLiveQuery)
+{
+    this->setForLiveQuery = setForLiveQuery;
+}
+
+bool GeneralParamsModel::getFromLiveQuery()
+{
+    return this->setForLiveQuery;
 }
 
 QStringList GeneralParamsModel::getCredentials()

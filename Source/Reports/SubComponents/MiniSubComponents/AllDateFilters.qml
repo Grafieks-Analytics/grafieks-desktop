@@ -105,7 +105,7 @@ Rectangle{
         }
 
         //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        if(GeneralParamsModel.getFromLiveFile() === true){
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             ReportsDataModel.fetchColumnDataLive(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
         } else {
             ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
