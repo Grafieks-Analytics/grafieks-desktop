@@ -88,8 +88,8 @@ void SaveLiveForwardOnlyWorker::run()
     QString password = this->ifSavePassword ? dbForward.password() : "";
     QString port = QString::number(dbForward.port());
 
-    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + dbForward.userName() + "', '" + password + "', '" + dbForward.hostName() + "', '" + port + "', '" + dbForward.databaseName() + "')";
+    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR, db_type VARCHAR)";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + dbForward.userName() + "', '" + password + "', '" + dbForward.hostName() + "', '" + port + "', '" + dbForward.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;
