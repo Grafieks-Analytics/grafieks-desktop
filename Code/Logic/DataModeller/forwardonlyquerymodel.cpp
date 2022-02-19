@@ -64,9 +64,9 @@ void ForwardOnlyQueryModel::saveExtractData()
 void ForwardOnlyQueryModel::saveLiveData()
 {
     if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
-        this->liveQuery = this->tmpSql +  " WHERE " + this->newWhereConditions;
+        this->liveQuery = this->query +  " WHERE " + this->newWhereConditions;
     } else {
-        this->liveQuery = this->tmpSql;
+        this->liveQuery = this->query;
     }
 
     // For .gads, we need to save headers
@@ -339,7 +339,7 @@ void ForwardOnlyQueryModel::liveSizeLimit(QString selectParams, QString whereCon
 
     emit showSaveExtractWaitPopup();
     emit liveFileSaved(m_ifPublish);
-    emit generateLiveReports(this->tmpSql);
+    emit generateLiveReports(this->query);
     emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
 }
 

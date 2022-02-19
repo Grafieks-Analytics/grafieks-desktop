@@ -119,7 +119,40 @@ QStringList TableColumnsModel::fetchColumnDataLive(QString colName)
         }
 
         break;
+
     }
+
+        break;
+
+    case Constants::teradataIntType:
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
+
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::redshiftIntType:
+            dbString = Constants::redshiftOdbcStrQueryType;
+            break;
+        case Constants::snowflakeIntType:
+            dbString = Constants::snowflakeOdbcStrQueryType;
+            break;
+        case Constants::teradataIntType:
+            dbString = Constants::teradataOdbcStrQueryType;
+            break;
+        }
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + colName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnDataList.append(query.value(0).toString());
+        }
+
+    }
+        break;
 
 
     }
@@ -389,7 +422,6 @@ void TableColumnsModel::generateColumnsForExtract()
 void TableColumnsModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
 
-    qDebug() << "I HAVE RECEIVED" << sqlHeaders;
     // Clear existing chart headers data
     this->numericalList.clear();
     this->categoryList.clear();
@@ -487,10 +519,10 @@ void TableColumnsModel::generateColumns(duckdb::Connection *con)
     QString extractPath = Statics::extractPath;
     QString tableName = Statics::currentDbName;
 
-//    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-//    }
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
 
     // Clear existing chart headers data
     this->numericalList.clear();

@@ -112,11 +112,40 @@ QStringList ReportsDataModel::fetchColumnDataLive(QString columnName, QString op
             this->columnData.append(query.value(0).toString());
         }
 
+    }
+        break;
+
+    case Constants::teradataIntType:
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
+
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::redshiftIntType:
+            dbString = Constants::redshiftOdbcStrQueryType;
+            break;
+        case Constants::snowflakeIntType:
+            dbString = Constants::snowflakeOdbcStrQueryType;
+            break;
+        case Constants::teradataIntType:
+            dbString = Constants::teradataOdbcStrQueryType;
+            break;
+        }
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnData.append(query.value(0).toString());
+        }
+
+    }
         break;
     }
 
-
-    }
 
     emit columnDataChanged(this->columnData, options);
     return this->columnData;
