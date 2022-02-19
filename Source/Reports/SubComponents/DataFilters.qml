@@ -240,7 +240,7 @@ Popup {
             "values" : ""
         }
 
-        if(GeneralParamsModel.getFromLiveFile() === true){
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             ReportsDataModel.fetchColumnDataLive(colName, options)
         } else {
             ReportsDataModel.fetchColumnData(colName, options)

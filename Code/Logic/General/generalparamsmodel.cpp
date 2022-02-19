@@ -3,6 +3,7 @@
 GeneralParamsModel::GeneralParamsModel(QObject *parent) : QObject(parent)
 {
     this->setForLiveFile = false;
+    this->setForLiveQuery = false;
 }
 
 QString GeneralParamsModel::getFileToken()
@@ -133,6 +134,16 @@ bool GeneralParamsModel::getFromLiveFile()
     return this->setForLiveFile;
 }
 
+void GeneralParamsModel::setFromLiveQuery(bool setForLiveQuery)
+{
+    this->setForLiveQuery = setForLiveQuery;
+}
+
+bool GeneralParamsModel::getFromLiveQuery()
+{
+    return this->setForLiveQuery;
+}
+
 QStringList GeneralParamsModel::getCredentials()
 {
     QString host;
@@ -192,6 +203,36 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::mongoDb;
         username = Statics::mongoUsername;
         password = Statics::mongoPassword;
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+
+        host = Statics::redshiftHost;
+        port = Statics::redshiftPort;
+        database = Statics::redshiftDb;
+        username = Statics::redshiftUsername;
+        password = Statics::redshiftPassword;
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        host = Statics::teradataHost;
+        port = Statics::teradataPort;
+        database = Statics::teradataDb;
+        username = Statics::teradataUsername;
+        password = Statics::teradataPassword;
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+
+        host = Statics::snowflakeHost;
+        port = Statics::snowflakePort;
+        database = Statics::snowflakeDb;
+        username = Statics::snowflakeUsername;
+        password = Statics::snowflakePassword;
         break;
     }
     }

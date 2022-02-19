@@ -20,7 +20,7 @@ Item {
     onComponentNameChanged: {
         var modelData
 
-        if(GeneralParamsModel.getFromLiveFile()){
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelData = TableColumnsModel.fetchColumnDataLive(componentName)
         } else {
             modelData = TableColumnsModel.fetchColumnData(componentName)
