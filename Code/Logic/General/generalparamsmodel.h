@@ -24,6 +24,7 @@ class GeneralParamsModel : public QObject
     QVariantMap changedHeaderTypes; // QMap<tableName.columnName, newColumnType>
 
     bool setForLiveFile;
+    bool setForLiveQuery;
 
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
@@ -71,6 +72,9 @@ public:
 
     Q_INVOKABLE void setFromLiveFile(bool setForLiveFile);
     Q_INVOKABLE bool getFromLiveFile();
+
+    Q_INVOKABLE void setFromLiveQuery(bool setForLiveQuery);
+    Q_INVOKABLE bool getFromLiveQuery();
 
     Q_INVOKABLE QStringList getCredentials();
 

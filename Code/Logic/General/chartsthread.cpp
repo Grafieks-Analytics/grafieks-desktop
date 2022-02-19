@@ -165,7 +165,7 @@ void ChartsThread::getBarChartValues()
             yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -177,8 +177,6 @@ void ChartsThread::getBarChartValues()
             xAxisDataPointer->append(dataListLive.value(0).toString());
             yAxisDataPointer->append(dataListLive.value(1).toString());
         }
-    } else {
-        // For forward
     }
 
     try{
@@ -277,7 +275,7 @@ void ChartsThread::getGroupedBarChartValues()
             splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -295,8 +293,6 @@ void ChartsThread::getGroupedBarChartValues()
             xAxisDataPointerPre.append(dataListLive.value(0).toString());
             splitDataPointerPre.append(dataListLive.value(2).toString());
         }
-    } else {
-        // For forward
     }
 
 
@@ -395,7 +391,7 @@ void ChartsThread::getNewGroupedBarChartValues()
             uniqueSplitKeyData = reportChartDataVar;
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -413,8 +409,6 @@ void ChartsThread::getNewGroupedBarChartValues()
             reportChartDataVar.removeDuplicates();
             uniqueSplitKeyData = reportChartDataVar;
         }
-    } else {
-        // For forward
     }
 
 
@@ -524,7 +518,7 @@ void ChartsThread::getLineBarChartValues()
             yLineAxisDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -538,8 +532,6 @@ void ChartsThread::getLineBarChartValues()
             yBarAxisDataPointer->append(dataListLive.value(1).toString());
             yLineAxisDataPointer->append(dataListLive.value(2).toString());
         }
-    } else {
-        // For forward
     }
 
     // Add data
@@ -624,7 +616,7 @@ void ChartsThread::getPieChartValues()
             yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else{
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -637,8 +629,6 @@ void ChartsThread::getPieChartValues()
             xAxisDataPointer->append(dataListLive.value(0).toString());
             yAxisDataPointer->append(dataListLive.value(1).toString());
         }
-    } else {
-        // For forward
     }
 
 
@@ -711,7 +701,7 @@ void ChartsThread::getFunnelChartValues()
             yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -724,8 +714,6 @@ void ChartsThread::getFunnelChartValues()
             xAxisDataPointer->append(dataListLive.value(0).toString());
             yAxisDataPointer->append(dataListLive.value(1).toString());
         }
-    } else {
-        // For forward
     }
 
     try{
@@ -805,7 +793,7 @@ void ChartsThread::getRadarChartValues()
             yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -818,8 +806,6 @@ void ChartsThread::getRadarChartValues()
             xAxisDataPointer->append(dataListLive.value(0).toString());
             yAxisDataPointer->append(dataListLive.value(1).toString());
         }
-    } else {
-        // For forward
     }
 
     try{
@@ -911,7 +897,7 @@ void ChartsThread::getScatterChartValues()
             splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -929,10 +915,7 @@ void ChartsThread::getScatterChartValues()
             xAxisDataPointerPre.append(dataListLive.value(0).toString());
             splitDataPointerPre.append(dataListLive.value(2).toString());
         }
-    } else {
-        // For forward
     }
-
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
@@ -1016,7 +999,7 @@ void ChartsThread::getScatterChartNumericalValues()
         xAxisValue = dataListExtract->GetValue(0, 0).ToString().c_str();
         yAxisValue = dataListExtract->GetValue(1, 0).ToString().c_str();
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT SUM(" + xAxisColumn + "), SUM(" + yAxisColumn + ") FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -1025,8 +1008,6 @@ void ChartsThread::getScatterChartNumericalValues()
         xAxisValue = dataListLive.value(0).toString();
         yAxisValue = dataListLive.value(1).toString();
 
-    } else {
-        // For forward
     }
 
     tmpData.append(0);
@@ -1100,7 +1081,7 @@ void ChartsThread::getHeatMapChartValues()
             splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -1118,8 +1099,6 @@ void ChartsThread::getHeatMapChartValues()
             xAxisDataPointerPre.append(dataListLive.value(0).toString());
             splitDataPointerPre.append(dataListLive.value(2).toString());
         }
-    } else {
-        // For forward
     }
 
     // Fetch unique xAxisData & splitter
@@ -1229,7 +1208,7 @@ void ChartsThread::getGaugeChartValues()
             calculateColumnPointer.append(dataListExtract->GetValue(0, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -1240,8 +1219,6 @@ void ChartsThread::getGaugeChartValues()
         while(dataListLive.next()){
             calculateColumnPointer.append(dataListLive.value(0).toString());
         }
-    } else {
-        // For forward
     }
 
     try{
@@ -1307,7 +1284,7 @@ void ChartsThread::getSankeyChartValues()
             measureDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -1320,8 +1297,6 @@ void ChartsThread::getSankeyChartValues()
             destinationDataPointer->append(dataListLive.value(1).toString());
             measureDataPointer->append(dataListLive.value(2).toString());
         }
-    } else {
-        // For forward
     }
 
     QStringList combinedList;
@@ -1424,7 +1399,7 @@ void ChartsThread::getKPIChartValues()
             calculateColumnPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -1435,8 +1410,6 @@ void ChartsThread::getKPIChartValues()
         while(dataListLive.next()){
             calculateColumnPointer->append(dataListLive.value(0).toString());
         }
-    } else {
-        // For forward
     }
 
 
@@ -1597,7 +1570,7 @@ void ChartsThread::getTableChartValues()
             qWarning() << Q_FUNC_INFO << e.what();
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString xQueryString =  "SELECT ";
@@ -1693,8 +1666,6 @@ void ChartsThread::getTableChartValues()
             qWarning() << Q_FUNC_INFO << e.what();
         }
 
-    } else {
-        // For forward
     }
 
 
@@ -1903,7 +1874,7 @@ void ChartsThread::getPivotChartValues()
             qWarning() << Q_FUNC_INFO << e.what();
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString xQueryString =  "SELECT ";
@@ -2002,8 +1973,6 @@ void ChartsThread::getPivotChartValues()
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
         }
-    } else {
-        // For forward
     }
 
 
@@ -2129,7 +2098,7 @@ void ChartsThread::getMultiLineChartValues()
             splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -2146,10 +2115,7 @@ void ChartsThread::getMultiLineChartValues()
             xAxisDataPointerPre.append(dataListLive.value(0).toString());
             splitDataPointerPre.append(dataListLive.value(2).toString());
         }
-    } else {
-        // For forward
     }
-
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -2253,7 +2219,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
             yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -2266,8 +2232,6 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
             yAxisDataPointer->append(dataListLive.value(1).toString());
         }
 
-    } else {
-        // For forward
     }
 
 
@@ -2481,7 +2445,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         }
 
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString xQueryString =  "SELECT ";
@@ -2609,8 +2573,6 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
             qWarning() << Q_FUNC_INFO << e.what();
         }
 
-    } else {
-        // For forward
     }
 
 
@@ -2694,7 +2656,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
             splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
         }
 
-    } else if(this->datasourceType == Constants::sqlType){
+    } else {
 
         // Fetch data from live
         QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
@@ -2712,8 +2674,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
             splitDataPointerPre.append(dataListLive.value(2).toString());
         }
 
-    } else {
-        // For forward
     }
 
     // Fetch unique xAxisData & splitter
@@ -2932,6 +2892,45 @@ QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
         connection.setPort(Statics::mongoPort);
         connection.setUserName(Statics::mongoUsername);
         connection.setPassword(Statics::mongoPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "redshiftQ");
+
+        connection.setDatabaseName(Statics::redshiftDb);
+        connection.setHostName(Statics::redshiftHost);
+        connection.setPort(Statics::redshiftPort);
+        connection.setUserName(Statics::redshiftUsername);
+        connection.setPassword(Statics::redshiftPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::teradataIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "teradataQ");
+
+        connection.setDatabaseName(Statics::teradataDb);
+        connection.setHostName(Statics::teradataHost);
+        connection.setPort(Statics::teradataPort);
+        connection.setUserName(Statics::teradataUsername);
+        connection.setPassword(Statics::teradataPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "snowflakeQ");
+
+        connection.setDatabaseName(Statics::snowflakeDb);
+        connection.setHostName(Statics::snowflakeHost);
+        connection.setPort(Statics::snowflakePort);
+        connection.setUserName(Statics::snowflakeUsername);
+        connection.setPassword(Statics::snowflakePassword);
 
         connection.open();
         break;

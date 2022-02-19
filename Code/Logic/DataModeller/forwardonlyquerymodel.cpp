@@ -20,6 +20,7 @@ void ForwardOnlyQueryModel::setQuery(QString query, bool queriedFromDataModeler)
     this->query = query.simplified();
     this->queriedFromDataModeler = queriedFromDataModeler;
     querySplitter.setQueryForClasses(this->query);
+//    this->generateRoleNames();
 
 }
 
@@ -36,7 +37,9 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
         this->finalSql += " WHERE " + this->newWhereConditions;
 
-    this->finalSql += " limit " + QString::number(previewRowCount);
+    if(Statics::currentDbIntType != Constants::teradataIntType){
+        this->finalSql += " limit " + QString::number(previewRowCount);
+    }
     this->generateRoleNames();
 
 }
@@ -56,6 +59,25 @@ void ForwardOnlyQueryModel::saveExtractData()
     connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
 
     saveForwardOnlyWorker->start();
+}
+
+void ForwardOnlyQueryModel::saveLiveData()
+{
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
+        this->liveQuery = this->query +  " WHERE " + this->newWhereConditions;
+    } else {
+        this->liveQuery = this->query;
+    }
+
+    // For .gads, we need to save headers
+    this->ifLive = true;
+
+
+    SaveLiveForwardOnlyWorker *saveLiveQueryWorker = new SaveLiveForwardOnlyWorker(this->liveQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveLiveQueryWorker, &SaveLiveForwardOnlyWorker::saveLiveComplete, this, &ForwardOnlyQueryModel::liveSaved, Qt::QueuedConnection);
+    connect(saveLiveQueryWorker, &SaveLiveForwardOnlyWorker::finished, saveLiveQueryWorker, &SaveLiveForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
+
+    saveLiveQueryWorker->start();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
@@ -122,6 +144,19 @@ void ForwardOnlyQueryModel::extractSaved(QString errorMsg)
     }
 }
 
+void ForwardOnlyQueryModel::liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    if(errorMessage.length() == 0){
+        liveSizeLimit(selectParams, whereConditions, joinConditions, masterTable);
+    } else {
+        emit liveCreationError(errorMessage);
+    }
+}
+
 void ForwardOnlyQueryModel::setIfPublish(bool ifPublish)
 {
     if (m_ifPublish == ifPublish)
@@ -133,7 +168,6 @@ void ForwardOnlyQueryModel::setIfPublish(bool ifPublish)
 
 void ForwardOnlyQueryModel::generateRoleNames()
 {
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
@@ -213,6 +247,36 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
         endResetModel();
     }
 
+
+    // For .gads file, we need to save headers and data types
+    if(this->ifLive){
+
+        QString livePath = Statics::livePath;
+        duckdb::DuckDB db(livePath.toStdString());
+        duckdb::Connection con(db);
+
+        QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
+        QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
+
+
+        foreach(QStringList values, this->resultData){
+            headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
+        }
+        headersInsertQuery.chop(1);
+
+        auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
+        if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
+        auto queryHeaderInsert = con.Query(headersInsertQuery.toStdString());
+        if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
+
+        if(queryHeadersCreate->success && queryHeaderInsert->success){
+            emit showSaveExtractWaitPopup();
+            emit liveHeaderGenerated(this->forwardOnlyChartHeader);
+        } else {
+            qWarning() << Q_FUNC_INFO << "HEADER WRITING FAILED";
+        }
+    }
+
     if(this->previewRowCount > 0){
         emit forwardOnlyHasData(true);
     } else{
@@ -255,5 +319,27 @@ void ForwardOnlyQueryModel::extractSizeLimit()
     } else {
         emit generateExtractReports();
     }
+}
+
+void ForwardOnlyQueryModel::liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+
+    QString livePath = Statics::livePath;
+    int size = 0;
+
+    QFile fileInfo(livePath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    // Generate headers to be saved for .gads file
+    this->setPreviewQuery(0);
+
+    emit showSaveExtractWaitPopup();
+    emit liveFileSaved(m_ifPublish);
+    emit generateLiveReports(this->query);
+    emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
 }
 

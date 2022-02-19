@@ -214,10 +214,6 @@ Page {
             saveExtractPopupFunction(false)
         }
 
-        function onShowSaveLiveWaitPopup(){
-            saveExtractPopupFunction(false)
-        }
-
         function onLiveFileSaved(ifPublish){
             saveLiveLimit(ifPublish)
         }
@@ -241,6 +237,16 @@ Page {
         }
 
         function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+
+        function onLiveFileSaved(ifPublish){
+            saveLiveLimit(ifPublish)
+        }
+
+        function onLiveCreationError(errorMessage){
             extractCreationError.text = errorMessage
             extractCreationError.open()
             saveExtractPopupFunction(false)
@@ -441,6 +447,7 @@ Page {
         // extract == in memory
         DSParamsModel.setDsType(Constants.extractDS)
         DSParamsModel.setFileExtension(Constants.extractFileExt)
+        GeneralParamsModel.setFromLiveQuery(false)
     }
 
     function openDataFilters(){
@@ -453,6 +460,7 @@ Page {
         // Also set the C++ class
         DSParamsModel.setDsType(Constants.liveDS)
         DSParamsModel.setFileExtension(Constants.liveFileExt)
+        GeneralParamsModel.setFromLiveQuery(true)
     }
 
     function onCreateDashboardClicked(){

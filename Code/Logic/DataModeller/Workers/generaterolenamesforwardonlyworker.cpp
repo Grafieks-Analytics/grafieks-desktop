@@ -49,19 +49,21 @@ void GenerateRoleNamesForwardOnlyWorker::run()
 
         connection = QSqlDatabase::addDatabase("QODBC", "teradataQ");
 
-        connection.setDatabaseName(Statics::teradataHost);
+        connection.setDatabaseName(Statics::teradataDb);
         connection.setPort(Statics::teradataPort);
         connection.setHostName(Statics::teradataHost);
         connection.setUserName(Statics::teradataUsername);
         connection.setPassword(Statics::teradataPassword);
         connection.open();
+
+        qDebug() << Q_FUNC_INFO << connection.isOpen() << connection.lastError() << Statics::teradataDb << Statics::teradataPort << Statics::teradataHost << Statics::teradataUsername << Statics::teradataPassword;
         break;
     }
     }
 
 
     if(!connection.isOpen()){
-        qDebug() << connection.lastError().text();
+        qDebug() << Q_FUNC_INFO << connection.lastError().text();
     } else{
 
         roleNames.clear();
