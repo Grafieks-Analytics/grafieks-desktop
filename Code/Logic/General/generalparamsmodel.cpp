@@ -205,6 +205,36 @@ QStringList GeneralParamsModel::getCredentials()
         password = Statics::mongoPassword;
         break;
     }
+
+    case Constants::redshiftIntType:{
+
+        host = Statics::redshiftHost;
+        port = Statics::redshiftPort;
+        database = Statics::redshiftDb;
+        username = Statics::redshiftUsername;
+        password = Statics::redshiftPassword;
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        host = Statics::teradataHost;
+        port = Statics::teradataPort;
+        database = Statics::teradataDb;
+        username = Statics::teradataUsername;
+        password = Statics::teradataPassword;
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+
+        host = Statics::snowflakeHost;
+        port = Statics::snowflakePort;
+        database = Statics::snowflakeDb;
+        username = Statics::snowflakeUsername;
+        password = Statics::snowflakePassword;
+        break;
+    }
     }
 
     output << host << port << database << username << password;

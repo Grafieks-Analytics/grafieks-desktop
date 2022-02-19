@@ -37,7 +37,6 @@ Popup {
         function onOpenConnection(dbType){
             if(dbType === "teradata"){
                 let credentials = GeneralParamsModel.getCredentials();
-
                 server.text = credentials[0]
                 port.text = credentials[1]
                 database.text = credentials[2]

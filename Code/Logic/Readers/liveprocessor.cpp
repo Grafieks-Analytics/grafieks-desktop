@@ -102,6 +102,8 @@ void LiveProcessor::processLive()
     dbType = credentials->GetValue(5,0).ToString().c_str();
 
     Statics::currentDbIntType = dbType.toInt();
+
+
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:
@@ -158,13 +160,41 @@ void LiveProcessor::processLive()
         qmlDbName = Constants::mongoQml;
         break;
     }
+
+    case Constants::redshiftIntType:{
+
+        Statics::redshiftHost = host;
+        Statics::redshiftPort = port.toInt();
+        Statics::redshiftDb = database;
+        Statics::redshiftUsername = username;
+        Statics::redshiftPassword = password;
+        qmlDbName = Constants::redshiftQml;
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+
+        Statics::snowflakeHost = host;
+        Statics::snowflakePort = port.toInt();
+        Statics::snowflakeDb = database;
+        Statics::snowflakeUsername = username;
+        Statics::snowflakePassword = password;
+        qmlDbName = Constants::snowflakeQml;
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        Statics::teradataHost = host;
+        Statics::teradataPort = port.toInt();
+        Statics::teradataDb = database;
+        Statics::teradataUsername = username;
+        Statics::teradataPassword = password;
+        qmlDbName = Constants::teradataQml;
+        break;
+    }
     }
 
     Statics::modeProcessReader = true;
     emit openConnection(qmlDbName);
-
-//    masterDb->Print();
-//    credentials->Print();
-//    parts->Print();
-//    headers->Print();
 }
