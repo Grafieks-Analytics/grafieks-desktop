@@ -488,7 +488,7 @@ Item{
 
     function toggleFullScreen(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-        if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
+        if(mainContainer.width === parent.parent.width-left_menubar.width && mainContainer.height === parent.parent.height-25)
         {
             mainContainer.width = newItem.originalWidth
             mainContainer.height = newItem.originalHeight
@@ -502,9 +502,9 @@ Item{
         }
         else{
             mainContainer.width= Qt.binding(function(){
-                return parent.width-left_menubar.width })
+                return parent.parent.width-left_menubar.width })
             mainContainer.height= Qt.binding(function(){
-                return parent.height-5 })
+                return parent.parent.height-25 })
             mainContainer.y=0
             mainContainer.x=0
 
