@@ -38,7 +38,6 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
         dbMysql.setPassword(password);
         dbMysql.open();
 
-
         if(!dbMysql.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMysql.lastError().text());

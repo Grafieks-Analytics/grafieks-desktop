@@ -60,9 +60,15 @@ Rectangle{
             if(ReportParamsModel.section === Constants.categoricalTab){
                 counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
-                var colData = ReportsDataModel.fetchColumnData(colName)
+                var colData
                 var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 ReportParamsModel.removeTmpSelectedValues(0, true)
+
+                if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+                    colData = ReportsDataModel.fetchColumnDataLive(colName)
+                } else {
+                    colData = ReportsDataModel.fetchColumnData(colName)
+                }
 
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []

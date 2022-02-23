@@ -7,6 +7,7 @@ SaveLiveQueryWorker::SaveLiveQueryWorker(QString tmpSql, QVariantMap changedColu
     this->ifSavePassword = ifSavePassword;
 
     querySplitter.setQuery(this->tmpSql);
+
 }
 
 void SaveLiveQueryWorker::run()
@@ -120,17 +121,6 @@ void SaveLiveQueryWorker::run()
         break;
     }
 
-    case Constants::accessIntType:{
-        connection = QSqlDatabase::addDatabase("QODBC", "accessQ");
-
-        connection.setDatabaseName(Statics::acDb);
-        connection.setUserName(Statics::acUsername);
-        connection.setPassword(Statics::acPassword);
-
-        connection.open();
-        break;
-    }
-
     }
 
     // Create a master table to refer the name of actual extract tableName
@@ -145,13 +135,13 @@ void SaveLiveQueryWorker::run()
     QString uniqueHash = generalParamsModel.randomStringGenerator();
 
     QString tableCreateQuery = "CREATE TABLE " + Constants::masterLiveTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER, unique_hash VARCHAR,  last_update VARCHAR)";
-    QString tableInserQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
+    QString tableInsertQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
     QString password = this->ifSavePassword ? connection.password() : "";
     int portTmp = connection.port();
     QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);
-    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "')";
+    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR)";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;
@@ -160,13 +150,18 @@ void SaveLiveQueryWorker::run()
     }
     selectParamsString.chop(2);
 
+    QString whereConditions = this->querySplitter.getWhereCondition();
+    QString joinConditions = this->querySplitter.getJoinConditions();
+    QString masterTable = this->querySplitter.getMainTable();
+
     QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
-    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + this->querySplitter.getWhereCondition() + "', '" + this->querySplitter.getJoinConditions() + "', '" + this->querySplitter.getMainTable() + "')";
+    QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + whereConditions + "', '" + joinConditions + "', '" + masterTable + "')";
+
 
     auto tableCreate = con.Query(tableCreateQuery.toStdString());
     if(!tableCreate->success) qDebug() << tableCreate->error.c_str() << tableCreateQuery;
-    auto tableInsert = con.Query(tableInserQuery.toStdString());
-    if(!tableInsert->success) qDebug() << tableInsert->error.c_str() << tableInserQuery;
+    auto tableInsert = con.Query(tableInsertQuery.toStdString());
+    if(!tableInsert->success) qDebug() << tableInsert->error.c_str() << tableInsertQuery;
 
     auto credentialsCreate = con.Query(credentialsCreateQuery.toStdString());
     if(!credentialsCreate->success) qDebug() << credentialsCreate->error.c_str() << credentialsCreateQuery;
@@ -179,9 +174,9 @@ void SaveLiveQueryWorker::run()
     if(!queryPartInsert->success) qDebug() << queryPartInsert->error.c_str() << queryPartInsertQuery;
 
     if(tableCreate->success && tableInsert->success && credentialsCreate->success && credentialsInsert->success && queryPartCreate->success && queryPartInsert->success){
-        emit saveLiveComplete("");
+        emit saveLiveComplete("", selectParamsString, whereConditions, joinConditions, masterTable);
     } else {
-        emit saveLiveComplete("Some error occured while saving live file");
+        emit saveLiveComplete("Some error occured while saving live file", "", "", "", "");
     }
 
 }

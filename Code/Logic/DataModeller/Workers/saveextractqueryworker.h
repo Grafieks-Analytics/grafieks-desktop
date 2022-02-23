@@ -13,6 +13,7 @@
 
 #include "../../General/datatype.h"
 #include "../../General/generalparamsmodel.h"
+#include "../../General/querysplitter.h"
 
 #include "../../../constants.h"
 #include "../../../statics.h"
@@ -24,8 +25,10 @@ class SaveExtractQueryWorker : public QThread
     QString tmpSql;
     QStringList columnStringTypes;
     QVariantMap changedColumnTypes;
+    bool ifSavePassword;
 
     GeneralParamsModel generalParamsModel;
+    QuerySplitter querySplitter;
 
     int colCount;
 

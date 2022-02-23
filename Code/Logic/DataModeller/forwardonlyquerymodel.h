@@ -17,6 +17,7 @@
 #include "./Workers/generaterolenamesforwardonlyworker.h"
 #include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractforwardonlyworker.h"
+#include "./Workers/saveliveforwardonlyworker.h"
 #include "../General/generalparamsmodel.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
@@ -32,6 +33,7 @@ public:
     Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
+    Q_INVOKABLE void saveLiveData();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;
@@ -44,6 +46,7 @@ public:
 public slots:
     void receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void extractSaved(QString errorMsg);
+    void liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
 
     void setIfPublish(bool ifPublish);
 
@@ -52,6 +55,8 @@ private:
     QString returnConnectionName();
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void extractSizeLimit();
+
+    void liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
 
 
     QHash<int, QByteArray> m_roleNames;
@@ -69,6 +74,7 @@ private:
     QMap<int, QStringList*> forwardOnlyChartData;
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
+    QString tmpSql;
 
     DataType dataType;
     QStringList columnStringTypes;
@@ -77,7 +83,9 @@ private:
     QString newWhereConditions;
     bool queriedFromDataModeler;
 
+    QString liveQuery;
     bool m_ifPublish;
+    bool ifLive;
 
 signals:
 
@@ -85,10 +93,15 @@ signals:
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports();
+    void generateExtractReports();
+    void generateLiveReports(QString query);
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
+    void liveFileSaved(bool ifPublish);
+    void liveCreationError(QString errorMessage);
+    void liveHeaderGenerated(QMap<int, QStringList> sqlHeaders);
+    void liveQueryParams(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 
 

@@ -36,6 +36,14 @@ Page {
     signal update_host_query_modeller(string new_host);
     signal update_data_sources_list();
 
+    Connections{
+        target: LiveProcessor
+
+        function onOpenConnection(dbType){
+            selectAuthorization(dbType)
+        }
+    }
+
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
@@ -582,7 +590,10 @@ Page {
 
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: selectAuthorization(name)
+                    onClicked: {
+                        GeneralParamsModel.setFromLiveFile(false)
+                        selectAuthorization(name)
+                    }
                     enabled: isEnabled
 
                 }
@@ -600,7 +611,10 @@ Page {
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: selectAuthorization(name)
+                    onClicked: {
+                        GeneralParamsModel.setFromLiveFile(false)
+                        selectAuthorization(name)
+                    }
                     enabled: isEnabled
                 }
             }

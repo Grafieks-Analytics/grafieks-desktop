@@ -23,7 +23,11 @@ Item {
     }
 
     onComponentNameChanged: {
-        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+        } else {
+            modelContent = TableColumnsModel.fetchColumnData(componentName)
+        }
         modelContent.unshift("Select All")
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
