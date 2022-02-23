@@ -18,7 +18,13 @@ Item {
     property var value2: 0
 
     onComponentNameChanged: {
-        var modelData = TableColumnsModel.fetchColumnData(componentName)
+        var modelData
+
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelData = TableColumnsModel.fetchColumnDataLive(componentName)
+        } else {
+            modelData = TableColumnsModel.fetchColumnData(componentName)
+        }
         modelData.sort()
 
         rangeSlider.from = Math.min(...modelData)

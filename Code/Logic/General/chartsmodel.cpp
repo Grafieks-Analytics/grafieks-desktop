@@ -85,7 +85,9 @@ void ChartsModel::getBarChartValues(int reportId, int dashboardId, int chartSour
     } else {
 
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
+
     }
 
 }
@@ -103,6 +105,7 @@ void ChartsModel::getStackedBarChartValues(int reportId, int dashboardId, int ch
         chartsAPIThread->methodSelector("getStackedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getStackedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -121,6 +124,7 @@ void ChartsModel::getGroupedBarChartValues(int reportId, int dashboardId, int ch
         chartsAPIThread->methodSelector("getGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 }
@@ -138,6 +142,7 @@ void ChartsModel::getNewGroupedBarChartValues(int reportId, int dashboardId, int
         chartsAPIThread->methodSelector("getNewGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getNewGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -156,6 +161,7 @@ void ChartsModel::getAreaChartValues(int reportId, int dashboardId, int chartSou
         chartsAPIThread->methodSelector("getAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -174,6 +180,7 @@ void ChartsModel::getLineChartValues(int reportId, int dashboardId, int chartSou
         chartsAPIThread->methodSelector("getLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -192,6 +199,7 @@ void ChartsModel::getLineBarChartValues(int reportId, int dashboardId, int chart
         chartsAPIThread->methodSelector("getLineBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getLineBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -210,6 +218,7 @@ void ChartsModel::getPieChartValues(int reportId, int dashboardId, int chartSour
         chartsAPIThread->methodSelector("getPieChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getPieChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -228,6 +237,7 @@ void ChartsModel::getFunnelChartValues(int reportId, int dashboardId, int chartS
         chartsAPIThread->methodSelector("getFunnelChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getFunnelChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -246,6 +256,7 @@ void ChartsModel::getRadarChartValues(int reportId, int dashboardId, int chartSo
         chartsAPIThread->methodSelector("getRadarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getRadarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -264,6 +275,7 @@ void ChartsModel::getScatterChartValues(int reportId, int dashboardId, int chart
         chartsAPIThread->methodSelector("getScatterChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getScatterChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -282,6 +294,7 @@ void ChartsModel::getScatterChartNumericalValues(int reportId, int dashboardId, 
         chartsAPIThread->methodSelector("getScatterChartNumericalValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getScatterChartNumericalValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -300,6 +313,7 @@ void ChartsModel::getHeatMapChartValues(int reportId, int dashboardId, int chart
         chartsAPIThread->methodSelector("getHeatMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getHeatMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -320,6 +334,7 @@ void ChartsModel::getSunburstChartValues(int reportId, int dashboardId, int char
     } else {
         chartsThread->setAxes(nullString, yAxisColumn, nullString);
         chartsThread->setLists(xAxisColumn, nullList);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector( "getSunburstChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -338,6 +353,7 @@ void ChartsModel::getWaterfallChartValues(int reportId, int dashboardId, int cha
         chartsAPIThread->methodSelector("getWaterfallChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, nullString);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getWaterfallChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -356,6 +372,7 @@ void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSo
         chartsAPIThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setGaugeKpiDetails(calculateColumn);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -374,6 +391,7 @@ void ChartsModel::getSankeyChartValues(int reportId, int dashboardId, int chartS
         chartsAPIThread->methodSelector("getSankeyChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setSankeyDetails(sourceColumn, destinationColumn, measureColumn);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getSankeyChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -394,6 +412,7 @@ void ChartsModel::getTreeChartValues(int reportId, int dashboardId, int chartSou
     } else {
         chartsThread->setAxes(nullString, yAxisColumn, nullString);
         chartsThread->setLists(xAxisColumn, nullList);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getTreeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -414,6 +433,7 @@ void ChartsModel::getTreeMapChartValues(int reportId, int dashboardId, int chart
     } else {
         chartsThread->setAxes(nullString, yAxisColumn, nullString);
         chartsThread->setLists(xAxisColumn, nullList);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getTreeMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -432,6 +452,7 @@ void ChartsModel::getKPIChartValues(int reportId, int dashboardId, int chartSour
         chartsAPIThread->methodSelector("getKPIChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setGaugeKpiDetails(calculateColumn);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getKPIChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -450,8 +471,10 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
         chartsAPIThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsAPIThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
+        qDebug() << "XLISTS" << xAxisColumn << yAxisColumn;
         chartsThread->setLists(xAxisColumn, yAxisColumn);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -472,6 +495,7 @@ void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSo
     } else {
         chartsThread->setLists(xAxisColumn, yAxisColumn);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -490,6 +514,7 @@ void ChartsModel::getStackedAreaChartValues(int reportId, int dashboardId, int c
         chartsAPIThread->methodSelector("getStackedAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getStackedAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -508,6 +533,7 @@ void ChartsModel::getMultiLineChartValues(int reportId, int dashboardId, int cha
         chartsThread->methodSelector("getMultiLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getMultiLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     }
 
@@ -707,6 +733,14 @@ void ChartsModel::receiveReportConditions(QString whereConditions, int currentRe
 void ChartsModel::receiveDashboardConditions(QString whereConditions, int currentDashboardId)
 {
     this->dashboardWhereConditions.insert(currentDashboardId, whereConditions);
+}
+
+void ChartsModel::receiveOriginalConditions(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+    this->originalSelectParams = selectParams;
+    this->originalWhereConditions = whereConditions;
+    this->originalJoinConditions = joinConditions;
+    this->originalMasterTable = masterTable;
 }
 
 void ChartsModel::getExtractWhereParams(QJsonObject whereParams)

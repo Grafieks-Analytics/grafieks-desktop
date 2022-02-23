@@ -375,11 +375,11 @@ int main(int argc, char *argv[])
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &forwardOnlyQueryModel, &ForwardOnlyQueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
-    QObject::connect(&queryModel, &QueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
-    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForReader);
+    QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForReader);
 
     // Dashboards
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
@@ -389,18 +389,23 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &reportsDataModel, &ReportsDataModel::updateFilterData);
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &reportsDataModel, &ReportsDataModel::getReportId);
 
-    QObject::connect(&queryModel, &QueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
-    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
+    QObject::connect(&queryModel, &QueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
 
-    QObject::connect(&queryModel, &QueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
-    QObject::connect(&extractProcessor, &ExtractProcessor::generateReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
+    QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForReader);
     QObject::connect(&reportsDataModel, &ReportsDataModel::generateFiltersForAPI, &tableSchemaModel, &TableSchemaModel::generateSchemaForApi);
+
+    // TODO X NEEDS TO CHECK
+    QObject::connect(&queryModel, &QueryModel::generateLiveReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForLive);
+    // TODO X NEEDS TO CHECK
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateLiveReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForLive);
 
     // Charts
     // Data for charts
@@ -414,11 +419,32 @@ int main(int argc, char *argv[])
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
     QObject::connect(&tableColumnsModel, &TableColumnsModel::signalSaveTableColumns, &workbookProcessor, &WorkbookProcessor::getTableColumns);
     QObject::connect(&chartsModel, &ChartsModel::sendWhereParams, &workbookProcessor, &WorkbookProcessor::getWhereParams);
+
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractWhereParams, &chartsModel, &ChartsModel::getExtractWhereParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processExtractFromWorkbook, &extractProcessor, &ExtractProcessor::setArgumentsFromWorkbook);
+
+    // Live Datasource headers
+    QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
+    QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+    QObject::connect(&queryModel, &QueryModel::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
+    QObject::connect(&queryModel, &QueryModel::liveQueryParams, &reportsDataModel, &ReportsDataModel::receiveOriginalConditions);
+    QObject::connect(&queryModel, &QueryModel::liveQueryParams, &tableColumnsModel, &TableColumnsModel::receiveOriginalConditions);
+
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveHeaderGenerated, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveHeaderGenerated, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveQueryParams, &reportsDataModel, &ReportsDataModel::receiveOriginalConditions);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::liveQueryParams, &tableColumnsModel, &TableColumnsModel::receiveOriginalConditions);
+
+    QObject::connect(&liveProcessor, &LiveProcessor::generateLiveReports, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
+    QObject::connect(&liveProcessor, &LiveProcessor::generateLiveReports, &tableColumnsModel, &TableColumnsModel::generateColumnsForLive);
+    QObject::connect(&liveProcessor, &LiveProcessor::liveQueryParams, &chartsModel, &ChartsModel::receiveOriginalConditions);
+    QObject::connect(&liveProcessor, &LiveProcessor::generateLiveSchema, &tableSchemaModel, &TableSchemaModel::generateSchemaForLive);
+    QObject::connect(&liveProcessor, &LiveProcessor::liveQueryParams, &reportsDataModel, &ReportsDataModel::receiveOriginalConditions);
+    QObject::connect(&liveProcessor, &LiveProcessor::liveQueryParams, &tableColumnsModel, &TableColumnsModel::receiveOriginalConditions);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -491,6 +517,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
     engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
     engine.rootContext()->setContextProperty("ExtractProcessor", &extractProcessor);
+    engine.rootContext()->setContextProperty("LiveProcessor", &liveProcessor);
     engine.rootContext()->setContextProperty("WorkbookProcessor", &workbookProcessor);
     engine.rootContext()->setContextProperty("PublishWorkbookModel", &publishWorkbookModel);
     engine.rootContext()->setContextProperty("ProjectsListModel", &projectsListModel);
@@ -511,7 +538,7 @@ int main(int argc, char *argv[])
         if(extension == Constants::extractExt){
             extractProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::liveExt){
-//            liveProcessor.setArgumentsByFile(fileToRead);
+            liveProcessor.setArgumentsByFile(fileToRead);
         } else if(extension == Constants::workbookExt){
             workbookProcessor.setArgumentsByFile(fileToRead);
 

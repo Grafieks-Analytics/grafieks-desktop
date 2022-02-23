@@ -57,6 +57,101 @@ QStringList ReportsDataModel::searchColumnData(QString keyword)
     return searchResults;
 }
 
+QStringList ReportsDataModel::fetchColumnDataLive(QString columnName, QString options)
+{
+    QString dbString;
+
+    this->columnData.clear();
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::oracleIntType:
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:
+    case Constants::mongoIntType:{
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::mysqlIntType:
+            dbString = Constants::mysqlStrQueryType;
+            break;
+        case Constants::mysqlOdbcIntType:
+            dbString = Constants::mysqlOdbcStrQueryType;
+            break;
+        case Constants::sqliteIntType:
+            dbString = Constants::sqliteStrQueryType;
+            break;
+        case Constants::postgresIntType:
+            dbString = Constants::postgresOdbcStrQueryType;
+            break;
+        case Constants::oracleIntType:
+            dbString = Constants::oracleOdbcStrQueryType;
+            break;
+        case Constants::mssqlIntType:
+            dbString = Constants::mssqlOdbcStrQueryType;
+            break;
+        case Constants::accessIntType:
+            dbString = Constants::accessOdbcStrQueryType;
+            break;
+        case Constants::mongoIntType:
+            dbString = Constants::mongoOdbcStrQueryType;
+            break;
+
+        }
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnData.append(query.value(0).toString());
+        }
+
+    }
+        break;
+
+    case Constants::teradataIntType:
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
+
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::redshiftIntType:
+            dbString = Constants::redshiftOdbcStrQueryType;
+            break;
+        case Constants::snowflakeIntType:
+            dbString = Constants::snowflakeOdbcStrQueryType;
+            break;
+        case Constants::teradataIntType:
+            dbString = Constants::teradataOdbcStrQueryType;
+            break;
+        }
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " " + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnData.append(query.value(0).toString());
+        }
+
+    }
+        break;
+    }
+
+
+    emit columnDataChanged(this->columnData, options);
+    return this->columnData;
+}
+
+
 void ReportsDataModel::clearData()
 {
 
@@ -402,6 +497,44 @@ void ReportsDataModel::generateColumnsForExtract()
 
 }
 
+void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
+{
+
+    // Clear existing chart headers data
+    this->numericalList.clear();
+    this->categoryList.clear();
+    this->dateList.clear();
+    this->newChartHeader.clear();
+
+    int i = 0;
+    foreach(QStringList headers, sqlHeaders){
+
+        if(headers.at(1).contains(Constants::categoricalType)){
+            this->categoryList.append(headers.at(0));
+        } else if(headers.at(1).contains(Constants::numericalType)){
+            this->numericalList.append(headers.at(0));
+        } else if(headers.at(1).contains(Constants::dateType)){
+            this->dateList.append(headers.at(0));
+        } else{
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" << headers.at(0);
+        }
+
+        this->newChartHeader.insert(i, headers.at(0));
+        i++;
+    }
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+
+    // Update new data
+
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
+    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+}
+
 void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
 {
     // GCS Bugfixes -- Fix Keyword
@@ -411,6 +544,14 @@ void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
     } else {
         this->generateColumns(con);
     }
+}
+
+void ReportsDataModel::receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable)
+{
+    this->liveSelectParams = selectParams;
+    this->liveMasterTable = masterTable;
+    this->liveWhereParams = whereParams;
+    this->liveJoinParams = joinParams;
 }
 
 void ReportsDataModel::dataReadyRead()

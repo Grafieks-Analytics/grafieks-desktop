@@ -124,6 +124,10 @@ Popup {
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
+        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+        }
+
         function onTableSchemaCleared(){
             categoricalModel.clear()
             numericalModel.clear()
@@ -236,7 +240,13 @@ Popup {
             "values" : ""
         }
 
-        ReportsDataModel.fetchColumnData(colName, options)
+        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            ReportsDataModel.fetchColumnDataLive(colName, options)
+        } else {
+            ReportsDataModel.fetchColumnData(colName, options)
+        }
+
+
 
         ReportParamsModel.setColName(colName)
         ReportParamsModel.setTableName(tableName)
@@ -398,7 +408,6 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
-        console.log("APPLU CLICKED HERE")
 
         reDrawChart()
 
