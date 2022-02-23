@@ -21,11 +21,11 @@ import com.grafieks.singleton.constants 1.0
 Popup {
     id: popupLogout
     width: 600
-    height: 400
+    height: 200
     modal: true
     visible: false
     x: parent.width / 2 - 300
-    y: parent.width / 2 - 700
+    y: parent.height / 2 - 200
     padding: 0
 
     property int label_col : 150
@@ -98,8 +98,8 @@ Popup {
     Row{
 
         id: row1
-        anchors.top: headerPopup.bottom
-        anchors.topMargin: 30
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin:  60
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
@@ -132,6 +132,7 @@ Popup {
             onClicked: {
                 error_connection_text.text = "Logging out. Please wait.."
                 User.logout()
+                stacklayout_home.currentIndex = 3
             }
         }
 
