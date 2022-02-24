@@ -85,6 +85,10 @@ Popup {
         function onExtractFileExceededLimit(freeLimit, ifPublish){
             saveExtractLimit(freeLimit, ifPublish)
         }
+
+        function onLiveFileExceededLimit(freeLimit, ifPublish){
+            saveLiveLimit(freeLimit, ifPublish)
+        }
     }
 
     Connections{
@@ -92,6 +96,10 @@ Popup {
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
             saveExtractLimit(freeLimit, ifPublish)
+        }
+
+        function onLiveFileExceededLimit(freeLimit, ifPublish){
+            saveLiveLimit(freeLimit, ifPublish)
         }
     }
 
@@ -151,7 +159,7 @@ Popup {
 
         // First save the extract file
         // Then publish the data and file
-        if(GeneralParamsModel.getExtractPath().length > 0){
+        if(GeneralParamsModel.getExtractPath().length > 0 || GeneralParamsModel.getLivePath().length > 0){
             publishData()
         } else {
             saveFilePrompt.open()
@@ -169,16 +177,20 @@ Popup {
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
+        console.log("DS NAME!", dsName, description)
+
         if(dsName !== "" && description !== "")
             PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
     }
 
     function saveExtractLimit(freeLimit, ifPublish){
-
-        if(ifPublish){
+        if(ifPublish)
             publishData()
-        }
+    }
 
+    function saveLiveLimit(freeLimit, ifPublish){
+        if(ifPublish)
+            publishData()
     }
 
 
