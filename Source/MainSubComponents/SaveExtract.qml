@@ -11,7 +11,7 @@ import com.grafieks.singleton.constants 1.0
 
 FileDialog{
     id: saveFilePromptDialog
-    title: "Save Extract As"
+    title: DSParamsModel.dsType === Constants.extractDS ? "Save Extract File As" : "Save Live File As"
     nameFilters: DSParamsModel.dsType === Constants.extractDS ? ["Extract (*."+ Constants.extractFileExt+" )"] : ["Live (*."+ Constants.liveFileExt+" )"];
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName

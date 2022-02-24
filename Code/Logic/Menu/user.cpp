@@ -29,6 +29,7 @@ void User::login()
     // Settings: set hostname
     QSettings settings;
     settings.setValue("general/baseUrl", host);
+    settings.setValue("general/ftpAddress", Constants::defaultFTPEndpoint);
 
     QUrl url(host);
     settings.setValue("general/hostname", url.host());
