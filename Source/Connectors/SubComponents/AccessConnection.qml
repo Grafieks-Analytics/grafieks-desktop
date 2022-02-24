@@ -39,17 +39,17 @@ Popup {
 
         function onAccessLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){
@@ -98,7 +98,7 @@ Popup {
     }
 
     function connectToAccess(){
-          ConnectorsLoginModel.accessOdbcLogin(control.currentText, fileName, username.text, password.text)
+        ConnectorsLoginModel.accessOdbcLogin(control.currentText, fileName, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS

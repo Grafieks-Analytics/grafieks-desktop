@@ -304,6 +304,7 @@ void QueryModel::liveSizeLimit(QString selectParams, QString whereConditions, QS
 
     emit liveFileSaved(m_ifPublish);
     emit generateLiveReports(this->tmpSql);
+    emit liveFileExceededLimit(true, m_ifPublish);
     emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
 }
 

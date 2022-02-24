@@ -881,7 +881,7 @@ void ChartsThread::getScatterChartValues()
 
         // Fetch data from extract
         QString tableName = this->getTableName();
-        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + " FROM "+tableName;
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
 
         dataListExtract = this->queryExtractFunction(queryString);
         totalRows = dataListExtract->collection.Count();
@@ -1065,7 +1065,7 @@ void ChartsThread::getHeatMapChartValues()
 
         // Fetch data from extract
         QString tableName = this->getTableName();
-        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + " FROM "+tableName;
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
 
         dataListExtract = this->queryExtractFunction(queryString);
         totalRows = dataListExtract->collection.Count();

@@ -339,6 +339,7 @@ void ForwardOnlyQueryModel::liveSizeLimit(QString selectParams, QString whereCon
 
     emit showSaveExtractWaitPopup();
     emit liveFileSaved(m_ifPublish);
+    emit liveFileExceededLimit(true, m_ifPublish);
     emit generateLiveReports(this->query);
     emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
 }

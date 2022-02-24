@@ -31,7 +31,7 @@ void LiveProcessor::processLiveQueries()
     this->dsParamsModel->setDsName(Statics::currentDbName);
 
     // For values refer to Constants.qml
-    this->generalParamsModel->setExtractPath(this->filePath);
+    this->generalParamsModel->setLivePath(this->filePath);
     this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
     this->generalParamsModel->setMenuType(1); // Set Dashboard designer menu
 
