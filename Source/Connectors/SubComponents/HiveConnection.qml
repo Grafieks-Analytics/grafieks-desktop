@@ -52,29 +52,29 @@ Popup {
 
         function onHiveLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
-                 if(setFromLiveFile){
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
 
-                     LiveProcessor.processLiveQueries()
+                    LiveProcessor.processLiveQueries()
 
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                     GeneralParamsModel.setFromLiveFile(false)
-                     stacklayout_home.currentIndex = 6
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    GeneralParamsModel.setFromLiveFile(false)
+                    stacklayout_home.currentIndex = 6
 
-                 } else {
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                     stacklayout_home.currentIndex = 5
-                 }
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){

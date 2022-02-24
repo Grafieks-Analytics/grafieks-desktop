@@ -143,15 +143,16 @@ void PublishDatasourceModel::uploadFinished()
 
 void PublishDatasourceModel::uploadFile()
 {
-//    QFile dataFile(Statics::extractPath);
-    QFile *dataFile = new QFile(Statics::extractPath, this);
+    QFile *dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
+
 
     QSettings settings;
 
-    QString baseUrl = settings.value("general/hostname").toString();
+//    QString ftpAddress = settings.value("general/ftpAddress").toString();
+    QString ftpAddress = Constants::defaultFTPEndpoint;
     QString siteName = settings.value("user/sitename").toString();
 
-    QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/" + siteName + "/tmp/" + this->outputFileName);
+    QUrl url("ftp://" + ftpAddress + ":" + Secret::ftpPort + "/" + siteName + "/datasources/" + this->outputFileName);
     url.setUserName(Secret::ftpUser);
     url.setPassword(Secret::ftpPass);
     url.setScheme("ftp");
@@ -167,6 +168,10 @@ void PublishDatasourceModel::uploadFile()
         // And connect to the progress upload signal
         connect(reply, &QNetworkReply::uploadProgress, this, &PublishDatasourceModel::uploadProgress);
         connect(reply, &QNetworkReply::finished, this, &PublishDatasourceModel::uploadFinished);
+        connect(reply, &QNetworkReply::errorOccurred, this,
+                    [reply](QNetworkReply::NetworkError) {
+                       qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
+                    });
     } else {
         qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
     }

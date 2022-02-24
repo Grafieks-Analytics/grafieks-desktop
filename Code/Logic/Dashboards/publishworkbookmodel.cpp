@@ -150,10 +150,11 @@ void PublishWorkbookModel::uploadFile()
 
         QSettings settings;
 
-        QString baseUrl = settings.value("general/hostname").toString();
+//        QString ftpAddress = settings.value("general/ftpAddress").toString();
+        QString ftpAddress = Constants::defaultFTPEndpoint;
         QString siteName = settings.value("user/sitename").toString();
 
-        QUrl url("ftp://" + baseUrl + ":" + Secret::ftpPort + "/" + siteName + "/tmp/" + this->outputFileName);
+        QUrl url("ftp://" + ftpAddress + ":" + Secret::ftpPort + "/" + siteName + "/workbooks/" + this->outputFileName);
         url.setUserName(Secret::ftpUser);
         url.setPassword(Secret::ftpPass);
         url.setScheme("ftp");

@@ -55,6 +55,10 @@ Popup {
         }
     }
 
+    function connectToSqlite(selectedFile){
+        ConnectorsLoginModel.sqliteLogin(selectedFile)
+    }
+
 
     // Popup Header starts
 
@@ -179,7 +183,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.sqliteLogin(selectedFile)
+            onClicked: connectToSqlite(selectedFile)
 
         }
     }

@@ -237,7 +237,6 @@ HEADERS += \
     Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
-    Code/parquet-extension.hpp \
     Code/secrets.h \
     Code/statics.h
 

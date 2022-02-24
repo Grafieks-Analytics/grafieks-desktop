@@ -14,6 +14,7 @@
 
 #include "../../statics.h"
 #include "../../secrets.h"
+#include "../../constants.h"
 
 class PublishWorkbookModel : public QObject
 {

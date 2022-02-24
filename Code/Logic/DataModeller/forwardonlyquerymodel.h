@@ -97,6 +97,7 @@ signals:
     void generateLiveReports(QString query);
     void showSaveExtractWaitPopup();
     void extractFileExceededLimit(bool freeLimit, bool ifPublish);
+    void liveFileExceededLimit(bool freeLimit, bool ifPublish);
     void extractCreationError(QString errorMessage);
     void liveFileSaved(bool ifPublish);
     void liveCreationError(QString errorMessage);

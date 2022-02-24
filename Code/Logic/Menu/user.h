@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QDebug>
 
+#include "../../constants.h"
+
 
 class User : public QObject
 {
