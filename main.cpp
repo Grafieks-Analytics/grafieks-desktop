@@ -534,6 +534,9 @@ int main(int argc, char *argv[])
         QString fileToRead = arguments.at(1);
         QFileInfo fi(fileToRead);
         QString extension = fi.suffix();
+        QString baseName = fi.baseName();
+
+        dsParamsModel.setDsName(baseName);
 
         if(extension == Constants::extractExt){
             extractProcessor.setArgumentsByFile(fileToRead);

@@ -1437,7 +1437,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Workbook")
+                    ToolTip.text: qsTr("Publish Datasource")
 
                 }
 

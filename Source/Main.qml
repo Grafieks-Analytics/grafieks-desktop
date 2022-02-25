@@ -169,6 +169,13 @@ ApplicationWindow {
         licensePopup.open()
     }
 
+    function basename(str) {
+        let file = str.slice(str.lastIndexOf("/")+1)
+        let fileSansExt = file.split('.').slice(0, -1).join('.');
+
+        return fileSansExt
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -226,6 +233,9 @@ ApplicationWindow {
 
         onAccepted: {
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
+            var filenameSansExt = basename(readerFile)
+            DSParamsModel.setDsName(filenameSansExt)
+
             if(readerFile.includes(Constants.extractFileExt)){
                 console.log("Extract file")
                 GeneralParamsModel.setFromLiveFile(false)
