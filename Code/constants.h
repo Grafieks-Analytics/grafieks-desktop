@@ -24,6 +24,7 @@ namespace Constants
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
+    const QString DefaultReportLineColor = "#CCCCCC";
     const int flushExtractCount = 100000;
     const QString extractType = "extract";
     const QString liveType = "live";

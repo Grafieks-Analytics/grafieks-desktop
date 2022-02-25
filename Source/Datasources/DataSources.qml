@@ -55,23 +55,32 @@ Page {
 
         Button{
             id: next_btn
-            text: "Next"
+//            text: "Next"
             anchors.right: parent.right
             anchors.top: submenu.top
             anchors.topMargin: 0
             height: 30
+            width:100
 
             onClicked: stacklayout_home.currentIndex = 5
+            Image {
+                                    id: dashboardIcon
+                                    source: "/Images/icons/create_dashboard_20.png"
+                                    height: 20
+                                    width: 20
+                                    anchors.centerIn: parent
+                                }
 
             background: Rectangle{
                 id: next_btn_background
-                color: next_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+                color: Constants.grafieksLightGreenColor
+                opacity: tabCreateDashboard.hovered ? 0.42 : 1
             }
 
-            ToolTip.delay: Constants.tooltipShowTime
-            ToolTip.timeout: Constants.tooltipShowTime
+            ToolTip.delay:Constants.tooltipShowTime
+            ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("Edit Datasource")
+            ToolTip.text: qsTr("Create Datasource")
 
 
         }
@@ -213,17 +222,27 @@ Page {
                 border.color: Constants.darkThemeColor
                 width: 300
                 height: 40
-                radius: 10
+//                radius: 10
 
-                TextEdit {
+                TextField {
                     id: search_text
-                    text: "Search"
-                    cursorVisible: true
-                    width:250
+//                    text: "Search"
+
+//                    cursorVisible: true
+                    placeholderText: "Search"
+                    width:300
                     height: 40
                     anchors.left: search_rect.left
-                    anchors.leftMargin: 10
+//                    anchors.leftMargin: 10
                     verticalAlignment:TextEdit.AlignVCenter
+//                    property string placeholderText: "Search"
+
+//                            Text {
+//                                text: "textEdit.placeholderText"
+//                                color: "red"
+
+//                                visible: !textEdit.text
+//                            }
 
                     onTextChanged: DatasourceDS.fetchDatsources(0, true, true, search_text.text)
                 }
