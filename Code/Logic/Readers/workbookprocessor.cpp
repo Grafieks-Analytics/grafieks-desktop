@@ -26,7 +26,7 @@ bool WorkbookProcessor::receivedArgumentStatus()
 
 void WorkbookProcessor::processExtract()
 {
-    QFile fileWorkbook(filePath);
+    QFile fileWorkbook(this->filePath);
 
     if(!fileWorkbook.open(QIODevice::ReadOnly | QIODevice::Truncate)){
         qDebug() << Q_FUNC_INFO << "Could not open file for reading" << fileWorkbook.errorString();
@@ -52,41 +52,48 @@ void WorkbookProcessor::processExtract()
                     emit extractMissing();
                 } else {
                     emit processExtractFromWorkbook(filePath);
+                    this->processRemaining(doc);
                 }
 
             } else {
                 qDebug() << Q_FUNC_INFO << "Live type not processed yet";
             }
-
-            // First process the files if any (images and text reports)
-            QJsonObject files = doc.object().value("files").toObject();
-            if(files.count() > 0){
-
-                QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
-                QDir tmpDir(tmpFilePath);
-
-                // Check if tmp directory exists
-                if (!tmpDir.exists()) QDir().mkdir(tmpFilePath);
-
-                QStringList filesList = files.keys();
-                foreach(QString file, filesList){
-                    QByteArray data = QByteArray::fromBase64(QByteArray::fromBase64(files.value(file).toString().toUtf8()));
-
-                    QFile fiWrite(tmpFilePath + file);
-                    fiWrite.open(QIODevice::WriteOnly);
-                    fiWrite.write(data);
-                    fiWrite.close();
-                }
-
-            }
-
-            emit sendExtractDashboardParams(doc.object().value("dashboardParams").toObject());
-            emit sendExtractReportParams(doc.object().value("reportParams").toObject());
-            emit sendExtractTableColumns(doc.object().value("tableColumns").toObject());
-            emit sendExtractWhereParams(doc.object().value("whereParams").toObject());
-
         }
     }
+
+    fileWorkbook.close();
+}
+
+void WorkbookProcessor::processExtractAfterSelectingDS(QString extractPath)
+{
+    QFile fileWorkbook(this->filePath);
+
+    if(!fileWorkbook.open(QIODevice::ReadOnly | QIODevice::Truncate)){
+        qDebug() << Q_FUNC_INFO << "Could not open file for reading" << fileWorkbook.errorString();
+    } else {
+        QByteArray workbookData;
+        QDataStream in(&fileWorkbook);
+        in >> workbookData;
+
+        QJsonParseError jsonError;
+        QJsonDocument doc = QJsonDocument::fromJson(workbookData, &jsonError);
+
+        if(doc.object().value("connectionType").toString() == Constants::extractType){
+
+            QString filePath = extractPath;
+            QFileInfo fi(filePath);
+
+            emit processExtractFromWorkbook(filePath);
+            this->processRemaining(doc);
+
+
+        } else {
+            qDebug() << Q_FUNC_INFO << "Live type not processed yet";
+        }
+
+    }
+
+    fileWorkbook.close();
 }
 
 void WorkbookProcessor::saveWorkbooks(QString filePath)
@@ -197,4 +204,34 @@ void WorkbookProcessor::getWhereParams(QJsonObject whereParams)
 {
     qDebug() << Q_FUNC_INFO << "GOT WHERE" << whereParams;
     this->whereParams = whereParams;
+}
+
+void WorkbookProcessor::processRemaining(QJsonDocument doc)
+{
+    // First process the files if any (images and text reports)
+    QJsonObject files = doc.object().value("files").toObject();
+    if(files.count() > 0){
+
+        QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+        QDir tmpDir(tmpFilePath);
+
+        // Check if tmp directory exists
+        if (!tmpDir.exists()) QDir().mkdir(tmpFilePath);
+
+        QStringList filesList = files.keys();
+        foreach(QString file, filesList){
+            QByteArray data = QByteArray::fromBase64(QByteArray::fromBase64(files.value(file).toString().toUtf8()));
+
+            QFile fiWrite(tmpFilePath + file);
+            fiWrite.open(QIODevice::WriteOnly);
+            fiWrite.write(data);
+            fiWrite.close();
+        }
+
+    }
+
+    emit sendExtractDashboardParams(doc.object().value("dashboardParams").toObject());
+    emit sendExtractReportParams(doc.object().value("reportParams").toObject());
+    emit sendExtractTableColumns(doc.object().value("tableColumns").toObject());
+    emit sendExtractWhereParams(doc.object().value("whereParams").toObject());
 }

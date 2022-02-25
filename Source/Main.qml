@@ -41,6 +41,7 @@ ApplicationWindow {
     minimumHeight: 700
 
     title: Constants.applicationName
+    property var selectMissingDS : false
 
     // Handle Splash screen here
     onVisibilityChanged: {
@@ -98,8 +99,8 @@ ApplicationWindow {
         target: WorkbookProcessor
 
         function onExtractMissing(){
-            readerDialog.title = "Extract missing. Select a file"
-            readerDialog.open()
+            selectMissingDS = true
+            locateDSlocallyOrOnline.open()
         }
     }
 
@@ -138,6 +139,19 @@ ApplicationWindow {
 
         }
 
+    }
+
+    function selectDSLocation(computerOptionSelected){
+        console.log(computerOptionSelected)
+
+        locateDSlocallyOrOnline.close()
+
+        if(computerOptionSelected){
+            readerDialog.title = "Extract missing. Select a file"
+            readerDialog.open()
+        } else {
+            console.log("SELECT DATA FROM GRAFIEKS CHARTS SERVER")
+        }
     }
 
     function openNewApplication(){
@@ -185,6 +199,8 @@ ApplicationWindow {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+
+    ButtonGroup { id: radioGroup }
 
     // Global Modals
     PublishDatasource{
@@ -239,7 +255,13 @@ ApplicationWindow {
             if(readerFile.includes(Constants.extractFileExt)){
                 console.log("Extract file")
                 GeneralParamsModel.setFromLiveFile(false)
-                ExtractProcessor.setArgumentsFromMenu(readerFile)
+
+                if(selectMissingDS){
+                    WorkbookProcessor.processExtractAfterSelectingDS(readerFile)
+                } else {
+                    ExtractProcessor.setArgumentsFromMenu(readerFile)
+                }
+
             } else if(readerFile.includes(Constants.workbookFileExt)){
                 console.log("Workbook file")
                 GeneralParamsModel.setFromLiveFile(false)
@@ -247,9 +269,46 @@ ApplicationWindow {
             } else {
                 console.log("Live file")
                 GeneralParamsModel.setFromLiveFile(true)
-                LiveProcessor.setArgumentsFromMenu(readerFile)
+
+                if(selectMissingDS){
+                    WorkbookProcessor.processExtractAfterSelectingDS(readerFile)
+                } else {
+                    LiveProcessor.setArgumentsFromMenu(readerFile)
+                }
             }
 
+        }
+    }
+
+    Popup{
+        id: locateDSlocallyOrOnline
+        width: 200
+        height: 300
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        ColumnLayout {
+            id: radioOptions
+            RadioButton {
+                id: computerOption
+                checked: true
+                text: qsTr("Find on your computer")
+                ButtonGroup.group: radioGroup
+            }
+            RadioButton {
+                id: serverOption
+                text: qsTr("Fetch from server")
+                ButtonGroup.group: radioGroup
+            }
+        }
+
+        Button{
+            id: confirmDSLocation
+            anchors.top: radioOptions.bottom
+            anchors.topMargin: 10
+            text: "Confirm"
+            onClicked: selectDSLocation(computerOption.checked)
         }
     }
 
@@ -336,88 +395,88 @@ ApplicationWindow {
 
         }
 
-//        Menu{
-//            id: editMenu
-//            title: qsTr("&Edit")
+        //        Menu{
+        //            id: editMenu
+        //            title: qsTr("&Edit")
 
 
-//            MenuItem{
-//                id: action_undo
-//                text: qsTr("Undo")
-//            }
+        //            MenuItem{
+        //                id: action_undo
+        //                text: qsTr("Undo")
+        //            }
 
-//            MenuItem{
-//                id: action_redo
-//                text: qsTr("Redo")
-//            }
+        //            MenuItem{
+        //                id: action_redo
+        //                text: qsTr("Redo")
+        //            }
 
-//            MenuSeparator{}
+        //            MenuSeparator{}
 
-//            MenuItem{
-//                id: action_cut
-//                text: qsTr("Cut")
-//            }
+        //            MenuItem{
+        //                id: action_cut
+        //                text: qsTr("Cut")
+        //            }
 
-//            MenuItem{
-//                id: action_copy
-//                text: qsTr("Copy")
-//            }
+        //            MenuItem{
+        //                id: action_copy
+        //                text: qsTr("Copy")
+        //            }
 
-//            MenuItem{
-//                id: action_paste
-//                text: qsTr("Paste")
-//            }
+        //            MenuItem{
+        //                id: action_paste
+        //                text: qsTr("Paste")
+        //            }
 
-//            MenuItem{
-//                id: action_delete
-//                text: qsTr("Delete")
-//            }
+        //            MenuItem{
+        //                id: action_delete
+        //                text: qsTr("Delete")
+        //            }
 
 
-//        }
+        //        }
 
         Menu {
             id: dataMenu
             title: qsTr("&Data")
 
 
-                MenuItem{
-                    id: disconnect_ds
-                    text: qsTr("Disconnect")
+            MenuItem{
+                id: disconnect_ds
+                text: qsTr("Disconnect")
 
-                    onTriggered: disconnectDS()
-                }
+                onTriggered: disconnectDS()
+            }
 
-//            MenuItem{
-//                id: action_new_ds
-//                text: qsTr("Add New Datasource")
+            //            MenuItem{
+            //                id: action_new_ds
+            //                text: qsTr("Add New Datasource")
 
-//                onTriggered: openDatasource()
-//            }
+            //                onTriggered: openDatasource()
+            //            }
 
-//            MenuSeparator{}
+            //            MenuSeparator{}
 
-//            MenuItem{
-//                id: action_save_ds
-//                text: qsTr("Save Datasource")
+            //            MenuItem{
+            //                id: action_save_ds
+            //                text: qsTr("Save Datasource")
 
-//                onTriggered: saveDatasource()
-//            }
-//            MenuItem{
-//                id: action_refresh_ds
-//                text: qsTr("Refresh Datasource")
-//            }
+            //                onTriggered: saveDatasource()
+            //            }
+            //            MenuItem{
+            //                id: action_refresh_ds
+            //                text: qsTr("Refresh Datasource")
+            //            }
 
-//            MenuSeparator{}
+            //            MenuSeparator{}
 
-//            MenuItem{
-//                id: action_export_ds_csv
-//                text: qsTr("Export Datasource to CSV")
-//            }
-//            MenuItem{
-//                id: action_export_ds_excel
-//                text: qsTr("Export Datasource to Excel")
-//            }
+            //            MenuItem{
+            //                id: action_export_ds_csv
+            //                text: qsTr("Export Datasource to CSV")
+            //            }
+            //            MenuItem{
+            //                id: action_export_ds_excel
+            //                text: qsTr("Export Datasource to Excel")
+            //            }
         }
 
 
@@ -516,12 +575,12 @@ ApplicationWindow {
                 }
             }
 
-//            MenuItem{
-//                text: qsTr("Test")
-//                onTriggered: {
-//                    stacklayout_home.currentIndex = 0
-//                }
-//            }
+            //            MenuItem{
+            //                text: qsTr("Test")
+            //                onTriggered: {
+            //                    stacklayout_home.currentIndex = 0
+            //                }
+            //            }
 
         }
 
