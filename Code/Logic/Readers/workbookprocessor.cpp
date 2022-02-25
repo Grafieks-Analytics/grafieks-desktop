@@ -9,7 +9,7 @@ void WorkbookProcessor::setArgumentsFromMenu(QString filePath)
 {
     this->filePath = filePath;
     Statics::editMode = true;
-    this->processExtract();
+    this->processDS();
 }
 
 void WorkbookProcessor::setArgumentsByFile(QString filePath)
@@ -24,7 +24,7 @@ bool WorkbookProcessor::receivedArgumentStatus()
     return this->receivedArgument;
 }
 
-void WorkbookProcessor::processExtract()
+void WorkbookProcessor::processDS()
 {
     QFile fileWorkbook(this->filePath);
 
@@ -56,7 +56,16 @@ void WorkbookProcessor::processExtract()
                 }
 
             } else {
-                qDebug() << Q_FUNC_INFO << "Live type not processed yet";
+
+                QString filePath = doc.object().value("datasourcePath").toString();
+                QFileInfo fi(filePath);
+
+                if(!fi.exists()){
+                    emit extractMissing();
+                } else {
+                    emit processLiveFromWorkbook(filePath);
+                    this->processRemaining(doc);
+                }
             }
         }
     }
@@ -64,7 +73,7 @@ void WorkbookProcessor::processExtract()
     fileWorkbook.close();
 }
 
-void WorkbookProcessor::processExtractAfterSelectingDS(QString extractPath)
+void WorkbookProcessor::processAfterSelectingDS(QString dsPath)
 {
     QFile fileWorkbook(this->filePath);
 
@@ -80,7 +89,7 @@ void WorkbookProcessor::processExtractAfterSelectingDS(QString extractPath)
 
         if(doc.object().value("connectionType").toString() == Constants::extractType){
 
-            QString filePath = extractPath;
+            QString filePath = dsPath;
             QFileInfo fi(filePath);
 
             emit processExtractFromWorkbook(filePath);
@@ -88,7 +97,12 @@ void WorkbookProcessor::processExtractAfterSelectingDS(QString extractPath)
 
 
         } else {
-            qDebug() << Q_FUNC_INFO << "Live type not processed yet";
+
+            QString filePath = dsPath;
+            QFileInfo fi(filePath);
+
+            emit processLiveFromWorkbook(filePath);
+            this->processRemaining(doc);
         }
 
     }
@@ -230,8 +244,8 @@ void WorkbookProcessor::processRemaining(QJsonDocument doc)
 
     }
 
-    emit sendExtractDashboardParams(doc.object().value("dashboardParams").toObject());
-    emit sendExtractReportParams(doc.object().value("reportParams").toObject());
-    emit sendExtractTableColumns(doc.object().value("tableColumns").toObject());
-    emit sendExtractWhereParams(doc.object().value("whereParams").toObject());
+    emit sendDSDashboardParams(doc.object().value("dashboardParams").toObject());
+    emit sendDSReportParams(doc.object().value("reportParams").toObject());
+    emit sendDSTableColumns(doc.object().value("tableColumns").toObject());
+    emit sendDSWhereParams(doc.object().value("whereParams").toObject());
 }

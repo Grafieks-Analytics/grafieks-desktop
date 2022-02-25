@@ -38,6 +38,9 @@ public:
     Q_INVOKABLE bool receivedArgumentStatus();
     Q_INVOKABLE void processLiveQueries();
 
+public slots:
+    void setArgumentsFromWorkbook(QString filePath = "");
+
 signals:
     void generateLiveReports(QMap<int, QStringList> sqlHeaders);
     void liveReaderProcessed();
