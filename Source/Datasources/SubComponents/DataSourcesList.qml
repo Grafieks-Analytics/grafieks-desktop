@@ -17,7 +17,7 @@ import com.grafieks.singleton.constants 1.0
 Page {
 
     id: data_source_list_page
-    property var headersModel : ["Data Source Name", "Published By", "Live/Extract", "Published On", "Last Refreshed", "Edit"]
+    property var headersModel : ["Data Source Name","Data Source", "Published By", "Live/Extract", "Published On", "Last Refreshed"]
     property int headerSize : headersModel.length
 
 
@@ -131,35 +131,49 @@ Page {
 
 
         header: Row {
+            id:dsHeader
             spacing: 1
             function itemAt(index) { return repeater.itemAt(index) }
+
 
             Repeater {
                 id: repeater
                 model: headersModel
 
+
                 Rectangle {
-                    color: Constants.themeColor
+//                    color: Constants.themeColor
                     height: 30
                     width: listView.width / headerSize
+//                    border.color: Constants.grayColor
+
+
 
                     Text{
                         text: modelData
                         anchors.verticalCenter: parent.verticalCenter
-                        leftPadding: 10
+                        leftPadding: 40
                     }
                 }
             }
+
         }
+//        Rectangle {
+//            anchors.bottom: dsHeader.bottom
+//            color: Constants.themeColor
+//            width: parent.width
+//            height: 1
+//        }
 
 
         highlight: Rectangle{
-            color:"lightgray"
+            color:"#AEE5FC"
             width: parent
             opacity: 0.3
             z:10
 
         }
+
 
         delegate: Column {
 
@@ -167,21 +181,51 @@ Page {
 
 
             Row {
-                spacing: 1
-                height: 25
+                spacing: 2
+                height: 40
+
+//                MouseArea:{
+//                    hoverEnabled: true
+//                    onHoveredChanged:dsName_col
+//                }
 
                 Column{
                     id: dsName_col
                     width: listView.width / headerSize
                     height: parent.height
 
+
                     Rectangle{
                         width: parent.width
                         height: parent.height
 
                         Text {
-                            text: qsTr(datasourceName + "-" + databaseName)
-                            leftPadding: 10
+                            text: qsTr(datasourceName)
+                            leftPadding: 40
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                onDataSourceNameClicked(datasourceName, index)
+                            }
+                        }
+                    }
+                }
+                Column{
+                    id: ds_col
+                    width: listView.width / headerSize
+                    height: parent.height
+
+
+                    Rectangle{
+                        width: parent.width
+                        height: parent.height
+
+                        Text {
+                            text: qsTr(databaseName)
+                            leftPadding: 40
                             anchors.verticalCenter: parent.verticalCenter
 
                         }
@@ -209,7 +253,7 @@ Page {
 
                         Text {
                             text: qsTr(firstname + " " + lastname)
-                            leftPadding: 10
+                            leftPadding: 40
                             anchors.verticalCenter: parent.verticalCenter
 
                         }
@@ -235,7 +279,7 @@ Page {
 
                         Text {
                             text: qsTr(connectionType)
-                            leftPadding: 10
+                            leftPadding: 40
                             anchors.verticalCenter: parent.verticalCenter
 
                         }
@@ -262,7 +306,7 @@ Page {
 
                         Text {
                             text: qsTr(createdDate)
-                            leftPadding: 10
+                            leftPadding: 40
                             anchors.verticalCenter: parent.verticalCenter
 
                         }
@@ -288,7 +332,7 @@ Page {
 
                         Text {
                             text: qsTr(connectionType)
-                            leftPadding: 10
+                            leftPadding: 40
                             anchors.verticalCenter: parent.verticalCenter
 
                         }
@@ -304,47 +348,47 @@ Page {
 
                 }
 
-                Column{
-                    id: dsEditRemove_col
-                    width: listView.width / headerSize
-                    height: parent.height
+//                Column{
+//                    id: dsEditRemove_col
+//                    width: listView.width / headerSize
+//                    height: parent.height
 
-                    leftPadding: 10
-                    anchors.verticalCenter: parent.verticalCenter
+//                    leftPadding: 10
+//                    anchors.verticalCenter: parent.verticalCenter
 
-                    Row{
-                        spacing: 5
+//                    Row{
+//                        spacing: 5
 
-                        Button{
-                            id: btn_edit
-                            text: "Edit"
-                            height: 23
-                            width: implicitWidth
+//                        Button{
+//                            id: btn_edit
+//                            text: "Edit"
+//                            height: 23
+//                            width: implicitWidth
 
-                            onClicked: {
-                                onEditClicked(datasourceName, index)
-                            }
-                        }
+//                            onClicked: {
+//                                onEditClicked(datasourceName, index)
+//                            }
+//                        }
 
-                        Button{
-                            id: btn_remove
-                            text: "Remove"
-                            height: 23
-                            width: implicitWidth
+//                        Button{
+//                            id: btn_remove
+//                            text: "Remove"
+//                            height: 23
+//                            width: implicitWidth
 
-                            onClicked: {
-                                onRemoveClicked(id,index)
-                            }
-                        }
-                    }
-                }
+//                            onClicked: {
+//                                onRemoveClicked(id,index)
+//                            }
+//                        }
+//                    }
+//                }
 
             }
-            Rectangle {
-                color: Constants.themeColor
-                width: parent.width
-                height: 1
-            }
+//            Rectangle {
+//                color: Constants.themeColor
+//                width: parent.width
+//                height: 1
+//            }
         }
 
         ScrollIndicator.horizontal: ScrollIndicator { }

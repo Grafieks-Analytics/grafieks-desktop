@@ -98,19 +98,38 @@ Page {
 
 
     GridView {
+        id:gridGrs
         width: datasources_grid.width
         height: datasources_grid.height
-        cellWidth: width/3
+        cellWidth: gridGrs.width/3
         cellHeight: 300
+        clip: true
+                interactive: true
+                ScrollBar.vertical: ScrollBar{}
+
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
         model: DatasourceModel
 
 
-        delegate: Rectangle{
+        delegate:
+            Rectangle{
+            width: gridGrs.width/3
+            height: 280
+
+
+            Rectangle{
             id:data_source_main
             border.color: Constants.darkThemeColor
+            anchors.horizontalCenter: parent.horizontalCenter
+
             width: 340
-            height: 240
+            height: 280
             radius: 10
+            scale: 1
+
+
 
             MouseArea{
                 anchors.fill:parent
@@ -129,6 +148,7 @@ Page {
                 radius: 10
 
 
+
                 Text{
                     id: title
                     text:  datasourceName + "-" + databaseName
@@ -140,48 +160,48 @@ Page {
 
 
 
-                ToolButton {
-                    id:data_source_edit
+//                ToolButton {
+//                    id:data_source_edit
 
-                    anchors.right:data_source_head.right
-                    anchors.rightMargin: 10
-                    anchors.top:data_source_head.top
-                    anchors.topMargin: 10
-                    z:10
+//                    anchors.right:data_source_head.right
+//                    anchors.rightMargin: 10
+//                    anchors.top:data_source_head.top
+//                    anchors.topMargin: 10
+//                    z:10
 
-                    background: Rectangle {
-                        implicitWidth: 20
-                        implicitHeight: 20
-                        opacity: enabled ? 1 : 0.3
-                        color: "transparent"
-                    }
+//                    background: Rectangle {
+//                        implicitWidth: 20
+//                        implicitHeight: 20
+//                        opacity: enabled ? 1 : 0.3
+//                        color: "transparent"
+//                    }
 
 
-                    Image {
-                        source: "/Images/icons/Edit_20.png"
-                        width:20
-                        height:width
+//                    Image {
+//                        source: "/Images/icons/Edit_20.png"
+//                        width:20
+//                        height:width
 
-                    }
-                    onClicked: optionsMenu.open()
+//                    }
+//                    onClicked: optionsMenu.open()
 
-                    Menu {
-                        id: optionsMenu
-                        x: parent.width - width
-                        transformOrigin: Menu.TopRight
+//                    Menu {
+//                        id: optionsMenu
+//                        x: parent.width - width
+//                        transformOrigin: Menu.TopRight
 
-                        MenuItem {
-                            text: "Edit Connection"
-                            onTriggered: {
-                                onEditClicked()
-                            }
-                        }
-                        MenuItem {
-                            text: "Remove"
-                            onTriggered: onRemoveClicked(id,index)
-                        }
-                    }
-                }
+//                        MenuItem {
+//                            text: "Edit Connection"
+//                            onTriggered: {
+//                                onEditClicked()
+//                            }
+//                        }
+//                        MenuItem {
+//                            text: "Remove"
+//                            onTriggered: onRemoveClicked(id,index)
+//                        }
+//                    }
+//                }
 
 
             }
@@ -233,6 +253,7 @@ Page {
 
 
                 Column{
+
                     Text{
                         text: "Published by"
                     }
@@ -245,7 +266,7 @@ Page {
                 }
 
                 Column{
-
+                    anchors.right: parent.right
                     Text{
                         text: "Live / In Memory"
 
@@ -260,6 +281,7 @@ Page {
 
             }
         }
+    }
     }
 
 
