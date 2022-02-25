@@ -41,6 +41,12 @@ void LiveProcessor::processLiveQueries()
     }
 }
 
+void LiveProcessor::setArgumentsFromWorkbook(QString filePath)
+{
+    this->filePath = filePath;
+    this->processLive();
+}
+
 void LiveProcessor::processLive()
 {
     qDebug() << "LIVE FILE READING";

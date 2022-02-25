@@ -37,8 +37,8 @@ public:
     Q_INVOKABLE void setArgumentsByFile(QString filePath);
     Q_INVOKABLE bool receivedArgumentStatus();
 
-    Q_INVOKABLE void processExtract();
-    Q_INVOKABLE void processExtractAfterSelectingDS(QString extractPath);
+    Q_INVOKABLE void processDS();
+    Q_INVOKABLE void processAfterSelectingDS(QString dsPath);
 
     Q_INVOKABLE void saveWorkbooks(QString filePath);
 
@@ -54,11 +54,12 @@ private:
 signals:
     void extractMissing();
     void processExtractFromWorkbook(QString filePath);
+    void processLiveFromWorkbook(QString filePath);
 
-    void sendExtractReportParams(QJsonObject reportParams);
-    void sendExtractDashboardParams(QJsonObject dashboardParams);
-    void sendExtractTableColumns(QJsonObject tableColumns);
-    void sendExtractWhereParams(QJsonObject whereParams);
+    void sendDSReportParams(QJsonObject reportParams);
+    void sendDSDashboardParams(QJsonObject dashboardParams);
+    void sendDSTableColumns(QJsonObject tableColumns);
+    void sendDSWhereParams(QJsonObject whereParams);
 
     void workbookSaved();
 

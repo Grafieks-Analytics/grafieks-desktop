@@ -120,11 +120,11 @@ ApplicationWindow {
         // Hence after completion we check if the arguments are received and then process the extract
 
         if(ExtractProcessor.receivedArgumentStatus() === true){
-            ExtractProcessor.processExtract()
+            ExtractProcessor.processDS()
         }
 
         if(WorkbookProcessor.receivedArgumentStatus() === true){
-            WorkbookProcessor.processExtract()
+            WorkbookProcessor.processDS()
         }
 
         if(settings.value("user/profileId") > 0){
@@ -257,7 +257,7 @@ ApplicationWindow {
                 GeneralParamsModel.setFromLiveFile(false)
 
                 if(selectMissingDS){
-                    WorkbookProcessor.processExtractAfterSelectingDS(readerFile)
+                    WorkbookProcessor.processAfterSelectingDS(readerFile)
                 } else {
                     ExtractProcessor.setArgumentsFromMenu(readerFile)
                 }
@@ -271,7 +271,8 @@ ApplicationWindow {
                 GeneralParamsModel.setFromLiveFile(true)
 
                 if(selectMissingDS){
-                    WorkbookProcessor.processExtractAfterSelectingDS(readerFile)
+                    WorkbookProcessor.processAfterSelectingDS(readerFile)
+                    LiveProcessor.processLiveQueries()
                 } else {
                     LiveProcessor.setArgumentsFromMenu(readerFile)
                 }

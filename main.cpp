@@ -420,11 +420,13 @@ int main(int argc, char *argv[])
     QObject::connect(&tableColumnsModel, &TableColumnsModel::signalSaveTableColumns, &workbookProcessor, &WorkbookProcessor::getTableColumns);
     QObject::connect(&chartsModel, &ChartsModel::sendWhereParams, &workbookProcessor, &WorkbookProcessor::getWhereParams);
 
-    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
-    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
-    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
-    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendExtractWhereParams, &chartsModel, &ChartsModel::getExtractWhereParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSWhereParams, &chartsModel, &ChartsModel::getExtractWhereParams);
+
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processExtractFromWorkbook, &extractProcessor, &ExtractProcessor::setArgumentsFromWorkbook);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::processLiveFromWorkbook, &liveProcessor, &LiveProcessor::setArgumentsFromWorkbook);
 
     // Live Datasource headers
     QObject::connect(&queryModel, &QueryModel::liveHeaderGenerated, &reportsDataModel, &ReportsDataModel::generateColumnsForLive);
