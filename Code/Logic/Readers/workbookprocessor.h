@@ -38,6 +38,7 @@ public:
     Q_INVOKABLE bool receivedArgumentStatus();
 
     Q_INVOKABLE void processExtract();
+    Q_INVOKABLE void processExtractAfterSelectingDS(QString extractPath);
 
     Q_INVOKABLE void saveWorkbooks(QString filePath);
 
@@ -47,7 +48,8 @@ public slots:
     void getTableColumns(QJsonObject tableColumns);
     void getWhereParams(QJsonObject whereParams);
 
-
+private:
+    void processRemaining(QJsonDocument doc);
 
 signals:
     void extractMissing();

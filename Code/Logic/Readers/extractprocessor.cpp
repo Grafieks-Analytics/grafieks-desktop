@@ -49,7 +49,7 @@ void ExtractProcessor::processExtract()
 
 void ExtractProcessor::setArgumentsFromWorkbook(QString filePath)
 {
-    this->moveToDashboardScreen = false;
+//    this->moveToDashboardScreen = false;
     this->filePath = filePath;
     this->processExtract();
 }
