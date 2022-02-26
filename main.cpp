@@ -82,7 +82,6 @@
 #include "Code/statics.h"
 
 int Statics::isFreeTier;
-QString Statics::tmpIconPath;
 bool Statics::editMode;
 bool Statics::apiSwitch = false;
 QString Statics::currentDSFile;
@@ -253,7 +252,6 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     Statics::freeLimitExtractSizeExceeded = false;
     Statics::isFreeTier = 1; // 1 = true (Free Tier); 0 = false (Pro)
-    Statics::tmpIconPath = "C:\\Users\\chill\\Downloads\\grs_gIn_icon.ico";
     Statics::editMode = false;
     /***********************************************************************************************************************/
     // Static initializations Ends
@@ -269,7 +267,7 @@ int main(int argc, char *argv[])
     settings.setValue("general/fileToken", QDateTime::currentMSecsSinceEpoch());
     // GCS Bugfixes -- Fix Keyword
     // wont required this when charts url is replaced with base url
-    settings.setValue("general/chartsUrl", "http://localhost:5473/"); // Delete this later when the API is resolved finally
+    settings.setValue("general/chartsUrl", Constants::defaultChartEndpoint); // Delete this later when the API is resolved finally
 
     // Delete existing tmp folder storing dashboard files
     QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
