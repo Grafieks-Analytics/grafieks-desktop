@@ -485,7 +485,7 @@ void TableSchemaModel::generateSchemaForExtract()
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         qDebug() << "Extract schema should be called for API 2";
     } else {
         this->extractSchema(&con);
@@ -499,7 +499,7 @@ void TableSchemaModel::generateSchemaForLive(QString query)
 
 void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
 {
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         qDebug() << "Extract schema should be called for API";
     } else {
         this->extractSchema(con);

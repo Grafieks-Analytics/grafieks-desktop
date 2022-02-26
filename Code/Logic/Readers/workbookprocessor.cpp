@@ -48,8 +48,12 @@ void WorkbookProcessor::processDS()
                 QString filePath = doc.object().value("datasourcePath").toString();
                 QFileInfo fi(filePath);
 
+                QString fileName = fi.fileName();
+                // For excel, csv, json, access and other in memory
+                QString dsType = Constants::duckType;
+
                 if(!fi.exists()){
-                    emit extractMissing();
+                    emit dsMissing(dsType, fileName);
                 } else {
                     emit processExtractFromWorkbook(filePath);
                     this->processRemaining(doc);
@@ -60,8 +64,12 @@ void WorkbookProcessor::processDS()
                 QString filePath = doc.object().value("datasourcePath").toString();
                 QFileInfo fi(filePath);
 
+                QString fileName = fi.fileName();
+                // For sqltype and forward type
+                QString dsType = Statics::currentDbClassification;
+
                 if(!fi.exists()){
-                    emit extractMissing();
+                   emit dsMissing(dsType, fileName);
                 } else {
                     emit processLiveFromWorkbook(filePath);
                     this->processRemaining(doc);

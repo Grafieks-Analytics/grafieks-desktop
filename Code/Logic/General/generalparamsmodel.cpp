@@ -241,6 +241,11 @@ QStringList GeneralParamsModel::getCredentials()
     return output;
 }
 
+void GeneralParamsModel::setAPISwitch(bool apiSwitch)
+{
+    Statics::apiSwitch = apiSwitch;
+}
+
 void GeneralParamsModel::setFromLiveFile(bool setForLiveFile)
 {
     this->setForLiveFile = setForLiveFile;

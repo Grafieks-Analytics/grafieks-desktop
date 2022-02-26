@@ -52,7 +52,7 @@ private:
     void processRemaining(QJsonDocument doc);
 
 signals:
-    void extractMissing();
+    void dsMissing(QString dsType, QString dsName);
     void processExtractFromWorkbook(QString filePath);
     void processLiveFromWorkbook(QString filePath);
 

@@ -78,7 +78,7 @@ void ChartsModel::getBarChartValues(int reportId, int dashboardId, int chartSour
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
 
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
@@ -101,7 +101,7 @@ void ChartsModel::getStackedBarChartValues(int reportId, int dashboardId, int ch
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getStackedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -121,7 +121,7 @@ void ChartsModel::getGroupedBarChartValues(int reportId, int dashboardId, int ch
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -140,7 +140,7 @@ void ChartsModel::getNewGroupedBarChartValues(int reportId, int dashboardId, int
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getNewGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -160,7 +160,7 @@ void ChartsModel::getAreaChartValues(int reportId, int dashboardId, int chartSou
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -180,7 +180,7 @@ void ChartsModel::getLineChartValues(int reportId, int dashboardId, int chartSou
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -200,7 +200,7 @@ void ChartsModel::getLineBarChartValues(int reportId, int dashboardId, int chart
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getLineBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -220,7 +220,7 @@ void ChartsModel::getPieChartValues(int reportId, int dashboardId, int chartSour
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getPieChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -240,7 +240,7 @@ void ChartsModel::getFunnelChartValues(int reportId, int dashboardId, int chartS
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getFunnelChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -260,7 +260,7 @@ void ChartsModel::getRadarChartValues(int reportId, int dashboardId, int chartSo
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getRadarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -280,7 +280,7 @@ void ChartsModel::getScatterChartValues(int reportId, int dashboardId, int chart
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getScatterChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -300,7 +300,7 @@ void ChartsModel::getScatterChartNumericalValues(int reportId, int dashboardId, 
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getScatterChartNumericalValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -320,7 +320,7 @@ void ChartsModel::getHeatMapChartValues(int reportId, int dashboardId, int chart
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getHeatMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -340,7 +340,7 @@ void ChartsModel::getSunburstChartValues(int reportId, int dashboardId, int char
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(nullString, yAxisColumn, nullString);
         chartsAPIThread->setLists(xAxisColumn, nullList);
         chartsAPIThread->methodSelector( "getSunburstChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
@@ -362,7 +362,7 @@ void ChartsModel::getWaterfallChartValues(int reportId, int dashboardId, int cha
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, nullString);
         chartsAPIThread->methodSelector("getWaterfallChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -382,7 +382,7 @@ void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSo
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setGaugeKpiDetails(calculateColumn);
         chartsAPIThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -402,7 +402,7 @@ void ChartsModel::getSankeyChartValues(int reportId, int dashboardId, int chartS
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setSankeyDetails(sourceColumn, destinationColumn, measureColumn);
         chartsAPIThread->methodSelector("getSankeyChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -422,7 +422,7 @@ void ChartsModel::getTreeChartValues(int reportId, int dashboardId, int chartSou
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(nullString, yAxisColumn, nullString);
         chartsAPIThread->setLists(xAxisColumn, nullList);
         chartsAPIThread->methodSelector("getTreeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
@@ -444,7 +444,7 @@ void ChartsModel::getTreeMapChartValues(int reportId, int dashboardId, int chart
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(nullString, yAxisColumn, nullString);
         chartsAPIThread->setLists(xAxisColumn, nullList);
         chartsAPIThread->methodSelector("getTreeMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
@@ -466,7 +466,7 @@ void ChartsModel::getKPIChartValues(int reportId, int dashboardId, int chartSour
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setGaugeKpiDetails(calculateColumn);
         chartsAPIThread->methodSelector("getKPIChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -486,7 +486,7 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setLists(xAxisColumn, yAxisColumn);
         chartsAPIThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsAPIThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
@@ -508,7 +508,7 @@ void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSo
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setLists(xAxisColumn, yAxisColumn);
         chartsAPIThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsAPIThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
@@ -530,7 +530,7 @@ void ChartsModel::getStackedAreaChartValues(int reportId, int dashboardId, int c
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getStackedAreaChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -550,7 +550,7 @@ void ChartsModel::getMultiLineChartValues(int reportId, int dashboardId, int cha
     this->currentDashboardId = dashboardId;
     this->currentChartSource = chartSource;
 
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
         chartsThread->methodSelector("getMultiLineChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
@@ -589,7 +589,7 @@ void ChartsModel::saveChartsModel()
 
 void ChartsModel::callThread()
 {
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         if(!chartsAPIThreadThread.isRunning()){
             chartsAPIThreadThread.setObjectName(this->threadName);
             chartsAPIThread->moveToThread(&chartsAPIThreadThread);
