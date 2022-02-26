@@ -200,6 +200,10 @@ void ChartsAPIThread::dataReadFinished()
 
 void ChartsAPIThread::getBarChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getBarChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -208,14 +212,15 @@ void ChartsAPIThread::getBarChartValues()
 
     QJsonObject obj;
     obj.insert("profileId", this->profileId);
-    obj.insert("uniqueHash", "hash");
+    obj.insert("uniqueHash", this->sessionToken.toStdString().c_str());
     obj.insert("reportId", this->currentReportId);
     obj.insert("dashboardId", this->currentDashboardId);
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -232,6 +237,9 @@ void ChartsAPIThread::getBarChartValues()
 
 void ChartsAPIThread::getStackedBarChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
 
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getStackedBarChartValues");
 
@@ -248,8 +256,9 @@ void ChartsAPIThread::getStackedBarChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -265,6 +274,10 @@ void ChartsAPIThread::getStackedBarChartValues()
 
 void ChartsAPIThread::getGroupedBarChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getGroupedBarChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -280,8 +293,9 @@ void ChartsAPIThread::getGroupedBarChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -297,6 +311,10 @@ void ChartsAPIThread::getGroupedBarChartValues()
 
 void ChartsAPIThread::getNewGroupedBarChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getNewGroupedBarChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -312,8 +330,9 @@ void ChartsAPIThread::getNewGroupedBarChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -330,6 +349,10 @@ void ChartsAPIThread::getNewGroupedBarChartValues()
 
 void ChartsAPIThread::getAreaChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getAreaChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -344,8 +367,9 @@ void ChartsAPIThread::getAreaChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -362,6 +386,10 @@ void ChartsAPIThread::getAreaChartValues()
 void ChartsAPIThread::getLineChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getLineChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -377,8 +405,9 @@ void ChartsAPIThread::getLineChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -395,6 +424,10 @@ void ChartsAPIThread::getLineChartValues()
 void ChartsAPIThread::getLineBarChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getLineBarChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -410,8 +443,9 @@ void ChartsAPIThread::getLineBarChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -428,6 +462,10 @@ void ChartsAPIThread::getLineBarChartValues()
 void ChartsAPIThread::getPieChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getPieChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -442,8 +480,9 @@ void ChartsAPIThread::getPieChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -460,6 +499,10 @@ void ChartsAPIThread::getPieChartValues()
 void ChartsAPIThread::getFunnelChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getFunnelChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -474,8 +517,9 @@ void ChartsAPIThread::getFunnelChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -492,6 +536,10 @@ void ChartsAPIThread::getFunnelChartValues()
 void ChartsAPIThread::getRadarChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getRadarChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -506,8 +554,9 @@ void ChartsAPIThread::getRadarChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -524,6 +573,10 @@ void ChartsAPIThread::getRadarChartValues()
 void ChartsAPIThread::getScatterChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getScatterChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -539,8 +592,9 @@ void ChartsAPIThread::getScatterChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -557,6 +611,10 @@ void ChartsAPIThread::getScatterChartValues()
 void ChartsAPIThread::getScatterChartNumericalValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getScatterChartNumericalValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -571,8 +629,9 @@ void ChartsAPIThread::getScatterChartNumericalValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -589,6 +648,10 @@ void ChartsAPIThread::getScatterChartNumericalValues()
 void ChartsAPIThread::getHeatMapChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getHeatMapChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -604,8 +667,9 @@ void ChartsAPIThread::getHeatMapChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -622,6 +686,10 @@ void ChartsAPIThread::getHeatMapChartValues()
 void ChartsAPIThread::getSunburstChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getSunburstChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -636,8 +704,9 @@ void ChartsAPIThread::getSunburstChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -654,6 +723,10 @@ void ChartsAPIThread::getSunburstChartValues()
 void ChartsAPIThread::getWaterfallChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getWaterfallChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -668,8 +741,9 @@ void ChartsAPIThread::getWaterfallChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -685,6 +759,10 @@ void ChartsAPIThread::getWaterfallChartValues()
 
 void ChartsAPIThread::getGaugeChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getGaugeChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -698,8 +776,9 @@ void ChartsAPIThread::getGaugeChartValues()
     obj.insert("dashboardId", this->currentDashboardId);
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("calculateColumn", this->calculateColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -715,6 +794,10 @@ void ChartsAPIThread::getGaugeChartValues()
 
 void ChartsAPIThread::getSankeyChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getSankeyChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -730,8 +813,9 @@ void ChartsAPIThread::getSankeyChartValues()
     obj.insert("sourceColumn", this->sourceColumn);
     obj.insert("destinationColumn", this->destinationColumn);
     obj.insert("measureColumn", this->measureColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -748,6 +832,10 @@ void ChartsAPIThread::getSankeyChartValues()
 void ChartsAPIThread::getTreeChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getTreeChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -762,8 +850,9 @@ void ChartsAPIThread::getTreeChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -779,6 +868,9 @@ void ChartsAPIThread::getTreeChartValues()
 
 void ChartsAPIThread::getTreeMapChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
 
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getTreeMapChartValues");
 
@@ -794,8 +886,9 @@ void ChartsAPIThread::getTreeMapChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -812,6 +905,10 @@ void ChartsAPIThread::getTreeMapChartValues()
 void ChartsAPIThread::getKPIChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getKPIChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -825,8 +922,9 @@ void ChartsAPIThread::getKPIChartValues()
     obj.insert("dashboardId", this->currentDashboardId);
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("calculateColumn", this->calculateColumn);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -843,6 +941,10 @@ void ChartsAPIThread::getKPIChartValues()
 void ChartsAPIThread::getTableChartValues()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getTableChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -858,8 +960,9 @@ void ChartsAPIThread::getTableChartValues()
     obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
     obj.insert("yAxisColumn", QJsonArray::fromVariantList(this->yAxisColumnList));
     obj.insert("dateConversionParameters", this->dateConversionOptions);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -877,6 +980,10 @@ void ChartsAPIThread::getTableChartValues()
 
 void ChartsAPIThread::getPivotChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getPivotChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -892,8 +999,9 @@ void ChartsAPIThread::getPivotChartValues()
     obj.insert("xAxisColumn", QJsonArray::fromVariantList(this->xAxisColumnList));
     obj.insert("yAxisColumn", QJsonArray::fromVariantList(this->yAxisColumnList));
     obj.insert("dateConversionParameters", this->dateConversionOptions);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -909,6 +1017,10 @@ void ChartsAPIThread::getPivotChartValues()
 
 void ChartsAPIThread::getStackedAreaChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getStackedAreaChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -924,8 +1036,9 @@ void ChartsAPIThread::getStackedAreaChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -941,6 +1054,10 @@ void ChartsAPIThread::getStackedAreaChartValues()
 
 void ChartsAPIThread::getMultiLineChartValues()
 {
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/getchart/getMultiLineChartValues");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -956,8 +1073,9 @@ void ChartsAPIThread::getMultiLineChartValues()
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("xSplitKey", this->xSplitKey);
-    obj.insert("dbType", "extract");
-    obj.insert("sourcePath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);

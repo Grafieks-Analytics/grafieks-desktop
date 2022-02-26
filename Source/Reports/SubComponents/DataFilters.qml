@@ -120,7 +120,7 @@ Popup {
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
-        function onAPISchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
+        function onApiSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
