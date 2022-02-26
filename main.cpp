@@ -84,6 +84,8 @@
 int Statics::isFreeTier;
 QString Statics::tmpIconPath;
 bool Statics::editMode;
+bool Statics::apiSwitch = false;
+QString Statics::currentDSFile;
 
 QString Statics::currentDbName;
 int Statics::currentDbIntType;

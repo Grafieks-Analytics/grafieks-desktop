@@ -98,7 +98,7 @@ ApplicationWindow {
     Connections{
         target: WorkbookProcessor
 
-        function onExtractMissing(){
+        function onDsMissing(dsType, dsName){
             selectMissingDS = true
             locateDSlocallyOrOnline.open()
         }
@@ -150,7 +150,12 @@ ApplicationWindow {
             readerDialog.title = "Extract missing. Select a file"
             readerDialog.open()
         } else {
-            console.log("SELECT DATA FROM GRAFIEKS CHARTS SERVER")
+            if(typeof settings.value("user/sessionToken") !== "undefined"){
+                GeneralParamsModel.setAPISwitch(true)
+            } else{
+                // Call login
+                connectGrafieks1.visible = true
+            }
         }
     }
 
@@ -236,7 +241,6 @@ ApplicationWindow {
 
         onAccepted: {
             var x = DSParamsModel.readDatasource(file)
-
         }
     }
 
