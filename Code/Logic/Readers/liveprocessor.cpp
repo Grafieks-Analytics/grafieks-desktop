@@ -27,9 +27,6 @@ void LiveProcessor::processLiveQueries()
 {
     this->masterQuery = "SELECT " + this->selectParams + " FROM " + this->masterTable + " " + this->joinParams + " " + this->whereParams;
 
-    // Set datasource name
-    this->dsParamsModel->setDsName(Statics::currentDbName);
-
     // For values refer to Constants.qml
     this->generalParamsModel->setLivePath(this->filePath);
     this->generalParamsModel->setCurrentScreen(4); // Set Dashboard screen
@@ -42,6 +39,12 @@ void LiveProcessor::processLiveQueries()
         emit liveReaderProcessed();
         emit generateLiveSchema(this->masterQuery);
     }
+}
+
+void LiveProcessor::setArgumentsFromWorkbook(QString filePath)
+{
+    this->filePath = filePath;
+    this->processLive();
 }
 
 void LiveProcessor::processLive()

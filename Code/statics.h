@@ -11,7 +11,8 @@ public:
     static int isFreeTier;
     static QString tmpIconPath;
     static bool editMode;
-
+    static bool apiSwitch;
+    static QString currentDSFile;
 
     static QString currentDbName;
     static int currentDbIntType;
