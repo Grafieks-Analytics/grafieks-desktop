@@ -41,6 +41,7 @@ ApplicationWindow {
     minimumHeight: 700
 
     title: Constants.applicationName
+    property var selectMissingDS : false
 
     // Handle Splash screen here
     onVisibilityChanged: {
@@ -97,9 +98,9 @@ ApplicationWindow {
     Connections{
         target: WorkbookProcessor
 
-        function onExtractMissing(){
-            readerDialog.title = "Extract missing. Select a file"
-            readerDialog.open()
+        function onDsMissing(dsType, dsName){
+            selectMissingDS = true
+            locateDSlocallyOrOnline.open()
         }
     }
 
@@ -119,11 +120,11 @@ ApplicationWindow {
         // Hence after completion we check if the arguments are received and then process the extract
 
         if(ExtractProcessor.receivedArgumentStatus() === true){
-            ExtractProcessor.processExtract()
+            ExtractProcessor.processDS()
         }
 
         if(WorkbookProcessor.receivedArgumentStatus() === true){
-            WorkbookProcessor.processExtract()
+            WorkbookProcessor.processDS()
         }
 
         if(settings.value("user/profileId") > 0){
@@ -138,6 +139,24 @@ ApplicationWindow {
 
         }
 
+    }
+
+    function selectDSLocation(computerOptionSelected){
+        console.log(computerOptionSelected)
+
+        locateDSlocallyOrOnline.close()
+
+        if(computerOptionSelected){
+            readerDialog.title = "Extract missing. Select a file"
+            readerDialog.open()
+        } else {
+            if(typeof settings.value("user/sessionToken") !== "undefined"){
+                GeneralParamsModel.setAPISwitch(true)
+            } else{
+                // Call login
+                connectGrafieks1.visible = true
+            }
+        }
     }
 
     function openNewApplication(){
@@ -169,6 +188,13 @@ ApplicationWindow {
         licensePopup.open()
     }
 
+    function basename(str) {
+        let file = str.slice(str.lastIndexOf("/")+1)
+        let fileSansExt = file.split('.').slice(0, -1).join('.');
+
+        return fileSansExt
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -178,6 +204,8 @@ ApplicationWindow {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+
+    ButtonGroup { id: radioGroup }
 
     // Global Modals
     PublishDatasource{
@@ -213,7 +241,6 @@ ApplicationWindow {
 
         onAccepted: {
             var x = DSParamsModel.readDatasource(file)
-
         }
     }
 
@@ -226,10 +253,19 @@ ApplicationWindow {
 
         onAccepted: {
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
+            var filenameSansExt = basename(readerFile)
+            DSParamsModel.setDsName(filenameSansExt)
+
             if(readerFile.includes(Constants.extractFileExt)){
                 console.log("Extract file")
                 GeneralParamsModel.setFromLiveFile(false)
-                ExtractProcessor.setArgumentsFromMenu(readerFile)
+
+                if(selectMissingDS){
+                    WorkbookProcessor.processAfterSelectingDS(readerFile)
+                } else {
+                    ExtractProcessor.setArgumentsFromMenu(readerFile)
+                }
+
             } else if(readerFile.includes(Constants.workbookFileExt)){
                 console.log("Workbook file")
                 GeneralParamsModel.setFromLiveFile(false)
@@ -237,9 +273,47 @@ ApplicationWindow {
             } else {
                 console.log("Live file")
                 GeneralParamsModel.setFromLiveFile(true)
-                LiveProcessor.setArgumentsFromMenu(readerFile)
+
+                if(selectMissingDS){
+                    WorkbookProcessor.processAfterSelectingDS(readerFile)
+                    LiveProcessor.processLiveQueries()
+                } else {
+                    LiveProcessor.setArgumentsFromMenu(readerFile)
+                }
             }
 
+        }
+    }
+
+    Popup{
+        id: locateDSlocallyOrOnline
+        width: 200
+        height: 300
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        ColumnLayout {
+            id: radioOptions
+            RadioButton {
+                id: computerOption
+                checked: true
+                text: qsTr("Find on your computer")
+                ButtonGroup.group: radioGroup
+            }
+            RadioButton {
+                id: serverOption
+                text: qsTr("Fetch from server")
+                ButtonGroup.group: radioGroup
+            }
+        }
+
+        Button{
+            id: confirmDSLocation
+            anchors.top: radioOptions.bottom
+            anchors.topMargin: 10
+            text: "Confirm"
+            onClicked: selectDSLocation(computerOption.checked)
         }
     }
 
@@ -326,88 +400,88 @@ ApplicationWindow {
 
         }
 
-//        Menu{
-//            id: editMenu
-//            title: qsTr("&Edit")
+        //        Menu{
+        //            id: editMenu
+        //            title: qsTr("&Edit")
 
 
-//            MenuItem{
-//                id: action_undo
-//                text: qsTr("Undo")
-//            }
+        //            MenuItem{
+        //                id: action_undo
+        //                text: qsTr("Undo")
+        //            }
 
-//            MenuItem{
-//                id: action_redo
-//                text: qsTr("Redo")
-//            }
+        //            MenuItem{
+        //                id: action_redo
+        //                text: qsTr("Redo")
+        //            }
 
-//            MenuSeparator{}
+        //            MenuSeparator{}
 
-//            MenuItem{
-//                id: action_cut
-//                text: qsTr("Cut")
-//            }
+        //            MenuItem{
+        //                id: action_cut
+        //                text: qsTr("Cut")
+        //            }
 
-//            MenuItem{
-//                id: action_copy
-//                text: qsTr("Copy")
-//            }
+        //            MenuItem{
+        //                id: action_copy
+        //                text: qsTr("Copy")
+        //            }
 
-//            MenuItem{
-//                id: action_paste
-//                text: qsTr("Paste")
-//            }
+        //            MenuItem{
+        //                id: action_paste
+        //                text: qsTr("Paste")
+        //            }
 
-//            MenuItem{
-//                id: action_delete
-//                text: qsTr("Delete")
-//            }
+        //            MenuItem{
+        //                id: action_delete
+        //                text: qsTr("Delete")
+        //            }
 
 
-//        }
+        //        }
 
         Menu {
             id: dataMenu
             title: qsTr("&Data")
 
 
-                MenuItem{
-                    id: disconnect_ds
-                    text: qsTr("Disconnect")
+            MenuItem{
+                id: disconnect_ds
+                text: qsTr("Disconnect")
 
-                    onTriggered: disconnectDS()
-                }
+                onTriggered: disconnectDS()
+            }
 
-//            MenuItem{
-//                id: action_new_ds
-//                text: qsTr("Add New Datasource")
+            //            MenuItem{
+            //                id: action_new_ds
+            //                text: qsTr("Add New Datasource")
 
-//                onTriggered: openDatasource()
-//            }
+            //                onTriggered: openDatasource()
+            //            }
 
-//            MenuSeparator{}
+            //            MenuSeparator{}
 
-//            MenuItem{
-//                id: action_save_ds
-//                text: qsTr("Save Datasource")
+            //            MenuItem{
+            //                id: action_save_ds
+            //                text: qsTr("Save Datasource")
 
-//                onTriggered: saveDatasource()
-//            }
-//            MenuItem{
-//                id: action_refresh_ds
-//                text: qsTr("Refresh Datasource")
-//            }
+            //                onTriggered: saveDatasource()
+            //            }
+            //            MenuItem{
+            //                id: action_refresh_ds
+            //                text: qsTr("Refresh Datasource")
+            //            }
 
-//            MenuSeparator{}
+            //            MenuSeparator{}
 
-//            MenuItem{
-//                id: action_export_ds_csv
-//                text: qsTr("Export Datasource to CSV")
-//            }
-//            MenuItem{
-//                id: action_export_ds_excel
-//                text: qsTr("Export Datasource to Excel")
-//            }
+            //            MenuItem{
+            //                id: action_export_ds_csv
+            //                text: qsTr("Export Datasource to CSV")
+            //            }
+            //            MenuItem{
+            //                id: action_export_ds_excel
+            //                text: qsTr("Export Datasource to Excel")
+            //            }
         }
 
 
@@ -506,12 +580,12 @@ ApplicationWindow {
                 }
             }
 
-//            MenuItem{
-//                text: qsTr("Test")
-//                onTriggered: {
-//                    stacklayout_home.currentIndex = 0
-//                }
-//            }
+            //            MenuItem{
+            //                text: qsTr("Test")
+            //                onTriggered: {
+            //                    stacklayout_home.currentIndex = 0
+            //                }
+            //            }
 
         }
 

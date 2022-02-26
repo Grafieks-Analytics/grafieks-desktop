@@ -489,7 +489,7 @@ void ReportsDataModel::generateColumnsForExtract()
 
     // GCS Bugfixes -- Fix Keyword
     // if condition is fictitious and needs fixing
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         this->generateColumnsFromAPI();
     } else {
         this->generateColumns(&con);
@@ -539,7 +539,7 @@ void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
 {
     // GCS Bugfixes -- Fix Keyword
     // if condition is fictitious and needs fixing
-    if(Constants::apiSwitch == true){
+    if(Statics::apiSwitch == true){
         this->generateColumnsFromAPI();
     } else {
         this->generateColumns(con);
@@ -715,6 +715,7 @@ void ReportsDataModel::generateColumnsFromAPI()
     QString chartsUrl = settings.value("general/chartsUrl").toString();
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
+    QString sitename = settings.value("user/sitename").toString();
 
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(chartsUrl+"/fetch_table_columns");
@@ -728,8 +729,8 @@ void ReportsDataModel::generateColumnsFromAPI()
     QJsonObject obj;
     obj.insert("profileId", profileId);
     obj.insert("dbType", "extract");
-    obj.insert("uniqueHash", "hash");
-    obj.insert("dbPath", "C:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("dbName", "C:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("siteName", sitename);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));

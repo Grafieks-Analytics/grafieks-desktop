@@ -9,7 +9,7 @@ void WorkbookProcessor::setArgumentsFromMenu(QString filePath)
 {
     this->filePath = filePath;
     Statics::editMode = true;
-    this->processExtract();
+    this->processDS();
 }
 
 void WorkbookProcessor::setArgumentsByFile(QString filePath)
@@ -24,9 +24,9 @@ bool WorkbookProcessor::receivedArgumentStatus()
     return this->receivedArgument;
 }
 
-void WorkbookProcessor::processExtract()
+void WorkbookProcessor::processDS()
 {
-    QFile fileWorkbook(filePath);
+    QFile fileWorkbook(this->filePath);
 
     if(!fileWorkbook.open(QIODevice::ReadOnly | QIODevice::Truncate)){
         qDebug() << Q_FUNC_INFO << "Could not open file for reading" << fileWorkbook.errorString();
@@ -48,45 +48,74 @@ void WorkbookProcessor::processExtract()
                 QString filePath = doc.object().value("datasourcePath").toString();
                 QFileInfo fi(filePath);
 
+                QString fileName = fi.fileName();
+                // For excel, csv, json, access and other in memory
+                QString dsType = Constants::duckType;
+
                 if(!fi.exists()){
-                    emit extractMissing();
+                    emit dsMissing(dsType, fileName);
                 } else {
                     emit processExtractFromWorkbook(filePath);
+                    this->processRemaining(doc);
                 }
 
             } else {
-                qDebug() << Q_FUNC_INFO << "Live type not processed yet";
-            }
 
-            // First process the files if any (images and text reports)
-            QJsonObject files = doc.object().value("files").toObject();
-            if(files.count() > 0){
+                QString filePath = doc.object().value("datasourcePath").toString();
+                QFileInfo fi(filePath);
 
-                QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
-                QDir tmpDir(tmpFilePath);
+                QString fileName = fi.fileName();
+                // For sqltype and forward type
+                QString dsType = Statics::currentDbClassification;
 
-                // Check if tmp directory exists
-                if (!tmpDir.exists()) QDir().mkdir(tmpFilePath);
-
-                QStringList filesList = files.keys();
-                foreach(QString file, filesList){
-                    QByteArray data = QByteArray::fromBase64(QByteArray::fromBase64(files.value(file).toString().toUtf8()));
-
-                    QFile fiWrite(tmpFilePath + file);
-                    fiWrite.open(QIODevice::WriteOnly);
-                    fiWrite.write(data);
-                    fiWrite.close();
+                if(!fi.exists()){
+                   emit dsMissing(dsType, fileName);
+                } else {
+                    emit processLiveFromWorkbook(filePath);
+                    this->processRemaining(doc);
                 }
-
             }
-
-            emit sendExtractDashboardParams(doc.object().value("dashboardParams").toObject());
-            emit sendExtractReportParams(doc.object().value("reportParams").toObject());
-            emit sendExtractTableColumns(doc.object().value("tableColumns").toObject());
-            emit sendExtractWhereParams(doc.object().value("whereParams").toObject());
-
         }
     }
+
+    fileWorkbook.close();
+}
+
+void WorkbookProcessor::processAfterSelectingDS(QString dsPath)
+{
+    QFile fileWorkbook(this->filePath);
+
+    if(!fileWorkbook.open(QIODevice::ReadOnly | QIODevice::Truncate)){
+        qDebug() << Q_FUNC_INFO << "Could not open file for reading" << fileWorkbook.errorString();
+    } else {
+        QByteArray workbookData;
+        QDataStream in(&fileWorkbook);
+        in >> workbookData;
+
+        QJsonParseError jsonError;
+        QJsonDocument doc = QJsonDocument::fromJson(workbookData, &jsonError);
+
+        if(doc.object().value("connectionType").toString() == Constants::extractType){
+
+            QString filePath = dsPath;
+            QFileInfo fi(filePath);
+
+            emit processExtractFromWorkbook(filePath);
+            this->processRemaining(doc);
+
+
+        } else {
+
+            QString filePath = dsPath;
+            QFileInfo fi(filePath);
+
+            emit processLiveFromWorkbook(filePath);
+            this->processRemaining(doc);
+        }
+
+    }
+
+    fileWorkbook.close();
 }
 
 void WorkbookProcessor::saveWorkbooks(QString filePath)
@@ -197,4 +226,34 @@ void WorkbookProcessor::getWhereParams(QJsonObject whereParams)
 {
     qDebug() << Q_FUNC_INFO << "GOT WHERE" << whereParams;
     this->whereParams = whereParams;
+}
+
+void WorkbookProcessor::processRemaining(QJsonDocument doc)
+{
+    // First process the files if any (images and text reports)
+    QJsonObject files = doc.object().value("files").toObject();
+    if(files.count() > 0){
+
+        QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+        QDir tmpDir(tmpFilePath);
+
+        // Check if tmp directory exists
+        if (!tmpDir.exists()) QDir().mkdir(tmpFilePath);
+
+        QStringList filesList = files.keys();
+        foreach(QString file, filesList){
+            QByteArray data = QByteArray::fromBase64(QByteArray::fromBase64(files.value(file).toString().toUtf8()));
+
+            QFile fiWrite(tmpFilePath + file);
+            fiWrite.open(QIODevice::WriteOnly);
+            fiWrite.write(data);
+            fiWrite.close();
+        }
+
+    }
+
+    emit sendDSDashboardParams(doc.object().value("dashboardParams").toObject());
+    emit sendDSReportParams(doc.object().value("reportParams").toObject());
+    emit sendDSTableColumns(doc.object().value("tableColumns").toObject());
+    emit sendDSWhereParams(doc.object().value("whereParams").toObject());
 }

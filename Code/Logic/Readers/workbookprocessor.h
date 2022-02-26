@@ -37,7 +37,8 @@ public:
     Q_INVOKABLE void setArgumentsByFile(QString filePath);
     Q_INVOKABLE bool receivedArgumentStatus();
 
-    Q_INVOKABLE void processExtract();
+    Q_INVOKABLE void processDS();
+    Q_INVOKABLE void processAfterSelectingDS(QString dsPath);
 
     Q_INVOKABLE void saveWorkbooks(QString filePath);
 
@@ -47,16 +48,18 @@ public slots:
     void getTableColumns(QJsonObject tableColumns);
     void getWhereParams(QJsonObject whereParams);
 
-
+private:
+    void processRemaining(QJsonDocument doc);
 
 signals:
-    void extractMissing();
+    void dsMissing(QString dsType, QString dsName);
     void processExtractFromWorkbook(QString filePath);
+    void processLiveFromWorkbook(QString filePath);
 
-    void sendExtractReportParams(QJsonObject reportParams);
-    void sendExtractDashboardParams(QJsonObject dashboardParams);
-    void sendExtractTableColumns(QJsonObject tableColumns);
-    void sendExtractWhereParams(QJsonObject whereParams);
+    void sendDSReportParams(QJsonObject reportParams);
+    void sendDSDashboardParams(QJsonObject dashboardParams);
+    void sendDSTableColumns(QJsonObject tableColumns);
+    void sendDSWhereParams(QJsonObject whereParams);
 
     void workbookSaved();
 
