@@ -714,7 +714,6 @@ void ReportsDataModel::generateColumnsFromAPI()
     // charts url to be replaced with actual base url
     QString chartsUrl = settings.value("general/chartsUrl").toString();
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
-    int profileId = settings.value("user/profileId").toInt();
     QString sitename = settings.value("user/sitename").toString();
 
     QNetworkRequest m_NetworkRequest;
@@ -724,13 +723,11 @@ void ReportsDataModel::generateColumnsFromAPI()
                                "application/x-www-form-urlencoded");
     m_NetworkRequest.setRawHeader("Authorization", sessionToken);
 
-    // GCS Bugfixes -- Fix Keyword
-    // unique hash, dbPath
     QJsonObject obj;
-    obj.insert("profileId", profileId);
-    obj.insert("dbType", "extract");
-    obj.insert("dbName", "C:/Users/chill/Desktop/orders1500.gadse");
-    obj.insert("siteName", sitename);
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));

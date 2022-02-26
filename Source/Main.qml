@@ -152,6 +152,8 @@ ApplicationWindow {
         } else {
             if(typeof settings.value("user/sessionToken") !== "undefined"){
                 GeneralParamsModel.setAPISwitch(true)
+                ReportsDataModel.generateColumnsForExtract()
+                stacklayout_home.currentIndex = 6
             } else{
                 // Call login
                 connectGrafieks1.visible = true
