@@ -679,7 +679,6 @@ Item{
 
     function drawChart(reportProperties){
 
-        console.log("COLPP", JSON.stringify(reportProperties))
         // Check if chart is still loading or not.
         if(webEngineView.loading){
             console.log('Chart is still loading... Please wait')

@@ -153,6 +153,7 @@ ApplicationWindow {
             if(typeof settings.value("user/sessionToken") !== "undefined"){
                 GeneralParamsModel.setAPISwitch(true)
                 ReportsDataModel.generateColumnsForExtract()
+                TableColumnsModel.generateColumnsFromAPI()
                 stacklayout_home.currentIndex = 6
             } else{
                 // Call login
