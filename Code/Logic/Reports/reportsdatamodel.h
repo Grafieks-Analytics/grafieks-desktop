@@ -33,6 +33,7 @@ class ReportsDataModel : public QObject
     DataType dataType;
     QStringList columnData;
     QString whereConditions;
+    QString APIOptions;
 
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
@@ -51,6 +52,7 @@ public:
     Q_INVOKABLE QStringList fetchColumnData(QString columnName, QString options = "");
     Q_INVOKABLE QStringList searchColumnData(QString keyword);
     Q_INVOKABLE QStringList fetchColumnDataLive(QString columnName, QString options = "");
+    Q_INVOKABLE void fetchColumnDataAPI(QString columnName, QString options = "");
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void deleteReportData(int reportId, bool deleteAll = false);
@@ -65,7 +67,8 @@ public slots:
     void receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
     void dataReadyRead();
-    void dataReadFinished();
+    void columnReadFinished();
+    void columnDataReadFinished();
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);

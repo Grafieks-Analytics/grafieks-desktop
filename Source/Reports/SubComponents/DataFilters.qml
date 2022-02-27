@@ -120,7 +120,7 @@ Popup {
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
-        function onAPISchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
+        function onApiSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
         }
 
@@ -240,7 +240,9 @@ Popup {
             "values" : ""
         }
 
-        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+        if(GeneralParamsModel.getAPISwitch()) {
+            ReportsDataModel.fetchColumnDataAPI(colName, options)
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             ReportsDataModel.fetchColumnDataLive(colName, options)
         } else {
             ReportsDataModel.fetchColumnData(colName, options)

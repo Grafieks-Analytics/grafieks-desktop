@@ -98,7 +98,9 @@ Rectangle{
         }
 
         //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+        if(GeneralParamsModel.getAPISwitch()) {
+            ReportsDataModel.fetchColumnDataAPI(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             ReportsDataModel.fetchColumnDataLive(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
         } else {
             ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))

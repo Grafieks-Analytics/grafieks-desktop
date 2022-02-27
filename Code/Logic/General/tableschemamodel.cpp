@@ -509,6 +509,10 @@ void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
 void TableSchemaModel::generateSchemaForApi()
 {
 
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
     this->m_NetworkRequest.setUrl(this->baseUrl +"/fetch_table_columns");
 
     this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
@@ -517,9 +521,10 @@ void TableSchemaModel::generateSchemaForApi()
 
     QJsonObject obj;
     obj.insert("profileId", this->profileId);
-    obj.insert("uniqueHash", "hash");
-    obj.insert("dbType", "extract");
-    obj.insert("dbPath", "c:/Users/chill/Desktop/orders1500.gadse");
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
@@ -567,17 +572,18 @@ void TableSchemaModel::dataReadFinished()
                 QJsonArray finalValue = data.toArray();
 
                 if(finalValue.at(3).toString() == "categorical"){
-                    this->allCategorical.append(value.toVariantList());
+                    this->allCategorical.append(finalValue.toVariantList());
                 } else if(finalValue.at(3).toString() == "numerical"){
-                    this->allNumerical.append(value.toVariantList());
+                    this->allNumerical.append(finalValue.toVariantList());
                 } else if(finalValue.at(3).toString() == "dateformat"){
-                    this->allDates.append(value.toVariantList());
+                    this->allDates.append(finalValue.toVariantList());
+                } else {
+                    this->allOthers.append(finalValue.toVariantList());
                 }
 
-//                this->newChartHeader.insert(i, finalValue.at(1).toString());
-//                i++;
+                this->allList.append(finalValue.toVariantList());
             }
-            // apiSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers);
+            emit apiSchemaObtained(this->allList, this->allCategorical, this->allNumerical, this->allDates, this->allOthers);
         }
     }
 }
