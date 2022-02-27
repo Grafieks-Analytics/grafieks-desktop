@@ -142,7 +142,6 @@ ApplicationWindow {
     }
 
     function selectDSLocation(computerOptionSelected){
-        console.log(computerOptionSelected)
 
         locateDSlocallyOrOnline.close()
 

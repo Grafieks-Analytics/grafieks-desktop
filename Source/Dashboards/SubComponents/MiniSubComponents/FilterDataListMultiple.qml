@@ -22,12 +22,51 @@ Item {
     }
 
     onComponentNameChanged: {
-        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+        if(GeneralParamsModel.getAPISwitch()) {
+            TableColumnsModel.fetchColumnDataAPI(componentName, DashboardParamsModel.currentDashboard)
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelContent)
         } else {
             modelContent = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelContent)
+        }
+    }
+
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                componentTitle.text = newAlias
+            }
+        }
+    }
+
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
+
+        if(checked === true){
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+
+        } else{
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
         }
 
+    }
+
+    function processDataList(modelContent){
         modelContent.unshift("Select All")
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
@@ -51,30 +90,6 @@ Item {
 
         // for the first time, select all values
         master = true
-    }
-
-
-    Connections{
-        target: DashboardParamsModel
-
-        function onAliasChanged(newAlias, columnName, dashboardId){
-            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                componentTitle.text = newAlias
-            }
-        }
-    }
-
-    function onMultiSelectCheckboxSelected(modelData,checked, index){
-
-        if(checked === true){
-            // Start pushing the individual checked item in the array
-            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-
-        } else{
-            // Remove item if unchecked
-            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-        }
-
     }
 
     function toggleSearch(){

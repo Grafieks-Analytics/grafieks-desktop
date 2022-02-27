@@ -23,11 +23,39 @@ Item{
 
 
     onComponentNameChanged: {
-        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+        if(GeneralParamsModel.getAPISwitch()) {
+            TableColumnsModel.fetchColumnDataAPI(componentName, DashboardParamsModel.currentDashboard)
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelContent)
         } else {
             modelContent = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelContent)
         }
+
+    }
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                componentTitle.text = newAlias
+            }
+        }
+    }
+
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+
+    function processDataList(modelContent){
         modelContent.unshift("Select All")
         control.model = modelContent
 
@@ -43,16 +71,6 @@ Item{
                              })
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
-    }
-
-    Connections{
-        target: DashboardParamsModel
-
-        function onAliasChanged(newAlias, columnName, dashboardId){
-            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                componentTitle.text = newAlias
-            }
-        }
     }
 
     function onRadioSelect(modelData){
