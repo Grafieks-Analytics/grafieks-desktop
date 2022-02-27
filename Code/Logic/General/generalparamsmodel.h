@@ -79,6 +79,7 @@ public:
     Q_INVOKABLE QStringList getCredentials();
 
     Q_INVOKABLE void setAPISwitch(bool apiSwitch);
+    Q_INVOKABLE bool getAPISwitch();
 
     QString randomStringGenerator();
 
