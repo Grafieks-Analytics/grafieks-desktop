@@ -6,6 +6,10 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QSettings>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -36,6 +40,10 @@ class TableColumnsModel : public QObject
     DataType dataType;
     int dashboardId;
 
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_dataBuffer;
+
     QString liveMasterTable;
     QString liveWhereParams;
     QString liveJoinParams;
@@ -65,11 +73,15 @@ public slots:
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
     void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
     void generateColumnsForExtract();
+    void generateColumnsFromAPI();
     void generateColumnsForLive(QMap<int, QStringList> sqlHeaders);
     void generateColumnsForReader(duckdb::Connection *con);
 
     void getExtractTableColumns(QJsonObject tableColumnParams);
     void receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
+
+    void dataReadyRead();
+    void columnReadFinished();
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);

@@ -138,8 +138,6 @@ Rectangle{
                     colData = ReportsDataModel.fetchColumnData(colName)
                     processDataList(columnData)
                 }
-
-
             }
         }
     }

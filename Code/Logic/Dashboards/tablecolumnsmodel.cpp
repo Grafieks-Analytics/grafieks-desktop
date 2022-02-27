@@ -1,7 +1,10 @@
 #include "tablecolumnsmodel.h"
 
 TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent),
-    dashboardId(0)
+    dashboardId(0),
+    m_networkAccessManager(new QNetworkAccessManager(this)),
+    m_networkReply(nullptr),
+    m_dataBuffer(new QByteArray)
 {
 
 }
@@ -419,6 +422,38 @@ void TableColumnsModel::generateColumnsForExtract()
     this->generateColumns(&con);
 }
 
+void TableColumnsModel::generateColumnsFromAPI()
+{
+    // Fetch value from settings
+    QSettings settings;
+    // GCS Bugfixes -- Fix Keyword
+    // charts url to be replaced with actual base url
+    QString chartsUrl = settings.value("general/chartsUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    QString sitename = settings.value("user/sitename").toString();
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(chartsUrl+"/fetch_table_columns");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    QJsonObject obj;
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&TableColumnsModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&TableColumnsModel::columnReadFinished);
+}
+
 void TableColumnsModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
 
@@ -453,10 +488,6 @@ void TableColumnsModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders
     this->dateList.sort(Qt::CaseInsensitive);
 
     // Update new data
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
     emit sendFilteredColumn(this->dashboardId, this->categoryList, this->numericalList, this->dateList);
 
 }
@@ -504,11 +535,67 @@ void TableColumnsModel::getExtractTableColumns(QJsonObject tableColumnParams)
 
 void TableColumnsModel::receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable)
 {
-    qDebug() << "I HAVE RECEIVED ORIGINAL CONDITONS" << selectParams << whereParams << joinParams << masterTable;
     this->liveSelectParams = selectParams;
     this->liveMasterTable = masterTable;
     this->liveWhereParams = whereParams;
     this->liveJoinParams = joinParams;
+}
+
+void TableColumnsModel::dataReadyRead()
+{
+    m_dataBuffer->clear();
+    m_dataBuffer->append(m_networkReply->readAll());
+}
+
+void TableColumnsModel::columnReadFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+
+        // Clear existing chart headers data
+        this->numericalList.clear();
+        this->categoryList.clear();
+        this->dateList.clear();
+        this->newChartHeader.clear();
+
+        QJsonObject json = dataDoc.object();
+        int i = 0;
+        QJsonArray value = json.value("all").toArray();
+
+        foreach(QJsonValue data, value){
+            QJsonArray finalValue = data.toArray();
+
+
+            if(finalValue.at(3).toString() == "categorical"){
+                this->categoryList.append(finalValue.at(1).toString());
+                this->columnTypes.insert(finalValue.at(1).toString(), Constants::categoricalType);
+            } else if(finalValue.at(3).toString() == "numerical"){
+                this->numericalList.append(finalValue.at(1).toString());
+                this->columnTypes.insert(finalValue.at(1).toString(), Constants::numericalType);
+            } else if(finalValue.at(3).toString() == "dateformat"){
+                this->dateList.append(finalValue.at(1).toString());
+                this->columnTypes.insert(finalValue.at(1).toString(), Constants::dateType);
+            }
+
+            this->newChartHeader.insert(i, finalValue.at(1).toString());
+            i++;
+        }
+
+
+        this->categoryList.sort(Qt::CaseInsensitive);
+        this->numericalList.sort(Qt::CaseInsensitive);
+        this->dateList.sort(Qt::CaseInsensitive);
+        emit sendFilteredColumn(this->dashboardId, this->categoryList, this->numericalList, this->dateList);
+    }
 }
 
 
