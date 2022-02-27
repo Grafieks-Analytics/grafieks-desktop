@@ -45,6 +45,7 @@ QStringList ReportsDataModel::fetchColumnData(QString columnName, QString option
         qDebug() << Q_FUNC_INFO << data->error.c_str();
     }
 
+
     emit columnDataChanged(this->columnData, options);
 
     return this->columnData;
@@ -151,6 +152,40 @@ QStringList ReportsDataModel::fetchColumnDataLive(QString columnName, QString op
     return this->columnData;
 }
 
+void ReportsDataModel::fetchColumnDataAPI(QString columnName, QString options)
+{
+    // Fetch value from settings
+    QSettings settings;
+    // GCS Bugfixes -- Fix Keyword
+    // charts url to be replaced with actual base url
+    QString chartsUrl = settings.value("general/chartsUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    QString sitename = settings.value("user/sitename").toString();
+
+    this->APIOptions = options;
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(chartsUrl+"/fetch_column_data");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    QJsonObject obj;
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
+    obj.insert("columnName", columnName);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ReportsDataModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::columnDataReadFinished);
+}
 
 void ReportsDataModel::clearData()
 {
@@ -556,10 +591,11 @@ void ReportsDataModel::receiveOriginalConditions(QString selectParams, QString w
 
 void ReportsDataModel::dataReadyRead()
 {
+    m_dataBuffer->clear();
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
-void ReportsDataModel::dataReadFinished()
+void ReportsDataModel::columnReadFinished()
 {
     //Parse the JSON
     if( m_networkReply->error()){
@@ -604,6 +640,35 @@ void ReportsDataModel::dataReadFinished()
         this->numericalList.sort(Qt::CaseInsensitive);
         this->dateList.sort(Qt::CaseInsensitive);
         emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+    }
+}
+
+
+void ReportsDataModel::columnDataReadFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+
+        // Clear existing chart headers data
+        this->columnData.clear();
+
+        QJsonObject json = dataDoc.object();
+        QJsonArray value = json.value("colData").toArray();
+
+        foreach(QJsonValue data, value){
+            this->columnData.append(data.toString());
+        }
+
+        emit columnDataChanged(this->columnData, this->APIOptions);
     }
 }
 
@@ -714,7 +779,6 @@ void ReportsDataModel::generateColumnsFromAPI()
     // charts url to be replaced with actual base url
     QString chartsUrl = settings.value("general/chartsUrl").toString();
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
-    int profileId = settings.value("user/profileId").toInt();
     QString sitename = settings.value("user/sitename").toString();
 
     QNetworkRequest m_NetworkRequest;
@@ -724,13 +788,11 @@ void ReportsDataModel::generateColumnsFromAPI()
                                "application/x-www-form-urlencoded");
     m_NetworkRequest.setRawHeader("Authorization", sessionToken);
 
-    // GCS Bugfixes -- Fix Keyword
-    // unique hash, dbPath
     QJsonObject obj;
-    obj.insert("profileId", profileId);
-    obj.insert("dbType", "extract");
-    obj.insert("dbName", "C:/Users/chill/Desktop/orders1500.gadse");
-    obj.insert("siteName", sitename);
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -738,7 +800,7 @@ void ReportsDataModel::generateColumnsFromAPI()
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
     connect(m_networkReply,&QIODevice::readyRead,this,&ReportsDataModel::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::dataReadFinished);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::columnReadFinished);
 
     emit generateFiltersForAPI();
 

@@ -246,6 +246,11 @@ void GeneralParamsModel::setAPISwitch(bool apiSwitch)
     Statics::apiSwitch = apiSwitch;
 }
 
+bool GeneralParamsModel::getAPISwitch()
+{
+    return Statics::apiSwitch;
+}
+
 void GeneralParamsModel::setFromLiveFile(bool setForLiveFile)
 {
     this->setForLiveFile = setForLiveFile;

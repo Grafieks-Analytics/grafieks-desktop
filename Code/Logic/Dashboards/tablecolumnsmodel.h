@@ -6,6 +6,10 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QSettings>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 
 #include <QJsonObject>
 #include <QJsonArray>
@@ -34,7 +38,13 @@ class TableColumnsModel : public QObject
     QStringList columnDataList;
 
     DataType dataType;
+    int forwardDashboardId;
     int dashboardId;
+    QString colName;
+
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_dataBuffer;
 
     QString liveMasterTable;
     QString liveWhereParams;
@@ -52,6 +62,12 @@ public:
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
     Q_INVOKABLE QStringList fetchColumnDataLive(QString colName);
+
+    // This function has to be multithreaded
+    // Else on selecting multiple filters, only the last filter value is updated
+    // Rest are removed
+    Q_INVOKABLE void fetchColumnDataAPI(QString colName, int forwardDashboardId);
+
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
     Q_INVOKABLE void searchColumnNames(int dashboardId, QString keyword);
     Q_INVOKABLE QString findColumnType(QString columnName);
@@ -65,11 +81,16 @@ public slots:
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
     void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
     void generateColumnsForExtract();
+    void generateColumnsFromAPI();
     void generateColumnsForLive(QMap<int, QStringList> sqlHeaders);
     void generateColumnsForReader(duckdb::Connection *con);
 
     void getExtractTableColumns(QJsonObject tableColumnParams);
     void receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
+
+    void dataReadyRead();
+    void columnReadFinished();
+    void columnDataReadFinished();
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
@@ -77,6 +98,7 @@ signals:
     void columnNamesChanged(int dashboardId, QStringList columnNames);
     void dashboardWhereConditions(QString whereConditions, int currentDashboardId);
     void chartValuesChanged(int currentDashboardId);
+    void columnDataChanged(QStringList columnData, QString columnName, int dashboardId);
 
     // save table columns
     void signalSaveTableColumns(QJsonObject tableColumnParams);

@@ -51,6 +51,8 @@ void WorkbookProcessor::processDS()
                 QString fileName = fi.fileName();
                 // For excel, csv, json, access and other in memory
                 QString dsType = Constants::duckType;
+                Statics::currentDSFile = fileName;
+                Statics::currentDbClassification = dsType;
 
                 if(!fi.exists()){
                     emit dsMissing(dsType, fileName);
@@ -67,6 +69,8 @@ void WorkbookProcessor::processDS()
                 QString fileName = fi.fileName();
                 // For sqltype and forward type
                 QString dsType = Statics::currentDbClassification;
+                Statics::currentDSFile = fileName;
+                Statics::currentDbClassification = dsType;
 
                 if(!fi.exists()){
                    emit dsMissing(dsType, fileName);

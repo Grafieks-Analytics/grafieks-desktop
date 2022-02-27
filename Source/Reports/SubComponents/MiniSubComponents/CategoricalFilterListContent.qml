@@ -58,56 +58,30 @@ Rectangle{
 
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.categoricalTab){
-                counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
                 var colData
-                var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 ReportParamsModel.removeTmpSelectedValues(0, true)
 
-                if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+                if(GeneralParamsModel.getAPISwitch()) {
+                    ReportsDataModel.fetchColumnDataAPI(colName)
+                } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
                     colData = ReportsDataModel.fetchColumnDataLive(colName)
+                    processDataList(colData)
                 } else {
                     colData = ReportsDataModel.fetchColumnData(colName)
+                    processDataList(colData)
                 }
 
-                // Just to reset the data if the previous `colData` and the new `colData` are same
-                singleSelectCheckList.model = []
-                multiSelectCheckList.model = []
 
-                columnDataModel = colData
-
-                singleSelectCheckList.model = columnDataModel
-                multiSelectCheckList.model  = columnDataModel
-
-                if(ReportParamsModel.subCategory === Constants.categorySubMulti){
-                    multiSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = true
-                    singleSelectCheckList.visible = false
-
-                    if(values[0] === "%"){
-                        columnDataModel.forEach((item) => {
-                                            ReportParamsModel.setTmpSelectedValues(item)
-                                        })
-                    } else{
-
-                        var checkedValues = values[0].split(",")
-                        checkedValues.forEach((item) => {
-                                                  ReportParamsModel.setTmpSelectedValues(item)
-                                              })
-                    }
-                } else{
-                    singleSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = false
-                    singleSelectCheckList.visible = true
-
-                    if(ReportParamsModel.searchTmpSelectedValues(values) < 0){
-                        ReportParamsModel.setTmpSelectedValues(values)
-                    }
-
-                }
             }
+        }
+    }
+
+    Connections{
+        target: ReportsDataModel
+
+        function onColumnDataChanged(columnData, options){
+            processDataList(columnData)
         }
     }
 
@@ -126,6 +100,49 @@ Rectangle{
     Component.onCompleted: {
         if(ReportParamsModel.section === Constants.categoricalTab){
             mainCheckBox.visible = true
+        }
+    }
+
+    function processDataList(colData){
+        counter = ReportParamsModel.filterIndex
+        var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+
+        // Just to reset the data if the previous `colData` and the new `colData` are same
+        singleSelectCheckList.model = []
+        multiSelectCheckList.model = []
+
+        columnDataModel = colData
+
+        singleSelectCheckList.model = columnDataModel
+        multiSelectCheckList.model  = columnDataModel
+
+        if(ReportParamsModel.subCategory === Constants.categorySubMulti){
+            multiSelectRadio.checked = true
+
+            multiSelectCheckList.visible = true
+            singleSelectCheckList.visible = false
+
+            if(values[0] === "%"){
+                columnDataModel.forEach((item) => {
+                                    ReportParamsModel.setTmpSelectedValues(item)
+                                })
+            } else{
+
+                var checkedValues = values[0].split(",")
+                checkedValues.forEach((item) => {
+                                          ReportParamsModel.setTmpSelectedValues(item)
+                                      })
+            }
+        } else{
+            singleSelectRadio.checked = true
+
+            multiSelectCheckList.visible = false
+            singleSelectCheckList.visible = true
+
+            if(ReportParamsModel.searchTmpSelectedValues(values) < 0){
+                ReportParamsModel.setTmpSelectedValues(values)
+            }
+
         }
     }
 

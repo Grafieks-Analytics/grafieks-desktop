@@ -17,6 +17,7 @@ namespace Constants
     // Application level constants
     const QString defaultAPIEndpoint = "https://apit.grafieks.net";
     const QString defaultFTPEndpoint = "95.217.117.126";
+    const QString defaultChartEndpoint = "http://localhost:5473";
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
