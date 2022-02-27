@@ -163,6 +163,41 @@ QStringList TableColumnsModel::fetchColumnDataLive(QString colName)
     return this->columnDataList;
 }
 
+void TableColumnsModel::fetchColumnDataAPI(QString colName, int forwardDashboardId)
+{
+    // Fetch value from settings
+    QSettings settings;
+    // GCS Bugfixes -- Fix Keyword
+    // charts url to be replaced with actual base url
+    QString chartsUrl = settings.value("general/chartsUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    QString sitename = settings.value("user/sitename").toString();
+    this->colName = colName;
+    this->forwardDashboardId = forwardDashboardId;
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(chartsUrl+"/fetch_column_data");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    QJsonObject obj;
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
+    obj.insert("columnName", this->colName);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&TableColumnsModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&TableColumnsModel::columnDataReadFinished);
+}
+
 QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnName)
 {
     QString extractPath = Statics::extractPath;
@@ -595,6 +630,34 @@ void TableColumnsModel::columnReadFinished()
         this->numericalList.sort(Qt::CaseInsensitive);
         this->dateList.sort(Qt::CaseInsensitive);
         emit sendFilteredColumn(this->dashboardId, this->categoryList, this->numericalList, this->dateList);
+    }
+}
+
+void TableColumnsModel::columnDataReadFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+
+        // Clear existing chart headers data
+        this->columnDataList.clear();
+
+        QJsonObject json = dataDoc.object();
+        QJsonArray value = json.value("colData").toArray();
+
+        foreach(QJsonValue data, value){
+            this->columnDataList.append(data.toString());
+        }
+
+        emit columnDataChanged(this->columnDataList, this->colName, this->forwardDashboardId);
     }
 }
 

@@ -20,11 +20,39 @@ Item {
     onComponentNameChanged: {
         var modelData
 
-        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+        if(GeneralParamsModel.getAPISwitch()) {
+            TableColumnsModel.fetchColumnDataAPI(componentName, DashboardParamsModel.currentDashboard)
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelData = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelData)
         } else {
             modelData = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelData)
         }
+
+    }
+
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                componentTitle.text = newAlias
+            }
+        }
+    }
+
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+    function processDataList(modelData){
         modelData.sort()
 
         rangeSlider.from = Math.min(...modelData)
@@ -44,18 +72,6 @@ Item {
 
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
-    }
-
-
-    Connections{
-        target: DashboardParamsModel
-
-        function onAliasChanged(newAlias, columnName, dashboardId){
-            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                componentTitle.text = newAlias
-            }
-        }
-
     }
 
     function updateValue(){
