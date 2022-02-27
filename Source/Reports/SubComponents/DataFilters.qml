@@ -240,7 +240,9 @@ Popup {
             "values" : ""
         }
 
-        if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+        if(GeneralParamsModel.getAPISwitch()) {
+            ReportsDataModel.fetchColumnDataAPI(colName, options)
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             ReportsDataModel.fetchColumnDataLive(colName, options)
         } else {
             ReportsDataModel.fetchColumnData(colName, options)
