@@ -107,7 +107,7 @@ public slots:
     void receiveReportConditions(QString whereConditions, int currentReportId);
     void receiveDashboardConditions(QString whereConditions, int currentDashboardId);
     void receiveOriginalConditions(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
-    void getExtractWhereParams(QJsonObject whereParams);
+    void getExtractJoinAndWhereParams(QJsonObject joinAndhereParams);
 
 signals:
 
@@ -135,7 +135,7 @@ signals:
     void signalStackedAreaChartValues(QString output, int reportId, int dashboardId, int chartSource);
     void signalMultiLineChartValues(QString output, int reportId, int dashboardId, int chartSource);
 
-    void sendWhereParams(QJsonObject whereParams);
+    void sendJoinAndWhereParams(QJsonObject joinAndWhereParams);
 
 };
 
