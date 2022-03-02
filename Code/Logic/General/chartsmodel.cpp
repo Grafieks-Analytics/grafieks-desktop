@@ -583,8 +583,9 @@ void ChartsModel::saveChartsModel()
 
     finalObj.insert("reportWhereConditions", reportWhereConditionsObj);
     finalObj.insert("dashboardWhereConditions", dashboardWhereConditionsObj);
+    finalObj.insert("joinConditions", originalJoinConditions);
 
-    emit sendWhereParams(finalObj);
+    emit sendJoinAndWhereParams(finalObj);
 }
 
 void ChartsModel::callThread()
@@ -766,11 +767,11 @@ void ChartsModel::receiveOriginalConditions(QString selectParams, QString whereC
     this->originalMasterTable = masterTable;
 }
 
-void ChartsModel::getExtractWhereParams(QJsonObject whereParams)
+void ChartsModel::getExtractJoinAndWhereParams(QJsonObject joinAndWhereParams)
 {
     // reportWhereConditions
-    QStringList reportIds = whereParams.value("reportWhereConditions").toObject().keys();
-    QVariantMap reportMap = whereParams.value("reportWhereConditions").toObject().toVariantMap();
+    QStringList reportIds = joinAndWhereParams.value("reportWhereConditions").toObject().keys();
+    QVariantMap reportMap = joinAndWhereParams.value("reportWhereConditions").toObject().toVariantMap();
 
     foreach(QString reportId, reportIds){
 
@@ -779,8 +780,8 @@ void ChartsModel::getExtractWhereParams(QJsonObject whereParams)
 
 
     // dashboardWhereConditions
-    QStringList dashboardIds = whereParams.value("dashboardWhereConditions").toObject().keys();
-    QVariantMap dashboardMap = whereParams.value("dashboardWhereConditions").toObject().toVariantMap();
+    QStringList dashboardIds = joinAndWhereParams.value("dashboardWhereConditions").toObject().keys();
+    QVariantMap dashboardMap = joinAndWhereParams.value("dashboardWhereConditions").toObject().toVariantMap();
 
     foreach(QString dashboardId, dashboardIds){
 

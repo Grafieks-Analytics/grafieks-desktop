@@ -418,12 +418,12 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::sendReportParams, &workbookProcessor, &WorkbookProcessor::getReportParams);
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
     QObject::connect(&tableColumnsModel, &TableColumnsModel::signalSaveTableColumns, &workbookProcessor, &WorkbookProcessor::getTableColumns);
-    QObject::connect(&chartsModel, &ChartsModel::sendWhereParams, &workbookProcessor, &WorkbookProcessor::getWhereParams);
+    QObject::connect(&chartsModel, &ChartsModel::sendJoinAndWhereParams, &workbookProcessor, &WorkbookProcessor::getJoinAndWhereParams);
 
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
-    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSWhereParams, &chartsModel, &ChartsModel::getExtractWhereParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSJoinAndWhereParams, &chartsModel, &ChartsModel::getExtractJoinAndWhereParams);
 
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processExtractFromWorkbook, &extractProcessor, &ExtractProcessor::setArgumentsFromWorkbook);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processLiveFromWorkbook, &liveProcessor, &LiveProcessor::setArgumentsFromWorkbook);
