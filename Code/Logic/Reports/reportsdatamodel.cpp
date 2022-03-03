@@ -544,12 +544,18 @@ void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
     int i = 0;
     foreach(QStringList headers, sqlHeaders){
 
+        int dbIntType = Statics::currentDbIntType;
+        QString tableColumnName = qj.getQueryJoiner(dbIntType) + headers.at(2) + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + headers.at(0) + qj.getQueryJoiner(dbIntType);
+
         if(headers.at(1).contains(Constants::categoricalType)){
             this->categoryList.append(headers.at(0));
+            this->categoricalMap.insert(headers.at(0), tableColumnName);
         } else if(headers.at(1).contains(Constants::numericalType)){
             this->numericalList.append(headers.at(0));
+            this->numericalMap.insert(headers.at(0), tableColumnName);
         } else if(headers.at(1).contains(Constants::dateType)){
             this->dateList.append(headers.at(0));
+            this->dateMap.insert(headers.at(0), tableColumnName);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" << headers.at(0);
         }
@@ -557,10 +563,6 @@ void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
         this->newChartHeader.insert(i, headers.at(0));
         i++;
     }
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
 
     // Update new data
 

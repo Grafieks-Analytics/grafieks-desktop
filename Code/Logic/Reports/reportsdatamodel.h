@@ -16,6 +16,7 @@
 #include "../../statics.h"
 #include "../../duckdb.hpp"
 #include "../General/datatype.h"
+#include "../General/queryjoiner.h"
 
 class ReportsDataModel : public QObject
 {
@@ -28,9 +29,14 @@ class ReportsDataModel : public QObject
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
+
+    QMap<QString, QString> numericalMap;
+    QMap<QString, QString> categoricalMap;
+    QMap<QString, QString> dateMap;
     int reportId;
 
     DataType dataType;
+    QueryJoiner qj;
     QStringList columnData;
     QString whereConditions;
     QString APIOptions;

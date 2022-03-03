@@ -36,6 +36,19 @@ QString QueryJoiner::getQueryJoiner(int dbType)
     case Constants::sqliteIntType:
         joiner = "`";
         break;
+
+    case Constants::redshiftIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::teradataIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::snowflakeIntType:
+        joiner = "\"";
+        break;
+
     }
 
     return joiner;
