@@ -66,14 +66,14 @@ Item{
             ]
         }
 
-        ListElement {
-            categoryName: "Axis Size"
-            collapsed: false
-            display: false
-            subItems: [
-                ListElement { itemName: "ChartSize" }
-            ]
-        }
+        // ListElement {
+        //     categoryName: "Axis Size"
+        //     collapsed: false
+        //     display: false
+        //     subItems: [
+        //         ListElement { itemName: "ChartSize" }
+        //     ]
+        // }
 
 //        ListElement {
 //            categoryName: "Reference Line"
