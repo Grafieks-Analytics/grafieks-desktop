@@ -96,7 +96,6 @@ public slots:
     void columnDataReadFinished();
 
 signals:
-//    void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void sendFilteredColumn(int currentDashboard, QVariantMap allCategoricalMap, QVariantMap allNumericalMap, QVariantMap allDatesMap);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
     void columnNamesChanged(int dashboardId, QStringList columnNames);

@@ -10,7 +10,29 @@ ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent),
 
 void ReportsDataModel::searchColumnNames(QString keyword)
 {
-    emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+    QVariantMap tmpCategorical, tmpNumerical, tmpDate;
+    QList<QString> categoricalKeys, numericalKeys, dateKeys;
+
+    categoricalKeys = this->categoricalMap.keys();
+    numericalKeys = this->numericalMap.keys();
+    dateKeys = this->dateMap.keys();
+
+    foreach(QString tmpCategoricalKey, categoricalKeys){
+        if(tmpCategoricalKey.contains(keyword))
+            tmpCategorical.insert(tmpCategoricalKey, this->categoricalMap.value(tmpCategoricalKey));
+    }
+
+    foreach(QString tmpNumericalKey, numericalKeys){
+        if(tmpNumericalKey.contains(keyword))
+            tmpNumerical.insert(tmpNumericalKey, this->numericalMap.value(tmpNumericalKey));
+    }
+
+    foreach(QString tmpDateKey, dateKeys){
+        if(tmpDateKey.contains(keyword))
+            tmpDate.insert(tmpDateKey, this->dateMap.value(tmpDateKey));
+    }
+
+    emit sendFilteredColumn(tmpCategorical, tmpNumerical, tmpDate);
 }
 
 QStringList ReportsDataModel::fetchColumnData(QString columnName, QString options)
@@ -207,9 +229,9 @@ void ReportsDataModel::deleteReportData(int reportId, bool deleteAll)
         this->reportChartData.clear();
         this->newChartHeader.clear();
 
-        this->numericalList.clear();
-        this->categoryList.clear();
-        this->dateList.clear();
+        this->numericalMap.clear();
+        this->categoricalMap.clear();
+        this->dateMap.clear();
     }
 }
 
@@ -536,9 +558,9 @@ void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
 
     // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
+    this->numericalMap.clear();
+    this->categoricalMap.clear();
+    this->dateMap.clear();
     this->newChartHeader.clear();
 
     int i = 0;
@@ -548,13 +570,10 @@ void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
         QString tableColumnName = qj.getQueryJoiner(dbIntType) + headers.at(2) + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + headers.at(0) + qj.getQueryJoiner(dbIntType);
 
         if(headers.at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(headers.at(0));
             this->categoricalMap.insert(headers.at(0), tableColumnName);
         } else if(headers.at(1).contains(Constants::numericalType)){
-            this->numericalList.append(headers.at(0));
             this->numericalMap.insert(headers.at(0), tableColumnName);
         } else if(headers.at(1).contains(Constants::dateType)){
-            this->dateList.append(headers.at(0));
             this->dateMap.insert(headers.at(0), tableColumnName);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" << headers.at(0);
@@ -565,11 +584,7 @@ void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
     }
 
     // Update new data
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+    emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
 }
 
 void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
@@ -612,9 +627,9 @@ void ReportsDataModel::columnReadFinished()
         QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
 
         // Clear existing chart headers data
-        this->numericalList.clear();
-        this->categoryList.clear();
-        this->dateList.clear();
+        this->numericalMap.clear();
+        this->categoricalMap.clear();
+        this->dateMap.clear();
         this->newChartHeader.clear();
 
         QJsonObject json = dataDoc.object();
@@ -624,24 +639,24 @@ void ReportsDataModel::columnReadFinished()
         foreach(QJsonValue data, value){
             QJsonArray finalValue = data.toArray();
 
+            int dbIntType = Statics::currentDbIntType;
+            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(3).toString() + qj.getQueryJoiner(dbIntType);
+
+
 
             if(finalValue.at(3).toString() == "categorical"){
-                this->categoryList.append(finalValue.at(1).toString());
+                this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
             } else if(finalValue.at(3).toString() == "numerical"){
-                this->numericalList.append(finalValue.at(1).toString());
+                this->numericalMap.insert(finalValue.at(1).toString(), tableColumnName);
             } else if(finalValue.at(3).toString() == "dateformat"){
-                this->dateList.append(finalValue.at(1).toString());
+                this->dateMap.insert(finalValue.at(1).toString(), tableColumnName);
             }
 
             this->newChartHeader.insert(i, finalValue.at(1).toString());
             i++;
         }
 
-
-        this->categoryList.sort(Qt::CaseInsensitive);
-        this->numericalList.sort(Qt::CaseInsensitive);
-        this->dateList.sort(Qt::CaseInsensitive);
-        emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+        emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
     }
 }
 
@@ -731,9 +746,9 @@ void ReportsDataModel::generateColumns(duckdb::Connection *con)
     //    }
 
     // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
+    this->numericalMap.clear();
+    this->categoricalMap.clear();
+    this->dateMap.clear();
     this->newChartHeader.clear();
 
 
@@ -750,11 +765,11 @@ void ReportsDataModel::generateColumns(duckdb::Connection *con)
 
 
             if(dataType.dataType(fieldType).contains(Constants::categoricalType)){
-                this->categoryList.append(fieldName);
+                this->categoricalMap.insert(fieldName, fieldName);
             } else if(dataType.dataType(fieldType).contains(Constants::numericalType)){
-                this->numericalList.append(fieldName);
+                this->numericalMap.insert(fieldName, fieldName);
             } else if(dataType.dataType(fieldType).contains(Constants::dateType)){
-                this->dateList.append(fieldName);
+                this->dateMap.insert(fieldName, fieldName);
             } else{
                 qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   fieldName;
             }
@@ -766,11 +781,7 @@ void ReportsDataModel::generateColumns(duckdb::Connection *con)
     }
 
     // Update new data
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+    emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
 }
 
 void ReportsDataModel::generateColumnsFromAPI()

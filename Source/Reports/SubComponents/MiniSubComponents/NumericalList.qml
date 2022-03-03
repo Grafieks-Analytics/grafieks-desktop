@@ -21,11 +21,13 @@ ListView{
     Connections{
         target : ReportsDataModel
 
-        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            
-              allNumerical = [ false , ...allNumerical]
-            numericalList.model =  allNumerical
+        function onSendFilteredColumn(allCategoricalMap, allNumericalMap, allDatesMap){
+            for(const [key, value] of Object.entries(allNumericalMap)){
+                console.log("FIELD NAME AND ALIAS", key, value)
+                listmodel.append({"key" : key, "value": value})
+            }
 
+            numericalList.model =  listmodel
         }
     }
     function appendToList(name){
@@ -53,8 +55,8 @@ ListView{
 
     delegate: DataPaneElement{
         id: dataPaneListElement
-        visible: modelData === false ? false : true
-        height: modelData === false ? 0 : 24
+        visible: key === false ? false : true
+        height: key === false ? 0 : 24
     }
 
 }

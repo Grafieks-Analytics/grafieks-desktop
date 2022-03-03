@@ -26,13 +26,13 @@ class ReportsDataModel : public QObject
     QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<int, QString> newChartHeader;
 
-    QStringList numericalList;
-    QStringList categoryList;
-    QStringList dateList;
+//    QStringList numericalList;
+//    QStringList categoryList;
+//    QStringList dateList;
 
-    QMap<QString, QString> numericalMap;
-    QMap<QString, QString> categoricalMap;
-    QMap<QString, QString> dateMap;
+    QVariantMap numericalMap;
+    QVariantMap categoricalMap;
+    QVariantMap dateMap;
     int reportId;
 
     DataType dataType;
@@ -77,7 +77,7 @@ public slots:
     void columnDataReadFinished();
 
 signals:
-    void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+    void sendFilteredColumn(QVariantMap allCategoricalMap, QVariantMap allNumericalMap, QVariantMap allDatesMap);
     void reportWhereConditions(QString whereConditions, int currentReportId);
     void columnDataChanged(QStringList columnData, QString options);
     void generateFiltersForAPI();
