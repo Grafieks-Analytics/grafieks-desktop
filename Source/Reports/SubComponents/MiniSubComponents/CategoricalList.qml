@@ -18,14 +18,21 @@ ListView{
     }
 
 
+    ListModel{
+        id: listmodel
+    }
 
 
     Connections{
         target : ReportsDataModel
 
-        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            allCategorical = [ false , ...allCategorical]
-            categoricalList.model =  allCategorical
+        function onSendFilteredColumn(allCategoricalMap, allNumericalMap, allDatesMap){
+            for(const [key, value] of Object.entries(allCategoricalMap)){
+                console.log("FIELD NAME AND ALIAS", key, value)
+                listmodel.append({"key" : key, "value": value})
+            }
+
+            categoricalList.model =  listmodel
         }
     }
 
@@ -35,10 +42,10 @@ ListView{
     width: parent.width
     delegate: DataPaneElement{
         id: dataPaneListElement
-        visible: modelData === false ? false : true
-        height: modelData === false ? 0 : 24
+        visible: key === false ? false : true
+        height: key === false ? 0 : 24
         Component.onCompleted: {
-            console.log('Debug: Index', itemType, modelData, itemName);
+            console.log('Debug: Index', itemType, key, value, itemName);
         }
     }
 
