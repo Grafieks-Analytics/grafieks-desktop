@@ -101,6 +101,7 @@ SOURCES += \
     Code/Logic/General/datatype.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/newtablecolumnsmodel.cpp \
+    Code/Logic/General/queryjoiner.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
@@ -223,6 +224,7 @@ HEADERS += \
     Code/Logic/General/datatype.h \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/newtablecolumnsmodel.h \
+    Code/Logic/General/queryjoiner.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
