@@ -16,6 +16,7 @@
 #include <QJsonDocument>
 
 #include "../General/datatype.h"
+#include "../General/queryjoiner.h"
 
 #include "../../constants.h"
 #include "../../statics.h"
@@ -29,15 +30,17 @@ class TableColumnsModel : public QObject
     QMap<int, QString> newChartHeader;
     QMap<int, QStringList> chartHeaderDetails;
 
-    QStringList numericalList;
-    QStringList categoryList;
-    QStringList dateList;
+    QVariantMap numericalMap;
+    QVariantMap categoricalMap;
+    QVariantMap dateMap;
+
     QMap<int, QVariantMap> allColumnVisibleMap;         // dashboardId - <columnName - columnType>
     QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<QString, QString> columnTypes;
     QStringList columnDataList;
 
     DataType dataType;
+    QueryJoiner qj;
     int forwardDashboardId;
     int dashboardId;
     QString colName;
@@ -93,7 +96,8 @@ public slots:
     void columnDataReadFinished();
 
 signals:
-    void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+//    void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+    void sendFilteredColumn(int currentDashboard, QVariantMap allCategoricalMap, QVariantMap allNumericalMap, QVariantMap allDatesMap);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
     void columnNamesChanged(int dashboardId, QStringList columnNames);
     void dashboardWhereConditions(QString whereConditions, int currentDashboardId);
