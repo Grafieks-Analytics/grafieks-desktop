@@ -638,6 +638,7 @@ Page {
                 drawChartAfterReceivingSignal(output);
         }
         function onSignalGaugeChartValues(output, reportId, dashboardId, chartSource){
+            console.log('DEBUG::: Gauge chart values',output);
             if(reportId === report_desiner_page.reportIdMain)
                 drawChartAfterReceivingSignal(output);
         }
@@ -1382,6 +1383,10 @@ Page {
     }
 
     function updateChart() {
+        if (chartTitle == Constants.gaugeChartTitle){
+            reDrawChart();
+            return;
+        }
         var runScriptString =
             "drawChart(window.data," + JSON.stringify(d3PropertyConfig) + "); ";
         webEngineView.runJavaScript(runScriptString);
@@ -2036,6 +2041,7 @@ Page {
 
         if (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) {
             drawChart();
+            return;
         }
 
         if (chartTitle == Constants.pivotTitle) {
@@ -2699,12 +2705,10 @@ Page {
             */
 
         if (
-            (xAxisColumns.length && yAxisColumns.length) ||
-            (xAxisColumns.length &&
-                (chartTitle == Constants.tableTitle ||
-                    chartTitle == Constants.kpiTitle)) ||
-            (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
-            (chartTitle == Constants.pivotTitle && isPivotChart())
+            (xAxisColumns.length && yAxisColumns.length) 
+            || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) 
+            || (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) // Condition for Gauge Chart
+            || (chartTitle == Constants.pivotTitle && isPivotChart()) // Condition for Pivot Chart
         ) {
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);
