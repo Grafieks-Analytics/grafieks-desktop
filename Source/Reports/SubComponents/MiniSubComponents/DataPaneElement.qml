@@ -170,15 +170,16 @@ Rectangle{
 
 
 
-                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType, dateFormat: Constants.yearFormat };
+                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: key, tableValue: value , itemType: itemType, dateFormat: Constants.yearFormat };
 
-                ReportParamsModel.itemName = modelData;
+                ReportParamsModel.itemName = key;
                 ReportParamsModel.itemType = itemType;
-                ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));
-                ReportParamsModel.setYAxisActive(yAxisDropEligible(modelData));
-                report_desiner_page.row3Active = row3AxisDropEligible(modelData);
+                ReportParamsModel.setXAxisActive(xAxisDropEligible(key));
+                ReportParamsModel.setYAxisActive(yAxisDropEligible(key));
+                report_desiner_page.row3Active = row3AxisDropEligible(key);
+                report_desiner_page.row4Active = row4AxisDropEligible(key);
 
-                if(isDropEligible(itemType, modelData)){
+                if(isDropEligible(itemType, key)){
                     ReportParamsModel.setColorByActive(true);
                 }else{
                     ReportParamsModel.setColorByActive(false);
@@ -190,6 +191,8 @@ Rectangle{
                 ReportParamsModel.setYAxisActive(false);
                 ReportParamsModel.setColorByActive(false);
                 report_desiner_page.row3Active = false;
+                report_desiner_page.row4Active = false;
+                
             }
 
             dataPaneListElement.Drag.drop();
