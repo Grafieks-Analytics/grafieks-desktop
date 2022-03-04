@@ -16,6 +16,7 @@
 #include <QSettings>
 
 #include "datatype.h"
+#include "queryjoiner.h"
 #include "querysplitter.h"
 
 #include "../../Connectors/allconnectors.h"
@@ -34,6 +35,7 @@ class TableSchemaModel : public QObject
 {
     Q_OBJECT
     DataType dataType;
+    QueryJoiner qj;
     QuerySplitter querySplitter;
 
     QNetworkAccessManager * m_networkAccessManager;
