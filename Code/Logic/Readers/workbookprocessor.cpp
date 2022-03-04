@@ -43,7 +43,7 @@ void WorkbookProcessor::processDS()
             qDebug() << Q_FUNC_INFO << "Blank JsonDocument" ;
         } else {
 
-            if(doc.object().value("connectionType").toString() == Constants::extractType){
+            if(doc.object().value("connectionType").toString() == Constants::duckType){
 
                 QString filePath = doc.object().value("datasourcePath").toString();
                 QFileInfo fi(filePath);
@@ -99,7 +99,7 @@ void WorkbookProcessor::processAfterSelectingDS(QString dsPath)
         QJsonParseError jsonError;
         QJsonDocument doc = QJsonDocument::fromJson(workbookData, &jsonError);
 
-        if(doc.object().value("connectionType").toString() == Constants::extractType){
+        if(doc.object().value("connectionType").toString() == Constants::duckType){
 
             QString filePath = dsPath;
             QFileInfo fi(filePath);
@@ -160,13 +160,12 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     finalObj.insert("workbook_version", Constants::workbookVersion);
     finalObj.insert("unique_hash", uniqueHash); // This is to identify the extract irrespective of its filename
     finalObj.insert("last_update", QString::number(currentTimestamp));
-    finalObj.insert("connectionType", Statics::dsType);
+    finalObj.insert("connectionType", Statics::dsType == Constants::extractType ? Constants::duckType : Constants::sqlType);
 
     finalObj.insert("reportParams", this->reportParams);
     finalObj.insert("dashboardParams", this->dashboardParams);
     finalObj.insert("tableColumns", this->tableColumnParams);
-    finalObj.insert("whereParams", this->whereParams);
-    finalObj.insert("connectionType", Statics::dsType);
+    finalObj.insert("joinAndWhereParams", this->joinAndWhereParams);
 
     if(Statics::dsType == Constants::liveType){
         finalObj.insert("currentDbIntType", Statics::currentDbIntType);
@@ -226,10 +225,10 @@ void WorkbookProcessor::getTableColumns(QJsonObject tableColumns)
     qDebug() << Q_FUNC_INFO << "Slot Table Column params" << tableColumns;
 }
 
-void WorkbookProcessor::getWhereParams(QJsonObject whereParams)
+void WorkbookProcessor::getJoinAndWhereParams(QJsonObject joinAndWhereParams)
 {
-    qDebug() << Q_FUNC_INFO << "GOT WHERE" << whereParams;
-    this->whereParams = whereParams;
+    qDebug() << Q_FUNC_INFO << "GOT WHERE" << joinAndWhereParams;
+    this->joinAndWhereParams = joinAndWhereParams;
 }
 
 void WorkbookProcessor::processRemaining(QJsonDocument doc)
@@ -259,5 +258,5 @@ void WorkbookProcessor::processRemaining(QJsonDocument doc)
     emit sendDSDashboardParams(doc.object().value("dashboardParams").toObject());
     emit sendDSReportParams(doc.object().value("reportParams").toObject());
     emit sendDSTableColumns(doc.object().value("tableColumns").toObject());
-    emit sendDSWhereParams(doc.object().value("whereParams").toObject());
+    emit sendDSJoinAndWhereParams(doc.object().value("joinAndWhereParams").toObject());
 }

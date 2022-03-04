@@ -16,6 +16,7 @@
 #include "../../statics.h"
 #include "../../duckdb.hpp"
 #include "../General/datatype.h"
+#include "../General/queryjoiner.h"
 
 class ReportsDataModel : public QObject
 {
@@ -25,12 +26,17 @@ class ReportsDataModel : public QObject
     QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<int, QString> newChartHeader;
 
-    QStringList numericalList;
-    QStringList categoryList;
-    QStringList dateList;
+//    QStringList numericalList;
+//    QStringList categoryList;
+//    QStringList dateList;
+
+    QVariantMap numericalMap;
+    QVariantMap categoricalMap;
+    QVariantMap dateMap;
     int reportId;
 
     DataType dataType;
+    QueryJoiner qj;
     QStringList columnData;
     QString whereConditions;
     QString APIOptions;
@@ -71,7 +77,7 @@ public slots:
     void columnDataReadFinished();
 
 signals:
-    void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+    void sendFilteredColumn(QVariantMap allCategoricalMap, QVariantMap allNumericalMap, QVariantMap allDatesMap);
     void reportWhereConditions(QString whereConditions, int currentReportId);
     void columnDataChanged(QStringList columnData, QString options);
     void generateFiltersForAPI();
