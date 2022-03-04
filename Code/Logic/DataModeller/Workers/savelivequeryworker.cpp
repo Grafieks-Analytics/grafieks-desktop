@@ -154,6 +154,10 @@ void SaveLiveQueryWorker::run()
     QString joinConditions = this->querySplitter.getJoinConditions();
     QString masterTable = this->querySplitter.getMainTable();
 
+    if(whereConditions.contains("\'")){
+        whereConditions.replace(R"(')", R"('')");
+    }
+
     QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
     QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + whereConditions + "', '" + joinConditions + "', '" + masterTable + "')";
 
