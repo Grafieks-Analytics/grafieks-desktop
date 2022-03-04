@@ -699,8 +699,7 @@ void TableSchemaModel::extractSchema(duckdb::Connection *con)
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldType);
 
-            QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
-            outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
+            outputDataList << tableName << fieldName << fieldType << filterDataType << fieldName;
 
             // Output data according to Filter type
 
