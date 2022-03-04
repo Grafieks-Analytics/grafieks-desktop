@@ -117,8 +117,10 @@ QStringList TableColumnsModel::fetchColumnDataLive(QString colName)
             this->liveWhereParams.replace(R"('')", R"(')");
         }
 
+        QString whereString = this->liveWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
         QSqlDatabase dbCon = QSqlDatabase::database(dbString);
-        QString queryString = "SELECT DISTINCT " + colName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " WHERE " + this->liveWhereParams;
+        QString queryString = "SELECT DISTINCT " + colName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + whereString + this->liveWhereParams;
         QSqlQuery query(queryString, dbCon);
 
         while(query.next()){
@@ -154,8 +156,10 @@ QStringList TableColumnsModel::fetchColumnDataLive(QString colName)
             this->liveWhereParams.replace(R"('')", R"(')");
         }
 
+        QString whereString = this->liveWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
         QSqlDatabase dbCon = QSqlDatabase::database(dbString);
-        QString queryString = "SELECT DISTINCT " + colName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + " WHERE " + this->liveWhereParams;
+        QString queryString = "SELECT DISTINCT " + colName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + whereString + this->liveWhereParams;
         QSqlQuery query(queryString, dbCon);
 
         while(query.next()){

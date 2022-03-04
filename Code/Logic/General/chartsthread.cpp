@@ -168,7 +168,12 @@ void ChartsThread::getBarChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -278,7 +283,12 @@ void ChartsThread::getGroupedBarChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -394,7 +404,12 @@ void ChartsThread::getNewGroupedBarChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -521,7 +536,12 @@ void ChartsThread::getLineBarChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -619,7 +639,12 @@ void ChartsThread::getPieChartValues()
     } else{
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -704,7 +729,12 @@ void ChartsThread::getFunnelChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -796,7 +826,12 @@ void ChartsThread::getRadarChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -900,7 +935,12 @@ void ChartsThread::getScatterChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -1002,7 +1042,12 @@ void ChartsThread::getScatterChartNumericalValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT SUM(" + xAxisColumn + "), SUM(" + yAxisColumn + ") FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT SUM(" + xAxisColumn + "), SUM(" + yAxisColumn + ") FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
         dataListLive = this->queryLiveFunction(queryString);
 
         xAxisValue = dataListLive.value(0).toString();
@@ -1084,7 +1129,12 @@ void ChartsThread::getHeatMapChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -1211,7 +1261,12 @@ void ChartsThread::getGaugeChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -1287,7 +1342,12 @@ void ChartsThread::getSankeyChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -1402,7 +1462,12 @@ void ChartsThread::getKPIChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -1573,13 +1638,19 @@ void ChartsThread::getTableChartValues()
     } else {
 
         // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
         QString xQueryString =  "SELECT ";
         foreach(QVariant xCols, xAxisColumnList){
             xQueryString += xCols.toString() + ", ";
         }
 
         xQueryString.chop(2);
-        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         QString yQueryString =  "SELECT ";
         foreach(QVariant yCols, yAxisColumnList){
@@ -1587,7 +1658,8 @@ void ChartsThread::getTableChartValues()
         }
 
         yQueryString.chop(2);
-        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+
+        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         xDataListLive = this->queryLiveFunction(xQueryString);
         xAxisLength = xAxisColumnList.length();
@@ -1877,13 +1949,18 @@ void ChartsThread::getPivotChartValues()
     } else {
 
         // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
         QString xQueryString =  "SELECT ";
         foreach(QVariant xCols, xAxisColumnList){
             xQueryString += xCols.toString() + ", ";
         }
 
         xQueryString.chop(2);
-        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         QString yQueryString =  "SELECT ";
         foreach(QVariant yCols, yAxisColumnList){
@@ -1891,7 +1968,7 @@ void ChartsThread::getPivotChartValues()
         }
 
         yQueryString.chop(2);
-        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         xDataListLive = this->queryLiveFunction(xQueryString);
         xAxisLength = xAxisColumnList.length();
@@ -2101,7 +2178,12 @@ void ChartsThread::getMultiLineChartValues()
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -2222,7 +2304,12 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -2448,15 +2535,20 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     } else {
 
         // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
         QString xQueryString =  "SELECT ";
         foreach(QVariant xCols, xAxisColumn){
             xQueryString += xCols.toString() + ", ";
         }
 
         xQueryString.chop(2);
-        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
-        QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         int totalXCols = xAxisColumn.length();
 //        int totalYCols = yAxisColumn.length();
@@ -2659,7 +2751,12 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     } else {
 
         // Fetch data from live
-        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + " " + this->masterWhereParams;
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         dataListLive = this->queryLiveFunction(queryString);
         totalRows = dataListLive.size();
@@ -2765,21 +2862,23 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryExtractFu
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
+    QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+
     // IF Reports
     // Else Dashboards
     if(this->currentChartSource == Constants::reportScreen){
         if(this->reportWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+            queryString = mainQuery + connector + this->reportWhereConditions;
         } else {
             queryString = mainQuery;
         }
     } else {
         if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString =mainQuery + " WHERE " + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+            queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
         } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+            queryString = mainQuery + connector + this->reportWhereConditions;
         } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->dashboardWhereConditions;
+            queryString = mainQuery + connector + this->dashboardWhereConditions;
         } else {
             queryString = mainQuery;
         }
@@ -2799,21 +2898,23 @@ QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
     QString queryString;
     QSqlDatabase connection;
 
+    QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+
     // IF Reports
     // Else Dashboards
     if(this->currentChartSource == Constants::reportScreen){
         if(this->reportWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+            queryString = mainQuery + connector + this->reportWhereConditions;
         } else {
             queryString = mainQuery;
         }
     } else {
         if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString =mainQuery + " WHERE " + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+            queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
         } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+            queryString = mainQuery + connector + this->reportWhereConditions;
         } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->dashboardWhereConditions;
+            queryString = mainQuery + connector + this->dashboardWhereConditions;
         } else {
             queryString = mainQuery;
         }
@@ -2954,21 +3055,23 @@ QMap<int, QHash<int, QString> > ChartsThread::queryLiveValues(QString mainQuery,
     QMap<int, QHash<int, QString>> output;
     QHash<int, QString> tmpOut;
 
+    QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+
     // IF Reports
     // Else Dashboards
     if(this->currentChartSource == Constants::reportScreen){
         if(this->reportWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+            queryString = mainQuery + connector + this->reportWhereConditions;
         } else {
             queryString = mainQuery;
         }
     } else {
         if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString =mainQuery + " WHERE " + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+            queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
         } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
-            queryString = mainQuery + " WHERE " + this->reportWhereConditions;
+            queryString = mainQuery + connector + this->reportWhereConditions;
         } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + " WHERE " + this->dashboardWhereConditions;
+            queryString = mainQuery + connector + this->dashboardWhereConditions;
         } else {
             queryString = mainQuery;
         }
