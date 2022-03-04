@@ -241,8 +241,6 @@ Popup {
             "values" : ""
         }
 
-        console.log("TABLE COL NAME", tableColName, colName, section, category, subCategory)
-
         if(GeneralParamsModel.getAPISwitch()) {
             ReportsDataModel.fetchColumnDataAPI(tableColName, options)
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){

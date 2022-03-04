@@ -27,6 +27,7 @@ ListView {
         function onSendFilteredColumn(currentDashboard, allCategoricalMap, allNumericalMap, allDatesMap){
 
             if(currentDashboard === DashboardParamsModel.currentDashboard){
+                listmodel.clear()
                 for(const [key, value] of Object.entries(allNumericalMap)){
                     listmodel.append({"key" : key, "value": value})
                 }

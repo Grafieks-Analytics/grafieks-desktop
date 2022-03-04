@@ -27,6 +27,7 @@ ListView{
 
         function onSendFilteredColumn(allCategoricalMap, allNumericalMap, allDatesMap){
             for(const [key, value] of Object.entries(allNumericalMap)){
+                listmodel.clear()
                 console.log("FIELD NAME AND ALIAS", key, value)
                 listmodel.append({"key" : key, "value": value})
             }
