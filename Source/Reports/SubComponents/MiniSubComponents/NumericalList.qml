@@ -17,6 +17,10 @@ ListView{
 
     property string itemType: "Numerical"
 
+    ListModel{
+        id: listmodel
+    }
+
 
     Connections{
         target : ReportsDataModel

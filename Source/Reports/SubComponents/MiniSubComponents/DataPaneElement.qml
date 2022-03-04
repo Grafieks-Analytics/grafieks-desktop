@@ -119,7 +119,7 @@ Rectangle{
     }
 
     Text {
-        text: modelData
+        text: key
         width: parent.width - categoricalImage.width - menuButton.width - 30
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: categoricalImage.right
