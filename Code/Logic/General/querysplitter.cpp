@@ -123,7 +123,7 @@ QString QuerySplitter::getJoinConditions()
 
     QRegularExpression joinConditionsRegex(R"(\s(?:INNER|LEFT|RIGHT|FULL)\s+(.*?)(?:\s+(?:WHERE|GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch joinConditionsIterator = joinConditionsRegex.match(m_query);
-    joinConditions = joinConditionsIterator.captured(0).trimmed();
+    joinConditions = joinConditionsIterator.captured(0).replace(" WHERE", "", Qt::CaseInsensitive).replace(" GROUP","", Qt::CaseInsensitive).replace(" ORDER", "", Qt::CaseInsensitive).replace(" LIMIT","", Qt::CaseInsensitive).trimmed();
 
     return joinConditions;
 }
