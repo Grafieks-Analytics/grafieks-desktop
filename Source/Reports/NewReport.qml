@@ -31,6 +31,7 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
     property bool row3Active: null
+    property bool row4Active: null
 
     property var maxDropOnXAxis: 1;
     property var maxDropOnYAxis: 1;
@@ -694,6 +695,7 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
         row3Active = false;
+        row4Active = false;
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -1104,6 +1106,17 @@ Page {
         }else{
             row3DropAreaRectangle.border.color = "transparent";
             row3DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+
+        // Variable when drop is hovered on Y Axis
+    onRow4ActiveChanged: {
+        if(row4Active){
+            row4DropAreaRectangle.border.color = Constants.grafieksLightGreenColor;
+            row4DropAreaRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            row4DropAreaRectangle.border.color = "transparent";
+            row4DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
         }
     }
 
@@ -1874,6 +1887,7 @@ Page {
             case Constants.yAxisName:
                 model = yAxisListModel;
                 break;
+            case Constants.row4Name:
             case Constants.row3Name:
                 model = valuesListModel;
                 break;
@@ -1883,7 +1897,7 @@ Page {
         }
         var columnsName = [];
         for (var i = 0; i < model.count; i++) {
-            columnsName.push(model.get(i).itemName);
+            columnsName.push(model.get(i).tableValue);
         }
         return columnsName;
     }
@@ -1898,6 +1912,7 @@ Page {
                 model = yAxisListModel;
                 break;
             case Constants.row3Name:
+            case Constants.row4Name:
                 model = valuesListModel;
                 break;
         }
@@ -1908,6 +1923,7 @@ Page {
         for (var i = 0; i < model.count; i++) {
             columnsAllDetails.push({
                 itemName: model.get(i).itemName,
+                tableValue: model.get(i).tableValue,
                 itemType: model.get(i).droppedItemType,
                 dateFormat: model.get(i).dateFormat,
             });
@@ -2535,12 +2551,23 @@ Page {
         return false;
     }
 
+    function row4AxisDropEligible(itemName, itemType) {
+        var row4Columns = getAxisColumnNames(Constants.row4Name);
+        // Check if condition more data pills can be added or not';
+        if (row4Columns.length === 1) {
+            return false;
+        }
+        return true;
+    }
+
+
     function onDropAreaDropped(element, axis) {
         row3Active = null;
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
+        var tableValue = lastPickedDataPaneElementProperties.tableValue;
 
         element.border.width = Constants.dropEligibleBorderWidth;
         element.border.color = Constants.themeColor;
@@ -2554,6 +2581,7 @@ Page {
             }
             xAxisListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2567,6 +2595,7 @@ Page {
             console.log("Y Axis itemType", itemType, itemName);
             yAxisListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2579,6 +2608,7 @@ Page {
             console.log(itemType, "Adding it to values?");
             valuesListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2590,6 +2620,7 @@ Page {
             console.log(itemType, "Adding for gauge?");
             valuesListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });

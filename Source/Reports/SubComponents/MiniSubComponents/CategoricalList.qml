@@ -41,7 +41,7 @@ ListView{
     anchors.topMargin: 5
     height: parent.height-20
     width: parent.width
-    delegate: DataPaneElement{
+    delegate: DataPaneElement {
         id: dataPaneListElement
         visible: key === false ? false : true
         height: key === false ? 0 : 24
