@@ -134,6 +134,21 @@ bool GeneralParamsModel::getFromLiveFile()
     return this->setForLiveFile;
 }
 
+void GeneralParamsModel::setJsonFromWorkbook(QJsonDocument jsonDoc)
+{
+    this->jsonDoc = jsonDoc;
+}
+
+QJsonDocument GeneralParamsModel::getJsonFromWorkbook()
+{
+    return this->jsonDoc;
+}
+
+bool GeneralParamsModel::ifJsonFromWorkbookSet()
+{
+    return this->jsonDoc.isEmpty() ? false: true;
+}
+
 void GeneralParamsModel::setFromLiveQuery(bool setForLiveQuery)
 {
     this->setForLiveQuery = setForLiveQuery;
