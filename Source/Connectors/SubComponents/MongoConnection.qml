@@ -58,6 +58,13 @@ Popup {
 
                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
                 if(setFromLiveFile){
+
+                    LiveProcessor.processLiveQueries()
+
+                    var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
+                    if(ifJsonFromWorkbookSet)
+                        WorkbookProcessor.processJsonAfterLoginCredentials()
+
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
                     stacklayout_home.currentIndex = 6

@@ -146,7 +146,7 @@ ApplicationWindow {
         locateDSlocallyOrOnline.close()
 
         if(computerOptionSelected){
-            readerDialog.title = "Extract missing. Select a file"
+            readerDialog.title = "Datasource missing. Select a file"
             readerDialog.open()
         } else {
             if(typeof settings.value("user/sessionToken") !== "undefined"){
@@ -270,7 +270,6 @@ ApplicationWindow {
 
             } else if(readerFile.includes(Constants.workbookFileExt)){
                 console.log("Workbook file")
-                GeneralParamsModel.setFromLiveFile(false)
                 WorkbookProcessor.setArgumentsFromMenu(readerFile)
             } else {
                 console.log("Live file")
