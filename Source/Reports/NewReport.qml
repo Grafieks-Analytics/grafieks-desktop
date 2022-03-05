@@ -1546,7 +1546,7 @@ Page {
             colorListModel.append({
                 textValue: colorListModelData[i].columnName,
                 itemName: colorListModelData[i].columnName,
-                tableValue: row3ColumnsReportData[i].tableValue
+                tableValue: colorListModelData[i].tableValue
             });
         }
 

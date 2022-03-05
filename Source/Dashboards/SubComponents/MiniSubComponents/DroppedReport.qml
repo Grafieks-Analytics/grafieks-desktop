@@ -1122,7 +1122,7 @@ Item{
             Rectangle{
                 id: chartMenu
                 anchors.right: parent.right
-                anchors.rightMargin: 80
+                anchors.rightMargin: 60
                 anchors.top: parent.top
                 height: parent.height
 
@@ -1154,18 +1154,18 @@ Item{
                         }
                     }
 
-                    Image{
-                        id: resizeReport
-                        height: 16
-                        width: 16
-                        source: "/Images/icons/view gray.png"
-                        anchors.verticalCenter: parent.verticalCenter
+                    // Image{
+                    //     id: resizeReport
+                    //     height: 16
+                    //     width: 16
+                    //     source: "/Images/icons/view gray.png"
+                    //     anchors.verticalCenter: parent.verticalCenter
 
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: resizeOptions.open()
-                        }
-                    }
+                    //     MouseArea{
+                    //         anchors.fill: parent
+                    //         onClicked: resizeOptions.open()
+                    //     }
+                    // }
 
                     Image {
                         id: fullScreenReport
@@ -1218,27 +1218,27 @@ Item{
                                 onTriggered: destroyElement()
                             }
                         }
-                        Menu{
-                            id: resizeOptions
-                            background: Rectangle{
-                                implicitWidth: 200
-                                border.color: Constants.darkThemeColor
-                            }
+                        // Menu{
+                        //     id: resizeOptions
+                        //     background: Rectangle{
+                        //         implicitWidth: 200
+                        //         border.color: Constants.darkThemeColor
+                        //     }
 
-                            MenuItem {
-                                text: qsTr("Standard")
-                                onTriggered: convertToStandard()
-                            }
+                        //     MenuItem {
+                        //         text: qsTr("Standard")
+                        //         onTriggered: convertToStandard()
+                        //     }
 
-                            MenuItem {
-                                text: qsTr("FitWidth")
-                                onTriggered: convertToFit()
-                            }
-                            MenuItem {
-                                text: qsTr("FitHeight")
-                                onTriggered: convertToFit()
-                            }
-                        }
+                        //     MenuItem {
+                        //         text: qsTr("FitWidth")
+                        //         onTriggered: convertToFit()
+                        //     }
+                        //     MenuItem {
+                        //         text: qsTr("FitHeight")
+                        //         onTriggered: convertToFit()
+                        //     }
+                        // }
                     }
                 }
             }
