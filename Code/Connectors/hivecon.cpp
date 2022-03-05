@@ -39,6 +39,7 @@ QVariantMap HiveCon::HiveOdbcInstance(const QString &driver, const QString &host
             Statics::hivePort = port;
             Statics::hiveUsername = username;
             Statics::hivePassword = password;
+            Statics::hiveRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -85,6 +86,7 @@ void HiveCon::closeConnection()
     Statics::impalaPort = 0;
     Statics::impalaUsername = "";
     Statics::impalaPassword = "";
+    Statics::hiveRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";
