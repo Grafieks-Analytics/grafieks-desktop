@@ -42,6 +42,8 @@ public:
 
     Q_INVOKABLE void saveWorkbooks(QString filePath);
 
+    Q_INVOKABLE void processJsonAfterLoginCredentials();
+
 public slots:
     void getReportParams(QJsonObject reportParams);
     void getDashboardParams(QJsonObject dashboardParams);
