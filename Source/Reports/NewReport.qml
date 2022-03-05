@@ -1520,6 +1520,7 @@ Page {
         for (var i = 0; i < xAxisColumnsReportData.length; i++) {
             xAxisListModel.append({
                 itemName: xAxisColumnsReportData[i].itemName,
+                tableValue: xAxisColumnsReportData[i].tableValue,
                 droppedItemType: xAxisColumnsReportData[i].droppedItemType,
                 dateFormat: xAxisColumnsReportData[i].dateFormat,
             });
@@ -1527,6 +1528,7 @@ Page {
         for (var i = 0; i < yAxisColumnsReportData.length; i++) {
             yAxisListModel.append({
                 itemName: yAxisColumnsReportData[i].itemName,
+                tableValue: yAxisColumnsReportData[i].tableValue,
                 droppedItemType: yAxisColumnsReportData[i].droppedItemType,
                 dateFormat: yAxisColumnsReportData[i].dateFormat,
             });
@@ -1534,6 +1536,7 @@ Page {
         for (var i = 0; i < row3ColumnsReportData.length; i++) {
             valuesListModel.append({
                 itemName: row3ColumnsReportData[i].itemName,
+                tableValue: row3ColumnsReportData[i].tableValue,
                 droppedItemType: row3ColumnsReportData[i].droppedItemType,
             });
         }
@@ -1543,6 +1546,7 @@ Page {
             colorListModel.append({
                 textValue: colorListModelData[i].columnName,
                 itemName: colorListModelData[i].columnName,
+                tableValue: row3ColumnsReportData[i].tableValue
             });
         }
 
@@ -1870,6 +1874,7 @@ Page {
         for (var i = 0; i < model.count; i++) {
             columnsData.push({
                 itemName: model.get(i).itemName,
+                tableValue: model.get(i).tableValue,
                 droppedItemType: model.get(i).droppedItemType,
                 dateFormat: model.get(i).dateFormat,
             });
