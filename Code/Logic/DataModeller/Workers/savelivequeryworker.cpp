@@ -4,7 +4,8 @@ SaveLiveQueryWorker::SaveLiveQueryWorker(QString tmpSql, QVariantMap changedColu
 {
     this->tmpSql = tmpSql;
     this->changedColumnTypes = changedColumnTypes;
-    this->ifSavePassword = ifSavePassword;
+//    this->ifSavePassword = ifSavePassword;
+    this->ifSavePassword = true;
 
     querySplitter.setQuery(this->tmpSql);
 
