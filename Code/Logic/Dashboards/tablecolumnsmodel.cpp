@@ -295,14 +295,14 @@ void TableColumnsModel::saveTableColumns()
     masterObj.insert("reportChartData", filteredChartDataTmp);
 
 
-    // numericalList
+    // numericalMap
     masterObj.insert("numericalMap", QJsonObject::fromVariantMap(this->numericalMap));
 
-    // categoryList
-    masterObj.insert("categoryList", QJsonObject::fromVariantMap(this->categoricalMap));
+    // categoricalMap
+    masterObj.insert("categoricalMap", QJsonObject::fromVariantMap(this->categoricalMap));
 
-    // dateList
-    masterObj.insert("dateList", QJsonObject::fromVariantMap(this->dateMap));
+    // dateMap
+    masterObj.insert("dateMap", QJsonObject::fromVariantMap(this->dateMap));
 
     // allColumnVisibleMap
     QJsonObject allColumnVisibleMapTmp;
