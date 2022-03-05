@@ -385,7 +385,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
     QMap<int, QStringList> tmpColData;
     QStringList tmp;
-    QString joiner = "\"";
+    QString joiner = Statics::extractPath.length() > 0 ? "\"" : "";
 
     QList<int> chartKeys = this->newChartHeader.keys();
 
