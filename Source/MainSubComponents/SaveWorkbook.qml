@@ -33,10 +33,11 @@ FileDialog{
         // Save workbook file
         let fileName = GeneralParamsModel.urlToFilePath(saveWorkbookPromptDialog.currentFile)
 
+        WorkbookProcessor.saveWorkbooks(fileName);
+
         // Workbook file
         PublishWorkbookModel.workbookFile(fileName)
 
-        WorkbookProcessor.saveWorkbooks(fileName);
     }
     onRejected: {
         console.log("file rejected")
