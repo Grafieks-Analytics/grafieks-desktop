@@ -617,15 +617,15 @@ Item{
         const reportProperties = ReportParamsModel.getReport(reportId);
         switch(axisName){
         case Constants.xAxisName:
-            var xAxisListModel = JSON.parse(reportProperties.xAxisColumns);
+            var xAxisListModel = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns.xAxisColumnDetails;
             model = xAxisListModel;
             break
         case Constants.yAxisName:
-            var yAxisListModel = JSON.parse(reportProperties.yAxisColumns);
+            var yAxisListModel = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns.yAxisColumnDetails;
             model = yAxisListModel;
             break;
         case Constants.row3Name:
-            model = JSON.parse(reportProperties.row3Columns || "[]");
+            model = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns.row3ColumnDetails;
             break;
         }
         if(!model){
@@ -633,7 +633,7 @@ Item{
         }
         var columnsName = [];
         for(var i=0; i< model.length; i++){
-            columnsName.push(model[i].itemName);
+            columnsName.push(model[i].tableValue);
         }
         return columnsName;
     }
