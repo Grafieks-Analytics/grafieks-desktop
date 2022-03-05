@@ -372,4 +372,6 @@ QtObject {
     // Dashboard Constasts
     property var defaultDashboardHeight: 800;
     property var defaultDashboardWidth: 1280;
+
+    property var tempGrafieksValue: "grafieks_false_temp";
 }
