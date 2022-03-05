@@ -34,6 +34,7 @@ void SaveLiveForwardOnlyWorker::run()
 
     QString errorMsg =  "";
     QSqlDatabase dbForward;
+    QString realDbName;
 
     switch(Statics::currentDbIntType){
 
@@ -46,6 +47,8 @@ void SaveLiveForwardOnlyWorker::run()
         dbForward.setPassword(Statics::redshiftPassword);
         dbForward.open();
 
+        realDbName = Statics::redshiftRealDbName;
+
         break;
 
     case Constants::snowflakeIntType:
@@ -57,6 +60,8 @@ void SaveLiveForwardOnlyWorker::run()
         dbForward.setPassword(Statics::snowflakePassword);
         dbForward.open();
 
+        realDbName = Statics::snowflakeRealDbName;
+
         break;
 
     case Constants::teradataIntType:
@@ -67,6 +72,8 @@ void SaveLiveForwardOnlyWorker::run()
         dbForward.setUserName(Statics::teradataUsername);
         dbForward.setPassword(Statics::teradataPassword);
         dbForward.open();
+
+        realDbName = Statics::teradataRealDbName;
 
         break;
     }
@@ -88,8 +95,8 @@ void SaveLiveForwardOnlyWorker::run()
     QString password = this->ifSavePassword ? dbForward.password() : "";
     QString port = QString::number(dbForward.port());
 
-    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR, db_type VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + dbForward.userName() + "', '" + password + "', '" + dbForward.hostName() + "', '" + port + "', '" + dbForward.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
+    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR, db_type VARCHAR, real_db_name VARCHAR)";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + dbForward.userName() + "', '" + password + "', '" + dbForward.hostName() + "', '" + port + "', '" + dbForward.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "', '" + realDbName + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;

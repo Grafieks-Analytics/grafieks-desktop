@@ -53,6 +53,7 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
             Statics::postgresPort = port;
             Statics::postgresUsername = username;
             Statics::postgresPassword = password;
+            Statics::postgresRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -100,6 +101,7 @@ void PostgresCon::closeConnection()
     Statics::postgresPort = 0;
     Statics::postgresUsername = "";
     Statics::postgresPassword = "";
+    Statics::postgresRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";
