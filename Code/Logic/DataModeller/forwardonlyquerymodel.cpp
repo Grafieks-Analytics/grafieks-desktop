@@ -264,7 +264,7 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
         QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
 
 
-        foreach(QStringList values, this->resultData){
+        foreach(QStringList values, this->forwardOnlyChartHeader){
             headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
         }
         headersInsertQuery.chop(1);

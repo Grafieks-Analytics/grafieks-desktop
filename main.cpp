@@ -104,68 +104,80 @@ QString Statics::myDb;
 int Statics::myPort;
 QString Statics::myUsername;
 QString Statics::myPassword;
+QString Statics::myRealDbName;
 
 QString Statics::sqliteFile;
 QString Statics::sqliteUsername;
 QString Statics::sqlitePassword;
+QString Statics::sqliteRealDbName;
 
 QString Statics::msHost;
 QString Statics::msDb;
 int Statics::msPort;
 QString Statics::msUsername;
 QString Statics::msPassword;
+QString Statics::msRealDbName;
 
 QString Statics::acDb;
 QString Statics::acUsername;
 QString Statics::acPassword;
+QString Statics::acRealDbName;
 
 QString Statics::postgresHost;
 QString Statics::postgresDb;
 int Statics::postgresPort;
 QString Statics::postgresUsername;
 QString Statics::postgresPassword;
+QString Statics::postgresRealDbName;
 
 QString Statics::redshiftHost;
 QString Statics::redshiftDb;
 int Statics::redshiftPort;
 QString Statics::redshiftUsername;
 QString Statics::redshiftPassword;
+QString Statics::redshiftRealDbName;
 
 QString Statics::oracleHost;
 QString Statics::oracleDb;
 int Statics::oraclePort;
 QString Statics::oracleUsername;
 QString Statics::oraclePassword;
+QString Statics::oracleRealDbName;
 
 QString Statics::mongoHost;
 QString Statics::mongoDb;
 int Statics::mongoPort;
 QString Statics::mongoUsername;
 QString Statics::mongoPassword;
+QString Statics::mongoRealDbName;
 
 QString Statics::impalaHost;
 QString Statics::impalaDb;
 int Statics::impalaPort;
 QString Statics::impalaUsername;
 QString Statics::impalaPassword;
+QString Statics::impalaRealDbName;
 
 QString Statics::hiveHost;
 QString Statics::hiveDb;
 int Statics::hivePort;
 QString Statics::hiveUsername;
 QString Statics::hivePassword;
+QString Statics::hiveRealDbName;
 
 QString Statics::snowflakeHost;
 QString Statics::snowflakeDb;
 int Statics::snowflakePort;
 QString Statics::snowflakeUsername;
 QString Statics::snowflakePassword;
+QString Statics::snowflakeRealDbName;
 
 QString Statics::teradataHost;
 QString Statics::teradataDb;
 int Statics::teradataPort;
 QString Statics::teradataUsername;
 QString Statics::teradataPassword;
+QString Statics::teradataRealDbName;
 
 QString Statics::separator;
 

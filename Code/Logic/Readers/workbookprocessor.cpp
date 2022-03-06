@@ -57,8 +57,10 @@ void WorkbookProcessor::processDS()
                 if(!fi.exists()){
                     emit dsMissing(dsType, fileName);
                 } else {
-                    emit processExtractFromWorkbook(filePath);
+                    generalParamsModel->setFromLiveFile(false);
                     this->processRemaining(doc);
+
+                    emit processExtractFromWorkbook(filePath);
                 }
 
             } else {
@@ -75,8 +77,10 @@ void WorkbookProcessor::processDS()
                 if(!fi.exists()){
                    emit dsMissing(dsType, fileName);
                 } else {
+                    generalParamsModel->setFromLiveFile(true);
+                    generalParamsModel->setJsonFromWorkbook(doc);
+
                     emit processLiveFromWorkbook(filePath);
-                    this->processRemaining(doc);
                 }
             }
         }
@@ -173,12 +177,7 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
         finalObj.insert("currentDbStrType", Statics::currentDbStrType);
         finalObj.insert("currentDbClassification", Statics::currentDbClassification);
 
-        finalObj.insert("driver", "driver");
-        finalObj.insert("host", "host");
-        finalObj.insert("db", "db");
-        finalObj.insert("port", "port");
-        finalObj.insert("username", "username");
-        finalObj.insert("password", "password");
+        finalObj.insert("datasourcePath", Statics::livePath);
     } else {
 
         finalObj.insert("datasourcePath", Statics::extractPath);
@@ -205,6 +204,11 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     }
 
     emit workbookSaved();
+}
+
+void WorkbookProcessor::processJsonAfterLoginCredentials()
+{
+    this->processRemaining(generalParamsModel->getJsonFromWorkbook());
 }
 
 void WorkbookProcessor::getReportParams(QJsonObject reportParams)
