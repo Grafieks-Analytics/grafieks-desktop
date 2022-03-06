@@ -14,8 +14,6 @@ void User::login()
     QString loginUrl = this->host + "/login";
     m_NetworkRequest.setUrl(loginUrl);
 
-    qDebug() << Q_FUNC_INFO << loginUrl;
-
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
 
