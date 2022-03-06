@@ -42,6 +42,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
             Statics::redshiftPort = port;
             Statics::redshiftUsername = username;
             Statics::redshiftPassword = password;
+            Statics::redshiftRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -88,6 +89,7 @@ void RedshiftCon::closeConnection()
     Statics::redshiftPort = 0;
     Statics::redshiftUsername = "";
     Statics::redshiftPassword = "";
+    Statics::redshiftRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";
