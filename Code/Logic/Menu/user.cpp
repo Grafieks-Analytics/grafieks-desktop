@@ -11,7 +11,10 @@ User::User(QObject *parent) : QObject(parent),
 void User::login()
 {
     QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(this->host);
+    QString loginUrl = this->host + "/login";
+    m_NetworkRequest.setUrl(loginUrl);
+
+    qDebug() << Q_FUNC_INFO << loginUrl;
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
@@ -24,15 +27,6 @@ void User::login()
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
-
-    // Settings: set baseUrl
-    // Settings: set hostname
-    QSettings settings;
-    settings.setValue("general/baseUrl", host);
-    settings.setValue("general/ftpAddress", Constants::defaultFTPEndpoint);
-
-    QUrl url(host);
-    settings.setValue("general/hostname", url.host());
 
     connect(m_networkReply, &QIODevice::readyRead, this, &User::reading, Qt::UniqueConnection);
     connect(m_networkReply, &QNetworkReply::finished, this, &User::loginReadComplete, Qt::UniqueConnection);
@@ -75,10 +69,6 @@ void User::logout()
 
 }
 
-void User::setHost(const QString &value)
-{
-    host = value;
-}
 
 void User::setPassword(const QString &value)
 {
@@ -88,6 +78,26 @@ void User::setPassword(const QString &value)
 void User::setUsername(const QString &value)
 {
     username = value;
+}
+
+void User::siteLookup(const QString &value)
+{
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(Constants::defaultAPIEndpoint + "/sitelookup");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+
+    QJsonObject obj;
+    obj.insert("sitename", value);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply, &QIODevice::readyRead, this, &User::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &User::siteLookupReadComplete, Qt::UniqueConnection);
 }
 
 void User::reading()
@@ -130,7 +140,45 @@ void User::loginReadComplete()
             settings.setValue("user/sitename", dataObj["sitename"].toString());
         }
 
-        emit loginStatus(outputStatus);
+    }
+    emit loginStatus(outputStatus);
+    m_tempStorage->clear();
+}
+
+void User::siteLookupReadComplete()
+{
+    if(m_networkReply->error()){
+        qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
+
+        // Set the output
+        outputStatus.insert("code", m_networkReply->error());
+        outputStatus.insert("msg", m_networkReply->errorString());
+
+    } else{
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
+        QJsonObject resultObj = resultJson.object();
+        QJsonObject statusObj = resultObj["status"].toObject();
+
+        // Set the output
+        outputStatus.insert("code", statusObj["code"].toInt());
+        outputStatus.insert("msg", statusObj["msg"].toString());
+
+        // If successful, set the variables in settings
+        if(statusObj["code"].toInt() == 200){
+
+            this->host = resultObj["data"].toString();
+
+            // Settings: set baseUrl
+            // Settings: set hostname
+            QSettings settings;
+            settings.setValue("general/baseUrl", this->host);
+            settings.setValue("general/ftpAddress", Constants::defaultFTPEndpoint);
+
+            QUrl url(this->host);
+            settings.setValue("general/hostname", url.host());
+        }
+
+        emit sitelookupStatus(outputStatus);
         m_tempStorage->clear();
 
     }
