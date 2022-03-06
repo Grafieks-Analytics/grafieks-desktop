@@ -68,7 +68,7 @@ Popup {
         }
 
         function onWbUploadFinished(){
-            errorMsg.text = "Workbook upload finished"
+            errorMsg.text = "Workbook is published now. Please close this window"
 //            closePopup()
         }
 
