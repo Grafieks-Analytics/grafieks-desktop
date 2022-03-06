@@ -41,6 +41,7 @@ void SaveExtractQueryWorker::run()
     QHash<int, QByteArray> roleNames;
     QString errorMsg =  "";
     QSqlDatabase connection;
+    QString realDbName;
 
     switch(Statics::currentDbIntType){
 
@@ -51,6 +52,7 @@ void SaveExtractQueryWorker::run()
         connection.setDatabaseName(Statics::myDb);
         connection.setUserName(Statics::myUsername);
         connection.setPassword(Statics::myPassword);
+        realDbName = Statics::myRealDbName;
 
         connection.open();
         break;
@@ -63,6 +65,7 @@ void SaveExtractQueryWorker::run()
         connection.setDatabaseName(Statics::myDb);
         connection.setUserName(Statics::myUsername);
         connection.setPassword(Statics::myPassword);
+        realDbName = Statics::myRealDbName;
 
         connection.open();
         break;
@@ -71,6 +74,7 @@ void SaveExtractQueryWorker::run()
     case Constants::sqliteIntType:{
         connection = QSqlDatabase::addDatabase("QSQLITE", "sqliteQ");
         connection.setDatabaseName(Statics::sqliteFile);
+        realDbName = "";
         connection.open();
         break;
     }
@@ -82,6 +86,7 @@ void SaveExtractQueryWorker::run()
         connection.setPort(Statics::postgresPort);
         connection.setUserName(Statics::postgresUsername);
         connection.setPassword(Statics::postgresPassword);
+        realDbName = Statics::postgresRealDbName;
 
         connection.open();
         break;
@@ -95,6 +100,7 @@ void SaveExtractQueryWorker::run()
         connection.setPort(Statics::msPort);
         connection.setUserName(Statics::msUsername);
         connection.setPassword(Statics::msPassword);
+        realDbName = Statics::msRealDbName;
 
         connection.open();
         break;
@@ -108,6 +114,7 @@ void SaveExtractQueryWorker::run()
         connection.setPort(Statics::oraclePort);
         connection.setUserName(Statics::oracleUsername);
         connection.setPassword(Statics::oraclePassword);
+        realDbName = Statics::oracleRealDbName;
 
         connection.open();
         break;
@@ -121,6 +128,7 @@ void SaveExtractQueryWorker::run()
         connection.setPort(Statics::mongoPort);
         connection.setUserName(Statics::mongoUsername);
         connection.setPassword(Statics::mongoPassword);
+        realDbName = Statics::mongoRealDbName;
 
         connection.open();
         break;
@@ -132,6 +140,7 @@ void SaveExtractQueryWorker::run()
         connection.setDatabaseName(Statics::acDb);
         connection.setUserName(Statics::acUsername);
         connection.setPassword(Statics::acPassword);
+        realDbName = Statics::acRealDbName;
 
         connection.open();
         break;
@@ -205,8 +214,8 @@ void SaveExtractQueryWorker::run()
         QString password = this->ifSavePassword ? connection.password() : "";
         int portTmp = connection.port();
         QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);
-        QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR)";
-        QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
+        QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR, real_db_name VARCHAR)";
+        QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "', '" + realDbName + "')";
 
         QStringList selectParams = this->querySplitter.getSelectParams();
         QString selectParamsString;

@@ -42,7 +42,7 @@ Popup {
 
                 server.text = credentials[0]
                 port.text = credentials[1]
-                database.text = credentials[2]
+                database.text = credentials[5]
                 username.text = credentials[3]
                 password.text = credentials[4]
             }

@@ -57,6 +57,7 @@ void LiveProcessor::processLive()
     QString database;
     QString port;
     QString dbType;
+    QString realDbName;
 
     QString colName;
     QString tableName;
@@ -103,6 +104,7 @@ void LiveProcessor::processLive()
     port = credentials->GetValue(3,0).ToString().c_str();
     database = credentials->GetValue(4,0).ToString().c_str();
     dbType = credentials->GetValue(5,0).ToString().c_str();
+    realDbName = credentials->GetValue(6,0).ToString().c_str();
 
     Statics::currentDbIntType = dbType.toInt();
 
@@ -116,6 +118,7 @@ void LiveProcessor::processLive()
         Statics::myDb = database;
         Statics::myUsername = username;
         Statics::myPassword = password;
+        Statics::myRealDbName = realDbName;
         qmlDbName = Constants::mysqlQml;
 
         break;
@@ -127,6 +130,7 @@ void LiveProcessor::processLive()
         Statics::postgresDb = database;
         Statics::postgresUsername = username;
         Statics::postgresPassword = password;
+        Statics::postgresRealDbName = realDbName;
         qmlDbName = Constants::postgresQml;
         break;
     }
@@ -138,7 +142,9 @@ void LiveProcessor::processLive()
         Statics::msDb = database;
         Statics::msUsername = username;
         Statics::msPassword = password;
+        Statics::msRealDbName = realDbName;
         qmlDbName = Constants::mssqlQml;
+
         break;
     }
 
@@ -149,6 +155,7 @@ void LiveProcessor::processLive()
         Statics::oracleDb = database;
         Statics::oracleUsername = username;
         Statics::oraclePassword = password;
+        Statics::oracleRealDbName = realDbName;
         qmlDbName = Constants::oracleQml;
         break;
     }
@@ -160,6 +167,7 @@ void LiveProcessor::processLive()
         Statics::mongoDb = database;
         Statics::mongoUsername = username;
         Statics::mongoPassword = password;
+        Statics::mongoRealDbName = realDbName;
         qmlDbName = Constants::mongoQml;
         break;
     }
@@ -171,6 +179,7 @@ void LiveProcessor::processLive()
         Statics::redshiftDb = database;
         Statics::redshiftUsername = username;
         Statics::redshiftPassword = password;
+        Statics::redshiftRealDbName = realDbName;
         qmlDbName = Constants::redshiftQml;
         break;
     }
@@ -182,6 +191,7 @@ void LiveProcessor::processLive()
         Statics::snowflakeDb = database;
         Statics::snowflakeUsername = username;
         Statics::snowflakePassword = password;
+        Statics::snowflakeRealDbName = realDbName;
         qmlDbName = Constants::snowflakeQml;
         break;
     }
@@ -193,6 +203,7 @@ void LiveProcessor::processLive()
         Statics::teradataDb = database;
         Statics::teradataUsername = username;
         Statics::teradataPassword = password;
+        Statics::teradataRealDbName = realDbName;
         qmlDbName = Constants::teradataQml;
         break;
     }
