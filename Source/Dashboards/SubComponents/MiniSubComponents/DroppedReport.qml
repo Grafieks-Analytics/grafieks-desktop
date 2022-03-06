@@ -1191,7 +1191,7 @@ Item{
 
                     anchors.right: parent.right
                     anchors.top: chartMenu.bottom
-                    anchors.rightMargin: -70
+                    anchors.rightMargin: 0
                     width: parent.width
                     height: 100
 
