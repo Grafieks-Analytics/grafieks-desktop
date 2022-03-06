@@ -311,6 +311,14 @@ Page {
 
         function onDisconnectAll(){
             disconnectDS()
+            // Here are all the instances, Let's Remove the charts
+            // console.logo('Removing all the charts');
+            // let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
+            // for (var reportIdValue in allReportInstances) {
+            //     // Redrawing charts one by one;
+            //     var instance = allReportInstances[reportIdValue];
+            //     instance.remove();
+            // }
         }
     }
 

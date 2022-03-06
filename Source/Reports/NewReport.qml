@@ -403,7 +403,7 @@ Page {
             elementHeight: 24
             activeChart: false
             disabled:true
-            title:"Sankey"
+            title:"Sankey - Coming Soon"
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
             mainCustomizations: "Properties,Legend,Reference Line"
@@ -419,7 +419,7 @@ Page {
             disabled:true
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
-            title: "Tree Map"
+            title: "Tree Map - Coming Soon"
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
             colorByDropEligible: ""
@@ -1546,7 +1546,7 @@ Page {
             colorListModel.append({
                 textValue: colorListModelData[i].columnName,
                 itemName: colorListModelData[i].columnName,
-                tableValue: row3ColumnsReportData[i].tableValue
+                tableValue: colorListModelData[i].tableValue
             });
         }
 
