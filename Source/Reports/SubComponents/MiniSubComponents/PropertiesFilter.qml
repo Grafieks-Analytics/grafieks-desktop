@@ -287,7 +287,7 @@ Column{
             }
             d3PropertyConfig.bottomPinch = +bottomPinchValue.text;
         }
-        qmlChartConfig.bottomPinch = bottomPinch;
+        qmlChartConfig.bottomPinch = bottomPinchValue.text;
         updateChart();
     }
 
