@@ -177,8 +177,6 @@ Popup {
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
-        console.log("DS NAME!", dsName, description)
-
         if(dsName !== "" && description !== "")
             PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
     }
