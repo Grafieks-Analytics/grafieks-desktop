@@ -53,6 +53,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;
+            Statics::myRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
