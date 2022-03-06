@@ -63,9 +63,6 @@ private:
     QSet<QString> category;
     QSet<QString> date;
     QSet<QString> numerical;
-    QStringList numericalList;
-    QStringList categoryList;
-    QStringList dateList;
 
     QStringList getData(QString queryString);
 };

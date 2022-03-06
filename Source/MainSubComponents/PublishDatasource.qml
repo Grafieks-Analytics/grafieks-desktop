@@ -63,8 +63,8 @@ Popup {
         }
 
         function onDsUploadFinished(){
-            errorMsg.text = "Datasource upload finished"
-            closePopup()
+            errorMsg.text = "Datasource is published now. Please close this window"
+//            closePopup()
 
             // If called from modelere screen, then redirect to reports screen
             // Else open publish workbook modal
