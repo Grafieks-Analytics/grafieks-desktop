@@ -1200,8 +1200,8 @@ Page {
 
             CustomRadioButton{
                 id: radio_memory
-                radio_text: qsTr("In Memory")
-                radio_checked: true
+                radio_text: qsTr("Extract")
+                radio_checked: false
                 parent_dimension: 16
 
                 ButtonGroup.group: memoryType
@@ -1221,7 +1221,7 @@ Page {
             CustomRadioButton{
                 id: radio_live
                 radio_text: qsTr("Live")
-                radio_checked: false
+                radio_checked: true
                 enabled: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
