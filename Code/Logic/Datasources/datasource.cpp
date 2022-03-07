@@ -1,8 +1,8 @@
 #include "datasource.h"
 
-Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString &databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent) :
+Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString &databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString &lastRun, QObject *parent) :
 
-    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_databaseName(databaseName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName)
+    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_databaseName(databaseName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName), m_lastRun(lastRun)
 {
 
 }
@@ -71,6 +71,11 @@ QString Datasource::firstName() const
 QString Datasource::lastName() const
 {
     return m_lastName;
+}
+
+QString Datasource::lastRun() const
+{
+    return m_lastRun;
 }
 
 void Datasource::setConnectionType(QString connectionType)
@@ -188,5 +193,14 @@ void Datasource::setLastName(QString lastName)
 
     m_lastName = lastName;
     emit lastNameChanged(m_lastName);
+}
+
+void Datasource::setLastRun(QString lastRun)
+{
+    if (m_lastRun == lastRun)
+        return;
+
+    m_lastRun = lastRun;
+    emit lastRunChanged(m_lastRun);
 }
 
