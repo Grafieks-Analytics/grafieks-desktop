@@ -64,6 +64,8 @@ QVariant DatasourceModel::data(const QModelIndex &index, int role) const
         return datasource->firstName();
     if( role == LastnameRole)
         return datasource->lastName();
+    if( role == LastRunRole)
+        return datasource->lastRun();
     return QVariant();
 }
 
@@ -170,6 +172,14 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
         }
         break;
 
+    case LastRunRole:
+        if ( datasource->lastRun() != value.toString()){
+            datasource->setLastRun(value.toString());
+            somethingChanged = true;
+        }
+        break;
+
+
     }
 
     if ( somethingChanged){
@@ -215,6 +225,7 @@ QHash<int, QByteArray> DatasourceModel::roleNames() const
     roles[CreatedDateRole] = "createdDate";
     roles[FirstnameRole] = "firstname";
     roles[LastnameRole] = "lastname";
+    roles[LastRunRole] = "lastrun";
 
     return roles;
 }

@@ -159,16 +159,16 @@ bool GeneralParamsModel::getFromLiveQuery()
     return this->setForLiveQuery;
 }
 
-QStringList GeneralParamsModel::getCredentials()
+QVariantList GeneralParamsModel::getCredentials()
 {
     QString host;
-    QString port;
+    int port;
     QString database;
     QString username;
     QString password;
     QString realDbName;
 
-    QStringList output;
+    QVariantList output;
 
     switch(Statics::currentDbIntType){
 
