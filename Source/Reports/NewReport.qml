@@ -1254,7 +1254,6 @@ Page {
             case Constants.multiLineChartTitle:
                 console.log(chartTitle, "CLICKED");
                 dataValues = JSON.parse(dataValues);
-                dataValues[1].splice(1, 0, colorByColumnName);
                 colorData = (dataValues && dataValues[1]) || [];
                 dataValues = JSON.stringify(dataValues);
                 break;
