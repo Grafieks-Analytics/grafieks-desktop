@@ -17,7 +17,7 @@ import com.grafieks.singleton.constants 1.0
 Page {
 
     id: data_source_list_page
-    property var headersModel : ["Data Source Name","Data Source", "Published By", "Live/Extract", "Published On", "Last Refreshed"]
+    property var headersModel : ["Data Source Name","Published By", "Live/Extract", "Published On", "Last Refreshed"]
     property int headerSize : headersModel.length
 
 
@@ -213,34 +213,7 @@ Page {
                         }
                     }
                 }
-                Column{
-                    id: ds_col
-                    width: listView.width / headerSize
-                    height: parent.height
 
-
-                    Rectangle{
-                        width: parent.width
-                        height: parent.height
-
-                        Text {
-                            text: qsTr(databaseName)
-                            leftPadding: 40
-                            anchors.verticalCenter: parent.verticalCenter
-
-                        }
-
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-
-                                onDataSourceNameClicked(datasourceName, index)
-
-                            }
-                        }
-                    }
-
-                }
 
                 Column{
                     id: dsOwner_col
@@ -331,7 +304,7 @@ Page {
                         height: parent.height
 
                         Text {
-                            text: qsTr(connectionType)
+                            text: qsTr(lastrun)
                             leftPadding: 40
                             anchors.verticalCenter: parent.verticalCenter
 

@@ -374,4 +374,8 @@ QtObject {
     property var defaultDashboardWidth: 1280;
 
     property var tempGrafieksValue: "grafieks_false_temp";
+
+    // Free tier limits
+    property var reportsPerDashboard : 2
+    property var reportsPerWorkbook : 10
 }

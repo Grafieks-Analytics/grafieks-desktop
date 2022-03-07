@@ -63,6 +63,7 @@ Page {
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onPostgresLoginStatus(status){
@@ -70,6 +71,7 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onMssqlLoginStatus(status){
@@ -78,6 +80,7 @@ Page {
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onAccessLoginStatus(status){
@@ -85,6 +88,7 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -101,6 +105,7 @@ Page {
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = false
+                radio_memory.checked = true
             }
         }
         function onMongoLoginStatus(status){
@@ -109,6 +114,7 @@ Page {
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onSnowflakeLoginStatus(status){
@@ -117,6 +123,7 @@ Page {
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onRedshiftLoginStatus(status){
@@ -125,6 +132,7 @@ Page {
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
 
@@ -134,6 +142,7 @@ Page {
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
                 radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onExcelLoginStatus(status){
@@ -142,6 +151,7 @@ Page {
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
                 radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -151,6 +161,7 @@ Page {
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
                 radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -160,6 +171,7 @@ Page {
                 tableslist.model = CSVJsonDataModel.getTableList()
                 queryModellerTab.visible = false
                 radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -169,6 +181,7 @@ Page {
                 tableslist.model = CSVJsonDataModel.getTableList()
                 queryModellerTab.visible = false
                 radio_live.visible = false
+                radio_memory.checked = true
             }
         }
     }
@@ -1209,7 +1222,6 @@ Page {
             CustomRadioButton{
                 id: radio_memory
                 radio_text: qsTr("Extract")
-                radio_checked: false
                 parent_dimension: 16
 
                 ButtonGroup.group: memoryType
@@ -1229,7 +1241,6 @@ Page {
             CustomRadioButton{
                 id: radio_live
                 radio_text: qsTr("Live")
-                radio_checked: true
                 enabled: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
