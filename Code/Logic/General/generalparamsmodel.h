@@ -82,7 +82,7 @@ public:
     Q_INVOKABLE void setFromLiveQuery(bool setForLiveQuery);
     Q_INVOKABLE bool getFromLiveQuery();
 
-    Q_INVOKABLE QStringList getCredentials();
+    Q_INVOKABLE QVariantList getCredentials();
 
     Q_INVOKABLE void setAPISwitch(bool apiSwitch);
     Q_INVOKABLE bool getAPISwitch();

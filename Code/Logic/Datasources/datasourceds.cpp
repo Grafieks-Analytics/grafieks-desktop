@@ -128,10 +128,10 @@ void DatasourceDS::addDatasource(Datasource *datasource)
  * \param firstName (owner firstname)
  * \param lastName (owner lastname)
  */
-void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName)
+void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun)
 
 {
-    Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, databaseName, descriptions, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, this);
+    Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, databaseName, descriptions, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, lastRun, this);
 
     addDatasource(datasource);
 
@@ -217,8 +217,9 @@ void DatasourceDS::dataReadFinished()
                 QString CreatedDate = dataObj["CreatedDate"].toString();
                 QString Firstname = dataObj["Firstname"].toString();
                 QString Lastname = dataObj["Lastname"].toString();
+                QString LastRun = dataObj["LastRun"].toString();
 
-                this->addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName, DatabaseName, Descriptions, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname);
+                this->addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName, DatabaseName, Descriptions, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname, LastRun);
             }
 
 

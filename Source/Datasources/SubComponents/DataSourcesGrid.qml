@@ -268,7 +268,7 @@ Page {
                 Column{
                     anchors.right: parent.right
                     Text{
-                        text: "Live / In Memory"
+                        text: "Live / Extract"
 
                     }
                     Text{
