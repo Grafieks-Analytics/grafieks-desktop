@@ -88,6 +88,7 @@ public:
     Q_INVOKABLE bool getAPISwitch();
 
     QString randomStringGenerator();
+    bool ifFreeRelease();
 
 public slots:
 

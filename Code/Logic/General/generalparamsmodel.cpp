@@ -296,6 +296,11 @@ QString GeneralParamsModel::randomStringGenerator()
     return randomString;
 }
 
+bool GeneralParamsModel::ifFreeRelease()
+{
+    return Constants::appVersion == "Free" ? true : false;
+}
+
 void GeneralParamsModel::setMenuType(int menuType)
 {
     if (m_menuType == menuType)
