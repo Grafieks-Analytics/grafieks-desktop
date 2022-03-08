@@ -17,6 +17,9 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+    QString base64Image;
+    QString filename;
+
     // Extract the exact file path
     // Open file for reading
     QFile imageFile(uploadImage);
@@ -27,44 +30,45 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
 
         // Extract the filename
         QFileInfo fileInfo(imageFile.fileName());
-        QString filename(fileInfo.fileName());
+        filename = fileInfo.fileName();
 
         // Convert filedata to base64
         QByteArray imageData = imageFile.readAll();
-        QString base64Image = QString(imageData.toBase64());
-
-        QNetworkRequest m_NetworkRequest;
-        m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
-
-        m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
-                                   "application/x-www-form-urlencoded");
-        m_NetworkRequest.setRawHeader("Authorization", sessionToken);
-
-
-        QJsonObject obj;
-        obj.insert("profileId", profileId);
-        obj.insert("schedulerId", schedulerId);
-        obj.insert("datasourceName", dsName);
-        obj.insert("description", description);
-        obj.insert("image", base64Image);
-        obj.insert("fileName", filename);
-        obj.insert("sourceType", sourceType);
-        obj.insert("columnName", extractColumnName);
-        obj.insert("isFullExtract", isFullExtract);
-        obj.insert("inMemory", true);
-
-
-        QJsonDocument doc(obj);
-        QString strJson(doc.toJson(QJsonDocument::Compact));
-
-        m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
-
-        connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
-        connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readComplete, Qt::UniqueConnection);
-
+        base64Image = QString(imageData.toBase64());
     } else {
         qDebug() << Q_FUNC_INFO << __LINE__  << imageFile.errorString();
     }
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+
+    QJsonObject obj;
+    obj.insert("profileId", profileId);
+    obj.insert("schedulerId", schedulerId);
+    obj.insert("datasourceName", dsName);
+    obj.insert("description", description);
+    obj.insert("image", base64Image);
+    obj.insert("fileName", filename);
+    obj.insert("sourceType", sourceType);
+    obj.insert("columnName", extractColumnName);
+    obj.insert("isFullExtract", isFullExtract);
+    obj.insert("inMemory", true);
+
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readComplete, Qt::UniqueConnection);
+
+
 }
 
 void PublishDatasourceModel::reading()
@@ -148,7 +152,7 @@ void PublishDatasourceModel::uploadFile()
 
     QSettings settings;
 
-//    QString ftpAddress = settings.value("general/ftpAddress").toString();
+    //    QString ftpAddress = settings.value("general/ftpAddress").toString();
     QString ftpAddress = Constants::defaultFTPEndpoint;
     QString siteName = settings.value("user/sitename").toString();
 
@@ -169,9 +173,9 @@ void PublishDatasourceModel::uploadFile()
         connect(reply, &QNetworkReply::uploadProgress, this, &PublishDatasourceModel::uploadProgress);
         connect(reply, &QNetworkReply::finished, this, &PublishDatasourceModel::uploadFinished);
         connect(reply, &QNetworkReply::errorOccurred, this,
-                    [reply](QNetworkReply::NetworkError) {
-                       qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
-                    });
+                [reply](QNetworkReply::NetworkError) {
+            qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
+        });
     } else {
         qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
     }
