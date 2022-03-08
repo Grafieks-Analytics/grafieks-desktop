@@ -104,68 +104,80 @@ QString Statics::myDb;
 int Statics::myPort;
 QString Statics::myUsername;
 QString Statics::myPassword;
+QString Statics::myRealDbName;
 
 QString Statics::sqliteFile;
 QString Statics::sqliteUsername;
 QString Statics::sqlitePassword;
+QString Statics::sqliteRealDbName;
 
 QString Statics::msHost;
 QString Statics::msDb;
 int Statics::msPort;
 QString Statics::msUsername;
 QString Statics::msPassword;
+QString Statics::msRealDbName;
 
 QString Statics::acDb;
 QString Statics::acUsername;
 QString Statics::acPassword;
+QString Statics::acRealDbName;
 
 QString Statics::postgresHost;
 QString Statics::postgresDb;
 int Statics::postgresPort;
 QString Statics::postgresUsername;
 QString Statics::postgresPassword;
+QString Statics::postgresRealDbName;
 
 QString Statics::redshiftHost;
 QString Statics::redshiftDb;
 int Statics::redshiftPort;
 QString Statics::redshiftUsername;
 QString Statics::redshiftPassword;
+QString Statics::redshiftRealDbName;
 
 QString Statics::oracleHost;
 QString Statics::oracleDb;
 int Statics::oraclePort;
 QString Statics::oracleUsername;
 QString Statics::oraclePassword;
+QString Statics::oracleRealDbName;
 
 QString Statics::mongoHost;
 QString Statics::mongoDb;
 int Statics::mongoPort;
 QString Statics::mongoUsername;
 QString Statics::mongoPassword;
+QString Statics::mongoRealDbName;
 
 QString Statics::impalaHost;
 QString Statics::impalaDb;
 int Statics::impalaPort;
 QString Statics::impalaUsername;
 QString Statics::impalaPassword;
+QString Statics::impalaRealDbName;
 
 QString Statics::hiveHost;
 QString Statics::hiveDb;
 int Statics::hivePort;
 QString Statics::hiveUsername;
 QString Statics::hivePassword;
+QString Statics::hiveRealDbName;
 
 QString Statics::snowflakeHost;
 QString Statics::snowflakeDb;
 int Statics::snowflakePort;
 QString Statics::snowflakeUsername;
 QString Statics::snowflakePassword;
+QString Statics::snowflakeRealDbName;
 
 QString Statics::teradataHost;
 QString Statics::teradataDb;
 int Statics::teradataPort;
 QString Statics::teradataUsername;
 QString Statics::teradataPassword;
+QString Statics::teradataRealDbName;
 
 QString Statics::separator;
 
@@ -418,12 +430,12 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::sendReportParams, &workbookProcessor, &WorkbookProcessor::getReportParams);
     QObject::connect(&dashboardParamsModel, &DashboardParamsModel::sendDashboardParams, &workbookProcessor, &WorkbookProcessor::getDashboardParams);
     QObject::connect(&tableColumnsModel, &TableColumnsModel::signalSaveTableColumns, &workbookProcessor, &WorkbookProcessor::getTableColumns);
-    QObject::connect(&chartsModel, &ChartsModel::sendWhereParams, &workbookProcessor, &WorkbookProcessor::getWhereParams);
+    QObject::connect(&chartsModel, &ChartsModel::sendJoinAndWhereParams, &workbookProcessor, &WorkbookProcessor::getJoinAndWhereParams);
 
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSReportParams, &reportParamsModel, &ReportParamsModel::getExtractReportParams);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSTableColumns, &tableColumnsModel, &TableColumnsModel::getExtractTableColumns);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSDashboardParams, &dashboardParamsModel, &DashboardParamsModel::getExtractDashboardParams);
-    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSWhereParams, &chartsModel, &ChartsModel::getExtractWhereParams);
+    QObject::connect(&workbookProcessor, &WorkbookProcessor::sendDSJoinAndWhereParams, &chartsModel, &ChartsModel::getExtractJoinAndWhereParams);
 
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processExtractFromWorkbook, &extractProcessor, &ExtractProcessor::setArgumentsFromWorkbook);
     QObject::connect(&workbookProcessor, &WorkbookProcessor::processLiveFromWorkbook, &liveProcessor, &LiveProcessor::setArgumentsFromWorkbook);

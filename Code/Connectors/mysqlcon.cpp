@@ -53,6 +53,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;
+            Statics::myRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -112,6 +113,7 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;
+            Statics::myRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -170,6 +172,7 @@ void MysqlCon::closeConnection()
     Statics::myPort = 0;
     Statics::myUsername = "";
     Statics::myPassword = "";
+    Statics::myRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

@@ -43,7 +43,8 @@ public:
         DatasourceLinkRole,
         CreatedDateRole,
         FirstnameRole,
-        LastnameRole
+        LastnameRole,
+        LastRunRole
 
     };
 

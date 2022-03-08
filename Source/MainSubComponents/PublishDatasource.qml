@@ -63,8 +63,8 @@ Popup {
         }
 
         function onDsUploadFinished(){
-            errorMsg.text = "Datasource upload finished"
-            closePopup()
+            errorMsg.text = "Datasource is published now. Please close this window"
+//            closePopup()
 
             // If called from modelere screen, then redirect to reports screen
             // Else open publish workbook modal
@@ -176,8 +176,6 @@ Popup {
         var extractColumnName = DSParamsModel.extractColName
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
-
-        console.log("DS NAME!", dsName, description)
 
         if(dsName !== "" && description !== "")
             PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)

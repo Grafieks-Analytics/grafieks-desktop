@@ -4,7 +4,8 @@ SaveLiveQueryWorker::SaveLiveQueryWorker(QString tmpSql, QVariantMap changedColu
 {
     this->tmpSql = tmpSql;
     this->changedColumnTypes = changedColumnTypes;
-    this->ifSavePassword = ifSavePassword;
+//    this->ifSavePassword = ifSavePassword;
+    this->ifSavePassword = true;
 
     querySplitter.setQuery(this->tmpSql);
 
@@ -36,6 +37,7 @@ void SaveLiveQueryWorker::run()
 
     QString errorMsg =  "";
     QSqlDatabase connection;
+    QString realDbName;
 
     switch(Statics::currentDbIntType){
 
@@ -48,6 +50,8 @@ void SaveLiveQueryWorker::run()
         connection.setPassword(Statics::myPassword);
 
         connection.open();
+
+        realDbName = Statics::myRealDbName;
         break;
     }
 
@@ -60,6 +64,8 @@ void SaveLiveQueryWorker::run()
         connection.setPassword(Statics::myPassword);
 
         connection.open();
+
+        realDbName = Statics::myRealDbName;
         break;
     }
 
@@ -79,6 +85,8 @@ void SaveLiveQueryWorker::run()
         connection.setPassword(Statics::postgresPassword);
 
         connection.open();
+
+        realDbName = Statics::postgresRealDbName;
         break;
     }
 
@@ -92,6 +100,8 @@ void SaveLiveQueryWorker::run()
         connection.setPassword(Statics::msPassword);
 
         connection.open();
+
+        realDbName = Statics::msRealDbName;
         break;
     }
 
@@ -105,6 +115,8 @@ void SaveLiveQueryWorker::run()
         connection.setPassword(Statics::oraclePassword);
 
         connection.open();
+
+        realDbName = Statics::oracleRealDbName;
         break;
     }
 
@@ -118,6 +130,8 @@ void SaveLiveQueryWorker::run()
         connection.setPassword(Statics::mongoPassword);
 
         connection.open();
+
+        realDbName = Statics::mongoRealDbName;
         break;
     }
 
@@ -140,8 +154,8 @@ void SaveLiveQueryWorker::run()
     QString password = this->ifSavePassword ? connection.password() : "";
     int portTmp = connection.port();
     QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);
-    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR)";
-    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "')";
+    QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port VARCHAR, database VARCHAR, db_type VARCHAR, real_db_name VARCHAR)";
+    QString credentialsInsertQuery = "INSERT INTO " + Constants::masterCredentialsTable + " VALUES ('" + connection.userName() + "', '" + password + "', '" + connection.hostName() + "', '"+ port +"', '" + connection.databaseName() + "', '" + QString::number(Statics::currentDbIntType) + "', '" + realDbName + "')";
 
     QStringList selectParams = this->querySplitter.getSelectParams();
     QString selectParamsString;
@@ -153,6 +167,10 @@ void SaveLiveQueryWorker::run()
     QString whereConditions = this->querySplitter.getWhereCondition();
     QString joinConditions = this->querySplitter.getJoinConditions();
     QString masterTable = this->querySplitter.getMainTable();
+
+    if(whereConditions.contains("\'")){
+        whereConditions.replace(R"(')", R"('')");
+    }
 
     QString queryPartCreateQuery = "CREATE TABLE " + Constants::masterQueryPartLiveTable + "(select_params VARCHAR, where_params VARCHAR, join_params VARCHAR, master_table VARCHAR)";
     QString queryPartInsertQuery = "INSERT INTO " + Constants::masterQueryPartLiveTable + " VALUES ('" + selectParamsString + "', '" + whereConditions + "', '" + joinConditions + "', '" + masterTable + "')";

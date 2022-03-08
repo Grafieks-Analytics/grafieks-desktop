@@ -134,6 +134,21 @@ bool GeneralParamsModel::getFromLiveFile()
     return this->setForLiveFile;
 }
 
+void GeneralParamsModel::setJsonFromWorkbook(QJsonDocument jsonDoc)
+{
+    this->jsonDoc = jsonDoc;
+}
+
+QJsonDocument GeneralParamsModel::getJsonFromWorkbook()
+{
+    return this->jsonDoc;
+}
+
+bool GeneralParamsModel::ifJsonFromWorkbookSet()
+{
+    return this->jsonDoc.isEmpty() ? false: true;
+}
+
 void GeneralParamsModel::setFromLiveQuery(bool setForLiveQuery)
 {
     this->setForLiveQuery = setForLiveQuery;
@@ -144,15 +159,16 @@ bool GeneralParamsModel::getFromLiveQuery()
     return this->setForLiveQuery;
 }
 
-QStringList GeneralParamsModel::getCredentials()
+QVariantList GeneralParamsModel::getCredentials()
 {
     QString host;
-    QString port;
+    int port;
     QString database;
     QString username;
     QString password;
+    QString realDbName;
 
-    QStringList output;
+    QVariantList output;
 
     switch(Statics::currentDbIntType){
 
@@ -163,6 +179,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::myDb;
         username = Statics::myUsername;
         password = Statics::myPassword;
+        realDbName = Statics::myRealDbName;
 
         break;
     }
@@ -173,6 +190,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::postgresDb;
         username = Statics::postgresUsername;
         password = Statics::postgresPassword;
+        realDbName = Statics::postgresRealDbName;
         break;
     }
 
@@ -183,6 +201,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::msDb;
         username = Statics::msUsername;
         password = Statics::msPassword;
+        realDbName = Statics::msRealDbName;
         break;
     }
 
@@ -193,6 +212,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::oracleDb;
         username = Statics::oracleUsername;
         password = Statics::oraclePassword;
+        realDbName = Statics::oracleRealDbName;
         break;
     }
 
@@ -203,6 +223,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::mongoDb;
         username = Statics::mongoUsername;
         password = Statics::mongoPassword;
+        realDbName = Statics::mongoRealDbName;
         break;
     }
 
@@ -213,6 +234,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::redshiftDb;
         username = Statics::redshiftUsername;
         password = Statics::redshiftPassword;
+        realDbName = Statics::redshiftRealDbName;
         break;
     }
 
@@ -223,6 +245,7 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::teradataDb;
         username = Statics::teradataUsername;
         password = Statics::teradataPassword;
+        realDbName = Statics::teradataRealDbName;
         break;
     }
 
@@ -233,11 +256,12 @@ QStringList GeneralParamsModel::getCredentials()
         database = Statics::snowflakeDb;
         username = Statics::snowflakeUsername;
         password = Statics::snowflakePassword;
+        realDbName = Statics::snowflakeRealDbName;
         break;
     }
     }
 
-    output << host << port << database << username << password;
+    output << host << port << database << username << password << realDbName;
     return output;
 }
 
@@ -270,6 +294,11 @@ QString GeneralParamsModel::randomStringGenerator()
         randomString.append(nextChar);
     }
     return randomString;
+}
+
+bool GeneralParamsModel::ifFreeRelease()
+{
+    return Constants::appVersion == "Free" ? true : false;
 }
 
 void GeneralParamsModel::setMenuType(int menuType)

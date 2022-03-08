@@ -9,6 +9,7 @@
 #include <QUrl>
 #include <QRandomGenerator>
 #include <QProcess>
+#include <QJsonDocument>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -25,6 +26,7 @@ class GeneralParamsModel : public QObject
 
     bool setForLiveFile;
     bool setForLiveQuery;
+    QJsonDocument jsonDoc;
 
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
@@ -73,15 +75,20 @@ public:
     Q_INVOKABLE void setFromLiveFile(bool setForLiveFile);
     Q_INVOKABLE bool getFromLiveFile();
 
+    Q_INVOKABLE void setJsonFromWorkbook(QJsonDocument jsonDoc);
+    Q_INVOKABLE QJsonDocument getJsonFromWorkbook();
+    Q_INVOKABLE bool ifJsonFromWorkbookSet();
+
     Q_INVOKABLE void setFromLiveQuery(bool setForLiveQuery);
     Q_INVOKABLE bool getFromLiveQuery();
 
-    Q_INVOKABLE QStringList getCredentials();
+    Q_INVOKABLE QVariantList getCredentials();
 
     Q_INVOKABLE void setAPISwitch(bool apiSwitch);
     Q_INVOKABLE bool getAPISwitch();
 
     QString randomStringGenerator();
+    bool ifFreeRelease();
 
 public slots:
 

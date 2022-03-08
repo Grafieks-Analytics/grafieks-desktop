@@ -220,6 +220,8 @@ void ChartsAPIThread::getBarChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -258,6 +260,8 @@ void ChartsAPIThread::getStackedBarChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -295,6 +299,8 @@ void ChartsAPIThread::getGroupedBarChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -332,6 +338,8 @@ void ChartsAPIThread::getNewGroupedBarChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -369,6 +377,8 @@ void ChartsAPIThread::getAreaChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -407,6 +417,8 @@ void ChartsAPIThread::getLineChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -445,6 +457,8 @@ void ChartsAPIThread::getLineBarChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -482,6 +496,8 @@ void ChartsAPIThread::getPieChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -519,6 +535,8 @@ void ChartsAPIThread::getFunnelChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -556,6 +574,8 @@ void ChartsAPIThread::getRadarChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -594,6 +614,8 @@ void ChartsAPIThread::getScatterChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -631,6 +653,8 @@ void ChartsAPIThread::getScatterChartNumericalValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -669,6 +693,8 @@ void ChartsAPIThread::getHeatMapChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -706,6 +732,8 @@ void ChartsAPIThread::getSunburstChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -743,6 +771,8 @@ void ChartsAPIThread::getWaterfallChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -778,6 +808,8 @@ void ChartsAPIThread::getGaugeChartValues()
     obj.insert("calculateColumn", this->calculateColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -815,6 +847,8 @@ void ChartsAPIThread::getSankeyChartValues()
     obj.insert("measureColumn", this->measureColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -852,6 +886,8 @@ void ChartsAPIThread::getTreeChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -888,6 +924,8 @@ void ChartsAPIThread::getTreeMapChartValues()
     obj.insert("yAxisColumn", this->yAxisColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -924,6 +962,8 @@ void ChartsAPIThread::getKPIChartValues()
     obj.insert("calculateColumn", this->calculateColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -962,6 +1002,8 @@ void ChartsAPIThread::getTableChartValues()
     obj.insert("dateConversionParameters", this->dateConversionOptions);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1001,6 +1043,8 @@ void ChartsAPIThread::getPivotChartValues()
     obj.insert("dateConversionParameters", this->dateConversionOptions);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1038,6 +1082,8 @@ void ChartsAPIThread::getStackedAreaChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1075,6 +1121,8 @@ void ChartsAPIThread::getMultiLineChartValues()
     obj.insert("xSplitKey", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("dbIntType", Statics::currentDbIntType);
+    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);

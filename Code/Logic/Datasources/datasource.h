@@ -27,9 +27,10 @@ class Datasource : public QObject
     QString m_createdDate;
     QString m_firstName;
     QString m_lastName;
+    QString m_lastRun;
 
 public:
-    explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent = nullptr);
+    explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun, QObject *parent = nullptr);
 
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged)
     Q_PROPERTY(int connectedWorkbooksCount READ connectedWorkbooksCount WRITE setConnectedWorkbooksCount NOTIFY connectedWorkbooksCountChanged)
@@ -44,6 +45,7 @@ public:
     Q_PROPERTY(QString createdDate READ createdDate WRITE setCreatedDate NOTIFY createdDateChanged)
     Q_PROPERTY(QString firstName READ firstName WRITE setFirstName NOTIFY firstNameChanged)
     Q_PROPERTY(QString lastName READ lastName WRITE setLastName NOTIFY lastNameChanged)
+    Q_PROPERTY(QString lastRun READ lastRun WRITE setLastRun NOTIFY lastRunChanged)
 
     QString connectionType() const;
     QString datasourceName() const;
@@ -58,8 +60,7 @@ public:
     QString createdDate() const;
     QString firstName() const;
     QString lastName() const;
-
-
+    QString lastRun() const;
 
 public slots:
     void setConnectionType(QString connectionType);
@@ -75,8 +76,7 @@ public slots:
     void setCreatedDate(QString createdDate);
     void setFirstName(QString firstName);
     void setLastName(QString lastName);
-
-
+    void setLastRun(QString lastRun);
 
 signals:
     void connectionTypeChanged(QString connectionType);
@@ -92,6 +92,7 @@ signals:
     void createdDateChanged(QString createdDate);
     void firstNameChanged(QString firstName);
     void lastNameChanged(QString lastName);
+    void lastRunChanged(QString lastRun);
 };
 
 #endif // DATASOURCE_H

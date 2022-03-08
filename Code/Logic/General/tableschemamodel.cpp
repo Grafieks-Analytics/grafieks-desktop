@@ -24,6 +24,9 @@ void TableSchemaModel::showSchema(QString query)
     QStringList tableList;
     QVariantList outputDataList;
 
+    int currentDbIntType = Statics::currentDbIntType;
+    QString joiner = qj.getQueryJoiner(currentDbIntType);
+
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:
@@ -86,7 +89,8 @@ void TableSchemaModel::showSchema(QString query)
 
                     // Get filter data type for QML
                     QString filterDataType = dataType.dataType(fieldType);
-                    outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                    outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                     // Output data according to Filter type
 
@@ -139,7 +143,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -194,7 +199,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -248,7 +254,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -302,7 +309,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -359,7 +367,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -409,7 +418,8 @@ void TableSchemaModel::showSchema(QString query)
                     // Get filter data type for QML
                     QString filterDataType = dataType.dataType(fieldType);
 
-                    outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                    outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                     // Output data according to Filter type
 
@@ -666,6 +676,8 @@ void TableSchemaModel::extractSchema(duckdb::Connection *con)
 {
     QVariantList outputDataList;
     QString tableName = Statics::currentDbName;
+    int currentDbIntType = Statics::currentDbIntType;
+    QString joiner = qj.getQueryJoiner(currentDbIntType);
 
     //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType || Statics::currentDbIntType == Constants::accessIntType) {
     tableName = QFileInfo(tableName).baseName().toLower();
@@ -687,7 +699,7 @@ void TableSchemaModel::extractSchema(duckdb::Connection *con)
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldType);
 
-            outputDataList << tableName << fieldName << fieldType << filterDataType;
+            outputDataList << tableName << fieldName << fieldType << filterDataType << fieldName;
 
             // Output data according to Filter type
 

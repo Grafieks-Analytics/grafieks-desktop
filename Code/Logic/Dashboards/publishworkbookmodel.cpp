@@ -16,6 +16,9 @@ void PublishWorkbookModel::publishWorkbook(int projectId, QString wbName, QStrin
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+    QString filename;
+    QString base64Image;
+
     // Extract the exact file path
     // Open file for reading
     QFile imageFile(uploadImage);
@@ -26,42 +29,43 @@ void PublishWorkbookModel::publishWorkbook(int projectId, QString wbName, QStrin
 
         // Extract the filename
         QFileInfo fileInfo(imageFile.fileName());
-        QString filename(fileInfo.fileName());
+        QString filename = fileInfo.fileName();
 
         // Convert filedata to base64
         QByteArray imageData = imageFile.readAll();
         QString base64Image = QString(imageData.toBase64());
-
-        QNetworkRequest m_NetworkRequest;
-        m_NetworkRequest.setUrl(baseUrl+"/desk_newworkbook");
-
-        m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
-                                   "application/x-www-form-urlencoded");
-        m_NetworkRequest.setRawHeader("Authorization", sessionToken);
-
-
-        QJsonObject obj;
-        obj.insert("profileId", profileId);
-        obj.insert("projectID", projectId);
-        obj.insert("workbookFile", this->workbookFilePath);
-        obj.insert("workbookName", wbName);
-        obj.insert("description", description);
-        obj.insert("image", base64Image);
-        obj.insert("fileName", filename);
-        obj.insert("dashboardCount", dashboardCount);
-        obj.insert("dashboardDetails", dashboardDetails);
-
-        QJsonDocument doc(obj);
-        QString strJson(doc.toJson(QJsonDocument::Compact));
-
-        m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
-
-        connect(m_networkReply, &QIODevice::readyRead, this, &PublishWorkbookModel::reading, Qt::UniqueConnection);
-        connect(m_networkReply, &QNetworkReply::finished, this, &PublishWorkbookModel::readComplete, Qt::UniqueConnection);
-
     } else {
         qDebug() << Q_FUNC_INFO << __LINE__  << imageFile.errorString();
     }
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/desk_newworkbook");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+
+    QJsonObject obj;
+    obj.insert("profileId", profileId);
+    obj.insert("projectID", projectId);
+    obj.insert("workbookFile", this->workbookFilePath);
+    obj.insert("workbookName", wbName);
+    obj.insert("description", description);
+    obj.insert("image", base64Image);
+    obj.insert("fileName", filename);
+    obj.insert("dashboardCount", dashboardCount);
+    obj.insert("dashboardDetails", dashboardDetails);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply, &QIODevice::readyRead, this, &PublishWorkbookModel::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &PublishWorkbookModel::readComplete, Qt::UniqueConnection);
+
+
 }
 
 void PublishWorkbookModel::workbookFile(QString workbookFilePath)
@@ -146,31 +150,31 @@ void PublishWorkbookModel::uploadFinished()
 void PublishWorkbookModel::uploadFile()
 {
     //    QFile dataFile(Statics::extractPath);
-        QFile *dataFile = new QFile(this->workbookFilePath, this);
+    QFile *dataFile = new QFile(this->workbookFilePath, this);
 
-        QSettings settings;
+    QSettings settings;
 
-//        QString ftpAddress = settings.value("general/ftpAddress").toString();
-        QString ftpAddress = Constants::defaultFTPEndpoint;
-        QString siteName = settings.value("user/sitename").toString();
+    //        QString ftpAddress = settings.value("general/ftpAddress").toString();
+    QString ftpAddress = Constants::defaultFTPEndpoint;
+    QString siteName = settings.value("user/sitename").toString();
 
-        QUrl url("ftp://" + ftpAddress + ":" + Secret::ftpPort + "/" + siteName + "/workbooks/" + this->outputFileName);
-        url.setUserName(Secret::ftpUser);
-        url.setPassword(Secret::ftpPass);
-        url.setScheme("ftp");
+    QUrl url("ftp://" + ftpAddress + ":" + Secret::ftpPort + "/" + siteName + "/workbooks/" + this->outputFileName);
+    url.setUserName(Secret::ftpUser);
+    url.setPassword(Secret::ftpPass);
+    url.setScheme("ftp");
 
-        if (dataFile->open(QIODevice::ReadOnly))
-        {
-            // Start upload
-            QNetworkReply *reply = m_networkAccessManager->put(QNetworkRequest(url), dataFile);
+    if (dataFile->open(QIODevice::ReadOnly))
+    {
+        // Start upload
+        QNetworkReply *reply = m_networkAccessManager->put(QNetworkRequest(url), dataFile);
 
-            if(reply->error()){
-                qDebug() << Q_FUNC_INFO << reply->errorString();
-            }
-            // And connect to the progress upload signal
-            connect(reply, &QNetworkReply::uploadProgress, this, &PublishWorkbookModel::uploadProgress);
-            connect(reply, &QNetworkReply::finished, this, &PublishWorkbookModel::uploadFinished);
-        } else {
-            qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
+        if(reply->error()){
+            qDebug() << Q_FUNC_INFO << reply->errorString();
         }
+        // And connect to the progress upload signal
+        connect(reply, &QNetworkReply::uploadProgress, this, &PublishWorkbookModel::uploadProgress);
+        connect(reply, &QNetworkReply::finished, this, &PublishWorkbookModel::uploadFinished);
+    } else {
+        qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
+    }
 }

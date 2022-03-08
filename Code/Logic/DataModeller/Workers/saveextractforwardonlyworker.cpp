@@ -26,6 +26,10 @@ void SaveExtractForwardOnlyWorker::run()
 
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
+
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
     QStringList list;
     QString errorMsg = "";
 
@@ -76,7 +80,7 @@ void SaveExtractForwardOnlyWorker::run()
         errorMsg = q.lastError().text();
     } else{
 
-        QString createTableQuery = "CREATE TABLE " + tableName + "(";
+        QString createTableQuery = "CREATE TABLE " + fileName + "(";
 
         for(int i = 0; i < this->colCount; i++){
             QVariant fieldType = record.field(i).value();
@@ -132,7 +136,7 @@ void SaveExtractForwardOnlyWorker::run()
             QString uniqueHash = generalParamsModel.randomStringGenerator();
 
             QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER, unique_hash VARCHAR,  last_update VARCHAR)";
-            QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + tableName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
+            QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
             auto x = con.Query(tableCreateQuery.toStdString());
             if(!x->success) qDebug() << x->error.c_str() << tableCreateQuery;
@@ -140,7 +144,7 @@ void SaveExtractForwardOnlyWorker::run()
             if(!z->success) qDebug() << z->error.c_str() << tableInserQuery;
 
             // Start appending data in table
-            duckdb::Appender appender(con, tableName.toStdString());
+            duckdb::Appender appender(con, fileName.toStdString());
 
             appendExtractData(&appender, &q);
 
