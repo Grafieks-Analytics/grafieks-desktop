@@ -37,9 +37,9 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
         this->finalSql += " WHERE " + this->newWhereConditions;
 
-    if(Statics::currentDbIntType != Constants::teradataIntType){
-        this->finalSql += " limit " + QString::number(previewRowCount);
-    }
+//    if(Statics::currentDbIntType != Constants::teradataIntType ){
+//        this->finalSql += " limit " + QString::number(previewRowCount);
+//    }
     this->generateRoleNames();
 
 }
@@ -218,6 +218,8 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->finalSql, dbForward);
 
+    qDebug() << Q_FUNC_INFO << q.lastError() << q.lastQuery();
+
     if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
         emit errorSignal(q.lastError().text());
@@ -229,9 +231,12 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
         int totalRowCount = 0;
         while(q.next()){
 
+            qDebug() << Q_FUNC_INFO << q.value(0) << this->internalColCount;
+
             try{
                 for(int i = 0; i < this->internalColCount; i++){
                     list << q.value(i).toString();
+                    qDebug() << Q_FUNC_INFO << q.value(i);
                 }
                 this->resultData.append(list);
             } catch(std::exception &e){
@@ -259,7 +264,7 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
         QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
 
 
-        foreach(QStringList values, this->resultData){
+        foreach(QStringList values, this->forwardOnlyChartHeader){
             headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
         }
         headersInsertQuery.chop(1);

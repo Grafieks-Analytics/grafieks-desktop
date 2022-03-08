@@ -21,18 +21,20 @@ public:
     Q_INVOKABLE void login();
     Q_INVOKABLE void logout();
 
-    Q_INVOKABLE void setHost(const QString &value);
+
     Q_INVOKABLE void setPassword(const QString &value);
     Q_INVOKABLE void setUsername(const QString &value);
-
+    Q_INVOKABLE void siteLookup(const QString &value);
 
 private slots:
     void reading();
     void loginReadComplete();
+    void siteLookupReadComplete();
 
 signals:
     void loginStatus(QVariantMap status);
     void logoutStatus(QVariantMap status);
+    void sitelookupStatus(QVariantMap status);
 
 private:
     QNetworkAccessManager * m_networkAccessManager;

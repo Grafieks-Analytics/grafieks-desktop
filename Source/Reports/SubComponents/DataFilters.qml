@@ -217,21 +217,22 @@ Popup {
         datesModel.clear()
 
         allCategorical.forEach(function (element) {
-            categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
+            categoricalModel.append({"tableColName" : element[4], "colName" : element[1]});
+            console.log("CATEORICAL MODEL", element[4], element[1])
         });
 
         allNumerical.forEach(function (element) {
-            numericalModel.append({"tableName" : element[0], "colName" : element[1]});
+            numericalModel.append({"tableColName" : element[4], "colName" : element[1]});
         });
 
         allDates.forEach(function (element) {
-            datesModel.append({"tableName" : element[0], "colName" : element[1]});
+            datesModel.append({"tableColName" : element[4], "colName" : element[1]});
         });
 
         add_btn_1.model =  categoricalModel
     }
 
-    function onAddMenuItemTriggered(colName,tableName, section, category, subCategory){
+    function onAddMenuItemTriggered(colName,tableColName, section, category, subCategory){
 
         var options = {
             "section" : section,
@@ -241,17 +242,17 @@ Popup {
         }
 
         if(GeneralParamsModel.getAPISwitch()) {
-            ReportsDataModel.fetchColumnDataAPI(colName, options)
+            ReportsDataModel.fetchColumnDataAPI(tableColName, options)
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
-            ReportsDataModel.fetchColumnDataLive(colName, options)
+            ReportsDataModel.fetchColumnDataLive(tableColName, options)
         } else {
-            ReportsDataModel.fetchColumnData(colName, options)
+            ReportsDataModel.fetchColumnData(tableColName, options)
         }
 
 
 
-        ReportParamsModel.setColName(colName)
-        ReportParamsModel.setTableName(tableName)
+        ReportParamsModel.setColName(tableColName)
+//        ReportParamsModel.setTableName(tableName)
 
     }
 
@@ -641,7 +642,7 @@ Popup {
         anchors.leftMargin: 20
 
         textRole: "colName"
-        valueRole: "tableName"
+        valueRole: "tableColName"
 
         onActivated: {
             onAddMenuItemTriggered(currentText, currentValue, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)

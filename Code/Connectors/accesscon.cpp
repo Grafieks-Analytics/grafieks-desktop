@@ -35,6 +35,7 @@ QVariantMap AccessCon::AccessOdbcInstance(const QString &driver, const QString &
             Statics::acDb = dbString;
             Statics::acUsername = username;
             Statics::acPassword = password;
+            Statics::acRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -78,6 +79,7 @@ void AccessCon::closeConnection()
     Statics::acDb = "";
     Statics::acUsername = "";
     Statics::acPassword = "";
+    Statics::acRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

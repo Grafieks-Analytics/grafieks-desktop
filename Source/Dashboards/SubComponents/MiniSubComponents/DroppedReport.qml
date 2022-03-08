@@ -617,15 +617,15 @@ Item{
         const reportProperties = ReportParamsModel.getReport(reportId);
         switch(axisName){
         case Constants.xAxisName:
-            var xAxisListModel = JSON.parse(reportProperties.xAxisColumns);
+            var xAxisListModel = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns.xAxisColumnDetails;
             model = xAxisListModel;
             break
         case Constants.yAxisName:
-            var yAxisListModel = JSON.parse(reportProperties.yAxisColumns);
+            var yAxisListModel = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns.yAxisColumnDetails;
             model = yAxisListModel;
             break;
         case Constants.row3Name:
-            model = JSON.parse(reportProperties.row3Columns || "[]");
+            model = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns.row3ColumnDetails;
             break;
         }
         if(!model){
@@ -633,7 +633,7 @@ Item{
         }
         var columnsName = [];
         for(var i=0; i< model.length; i++){
-            columnsName.push(model[i].itemName);
+            columnsName.push(model[i].tableValue);
         }
         return columnsName;
     }
@@ -1122,7 +1122,7 @@ Item{
             Rectangle{
                 id: chartMenu
                 anchors.right: parent.right
-                anchors.rightMargin: 80
+                anchors.rightMargin: 60
                 anchors.top: parent.top
                 height: parent.height
 
@@ -1154,18 +1154,18 @@ Item{
                         }
                     }
 
-                    Image{
-                        id: resizeReport
-                        height: 16
-                        width: 16
-                        source: "/Images/icons/view gray.png"
-                        anchors.verticalCenter: parent.verticalCenter
+                    // Image{
+                    //     id: resizeReport
+                    //     height: 16
+                    //     width: 16
+                    //     source: "/Images/icons/view gray.png"
+                    //     anchors.verticalCenter: parent.verticalCenter
 
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: resizeOptions.open()
-                        }
-                    }
+                    //     MouseArea{
+                    //         anchors.fill: parent
+                    //         onClicked: resizeOptions.open()
+                    //     }
+                    // }
 
                     Image {
                         id: fullScreenReport
@@ -1191,7 +1191,7 @@ Item{
 
                     anchors.right: parent.right
                     anchors.top: chartMenu.bottom
-                    anchors.rightMargin: -70
+                    anchors.rightMargin: 0
                     width: parent.width
                     height: 100
 
@@ -1218,27 +1218,27 @@ Item{
                                 onTriggered: destroyElement()
                             }
                         }
-                        Menu{
-                            id: resizeOptions
-                            background: Rectangle{
-                                implicitWidth: 200
-                                border.color: Constants.darkThemeColor
-                            }
+                        // Menu{
+                        //     id: resizeOptions
+                        //     background: Rectangle{
+                        //         implicitWidth: 200
+                        //         border.color: Constants.darkThemeColor
+                        //     }
 
-                            MenuItem {
-                                text: qsTr("Standard")
-                                onTriggered: convertToStandard()
-                            }
+                        //     MenuItem {
+                        //         text: qsTr("Standard")
+                        //         onTriggered: convertToStandard()
+                        //     }
 
-                            MenuItem {
-                                text: qsTr("FitWidth")
-                                onTriggered: convertToFit()
-                            }
-                            MenuItem {
-                                text: qsTr("FitHeight")
-                                onTriggered: convertToFit()
-                            }
-                        }
+                        //     MenuItem {
+                        //         text: qsTr("FitWidth")
+                        //         onTriggered: convertToFit()
+                        //     }
+                        //     MenuItem {
+                        //         text: qsTr("FitHeight")
+                        //         onTriggered: convertToFit()
+                        //     }
+                        // }
                     }
                 }
             }

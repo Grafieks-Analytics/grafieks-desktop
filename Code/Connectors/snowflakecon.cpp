@@ -41,6 +41,7 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
             Statics::snowflakePort = port;
             Statics::snowflakeUsername = username;
             Statics::snowflakePassword = password;
+            Statics::snowflakeRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -87,6 +88,7 @@ void SnowflakeCon::closeConnection()
     Statics::snowflakePort = 0;
     Statics::snowflakeUsername = "";
     Statics::snowflakePassword = "";
+    Statics::snowflakeRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

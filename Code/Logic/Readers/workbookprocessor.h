@@ -27,7 +27,7 @@ class WorkbookProcessor : public QObject
     QJsonObject dashboardParams;
     QJsonObject reportParams;
     QJsonObject tableColumnParams;
-    QJsonObject whereParams;
+    QJsonObject joinAndWhereParams;
     bool receivedArgument;
 
 public:
@@ -42,11 +42,13 @@ public:
 
     Q_INVOKABLE void saveWorkbooks(QString filePath);
 
+    Q_INVOKABLE void processJsonAfterLoginCredentials();
+
 public slots:
     void getReportParams(QJsonObject reportParams);
     void getDashboardParams(QJsonObject dashboardParams);
     void getTableColumns(QJsonObject tableColumns);
-    void getWhereParams(QJsonObject whereParams);
+    void getJoinAndWhereParams(QJsonObject joinAndWhereParams);
 
 private:
     void processRemaining(QJsonDocument doc);
@@ -59,7 +61,7 @@ signals:
     void sendDSReportParams(QJsonObject reportParams);
     void sendDSDashboardParams(QJsonObject dashboardParams);
     void sendDSTableColumns(QJsonObject tableColumns);
-    void sendDSWhereParams(QJsonObject whereParams);
+    void sendDSJoinAndWhereParams(QJsonObject joinAndWhereParams);
 
     void workbookSaved();
 

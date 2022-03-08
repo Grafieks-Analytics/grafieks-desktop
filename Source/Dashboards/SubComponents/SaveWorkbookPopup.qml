@@ -126,7 +126,7 @@ Popup {
             id: saveDatasource
             height: 30
             checkbox_checked: true
-            checkbox_text: "Save Datasource"
+            checkbox_text: "Save & Publish Datasource"
             parent_dimension: 16
         }
 
@@ -148,7 +148,7 @@ Popup {
             id: saveWorkbook
             height: 30
             checkbox_checked: true
-            checkbox_text: "Save Workbook"
+            checkbox_text: "Save & Publish Workbook"
             parent_dimension: 16
             enabled: false
         }

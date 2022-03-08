@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
+import com.grafieks.singleton.constants 1.0
 
 
 ListView{
@@ -17,15 +18,23 @@ ListView{
 
     property string itemType: "Numerical"
 
+    ListModel{
+        id: listmodel
+    }
+
 
     Connections{
         target : ReportsDataModel
 
-        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            
-              allNumerical = [ false , ...allNumerical]
-            numericalList.model =  allNumerical
+        function onSendFilteredColumn(allCategoricalMap, allNumericalMap, allDatesMap){
+            listmodel.clear()
+            listmodel.append({"key" : Constants.tempGrafieksValue, "value": ""})
+            for(const [key, value] of Object.entries(allNumericalMap)){
+                console.log("FIELD NAME AND ALIAS", key, value)
+                listmodel.append({"key" : key, "value": value})
+            }
 
+            numericalList.model =  listmodel
         }
     }
     function appendToList(name){
@@ -53,8 +62,8 @@ ListView{
 
     delegate: DataPaneElement{
         id: dataPaneListElement
-        visible: modelData === false ? false : true
-        height: modelData === false ? 0 : 24
+        visible: key === Constants.tempGrafieksValue ? false : true
+        height: key === Constants.tempGrafieksValue ? 0 : 24
     }
 
 }

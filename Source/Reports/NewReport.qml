@@ -31,6 +31,7 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
     property bool row3Active: null
+    property bool row4Active: null
 
     property var maxDropOnXAxis: 1;
     property var maxDropOnYAxis: 1;
@@ -402,7 +403,7 @@ Page {
             elementHeight: 24
             activeChart: false
             disabled:true
-            title:"Sankey"
+            title:"Sankey - Coming Soon"
             xAxisLabelName: "Source"
             yAxisLabelName: "Target"
             mainCustomizations: "Properties,Legend,Reference Line"
@@ -418,7 +419,7 @@ Page {
             disabled:true
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
-            title: "Tree Map"
+            title: "Tree Map - Coming Soon"
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
             colorByDropEligible: ""
@@ -638,6 +639,7 @@ Page {
                 drawChartAfterReceivingSignal(output);
         }
         function onSignalGaugeChartValues(output, reportId, dashboardId, chartSource){
+            console.log('DEBUG::: Gauge chart values',output);
             if(reportId === report_desiner_page.reportIdMain)
                 drawChartAfterReceivingSignal(output);
         }
@@ -693,6 +695,7 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
         row3Active = false;
+        row4Active = false;
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -1106,6 +1109,17 @@ Page {
         }
     }
 
+        // Variable when drop is hovered on Y Axis
+    onRow4ActiveChanged: {
+        if(row4Active){
+            row4DropAreaRectangle.border.color = Constants.grafieksLightGreenColor;
+            row4DropAreaRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            row4DropAreaRectangle.border.color = "transparent";
+            row4DropAreaRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+
     function drawChartAfterReceivingSignal(dataValues) {
         if (webEngineView.loading) {
             return;
@@ -1240,7 +1254,6 @@ Page {
             case Constants.multiLineChartTitle:
                 console.log(chartTitle, "CLICKED");
                 dataValues = JSON.parse(dataValues);
-                dataValues[1].splice(1, 0, colorByColumnName);
                 colorData = (dataValues && dataValues[1]) || [];
                 dataValues = JSON.stringify(dataValues);
                 break;
@@ -1382,6 +1395,10 @@ Page {
     }
 
     function updateChart() {
+        if (chartTitle == Constants.gaugeChartTitle){
+            reDrawChart();
+            return;
+        }
         var runScriptString =
             "drawChart(window.data," + JSON.stringify(d3PropertyConfig) + "); ";
         webEngineView.runJavaScript(runScriptString);
@@ -1502,6 +1519,7 @@ Page {
         for (var i = 0; i < xAxisColumnsReportData.length; i++) {
             xAxisListModel.append({
                 itemName: xAxisColumnsReportData[i].itemName,
+                tableValue: xAxisColumnsReportData[i].tableValue,
                 droppedItemType: xAxisColumnsReportData[i].droppedItemType,
                 dateFormat: xAxisColumnsReportData[i].dateFormat,
             });
@@ -1509,6 +1527,7 @@ Page {
         for (var i = 0; i < yAxisColumnsReportData.length; i++) {
             yAxisListModel.append({
                 itemName: yAxisColumnsReportData[i].itemName,
+                tableValue: yAxisColumnsReportData[i].tableValue,
                 droppedItemType: yAxisColumnsReportData[i].droppedItemType,
                 dateFormat: yAxisColumnsReportData[i].dateFormat,
             });
@@ -1516,6 +1535,7 @@ Page {
         for (var i = 0; i < row3ColumnsReportData.length; i++) {
             valuesListModel.append({
                 itemName: row3ColumnsReportData[i].itemName,
+                tableValue: row3ColumnsReportData[i].tableValue,
                 droppedItemType: row3ColumnsReportData[i].droppedItemType,
             });
         }
@@ -1525,6 +1545,7 @@ Page {
             colorListModel.append({
                 textValue: colorListModelData[i].columnName,
                 itemName: colorListModelData[i].columnName,
+                tableValue: colorListModelData[i].tableValue
             });
         }
 
@@ -1852,6 +1873,7 @@ Page {
         for (var i = 0; i < model.count; i++) {
             columnsData.push({
                 itemName: model.get(i).itemName,
+                tableValue: model.get(i).tableValue,
                 droppedItemType: model.get(i).droppedItemType,
                 dateFormat: model.get(i).dateFormat,
             });
@@ -1869,6 +1891,7 @@ Page {
             case Constants.yAxisName:
                 model = yAxisListModel;
                 break;
+            case Constants.row4Name:
             case Constants.row3Name:
                 model = valuesListModel;
                 break;
@@ -1878,7 +1901,7 @@ Page {
         }
         var columnsName = [];
         for (var i = 0; i < model.count; i++) {
-            columnsName.push(model.get(i).itemName);
+            columnsName.push(model.get(i).tableValue);
         }
         return columnsName;
     }
@@ -1893,6 +1916,7 @@ Page {
                 model = yAxisListModel;
                 break;
             case Constants.row3Name:
+            case Constants.row4Name:
                 model = valuesListModel;
                 break;
         }
@@ -1903,6 +1927,7 @@ Page {
         for (var i = 0; i < model.count; i++) {
             columnsAllDetails.push({
                 itemName: model.get(i).itemName,
+                tableValue: model.get(i).tableValue,
                 itemType: model.get(i).droppedItemType,
                 dateFormat: model.get(i).dateFormat,
             });
@@ -2036,6 +2061,7 @@ Page {
 
         if (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) {
             drawChart();
+            return;
         }
 
         if (chartTitle == Constants.pivotTitle) {
@@ -2529,12 +2555,23 @@ Page {
         return false;
     }
 
+    function row4AxisDropEligible(itemName, itemType) {
+        var row4Columns = getAxisColumnNames(Constants.row4Name);
+        // Check if condition more data pills can be added or not';
+        if (row4Columns.length === 1) {
+            return false;
+        }
+        return true;
+    }
+
+
     function onDropAreaDropped(element, axis) {
         row3Active = null;
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
+        var tableValue = lastPickedDataPaneElementProperties.tableValue;
 
         element.border.width = Constants.dropEligibleBorderWidth;
         element.border.color = Constants.themeColor;
@@ -2548,6 +2585,7 @@ Page {
             }
             xAxisListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2561,6 +2599,7 @@ Page {
             console.log("Y Axis itemType", itemType, itemName);
             yAxisListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2573,6 +2612,7 @@ Page {
             console.log(itemType, "Adding it to values?");
             valuesListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2584,6 +2624,7 @@ Page {
             console.log(itemType, "Adding for gauge?");
             valuesListModel.append({
                 itemName: itemName,
+                tableValue: tableValue,
                 droppedItemType: itemType,
                 dateFormat: Constants.yearFormat,
             });
@@ -2699,12 +2740,10 @@ Page {
             */
 
         if (
-            (xAxisColumns.length && yAxisColumns.length) ||
-            (xAxisColumns.length &&
-                (chartTitle == Constants.tableTitle ||
-                    chartTitle == Constants.kpiTitle)) ||
-            (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
-            (chartTitle == Constants.pivotTitle && isPivotChart())
+            (xAxisColumns.length && yAxisColumns.length) 
+            || (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) 
+            || (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) // Condition for Gauge Chart
+            || (chartTitle == Constants.pivotTitle && isPivotChart()) // Condition for Pivot Chart
         ) {
             var xAxisColumnNamesArray = Array.from(xAxisColumns);
             var yAxisColumnNamesArray = Array.from(yAxisColumns);

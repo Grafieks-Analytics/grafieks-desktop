@@ -27,6 +27,23 @@ Popup {
 
     property int label_col : 150
 
+    Connections{
+        target: User
+
+        function onSitelookupStatus(status){
+            console.log(JSON.stringify(status))
+
+            if(status.code === 200){
+                popupLoginServer.visible = false
+                connectGrafieks2.visible = true
+            } else {
+                errorMsg.text = status.msg + " Host not found"
+            }
+
+
+        }
+    }
+
     // Header starts
 
     Rectangle{
@@ -149,13 +166,7 @@ Popup {
                     font.pixelSize: Constants.fontCategoryHeader
                 }
             }
-            onClicked: {
-
-//                User.setHost(server_address.text)
-                User.setHost(server_address.text)
-                popupLoginServer.visible = false
-                connectGrafieks2.visible = true
-            }
+            onClicked: User.siteLookup(server_address.text)
         }
 
         Button{
@@ -191,5 +202,19 @@ Popup {
         }
     }
     // Row 2: Action Button ends
+
+
+    // Row 3: Error Msg
+    Row{
+        anchors.top: row2.bottom
+        anchors.leftMargin: 10
+
+        Text{
+            id: errorMsg
+            color: Constants.redColor
+            font.pointSize:  Constants.fontReading
+
+        }
+    }
 
 }

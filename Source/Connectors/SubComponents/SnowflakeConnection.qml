@@ -41,7 +41,7 @@ Popup {
 
                 server.text = credentials[0]
                 port.text = credentials[1]
-                database.text = credentials[2]
+                database.text = credentials[5]
                 username.text = credentials[3]
                 password.text = credentials[4]
             }
@@ -59,6 +59,11 @@ Popup {
                 if(setFromLiveFile){
 
                     LiveProcessor.processLiveQueries()
+
+                    var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
+                    if(ifJsonFromWorkbookSet)
+                        WorkbookProcessor.processJsonAfterLoginCredentials()
+
 
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)

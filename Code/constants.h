@@ -7,7 +7,7 @@ namespace Constants
 {
     // General Constants
     const QString appName = "Grafieks Desktop";
-    const QString appVersion = "Beta";
+    const QString appVersion = "Free";
     const QString extractVersion = "29"; // Same as currently used duckdb version sans dot(.) & prefixed 0s
     const QString liveVersion = "1.0";
     const QString workbookVersion = "1.0";
@@ -15,9 +15,16 @@ namespace Constants
     const QString currentMode = "RELEASE";
 
     // Application level constants
+    // Server level APIs
     const QString defaultAPIEndpoint = "https://apit.grafieks.net";
     const QString defaultFTPEndpoint = "95.217.117.126";
     const QString defaultChartEndpoint = "http://95.217.117.126:5473";
+
+    // For local testing
+//    const QString defaultAPIEndpoint = "http://localhost:5476";
+//    const QString defaultFTPEndpoint = "172.18.94.57";
+//    const QString defaultChartEndpoint = "http://localhost:5473";
+
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
