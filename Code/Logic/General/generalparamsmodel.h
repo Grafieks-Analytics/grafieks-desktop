@@ -90,6 +90,8 @@ public:
     QString randomStringGenerator();
     bool ifFreeRelease();
 
+    Q_INVOKABLE void resetGeneralParams();
+
 public slots:
 
     //! Set the current highlighted left menu
