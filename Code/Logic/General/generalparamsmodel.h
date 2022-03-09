@@ -88,7 +88,7 @@ public:
     Q_INVOKABLE bool getAPISwitch();
 
     QString randomStringGenerator();
-    bool ifFreeRelease();
+    Q_INVOKABLE bool ifFreeRelease();
 
     Q_INVOKABLE void resetGeneralParams();
 
