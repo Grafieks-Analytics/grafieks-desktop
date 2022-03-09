@@ -58,7 +58,7 @@ Item{
         event.accepted = false
 
         // Save the plain query for execution
-        DSParamsModel.setTmpSql(newText)
+        DSParamsModel.setTmpSql(newText.replace(';', ''))
 
         // This is for Data Preview Table (Important. Else while tying query GUI thread is blocked)
         // If set false, header wont generate in Preview

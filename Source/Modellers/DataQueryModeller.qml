@@ -615,7 +615,7 @@ Page {
         }
 
         ConnectorsLoginModel.sqlLogout()
-        ReportsDataModel.removeTmpChartData()
+
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
@@ -636,6 +636,10 @@ Page {
         // Destroy reports
         ReportParamsModel.deleteReport(0, true)
         ReportsDataModel.deleteReportData(0, true)
+        ReportsDataModel.removeTmpChartData()
+
+        // GeneralParamsModel
+        GeneralParamsModel.resetGeneralParams();
 
         // Take back to select connection screen
         stacklayout_home.currentIndex = 3
