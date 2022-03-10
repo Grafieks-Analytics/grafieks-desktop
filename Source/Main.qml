@@ -288,14 +288,32 @@ ApplicationWindow {
 
     Popup{
         id: locateDSlocallyOrOnline
-        width: 200
-        height: 300
+        width: 450
+        height: 280
         modal: true
         focus: true
+        anchors.centerIn: parent
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+ Text{
+     anchors.top: parent.top
+     anchors.topMargin: 25
+      anchors.horizontalCenter: parent.horizontalCenter
+          text:"Unable to find Data Source"
+        }
+Rectangle{
+// color:"red"
+        width: 150
+        height: 180
+        anchors.centerIn: parent
+       
+       
 
         ColumnLayout {
             id: radioOptions
+            // anchors.rightMargin:220
+            // anchors.topMargin: 50
+            anchors.centerIn: parent
             RadioButton {
                 id: computerOption
                 checked: true
@@ -307,14 +325,18 @@ ApplicationWindow {
                 text: qsTr("Fetch from server")
                 ButtonGroup.group: radioGroup
             }
-        }
-
-        Button{
+             Button{
             id: confirmDSLocation
-            anchors.top: radioOptions.bottom
-            anchors.topMargin: 10
+            anchors.top: serverOption.bottom
+            anchors.topMargin: 15
+            anchors.horizontalCenter: parent.horizontalCenter
             text: "Confirm"
             onClicked: selectDSLocation(computerOption.checked)
+        }
+
+        }
+
+       
         }
     }
 
