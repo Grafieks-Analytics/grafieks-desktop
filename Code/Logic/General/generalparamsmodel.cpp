@@ -301,6 +301,20 @@ bool GeneralParamsModel::ifFreeRelease()
     return Constants::appVersion == "Free" ? true : false;
 }
 
+void GeneralParamsModel::resetGeneralParams()
+{
+    Statics::extractPath = "";
+    Statics::livePath = "";
+
+    Statics::modeProcessReader = false;
+    Statics::currentDbClassification = "";
+    Statics::currentDbName = "";
+    Statics::currentDSFile = "";
+
+    Statics::editMode = false;
+    Statics::apiSwitch = false;
+}
+
 void GeneralParamsModel::setMenuType(int menuType)
 {
     if (m_menuType == menuType)
