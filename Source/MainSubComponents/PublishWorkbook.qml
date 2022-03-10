@@ -167,7 +167,7 @@ Popup {
                                             })
 
         dashboardDetails += "]"
-        if(wbName !== "" && description !== "")
+        if(wbName !== "")
             PublishWorkbookModel.publishWorkbook(projectId, wbName, description, readerFile, dashboardCount, dashboardDetails)
     }
 

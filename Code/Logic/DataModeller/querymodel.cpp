@@ -271,18 +271,18 @@ void QueryModel::extractSizeLimit()
         if(!file.remove(extractPath)){
             qDebug() << Q_FUNC_INFO << file.errorString();
         }
-        Statics::freeLimitExtractSizeExceeded = true;
-        emit extractFileExceededLimit(true, m_ifPublish);
-    } else {
-        emit extractFileExceededLimit(false, m_ifPublish);
-    }
 
+        Statics::freeLimitExtractSizeExceeded = true;
+
+    }
     emit showSaveExtractWaitPopup();
 
     if(Statics::freeLimitExtractSizeExceeded == true){
         Statics::freeLimitExtractSizeExceeded = false;
+        emit extractFileExceededLimit(true, m_ifPublish);
     } else {
         emit generateExtractReports();
+        emit extractFileExceededLimit(false, m_ifPublish);
     }
 }
 

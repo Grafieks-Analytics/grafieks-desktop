@@ -160,6 +160,7 @@ Popup {
         // First save the extract file
         // Then publish the data and file
         if(GeneralParamsModel.getExtractPath().length > 0 || GeneralParamsModel.getLivePath().length > 0){
+            errorMsg.text = "Processing. Please wait.."
             publishData()
         } else {
             saveFilePrompt.open()
@@ -177,18 +178,31 @@ Popup {
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
-        if(dsName !== "" && description !== "")
-            PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
+        PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
     }
 
     function saveExtractLimit(freeLimit, ifPublish){
-        if(ifPublish)
-            publishData()
+        errorMsg.text = "Processing. Please wait.."
+
+        if(GeneralParamsModel.ifFreeRelease() === "Free"){
+            if(ifPublish && !freeLimit)
+                publishData()
+        } else {
+            if(ifPublish)
+                publishData()
+        }
     }
 
     function saveLiveLimit(freeLimit, ifPublish){
-        if(ifPublish)
-            publishData()
+        errorMsg.text = "Processing. Please wait.."
+
+        if(GeneralParamsModel.ifFreeRelease() === "Free"){
+            if(ifPublish && !freeLimit)
+                publishData()
+        } else {
+            if(ifPublish)
+                publishData()
+        }
     }
 
 
