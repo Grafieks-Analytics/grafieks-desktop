@@ -152,6 +152,8 @@ Popup {
         // Call Cpp function to process &
         // Upload data to API
 
+        errorMsg.text = ""
+
         QueryModel.setIfPublish(true)
         ForwardOnlyQueryModel.setIfPublish(true)
         ExcelQueryModel.setIfPublish(true)

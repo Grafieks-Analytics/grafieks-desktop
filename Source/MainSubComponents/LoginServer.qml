@@ -39,8 +39,6 @@ Popup {
             } else {
                 errorMsg.text = status.msg + " Host not found"
             }
-
-
         }
     }
 

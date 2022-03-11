@@ -27,6 +27,7 @@ class GeneralParamsModel : public QObject
     bool setForLiveFile;
     bool setForLiveQuery;
     QJsonDocument jsonDoc;
+    QString currentWorkbookName;
 
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
@@ -90,6 +91,8 @@ public:
     QString randomStringGenerator();
     Q_INVOKABLE bool ifFreeRelease();
 
+    Q_INVOKABLE void setCurrentWorkbookName(QString workbookName);
+
     Q_INVOKABLE void resetGeneralParams();
 
 public slots:
@@ -107,6 +110,7 @@ signals:
     void hideSplash();
     void colTypeChanged();
     void showSaveExtractWaitPopup();
+    void savedWorkbookChanged(QString workbookName);
 };
 
 #endif // GENERALPARAMSMODEL_H
