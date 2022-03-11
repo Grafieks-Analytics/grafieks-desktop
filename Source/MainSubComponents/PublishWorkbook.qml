@@ -74,6 +74,15 @@ Popup {
 
     }
 
+    Connections {
+        target: GeneralParamsModel
+
+        function onSavedWorkbookChanged(workbookName){
+            popup.showSaveWbPrompt = false
+            wbNamefield.text = workbookName
+        }
+    }
+
 
     Connections{
         target: ProjectsListModel
@@ -133,6 +142,7 @@ Popup {
 
     function onPublishWorkbookClicked(){
 
+        errorMsg.text = ""
         if(popup.showSaveWbPrompt === true){
 
             popup.showSaveWbPrompt = false
@@ -168,7 +178,8 @@ Popup {
                                             })
 
         dashboardDetails += "]"
-        if(wbName !== "")
+
+        if(wbName !== "" && projectId > 0 )
             PublishWorkbookModel.publishWorkbook(projectId, wbName, description, readerFile, dashboardCount, dashboardDetails)
     }
 
