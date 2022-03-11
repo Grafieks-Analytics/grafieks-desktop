@@ -301,6 +301,13 @@ bool GeneralParamsModel::ifFreeRelease()
     return Constants::appVersion == "Free" ? true : false;
 }
 
+void GeneralParamsModel::setCurrentWorkbookName(QString workbookName)
+{
+    this->currentWorkbookName = workbookName;
+    emit savedWorkbookChanged(this->currentWorkbookName);
+}
+
+
 void GeneralParamsModel::resetGeneralParams()
 {
     Statics::extractPath = "";
@@ -313,6 +320,15 @@ void GeneralParamsModel::resetGeneralParams()
 
     Statics::editMode = false;
     Statics::apiSwitch = false;
+
+    this->m_menuType = 0;
+    this->m_currentScreen = 0;
+    this->changedHeaderTypes.clear();
+
+    this->setForLiveFile = false;
+    this->setForLiveQuery = false;
+    this->currentWorkbookName = "";
+
 }
 
 void GeneralParamsModel::setMenuType(int menuType)

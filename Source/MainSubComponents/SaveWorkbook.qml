@@ -33,7 +33,11 @@ FileDialog{
         // Save workbook file
         let fileName = GeneralParamsModel.urlToFilePath(saveWorkbookPromptDialog.currentFile)
 
+        var filename2 = fileName.split(/[\\\/]/).pop().split('.')[0];
+        GeneralParamsModel.setCurrentWorkbookName(filename2)
+
         WorkbookProcessor.saveWorkbooks(fileName);
+
 
         // Workbook file
         PublishWorkbookModel.workbookFile(fileName)
