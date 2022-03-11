@@ -37,7 +37,7 @@ Popup {
 
             if(status.code === 200){
                 popupLoginCredentials.visible = false
-                stacklayout_home.currentIndex = 4
+//                stacklayout_home.currentIndex = 4
 
                 var firstname = settings.value("user/firstname")
                 var lastname = settings.value("user/lastname")
