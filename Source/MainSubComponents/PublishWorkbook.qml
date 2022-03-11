@@ -159,6 +159,7 @@ Popup {
         Object.keys(dashboardNames).forEach(dashboardId => {
                                                 let reportsCount = DashboardParamsModel.getDasbboardReportCount(dashboardId)
                                                 dashboardDetails += '{
+                                                                          "dashboardId" : '+ dashboardId +',
                                                                           "name" : "' + dashboardNames[dashboardId] + '",
                                                                           "count" : '+ reportsCount + ',
                                                                           "image" : "",
