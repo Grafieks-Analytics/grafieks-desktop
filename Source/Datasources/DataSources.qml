@@ -199,7 +199,7 @@ Page {
                 }
                 Text{
                     id: ds_server_header
-                    text: settings.value("general/baseUrl")
+                    text: settings.value("general/sitelookup")
                 }
                 Text{
                     id: ds_name_label_header
