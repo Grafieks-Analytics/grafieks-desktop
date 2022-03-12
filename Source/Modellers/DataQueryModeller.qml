@@ -323,7 +323,9 @@ Page {
         }
 
         function onDisconnectAll(){
-            disconnectDS()
+            disconnectDS();
+            ReportParamsModel.resetReportIdsCounter();
+            DashboardParamsModel.clearAllMapValuesAfterDisconnect();
             // Here are all the instances, Let's Remove the charts
             // console.logo('Removing all the charts');
             // let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();

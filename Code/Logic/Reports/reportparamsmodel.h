@@ -248,6 +248,7 @@ public:
     Q_INVOKABLE QVariantMap getAllDashboardReportInstances();
 
     Q_INVOKABLE int generateNewReportId();
+    Q_INVOKABLE void resetReportIdsCounter();
     Q_INVOKABLE void clearReportsScreen();
     Q_INVOKABLE int reportsCount();
     QString optionalConfig() const;
