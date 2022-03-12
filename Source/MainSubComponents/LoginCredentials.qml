@@ -47,6 +47,11 @@ Popup {
 
                 action_signin.text  = Constants.signOutText
                 menu_signIn.title = qsTr(name)
+
+                error_connection_text.text = ""
+                password_field.text = ""
+                username_field.text = ""
+
             }
             else{
                 error_connection_text.text = status.msg
