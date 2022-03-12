@@ -132,6 +132,10 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted:  {
+       errorMsg.text = ""
+    }
+
     function closePopup(){
         popup.visible = false
         errorMsg.text = ""

@@ -36,6 +36,10 @@ Popup {
             if(status.code === 200){
                 popupLoginServer.visible = false
                 connectGrafieks2.visible = true
+
+                errorMsg.text = ""
+                server_address.text = ""
+
             } else {
                 errorMsg.text = status.msg + " Host not found"
             }
