@@ -53,7 +53,7 @@ Window {
             anchors.top:textTitle.bottom
             anchors.topMargin: 10
             anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("\u00a9 Copyright 2021. All Rights Reserved")
+            text: qsTr("\u00a9 Copyright 2022. All Rights Reserved")
             color: Constants.grayColor
         }
     }

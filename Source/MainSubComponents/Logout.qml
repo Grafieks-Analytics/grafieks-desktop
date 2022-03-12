@@ -34,6 +34,8 @@ Popup {
         target: User
         function onLogoutStatus(status){
 
+             error_connection_text.text = ""
+
             if(status.code === 200){
                 popupLogout.visible = false
                 action_signin.text = Constants.signInText
