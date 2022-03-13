@@ -938,6 +938,17 @@ void DashboardParamsModel::deleteReportName(int dashboardId, int widgetId)
     }
 }
 
+void DashboardParamsModel::clearAllMapValuesAfterDisconnect(){
+    this->dashboardWidgetsMap.clear();                   // <dashboardId, <widgetId>>
+    this->dashboardWidgetsZorder.clear();              // <dashboardId, <widgetId, zId>>
+    this->dashboardWidgetCoordinates.clear(); // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
+    this->dashboardWidgetTypeMap.clear();              // <dashboardId, <widgetId, reportTypeId (constant)>>
+    this->dashboardWidgetUrl.clear();                 // <dashboardId, <widgetId, URI Link>>
+    this->dashboardUniqueWidgetMap.clear();               
+    this->dashboardReportMap.clear();
+}
+    
+
 void DashboardParamsModel::setReportBackgroundColor(int dashboardId, int widgetId, QString color)
 {
 

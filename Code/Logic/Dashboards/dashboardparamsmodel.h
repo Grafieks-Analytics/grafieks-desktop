@@ -198,6 +198,8 @@ public:
     Q_INVOKABLE bool getDashboardReportMap(int reportId);
     Q_INVOKABLE int getDasbboardReportCount(int dashboardId);
 
+    Q_INVOKABLE void clearAllMapValuesAfterDisconnect();
+
     // General
     QString lastContainerType() const;
     int positionY() const;
