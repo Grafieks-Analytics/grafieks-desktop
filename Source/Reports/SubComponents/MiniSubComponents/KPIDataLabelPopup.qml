@@ -356,7 +356,7 @@ Popup {
 
 
                     Component.onCompleted: {
-                        let fontFamilies = Qt.fontFamilies();
+                        let fontFamilies = ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"];
                         for(let i=0; i<fontFamilies.length;i++){
                             fonts.append({"fontName": fontFamilies[i]});
                         }
