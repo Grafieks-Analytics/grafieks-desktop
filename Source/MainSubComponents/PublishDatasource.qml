@@ -188,14 +188,18 @@ Popup {
     }
 
     function saveExtractLimit(freeLimit, ifPublish){
-        errorMsg.text = "Processing. Please wait.."
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
-            if(ifPublish && !freeLimit)
+            if(ifPublish && !freeLimit){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
+
         } else {
-            if(ifPublish)
+            if(ifPublish){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
         }
     }
 
@@ -203,11 +207,17 @@ Popup {
         errorMsg.text = "Processing. Please wait.."
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
-            if(ifPublish && !freeLimit)
+            if(ifPublish && !freeLimit){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
+
         } else {
-            if(ifPublish)
+            if(ifPublish){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
+
         }
     }
 
