@@ -105,7 +105,10 @@ Page {
         cellHeight: 300
         clip: true
                 interactive: true
-                ScrollBar.vertical: ScrollBar{}
+                ScrollBar.vertical: ScrollBar{
+                     policy: ScrollBar.AlwaysOn
+                }
+               
 
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -210,11 +213,11 @@ Page {
 
             Image{
                 id: image_datasource
-                source: "/Images/icons/sample_graph.png"
+                source: "/Images/icons/Data Sourse.png"
                 anchors.top: data_source_head.bottom
                 anchors.topMargin:10
                 anchors.horizontalCenter: data_source_main.horizontalCenter
-                width: 250
+                width: 150
                 height:76
 
 
@@ -244,10 +247,10 @@ Page {
 
             RowLayout{
                 id: info_datasource
-                anchors.top: description_datasource.bottom
+                anchors.bottom: parent.bottom
                 anchors.left: data_source_main.left
                 anchors.right: data_source_main.right
-                anchors.topMargin: 15
+                anchors.bottomMargin: 15
                 anchors.leftMargin: 10
                 anchors.rightMargin: 10
 
