@@ -296,7 +296,7 @@ Rectangle{
             ComboBox {
                 id: fontFamilyComboBox
                 implicitWidth: 150
-                model: Qt.fontFamilies()
+                model: ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"]
                 property bool special : false
                 anchors.verticalCenter: parent.verticalCenter
                 onActivated: {
@@ -477,7 +477,7 @@ Rectangle{
             selectionEnd: textArea.selectionEnd
             textColor: colorDialog.color
             onFontFamilyChanged: {
-                var index = Qt.fontFamilies().indexOf(document.fontFamily)
+                var index = ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"].indexOf(document.fontFamily)
                 if (index === -1) {
                     fontFamilyComboBox.currentIndex = 0
                     fontFamilyComboBox.special = true
