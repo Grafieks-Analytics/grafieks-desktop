@@ -216,5 +216,6 @@
         <file>Images/icons/connectors/teradata.png</file>
         <file>Images/icons/connectors/excel.png</file>
         <file>Images/logos/logo_large.png</file>
+        <file>Images/icons/Data Sourse.png</file>
     </qresource>
 </RCC>
