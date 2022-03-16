@@ -171,11 +171,21 @@ ApplicationWindow {
 
     function saveDatasource(){
 
-        dsSaveDialog.visible = true
+        if(typeof settings.value("user/sessionToken") !== "undefined"){
+            dsSaveDialog.visible = true
+        } else {
+            // Call login
+            connectGrafieks1.visible = true
+        }
     }
 
     function saveWorkbook(){
-        saveWorkbookPrompt.open()
+        if(typeof settings.value("user/sessionToken") !== "undefined"){
+            saveWorkbookPrompt.open()
+        } else {
+            // Call login
+            connectGrafieks1.visible = true
+        }
     }
 
     function openDatasource(){
