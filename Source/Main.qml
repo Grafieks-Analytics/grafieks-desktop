@@ -188,6 +188,24 @@ ApplicationWindow {
         }
     }
 
+    function publishWorkbookNow(){
+        if(typeof settings.value("user/sessionToken") !== "undefined"){
+            publishWorkbook.visible = true
+        } else {
+            // Call login
+            connectGrafieks1.visible = true
+        }
+    }
+
+    function publishDatasourceNow(){
+        if(typeof settings.value("user/sessionToken") !== "undefined"){
+            publishDatasource.visible = true
+        } else {
+            // Call login
+            connectGrafieks1.visible = true
+        }
+    }
+
     function openDatasource(){
 
         dsOpenDialog.visible = true
@@ -221,8 +239,12 @@ ApplicationWindow {
 
     // Global Modals
     PublishDatasource{
-        id: datasourceDescription
+        id: publishDatasource
     }
+    PublishWorkbook{
+        id: publishWorkbook
+    }
+
     LoginServer{
         id: connectGrafieks1
     }
@@ -549,10 +571,7 @@ Rectangle{
                 text: qsTr("Publish Datasource")
                 enabled: true
 
-                onTriggered: {
-                    Datasources.setSourceType(Constants.liveDS)
-                    publishGrafieks1.visible = true
-                }
+                onTriggered: publishDatasourceNow()
             }
 
             MenuSeparator{}
@@ -561,6 +580,7 @@ Rectangle{
                 id: action_publish_workbook
                 text: qsTr("Publish Workbook")
                 enabled: true
+                onTriggered: publishWorkbookNow()
             }
         }
 
