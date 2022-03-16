@@ -39,8 +39,14 @@ QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
 {
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
+    // columnTypes
 
-    emit columnNamesChanged(dashboardId, visibleColumns);
+    QStringList visibleColumnTypes;
+    foreach(QString tmpType, visibleColumns){
+        visibleColumnTypes.append(this->columnTypes.value(tmpType));
+    }
+
+    emit columnNamesChanged(dashboardId, visibleColumns, visibleColumnTypes);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
 
