@@ -1396,12 +1396,14 @@ void DashboardParamsModel::setWbName(QString wbName)
     emit wbNameChanged(m_wbName);
 }
 
-void DashboardParamsModel::getColumnNames(int dashboardId, QStringList columnNames)
+void DashboardParamsModel::getColumnNames(int dashboardId, QStringList columnNames, QStringList columnTypes)
 {
 
-    const QString defaultFilterType = "dataListMulti";  // Do not change this name
-    const QString defaultIncludeType = "include";       // Do not change this name
+    const QString defaultFilterTypeCategorical = "dataListMulti";  // Do not change this name
+    const QString defaultFilterTypeNumerical = "dataRange";        // Do not change this name
+    const QString defaultIncludeType = "include";                  // Do not change this name
 
+    int i = 0;
     foreach(QString column, columnNames){
 
         // Set default column alias name to the existing column name
@@ -1409,12 +1411,24 @@ void DashboardParamsModel::getColumnNames(int dashboardId, QStringList columnNam
             this->setColumnAliasName(dashboardId, column, column);
 
         // Set default filter type
-        if(this->fetchColumnFilterType(dashboardId, column) == "")
+        if(this->fetchColumnFilterType(dashboardId, column) == ""){
+
+            QString defaultFilterType;
+            if(columnTypes.at(i) == Constants::categoricalType ||columnTypes.at(i) == Constants::dateType  ) {
+                defaultFilterType = defaultFilterTypeCategorical;
+            } else {
+                defaultFilterType = defaultFilterTypeNumerical;
+            }
+
             this->setColumnFilterType(dashboardId, column, defaultFilterType);
+        }
+
 
         // Set default include/exclude type
         if(this->fetchIncludeExcludeMap(dashboardId, column) == "")
             this->setIncludeExcludeMap(dashboardId, column, defaultIncludeType);
+
+        i++;
     }
 }
 

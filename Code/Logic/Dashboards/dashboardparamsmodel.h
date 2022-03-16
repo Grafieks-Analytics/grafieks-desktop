@@ -232,7 +232,7 @@ public slots:
     void setWbName(QString wbName);
 
     // Filter column names
-    void getColumnNames(int dashboardId, QStringList columnNames);
+    void getColumnNames(int dashboardId, QStringList columnNames, QStringList columnTypes);
     void setCurrentSelectedColumn(QString currentSelectedColumn);
 
     // Receive extract workbook data params
