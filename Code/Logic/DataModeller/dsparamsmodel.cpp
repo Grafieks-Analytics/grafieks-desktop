@@ -682,6 +682,11 @@ QVariant DSParamsModel::fetchNewJoinBox(int refObjId)
     return this->newJoinBox.value(refObjId);
 }
 
+int DSParamsModel::fetchTotalJoins()
+{
+    return this->newJoinBox.count();
+}
+
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
 {
     this->joinRelation.insert(QString::number(refObjId), relation);
