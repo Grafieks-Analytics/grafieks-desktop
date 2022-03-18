@@ -522,7 +522,6 @@ Item {
         var objArray = []
         var tmpArray = []
         var tmpJoinString = ""
-        var totalJoinCount = 0;
 
         if(recursion === true) {
             objArray = objId
@@ -534,7 +533,6 @@ Item {
 
         objArray.forEach(function(item){
 
-            totalJoinCount++
 
             if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 
@@ -641,7 +639,7 @@ Item {
 
             if(GeneralParamsModel.getDbClassification() === Constants.accessType || GeneralParamsModel.getDbClassification() === Constants.excelType ) {
                 let braces = "";
-                for(var i = 0; i < totalJoinCount - 1; i++){
+                 for(var i = 0; i <  DSParamsModel.fetchTotalJoins() - 1; i++){
                     braces += "(";
                 }
 
