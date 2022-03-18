@@ -203,6 +203,7 @@ public:
     Q_INVOKABLE void addToNewJoinBox(int refObjId, const QVariant &joinBoxObject);
     Q_INVOKABLE void removeNewJoinBox(int refObjId = 0);
     Q_INVOKABLE QVariant fetchNewJoinBox(int refObjId = 0);
+    Q_INVOKABLE int fetchTotalJoins();
 
     // Filters
 
