@@ -1443,7 +1443,7 @@ void ChartsThread::getGaugeChartValues()
     QString calculateParam;
 
     if(this->datasourceType == Constants::duckType){
-        calculateParam = xAxisColumn;
+        calculateParam = calculateColumn;
 
     } else {
         QStringList calculatePieces = calculateColumn.split( "." );
