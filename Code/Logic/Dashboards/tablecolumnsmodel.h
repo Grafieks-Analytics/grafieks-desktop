@@ -98,7 +98,7 @@ public slots:
 signals:
     void sendFilteredColumn(int currentDashboard, QVariantMap allCategoricalMap, QVariantMap allNumericalMap, QVariantMap allDatesMap);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
-    void columnNamesChanged(int dashboardId, QStringList columnNames);
+    void columnNamesChanged(int dashboardId, QStringList columnNames, QStringList columnTypes);
     void dashboardWhereConditions(QString whereConditions, int currentDashboardId);
     void chartValuesChanged(int currentDashboardId);
     void columnDataChanged(QStringList columnData, QString columnName, int dashboardId);

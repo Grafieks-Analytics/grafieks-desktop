@@ -177,7 +177,7 @@ Popup {
         var dsName = datasource_name_field.text
         var description = description_field.text
         var uploadImage = fileDialog1.fileUrl
-        var sourceType = DSParamsModel.dsType
+        var sourceType = DSParamsModel.dsType === "" ? GeneralParamsModel.getFromLiveFile() === true ? Constants.liveDS : Constants.extractDS : DSParamsModel.dsType
         var schedulerId = DSParamsModel.schedulerId
         var isFullExtract = DSParamsModel.isFullExtract
         var extractColumnName = DSParamsModel.extractColName

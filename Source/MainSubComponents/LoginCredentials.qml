@@ -46,7 +46,9 @@ Popup {
                 var name = capitalizeFirstName + " "+ capitalizeLastName
 
                 action_signin.text  = Constants.signOutText
-                menu_signIn.title = qsTr(name)
+
+                // Load datasources in GRS for first time
+                DatasourceDS.fetchDatsources(0,true, false)
 
                 error_connection_text.text = ""
                 password_field.text = ""
