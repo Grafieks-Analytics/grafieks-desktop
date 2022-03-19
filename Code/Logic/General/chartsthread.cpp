@@ -210,10 +210,26 @@ void ChartsThread::getBarChartValues()
     colData.append(QJsonArray::fromStringList(xAxisData));
     colData.append(QJsonArray::fromVariantList(yAxisData));
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
 
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(colData);
     data.append(columns);
@@ -585,10 +601,33 @@ void ChartsThread::getLineBarChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-    columns.append(xSplitKey);
+    columns.append(xParam);
+    columns.append(yParam);
+    columns.append(splitParam);
 
     data.append(colData);
     data.append(columns);
@@ -675,9 +714,27 @@ void ChartsThread::getPieChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(obj);
     data.append(columns);
@@ -775,9 +832,26 @@ void ChartsThread::getFunnelChartValues()
 
     data.append(axisDataArray);
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(columns);
 
@@ -872,9 +946,26 @@ void ChartsThread::getRadarChartValues()
 
     data.append(axisDataArray);
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(columns);
 
@@ -997,10 +1088,34 @@ void ChartsThread::getScatterChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-    columns.append(xSplitKey);
+    columns.append(xParam);
+    columns.append(yParam);
+    columns.append(splitParam);
 
 
 
@@ -1065,9 +1180,26 @@ void ChartsThread::getScatterChartNumericalValues()
 
     colData.append(QJsonArray::fromVariantList(tmpData));
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QStringList colNames;
-    colNames.append(xAxisColumn);
-    colNames.append(yAxisColumn);
+    colNames.append(xParam);
+    colNames.append(yParam);
 
     data.append(colData);
     data.append(QJsonArray::fromStringList(colNames));
@@ -1200,10 +1332,33 @@ void ChartsThread::getHeatMapChartValues()
     columns.append(QJsonArray::fromStringList(xAxisDataPointerPre));
     columns.append(QJsonArray::fromStringList(splitDataPointerPre));
 
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QStringList inputKeys;
-    inputKeys.append(xAxisColumn);
-    inputKeys.append(yAxisColumn);
-    inputKeys.append(xSplitKey);
+    inputKeys.append(xParam);
+    inputKeys.append(yParam);
+    inputKeys.append(splitParam);
 
     QJsonArray input = QJsonArray::fromStringList(inputKeys);
 
@@ -1285,9 +1440,20 @@ void ChartsThread::getGaugeChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString calculateParam;
+
+    if(this->datasourceType == Constants::duckType){
+        calculateParam = xAxisColumn;
+
+    } else {
+        QStringList calculatePieces = calculateColumn.split( "." );
+        calculateParam = calculatePieces.at(1);
+        calculateParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QVariantList cols;
     cols.append(output);
-    cols.append(calculateColumn);
+    cols.append(calculateParam);
 
     QJsonArray data;
     data.append(QJsonArray::fromVariantList(cols));
@@ -1487,9 +1653,20 @@ void ChartsThread::getKPIChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString calculateParam;
+
+    if(this->datasourceType == Constants::duckType){
+        calculateParam = calculateColumn;
+
+    } else {
+        QStringList calculatePieces = calculateColumn.split( "." );
+        calculateParam = calculatePieces.at(1);
+        calculateParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QVariantList cols;
     cols.append(output);
-    cols.append(calculateColumn);
+    cols.append(calculateParam);
 
     QJsonArray data;
     data.append(QJsonArray::fromVariantList(cols));
@@ -1613,8 +1790,17 @@ void ChartsThread::getTableChartValues()
 
                 xAxisDataPointer->insert(i, data);
 
+                QString xParam;
+
+                if(this->datasourceType == Constants::duckType){
+                    xParam = xAxisColumnList.at(i).toString();
+                } else {
+                    QStringList xPieces = xAxisColumnList.at(i).toString().split( "." );
+                    xParam = xPieces.at(1);
+                    xParam.remove(QRegularExpression("[\"\'`]+"));
+                }
                 // Append to output columns -- all x axis names
-                columns.append(xAxisColumnList.at(i).toString());
+                columns.append(xParam);
             }
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
@@ -1628,8 +1814,18 @@ void ChartsThread::getTableChartValues()
 
                 yAxisDataPointer->insert(i, data);
 
+                QString yParam;
+
+                if(this->datasourceType == Constants::duckType){
+                    yParam = yAxisColumnList.at(i).toString();
+                } else {
+                    QStringList xPieces = yAxisColumnList.at(i).toString().split( "." );
+                    yParam = xPieces.at(1);
+                    yParam.remove(QRegularExpression("[\"\'`]+"));
+                }
                 // Append to output columns -- all y axis names
-                columns.append(yAxisColumnList.at(i).toString());
+                columns.append(yParam);
+
             }
         } catch(std::exception &e){
             qWarning() << Q_FUNC_INFO << e.what();
@@ -2250,10 +2446,33 @@ void ChartsThread::getMultiLineChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-    columns.append(xSplitKey);
+    columns.append(xParam);
+    columns.append(yParam);
+    columns.append(splitParam);
 
 
     data.append(colData);
@@ -2349,9 +2568,26 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(colData);
     data.append(columns);
@@ -2672,17 +2908,40 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     QString s = output.to_string().c_str();
     QJsonDocument d = QJsonDocument::fromJson(s.toUtf8());
 
+    QString yParam;
+
+    if(this->datasourceType == Constants::duckType){
+        yParam = yAxisColumn;
+
+    } else {
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonObject obj;
-    obj.insert("name", yAxisColumn);
+    obj.insert("name", yParam);
     obj.insert("size", total);
     obj.insert("children", d.array());
 
 
     QStringList colStringList;
     foreach(QVariant xCol, xAxisColumn){
-        colStringList.append(xCol.toString());
+        QString xParam;
+
+        if(this->datasourceType == Constants::duckType){
+            xParam = xCol.toString();
+
+        } else {
+            QStringList xPieces = xCol.toString().split( "." );
+            xParam = xPieces.at(1);
+            xParam.remove(QRegularExpression("[\"\'`]+"));
+        }
+
+        colStringList.append(xParam);
     }
-    colStringList.append(yAxisColumn);
+    colStringList.append(yParam);
 
     QJsonArray cols;
     cols.append(obj);
@@ -2724,6 +2983,8 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
+
+    qDebug() << Q_FUNC_INFO << xAxisColumn << yAxisColumn << xSplitKey;
 
     // Fetch data here
 
@@ -2827,10 +3088,33 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::duckType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xSplitKey);
-    columns.append(yAxisColumn);
-    columns.append(xAxisColumn);
+    columns.append(splitParam);
+    columns.append(yParam);
+    columns.append(xParam);
 
 
     data.append(colData);
@@ -2842,6 +3126,8 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+
+    qDebug() << Q_FUNC_INFO << strData;
 
     if(identifier == "getStackedBarChartValues"){
         emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
