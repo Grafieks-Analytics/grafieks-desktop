@@ -199,7 +199,7 @@ Page {
                 }
                 Text{
                     id: ds_server_header
-                    text: settings.value("general/sitelookup")
+                    text: settings.value("general/sitelookup").includes("http:") || settings.value("general/sitelookup").includes("https:") ? settings.value("general/sitelookup") : "https://" + settings.value("general/sitelookup")
                 }
                 Text{
                     id: ds_name_label_header
