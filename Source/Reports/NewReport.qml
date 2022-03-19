@@ -1323,9 +1323,7 @@ Page {
                 console.log(chartTitle, "CLICKED");
                 break;
             case Constants.kpiTitle:
-                dataValues = JSON.parse(dataValues);
-                dataValues = dataValues[0];
-                dataValues = JSON.stringify(dataValues);
+                console.log('KPI CPP', dataValues);
                 console.log(chartTitle, "CLICKED");
                 break;
             case Constants.tableTitle:
