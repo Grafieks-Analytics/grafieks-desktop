@@ -2253,6 +2253,7 @@ Page {
         input1Field.text = "";
         input2Field.text = "";
         input3Field.text = "";
+        isHorizontalGraph = false;
 
         chartTitle = Constants.barChartTitle;
         chartUrl = Constants.barChartUrl;
