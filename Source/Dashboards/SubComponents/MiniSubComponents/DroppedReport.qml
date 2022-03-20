@@ -812,6 +812,7 @@ Item{
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
+            case Constants.horizontalAreaChartTitle:
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")
                 ChartsModel.getLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0],'Sum');
@@ -820,9 +821,10 @@ Item{
                 console.log(Constants.multiLineChartTitle,"CLICKED");
                 ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
+            case Constants.multipleHorizontalAreaChartTitle:
             case Constants.horizontalMultiLineChartTitle:
                 console.log(chartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0], xAxisColumns[0],colorByColumnName);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
