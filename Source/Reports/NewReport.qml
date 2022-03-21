@@ -832,7 +832,7 @@ Page {
             allChartsMapping[chartTitle] = {}
         }
         const chartDetailsConfig = allChartsMapping[chartTitle];
-        const { maxDropOnXAxis, maxDropOnYAxis, maxDropOnRow3Axis = 0 } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
+        const { maxDropOnXAxis = 2, maxDropOnYAxis = 2, maxDropOnRow3Axis = 0 } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
@@ -1186,14 +1186,6 @@ Page {
                     colorListModel.clear();
                     colorByData = [];
                 }
-                dataValues = JSON.parse(dataValues);
-                dataValues.push([
-                    yAxisColumns[0],
-                    yAxisColumns[1],
-                    xAxisColumns[0],
-                ]);
-                dataValues = JSON.stringify(dataValues);
-
                 break;
             case Constants.groupBarChartTitle:
                 var [category, subcategory] = getAxisColumnNames(
@@ -1218,20 +1210,6 @@ Page {
                     ReportParamsModel.setLastDropped(null);
                 }
 
-                dataValues = JSON.parse(dataValues);
-                dataValues.push([
-                    xAxisColumns[0],
-                    xAxisColumns[1],
-                    yAxisColumns[0],
-                ]);
-                dataValues = JSON.stringify(dataValues);
-
-                console.log(
-                    "Grouped bar chart!",
-                    xAxisColumns[0],
-                    yAxisColumns[0],
-                    xAxisColumns[1]
-                );
                 break;
             case Constants.areaChartTitle:
                 console.log(chartTitle, "CLICKED");
@@ -1260,7 +1238,7 @@ Page {
             case Constants.multipleHorizontalAreaChartTitle:
             case Constants.horizontalMultiLineChartTitle:
                 dataValues = JSON.parse(dataValues);
-                dataValues[1].splice(1, 0, colorByColumnName);
+                // dataValues[1].splice(1, 0, colorByColumnName);
                 colorData = (dataValues && dataValues[1]) || [];
                 dataValues = JSON.stringify(dataValues);
                 break;
@@ -1307,15 +1285,6 @@ Page {
                 console.log(chartTitle, "CLICKED");
                 break;
             case Constants.gaugeChartTitle:
-                var greenValue = input1Field.text;
-                var yellowValue = input2Field.text;
-                var redValue = input3Field.text;
-                optionalParams[chartTitle] = { greenValue, yellowValue, redValue };
-                var oldDataValues = JSON.parse(dataValues)[0];
-                dataValues = [
-                    [+greenValue, +yellowValue, +redValue, oldDataValues[0]],
-                    oldDataValues[1],
-                ];
                 dataValues = JSON.stringify(dataValues);
                 console.log("Debug:::dataValues", dataValues);
                 break;
@@ -1330,10 +1299,6 @@ Page {
                 console.log(chartTitle, "CLICKED");
                 break;
             case Constants.pivotTitle:
-                dataValues = JSON.parse(dataValues);
-                dataValues.push([xAxisColumns, yAxisColumns, row3Columns]);
-                dataValues = JSON.stringify(dataValues);
-
                 console.log(chartTitle, "CLICKED");
                 break;
             default:
@@ -3085,12 +3050,20 @@ Page {
                     var row3ColumnsArray = Array.from(row3Columns);
                     console.log("GAUGE CLICKED");
                     console.log("row3ColumnsArray", row3ColumnsArray);
+
+                    var greenValue = +input1Field.text;
+                    var yellowValue = +input2Field.text;
+                    var redValue = +input3Field.text;
+                    optionalParams[chartTitle] = { greenValue, yellowValue, redValue };
+                    
                     ChartsModel.getGaugeChartValues(
                         reportIdMain,
                         0,
                         Constants.reportScreen,
                         row3ColumnsArray[0],
-                        "Sum"
+                        greenValue,
+                        yellowValue,
+                        redValue
                     );
                     break;
                 case Constants.sankeyChartTitle:
