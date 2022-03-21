@@ -2026,6 +2026,9 @@ void ChartsThread::getPivotChartValues()
     QSqlQuery xDataListLive;
     QSqlQuery yDataListLive;
 
+    QVariantList xAxisColumnOut = xAxisColumnList;
+    QVariantList yAxisColumnOut = yAxisColumnList;
+
     // Process date conversions, if any
     foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
 
@@ -2311,7 +2314,6 @@ void ChartsThread::getPivotChartValues()
     QJsonArray columnSegregated;
     columnSegregated.append(QJsonValue::fromVariant(xAxisColumnOut));
     columnSegregated.append(QJsonValue::fromVariant(yAxisColumnOut));
-    columnSegregated.append(QJsonValue::fromVariant(row3ColumnOut));
 
     data.append(colData);
     data.append(QJsonArray::fromVariantList(masterOutput));
