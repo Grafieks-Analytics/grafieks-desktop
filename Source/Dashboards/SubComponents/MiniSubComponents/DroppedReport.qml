@@ -306,14 +306,12 @@ Item{
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
             dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.stackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
             dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
             colorData = dataValues[1] || [];
             dataValues = JSON.stringify(dataValues);
             break;
@@ -325,9 +323,6 @@ Item{
                 delete d3PropertyConfig['options'];
                 colorByData = [];
             }
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            dataValues = JSON.stringify(dataValues);
 
             break;
         case Constants.groupBarChartTitle:
@@ -340,10 +335,6 @@ Item{
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
             }
-
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            dataValues = JSON.stringify(dataValues);
 
             console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
             break;
@@ -367,16 +358,13 @@ Item{
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
-            dataValues[1].splice(1,0,colorByColumnName);
             colorData = (dataValues && dataValues[1]) || [];
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.multipleHorizontalAreaChartTitle:
         case Constants.horizontalMultiLineChartTitle:
             dataValues = JSON.parse(dataValues);
-            dataValues[1].splice(1,0,colorByColumnName);
             colorData = (dataValues && dataValues[1]) || [];
-            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
@@ -407,12 +395,7 @@ Item{
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED");
-            var { greenValue, yellowValue, redValue } = optionalParams[Constants.gaugeChartTitle];
-            console.log('Gauge values',greenValue, yellowValue, redValue)
-            var oldDataValues = JSON.parse(dataValues)[0];
-            dataValues = [[+greenValue, +yellowValue, +redValue, oldDataValues[0]], oldDataValues[1]];
-            dataValues = JSON.stringify(dataValues);
+            console.log(chartTitle,"CLICKED")
             break;
         case Constants.sankeyChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -424,11 +407,6 @@ Item{
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.pivotTitle:
-
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns,yAxisColumns,row3Columns]);
-            dataValues = JSON.stringify(dataValues);
-
             console.log(chartTitle,"CLICKED")
             break;
         default:
