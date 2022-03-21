@@ -43,8 +43,21 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
 
     QStringList visibleColumnTypes;
     foreach(QString tmpType, visibleColumns){
-        visibleColumnTypes.append(this->columnTypes.value(tmpType));
+
+        QString type;
+
+        if(Statics::currentDbClassification != Constants::duckType){
+            QStringList pieces = tmpType.split( "." );
+            type = pieces.at(1);
+            type.remove(QRegularExpression("[\"\'`]+"));
+        } else {
+            type = tmpType;
+        }
+
+
+        visibleColumnTypes.append(this->columnTypes.value(type));
     }
+
 
     emit columnNamesChanged(dashboardId, visibleColumns, visibleColumnTypes);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
