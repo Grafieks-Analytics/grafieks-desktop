@@ -371,7 +371,6 @@ void ChartsThread::getGroupedBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
-
     emit signalGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -490,11 +489,12 @@ void ChartsThread::getNewGroupedBarChartValues()
     //    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
 
     QJsonArray categories;
-    xAxisDataPointer->removeDuplicates();
-    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
+    categories.append(xAxisColumn);
+    categories.append(xSplitKey);
+    categories.append(yAxisColumn);
 
     data.append(columns);
-    //    data.append(categories);
+    data.append(categories);
 
     QJsonDocument doc;
     doc.setArray(data);
@@ -1462,7 +1462,6 @@ void ChartsThread::getGaugeChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
-
     emit signalGaugeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
