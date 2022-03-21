@@ -2308,10 +2308,15 @@ void ChartsThread::getPivotChartValues()
         masterOutput.append(masterTotal.at(i).toFloat());
     }
 
+    QJsonArray columnSegregated;
+    columnSegregated.append(QJsonValue::fromVariant(xAxisColumnOut));
+    columnSegregated.append(QJsonValue::fromVariant(yAxisColumnOut));
+    columnSegregated.append(QJsonValue::fromVariant(row3ColumnOut));
 
     data.append(colData);
     data.append(QJsonArray::fromVariantList(masterOutput));
     data.append(columns);
+    data.append(columnSegregated);
 
     QJsonDocument doc;
     doc.setArray(data);
