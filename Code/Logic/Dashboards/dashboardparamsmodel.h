@@ -12,8 +12,10 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include "../../constants.h"
+#include "../../statics.h"
 #include "../General/generalparamsmodel.h"
 
 class DashboardParamsModel : public QObject
