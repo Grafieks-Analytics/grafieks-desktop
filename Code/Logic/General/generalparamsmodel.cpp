@@ -279,6 +279,7 @@ void GeneralParamsModel::setFromLiveFile(bool setForLiveFile)
 {
     this->setForLiveFile = setForLiveFile;
     Statics::dsType = setForLiveFile == true ? Constants::sqlType : Constants::duckType;
+    Statics::currentDbClassification = Statics::dsType;
 }
 
 QString GeneralParamsModel::randomStringGenerator()
