@@ -105,9 +105,12 @@ void ChartsAPIThread::setSankeyDetails(QString &sourceColumn, QString &destinati
     this->measureColumn = measureColumn;
 }
 
-void ChartsAPIThread::setGaugeKpiDetails(QString &calculateColumn)
+void ChartsAPIThread::setGaugeKpiDetails(QString &calculateColumn, QString greenValue, QString yellowValue, QString redValue)
 {
     this->calculateColumn = calculateColumn;
+    this->greenValue = greenValue;
+    this->yellowValue = yellowValue;
+    this->redValue = redValue;
 }
 
 void ChartsAPIThread::setTablePivotDateConversionOptions(QString dateConversionOptions)

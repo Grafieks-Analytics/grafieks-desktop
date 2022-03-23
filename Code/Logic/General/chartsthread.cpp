@@ -118,9 +118,12 @@ void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationC
     this->measureColumn = measureColumn;
 }
 
-void ChartsThread::setGaugeKpiDetails(QString &calculateColumn)
+void ChartsThread::setGaugeKpiDetails(QString &calculateColumn, QString greenValue, QString yellowValue, QString redValue)
 {
     this->calculateColumn = calculateColumn;
+    this->greenValue = greenValue;
+    this->yellowValue = yellowValue;
+    this->redValue = redValue;
 }
 
 void ChartsThread::setTablePivotDateConversionOptions(QString dateConversionOptions)
@@ -1451,15 +1454,19 @@ void ChartsThread::getGaugeChartValues()
         calculateParam.remove(QRegularExpression("[\"\'`]+"));
     }
 
-    QVariantList cols;
-    cols.append(output);
+    QJsonArray finalResult;
+    finalResult.append(this->greenValue.toFloat());
+    finalResult.append(this->yellowValue.toFloat());
+    finalResult.append(this->redValue.toFloat());
+    finalResult.append(output);
+
+    QJsonArray cols;
+    cols.append(finalResult);
     cols.append(calculateParam);
 
-    QJsonArray data;
-    data.append(QJsonArray::fromVariantList(cols));
 
     QJsonDocument doc;
-    doc.setArray(data);
+    doc.setArray(cols);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
     emit signalGaugeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);

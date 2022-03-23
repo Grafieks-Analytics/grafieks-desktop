@@ -374,7 +374,7 @@ void ChartsModel::getWaterfallChartValues(int reportId, int dashboardId, int cha
 
 }
 
-void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn)
+void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn, QString greenValue, QString yellowValue, QString redValue)
 {
     this->callThread();
 
@@ -383,11 +383,11 @@ void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSo
     this->currentChartSource = chartSource;
 
     if(Statics::apiSwitch == true){
-        chartsAPIThread->setGaugeKpiDetails(calculateColumn);
+        chartsAPIThread->setGaugeKpiDetails(calculateColumn, greenValue, yellowValue, redValue);
         chartsAPIThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
-        chartsThread->setGaugeKpiDetails(calculateColumn);
+        chartsThread->setGaugeKpiDetails(calculateColumn, greenValue, yellowValue, redValue);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
     }
