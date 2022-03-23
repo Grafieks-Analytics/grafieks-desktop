@@ -52,6 +52,9 @@ class ChartsThread : public QObject
     QString destinationColumn;
     QString measureColumn;
     QString calculateColumn;
+    QString greenValue;
+    QString yellowValue;
+    QString redValue;
     QJsonArray dateConversionOptions;
 
 public:
@@ -63,7 +66,7 @@ public:
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
-    void setGaugeKpiDetails(QString &calculateColumn);
+    void setGaugeKpiDetails(QString &calculateColumn, QString greenValue = "", QString yellowValue = "", QString redValue = "");
     void setTablePivotDateConversionOptions(QString dateConversionOptions);
 
 public slots:
