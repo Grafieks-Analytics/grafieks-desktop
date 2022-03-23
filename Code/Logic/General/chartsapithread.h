@@ -31,6 +31,7 @@ class ChartsAPIThread : public QObject
     QString xSplitKey;
     QVariantList xAxisColumnList;
     QVariantList yAxisColumnList;
+    QVariantList row3ColumnList;
     QString sourceColumn;
     QString destinationColumn;
     QString measureColumn;
@@ -55,7 +56,7 @@ public:
 
     void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0);
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
-    void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
+    void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList, QVariantList &row3ColumnsList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
     void setGaugeKpiDetails(QString &calculateColumn, QString greenValue = "", QString yellowValue = "", QString redValue = "");
     void setTablePivotDateConversionOptions(QString dateConversionOptions);

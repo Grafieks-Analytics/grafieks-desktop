@@ -98,13 +98,15 @@ void ChartsThread::setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &
     this->xSplitKey = xSplitKey;
 }
 
-void ChartsThread::setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList)
+void ChartsThread::setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList, QVariantList &row3ColumnList)
 {
     this->xAxisColumnList.clear();
     this->yAxisColumnList.clear();
+    this->row3ColumnList.clear();
 
     this->xAxisColumnList = xAxisColumnList;
     this->yAxisColumnList = yAxisColumnList;
+    this->row3ColumnList = row3ColumnList;
 }
 
 void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn)
@@ -2027,6 +2029,7 @@ void ChartsThread::getPivotChartValues()
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+    QScopedPointer<QMap<int, QStringList>> row3DataPointer(new  QMap<int, QStringList>);
 
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
@@ -2035,6 +2038,9 @@ void ChartsThread::getPivotChartValues()
 
     QVariantList xAxisColumnOut = xAxisColumnList;
     QVariantList yAxisColumnOut = yAxisColumnList;
+    QVariantList row3ColumnOut = row3ColumnList;
+
+    qDebug() << xAxisColumnOut << yAxisColumnOut << row3ColumnOut;
 
     // Process date conversions, if any
     foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
@@ -2321,6 +2327,7 @@ void ChartsThread::getPivotChartValues()
     QJsonArray columnSegregated;
     columnSegregated.append(QJsonValue::fromVariant(xAxisColumnOut));
     columnSegregated.append(QJsonValue::fromVariant(yAxisColumnOut));
+    columnSegregated.append(QJsonValue::fromVariant(row3ColumnOut));
 
     data.append(colData);
     data.append(QJsonArray::fromVariantList(masterOutput));
@@ -2331,6 +2338,7 @@ void ChartsThread::getPivotChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+    qDebug() << "STRING DATA" << strData;
 
     emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
