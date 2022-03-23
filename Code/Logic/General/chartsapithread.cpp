@@ -85,13 +85,15 @@ void ChartsAPIThread::setAxes(QString &xAxisColumn, QString &yAxisColumn, QStrin
     this->xSplitKey = xSplitKey;
 }
 
-void ChartsAPIThread::setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList)
+void ChartsAPIThread::setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList, QVariantList &row3ColumnsList)
 {
     this->xAxisColumnList.clear();
     this->yAxisColumnList.clear();
+    this->row3ColumnList.clear();
 
     this->xAxisColumnList = xAxisColumnList;
     this->yAxisColumnList = yAxisColumnList;
+    this->row3ColumnList = row3ColumnsList;
 }
 
 void ChartsAPIThread::setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn)
