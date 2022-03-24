@@ -168,7 +168,9 @@ Column{
             return;
         }
 
-        colorByData.push({ columnName: itemName, itemType: itemType });
+        var tableValue = lastPickedDataPaneElementProperties.tableValue;
+
+        colorByData.push({ columnName: tableValue, itemType: itemType });
         colorListModel.append({textValue: itemName,itemName:itemName})
 
         ReportParamsModel.setLastDropped(itemType);
