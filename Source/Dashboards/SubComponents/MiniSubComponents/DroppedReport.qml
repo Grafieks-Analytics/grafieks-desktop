@@ -572,10 +572,10 @@ Item{
         const optionalConfig = JSON.parse(reportProperties.optionalConfig);
         const gaugeChartOptions = optionalConfig[Constants.gaugeChartTitle];
         console.log('Gauge options', JSON.stringify(gaugeChartOptions));
-        var { yellowValue, redValue, yellowValue } = gaugeChartOptions;
+        var { greenValue, redValue, yellowValue } = gaugeChartOptions;
         var row3Columns = getAxisColumnNames(Constants.row3Name);
         console.log(row3Columns.length);
-        if(row3Columns.length && yellowValue && redValue && yellowValue){
+        if(row3Columns.length && yellowValue && redValue && greenValue){
             return true;
         }
         return false;
@@ -845,7 +845,11 @@ Item{
             case Constants.gaugeChartTitle:
                 console.log("GAUGE CLICKED")
                 var row3ColumnsArray = Array.from(row3Columns);
-                ChartsModel.getGaugeChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, row3ColumnsArray[0] ,'Sum');
+                const optionalConfig = JSON.parse(reportProperties.optionalConfig);
+                const gaugeChartOptions = optionalConfig[Constants.gaugeChartTitle];
+                var { greenValue, redValue, yellowValue } = gaugeChartOptions;
+                
+                ChartsModel.getGaugeChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, row3ColumnsArray[0] , greenValue, yellowValue, redValue);
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
@@ -944,8 +948,7 @@ Item{
                 })
                 
                 dateConversionOptions = JSON.stringify(dateConversionOptions);
-                ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,dateConversionOptions);
-                
+                ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,dateConversionOptions, [xAxisColumnNamesArray, yAxisColumnNamesArray, row3ColumnsArray]);
                 break;
             }
             if(!dataValues){
