@@ -342,12 +342,12 @@ void ChartsModel::getSunburstChartValues(int reportId, int dashboardId, int char
 
     if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(nullString, yAxisColumn, nullString);
-        chartsAPIThread->setLists(xAxisColumn, nullList);
+        chartsAPIThread->setLists(xAxisColumn, nullList, nullList);
         chartsAPIThread->methodSelector( "getSunburstChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
         chartsThread->setAxes(nullString, yAxisColumn, nullString);
-        chartsThread->setLists(xAxisColumn, nullList);
+        chartsThread->setLists(xAxisColumn, nullList, nullList);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector( "getSunburstChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
     }
@@ -374,7 +374,7 @@ void ChartsModel::getWaterfallChartValues(int reportId, int dashboardId, int cha
 
 }
 
-void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn)
+void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn, QString greenValue, QString yellowValue, QString redValue)
 {
     this->callThread();
 
@@ -383,11 +383,11 @@ void ChartsModel::getGaugeChartValues(int reportId, int dashboardId, int chartSo
     this->currentChartSource = chartSource;
 
     if(Statics::apiSwitch == true){
-        chartsAPIThread->setGaugeKpiDetails(calculateColumn);
+        chartsAPIThread->setGaugeKpiDetails(calculateColumn, greenValue, yellowValue, redValue);
         chartsAPIThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
-        chartsThread->setGaugeKpiDetails(calculateColumn);
+        chartsThread->setGaugeKpiDetails(calculateColumn, greenValue, yellowValue, redValue);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getGaugeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
     }
@@ -424,12 +424,12 @@ void ChartsModel::getTreeChartValues(int reportId, int dashboardId, int chartSou
 
     if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(nullString, yAxisColumn, nullString);
-        chartsAPIThread->setLists(xAxisColumn, nullList);
+        chartsAPIThread->setLists(xAxisColumn, nullList, nullList);
         chartsAPIThread->methodSelector("getTreeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
         chartsThread->setAxes(nullString, yAxisColumn, nullString);
-        chartsThread->setLists(xAxisColumn, nullList);
+        chartsThread->setLists(xAxisColumn, nullList, nullList);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getTreeChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
     }
@@ -446,12 +446,12 @@ void ChartsModel::getTreeMapChartValues(int reportId, int dashboardId, int chart
 
     if(Statics::apiSwitch == true){
         chartsAPIThread->setAxes(nullString, yAxisColumn, nullString);
-        chartsAPIThread->setLists(xAxisColumn, nullList);
+        chartsAPIThread->setLists(xAxisColumn, nullList, nullList);
         chartsAPIThread->methodSelector("getTreeMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
         chartsThread->setAxes(nullString, yAxisColumn, nullString);
-        chartsThread->setLists(xAxisColumn, nullList);
+        chartsThread->setLists(xAxisColumn, nullList, nullList);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getTreeMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
     }
@@ -487,12 +487,12 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
     this->currentChartSource = chartSource;
 
     if(Statics::apiSwitch == true){
-        chartsAPIThread->setLists(xAxisColumn, yAxisColumn);
+        chartsAPIThread->setLists(xAxisColumn, yAxisColumn, nullList);
         chartsAPIThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsAPIThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
-        chartsThread->setLists(xAxisColumn, yAxisColumn);
+        chartsThread->setLists(xAxisColumn, yAxisColumn, nullList);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
@@ -500,8 +500,9 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
 
 }
 
-void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters)
+void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QVariantList row3Columns, QString dateConversionParameters)
 {
+    qDebug() << "PARAMS ARRIVED" << xAxisColumn << yAxisColumn << row3Columns;
     this->callThread();
 
     this->currentReportId = reportId;
@@ -509,12 +510,12 @@ void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSo
     this->currentChartSource = chartSource;
 
     if(Statics::apiSwitch == true){
-        chartsAPIThread->setLists(xAxisColumn, yAxisColumn);
+        chartsAPIThread->setLists(xAxisColumn, yAxisColumn, row3Columns);
         chartsAPIThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsAPIThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
-        chartsThread->setLists(xAxisColumn, yAxisColumn);
+        chartsThread->setLists(xAxisColumn, yAxisColumn, row3Columns);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
         chartsThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
