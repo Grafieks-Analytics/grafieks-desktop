@@ -1285,7 +1285,6 @@ Page {
                 console.log(chartTitle, "CLICKED");
                 break;
             case Constants.gaugeChartTitle:
-                dataValues = JSON.stringify(dataValues);
                 console.log("Debug:::dataValues", dataValues);
                 break;
             case Constants.sankeyChartTitle:
@@ -3217,7 +3216,8 @@ Page {
                         Constants.reportScreen,
                         [...xAxisColumnNamesArray, ...yAxisColumnNamesArray],
                         row3ColumnsArray,
-                        dateConversionOptions
+                        dateConversionOptions,
+                        [xAxisColumnNamesArray, yAxisColumnNamesArray, row3ColumnsArray]
                     );
 
                     /*
