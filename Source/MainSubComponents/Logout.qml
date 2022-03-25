@@ -39,8 +39,10 @@ Popup {
             if(status.code === 200){
                 popupLogout.visible = false
                 action_signin.text = Constants.signInText
-                menu_signIn.title = Constants.signInText
-//                stacklayout_home.currentIndex = 2
+
+                if(GeneralParamsModel.currentScreen === Constants.grsScreen){
+                    stacklayout_home.currentIndex = 3
+                }
             }
             else{
                 error_connection_text.text = status.msg
@@ -134,7 +136,6 @@ Popup {
             onClicked: {
                 error_connection_text.text = "Logging out. Please wait.."
                 User.logout()
-                stacklayout_home.currentIndex = 3
             }
         }
 
