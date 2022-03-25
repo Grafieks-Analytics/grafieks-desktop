@@ -95,6 +95,7 @@ Page {
             if (typeof settings.value("user/sessionToken") == "undefined"){
                 connectGrafieks1.visible = true
             } else{
+                GeneralParamsModel.setCurrentScreen(Constants.grsScreen)
                 stacklayout_home.currentIndex = 4
             }
 
