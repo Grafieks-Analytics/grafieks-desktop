@@ -500,9 +500,8 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
 
 }
 
-void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QVariantList row3Columns, QString dateConversionParameters)
+void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QVariantList row3Columns)
 {
-    qDebug() << "PARAMS ARRIVED" << xAxisColumn << yAxisColumn << row3Columns;
     this->callThread();
 
     this->currentReportId = reportId;

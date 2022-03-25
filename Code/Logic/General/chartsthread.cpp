@@ -2324,21 +2324,15 @@ void ChartsThread::getPivotChartValues()
         masterOutput.append(masterTotal.at(i).toFloat());
     }
 
-    QJsonArray columnSegregated;
-    columnSegregated.append(QJsonValue::fromVariant(xAxisColumnOut));
-    columnSegregated.append(QJsonValue::fromVariant(yAxisColumnOut));
-    columnSegregated.append(QJsonValue::fromVariant(row3ColumnOut));
-
     data.append(colData);
     data.append(QJsonArray::fromVariantList(masterOutput));
     data.append(columns);
-    data.append(columnSegregated);
+    data.append(QJsonValue::fromVariant(row3ColumnOut));
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
-    qDebug() << "STRING DATA" << strData;
 
     emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
