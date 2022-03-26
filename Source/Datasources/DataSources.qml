@@ -41,7 +41,12 @@ Page {
 
     function processDS(){
 //        stacklayout_home.currentIndex = 5
-        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
+//        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
+        GeneralParamsModel.setAPISwitch(true)
+        GeneralParamsModel.setForAPI(ds_name_header.text, "live")
+        ReportsDataModel.generateColumnsForExtract()
+        TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
+        stacklayout_home.currentIndex = 6
 
     }
 
