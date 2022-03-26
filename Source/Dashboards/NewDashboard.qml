@@ -249,8 +249,9 @@ Page {
     function createNewReport(){
         var reportId = ReportParamsModel.generateNewReportId();
         ReportParamsModel.setReportId(reportId);
-        var numberOfReports = ReportParamsModel.reportsCount();
-        if(numberOfReports>Constants.reportsPerWorkbook){
+        const allReportsData = ReportParamsModel.getReportsList();
+        const numberOfReports = Object.keys(allReportsData).length;
+        if(numberOfReports>=Constants.reportsPerWorkbook){
             workbookReportsLimitAccess.open();
             return;
         }
