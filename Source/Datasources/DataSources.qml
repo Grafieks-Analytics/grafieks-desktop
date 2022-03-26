@@ -39,6 +39,13 @@ Page {
     }
 
 
+    function processDS(){
+//        stacklayout_home.currentIndex = 5
+        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
+
+    }
+
+
 
     LeftMenuBar{
         id: left_menubar
@@ -62,14 +69,14 @@ Page {
             height: 30
             width:100
 
-            onClicked: stacklayout_home.currentIndex = 5
+            onClicked: processDS()
             Image {
-                                    id: dashboardIcon
-                                    source: "/Images/icons/create_dashboard_20.png"
-                                    height: 20
-                                    width: 20
-                                    anchors.centerIn: parent
-                                }
+                        id: dashboardIcon
+                        source: "/Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
 
             background: Rectangle{
                 id: next_btn_background
