@@ -134,6 +134,17 @@ bool GeneralParamsModel::getFromLiveFile()
     return this->setForLiveFile;
 }
 
+void GeneralParamsModel::setForAPI(QString dsFileName, QString fileType)
+{
+    if(fileType == Constants::duckType){
+        Statics::currentDbClassification = Constants::duckType;
+        Statics::currentDSFile = dsFileName + ".gadse";
+    } else {
+        Statics::currentDbClassification = Constants::sqlType;
+        Statics::currentDSFile = dsFileName + ".gads";
+    }
+}
+
 void GeneralParamsModel::setJsonFromWorkbook(QJsonDocument jsonDoc)
 {
     this->jsonDoc = jsonDoc;
