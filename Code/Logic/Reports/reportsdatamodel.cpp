@@ -653,10 +653,10 @@ void ReportsDataModel::columnReadFinished()
 
             int dbIntType = Statics::currentDbIntType;QString tableColumnName;
 
-            if(Statics::currentDbClassification != Constants::duckType){
-                tableColumnName = finalValue.at(4).toString();
-            } else {
+            if(Statics::currentDbClassification == Constants::duckType){
                 tableColumnName = finalValue.at(1).toString();
+            } else {
+                tableColumnName = finalValue.at(4).toString();
             }
 
             if(finalValue.at(3).toString() == "categorical"){
@@ -689,7 +689,6 @@ void ReportsDataModel::columnDataReadFinished()
         QJsonObject resultObj = resultJson.object();
 
         QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
-
         // Clear existing chart headers data
         this->columnData.clear();
 

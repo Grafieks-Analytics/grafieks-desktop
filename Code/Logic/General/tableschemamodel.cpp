@@ -581,17 +581,22 @@ void TableSchemaModel::dataReadFinished()
             foreach(QJsonValue data, value){
                 QJsonArray finalValue = data.toArray();
 
-                if(finalValue.at(3).toString() == "categorical"){
-                    this->allCategorical.append(finalValue.toVariantList());
-                } else if(finalValue.at(3).toString() == "numerical"){
-                    this->allNumerical.append(finalValue.toVariantList());
-                } else if(finalValue.at(3).toString() == "dateformat"){
-                    this->allDates.append(finalValue.toVariantList());
-                } else {
-                    this->allOthers.append(finalValue.toVariantList());
+                QVariantList valueList = finalValue.toVariantList();
+                if(Statics::currentDbClassification == Constants::duckType){
+                    valueList.replace(4, valueList.at(1));
                 }
 
-                this->allList.append(finalValue.toVariantList());
+                if(finalValue.at(3).toString() == "categorical"){
+                    this->allCategorical.append(valueList);
+                } else if(finalValue.at(3).toString() == "numerical"){
+                    this->allNumerical.append(valueList);
+                } else if(finalValue.at(3).toString() == "dateformat"){
+                    this->allDates.append(valueList);
+                } else {
+                    this->allOthers.append(valueList);
+                }
+
+                this->allList.append(valueList);
             }
             emit apiSchemaObtained(this->allList, this->allCategorical, this->allNumerical, this->allDates, this->allOthers);
         }
