@@ -652,7 +652,7 @@ void ReportsDataModel::columnReadFinished()
             QJsonArray finalValue = data.toArray();
 
             int dbIntType = Statics::currentDbIntType;
-            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(3).toString() + qj.getQueryJoiner(dbIntType);
+            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(1).toString() + qj.getQueryJoiner(dbIntType);
 
 
 

@@ -23,6 +23,7 @@
 
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
+#include "Code/Logic/Datasources/credentialsmodel.h"
 
 #include "Code/Logic/DataModeller/querymodel.h"
 #include "Code/Logic/DataModeller/querydatamodel.h"
@@ -332,6 +333,7 @@ int main(int argc, char *argv[])
     CSVJsonDataModel csvJsonDataModel;
     TableSchemaModel tableSchemaModel;
     NewTableColumnsModel newTableColumnsModel;
+    CredentialsModel credentialsModel;
 
     PublishWorkbookModel publishWorkbookModel;
     ProjectsListModel projectsListModel;
@@ -493,6 +495,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ConnectorsLoginModel", &connectorsLoginModel);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
     engine.rootContext()->setContextProperty("DatasourceDS", datasource);
+    engine.rootContext()->setContextProperty("CredentialsModel", &credentialsModel);
     engine.rootContext()->setContextProperty("QueryModel", &queryModel);
     engine.rootContext()->setContextProperty("QueryDataModel", &queryDataModel);
     engine.rootContext()->setContextProperty("DBListModel", &dblistModel);

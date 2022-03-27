@@ -39,6 +39,18 @@ Page {
     }
 
 
+    function processDS(){
+//        stacklayout_home.currentIndex = 5
+//        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
+        GeneralParamsModel.setAPISwitch(true)
+        GeneralParamsModel.setForAPI(ds_name_header.text, "live")
+        ReportsDataModel.generateColumnsForExtract()
+        TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
+        stacklayout_home.currentIndex = 6
+
+    }
+
+
 
     LeftMenuBar{
         id: left_menubar
@@ -62,14 +74,14 @@ Page {
             height: 30
             width:100
 
-            onClicked: stacklayout_home.currentIndex = 5
+            onClicked: processDS()
             Image {
-                                    id: dashboardIcon
-                                    source: "/Images/icons/create_dashboard_20.png"
-                                    height: 20
-                                    width: 20
-                                    anchors.centerIn: parent
-                                }
+                        id: dashboardIcon
+                        source: "/Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
 
             background: Rectangle{
                 id: next_btn_background

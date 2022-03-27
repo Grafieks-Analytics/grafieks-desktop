@@ -76,6 +76,8 @@ public:
     Q_INVOKABLE void setFromLiveFile(bool setForLiveFile);
     Q_INVOKABLE bool getFromLiveFile();
 
+    Q_INVOKABLE void setForAPI(QString dsFileName, QString fileType);
+
     Q_INVOKABLE void setJsonFromWorkbook(QJsonDocument jsonDoc);
     Q_INVOKABLE QJsonDocument getJsonFromWorkbook();
     Q_INVOKABLE bool ifJsonFromWorkbookSet();

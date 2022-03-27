@@ -666,17 +666,16 @@ void TableColumnsModel::columnReadFinished()
 
 
             int dbIntType = Statics::currentDbIntType;
-            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(3).toString() + qj.getQueryJoiner(dbIntType);
-
+            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(1).toString() + qj.getQueryJoiner(dbIntType);
 
             if(finalValue.at(3).toString() == "categorical"){
-                this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
+                this->categoricalMap.insert(finalValue.at(1).toString(), finalValue.at(4).toString());
                 this->columnTypes.insert(finalValue.at(1).toString(), Constants::categoricalType);
             } else if(finalValue.at(3).toString() == "numerical"){
-                this->numericalMap.insert(finalValue.at(1).toString(), tableColumnName);
+                this->numericalMap.insert(finalValue.at(1).toString(), finalValue.at(4).toString());
                 this->columnTypes.insert(finalValue.at(1).toString(), Constants::numericalType);
             } else if(finalValue.at(3).toString() == "dateformat"){
-                this->dateMap.insert(finalValue.at(1).toString(), tableColumnName);
+                this->dateMap.insert(finalValue.at(1).toString(), finalValue.at(4).toString());
                 this->columnTypes.insert(finalValue.at(1).toString(), Constants::dateType);
             }
 
