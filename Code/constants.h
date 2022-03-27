@@ -243,6 +243,9 @@ namespace Constants
     const int dashboardScreen = 4;
     const int reportScreen = 5;
 
+    const QString reportScreenString = "reports";
+    const QString dashboardScreenString = "dashboards";
+
 
     // Menu User
 
