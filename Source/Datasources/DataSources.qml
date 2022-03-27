@@ -23,6 +23,7 @@ Page {
 
     id: datasourcelist_page
     property int menu_width: 60
+    property var clickedItemConnectionType: ""
 
     Component.onCompleted: {
         DatasourceDS.fetchDatsources(0, true, true)
@@ -34,16 +35,23 @@ Page {
     }
 
     // Slots
-    function updateDSNameTitle(signalDSName){
+    function updateDSNameTitle(signalDSName, updateDSName){
         ds_name_header.text = signalDSName
+        datasourcelist_page.clickedItemConnectionType = updateDSName
     }
 
 
     function processDS(){
 //        stacklayout_home.currentIndex = 5
 //        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
+
         GeneralParamsModel.setAPISwitch(true)
-        GeneralParamsModel.setForAPI(ds_name_header.text, "live")
+        if(datasourcelist_page.clickedItemConnectionType === "live"){
+            GeneralParamsModel.setForAPI(ds_name_header.text, Constants.sqlType)
+        } else {
+            GeneralParamsModel.setForAPI(ds_name_header.text, Constants.duckType)
+        }
+
         ReportsDataModel.generateColumnsForExtract()
         TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
         stacklayout_home.currentIndex = 6
