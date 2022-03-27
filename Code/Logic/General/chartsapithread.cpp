@@ -226,12 +226,12 @@ void ChartsAPIThread::getBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
-
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -262,15 +262,16 @@ void ChartsAPIThread::getStackedBarChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("colorByDataColumns", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -305,11 +306,12 @@ void ChartsAPIThread::getGroupedBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -340,15 +342,16 @@ void ChartsAPIThread::getNewGroupedBarChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("colorByDataColumns", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -383,11 +386,12 @@ void ChartsAPIThread::getAreaChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -423,11 +427,12 @@ void ChartsAPIThread::getLineChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -463,11 +468,12 @@ void ChartsAPIThread::getLineBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -502,11 +508,12 @@ void ChartsAPIThread::getPieChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -541,11 +548,12 @@ void ChartsAPIThread::getFunnelChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -580,11 +588,12 @@ void ChartsAPIThread::getRadarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -616,15 +625,16 @@ void ChartsAPIThread::getScatterChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("colorByDataColumns", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -659,11 +669,12 @@ void ChartsAPIThread::getScatterChartNumericalValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -695,15 +706,16 @@ void ChartsAPIThread::getHeatMapChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("colorByDataColumns", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -738,11 +750,12 @@ void ChartsAPIThread::getSunburstChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -777,11 +790,12 @@ void ChartsAPIThread::getWaterfallChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -811,14 +825,18 @@ void ChartsAPIThread::getGaugeChartValues()
     obj.insert("dashboardId", this->currentDashboardId);
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("calculateColumn", this->calculateColumn);
+    obj.insert("greenValue", this->greenValue);
+    obj.insert("yellowValue", this->yellowValue);
+    obj.insert("redValue", this->redValue);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -853,11 +871,12 @@ void ChartsAPIThread::getSankeyChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -892,11 +911,12 @@ void ChartsAPIThread::getTreeChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -930,11 +950,12 @@ void ChartsAPIThread::getTreeMapChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -964,15 +985,16 @@ void ChartsAPIThread::getKPIChartValues()
     obj.insert("reportId", this->currentReportId);
     obj.insert("dashboardId", this->currentDashboardId);
     obj.insert("chartSource", this->currentChartSource);
-    obj.insert("calculateColumn", this->calculateColumn);
+    obj.insert("xAxisColumn", this->calculateColumn);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -1008,11 +1030,12 @@ void ChartsAPIThread::getTableChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
 
     QJsonDocument doc(obj);
@@ -1049,11 +1072,12 @@ void ChartsAPIThread::getPivotChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -1084,15 +1108,16 @@ void ChartsAPIThread::getStackedAreaChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("colorByDataColumns", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -1123,15 +1148,16 @@ void ChartsAPIThread::getMultiLineChartValues()
     obj.insert("chartSource", this->currentChartSource);
     obj.insert("xAxisColumn", this->xAxisColumn);
     obj.insert("yAxisColumn", this->yAxisColumn);
-    obj.insert("xSplitKey", this->xSplitKey);
+    obj.insert("colorByDataColumns", this->xSplitKey);
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::livePath.length() > 0 ? true : false);
+    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
     obj.insert("joinConditions", this->joinConditions);
+    obj.insert("fromDesktop", true);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));

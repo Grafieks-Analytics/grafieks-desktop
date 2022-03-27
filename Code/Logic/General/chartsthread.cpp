@@ -2040,7 +2040,6 @@ void ChartsThread::getPivotChartValues()
     QVariantList yAxisColumnOut = yAxisColumnList;
     QVariantList row3ColumnOut = row3ColumnList;
 
-    qDebug() << xAxisColumnOut << yAxisColumnOut << row3ColumnOut;
 
     // Process date conversions, if any
     foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
@@ -2999,7 +2998,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    qDebug() << Q_FUNC_INFO << xAxisColumn << yAxisColumn << xSplitKey;
 
     // Fetch data here
 
@@ -3142,7 +3140,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
-    qDebug() << Q_FUNC_INFO << strData;
 
     if(identifier == "getStackedBarChartValues"){
         emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
