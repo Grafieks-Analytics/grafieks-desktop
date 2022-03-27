@@ -651,10 +651,13 @@ void ReportsDataModel::columnReadFinished()
         foreach(QJsonValue data, value){
             QJsonArray finalValue = data.toArray();
 
-            int dbIntType = Statics::currentDbIntType;
-            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(1).toString() + qj.getQueryJoiner(dbIntType);
+            int dbIntType = Statics::currentDbIntType;QString tableColumnName;
 
-
+            if(Statics::currentDbClassification != Constants::duckType){
+                tableColumnName = finalValue.at(4).toString();
+            } else {
+                tableColumnName = finalValue.at(1).toString();
+            }
 
             if(finalValue.at(3).toString() == "categorical"){
                 this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
