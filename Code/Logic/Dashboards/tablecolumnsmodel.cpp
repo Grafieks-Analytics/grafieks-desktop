@@ -45,12 +45,12 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
     foreach(QString tmpType, visibleColumns){
 
         QString type;
-        if(Statics::currentDbClassification != Constants::duckType){
+        if(Statics::currentDbClassification == Constants::duckType){
+            type = tmpType;
+        } else {
             QStringList pieces = tmpType.split( "." );
             type = pieces.at(1);
             type.remove(QRegularExpression("[\"\'`]+"));
-        } else {
-            type = tmpType;
         }
 
 
@@ -430,7 +430,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
         QVector<int> filterValueIds;
         QStringList selectedValues;
 
-        // Equal relations
+        // In relations
         if(equalRelationsList.indexOf(currentColumnRelation) >= 0){
 
             QStringList tmpValList;
@@ -670,11 +670,12 @@ void TableColumnsModel::columnReadFinished()
 
             QString tableColumnName;
 
-            if(Statics::currentDbClassification != Constants::duckType){
-                tableColumnName = finalValue.at(4).toString();
-            } else {
+            if(Statics::currentDbClassification == Constants::duckType){
                 tableColumnName = finalValue.at(1).toString();
+            } else {
+                tableColumnName = finalValue.at(4).toString();
             }
+
             if(finalValue.at(3).toString() == "categorical"){
                 this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
                 this->columnTypes.insert(finalValue.at(1).toString(), Constants::categoricalType);
