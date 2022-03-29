@@ -120,8 +120,8 @@ Item {
     }
 
     function filterClicked(){
-
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 

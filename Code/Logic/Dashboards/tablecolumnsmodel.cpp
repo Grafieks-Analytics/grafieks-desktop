@@ -50,11 +50,10 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
         } else {
             QStringList pieces = tmpType.split( "." );
             type = pieces.at(1);
-            type.remove(QRegularExpression("[\"\'`]+"));
-           this->dashboardParamsModel->setColumnAliasName(dashboardId, tmpType, type);
+            type.remove(QRegularExpression("[\"\'`]+"));   
         }
 
-
+        this->dashboardParamsModel->setColumnAliasName(dashboardId, tmpType, type);
         visibleColumnTypes.append(this->columnTypes.value(type));
     }
 
