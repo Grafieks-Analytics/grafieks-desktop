@@ -164,7 +164,7 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     finalObj.insert("workbook_version", Constants::workbookVersion);
     finalObj.insert("unique_hash", uniqueHash); // This is to identify the extract irrespective of its filename
     finalObj.insert("last_update", QString::number(currentTimestamp));
-    finalObj.insert("connectionType", Statics::dsType == Constants::extractType ? Constants::duckType : Constants::sqlType);
+    finalObj.insert("connectionType", Statics::currentDbClassification == Constants::duckType ? Constants::duckType : Constants::sqlType);
 
     finalObj.insert("reportParams", this->reportParams);
     finalObj.insert("dashboardParams", this->dashboardParams);
