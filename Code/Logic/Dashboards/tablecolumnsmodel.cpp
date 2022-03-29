@@ -1,12 +1,12 @@
 #include "tablecolumnsmodel.h"
 
-TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent),
+TableColumnsModel::TableColumnsModel(DashboardParamsModel *dashboardParamsModel, QObject *parent) : QObject(parent),
     dashboardId(0),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
-
+    this->dashboardParamsModel = dashboardParamsModel;
 }
 
 void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show)
@@ -37,7 +37,7 @@ QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
 
 
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
-{
+{ 
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
     // columnTypes
 
@@ -50,14 +50,12 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
         } else {
             QStringList pieces = tmpType.split( "." );
             type = pieces.at(1);
-            type.remove(QRegularExpression("[\"\'`]+"));
+            type.remove(QRegularExpression("[\"\'`]+"));   
         }
 
-
-
+        this->dashboardParamsModel->setColumnAliasName(dashboardId, tmpType, type);
         visibleColumnTypes.append(this->columnTypes.value(type));
     }
-
 
     emit columnNamesChanged(dashboardId, visibleColumns, visibleColumnTypes);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
