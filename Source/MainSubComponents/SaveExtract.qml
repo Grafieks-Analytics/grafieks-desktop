@@ -19,6 +19,7 @@ FileDialog{
 
     onAccepted: {
 
+        let isLive = false;
         let fileName = GeneralParamsModel.urlToFilePath(saveFilePromptDialog.currentFile)
         DSParamsModel.dsType === Constants.extractDS ? GeneralParamsModel.setExtractPath(fileName) : GeneralParamsModel.setLivePath(fileName)
 
@@ -28,11 +29,13 @@ FileDialog{
             console.log("SQL save extract")
 //            QueryModel.saveExtractData()
             DSParamsModel.dsType === Constants.extractDS ? QueryModel.saveExtractData() : QueryModel.saveLiveData()
+            isLive = DSParamsModel.dsType === Constants.extractDS ? false : true
             break;
 
         case Constants.forwardType:
             console.log("FOWARD")
             DSParamsModel.dsType === Constants.extractDS ? ForwardOnlyQueryModel.saveExtractData() : ForwardOnlyQueryModel.saveLiveData()
+            isLive = DSParamsModel.dsType === Constants.extractDS ? false : true
             break;
 
         case Constants.excelType:
@@ -50,6 +53,8 @@ FileDialog{
             console.log("DB Classification failed")
             break;
         }
+
+        GeneralParamsModel.setDBClassification(isLive)
 
     }
     onRejected: {

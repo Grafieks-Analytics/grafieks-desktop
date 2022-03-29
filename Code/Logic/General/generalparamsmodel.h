@@ -97,6 +97,8 @@ public:
 
     Q_INVOKABLE void resetGeneralParams();
 
+    Q_INVOKABLE void setDBClassification(bool isLive);
+
 public slots:
 
     //! Set the current highlighted left menu

@@ -344,6 +344,14 @@ void GeneralParamsModel::resetGeneralParams()
 
 }
 
+void GeneralParamsModel::setDBClassification(bool isLive){
+    if(isLive){
+        Statics::currentDbClassification = Constants::sqlType;
+    } else {
+        Statics::currentDbClassification = Constants::duckType;
+    }
+}
+
 void GeneralParamsModel::setMenuType(int menuType)
 {
     if (m_menuType == menuType)

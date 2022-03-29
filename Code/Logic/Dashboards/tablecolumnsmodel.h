@@ -17,6 +17,7 @@
 
 #include "../General/datatype.h"
 #include "../General/queryjoiner.h"
+#include "dashboardparamsmodel.h"
 
 #include "../../constants.h"
 #include "../../statics.h"
@@ -54,8 +55,10 @@ class TableColumnsModel : public QObject
     QString liveJoinParams;
     QString liveSelectParams;
 
+    DashboardParamsModel *dashboardParamsModel;
+
 public:
-    explicit TableColumnsModel(QObject *parent = nullptr);
+    explicit TableColumnsModel(DashboardParamsModel *dashboardParamsModel, QObject *parent = nullptr);
 
     Q_INVOKABLE void setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show = true);
     Q_INVOKABLE QVariantMap fetchVisibleColumns(int dashboardId);

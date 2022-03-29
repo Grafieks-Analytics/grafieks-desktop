@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
     ReportsDataModel reportsDataModel;
     ForwardOnlyDataModel forwardOnlyDataModel;  
     NewTableListModel newTableListModel;
-    TableColumnsModel tableColumnsModel;
+    TableColumnsModel tableColumnsModel(&dashboardParamsModel);
     ExcelDataModel excelDataModel;
     CSVJsonDataModel csvJsonDataModel;
     TableSchemaModel tableSchemaModel;
