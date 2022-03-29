@@ -97,13 +97,7 @@ public:
 
     Q_INVOKABLE void resetGeneralParams();
 
-    Q_INVOKABLE void setDBClassification(bool isLive){
-        if(isLive){
-            Statics::currentDbClassification = Constants::sqlType;
-        } else {
-            Statics::currentDbClassification = Constants::duckType;
-        }
-    }
+    Q_INVOKABLE void setDBClassification(bool isLive);
 
 public slots:
 
