@@ -593,7 +593,7 @@ Rectangle{
                 text: qsTr("Open Help")
                 onTriggered: {
                     // stacklayout_home.currentIndex = 2
-                    Qt.openUrlExternally("https://docs.grafieks.com/");
+                    Qt.openUrlExternally("https://grafieks.tawk.help/");
                 }
 
             }
