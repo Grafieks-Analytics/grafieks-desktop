@@ -45,7 +45,7 @@ Popup {
     }
     Text{
         id: version
-        text: "Free Edition (x64)"
+        text: "Free Edition 1.0 (x64)"
         font.pointSize: 8
         font.family: Constants.fontDefault
         anchors.top: header.bottom
