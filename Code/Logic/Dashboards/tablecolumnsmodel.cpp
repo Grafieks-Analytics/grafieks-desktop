@@ -217,8 +217,6 @@ void TableColumnsModel::fetchColumnDataAPI(QString colName, int forwardDashboard
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("sitename", sitename);
     obj.insert("columnNames", this->colName);
-    qDebug() << obj << "OBJJ";
-
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
