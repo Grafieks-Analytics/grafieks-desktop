@@ -210,7 +210,7 @@ void ReportsDataModel::fetchColumnDataAPI(QString columnName, QString options)
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("sitename", sitename);
-    obj.insert("columnName", columnName);
+    obj.insert("columnNames", columnName);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
