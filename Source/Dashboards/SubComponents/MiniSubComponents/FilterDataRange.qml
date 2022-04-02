@@ -21,7 +21,7 @@ Item {
         var modelData
 
         if(GeneralParamsModel.getAPISwitch()) {
-            TableColumnsModel.fetchColumnDataAPI(componentName, DashboardParamsModel.currentDashboard)
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelData = TableColumnsModel.fetchColumnDataLive(componentName)
             processDataList(modelData)

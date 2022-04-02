@@ -216,7 +216,8 @@ void TableColumnsModel::fetchColumnDataAPI(QString colName, int forwardDashboard
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("sitename", sitename);
-    obj.insert("columnName", this->colName);
+    obj.insert("columnNames", this->colName);
+    qDebug() << obj << "OBJJ";
 
 
     QJsonDocument doc(obj);
@@ -705,18 +706,29 @@ void TableColumnsModel::columnDataReadFinished()
         QJsonObject resultObj = resultJson.object();
 
         QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
-        // Clear existing chart headers data
-        this->columnDataList.clear();
-
-        QJsonObject json = dataDoc.object();
-        QJsonArray value = json.value("colData").toArray();
 
 
-        foreach(QJsonValue data, value){
-            this->columnDataList.append(data.toString());
+        QJsonArray jsonArray = dataDoc.array();
+        int i = 0;
+        QStringList colNamesList = this->colName.split(",");
+        foreach(QJsonValue jsonValue, jsonArray){
+
+            // Clear existing chart headers data
+            this->columnDataList.clear();
+
+            QJsonObject json = jsonValue.toObject();
+            QJsonArray value = json.value("colData").toArray();
+
+            foreach(QJsonValue data, value){
+                this->columnDataList.append(data.toString());
+            }
+
+            QString emitColName = colNamesList.at(i).trimmed();
+            i++;
+
+            emit columnDataChanged(this->columnDataList, emitColName, this->forwardDashboardId);
         }
 
-        emit columnDataChanged(this->columnDataList, this->colName, this->forwardDashboardId);
     }
 }
 
