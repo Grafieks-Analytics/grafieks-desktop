@@ -805,6 +805,14 @@ void DashboardParamsModel::applyFilterToDashboard(int dashboardId)
     emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 
+void DashboardParamsModel::clearFilters(){
+    this->showColumns.clear();
+    this->columnAliasMap.clear();
+    this->columnFilterType.clear();
+    this->columnIncludeExcludeMap.clear();
+    this->columnValueMap.clear();
+}
+
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
 {
 
