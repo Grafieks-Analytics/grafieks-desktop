@@ -81,6 +81,8 @@ public:
     Q_INVOKABLE void redrawCharts(int dashboardId);
     Q_INVOKABLE void saveTableColumns();
 
+    Q_INVOKABLE void clearFilters();
+
 
 public slots:
 

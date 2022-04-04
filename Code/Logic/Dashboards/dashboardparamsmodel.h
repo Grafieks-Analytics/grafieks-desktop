@@ -151,6 +151,8 @@ public:
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
     Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
 
+    Q_INVOKABLE void clearFilters();
+
     // Customize Dashboard parameters
 
     Q_INVOKABLE void setDashboardName(int dashboardId, QString dashboardName);

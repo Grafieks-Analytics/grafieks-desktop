@@ -633,7 +633,9 @@ Page {
 
         // Destroy dashboards
         DashboardParamsModel.destroyDashboard(0, true)
+        DashboardParamsModel.clearFilters();
         TableColumnsModel.deleteDashboard(0, true)
+        TableColumnsModel.clearFilters()
 
         // Destroy reports
         ReportParamsModel.deleteReport(0, true)
