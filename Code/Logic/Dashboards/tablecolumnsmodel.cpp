@@ -368,6 +368,26 @@ void TableColumnsModel::saveTableColumns()
     emit signalSaveTableColumns(masterObj);
 }
 
+void TableColumnsModel::clearFilters(){
+    this->filteredChartData.clear();
+    this->newChartData.clear();
+    this->newChartHeader.clear();
+    this->chartHeaderDetails.clear();
+
+    this->numericalMap.clear();
+    this->categoricalMap.clear();
+    this->dateMap.clear();
+
+    this->allColumnVisibleMap.clear();
+    this->reportChartData.clear();
+    this->columnTypes.clear();
+    this->columnDataList.clear();
+
+    this->dashboardId = 0;
+
+    emit visibleColumnListChanged(this->allColumnVisibleMap.value(this->dashboardId));
+}
+
 void TableColumnsModel::addNewDashboard(int dashboardId)
 {
     this->dashboardId = dashboardId;
