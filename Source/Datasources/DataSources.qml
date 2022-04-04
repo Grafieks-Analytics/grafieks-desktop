@@ -55,6 +55,7 @@ Page {
         ReportsDataModel.generateColumnsForExtract()
         TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
         stacklayout_home.currentIndex = 6
+        DSParamsModel.setDsName(ds_name_header.text)
 
     }
 
