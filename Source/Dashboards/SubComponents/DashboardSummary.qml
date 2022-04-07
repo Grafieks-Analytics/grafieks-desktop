@@ -92,7 +92,6 @@ Rectangle {
                 reportsInFirstDashboard.forEach(j => {
 
                                                     var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(allDashboardKeys[i], j)
-                                            console.log('Coordinates TEST DEBUG',JSON.stringify(coordinates))
 
                                                     let x1 = coordinates[0]
                                                     let y1 = coordinates[1]
