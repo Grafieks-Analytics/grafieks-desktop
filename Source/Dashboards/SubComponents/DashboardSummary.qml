@@ -92,9 +92,16 @@ Rectangle {
                 reportsInFirstDashboard.forEach(j => {
 
                                                     var coordinates = DashboardParamsModel.getDashboardWidgetCoordinates(allDashboardKeys[i], j)
+                                            console.log('Coordinates TEST DEBUG',JSON.stringify(coordinates))
 
                                                     let x1 = coordinates[0]
                                                     let y1 = coordinates[1]
+                        
+                                                    let x2 = coordinates[2]
+                                                    let y2 = coordinates[3]
+
+                                                    var width = x2-x1;
+                                                    var height = y2-y1;
 
                                                     let reportType = Constants.reportTypeChart;
                                                     let draggedItem = DashboardParamsModel.getReportName(allDashboardKeys[i], j);
@@ -108,7 +115,10 @@ Rectangle {
                                                     var uniqueHash = DashboardParamsModel.getDashboardUniqueWidget(allDashboardKeys[i], j)
 
                                                     var objectJson = {x: x1, y: y1, z: DashboardParamsModel.getReportZOrder(allDashboardKeys[i],j),  objectName : j, reportId: j, uniqueHash: uniqueHash, webUrl: DashboardParamsModel.getDashboardWidgetUrl(allDashboardKeys[i], j)};
-                                                    rectangles.set(counter, dynamicContainer.createObject(parent,objectJson));
+                                                    var dymanicContainerTemp = dynamicContainer.createObject(parent,objectJson);
+                                                    dymanicContainerTemp.width = width;
+                                                    dymanicContainerTemp.height = height;
+                                                    rectangles.set(counter, dymanicContainerTemp );
 
                                                     const reportProperties = ReportParamsModel.getReport(j);
 
