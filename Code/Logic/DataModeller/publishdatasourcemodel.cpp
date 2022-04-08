@@ -97,9 +97,10 @@ void PublishDatasourceModel::readComplete()
 
         qDebug() << Q_FUNC_INFO << resultJson;
 
-        m_tempStorage->clear();
+
     }
 
+     m_tempStorage->clear();
     // If saving to database throws error, emit signal
     // else start uploading the extract file
     if(outputStatus.value("code") != 200){

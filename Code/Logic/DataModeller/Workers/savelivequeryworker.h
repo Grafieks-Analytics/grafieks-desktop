@@ -8,6 +8,8 @@
 #include <QRegularExpression>
 #include <QSqlDatabase>
 #include <QDateTime>
+#include "../../../simplecrypt.h"
+
 
 #include "../../General/generalparamsmodel.h"
 #include "../../General/querysplitter.h"

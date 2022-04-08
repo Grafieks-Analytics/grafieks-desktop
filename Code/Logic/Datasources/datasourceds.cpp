@@ -224,12 +224,10 @@ void DatasourceDS::dataReadFinished()
 
 
         }
-
-        //Clear the buffer
-        m_dataBuffer->clear();
-
-
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 }
 
 /*!
@@ -251,12 +249,10 @@ void DatasourceDS::dataDeleteFinished()
         if(statusObj["code"].toInt() != 200){
             qWarning() << "Failed to delete. " << statusObj["code"].toString();
         }
-
-        //Clear the buffer
-        m_dataBuffer->clear();
-
-
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 }
 
 

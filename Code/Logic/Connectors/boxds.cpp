@@ -256,7 +256,7 @@ void BoxDS::dataReadFinished()
                 this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
             }
         }
-        m_dataBuffer->clear();
+
 
         // Get user email
 
@@ -268,6 +268,7 @@ void BoxDS::dataReadFinished()
 
     }
 
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

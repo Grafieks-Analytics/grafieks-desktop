@@ -551,7 +551,6 @@ void TableSchemaModel::generateSchemaForApi()
 
 void TableSchemaModel::dataReadyRead()
 {
-    m_dataBuffer->clear();
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
@@ -601,6 +600,8 @@ void TableSchemaModel::dataReadFinished()
             emit apiSchemaObtained(this->allList, this->allCategorical, this->allNumerical, this->allDates, this->allOthers);
         }
     }
+
+    m_dataBuffer->clear();
 }
 
 void TableSchemaModel::clearSchema()
