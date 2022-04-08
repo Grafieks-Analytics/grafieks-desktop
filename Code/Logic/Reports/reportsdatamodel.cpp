@@ -670,7 +670,6 @@ void ReportsDataModel::columnReadFinished()
             i++;
         }
 
-        qDebug() << Q_FUNC_INFO << this->categoricalMap << this->numericalMap << this->dateMap;
         m_dataBuffer->clear();
         emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
     }
@@ -823,8 +822,6 @@ void ReportsDataModel::generateColumnsFromAPI()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("sitename", sitename);
-
-    qDebug() << Q_FUNC_INFO << obj << chartsUrl << "/fetch_table_columns";
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));

@@ -77,6 +77,19 @@ Popup {
             }
         }
 
+        function onDsExists(status){
+
+            if(status.code !== 200){
+                confirmPublishDsComponent.open()
+            } else {
+                publishData()
+            }
+        }
+
+        function onPublishDSNow(){
+            publishData()
+        }
+
     }
 
     Connections{
@@ -167,10 +180,15 @@ Popup {
         // Then publish the data and file
         if(GeneralParamsModel.getExtractPath().length > 0 || GeneralParamsModel.getLivePath().length > 0){
             errorMsg.text = "Processing. Please wait.."
-            publishData()
+            checkDSName()
         } else {
             saveFilePrompt.open()
         }
+    }
+
+    function checkDSName(){
+        var dsName = datasource_name_field.text
+        PublishDatasourceModel.checkIfDSExists(dsName)
     }
 
     function publishData(){
@@ -243,6 +261,11 @@ Popup {
     // and this conflicts with the current file
     SaveExtract{
         id: saveFilePrompt
+    }
+
+    // Confirm pubish dialog on finding duplicate dsname in server
+    ConfirmPublishDS{
+        id: confirmPublishDsComponent
     }
 
     // SubComponents Ends
