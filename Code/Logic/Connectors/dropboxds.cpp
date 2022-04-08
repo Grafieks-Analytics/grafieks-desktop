@@ -315,8 +315,6 @@ void DropboxDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
-
         //        Get user email
         QByteArray blankPostReq;
 
@@ -328,6 +326,7 @@ void DropboxDS::dataReadFinished()
         connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
 
     }
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 
@@ -378,9 +377,9 @@ void DropboxDS::dataSearchedFinished()
             }
 
         }
-        m_dataBuffer->clear();
-    }
 
+    }
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

@@ -203,14 +203,14 @@ void DriveDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
+
 
         // Get user email
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 
 }
@@ -256,14 +256,12 @@ void DriveDS::dataSearchFinished()
             }
         }
 
-        m_dataBuffer->clear();
-
         // Get user email
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 
 }

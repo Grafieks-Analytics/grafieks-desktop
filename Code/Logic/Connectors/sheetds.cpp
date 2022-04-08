@@ -212,14 +212,13 @@ void SheetDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
 
         // Get user email
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 
 }
@@ -260,9 +259,9 @@ void SheetDS::dataSearchFinished()
             }
         }
 
-        m_dataBuffer->clear();
-    }
 
+    }
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

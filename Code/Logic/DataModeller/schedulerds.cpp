@@ -98,11 +98,8 @@ void SchedulerDS::dataReadFinished()
             }
 
         }
-
-        //Clear the buffer
-        m_dataBuffer->clear();
-
-
     }
+    //Clear the buffer
+    m_dataBuffer->clear();
 }
 
