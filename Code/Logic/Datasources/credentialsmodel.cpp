@@ -121,9 +121,10 @@ void CredentialsModel::dataReadFinished()
 
         }
 
-        //Clear the buffer
-        m_dataBuffer->clear();
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 
     emit signalCredentialsReceived(this->credentials);
     emit openConnection(dbTypeString);

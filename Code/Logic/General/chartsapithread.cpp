@@ -127,7 +127,6 @@ void ChartsAPIThread::start()
 
 void ChartsAPIThread::dataReadyRead()
 {
-    m_dataBuffer->clear();
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
@@ -201,6 +200,8 @@ void ChartsAPIThread::dataReadFinished()
             } else {}
         }
     }
+
+    m_dataBuffer->clear();
 }
 
 void ChartsAPIThread::getBarChartValues()
