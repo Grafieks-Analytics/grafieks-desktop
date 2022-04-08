@@ -114,6 +114,7 @@ SOURCES += \
     Code/Logic/Reports/reportsdatamodel.cpp \
     Code/OS/odbcdriversmodel.cpp \
     Code/OS/osentries.cpp \
+    Code/simplecrypt.cpp \
     main.cpp
 
 RESOURCES += \
@@ -242,6 +243,7 @@ HEADERS += \
     Code/messages.h \
     Code/constants.h \
     Code/secrets.h \
+    Code/simplecrypt.h \
     Code/statics.h
 
 
