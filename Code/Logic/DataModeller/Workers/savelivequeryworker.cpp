@@ -151,6 +151,7 @@ void SaveLiveQueryWorker::run()
     QString tableCreateQuery = "CREATE TABLE " + Constants::masterLiveTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER, unique_hash VARCHAR,  last_update VARCHAR)";
     QString tableInsertQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
+    SimpleCrypt crypto(Q_UINT64_C(0x0c2ad4a4acb9f023));
     QString password = this->ifSavePassword ? connection.password() : "";
     int portTmp = connection.port();
     QString port = connection.port() == NULL ? "NULL" : QString::number(portTmp);

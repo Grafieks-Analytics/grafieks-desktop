@@ -651,7 +651,6 @@ void TableColumnsModel::receiveOriginalConditions(QString selectParams, QString 
 
 void TableColumnsModel::dataReadyRead()
 {
-    m_dataBuffer->clear();
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
@@ -707,6 +706,7 @@ void TableColumnsModel::columnReadFinished()
             this->newChartHeader.insert(i, finalValue.at(1).toString());
             i++;
         }
+        m_dataBuffer->clear();
         emit sendFilteredColumn(this->dashboardId, this->categoricalMap, this->numericalMap, this->dateMap);
     }
 }

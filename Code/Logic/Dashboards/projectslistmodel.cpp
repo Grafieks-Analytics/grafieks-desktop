@@ -74,9 +74,10 @@ void ProjectsListModel::dataReadFinished()
 
         }
 
-        //Clear the buffer
-        m_dataBuffer->clear();
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 
     emit signalProjectList(this->projects);
 }
