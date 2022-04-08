@@ -1485,6 +1485,8 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
             this->setDashboardWidgetCoordinates(dashboardId.toInt(), widgetId.toInt(), coordinates.at(0).toFloat(), coordinates.at(1).toFloat(), coordinates.at(2).toFloat(), coordinates.at(3).toFloat());
         }
 
+        qDebug() << "DASHBOARD COORDINATES" << this->dashboardWidgetCoordinates;
+
         // dashboardWidgetTypeMap
         mainObj = dashboardParams.value("dashboardWidgetTypeMap").toObject();
         childObj = mainObj.value(dashboardId).toObject();
