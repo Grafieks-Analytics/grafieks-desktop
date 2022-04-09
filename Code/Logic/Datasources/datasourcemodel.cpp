@@ -66,6 +66,13 @@ QVariant DatasourceModel::data(const QModelIndex &index, int role) const
         return datasource->lastName();
     if( role == LastRunRole)
         return datasource->lastRun();
+
+    if( role == DownloadAllowedRole)
+        return datasource->downloadAllowed();
+    if( role == ConnectAllowedRole)
+        return datasource->connectAllowed();
+    if( role == PublishAllowedRole)
+        return datasource->publishAllowed();
     return QVariant();
 }
 
@@ -179,6 +186,27 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
         }
         break;
 
+    case DownloadAllowedRole:
+        if ( datasource->downloadAllowed() != value.toBool()){
+            datasource->setDownloadAllowed(value.toBool());
+            somethingChanged = true;
+        }
+        break;
+
+    case ConnectAllowedRole:
+        if ( datasource->connectAllowed() != value.toBool()){
+            datasource->setConnectAllowed(value.toBool());
+            somethingChanged = true;
+        }
+        break;
+
+    case PublishAllowedRole:
+        if ( datasource->publishAllowed() != value.toBool()){
+            datasource->setPublishAllowed(value.toBool());
+            somethingChanged = true;
+        }
+        break;
+
 
     }
 
@@ -226,6 +254,9 @@ QHash<int, QByteArray> DatasourceModel::roleNames() const
     roles[FirstnameRole] = "firstname";
     roles[LastnameRole] = "lastname";
     roles[LastRunRole] = "lastrun";
+    roles[DownloadAllowedRole] = "downloadAllowed";
+    roles[ConnectAllowedRole] = "connectAllowed";
+    roles[PublishAllowedRole] = "publishAllowed";
 
     return roles;
 }
