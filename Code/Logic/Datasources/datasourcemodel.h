@@ -44,7 +44,10 @@ public:
         CreatedDateRole,
         FirstnameRole,
         LastnameRole,
-        LastRunRole
+        LastRunRole,
+        DownloadAllowedRole,
+        ConnectAllowedRole,
+        PublishAllowedRole
 
     };
 

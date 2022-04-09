@@ -33,7 +33,7 @@ Page {
     // SIGNALS STARTS
 
 
-    signal updateDSName(string signalDSName, string connectionType);
+    signal updateDSName(string signalDSName, string connectionType, bool connectAllowed);
 
 
 
@@ -57,29 +57,29 @@ Page {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function onDataSourceNameClicked(datasourceName, index, connectionType){
+    function onDataSourceNameClicked(datasourceName, index, connectionType, connectAllowed){
         listView.currentIndex = index
-        updateDSName(datasourceName, connectionType)
+        updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
-    function onDataSourceOwnerClicked(datasourceName, index, connectionType){
+    function onDataSourceOwnerClicked(datasourceName, index, connectionType, connectAllowed){
         listView.currentIndex = index
-        updateDSName(datasourceName, connectionType)
+        updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
-    function onConnectionClicked(datasourceName, index, connectionType){
+    function onConnectionClicked(datasourceName, index, connectionType, connectAllowed){
         listView.currentIndex = index;
-        updateDSName(datasourceName, connectionType)
+        updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
-    function onDateCreatedClicked(datasourceName, index, connectionType){
+    function onDateCreatedClicked(datasourceName, index, connectionType, connectAllowed){
         listView.currentIndex = index;
-        updateDSName(datasourceName, connectionType)
+        updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
-    function onLastRefreshedClicked(datasourceName, index, connectionType){
+    function onLastRefreshedClicked(datasourceName, index, connectionType, connectAllowed){
         listView.currentIndex = index;
-        updateDSName(datasourceName, connectionType)
+        updateDSName(datasourceName, connectionType, connectAllowed)
 
     }
 
@@ -208,7 +208,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onDataSourceNameClicked(datasourceName, index, connectionType)
+                                onDataSourceNameClicked(datasourceName, index, connectionType, connectAllowed)
                             }
                         }
                     }
@@ -234,7 +234,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onDataSourceOwnerClicked(datasourceName, index, connectionType)
+                                onDataSourceOwnerClicked(datasourceName, index, connectionType, connectAllowed)
                             }
                         }
                     }
@@ -261,7 +261,7 @@ Page {
                             anchors.fill: parent
                             onClicked: {
 
-                                onConnectionClicked(datasourceName, index, connectionType)
+                                onConnectionClicked(datasourceName, index, connectionType, connectAllowed)
 
                             }
                         }
@@ -287,7 +287,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onDateCreatedClicked(datasourceName, index, connectionType)
+                                onDateCreatedClicked(datasourceName, index, connectionType, connectAllowed)
                             }
                         }
                     }
@@ -313,7 +313,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onLastRefreshedClicked(datasourceName, index, connectionType)
+                                onLastRefreshedClicked(datasourceName, index, connectionType, connectAllowed)
                             }
                         }
                     }

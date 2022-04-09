@@ -36,7 +36,7 @@ Page {
     // SIGNALS STARTS
 
 
-    signal updateDSName(string signalDSName, string connectionType);
+    signal updateDSName(string signalDSName, string connectionType, bool connectAllowed);
 
 
 
@@ -136,7 +136,7 @@ Page {
 
             MouseArea{
                 anchors.fill:parent
-                onClicked: updateDSName(datasourceName, connectionType)
+                onClicked: updateDSName(datasourceName, connectionType, connectAllowed)
             }
 
             Rectangle{
