@@ -29,7 +29,7 @@ public:
 
     void addDatasource(Datasource * datasource);
 
-    Q_INVOKABLE void addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun);
+    Q_INVOKABLE void addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun, const bool & downloadAllowed, const bool &connectAllowed, const bool &publishAllowed);
 
     Q_INVOKABLE void removeDatasource(int index);
     QList<Datasource *> dataItems();

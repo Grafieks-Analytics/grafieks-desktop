@@ -24,6 +24,8 @@ Page {
     id: datasourcelist_page
     property int menu_width: 60
     property var clickedItemConnectionType: ""
+    property bool connectAllowed: true
+
 
     Component.onCompleted: {
         DatasourceDS.fetchDatsources(0, true, true)
@@ -35,9 +37,12 @@ Page {
     }
 
     // Slots
-    function updateDSNameTitle(signalDSName, updateDSName){
+    function updateDSNameTitle(signalDSName, updateDSName, connectAllowed){
         ds_name_header.text = signalDSName
         datasourcelist_page.clickedItemConnectionType = updateDSName
+        datasourcelist_page.connectAllowed = connectAllowed
+
+        console.log(datasourcelist_page.connectAllowed, connectAllowed)
     }
 
 
@@ -45,24 +50,31 @@ Page {
 //        stacklayout_home.currentIndex = 5
 //        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
 
-        GeneralParamsModel.setAPISwitch(true)
-        if(datasourcelist_page.clickedItemConnectionType === "live"){
-            GeneralParamsModel.setForAPI(ds_name_header.text, Constants.sqlType)
+        if(datasourcelist_page.connectAllowed === true){
+            GeneralParamsModel.setAPISwitch(true)
+            if(datasourcelist_page.clickedItemConnectionType === "live"){
+                GeneralParamsModel.setForAPI(ds_name_header.text, Constants.sqlType)
+            } else {
+                GeneralParamsModel.setForAPI(ds_name_header.text, Constants.duckType)
+            }
+
+            ReportsDataModel.generateColumnsForExtract()
+            TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
+            stacklayout_home.currentIndex = 6
+            DSParamsModel.setDsName(ds_name_header.text)
         } else {
-            GeneralParamsModel.setForAPI(ds_name_header.text, Constants.duckType)
+            connectionError.open()
         }
-
-        ReportsDataModel.generateColumnsForExtract()
-        TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
-        stacklayout_home.currentIndex = 6
-        DSParamsModel.setDsName(ds_name_header.text)
-
     }
 
 
 
     LeftMenuBar{
         id: left_menubar
+    }
+
+    ConnectionError{
+        id: connectionError
     }
 
 

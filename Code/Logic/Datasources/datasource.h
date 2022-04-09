@@ -28,9 +28,12 @@ class Datasource : public QObject
     QString m_firstName;
     QString m_lastName;
     QString m_lastRun;
+    bool m_downloadAllowed;
+    bool m_connectAllowed;
+    bool m_publishAllowed;
 
 public:
-    explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun, QObject *parent = nullptr);
+    explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun, const bool & downloadAllowed, const bool & connectAllowed, const bool & publishAllowed, QObject *parent = nullptr);
 
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged)
     Q_PROPERTY(int connectedWorkbooksCount READ connectedWorkbooksCount WRITE setConnectedWorkbooksCount NOTIFY connectedWorkbooksCountChanged)
@@ -46,6 +49,9 @@ public:
     Q_PROPERTY(QString firstName READ firstName WRITE setFirstName NOTIFY firstNameChanged)
     Q_PROPERTY(QString lastName READ lastName WRITE setLastName NOTIFY lastNameChanged)
     Q_PROPERTY(QString lastRun READ lastRun WRITE setLastRun NOTIFY lastRunChanged)
+    Q_PROPERTY(bool downloadAllowed READ downloadAllowed WRITE setDownloadAllowed NOTIFY downloadAllowedChanged)
+    Q_PROPERTY(bool connectAllowed READ connectAllowed WRITE setConnectAllowed NOTIFY connectAllowedChanged)
+    Q_PROPERTY(bool publishAllowed READ publishAllowed WRITE setPublishAllowed NOTIFY publishAllowedChanged)
 
     QString connectionType() const;
     QString datasourceName() const;
@@ -61,6 +67,9 @@ public:
     QString firstName() const;
     QString lastName() const;
     QString lastRun() const;
+    bool downloadAllowed() const;
+    bool connectAllowed() const;
+    bool publishAllowed() const;
 
 public slots:
     void setConnectionType(QString connectionType);
@@ -77,6 +86,9 @@ public slots:
     void setFirstName(QString firstName);
     void setLastName(QString lastName);
     void setLastRun(QString lastRun);
+    void setDownloadAllowed(bool downloadAllowed);
+    void setConnectAllowed(bool connectAllowed);
+    void setPublishAllowed(bool publishAllowed);
 
 signals:
     void connectionTypeChanged(QString connectionType);
@@ -93,6 +105,9 @@ signals:
     void firstNameChanged(QString firstName);
     void lastNameChanged(QString lastName);
     void lastRunChanged(QString lastRun);
+    void downloadAllowedChanged(bool downloadAllowed);
+    void connectAllowedChanged(bool connectAllowed);
+    void publishAllowedChanged(bool publishAllowed);
 };
 
 #endif // DATASOURCE_H
