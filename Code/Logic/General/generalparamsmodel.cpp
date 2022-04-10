@@ -38,10 +38,12 @@ bool GeneralParamsModel::isWorkbookInEditMode()
 
 void GeneralParamsModel::openNewGrafieksInstance()
 {
-    QString appPath = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
-    appPath.replace("/", "\\");
+    QString appPath = "\""+QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe\"";
+    QString replacedPath = QDir::toNativeSeparators(appPath);
 
-    QProcess::startDetached(appPath);
+
+    QProcess::startDetached(replacedPath);
+
 }
 
 QVariantMap GeneralParamsModel::getAppInfo()

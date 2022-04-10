@@ -10,6 +10,7 @@
 #include <QRandomGenerator>
 #include <QProcess>
 #include <QJsonDocument>
+#include <QDir>
 
 #include "../../statics.h"
 #include "../../constants.h"
