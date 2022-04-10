@@ -155,6 +155,7 @@ void ChartsThread::getBarChartValues()
     int index;
     int totalRows = 0;
 
+    qDebug() << this->datasourceType;
 
     if(this->datasourceType == Constants::duckType){
 
@@ -3155,36 +3156,42 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryExtractFu
 {
     // Fetch data here
     QString queryString;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataList;
     QString extractPath = Statics::extractPath;
 
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
+    try{
+        duckdb::DuckDB db(extractPath.toStdString());
+        duckdb::Connection con(db);
 
-    QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+        QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
 
-    // IF Reports
-    // Else Dashboards
-    if(this->currentChartSource == Constants::reportScreen){
-        if(this->reportWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + connector + this->reportWhereConditions;
+        // IF Reports
+        // Else Dashboards
+        if(this->currentChartSource == Constants::reportScreen){
+            if(this->reportWhereConditions.trimmed().length() > 0){
+                queryString = mainQuery + connector + this->reportWhereConditions;
+            } else {
+                queryString = mainQuery;
+            }
         } else {
-            queryString = mainQuery;
+            if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+                queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+            } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
+                queryString = mainQuery + connector + this->reportWhereConditions;
+            } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+                queryString = mainQuery + connector + this->dashboardWhereConditions;
+            } else {
+                queryString = mainQuery;
+            }
         }
-    } else {
-        if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
-        } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
-            queryString = mainQuery + connector + this->reportWhereConditions;
-        } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
-            queryString = mainQuery + connector + this->dashboardWhereConditions;
-        } else {
-            queryString = mainQuery;
-        }
+
+        dataList = con.Query(queryString.toStdString());
+        if(!dataList->error.empty())
+            qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
+
+    } catch(std::exception &e){
+        qDebug() << e.what();
     }
-
-    auto dataList = con.Query(queryString.toStdString());
-    if(!dataList->error.empty())
-        qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
 
     return dataList;
 

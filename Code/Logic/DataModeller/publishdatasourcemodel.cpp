@@ -3,7 +3,8 @@
 PublishDatasourceModel::PublishDatasourceModel(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_tempStorage(new QByteArray)
+    m_tempStorage(new QByteArray),
+    dataFile(nullptr)
 {
 
 }
@@ -205,12 +206,16 @@ void PublishDatasourceModel::uploadFinished()
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
+    if(this->dataFile->isOpen()){
+        this->dataFile->close();
+    }
+
     emit dsUploadFinished();
 }
 
 void PublishDatasourceModel::uploadFile()
 {
-    QFile *dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
+    this->dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
 
 
     QSettings settings;
@@ -239,7 +244,9 @@ void PublishDatasourceModel::uploadFile()
                 [reply](QNetworkReply::NetworkError) {
             qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
         });
+
     } else {
         qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
     }
+
 }
