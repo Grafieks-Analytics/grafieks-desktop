@@ -61,7 +61,7 @@ Popup {
 
         Text{
             id: text2
-            text: "Signin to Grafieks Reporting Server"
+            text: "Sign in to Grafieks Reporting Server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10

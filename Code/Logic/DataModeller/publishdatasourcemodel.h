@@ -44,6 +44,7 @@ private:
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
     QByteArray * m_tempStorage;
+    QFile *dataFile;
 
     QString outputFileName;
 
