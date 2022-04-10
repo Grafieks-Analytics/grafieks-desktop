@@ -80,7 +80,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Signin to Grafieks server"
+            text: "Signin to Grafieks Reporting Server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
