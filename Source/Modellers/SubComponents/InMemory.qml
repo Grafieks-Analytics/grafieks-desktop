@@ -223,6 +223,7 @@ Popup {
                 radio_text: qsTr("Incremental Extract")
                 font.pixelSize: Constants.fontCategoryHeader
                 radio_checked: false
+                enabled: false
                 parent_dimension: 16
                 ButtonGroup.group: extractRadio
                 onCheckedChanged: onIncrementalExtractClicked()
@@ -271,6 +272,7 @@ Popup {
                     anchors.left: parent.left
                     anchors.leftMargin: 30
                     width: parent.width
+                    enabled: false
                     onCurrentIndexChanged: onIncrementalExtractClicked(currentText, currentIndex)
 
                 }
@@ -309,6 +311,7 @@ Popup {
                     anchors.left: parent.left
                     anchors.leftMargin: 30
                     width: parent.width
+                    enabled: false
 
                     model: SchedulerModel
                     onCurrentIndexChanged: onSchedulerIndexChanged(currentValue, currentText, currentIndex)
