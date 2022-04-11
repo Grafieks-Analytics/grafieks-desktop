@@ -120,7 +120,11 @@ ApplicationWindow {
         // Hence after completion we check if the arguments are received and then process the extract
 
         if(ExtractProcessor.receivedArgumentStatus() === true){
-            ExtractProcessor.processDS()
+            ExtractProcessor.processExtract()
+        }
+
+        if(LiveProcessor.receivedArgumentStatus() === true){
+            LiveProcessor.processLive()
         }
 
         if(WorkbookProcessor.receivedArgumentStatus() === true){
