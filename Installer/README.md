@@ -8,9 +8,10 @@
 
 config
 packages
-|-> com.grafieks.desktop
-|-> data (rc folder, duckdb.dll, grafieks binaries)
-|-> meta
+<br/>|-> com.grafieks.desktop
+
+<br/>\t|-> data (rc folder, duckdb.dll, grafieks binaries)
+<br/>\t|-> meta
 
 ### Grafieks bianries
 
