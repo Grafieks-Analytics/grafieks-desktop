@@ -105,7 +105,7 @@ void ChartsModel::getStackedBarChartValues(int reportId, int dashboardId, int ch
 
     if(Statics::apiSwitch == true){
         QString chartSourceString = this->currentChartSource == Constants::reportScreen ? Constants::reportScreenString : Constants::dashboardScreenString;
-        chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsAPIThread->setAxes(xSplitKey, yAxisColumn, xAxisColumn);
         chartsAPIThread->methodSelector("getStackedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
@@ -127,7 +127,7 @@ void ChartsModel::getGroupedBarChartValues(int reportId, int dashboardId, int ch
 
     if(Statics::apiSwitch == true){
         QString chartSourceString = this->currentChartSource == Constants::reportScreen ? Constants::reportScreenString : Constants::dashboardScreenString;
-        chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsAPIThread->setAxes(yAxisColumn, xAxisColumn, xSplitKey);
         chartsAPIThread->methodSelector("getGroupedBarChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
@@ -346,7 +346,7 @@ void ChartsModel::getHeatMapChartValues(int reportId, int dashboardId, int chart
 
     if(Statics::apiSwitch == true){
         QString chartSourceString = this->currentChartSource == Constants::reportScreen ? Constants::reportScreenString : Constants::dashboardScreenString;
-        chartsAPIThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
+        chartsAPIThread->setAxes(xSplitKey, xAxisColumn, yAxisColumn);
         chartsAPIThread->methodSelector("getHeatMapChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId);
     } else {
         QString datasourceType = Statics::extractPath != "" ? Constants::duckType : "";
