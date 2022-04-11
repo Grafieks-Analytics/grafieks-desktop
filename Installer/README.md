@@ -7,11 +7,11 @@
 ### Folder Structure
 
 config
-packages
-<br/>|-> com.grafieks.desktop
+packages<br/>
+|-> com.grafieks.desktop
 
-<br/>\t|-> data (rc folder, duckdb.dll, grafieks binaries)
-<br/>\t|-> meta
+-   |-> data (rc folder, duckdb.dll, grafieks binaries)
+-   |-> meta
 
 ### Grafieks bianries
 
