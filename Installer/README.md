@@ -6,7 +6,7 @@
 
 ### Folder Structure
 
-config
+config<br/>
 packages<br/>
 |-> com.grafieks.desktop
 
