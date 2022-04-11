@@ -37,6 +37,7 @@ public:
     Q_INVOKABLE void setArgumentsByFile(QString filePath);
     Q_INVOKABLE bool receivedArgumentStatus();
     Q_INVOKABLE void processLiveQueries();
+    Q_INVOKABLE void processLive();
 
 public slots:
     void setArgumentsFromWorkbook(QString filePath = "");
@@ -49,7 +50,7 @@ signals:
     void openConnection(QString dbType);
 
 private:
-    void processLive();
+
 
 };
 
