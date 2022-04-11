@@ -3,7 +3,7 @@
     <DisplayName>Grafieks Desktop</DisplayName>
     <Description>Grafieks Desktop is used to create and manage both Datasources and Workbooks. Reports can be created as well</Description>
     <Version>1.0.0</Version>
-    <ReleaseDate>2020-12-31</ReleaseDate>
+    <ReleaseDate>2022-04-11</ReleaseDate>
     <Licenses>
         <License name="Grafieks EULA" file="license.txt" />
     </Licenses>
