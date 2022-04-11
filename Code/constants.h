@@ -9,8 +9,8 @@ namespace Constants
     const QString appName = "Grafieks Desktop";
     const QString appVersion = "Free";
     const QString extractVersion = "29"; // Same as currently used duckdb version sans dot(.) & prefixed 0s
-    const QString liveVersion = "1.0";
-    const QString workbookVersion = "1.0";
+    const QString liveVersion = "1.0.2";
+    const QString workbookVersion = "1.0.2";
 //    const QString currentMode = "DEBUG";
     const QString currentMode = "RELEASE";
 
