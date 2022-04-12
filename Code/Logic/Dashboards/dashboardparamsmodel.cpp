@@ -449,6 +449,7 @@ void DashboardParamsModel::setDashboardWidgetCoordinates(int dashboardId, int wi
     QVariantList coordinates;
 
     coordinates << x1 << y1 << x2 << y2;
+    qDebug() << "COORDINATES" << coordinates;
 
     if (this->dashboardWidgetCoordinates.value(dashboardId).isEmpty())
     {
