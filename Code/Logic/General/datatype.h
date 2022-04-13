@@ -31,9 +31,11 @@ public:
     //! for extract data type
     QString qVariantType(QString inputVariable);
 
-private:
     bool checkNumberType(QString inputVariable);
     QVariantList checkDateTimeType(QString inputVariable);
+
+private:
+
 
 
 signals:
