@@ -170,7 +170,13 @@ void PublishDatasourceModel::readDSComplete()
     }
 
     m_tempStorage->clear();
-    emit dsExists(outputStatus);
+
+    if(outputStatus.value("msg").toString() == Constants::sessionExpiredText){
+        emit sessionExpired();
+    } else {
+        emit dsExists(outputStatus);
+    }
+
 }
 
 void PublishDatasourceModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)

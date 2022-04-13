@@ -104,6 +104,55 @@ ApplicationWindow {
         }
     }
 
+
+    Connections {
+        target: PublishDatasourceModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: DatasourceDS
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: ProjectsListModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: PublishWorkbookModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: TableSchemaModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: ReportsDataModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -175,21 +224,24 @@ ApplicationWindow {
 
     function saveDatasource(){
 
-        if(typeof settings.value("user/sessionToken") !== "undefined"){
-            dsSaveDialog.visible = true
-        } else {
-            // Call login
-            connectGrafieks1.visible = true
-        }
+        dsSaveDialog.visible = true
+        //        if(typeof settings.value("user/sessionToken") !== "undefined"){
+        //            dsSaveDialog.visible = true
+        //        } else {
+        //            // Call login
+        //            connectGrafieks1.visible = true
+        //        }
     }
 
     function saveWorkbook(){
-        if(typeof settings.value("user/sessionToken") !== "undefined"){
-            saveWorkbookPrompt.open()
-        } else {
-            // Call login
-            connectGrafieks1.visible = true
-        }
+
+        saveWorkbookPrompt.open()
+        //        if(typeof settings.value("user/sessionToken") !== "undefined"){
+        //            saveWorkbookPrompt.open()
+        //        } else {
+        //            // Call login
+        //            connectGrafieks1.visible = true
+        //        }
     }
 
     function publishWorkbookNow(){
@@ -331,48 +383,48 @@ ApplicationWindow {
         anchors.centerIn: parent
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
- Text{
-     anchors.top: parent.top
-     anchors.topMargin: 25
-      anchors.horizontalCenter: parent.horizontalCenter
-          text:"Unable to find Data Source"
-        }
-Rectangle{
-// color:"red"
-        width: 150
-        height: 180
-        anchors.centerIn: parent
-       
-       
-
-        ColumnLayout {
-            id: radioOptions
-            // anchors.rightMargin:220
-            // anchors.topMargin: 50
-            anchors.centerIn: parent
-            RadioButton {
-                id: computerOption
-                checked: true
-                text: qsTr("Find on your computer")
-                ButtonGroup.group: radioGroup
-            }
-            RadioButton {
-                id: serverOption
-                text: qsTr("Fetch from server")
-                ButtonGroup.group: radioGroup
-            }
-             Button{
-            id: confirmDSLocation
-            anchors.top: serverOption.bottom
-            anchors.topMargin: 15
+        Text{
+            anchors.top: parent.top
+            anchors.topMargin: 25
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Confirm"
-            onClicked: selectDSLocation(computerOption.checked)
+            text:"Unable to find Data Source"
         }
+        Rectangle{
+            // color:"red"
+            width: 150
+            height: 180
+            anchors.centerIn: parent
 
-        }
 
-       
+
+            ColumnLayout {
+                id: radioOptions
+                // anchors.rightMargin:220
+                // anchors.topMargin: 50
+                anchors.centerIn: parent
+                RadioButton {
+                    id: computerOption
+                    checked: true
+                    text: qsTr("Find on your computer")
+                    ButtonGroup.group: radioGroup
+                }
+                RadioButton {
+                    id: serverOption
+                    text: qsTr("Fetch from server")
+                    ButtonGroup.group: radioGroup
+                }
+                Button{
+                    id: confirmDSLocation
+                    anchors.top: serverOption.bottom
+                    anchors.topMargin: 15
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "Confirm"
+                    onClicked: selectDSLocation(computerOption.checked)
+                }
+
+            }
+
+
         }
     }
 
@@ -390,6 +442,11 @@ Rectangle{
     // and this conflicts with the current file
     SaveWorkbook{
         id: saveWorkbookPrompt
+    }
+
+
+    SessionExpired{
+        id: sessionExpired
     }
 
 

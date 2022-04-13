@@ -573,6 +573,10 @@ void TableSchemaModel::dataReadFinished()
 
         if(code != 200){
             qDebug() << "Error code" << code << ": " << msg;
+
+            if(msg == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         } else {
 
             QJsonArray value = dataDocObj.value("all").toArray();

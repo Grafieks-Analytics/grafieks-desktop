@@ -300,5 +300,6 @@
         <file>Source/Dashboards/SubComponents/SaveWorkbookPopup.qml</file>
         <file>Source/MainSubComponents/ConfirmPublishDS.qml</file>
         <file>Source/Datasources/SubComponents/ConnectionError.qml</file>
+        <file>Source/MainSubComponents/SessionExpired.qml</file>
     </qresource>
 </RCC>

@@ -79,8 +79,10 @@ Popup {
 
         function onDsExists(status){
 
-            if(status.code !== 200){
+            if(status.msg === Constants.dsExists){
                 confirmPublishDsComponent.open()
+            } else if (status.code !== 200){
+                errorMsg.text = status.msg
             } else {
                 publishData()
             }
@@ -267,7 +269,6 @@ Popup {
     ConfirmPublishDS{
         id: confirmPublishDsComponent
     }
-
     // SubComponents Ends
     /***********************************************************************************************************************/
 
