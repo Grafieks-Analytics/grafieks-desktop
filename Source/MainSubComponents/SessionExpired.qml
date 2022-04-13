@@ -5,26 +5,25 @@ import QtQuick.Dialogs 1.2
 import com.grafieks.singleton.constants 1.0
 
 Popup {
-    id: confirmPublishDs
+    id: sessionExpiredPopup
+    x: parent.width/2 - 300
+    y: parent.height/2 - 200
     width: 600
     height: 300
     modal: true
     visible: false
-    x: (parent.width - popup.width) / 2
-    y: 100
     padding: 0
 
     closePolicy: Popup.NoAutoClose
 
+
     function closePopup(){
-        confirmPublishDs.visible = false
+        User.logout()
+        sessionExpiredPopup.visible = false
         errorMsg.text = ""
     }
 
-    function publishDS(){
-        closePopup()
-        PublishDatasourceModel.publishNowAfterDSCheck()
-    }
+
 
     // Popup Header starts
 
@@ -40,7 +39,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Confirm Datasource Overwrite"
+            text: "Session Expired"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -62,7 +61,7 @@ Popup {
 
     // Popup Header ends
 
-    // Row : Data Source name exists starts
+    // Row : Session starts
 
     Row{
 
@@ -81,7 +80,7 @@ Popup {
 
             Text{
                 id : dsNameLabel
-                text: "Datasource name already exists. Confirm to publish and overwrite"
+                text: "Your current session has expired. Sign in again"
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -90,33 +89,45 @@ Popup {
 
     }
 
-    // Row : Data Source name exists ends
+    // Row : Sesison ends
 
-    // Row : Data Source name exists starts
+    // Row : Buttons starts
 
     Row{
 
-        id: datasourceErrorHandlingButtons
+        id: sessionErrorHandlingButtons
         anchors.top: datasourceErrorMsg.bottom
         anchors.topMargin: 30
         anchors.left: parent.left
         anchors.leftMargin: 30
-        padding: 10
 
         Button{
             id: confirm
-            text: "Confirm"
-            onClicked: publishDS()
-        }
-
-        Button{
-            id: reject
-            text: "Cancel"
+            text: "OK"
             onClicked: closePopup()
         }
 
     }
 
-    // Row : Data Source name exists ends
+    // Row :Buttons ends
+
+    // Row 2: Error message starts
+    Row{
+
+        id: errorRow
+        anchors.top: sessionErrorHandlingButtons.bottom
+        anchors.topMargin: 30
+        anchors.right: parent.right
+        anchors.rightMargin: label_col - 70
+        spacing: 10
+
+        Text{
+            id: error_connection_text
+            color: "red"
+            text: ""
+        }
+    }
+
+    // Row 2: Error message ends
 
 }

@@ -72,6 +72,10 @@ void ProjectsListModel::dataReadFinished()
                 this->projects.insert(projectName, projectId);
             }
 
+        } else {
+            if(statusObj["code"].toString() == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         }
 
     }

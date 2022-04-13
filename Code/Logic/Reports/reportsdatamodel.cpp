@@ -678,6 +678,7 @@ void ReportsDataModel::columnReadFinished()
 
 void ReportsDataModel::columnDataReadFinished()
 {
+    QString msg;
     //Parse the JSON
     if( m_networkReply->error()){
 
@@ -687,6 +688,8 @@ void ReportsDataModel::columnDataReadFinished()
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
+
+        msg = resultObj["msg"].toString();
 
         QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
         // Clear existing chart headers data
@@ -702,7 +705,13 @@ void ReportsDataModel::columnDataReadFinished()
     }
 
     m_dataBuffer->clear();
-    emit columnDataChanged(this->columnData, this->APIOptions);
+
+    if(msg == Constants::sessionExpiredText){
+        emit sessionExpired();
+    } else {
+        emit columnDataChanged(this->columnData, this->APIOptions);
+    }
+
 }
 
 QVariant ReportsDataModel::convertToDateFormatTimeFromString(QString stringDateFormat)

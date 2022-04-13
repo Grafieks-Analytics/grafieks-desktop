@@ -103,13 +103,19 @@ void PublishWorkbookModel::readComplete()
     }
 
      m_tempStorage->clear();
-    // If saving to database throws error, emit signal
-    // else start uploading the extract file
-    if(outputStatus.value("code") != 200){
-        emit publishWbStatus(outputStatus);
-    } else {
-        uploadFile();
-    }
+
+     if(outputStatus.value("msg") == Constants::sessionExpiredText){
+        emit sessionExpired();
+     } else {
+         // If saving to database throws error, emit signal
+         // else start uploading the extract file
+         if(outputStatus.value("code") != 200){
+             emit publishWbStatus(outputStatus);
+         } else {
+             uploadFile();
+         }
+     }
+
 }
 
 void PublishWorkbookModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
