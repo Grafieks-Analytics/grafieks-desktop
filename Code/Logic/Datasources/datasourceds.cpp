@@ -227,6 +227,10 @@ void DatasourceDS::dataReadFinished()
             }
 
 
+        } else {
+            if(statusObj["msg"] == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         }
     }
 
@@ -252,6 +256,10 @@ void DatasourceDS::dataDeleteFinished()
         // If successful, set the variables in settings
         if(statusObj["code"].toInt() != 200){
             qWarning() << "Failed to delete. " << statusObj["code"].toString();
+        } else {
+            if(statusObj["msg"] == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         }
     }
 

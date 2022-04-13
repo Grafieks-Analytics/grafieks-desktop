@@ -10,6 +10,8 @@
 #include <QSettings>
 #include <QObject>
 
+#include "../../constants.h"
+
 class ProjectsListModel : public QObject
 {
     Q_OBJECT
@@ -29,6 +31,7 @@ public slots:
 
 signals:
     void signalProjectList(QVariantMap projects);
+    void sessionExpired();
 
 };
 

@@ -34,6 +34,7 @@ signals:
     void publishWbStatus(QVariantMap status);
     void wbUploadPercentage(int percentage);
     void wbUploadFinished();
+    void sessionExpired();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
