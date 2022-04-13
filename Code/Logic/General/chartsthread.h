@@ -22,6 +22,7 @@
 #include "jsoncons/json.hpp"
 #include "../../constants.h"
 #include "../../statics.h"
+#include "datatype.h"
 
 #include "../../duckdb.hpp"
 
@@ -57,6 +58,8 @@ class ChartsThread : public QObject
     QString yellowValue;
     QString redValue;
     QJsonArray dateConversionOptions;
+
+    DataType dataType;
 
 public:
     explicit ChartsThread(QObject *parent = nullptr);
