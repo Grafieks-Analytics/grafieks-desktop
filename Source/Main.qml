@@ -175,21 +175,24 @@ ApplicationWindow {
 
     function saveDatasource(){
 
-        if(typeof settings.value("user/sessionToken") !== "undefined"){
-            dsSaveDialog.visible = true
-        } else {
-            // Call login
-            connectGrafieks1.visible = true
-        }
+        dsSaveDialog.visible = true
+//        if(typeof settings.value("user/sessionToken") !== "undefined"){
+//            dsSaveDialog.visible = true
+//        } else {
+//            // Call login
+//            connectGrafieks1.visible = true
+//        }
     }
 
     function saveWorkbook(){
-        if(typeof settings.value("user/sessionToken") !== "undefined"){
-            saveWorkbookPrompt.open()
-        } else {
-            // Call login
-            connectGrafieks1.visible = true
-        }
+
+        saveWorkbookPrompt.open()
+//        if(typeof settings.value("user/sessionToken") !== "undefined"){
+//            saveWorkbookPrompt.open()
+//        } else {
+//            // Call login
+//            connectGrafieks1.visible = true
+//        }
     }
 
     function publishWorkbookNow(){

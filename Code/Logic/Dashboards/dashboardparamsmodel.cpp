@@ -449,7 +449,6 @@ void DashboardParamsModel::setDashboardWidgetCoordinates(int dashboardId, int wi
     QVariantList coordinates;
 
     coordinates << x1 << y1 << x2 << y2;
-    qDebug() << "COORDINATES" << coordinates;
 
     if (this->dashboardWidgetCoordinates.value(dashboardId).isEmpty())
     {
@@ -1485,8 +1484,6 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
             QVariantList coordinates = childObj.value(widgetId).toArray().toVariantList();
             this->setDashboardWidgetCoordinates(dashboardId.toInt(), widgetId.toInt(), coordinates.at(0).toFloat(), coordinates.at(1).toFloat(), coordinates.at(2).toFloat(), coordinates.at(3).toFloat());
         }
-
-        qDebug() << "DASHBOARD COORDINATES" << this->dashboardWidgetCoordinates;
 
         // dashboardWidgetTypeMap
         mainObj = dashboardParams.value("dashboardWidgetTypeMap").toObject();
