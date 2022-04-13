@@ -82,6 +82,8 @@ signals:
     void columnDataChanged(QStringList columnData, QString options);
     void generateFiltersForAPI();
 
+    void sessionExpired();
+
 
 private:
     QVariant convertToDateFormatTimeFromString(QString stringDateFormat);

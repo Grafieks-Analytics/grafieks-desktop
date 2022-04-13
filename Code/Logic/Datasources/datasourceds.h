@@ -11,6 +11,7 @@
 #include <QSettings>
 
 #include "datasource.h"
+#include "../../constants.h"
 
 /*!
  * \brief Fetches data records from Datasources API
@@ -41,6 +42,8 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
+
+    void sessionExpired();
 
 private slots:
     void resetDatasource();

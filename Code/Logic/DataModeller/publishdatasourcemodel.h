@@ -39,6 +39,7 @@ signals:
     void dsUploadFinished();
     void dsExists(QVariantMap status);
     void publishDSNow();
+    void sessionExpired();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
