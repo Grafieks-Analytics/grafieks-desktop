@@ -55,7 +55,6 @@ QStringList QuerySplitter::getSelectParams()
     QRegularExpressionMatch selectIterator = selectListRegex.match(m_query);
     selectList << selectIterator.captured(1).trimmed().replace("DISTINCT", "", Qt::CaseInsensitive).split(",");
 //    selectList.sort(Qt::CaseInsensitive);
-
     return selectList;
 }
 /*!
@@ -123,9 +122,19 @@ QString QuerySplitter::getJoinConditions()
 
     QRegularExpression joinConditionsRegex(R"(\s(?:INNER|LEFT|RIGHT|FULL)\s+(.*?)(?:\s+(?:WHERE|GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch joinConditionsIterator = joinConditionsRegex.match(m_query);
-    joinConditions = joinConditionsIterator.captured(0).replace(" WHERE", "", Qt::CaseInsensitive).replace(" GROUP","", Qt::CaseInsensitive).replace(" ORDER", "", Qt::CaseInsensitive).replace(" LIMIT","", Qt::CaseInsensitive).trimmed();
 
-    return joinConditions;
+    joinConditions = joinConditionsIterator.captured(0);
+    if(joinConditions.contains(" WHERE ", Qt::CaseInsensitive)){
+        joinConditions.replace(" WHERE ", "", Qt::CaseInsensitive);
+    }
+    if(joinConditions.contains(" ORDER ", Qt::CaseInsensitive)){
+        joinConditions.replace(" ORDER ", "", Qt::CaseInsensitive);
+    }
+    if(joinConditions.contains(" LIMIT ", Qt::CaseInsensitive)){
+        joinConditions.replace(" LIMIT ", "", Qt::CaseInsensitive);
+    }
+
+    return joinConditions.trimmed();
 }
 
 QString QuerySplitter::getAliasName(QString columnString)
