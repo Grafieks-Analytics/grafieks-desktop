@@ -2889,10 +2889,15 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
                         counter++;
                         totalCount->insert(hashKeyword, measure);
 
+                        QString tmpLabel =  xAxisColumn.at(j).toString();
+                        QStringList tmpYPieces =  tmpLabel.split( "." );
+                        QString tmpYParam = tmpYPieces.at(1);
+                        tmpYParam.remove(QRegularExpression("[\"\'`]+"));
+
                         tmpOutput["name"] = paramName.toStdString();
                         tmpOutput["size"] = measure;
                         tmpOutput["children"] = emptyJsonArray;
-                        tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
+                        tmpOutput["label"] = tmpYParam.toStdString();
 
                         // Check if first element of json is already there
                         // If not, then add it according to the graph data
