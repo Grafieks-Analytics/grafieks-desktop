@@ -1,5 +1,5 @@
-#ifndef PROJECTSLISTMODEL_H
-#define PROJECTSLISTMODEL_H
+#ifndef CREDENTIALSMODEL_H
+#define CREDENTIALSMODEL_H
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -9,30 +9,32 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QObject>
+#include <QDebug>
+
 
 #include "../../constants.h"
 
-class ProjectsListModel : public QObject
+class CredentialsModel : public QObject
 {
     Q_OBJECT
 
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QVariantMap projects;
+    QVariantMap credentials;
 
 public:
-    explicit ProjectsListModel(QObject *parent = nullptr);
-    Q_INVOKABLE void fetchProjectList();
+    explicit CredentialsModel(QObject *parent = nullptr);
+    Q_INVOKABLE void fetchLiveCredentials(QString dsName);
 
 public slots:
     void dataReadyRead();
     void dataReadFinished();
 
 signals:
-    void signalProjectList(QVariantMap projects);
-    void sessionExpired();
+    void openConnection(QString dbType);
+    void signalCredentialsReceived(QVariantMap credentials);
 
 };
 
-#endif // PROJECTSLISTMODEL_H
+#endif // CREDENTIALSMODEL_H

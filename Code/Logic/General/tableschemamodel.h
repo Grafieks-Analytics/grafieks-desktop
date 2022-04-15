@@ -65,6 +65,8 @@ signals:
     void apiSchemaObtained(QList<QVariantList> allList, QList<QVariantList> allCategorical, QList<QVariantList> allNumerical, QList<QVariantList> allDates, QList<QVariantList> allOthers);
     void tableSchemaCleared();
 
+    void sessionExpired();
+
 public slots:
     void generateSchemaForExtract();
     void generateSchemaForLive(QString query);
@@ -73,6 +75,7 @@ public slots:
 
     void dataReadyRead();
     void dataReadFinished();
+
 
 private:
 

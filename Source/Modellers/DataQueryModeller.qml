@@ -323,7 +323,9 @@ Page {
         }
 
         function onDisconnectAll(){
-            disconnectDS()
+            disconnectDS();
+            ReportParamsModel.resetReportIdsCounter();
+            DashboardParamsModel.clearAllMapValuesAfterDisconnect();
             // Here are all the instances, Let's Remove the charts
             // console.logo('Removing all the charts');
             // let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
@@ -631,7 +633,9 @@ Page {
 
         // Destroy dashboards
         DashboardParamsModel.destroyDashboard(0, true)
+        DashboardParamsModel.clearFilters();
         TableColumnsModel.deleteDashboard(0, true)
+        TableColumnsModel.clearFilters()
 
         // Destroy reports
         ReportParamsModel.deleteReport(0, true)

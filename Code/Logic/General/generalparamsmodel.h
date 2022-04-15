@@ -10,6 +10,7 @@
 #include <QRandomGenerator>
 #include <QProcess>
 #include <QJsonDocument>
+#include <QDir>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -27,6 +28,7 @@ class GeneralParamsModel : public QObject
     bool setForLiveFile;
     bool setForLiveQuery;
     QJsonDocument jsonDoc;
+    QString currentWorkbookName;
 
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
@@ -75,6 +77,8 @@ public:
     Q_INVOKABLE void setFromLiveFile(bool setForLiveFile);
     Q_INVOKABLE bool getFromLiveFile();
 
+    Q_INVOKABLE void setForAPI(QString dsFileName, QString fileType);
+
     Q_INVOKABLE void setJsonFromWorkbook(QJsonDocument jsonDoc);
     Q_INVOKABLE QJsonDocument getJsonFromWorkbook();
     Q_INVOKABLE bool ifJsonFromWorkbookSet();
@@ -90,7 +94,11 @@ public:
     QString randomStringGenerator();
     Q_INVOKABLE bool ifFreeRelease();
 
+    Q_INVOKABLE void setCurrentWorkbookName(QString workbookName);
+
     Q_INVOKABLE void resetGeneralParams();
+
+    Q_INVOKABLE void setDBClassification(bool isLive);
 
 public slots:
 
@@ -107,6 +115,7 @@ signals:
     void hideSplash();
     void colTypeChanged();
     void showSaveExtractWaitPopup();
+    void savedWorkbookChanged(QString workbookName);
 };
 
 #endif // GENERALPARAMSMODEL_H

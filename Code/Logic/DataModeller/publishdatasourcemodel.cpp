@@ -3,7 +3,8 @@
 PublishDatasourceModel::PublishDatasourceModel(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_tempStorage(new QByteArray)
+    m_tempStorage(new QByteArray),
+    dataFile(nullptr)
 {
 
 }
@@ -71,6 +72,41 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
 
 }
 
+void PublishDatasourceModel::checkIfDSExists(QString dsName){
+    // Fetch value from settings
+    QSettings settings;
+    QString baseUrl = settings.value("general/baseUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    int profileId = settings.value("user/profileId").toInt();
+
+
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/checkdatasource");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+
+    QJsonObject obj;
+    obj.insert("profileId", profileId);
+    obj.insert("datasourcename", dsName);
+
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readDSComplete, Qt::UniqueConnection);
+}
+
+void PublishDatasourceModel::publishNowAfterDSCheck(){
+    emit publishDSNow();
+}
+
 void PublishDatasourceModel::reading()
 {
     m_tempStorage->append(m_networkReply->readAll());
@@ -78,6 +114,7 @@ void PublishDatasourceModel::reading()
 
 void PublishDatasourceModel::readComplete()
 {
+    QVariantMap outputStatus;
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
 
@@ -95,10 +132,8 @@ void PublishDatasourceModel::readComplete()
         outputStatus.insert("msg", statusObj["msg"].toString());
         this->outputFileName = statusObj["datasource"].toString();
 
-        qDebug() << Q_FUNC_INFO << resultJson;
-
-        m_tempStorage->clear();
     }
+
 
     // If saving to database throws error, emit signal
     // else start uploading the extract file
@@ -107,6 +142,41 @@ void PublishDatasourceModel::readComplete()
     } else {
         uploadFile();
     }
+
+    m_tempStorage->clear();
+}
+
+void PublishDatasourceModel::readDSComplete()
+{
+    QVariantMap outputStatus;
+    if(m_networkReply->error()){
+        qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
+
+        // Set the output
+        outputStatus.insert("code", m_networkReply->error());
+        outputStatus.insert("msg", m_networkReply->errorString());
+        outputStatus.insert("statusMsg", "");
+
+    } else{
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
+        QJsonObject resultObj = resultJson.object();
+        QJsonObject statusObj = resultObj["status"].toObject();
+        QString statusMsg = resultJson["data"].toString();
+
+        // Set the output
+        outputStatus.insert("code", statusObj["code"].toInt());
+        outputStatus.insert("msg", statusObj["msg"].toString());
+        outputStatus.insert("statusMsg", statusObj["data"].toString());
+    }
+
+    m_tempStorage->clear();
+
+    if(outputStatus.value("msg").toString() == Constants::sessionExpiredText){
+        emit sessionExpired();
+    } else {
+        emit dsExists(outputStatus);
+    }
+
 }
 
 void PublishDatasourceModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
@@ -142,12 +212,16 @@ void PublishDatasourceModel::uploadFinished()
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
+    if(this->dataFile->isOpen()){
+        this->dataFile->close();
+    }
+
     emit dsUploadFinished();
 }
 
 void PublishDatasourceModel::uploadFile()
 {
-    QFile *dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
+    this->dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
 
 
     QSettings settings;
@@ -176,7 +250,9 @@ void PublishDatasourceModel::uploadFile()
                 [reply](QNetworkReply::NetworkError) {
             qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
         });
+
     } else {
         qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
     }
+
 }

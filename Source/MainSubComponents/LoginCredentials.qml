@@ -37,7 +37,7 @@ Popup {
 
             if(status.code === 200){
                 popupLoginCredentials.visible = false
-                stacklayout_home.currentIndex = 4
+//                stacklayout_home.currentIndex = 4
 
                 var firstname = settings.value("user/firstname")
                 var lastname = settings.value("user/lastname")
@@ -46,7 +46,14 @@ Popup {
                 var name = capitalizeFirstName + " "+ capitalizeLastName
 
                 action_signin.text  = Constants.signOutText
-                menu_signIn.title = qsTr(name)
+
+                // Load datasources in GRS for first time
+                DatasourceDS.fetchDatsources(0,true, false)
+
+                error_connection_text.text = ""
+                password_field.text = ""
+                username_field.text = ""
+
             }
             else{
                 error_connection_text.text = status.msg
@@ -73,7 +80,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Signin to Grafieks server"
+            text: "Sign in to Grafieks Reporting Server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader

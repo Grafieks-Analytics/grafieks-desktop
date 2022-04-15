@@ -17,6 +17,7 @@
 
 #include "../General/datatype.h"
 #include "../General/queryjoiner.h"
+#include "dashboardparamsmodel.h"
 
 #include "../../constants.h"
 #include "../../statics.h"
@@ -54,8 +55,10 @@ class TableColumnsModel : public QObject
     QString liveJoinParams;
     QString liveSelectParams;
 
+    DashboardParamsModel *dashboardParamsModel;
+
 public:
-    explicit TableColumnsModel(QObject *parent = nullptr);
+    explicit TableColumnsModel(DashboardParamsModel *dashboardParamsModel, QObject *parent = nullptr);
 
     Q_INVOKABLE void setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show = true);
     Q_INVOKABLE QVariantMap fetchVisibleColumns(int dashboardId);
@@ -78,6 +81,8 @@ public:
     Q_INVOKABLE void redrawCharts(int dashboardId);
     Q_INVOKABLE void saveTableColumns();
 
+    Q_INVOKABLE void clearFilters();
+
 
 public slots:
 
@@ -98,7 +103,7 @@ public slots:
 signals:
     void sendFilteredColumn(int currentDashboard, QVariantMap allCategoricalMap, QVariantMap allNumericalMap, QVariantMap allDatesMap);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
-    void columnNamesChanged(int dashboardId, QStringList columnNames);
+    void columnNamesChanged(int dashboardId, QStringList columnNames, QStringList columnTypes);
     void dashboardWhereConditions(QString whereConditions, int currentDashboardId);
     void chartValuesChanged(int currentDashboardId);
     void columnDataChanged(QStringList columnData, QString columnName, int dashboardId);

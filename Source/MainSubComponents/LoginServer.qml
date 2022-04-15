@@ -36,11 +36,13 @@ Popup {
             if(status.code === 200){
                 popupLoginServer.visible = false
                 connectGrafieks2.visible = true
+
+                errorMsg.text = ""
+                server_address.text = ""
+
             } else {
                 errorMsg.text = status.msg + " Host not found"
             }
-
-
         }
     }
 
@@ -59,7 +61,7 @@ Popup {
 
         Text{
             id: text2
-            text: "Signin to Grafieks server"
+            text: "Sign in to Grafieks Reporting Server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10

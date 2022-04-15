@@ -15,12 +15,13 @@ void LiveProcessor::setArgumentsFromMenu(QString filePath)
 
 void LiveProcessor::setArgumentsByFile(QString filePath)
 {
-
+    this->filePath = filePath;
+    this->receivedArgument = true;
 }
 
 bool LiveProcessor::receivedArgumentStatus()
 {
-    return true;
+    return this->receivedArgument;
 }
 
 void LiveProcessor::processLiveQueries()

@@ -38,10 +38,12 @@ bool GeneralParamsModel::isWorkbookInEditMode()
 
 void GeneralParamsModel::openNewGrafieksInstance()
 {
-    QString appPath = QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe";
-    appPath.replace("/", "\\");
+    QString appPath = "\""+QCoreApplication::applicationDirPath() + "/GrafieksDesktop.exe\"";
+    QString replacedPath = QDir::toNativeSeparators(appPath);
 
-    QProcess::startDetached(appPath);
+
+    QProcess::startDetached(replacedPath);
+
 }
 
 QVariantMap GeneralParamsModel::getAppInfo()
@@ -132,6 +134,17 @@ QString GeneralParamsModel::urlToFilePath(QUrl url)
 bool GeneralParamsModel::getFromLiveFile()
 {
     return this->setForLiveFile;
+}
+
+void GeneralParamsModel::setForAPI(QString dsFileName, QString fileType)
+{
+    if(fileType == Constants::duckType){
+        Statics::currentDbClassification = Constants::duckType;
+        Statics::currentDSFile = dsFileName + ".gadse";
+    } else {
+        Statics::currentDbClassification = Constants::sqlType;
+        Statics::currentDSFile = dsFileName + ".gads";
+    }
 }
 
 void GeneralParamsModel::setJsonFromWorkbook(QJsonDocument jsonDoc)
@@ -278,6 +291,8 @@ bool GeneralParamsModel::getAPISwitch()
 void GeneralParamsModel::setFromLiveFile(bool setForLiveFile)
 {
     this->setForLiveFile = setForLiveFile;
+    Statics::dsType = setForLiveFile == true ? Constants::sqlType : Constants::duckType;
+    Statics::currentDbClassification = Statics::dsType;
 }
 
 QString GeneralParamsModel::randomStringGenerator()
@@ -301,6 +316,13 @@ bool GeneralParamsModel::ifFreeRelease()
     return Constants::appVersion == "Free" ? true : false;
 }
 
+void GeneralParamsModel::setCurrentWorkbookName(QString workbookName)
+{
+    this->currentWorkbookName = workbookName;
+    emit savedWorkbookChanged(this->currentWorkbookName);
+}
+
+
 void GeneralParamsModel::resetGeneralParams()
 {
     Statics::extractPath = "";
@@ -313,6 +335,23 @@ void GeneralParamsModel::resetGeneralParams()
 
     Statics::editMode = false;
     Statics::apiSwitch = false;
+
+    this->m_menuType = 0;
+    this->m_currentScreen = 0;
+    this->changedHeaderTypes.clear();
+
+    this->setForLiveFile = false;
+    this->setForLiveQuery = false;
+    this->currentWorkbookName = "";
+
+}
+
+void GeneralParamsModel::setDBClassification(bool isLive){
+    if(isLive){
+        Statics::currentDbClassification = Constants::sqlType;
+    } else {
+        Statics::currentDbClassification = Constants::duckType;
+    }
 }
 
 void GeneralParamsModel::setMenuType(int menuType)

@@ -26,6 +26,8 @@ QtObject {
     property string openFileText : qsTr("Open")
     property string dataDesignerText : qsTr("Data Designer")
     property string dashboardDesignerText : qsTr("Dashboard Designer")
+    property string sessionExpiredText : qsTr("Login incorrect")
+    property string dsExists: qsTr("Datasource name already exists")
 
     property string gaugePointerLabel: 'Pointer/Actual';
 
@@ -376,6 +378,6 @@ QtObject {
     property var tempGrafieksValue: "grafieks_false_temp";
 
     // Free tier limits
-    property var reportsPerDashboard : 2
+    property var dashboardPerWorkbook : 2
     property var reportsPerWorkbook : 10
 }

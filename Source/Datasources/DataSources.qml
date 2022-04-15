@@ -23,6 +23,9 @@ Page {
 
     id: datasourcelist_page
     property int menu_width: 60
+    property var clickedItemConnectionType: ""
+    property bool connectAllowed: true
+
 
     Component.onCompleted: {
         DatasourceDS.fetchDatsources(0, true, true)
@@ -34,14 +37,44 @@ Page {
     }
 
     // Slots
-    function updateDSNameTitle(signalDSName){
+    function updateDSNameTitle(signalDSName, updateDSName, connectAllowed){
         ds_name_header.text = signalDSName
+        datasourcelist_page.clickedItemConnectionType = updateDSName
+        datasourcelist_page.connectAllowed = connectAllowed
+
+        console.log(datasourcelist_page.connectAllowed, connectAllowed)
+    }
+
+
+    function processDS(){
+//        stacklayout_home.currentIndex = 5
+//        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
+
+        if(datasourcelist_page.connectAllowed === true){
+            GeneralParamsModel.setAPISwitch(true)
+            if(datasourcelist_page.clickedItemConnectionType === "live"){
+                GeneralParamsModel.setForAPI(ds_name_header.text, Constants.sqlType)
+            } else {
+                GeneralParamsModel.setForAPI(ds_name_header.text, Constants.duckType)
+            }
+
+            ReportsDataModel.generateColumnsForExtract()
+            TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
+            stacklayout_home.currentIndex = 6
+            DSParamsModel.setDsName(ds_name_header.text)
+        } else {
+            connectionError.open()
+        }
     }
 
 
 
     LeftMenuBar{
         id: left_menubar
+    }
+
+    ConnectionError{
+        id: connectionError
     }
 
 
@@ -62,14 +95,14 @@ Page {
             height: 30
             width:100
 
-            onClicked: stacklayout_home.currentIndex = 5
+            onClicked: processDS()
             Image {
-                                    id: dashboardIcon
-                                    source: "/Images/icons/create_dashboard_20.png"
-                                    height: 20
-                                    width: 20
-                                    anchors.centerIn: parent
-                                }
+                        id: dashboardIcon
+                        source: "/Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
 
             background: Rectangle{
                 id: next_btn_background
@@ -199,7 +232,7 @@ Page {
                 }
                 Text{
                     id: ds_server_header
-                    text: settings.value("general/baseUrl")
+                    text: settings.value("general/sitelookup").includes("http:") || settings.value("general/sitelookup").includes("https:") ? settings.value("general/sitelookup") : "https://" + settings.value("general/sitelookup")
                 }
                 Text{
                     id: ds_name_label_header

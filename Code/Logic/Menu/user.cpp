@@ -89,6 +89,9 @@ void User::siteLookup(const QString &value)
     QJsonObject obj;
     obj.insert("sitename", value);
 
+    QSettings settings;
+    settings.setValue("general/sitelookup", value);
+
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
