@@ -210,7 +210,7 @@ void ReportsDataModel::fetchColumnDataAPI(QString columnName, QString options)
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("sitename", sitename);
-    obj.insert("columnName", columnName);
+    obj.insert("columnNames", columnName);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -620,7 +620,6 @@ void ReportsDataModel::receiveOriginalConditions(QString selectParams, QString w
 
 void ReportsDataModel::dataReadyRead()
 {
-    m_dataBuffer->clear();
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
@@ -651,10 +650,13 @@ void ReportsDataModel::columnReadFinished()
         foreach(QJsonValue data, value){
             QJsonArray finalValue = data.toArray();
 
-            int dbIntType = Statics::currentDbIntType;
-            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(3).toString() + qj.getQueryJoiner(dbIntType);
+            int dbIntType = Statics::currentDbIntType;QString tableColumnName;
 
-
+            if(Statics::currentDbClassification == Constants::duckType){
+                tableColumnName = finalValue.at(1).toString();
+            } else {
+                tableColumnName = finalValue.at(4).toString();
+            }
 
             if(finalValue.at(3).toString() == "categorical"){
                 this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
@@ -668,6 +670,7 @@ void ReportsDataModel::columnReadFinished()
             i++;
         }
 
+        m_dataBuffer->clear();
         emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
     }
 }
@@ -675,6 +678,7 @@ void ReportsDataModel::columnReadFinished()
 
 void ReportsDataModel::columnDataReadFinished()
 {
+    QString msg;
     //Parse the JSON
     if( m_networkReply->error()){
 
@@ -685,8 +689,9 @@ void ReportsDataModel::columnDataReadFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
-        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+        msg = resultObj["msg"].toString();
 
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
         // Clear existing chart headers data
         this->columnData.clear();
 
@@ -697,8 +702,16 @@ void ReportsDataModel::columnDataReadFinished()
             this->columnData.append(data.toString());
         }
 
+    }
+
+    m_dataBuffer->clear();
+
+    if(msg == Constants::sessionExpiredText){
+        emit sessionExpired();
+    } else {
         emit columnDataChanged(this->columnData, this->APIOptions);
     }
+
 }
 
 QVariant ReportsDataModel::convertToDateFormatTimeFromString(QString stringDateFormat)

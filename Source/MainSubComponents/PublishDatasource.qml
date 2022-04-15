@@ -77,6 +77,21 @@ Popup {
             }
         }
 
+        function onDsExists(status){
+
+            if(status.msg === Constants.dsExists){
+                confirmPublishDsComponent.open()
+            } else if (status.code !== 200){
+                errorMsg.text = status.msg
+            } else {
+                publishData()
+            }
+        }
+
+        function onPublishDSNow(){
+            publishData()
+        }
+
     }
 
     Connections{
@@ -139,6 +154,10 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted:  {
+       errorMsg.text = ""
+    }
+
     function closePopup(){
         popup.visible = false
         errorMsg.text = ""
@@ -152,6 +171,8 @@ Popup {
         // Call Cpp function to process &
         // Upload data to API
 
+        errorMsg.text = ""
+
         QueryModel.setIfPublish(true)
         ForwardOnlyQueryModel.setIfPublish(true)
         ExcelQueryModel.setIfPublish(true)
@@ -161,17 +182,22 @@ Popup {
         // Then publish the data and file
         if(GeneralParamsModel.getExtractPath().length > 0 || GeneralParamsModel.getLivePath().length > 0){
             errorMsg.text = "Processing. Please wait.."
-            publishData()
+            checkDSName()
         } else {
             saveFilePrompt.open()
         }
+    }
+
+    function checkDSName(){
+        var dsName = datasource_name_field.text
+        PublishDatasourceModel.checkIfDSExists(dsName)
     }
 
     function publishData(){
         var dsName = datasource_name_field.text
         var description = description_field.text
         var uploadImage = fileDialog1.fileUrl
-        var sourceType = DSParamsModel.dsType
+        var sourceType = DSParamsModel.dsType === "" ? GeneralParamsModel.getFromLiveFile() === true ? Constants.liveDS : Constants.extractDS : DSParamsModel.dsType
         var schedulerId = DSParamsModel.schedulerId
         var isFullExtract = DSParamsModel.isFullExtract
         var extractColumnName = DSParamsModel.extractColName
@@ -182,14 +208,18 @@ Popup {
     }
 
     function saveExtractLimit(freeLimit, ifPublish){
-        errorMsg.text = "Processing. Please wait.."
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
-            if(ifPublish && !freeLimit)
+            if(ifPublish && !freeLimit){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
+
         } else {
-            if(ifPublish)
+            if(ifPublish){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
         }
     }
 
@@ -197,11 +227,17 @@ Popup {
         errorMsg.text = "Processing. Please wait.."
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
-            if(ifPublish && !freeLimit)
+            if(ifPublish && !freeLimit){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
+
         } else {
-            if(ifPublish)
+            if(ifPublish){
+                errorMsg.text = "Processing. Please wait.."
                 publishData()
+            }
+
         }
     }
 
@@ -229,6 +265,10 @@ Popup {
         id: saveFilePrompt
     }
 
+    // Confirm pubish dialog on finding duplicate dsname in server
+    ConfirmPublishDS{
+        id: confirmPublishDsComponent
+    }
     // SubComponents Ends
     /***********************************************************************************************************************/
 

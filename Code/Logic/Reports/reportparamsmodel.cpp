@@ -1647,6 +1647,11 @@ int ReportParamsModel::generateNewReportId()
     return this->reportIdsCounter;
 }
 
+void ReportParamsModel::resetReportIdsCounter()
+{
+    this->reportIdsCounter = 0;
+}
+
 void ReportParamsModel::clearReportsScreen()
 {
     emit clearScreenSignal();

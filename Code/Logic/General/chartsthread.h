@@ -22,6 +22,7 @@
 #include "jsoncons/json.hpp"
 #include "../../constants.h"
 #include "../../statics.h"
+#include "datatype.h"
 
 #include "../../duckdb.hpp"
 
@@ -48,11 +49,17 @@ class ChartsThread : public QObject
     QString xSplitKey;
     QVariantList xAxisColumnList;
     QVariantList yAxisColumnList;
+    QVariantList row3ColumnList;
     QString sourceColumn;
     QString destinationColumn;
     QString measureColumn;
     QString calculateColumn;
+    QString greenValue;
+    QString yellowValue;
+    QString redValue;
     QJsonArray dateConversionOptions;
+
+    DataType dataType;
 
 public:
     explicit ChartsThread(QObject *parent = nullptr);
@@ -61,9 +68,9 @@ public:
     void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0, QString datasourceType = Constants::sqlType);
     void queryParams(QString masterTable = "", QString masterWhereParams = "", QString masterJoinParams = "");
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
-    void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
+    void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList, QVariantList &row3ColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
-    void setGaugeKpiDetails(QString &calculateColumn);
+    void setGaugeKpiDetails(QString &calculateColumn, QString greenValue = "", QString yellowValue = "", QString redValue = "");
     void setTablePivotDateConversionOptions(QString dateConversionOptions);
 
 public slots:

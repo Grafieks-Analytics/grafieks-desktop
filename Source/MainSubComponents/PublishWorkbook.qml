@@ -74,6 +74,15 @@ Popup {
 
     }
 
+    Connections {
+        target: GeneralParamsModel
+
+        function onSavedWorkbookChanged(workbookName){
+            popup.showSaveWbPrompt = false
+            wbNamefield.text = workbookName
+        }
+    }
+
 
     Connections{
         target: ProjectsListModel
@@ -123,6 +132,10 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted:  {
+       errorMsg.text = ""
+    }
+
     function closePopup(){
         popup.visible = false
         errorMsg.text = ""
@@ -133,6 +146,7 @@ Popup {
 
     function onPublishWorkbookClicked(){
 
+        errorMsg.text = ""
         if(popup.showSaveWbPrompt === true){
 
             popup.showSaveWbPrompt = false
@@ -159,6 +173,7 @@ Popup {
         Object.keys(dashboardNames).forEach(dashboardId => {
                                                 let reportsCount = DashboardParamsModel.getDasbboardReportCount(dashboardId)
                                                 dashboardDetails += '{
+                                                                          "dashboardId" : '+ dashboardId +',
                                                                           "name" : "' + dashboardNames[dashboardId] + '",
                                                                           "count" : '+ reportsCount + ',
                                                                           "image" : "",
@@ -167,7 +182,8 @@ Popup {
                                             })
 
         dashboardDetails += "]"
-        if(wbName !== "")
+
+        if(wbName !== "" && projectId > 0 )
             PublishWorkbookModel.publishWorkbook(projectId, wbName, description, readerFile, dashboardCount, dashboardDetails)
     }
 

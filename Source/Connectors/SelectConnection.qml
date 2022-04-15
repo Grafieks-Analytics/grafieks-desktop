@@ -44,6 +44,14 @@ Page {
         }
     }
 
+    Connections{
+        target: CredentialsModel
+
+        function onOpenConnection(dbType){
+            selectAuthorization(dbType)
+        }
+    }
+
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
@@ -95,6 +103,7 @@ Page {
             if (typeof settings.value("user/sessionToken") == "undefined"){
                 connectGrafieks1.visible = true
             } else{
+                GeneralParamsModel.setCurrentScreen(Constants.grsScreen)
                 stacklayout_home.currentIndex = 4
             }
 

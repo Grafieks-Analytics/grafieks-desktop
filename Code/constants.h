@@ -9,21 +9,21 @@ namespace Constants
     const QString appName = "Grafieks Desktop";
     const QString appVersion = "Free";
     const QString extractVersion = "29"; // Same as currently used duckdb version sans dot(.) & prefixed 0s
-    const QString liveVersion = "1.0";
-    const QString workbookVersion = "1.0";
+    const QString liveVersion = "1.0.2";
+    const QString workbookVersion = "1.0.2";
 //    const QString currentMode = "DEBUG";
     const QString currentMode = "RELEASE";
 
     // Application level constants
     // Server level APIs
-    const QString defaultAPIEndpoint = "https://apit.grafieks.net";
-    const QString defaultFTPEndpoint = "95.217.117.126";
-    const QString defaultChartEndpoint = "http://95.217.117.126:5473";
+   const QString defaultAPIEndpoint = "https://apit.grafieks.net";
+   const QString defaultFTPEndpoint = "95.217.117.126";
+   const QString defaultChartEndpoint = "http://95.217.117.126:5473";
 
     // For local testing
-//    const QString defaultAPIEndpoint = "http://localhost:5476";
-//    const QString defaultFTPEndpoint = "172.18.87.201";
-//    const QString defaultChartEndpoint = "http://localhost:5473";
+//     const QString defaultAPIEndpoint = "http://localhost:5476";
+//     const QString defaultFTPEndpoint = "172.23.53.109";
+//     const QString defaultChartEndpoint = "http://localhost:5473";
 
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
@@ -55,7 +55,7 @@ namespace Constants
     const int freeTierExtractLimit = 1024 * 1024 * 1024; // 1GB limit
 //    const int freeTierExtractLimit = 1024 * 1024 * 2;
     const int timeDelayCheckExtractSize = 2000; // 2 seconds
-    const int freeTierExtractGrsLimit = 500 * 1024 * 1024; // 500 MB limit
+    const int freeTierExtractGrsLimit = 100 * 1024 * 1024; // 100 MB limit
 
     // EXTRACTS (DuckDb) Data Type integer for switching
     const int varcharIntType = 0;
@@ -243,8 +243,12 @@ namespace Constants
     const int dashboardScreen = 4;
     const int reportScreen = 5;
 
+    const QString reportScreenString = "reports";
+    const QString dashboardScreenString = "dashboards";
+
 
     // Menu User
+    const QString sessionExpiredText = "Login incorrect";
 
 } // namespace Constants
 #endif // CONSTANTS_H

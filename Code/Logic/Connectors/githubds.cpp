@@ -176,14 +176,14 @@ void GithubDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
+
 
         // Get user email
         m_networkReply = this->github->get(QUrl("https://api.github.com/user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

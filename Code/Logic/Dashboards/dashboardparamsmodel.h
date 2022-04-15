@@ -12,8 +12,10 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include "../../constants.h"
+#include "../../statics.h"
 #include "../General/generalparamsmodel.h"
 
 class DashboardParamsModel : public QObject
@@ -149,6 +151,8 @@ public:
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
     Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
 
+    Q_INVOKABLE void clearFilters();
+
     // Customize Dashboard parameters
 
     Q_INVOKABLE void setDashboardName(int dashboardId, QString dashboardName);
@@ -198,6 +202,8 @@ public:
     Q_INVOKABLE bool getDashboardReportMap(int reportId);
     Q_INVOKABLE int getDasbboardReportCount(int dashboardId);
 
+    Q_INVOKABLE void clearAllMapValuesAfterDisconnect();
+
     // General
     QString lastContainerType() const;
     int positionY() const;
@@ -230,7 +236,7 @@ public slots:
     void setWbName(QString wbName);
 
     // Filter column names
-    void getColumnNames(int dashboardId, QStringList columnNames);
+    void getColumnNames(int dashboardId, QStringList columnNames, QStringList columnTypes);
     void setCurrentSelectedColumn(QString currentSelectedColumn);
 
     // Receive extract workbook data params

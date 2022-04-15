@@ -72,11 +72,16 @@ void ProjectsListModel::dataReadFinished()
                 this->projects.insert(projectName, projectId);
             }
 
+        } else {
+            if(statusObj["code"].toString() == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         }
 
-        //Clear the buffer
-        m_dataBuffer->clear();
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 
     emit signalProjectList(this->projects);
 }

@@ -207,7 +207,11 @@ Page {
     function addDashboard(){
 
         let currentCount = DashboardParamsModel.dashboardCount
-        let newCount = currentCount + 1
+        if(currentCount >= Constants.dashboardPerWorkbook){
+            dashboardPerWorkbookLimitAccess.open();
+            return;
+        }
+        let newCount = currentCount + 1;
         DashboardParamsModel.setDashboardCount(newCount)
 
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
@@ -245,7 +249,12 @@ Page {
     function createNewReport(){
         var reportId = ReportParamsModel.generateNewReportId();
         ReportParamsModel.setReportId(reportId);
-
+        const allReportsData = ReportParamsModel.getReportsList();
+        const numberOfReports = Object.keys(allReportsData).length;
+        if(numberOfReports>=Constants.reportsPerWorkbook){
+            workbookReportsLimitAccess.open();
+            return;
+        }
 
         ReportParamsModel.clearReportsScreen();
         // Setting Edit toggle to false
@@ -309,6 +318,20 @@ Page {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+    MessageDialog {
+        id: dashboardPerWorkbookLimitAccess
+        visible: false
+        title: "Limited Access"
+        text: qsTr("Sorry, your current plan allows upto "+ Constants.dashboardPerWorkbook +" Dashboards. To add more Dashboard in same workbook, please upgrade plan.")
+    }
+
+    
+    MessageDialog {
+        id: workbookReportsLimitAccess
+        visible: false
+        title: "Limited Access"
+        text: qsTr("Sorry, your current plan allows upto "+ Constants.reportsPerWorkbook +" reports. To add more reports in same workbook, please upgrade plan.")
+    }
 
     SaveWorkbookPopup{
         id: publishWorkbookPopup

@@ -128,10 +128,10 @@ void DatasourceDS::addDatasource(Datasource *datasource)
  * \param firstName (owner firstname)
  * \param lastName (owner lastname)
  */
-void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun)
+void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString & lastRun, const bool & downloadAllowed, const bool & connectAllowed, const bool & publishAllowed)
 
 {
-    Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, databaseName, descriptions, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, lastRun, this);
+    Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, databaseName, descriptions, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, lastRun, downloadAllowed, connectAllowed, publishAllowed, this);
 
     addDatasource(datasource);
 
@@ -218,18 +218,24 @@ void DatasourceDS::dataReadFinished()
                 QString Firstname = dataObj["Firstname"].toString();
                 QString Lastname = dataObj["Lastname"].toString();
                 QString LastRun = dataObj["LastRun"].toString();
+                bool DownloadAllowed = dataObj["DownloadAllowed"].toBool();
+                bool ConnectAllowed = dataObj["ConnectAllowed"].toBool();
+                bool PublishAllowed = dataObj["PublishAllowed"].toBool();
 
-                this->addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName, DatabaseName, Descriptions, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname, LastRun);
+
+                this->addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName, DatabaseName, Descriptions, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname, LastRun, DownloadAllowed, ConnectAllowed, PublishAllowed);
             }
 
 
+        } else {
+            if(statusObj["msg"] == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         }
-
-        //Clear the buffer
-        m_dataBuffer->clear();
-
-
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 }
 
 /*!
@@ -250,13 +256,15 @@ void DatasourceDS::dataDeleteFinished()
         // If successful, set the variables in settings
         if(statusObj["code"].toInt() != 200){
             qWarning() << "Failed to delete. " << statusObj["code"].toString();
+        } else {
+            if(statusObj["msg"] == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
         }
-
-        //Clear the buffer
-        m_dataBuffer->clear();
-
-
     }
+
+    //Clear the buffer
+    m_dataBuffer->clear();
 }
 
 

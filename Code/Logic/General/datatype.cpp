@@ -118,7 +118,8 @@ QVariantList DataType::checkDateTimeType(QString inputVariable)
                     << "yyyy.MM.dd" << "yyyy.MM.dd HH:mm:ss" << "yyyy.MM.dd HH:mm"
                     << "yyyy.MM.dd." << "yyyy.MM.dd. H:mm:ss" << "yyyy.MM.dd. H:mm"
                     << "d.M.yyyy HH:mm:ss" << "d.M.yyyy HH:mm"
-                    << "yy/MM/dd" << "yyyy/MM/dd" << "yy/MM/dd H:mm" << "MM/dd/yy H:mm";
+                    << "yy/MM/dd" << "yyyy/MM/dd" << "yy/MM/dd H:mm" << "MM/dd/yy H:mm"
+                    << "yyyy-MM-dd";
 
     validDateFormats.removeDuplicates();
     foreach(QString format, validDateFormats){

@@ -45,7 +45,7 @@ Popup {
     }
     Text{
         id: version
-        text: "Version Beta (x64)"
+        text: "Free Edition 1.0.2 (x64)"
         font.pointSize: 8
         font.family: Constants.fontDefault
         anchors.top: header.bottom
@@ -116,7 +116,7 @@ Popup {
     }
      Text{
         id: copyright
-        text: "Copyright © 2021 Grafieks Analytics Ltd. All rights reserved."
+        text: "Copyright © 2022 Grafieks Analytics Ltd. All rights reserved."
         font.pointSize: 8
         font.family: Constants.fontDefault
         anchors.top: toolsep2.bottom

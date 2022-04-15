@@ -1,12 +1,12 @@
 #include "tablecolumnsmodel.h"
 
-TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent),
+TableColumnsModel::TableColumnsModel(DashboardParamsModel *dashboardParamsModel, QObject *parent) : QObject(parent),
     dashboardId(0),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
-
+    this->dashboardParamsModel = dashboardParamsModel;
 }
 
 void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show)
@@ -37,10 +37,27 @@ QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
 
 
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
-{
+{ 
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
+    // columnTypes
 
-    emit columnNamesChanged(dashboardId, visibleColumns);
+    QStringList visibleColumnTypes;
+    foreach(QString tmpType, visibleColumns){
+
+        QString type;
+        if(Statics::currentDbClassification == Constants::duckType){
+            type = tmpType;
+        } else {
+            QStringList pieces = tmpType.split( "." );
+            type = pieces.at(1);
+            type.remove(QRegularExpression("[\"\'`]+"));   
+        }
+
+        this->dashboardParamsModel->setColumnAliasName(dashboardId, tmpType, type);
+        visibleColumnTypes.append(this->columnTypes.value(type));
+    }
+
+    emit columnNamesChanged(dashboardId, visibleColumns, visibleColumnTypes);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
 
@@ -199,7 +216,7 @@ void TableColumnsModel::fetchColumnDataAPI(QString colName, int forwardDashboard
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("sitename", sitename);
-    obj.insert("columnName", this->colName);
+    obj.insert("columnNames", this->colName);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -351,6 +368,26 @@ void TableColumnsModel::saveTableColumns()
     emit signalSaveTableColumns(masterObj);
 }
 
+void TableColumnsModel::clearFilters(){
+    this->filteredChartData.clear();
+    this->newChartData.clear();
+    this->newChartHeader.clear();
+    this->chartHeaderDetails.clear();
+
+    this->numericalMap.clear();
+    this->categoricalMap.clear();
+    this->dateMap.clear();
+
+    this->allColumnVisibleMap.clear();
+    this->reportChartData.clear();
+    this->columnTypes.clear();
+    this->columnDataList.clear();
+
+    this->dashboardId = 0;
+
+    emit visibleColumnListChanged(this->allColumnVisibleMap.value(this->dashboardId));
+}
+
 void TableColumnsModel::addNewDashboard(int dashboardId)
 {
     this->dashboardId = dashboardId;
@@ -410,7 +447,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
         QVector<int> filterValueIds;
         QStringList selectedValues;
 
-        // Equal relations
+        // In relations
         if(equalRelationsList.indexOf(currentColumnRelation) >= 0){
 
             QStringList tmpValList;
@@ -614,7 +651,6 @@ void TableColumnsModel::receiveOriginalConditions(QString selectParams, QString 
 
 void TableColumnsModel::dataReadyRead()
 {
-    m_dataBuffer->clear();
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
@@ -647,8 +683,14 @@ void TableColumnsModel::columnReadFinished()
 
 
             int dbIntType = Statics::currentDbIntType;
-            QString tableColumnName = qj.getQueryJoiner(dbIntType) + finalValue.at(0).toString() + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + finalValue.at(3).toString() + qj.getQueryJoiner(dbIntType);
 
+            QString tableColumnName;
+
+            if(Statics::currentDbClassification == Constants::duckType){
+                tableColumnName = finalValue.at(1).toString();
+            } else {
+                tableColumnName = finalValue.at(4).toString();
+            }
 
             if(finalValue.at(3).toString() == "categorical"){
                 this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
@@ -664,7 +706,7 @@ void TableColumnsModel::columnReadFinished()
             this->newChartHeader.insert(i, finalValue.at(1).toString());
             i++;
         }
-
+        m_dataBuffer->clear();
         emit sendFilteredColumn(this->dashboardId, this->categoricalMap, this->numericalMap, this->dateMap);
     }
 }
@@ -683,17 +725,28 @@ void TableColumnsModel::columnDataReadFinished()
 
         QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
 
-        // Clear existing chart headers data
-        this->columnDataList.clear();
 
-        QJsonObject json = dataDoc.object();
-        QJsonArray value = json.value("colData").toArray();
+        QJsonArray jsonArray = dataDoc.array();
+        int i = 0;
+        QStringList colNamesList = this->colName.split(",");
+        foreach(QJsonValue jsonValue, jsonArray){
 
-        foreach(QJsonValue data, value){
-            this->columnDataList.append(data.toString());
+            // Clear existing chart headers data
+            this->columnDataList.clear();
+
+            QJsonObject json = jsonValue.toObject();
+            QJsonArray value = json.value("colData").toArray();
+
+            foreach(QJsonValue data, value){
+                this->columnDataList.append(data.toString());
+            }
+
+            QString emitColName = colNamesList.at(i).trimmed();
+            i++;
+
+            emit columnDataChanged(this->columnDataList, emitColName, this->forwardDashboardId);
         }
 
-        emit columnDataChanged(this->columnDataList, this->colName, this->forwardDashboardId);
     }
 }
 

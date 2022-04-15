@@ -88,6 +88,7 @@ SOURCES += \
     Code/Logic/DataModeller/scheduler.cpp \
     Code/Logic/DataModeller/schedulerds.cpp \
     Code/Logic/DataModeller/schedulermodel.cpp \
+    Code/Logic/Datasources/credentialsmodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
@@ -113,6 +114,7 @@ SOURCES += \
     Code/Logic/Reports/reportsdatamodel.cpp \
     Code/OS/odbcdriversmodel.cpp \
     Code/OS/osentries.cpp \
+    Code/simplecrypt.cpp \
     main.cpp
 
 RESOURCES += \
@@ -211,6 +213,7 @@ HEADERS += \
     Code/Logic/DataModeller/scheduler.h \
     Code/Logic/DataModeller/schedulerds.h \
     Code/Logic/DataModeller/schedulermodel.h \
+    Code/Logic/Datasources/credentialsmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
@@ -240,6 +243,7 @@ HEADERS += \
     Code/messages.h \
     Code/constants.h \
     Code/secrets.h \
+    Code/simplecrypt.h \
     Code/statics.h
 
 

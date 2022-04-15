@@ -99,16 +99,23 @@ void PublishWorkbookModel::readComplete()
 
         qDebug() << Q_FUNC_INFO << resultJson;
 
-        m_tempStorage->clear();
+
     }
 
-    // If saving to database throws error, emit signal
-    // else start uploading the extract file
-    if(outputStatus.value("code") != 200){
-        emit publishWbStatus(outputStatus);
-    } else {
-        uploadFile();
-    }
+     m_tempStorage->clear();
+
+     if(outputStatus.value("msg") == Constants::sessionExpiredText){
+        emit sessionExpired();
+     } else {
+         // If saving to database throws error, emit signal
+         // else start uploading the extract file
+         if(outputStatus.value("code") != 200){
+             emit publishWbStatus(outputStatus);
+         } else {
+             uploadFile();
+         }
+     }
+
 }
 
 void PublishWorkbookModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)

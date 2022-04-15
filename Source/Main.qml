@@ -104,6 +104,55 @@ ApplicationWindow {
         }
     }
 
+
+    Connections {
+        target: PublishDatasourceModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: DatasourceDS
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: ProjectsListModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: PublishWorkbookModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: TableSchemaModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
+    Connections {
+        target: ReportsDataModel
+
+        function onSessionExpired(){
+            sessionExpired.open()
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -120,7 +169,11 @@ ApplicationWindow {
         // Hence after completion we check if the arguments are received and then process the extract
 
         if(ExtractProcessor.receivedArgumentStatus() === true){
-            ExtractProcessor.processDS()
+            ExtractProcessor.processExtract()
+        }
+
+        if(LiveProcessor.receivedArgumentStatus() === true){
+            LiveProcessor.processLive()
         }
 
         if(WorkbookProcessor.receivedArgumentStatus() === true){
@@ -172,10 +225,41 @@ ApplicationWindow {
     function saveDatasource(){
 
         dsSaveDialog.visible = true
+        //        if(typeof settings.value("user/sessionToken") !== "undefined"){
+        //            dsSaveDialog.visible = true
+        //        } else {
+        //            // Call login
+        //            connectGrafieks1.visible = true
+        //        }
     }
 
     function saveWorkbook(){
+
         saveWorkbookPrompt.open()
+        //        if(typeof settings.value("user/sessionToken") !== "undefined"){
+        //            saveWorkbookPrompt.open()
+        //        } else {
+        //            // Call login
+        //            connectGrafieks1.visible = true
+        //        }
+    }
+
+    function publishWorkbookNow(){
+        if(typeof settings.value("user/sessionToken") !== "undefined"){
+            publishWorkbook.visible = true
+        } else {
+            // Call login
+            connectGrafieks1.visible = true
+        }
+    }
+
+    function publishDatasourceNow(){
+        if(typeof settings.value("user/sessionToken") !== "undefined"){
+            publishDatasource.visible = true
+        } else {
+            // Call login
+            connectGrafieks1.visible = true
+        }
     }
 
     function openDatasource(){
@@ -211,8 +295,12 @@ ApplicationWindow {
 
     // Global Modals
     PublishDatasource{
-        id: datasourceDescription
+        id: publishDatasource
     }
+    PublishWorkbook{
+        id: publishWorkbook
+    }
+
     LoginServer{
         id: connectGrafieks1
     }
@@ -295,48 +383,48 @@ ApplicationWindow {
         anchors.centerIn: parent
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
- Text{
-     anchors.top: parent.top
-     anchors.topMargin: 25
-      anchors.horizontalCenter: parent.horizontalCenter
-          text:"Unable to find Data Source"
-        }
-Rectangle{
-// color:"red"
-        width: 150
-        height: 180
-        anchors.centerIn: parent
-       
-       
-
-        ColumnLayout {
-            id: radioOptions
-            // anchors.rightMargin:220
-            // anchors.topMargin: 50
-            anchors.centerIn: parent
-            RadioButton {
-                id: computerOption
-                checked: true
-                text: qsTr("Find on your computer")
-                ButtonGroup.group: radioGroup
-            }
-            RadioButton {
-                id: serverOption
-                text: qsTr("Fetch from server")
-                ButtonGroup.group: radioGroup
-            }
-             Button{
-            id: confirmDSLocation
-            anchors.top: serverOption.bottom
-            anchors.topMargin: 15
+        Text{
+            anchors.top: parent.top
+            anchors.topMargin: 25
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Confirm"
-            onClicked: selectDSLocation(computerOption.checked)
+            text:"Unable to find Data Source"
         }
+        Rectangle{
+            // color:"red"
+            width: 150
+            height: 180
+            anchors.centerIn: parent
 
-        }
 
-       
+
+            ColumnLayout {
+                id: radioOptions
+                // anchors.rightMargin:220
+                // anchors.topMargin: 50
+                anchors.centerIn: parent
+                RadioButton {
+                    id: computerOption
+                    checked: true
+                    text: qsTr("Find on your computer")
+                    ButtonGroup.group: radioGroup
+                }
+                RadioButton {
+                    id: serverOption
+                    text: qsTr("Fetch from server")
+                    ButtonGroup.group: radioGroup
+                }
+                Button{
+                    id: confirmDSLocation
+                    anchors.top: serverOption.bottom
+                    anchors.topMargin: 15
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "Confirm"
+                    onClicked: selectDSLocation(computerOption.checked)
+                }
+
+            }
+
+
         }
     }
 
@@ -354,6 +442,11 @@ Rectangle{
     // and this conflicts with the current file
     SaveWorkbook{
         id: saveWorkbookPrompt
+    }
+
+
+    SessionExpired{
+        id: sessionExpired
     }
 
 
@@ -539,10 +632,7 @@ Rectangle{
                 text: qsTr("Publish Datasource")
                 enabled: true
 
-                onTriggered: {
-                    Datasources.setSourceType(Constants.liveDS)
-                    publishGrafieks1.visible = true
-                }
+                onTriggered: publishDatasourceNow()
             }
 
             MenuSeparator{}
@@ -551,6 +641,7 @@ Rectangle{
                 id: action_publish_workbook
                 text: qsTr("Publish Workbook")
                 enabled: true
+                onTriggered: publishWorkbookNow()
             }
         }
 
@@ -563,7 +654,7 @@ Rectangle{
                 text: qsTr("Open Help")
                 onTriggered: {
                     // stacklayout_home.currentIndex = 2
-                    Qt.openUrlExternally("https://docs.grafieks.com/");
+                    Qt.openUrlExternally("https://grafieks.tawk.help/");
                 }
 
             }

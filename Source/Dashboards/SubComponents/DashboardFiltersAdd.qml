@@ -22,7 +22,11 @@ Item {
     }
 
     function addNewFilterColumns(){
-        TableColumnsModel.applyColumnVisibility(DashboardParamsModel.currentDashboard)
+        var currentDashboardId = DashboardParamsModel.currentDashboard
+        TableColumnsModel.applyColumnVisibility(currentDashboardId)
+
+        if(GeneralParamsModel.getAPISwitch())
+            TableColumnsModel.fetchColumnDataAPI(DashboardParamsModel.fetchShowColumns(currentDashboardId), currentDashboardId)
     }
 
     function hideColumn(){

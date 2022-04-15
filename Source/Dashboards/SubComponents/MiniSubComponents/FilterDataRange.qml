@@ -21,7 +21,7 @@ Item {
         var modelData
 
         if(GeneralParamsModel.getAPISwitch()) {
-            TableColumnsModel.fetchColumnDataAPI(componentName, DashboardParamsModel.currentDashboard)
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
             modelData = TableColumnsModel.fetchColumnDataLive(componentName)
             processDataList(modelData)
@@ -89,7 +89,8 @@ Item {
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
