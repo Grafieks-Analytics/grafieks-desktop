@@ -2055,8 +2055,6 @@ void ChartsThread::getPivotChartValues()
         dateConversionParams.insert(columnName, itemDetails);
     }
 
-    qDebug() <<"dateConversionParams" << dateConversionParams;
-
     QStringList xAxisData;
     QStringList yAxisData;
 
