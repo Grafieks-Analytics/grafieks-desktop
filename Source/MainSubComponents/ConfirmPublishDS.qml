@@ -35,15 +35,17 @@ Popup {
         height: 40
         width: parent.width - 2
         anchors.top: parent.top
-        anchors.left: parent.left
+        // anchors.left: parent.left
         anchors.topMargin: 1
         anchors.leftMargin: 1
+        anchors.horizontalCenter: confirmPublishDs.horizontalCenter
 
         Text{
             text: "Confirm Datasource Overwrite"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left : parent.left
+            // anchors.left : parent.left
             anchors.leftMargin: 10
+            anchors.horizontalCenter: confirmPublishDs.horizontalCenter
         }
         Image {
             id: close_icn
@@ -69,8 +71,9 @@ Popup {
         id: datasourceErrorMsg
         anchors.top: header_popup.bottom
         anchors.topMargin: 30
-        anchors.left: parent.left
+        // anchors.left: parent.left
         anchors.leftMargin: 30
+        anchors.horizontalCenter: confirmPublishDs.horizontalCenter
 
         Rectangle{
 
@@ -82,9 +85,10 @@ Popup {
             Text{
                 id : dsNameLabel
                 text: "Datasource name already exists. Confirm to publish and overwrite"
-                anchors.left: parent.left
+                // anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: confirmPublishDs.horizontalCenter
             }
         }
 

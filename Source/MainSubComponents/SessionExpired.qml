@@ -68,22 +68,26 @@ Popup {
         id: datasourceErrorMsg
         anchors.top: header_popup.bottom
         anchors.topMargin: 30
-        anchors.left: parent.left
-        anchors.leftMargin: 30
+        // anchors.left: parent.left
+        // anchors.leftMargin: 30
+        // anchors.horizontalCenter: parent.horizontalCenter
 
         Rectangle{
 
             id: label1
-            width:label_col
+            width:sessionExpiredPopup.width
             height: 40
-            anchors.leftMargin: 30
+            // anchors.leftMargin: 30
+            anchors.horizontalCenter: sessionExpiredPopup.horizontalCenter
+
 
             Text{
                 id : dsNameLabel
                 text: "Your current session has expired. Sign in again"
-                anchors.left: parent.left
+                // anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
 
@@ -98,7 +102,8 @@ Popup {
         id: sessionErrorHandlingButtons
         anchors.top: datasourceErrorMsg.bottom
         anchors.topMargin: 30
-        anchors.left: parent.left
+        // anchors.left: parent.left
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.leftMargin: 30
 
         Button{
