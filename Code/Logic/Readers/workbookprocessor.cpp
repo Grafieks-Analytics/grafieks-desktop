@@ -70,7 +70,7 @@ void WorkbookProcessor::processDS()
 
                 QString fileName = fi.fileName();
                 // For sqltype and forward type
-                QString dsType = Statics::currentDbClassification;
+                QString dsType = Constants::sqlType;
                 Statics::currentDSFile = fileName;
                 Statics::currentDbClassification = dsType;
 

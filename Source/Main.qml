@@ -207,6 +207,7 @@ ApplicationWindow {
                 ReportsDataModel.generateColumnsForExtract()
                 TableColumnsModel.generateColumnsFromAPI()
                 stacklayout_home.currentIndex = 6
+                DSParamsModel.setDsName(GeneralParamsModel.getDSNameWithoutExtension())
             } else{
                 // Call login
                 connectGrafieks1.visible = true

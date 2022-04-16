@@ -354,6 +354,12 @@ void GeneralParamsModel::setDBClassification(bool isLive){
     }
 }
 
+QString GeneralParamsModel::getDSNameWithoutExtension(){
+    QString fullDSName = Statics::currentDSFile;
+    QStringList dsNameParts = fullDSName.split(".");
+    return dsNameParts.at(0);
+}
+
 void GeneralParamsModel::setMenuType(int menuType)
 {
     if (m_menuType == menuType)
