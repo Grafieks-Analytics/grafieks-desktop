@@ -100,6 +100,8 @@ public:
 
     Q_INVOKABLE void setDBClassification(bool isLive);
 
+    Q_INVOKABLE QString getDSNameWithoutExtension();
+
 public slots:
 
     //! Set the current highlighted left menu
