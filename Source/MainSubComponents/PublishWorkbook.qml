@@ -178,9 +178,10 @@ Popup {
                                                                           "count" : '+ reportsCount + ',
                                                                           "image" : "",
                                                                           "imageData" : ""
-                                                                      }'
+                                                                      },'
                                             })
 
+        dashboardDetails = dashboardDetails.slice(0,-1);
         dashboardDetails += "]"
 
         if(wbName !== "" && projectId > 0 )
