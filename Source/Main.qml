@@ -203,6 +203,8 @@ ApplicationWindow {
             readerDialog.open()
         } else {
             if(typeof settings.value("user/sessionToken") !== "undefined"){
+
+                WorkbookProcessor.processAfterSelectinOnlineDS()
                 GeneralParamsModel.setAPISwitch(true)
                 ReportsDataModel.generateColumnsForExtract()
                 TableColumnsModel.generateColumnsFromAPI()
