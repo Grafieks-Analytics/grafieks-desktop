@@ -126,6 +126,27 @@ void WorkbookProcessor::processAfterSelectingDS(QString dsPath)
     fileWorkbook.close();
 }
 
+void WorkbookProcessor::processAfterSelectinOnlineDS()
+{
+    QFile fileWorkbook(this->filePath);
+
+    if(!fileWorkbook.open(QIODevice::ReadOnly | QIODevice::Truncate)){
+        qDebug() << Q_FUNC_INFO << "Could not open file for reading" << fileWorkbook.errorString();
+    } else {
+        QByteArray workbookData;
+        QDataStream in(&fileWorkbook);
+        in >> workbookData;
+
+        QJsonParseError jsonError;
+        QJsonDocument doc = QJsonDocument::fromJson(workbookData, &jsonError);
+
+        this->processRemaining(doc);
+
+    }
+
+    fileWorkbook.close();
+}
+
 void WorkbookProcessor::saveWorkbooks(QString filePath)
 {
     QJsonObject finalObj;
