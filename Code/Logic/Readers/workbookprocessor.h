@@ -39,6 +39,7 @@ public:
 
     Q_INVOKABLE void processDS();
     Q_INVOKABLE void processAfterSelectingDS(QString dsPath);
+    Q_INVOKABLE void processAfterSelectinOnlineDS();
 
     Q_INVOKABLE void saveWorkbooks(QString filePath);
 
