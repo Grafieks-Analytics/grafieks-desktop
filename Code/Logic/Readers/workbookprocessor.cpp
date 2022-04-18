@@ -44,7 +44,6 @@ void WorkbookProcessor::processDS()
         } else {
 
             if(doc.object().value("connectionType").toString() == Constants::duckType){
-
                 QString filePath = doc.object().value("datasourcePath").toString();
                 QFileInfo fi(filePath);
 
@@ -53,6 +52,7 @@ void WorkbookProcessor::processDS()
                 QString dsType = Constants::duckType;
                 Statics::currentDSFile = fileName;
                 Statics::currentDbClassification = dsType;
+                Statics::extractPath = doc.object().value("datasourcePath").toString();
 
                 if(!fi.exists()){
                     emit dsMissing(dsType, fileName);
@@ -73,6 +73,7 @@ void WorkbookProcessor::processDS()
                 QString dsType = Constants::sqlType;
                 Statics::currentDSFile = fileName;
                 Statics::currentDbClassification = dsType;
+                Statics::livePath = doc.object().value("datasourcePath").toString();
 
                 if(!fi.exists()){
                    emit dsMissing(dsType, fileName);
