@@ -345,6 +345,7 @@ ApplicationWindow {
         nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")", "Workbook (*."+Constants.workbookFileExt+")"]
 
         onAccepted: {
+            disconnectDS()
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
             var filenameSansExt = basename(readerFile)
             DSParamsModel.setDsName(filenameSansExt)
@@ -352,6 +353,7 @@ ApplicationWindow {
             if(readerFile.includes(Constants.extractFileExt)){
                 console.log("Extract file")
                 GeneralParamsModel.setFromLiveFile(false)
+                DSParamsModel.setDsType(Constants.extractDS)
 
                 if(selectMissingDS){
                     WorkbookProcessor.processAfterSelectingDS(readerFile)
@@ -365,6 +367,7 @@ ApplicationWindow {
             } else {
                 console.log("Live file")
                 GeneralParamsModel.setFromLiveFile(true)
+                DSParamsModel.setDsType(Constants.liveDS)
 
                 if(selectMissingDS){
                     WorkbookProcessor.processAfterSelectingDS(readerFile)
