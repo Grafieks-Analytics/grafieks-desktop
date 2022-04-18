@@ -70,6 +70,7 @@ SOURCES += \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/exceldatamodel.cpp \
     Code/Logic/DataModeller/excelquerymodel.cpp \
+    Code/Logic/DataModeller/extractslivequerymodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filtercsvjson.cpp \
@@ -195,6 +196,7 @@ HEADERS += \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/exceldatamodel.h \
     Code/Logic/DataModeller/excelquerymodel.h \
+    Code/Logic/DataModeller/extractslivequerymodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filtercsvjson.h \

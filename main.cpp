@@ -44,6 +44,7 @@
 #include "Code/Logic/DataModeller/excelquerymodel.h"
 #include "Code/Logic/DataModeller/csvjsondatamodel.h"
 #include "Code/Logic/DataModeller/csvjsonquerymodel.h"
+#include "Code/Logic/DataModeller/extractslivequerymodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -334,6 +335,7 @@ int main(int argc, char *argv[])
     TableSchemaModel tableSchemaModel;
     NewTableColumnsModel newTableColumnsModel;
     CredentialsModel credentialsModel;
+    ExtractsLiveQueryModel extractsLiveQueryModel;
 
     PublishWorkbookModel publishWorkbookModel;
     ProjectsListModel projectsListModel;
@@ -533,6 +535,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ExcelDataModel", &excelDataModel);
     engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
     engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
+    engine.rootContext()->setContextProperty("ExtractsLiveQueryModel", &extractsLiveQueryModel);
     engine.rootContext()->setContextProperty("ExtractProcessor", &extractProcessor);
     engine.rootContext()->setContextProperty("LiveProcessor", &liveProcessor);
     engine.rootContext()->setContextProperty("WorkbookProcessor", &workbookProcessor);

@@ -309,6 +309,14 @@ Page {
         }
     }
 
+    Connections{
+        target: ExtractsLiveQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+    }
+
 
     Connections{
         target: GeneralParamsModel
