@@ -22,35 +22,42 @@ FileDialog{
         let fileName = GeneralParamsModel.urlToFilePath(saveFilePromptDialog.currentFile)
         DSParamsModel.dsType === Constants.extractDS ? GeneralParamsModel.setExtractPath(fileName) : GeneralParamsModel.setLivePath(fileName)
 
-        switch(GeneralParamsModel.getDbClassification()){
-        case Constants.sqlType:
-        case Constants.accessType:
-            console.log("SQL save extract")
-//            QueryModel.saveExtractData()
-            DSParamsModel.dsType === Constants.extractDS ? QueryModel.saveExtractData() : QueryModel.saveLiveData()
-            break;
+        console.log("DB CLASSIFICATION", GeneralParamsModel.getDbClassification())
 
-        case Constants.forwardType:
-            console.log("FOWARD")
-            DSParamsModel.dsType === Constants.extractDS ? ForwardOnlyQueryModel.saveExtractData() : ForwardOnlyQueryModel.saveLiveData()
-            break;
+        if(GeneralParamsModel.currentScreen === Constants.modelerScreen){
 
-        case Constants.excelType:
-            console.log("EXCEL")
-            ExcelQueryModel.saveExtractData()
-            break;
+            switch(GeneralParamsModel.getDbClassification()){
+            case Constants.sqlType:
+            case Constants.accessType:
+                console.log("SQL save extract")
+    //            QueryModel.saveExtractData()
+                DSParamsModel.dsType === Constants.extractDS ? QueryModel.saveExtractData() : QueryModel.saveLiveData()
+                break;
 
-        case Constants.csvType:
-        case Constants.jsonType:
-            console.log("CSV")
-            CSVJsonQueryModel.saveExtractData()
-            break;
+            case Constants.forwardType:
+                console.log("FOWARD")
+                DSParamsModel.dsType === Constants.extractDS ? ForwardOnlyQueryModel.saveExtractData() : ForwardOnlyQueryModel.saveLiveData()
+                break;
 
-        default:
-            console.log("DB Classification failed")
-            break;
-        }   
+            case Constants.excelType:
+                console.log("EXCEL")
+                ExcelQueryModel.saveExtractData()
+                break;
 
+            case Constants.csvType:
+            case Constants.jsonType:
+                console.log("CSV")
+                CSVJsonQueryModel.saveExtractData()
+                break;
+
+            default:
+
+                console.log("DB Classification failed")
+                break;
+            }
+        } else {
+            ExtractsLiveQueryModel.hideSaveDSPopup()
+        }
     }
     onRejected: {
         console.log("file rejected")

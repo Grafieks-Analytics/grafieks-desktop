@@ -352,6 +352,7 @@ ApplicationWindow {
             if(readerFile.includes(Constants.extractFileExt)){
                 console.log("Extract file")
                 GeneralParamsModel.setFromLiveFile(false)
+                DSParamsModel.setDsType(Constants.extractDS)
 
                 if(selectMissingDS){
                     WorkbookProcessor.processAfterSelectingDS(readerFile)
@@ -365,6 +366,7 @@ ApplicationWindow {
             } else {
                 console.log("Live file")
                 GeneralParamsModel.setFromLiveFile(true)
+                DSParamsModel.setDsType(Constants.liveDS)
 
                 if(selectMissingDS){
                     WorkbookProcessor.processAfterSelectingDS(readerFile)
