@@ -345,6 +345,7 @@ ApplicationWindow {
         nameFilters: ["Extract (*."+Constants.extractFileExt+")", "Live (*."+Constants.liveFileExt+")", "Workbook (*."+Constants.workbookFileExt+")"]
 
         onAccepted: {
+            disconnectDS()
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
             var filenameSansExt = basename(readerFile)
             DSParamsModel.setDsName(filenameSansExt)
