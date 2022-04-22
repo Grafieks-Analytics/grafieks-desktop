@@ -48,7 +48,6 @@ SOURCES += \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
-    Code/Logic/Dashboards/Workers/saveworkbookworker.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/projectslistmodel.cpp \
@@ -94,7 +93,6 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
-    Code/Logic/FreeTier/freetierchartsmanager.cpp \
     Code/Logic/FreeTier/freetierconnectorsmanager.cpp \
     Code/Logic/FreeTier/freetierextractsmanager.cpp \
     Code/Logic/General/chartsapithread.cpp \
@@ -110,7 +108,6 @@ SOURCES += \
     Code/Logic/Readers/extractprocessor.cpp \
     Code/Logic/Readers/liveprocessor.cpp \
     Code/Logic/Readers/workbookprocessor.cpp \
-    Code/Logic/Reports/Workers/updatefilterdataworker.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
     Code/OS/odbcdriversmodel.cpp \
@@ -174,7 +171,6 @@ HEADERS += \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
-    Code/Logic/Dashboards/Workers/saveworkbookworker.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/projectslistmodel.h \
@@ -220,7 +216,6 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/FreeTier/freetierchartsmanager.h \
     Code/Logic/FreeTier/freetierconnectorsmanager.h \
     Code/Logic/FreeTier/freetierextractsmanager.h \
     Code/Logic/General/chartsapithread.h \
@@ -236,7 +231,6 @@ HEADERS += \
     Code/Logic/Readers/extractprocessor.h \
     Code/Logic/Readers/liveprocessor.h \
     Code/Logic/Readers/workbookprocessor.h \
-    Code/Logic/Reports/Workers/updatefilterdataworker.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
     Code/OS/odbcdriversmodel.h \
