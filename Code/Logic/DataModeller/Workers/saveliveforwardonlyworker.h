@@ -15,6 +15,8 @@
 #include "../../../constants.h"
 #include "../../../statics.h"
 #include "../../../duckdb.hpp"
+#include "../../../secrets.h"
+#include "../../../simplecrypt.h"
 
 class SaveLiveForwardOnlyWorker : public QThread
 {
@@ -25,6 +27,8 @@ class SaveLiveForwardOnlyWorker : public QThread
     QVariantMap changedColumnTypes;
 
     QuerySplitter querySplitter;
+    SimpleCrypt simpleCrypt;
+
 
 public:
     explicit SaveLiveForwardOnlyWorker(QString tmpSql = "", QVariantMap changedColumnTypes = QVariantMap(), bool ifSavePassword = false);

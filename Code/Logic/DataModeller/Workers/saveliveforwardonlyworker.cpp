@@ -93,7 +93,8 @@ void SaveLiveForwardOnlyWorker::run()
     QString tableCreateQuery = "CREATE TABLE " + Constants::masterLiveTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER, unique_hash VARCHAR,  last_update VARCHAR)";
     QString tableInsertQuery = "INSERT INTO " + Constants::masterLiveTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
-    QString password = this->ifSavePassword ? dbForward.password() : "";
+    simpleCrypt.setKey(Secret::simpleCryptHash);
+    QString password = this->ifSavePassword ? simpleCrypt.encryptToString(dbForward.password()) : "";
     QString port = QString::number(dbForward.port());
 
     QString credentialsCreateQuery = "CREATE TABLE " + Constants::masterCredentialsTable + "(username VARCHAR, password VARCHAR, host VARCHAR, port INTEGER, database VARCHAR, db_type VARCHAR, real_db_name VARCHAR)";
