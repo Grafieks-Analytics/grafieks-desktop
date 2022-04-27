@@ -17,6 +17,8 @@
 #include "../../../constants.h"
 #include "../../../statics.h"
 #include "../../../duckdb.hpp"
+#include "../../../secrets.h"
+#include "../../../simplecrypt.h"
 
 class SaveLiveQueryWorker : public QThread
 {
@@ -29,6 +31,8 @@ class SaveLiveQueryWorker : public QThread
 
     QuerySplitter querySplitter;
     GeneralParamsModel generalParamsModel;
+
+    SimpleCrypt simpleCrypt;
 
     int colCount;
 

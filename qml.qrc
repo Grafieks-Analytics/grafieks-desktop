@@ -60,8 +60,6 @@
         <file>Source/MainSubComponents/LoginCredentials.qml</file>
         <file>Source/MainSubComponents/LoginServer.qml</file>
         <file>Source/MainSubComponents/Logout.qml</file>
-        <file>Source/MainSubComponents/MainMenuDelegate.qml</file>
-        <file>Source/MainSubComponents/MenuItemDelegate.qml</file>
         <file>Source/MainSubComponents/MenuSeparatorComponent.qml</file>
         <file>Source/MainSubComponents/RangeSliderTpl.qml</file>
         <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>

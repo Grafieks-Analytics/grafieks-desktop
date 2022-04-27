@@ -10,6 +10,8 @@
 #include "../../statics.h"
 #include "../../constants.h"
 #include "../../duckdb.hpp"
+#include "../../secrets.h"
+#include "../../simplecrypt.h"
 
 class LiveProcessor : public QObject
 {
@@ -28,6 +30,7 @@ class LiveProcessor : public QObject
     QString selectParams;
 
     QString masterQuery;
+    SimpleCrypt simpleCrypt;
 
 
 public:
