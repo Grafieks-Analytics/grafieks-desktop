@@ -469,26 +469,101 @@ ApplicationWindow {
 
 
     /***********************************************************************************************************************/
+    // Shortcut action Starts
+
+    Action {
+        id: newAction
+        shortcut: StandardKey.New
+        onTriggered: openNewApplication()
+    }
+
+    Action {
+        id: openAction
+        shortcut: StandardKey.Open
+        onTriggered: openReaderDialog()
+    }
+
+    Action {
+        id: saveDsAction
+        shortcut: "Ctrl+Shift+S"
+        onTriggered: saveDatasource()
+    }
+
+    Action {
+        id: saveWbAction
+        shortcut: "Ctrl+Alt+S"
+        onTriggered: saveWorkbook()
+    }
+
+    Action {
+        id: disconnectAction
+        shortcut: "Ctrl+D"
+        onTriggered: disconnectDS()
+    }
+
+    Action {
+        id: loginLogoutAction
+        shortcut: "Ctrl+L"
+        onTriggered: {
+             if(typeof settings.value("user/sessionToken") !== "undefined"){
+
+                 // Call logout
+                 logout.visible = true
+             } else{
+
+                 // Call login
+                 connectGrafieks1.visible = true
+             }
+         }
+    }
+
+    Action {
+        id: publishDsAction
+        shortcut: "Ctrl+Shift+P"
+        onTriggered: publishDatasourceNow()
+    }
+
+    Action {
+        id: publishWbAction
+        shortcut: "Ctrl+Alt+P"
+        onTriggered: publishWorkbookNow()
+    }
+
+    Action {
+        id: helpAction
+        shortcut: StandardKey.HelpContents
+        onTriggered: {
+            // stacklayout_home.currentIndex = 2
+            Qt.openUrlExternally("https://grafieks.tawk.help/");
+        }
+    }
+
+    // Shortcut action Ends
+    /***********************************************************************************************************************/
+
+    /***********************************************************************************************************************/
     // Menu Bar Starts
+
 
     MenuBar {
         id: menuBar
+
 
         Menu {
             id: fileMenu
             title: qsTr("&File")
 
-
             MenuItem{
                 id: action_new
                 text: qsTr("New")
+                shortcut: StandardKey.New
                 onTriggered: openNewApplication()
             }
 
             MenuItem{
                 id: action_open
                 text: qsTr("Open")
-
+                shortcut: StandardKey.Open
                 onTriggered: openReaderDialog()
             }
 
@@ -497,7 +572,7 @@ ApplicationWindow {
             MenuItem{
                 id: action_save_ds
                 text: qsTr("Save Datasource")
-
+                shortcut: "Ctrl+Shift+S"
                 onTriggered: saveDatasource()
             }
 
@@ -507,7 +582,7 @@ ApplicationWindow {
                 id: action_save_workbook
                 text: qsTr("Save Workbook")
                 enabled: true
-
+                shortcut: "Ctrl+Alt+S"
                 onTriggered: saveWorkbook()
             }
 
@@ -570,7 +645,7 @@ ApplicationWindow {
             MenuItem{
                 id: disconnect_ds
                 text: qsTr("Disconnect")
-
+                shortcut: "Ctrl+D"
                 onTriggered: disconnectDS()
             }
 
@@ -617,7 +692,7 @@ ApplicationWindow {
                 id: action_signin
                 text: Constants.signInText
                 enabled: true
-
+                shortcut: "Ctrl+L"
                 onTriggered: {
                     if(typeof settings.value("user/sessionToken") !== "undefined"){
 
@@ -637,7 +712,7 @@ ApplicationWindow {
                 id: action_publish_datasource
                 text: qsTr("Publish Datasource")
                 enabled: true
-
+                shortcut: "Ctrl+Shift+P"
                 onTriggered: publishDatasourceNow()
             }
 
@@ -647,6 +722,7 @@ ApplicationWindow {
                 id: action_publish_workbook
                 text: qsTr("Publish Workbook")
                 enabled: true
+                shortcut: "Ctrl+Alt+P"
                 onTriggered: publishWorkbookNow()
             }
         }
@@ -658,6 +734,7 @@ ApplicationWindow {
 
             MenuItem{
                 text: qsTr("Open Help")
+                shortcut: StandardKey.HelpContents
                 onTriggered: {
                     // stacklayout_home.currentIndex = 2
                     Qt.openUrlExternally("https://grafieks.tawk.help/");

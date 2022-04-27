@@ -36,6 +36,9 @@ namespace Secret
     const QString ftpPass = "4379D9A952A68BE66B64D1D7C4376923220A7219BC5F1";
     const QString ftpPort = "5475";
 
+    // SimpleCrypt
+    const int simpleCryptHash = 45715476;
+
 
 }
 

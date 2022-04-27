@@ -107,6 +107,11 @@ void LiveProcessor::processLive()
     dbType = credentials->GetValue(5,0).ToString().c_str();
     realDbName = credentials->GetValue(6,0).ToString().c_str();
 
+    if(password.trimmed() != ""){
+        simpleCrypt.setKey(Secret::simpleCryptHash);
+        password = simpleCrypt.decryptToString(password);
+    }
+
     Statics::currentDbIntType = dbType.toInt();
 
 
