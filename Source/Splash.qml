@@ -12,6 +12,7 @@ Window {
     width: 400
     height: 400
     color: "transparent"
+    visible: true
 
     Connections{
         target: GeneralParamsModel
@@ -58,5 +59,7 @@ Window {
         }
     }
 
-    Component.onCompleted: visible = true
+    Component.onCompleted: {
+        splashScreen.visible = true
+    }
 }
