@@ -50,21 +50,6 @@ Popup {
     }
 
     Connections{
-        target: CredentialsModel
-
-        function onSignalCredentialsReceived(credentials){
-
-            if(credentials.dbTypeString === "mongodb"){
-                server.text = credentials.host
-                port.text = credentials.port
-                database.text = credentials.database
-                username.text = credentials.username
-                password.text = credentials.password
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         function onMongoLoginStatus(status){

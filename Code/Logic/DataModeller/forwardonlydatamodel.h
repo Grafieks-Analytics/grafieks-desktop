@@ -41,10 +41,9 @@ public:
 
     Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
-    Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName, QString searchString = "");
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
-    Q_INVOKABLE QStringList getDbList();
+    Q_INVOKABLE QStringList getDbList(); // TO DELETE
 
     Q_INVOKABLE QStringList getDateColumnData();
 

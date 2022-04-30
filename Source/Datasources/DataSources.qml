@@ -47,8 +47,6 @@ Page {
 
 
     function processDS(){
-//        stacklayout_home.currentIndex = 5
-//        CredentialsModel.fetchLiveCredentials(ds_name_header.text)
 
         if(datasourcelist_page.connectAllowed === true){
             GeneralParamsModel.setAPISwitch(true)

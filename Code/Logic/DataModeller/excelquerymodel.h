@@ -18,7 +18,6 @@
 #include "../General/generalparamsmodel.h"
 
 #include "./Workers/saveextractexcelworker.h"
-#include "../FreeTier/freetierextractsmanager.h"
 
 class ExcelQueryModel : public QAbstractTableModel
 {

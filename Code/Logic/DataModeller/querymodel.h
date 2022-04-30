@@ -15,7 +15,6 @@
 #include "../General/datatype.h"
 #include "./Workers/generaterolenamesqueryworker.h"
 #include "./Workers/setchartdataqueryworker.h"
-#include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractqueryworker.h"
 #include "./Workers/savelivequeryworker.h"
 #include "../General/generalparamsmodel.h"

@@ -34,7 +34,7 @@ import "./Dashboards/SubComponents"
 ApplicationWindow {
 
     id: mainwindow
-    visible: true
+    visible: false
     width: 1800
     height: 900
     minimumWidth: 1300
@@ -43,10 +43,19 @@ ApplicationWindow {
     title: Constants.applicationName
     property var selectMissingDS : false
 
-    // Handle Splash screen here
-    onVisibilityChanged: {
-        GeneralParamsModel.loadingComplete()
+    // Handle splash screen
+    Timer {
+        id: ttimer
+        interval: 2000
+        running: false
+        repeat: false
+
+        onTriggered: {
+            GeneralParamsModel.loadingComplete()
+            mainwindow.visible = true
+        }
     }
+
 
 
 
@@ -162,6 +171,10 @@ ApplicationWindow {
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
+
+        // Timer for splash
+        ttimer.start()
+
 
         // Get Reader file
         // We call a function to check because signals and slots between Qml and C++ dont Work

@@ -92,22 +92,22 @@ public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
 
     Q_INVOKABLE bool dragNewReport(int dashboardId, int widgetId, QString reportName);
-    Q_INVOKABLE bool removeReport(int dashboardId, int widgetId);
+    Q_INVOKABLE bool removeReport(int dashboardId, int widgetId); // TO REMOVE
 
     Q_INVOKABLE bool createNewDashboard(int dashboardId);
     Q_INVOKABLE bool destroyDashboard(int dashboardId, bool destroyAll = false);
     Q_INVOKABLE QVariantMap fetchAllDashboards(); // returns [dashboardId, dashboardName]
     Q_INVOKABLE QVector<int> fetchReportsInDashboard(int dashboardId);
-    Q_INVOKABLE QVariantMap fetchAllReportZOrder(int dashboardId);
-    Q_INVOKABLE QVariantMap fetchAllReportCoordinates(int dashboardId);
-    Q_INVOKABLE QVariantMap fetchAllReportUrls(int dashboardId);
+    Q_INVOKABLE QVariantMap fetchAllReportZOrder(int dashboardId); // TO REMOVE
+    Q_INVOKABLE QVariantMap fetchAllReportCoordinates(int dashboardId); // TO REMOVE
+    Q_INVOKABLE QVariantMap fetchAllReportUrls(int dashboardId); // TO REMOVE
     Q_INVOKABLE QVariantMap fetchAllReportTypeMap(int dashboardId);
     Q_INVOKABLE void deleteReport(int reportId, int dashboardId = -1);
 
     // Dashboard Report Mapping
 
-    Q_INVOKABLE void addReportToDashboard(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteReportFromDashboard(int dashboardId, int widgetId);
+    Q_INVOKABLE void addReportToDashboard(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
+    Q_INVOKABLE void deleteReportFromDashboard(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setReportZOrder(int dashboardId, int widgetId, int zOrder);
     Q_INVOKABLE int getReportZOrder(int dashboardId, int widgetId);
@@ -118,12 +118,12 @@ public:
     Q_INVOKABLE void deleteDashboardWidgetCoordinates(int dashboardId, int widgetId);
 
     Q_INVOKABLE void setDashboardWidgetTypeMap(int dashboardId, int widgetId, int reportType);
-    Q_INVOKABLE int getDashboardWidgetTypeMap(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteDashboardWidgetTypeMap(int dashboardId, int widgetId);
+    Q_INVOKABLE int getDashboardWidgetTypeMap(int dashboardId, int widgetId); // TO REMOVE
+    Q_INVOKABLE void deleteDashboardWidgetTypeMap(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setDashboardWidgetUrl(int dashboardId, int widgetId, QUrl url);
     Q_INVOKABLE QUrl getDashboardWidgetUrl(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteDashboardWidgetUrl(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteDashboardWidgetUrl(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setDashboardUniqueWidget(int dashboardId, int widgetId, QString hash);
     Q_INVOKABLE QString getDashboardUniqueWidget(int dashboardId, int widgetId);
@@ -131,7 +131,7 @@ public:
 
     Q_INVOKABLE void setTextReportParametersMap(int dashboardId, int widgetId, QVariantMap textReportParams);
     Q_INVOKABLE QVariant getTextReportParametersMap(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteTextReportParametersMap(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteTextReportParametersMap(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     // Filter Parameters
     Q_INVOKABLE void addToShowColumns(int dashboardId, QString colName, bool status);
@@ -174,23 +174,21 @@ public:
 
     Q_INVOKABLE void setReportName(int dashboardId, int widgetId, QString reportName);
     Q_INVOKABLE QString getReportName(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteReportName(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportName(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setReportBackgroundColor(int dashboardId, int widgetId, QString color);
     Q_INVOKABLE QString getReportBackgroundColor(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteReportBackgroundColor(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportBackgroundColor(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setReportLineColor(int dashboardId, int widgetId, QString color);
-    Q_INVOKABLE QString getReportLineColor(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteReportLineColor(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportLineColor(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setReportOpacity(int dashboardId, int widgetId, int percent);
     Q_INVOKABLE int getReportOpacity(int dashboardId, int widgetId);
-    Q_INVOKABLE void deleteReportOpacity(int dashboardId, int widgetId);
+    Q_INVOKABLE void deleteReportOpacity(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
     Q_INVOKABLE void setDashboardReportUrl(int dashboardId, int reportId, QUrl url);
-    Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
-    Q_INVOKABLE void deleteDashboardReportUrl(int dashboardId, int reportId);
+    Q_INVOKABLE void deleteDashboardReportUrl(int dashboardId, int reportId); // TO CHANGE - MAKE PRIVATE
 
     // Save and read files
 
@@ -198,7 +196,7 @@ public:
     Q_INVOKABLE void setDashboardReportMap(int reportId);
     Q_INVOKABLE void saveDashboard();
 
-    Q_INVOKABLE void deleteDashboardReportMap(int dashboardId, int reportId);
+    Q_INVOKABLE void deleteDashboardReportMap(int dashboardId, int reportId); // TO CHANGE - MAKE PRIVATE
     Q_INVOKABLE bool getDashboardReportMap(int reportId);
     Q_INVOKABLE int getDasbboardReportCount(int dashboardId);
 

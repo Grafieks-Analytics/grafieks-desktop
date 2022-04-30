@@ -371,11 +371,6 @@ void DSParamsModel::removeJoinIconMap(int refObjId, bool removeAll)
     }
 }
 
-QString DSParamsModel::fetchJoinIconMap(int refObjId)
-{
-    return this->joinIconMap.value(refObjId);
-}
-
 void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString leftParam, QString rightParam)
 {
     QMap<int, QStringList> joinParamMap;
@@ -487,16 +482,6 @@ QStringList DSParamsModel::fetchQuerySelectParamsList()
 void DSParamsModel::addToJoinOrder(int joinOrderId)
 {
     this->joinOrder.append(joinOrderId);
-}
-
-void DSParamsModel::removeJoinOrder(int joinOrderId)
-{
-    this->joinOrder.removeOne(joinOrderId);
-}
-
-QVariantList DSParamsModel::fetchJoinOrder()
-{
-    return this->joinOrder;
 }
 
 void DSParamsModel::addToExistingTables(int refObjId, QString tableName)
@@ -1009,87 +994,6 @@ QVector<int> DSParamsModel::getTmpFilterIndex(int refObjId, bool fetchAll)
     }
 
     return output;
-}
-
-void DSParamsModel::parseCsv(QUrl pathToCsv)
-{
-
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QFileInfo fileInfo(pathToCsv.toString());
-    //    QString fileName = fileInfo.fileName();
-    //    QString fileNameWithoutExt = fileName.section(".", 0, 0);
-
-    //    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM read_csv_auto('" + pathToCsv.toLocalFile() + "')";
-    //    auto result = con.Query(queryString.toStdString());
-    //    result->Print();
-
-    //    if (!result->success)
-    //    {
-    //        msg = QString::fromStdString(result->error);
-    //    }
-    //    else
-    //    {
-    //        msg = "Success";
-    //    }
-    //    qDebug() << msg << "CSV Reading";
-
-    //    emit csvReadComplete(timer.elapsed(), result->success, msg);
-}
-
-void DSParamsModel::parseParquet(QUrl pathToParquet)
-{
-
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QFileInfo fileInfo(pathToParquet.toString());
-    //    QString fileName = fileInfo.fileName();
-    //    QString fileNameWithoutExt = fileName.section(".", 0, 0);
-
-    //    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM PARQUET_SCAN('" + pathToParquet.toLocalFile() + "')";
-    //    qDebug() << queryString << "QSTRING";
-    //    auto result = con.Query(queryString.toStdString());
-    //    result->Print();
-
-    //    if (!result->success)
-    //    {
-    //        msg = QString::fromStdString(result->error);
-    //    }
-    //    else
-    //    {
-    //        msg = "Success";
-    //    }
-
-    //    emit parquetReadComplete(timer.elapsed(), result->success, msg);
-}
-
-void DSParamsModel::exportExtractData(QString pathToExtract)
-{
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QString queryString = "EXPORT DATABASE '" + pathToExtract + "' (FORMAT PARQUET)";
-    //    auto result = con.Query(queryString.toStdString());
-
-    //    emit exportDataComplete(timer.elapsed(), result->success, msg);
-}
-
-void DSParamsModel::importExtractData(QString pathToExtract)
-{
-
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QString queryString = "IMPORT DATABASE '" + pathToExtract + "'";
-    //    auto result = con.Query(queryString.toStdString());
-
-    //    emit importDataComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::resetInputFields()

@@ -57,39 +57,7 @@ QString DataType::dataType(QString parameter)
 
 }
 
-QString DataType::duckNumericType(QString parameter)
-{
-    QString output;
-    QStringList bigintType, hugeintType, integerType, realType, doubleType, tinyintType, smallintType;
 
-    tinyintType << "I1" << "tinyint" << "int1";
-    smallintType << "smallint" << "short" << "ushort" << "I2" << "smallserial" << "int2";
-    integerType << "int" << "integer" << "numeric" << "I4" << "autonumber" << "int4" << "smallmoney" << "uint" << "I" << "signed" << "mediumint" << "serial" << "number";
-    bigintType << "bigint" << "I8" << "unsigned big int" << "int8" << "large number" << "qulonglong" << "ulong" << "bigserial" << "long" << "money";
-    doubleType << "double" << "double precision" << "decimal" << "float8" << "binary_double" << "D";
-    realType << "float" << "float4" << "F" << "bianry_float" ;
-
-
-    // Match the incoming parameter and determine filter type
-
-    if(smallintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "SMALLINT";
-    } else if(doubleType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "DOUBLE";
-    } else if(realType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "REAL";
-    } else if(bigintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "BIGINT";
-    } else if(hugeintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "HUGEINT";
-    } else if(tinyintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "TINYINT";
-    } else{
-        output = "INTEGER";
-    }
-
-    return output;
-}
 
 bool DataType::checkNumberType(QString inputVariable)
 {
