@@ -1037,24 +1037,6 @@ void DashboardParamsModel::setReportLineColor(int dashboardId, int widgetId, QSt
     emit reportLineColorChanged(dashboardId, widgetId, color);
 }
 
-QString DashboardParamsModel::getReportLineColor(int dashboardId, int widgetId)
-{
-
-    QString output;
-    QMap<int, QString> lineColor;
-
-    if (!this->reportLineColor.value(dashboardId).isEmpty())
-    {
-
-        lineColor = this->reportLineColor.value(dashboardId);
-        if (lineColor.contains(widgetId))
-        {
-            output = lineColor.value(widgetId);
-        }
-    }
-
-    return output;
-}
 
 void DashboardParamsModel::deleteReportLineColor(int dashboardId, int widgetId)
 {
@@ -1151,25 +1133,6 @@ void DashboardParamsModel::setDashboardReportUrl(int dashboardId, int reportId, 
     emit reportUrlChanged(dashboardId, reportId, url.toString());
 }
 
-QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
-{
-    QUrl output;
-    QMap<int, QString> reportUrl;
-
-    if (!this->dashboardReportUrl.value(dashboardId).isEmpty())
-    {
-
-        reportUrl = this->dashboardReportUrl.value(dashboardId);
-        if (reportUrl.contains(reportId))
-        {
-            output = reportUrl.value(reportId);
-        }
-    }
-
-    return output;
-}
-
-
 
 void DashboardParamsModel::deleteDashboardReportUrl(int dashboardId, int reportId)
 {
@@ -1186,16 +1149,6 @@ void DashboardParamsModel::deleteDashboardReportUrl(int dashboardId, int reportI
         this->dashboardReportUrl.insert(dashboardId, reportUrl);
     }
 }
-
-//void DashboardParamsModel::setSelectAll(bool status, QString columnName, int dashboardId)
-//{
-//    emit selectAllChanged(status, columnName, dashboardId);
-//}
-
-//bool DashboardParamsModel::ifFilterApplied(int dashboardId)
-//{
-//    return this->columnValueMap.value(dashboardId).size() > 0 ? true: false;
-//}
 
 void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
 {
@@ -1512,7 +1465,6 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
 
         foreach(QString hash, dashboardUniqueWidgetKeys){
             int widgetId = childObj.value(hash).toString().toInt();
-//            qDebug() << "SLOT D" << widgetId << dashboardUniqueWidgetKeys << childObj << childObj.value(hash).toString().toInt();
             this->setDashboardUniqueWidget(dashboardId.toInt(), widgetId, hash);
         }
 

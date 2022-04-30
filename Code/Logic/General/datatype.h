@@ -19,9 +19,6 @@ public:
     //! for classification only
     QString dataType(QString parameter);
 
-    //! Numeric data type
-    //! for extract data type
-    QString duckNumericType(QString parameter);
 
     //! Get variable type classification from value
     //! for extract data type
@@ -31,6 +28,7 @@ public:
     //! for extract data type
     QString qVariantType(QString inputVariable);
 
+    // TO CHANGE - MAKE PRIVATE
     bool checkNumberType(QString inputVariable);
     QVariantList checkDateTimeType(QString inputVariable);
 

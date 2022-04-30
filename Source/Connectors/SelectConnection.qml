@@ -44,13 +44,6 @@ Page {
         }
     }
 
-    Connections{
-        target: CredentialsModel
-
-        function onOpenConnection(dbType){
-            selectAuthorization(dbType)
-        }
-    }
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
