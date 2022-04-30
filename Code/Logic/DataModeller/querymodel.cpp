@@ -225,7 +225,6 @@ void QueryModel::extractSaved(QString errorMessage)
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     if(errorMessage.length() == 0){
-        FreeTierExtractsManager freeTierExtractsManager;
         QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
     } else {
         emit extractCreationError(errorMessage);

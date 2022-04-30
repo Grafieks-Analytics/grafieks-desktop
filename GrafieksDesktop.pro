@@ -65,7 +65,6 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/csvjsondatamodel.cpp \
     Code/Logic/DataModeller/csvjsonquerymodel.cpp \
-    Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/exceldatamodel.cpp \
     Code/Logic/DataModeller/excelquerymodel.cpp \
@@ -88,13 +87,9 @@ SOURCES += \
     Code/Logic/DataModeller/scheduler.cpp \
     Code/Logic/DataModeller/schedulerds.cpp \
     Code/Logic/DataModeller/schedulermodel.cpp \
-    Code/Logic/Datasources/credentialsmodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
-    Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
-    Code/Logic/FreeTier/freetierconnectorsmanager.cpp \
-    Code/Logic/FreeTier/freetierextractsmanager.cpp \
     Code/Logic/General/chartsapithread.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
@@ -188,7 +183,6 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/csvjsondatamodel.h \
     Code/Logic/DataModeller/csvjsonquerymodel.h \
-    Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/exceldatamodel.h \
     Code/Logic/DataModeller/excelquerymodel.h \
@@ -211,13 +205,9 @@ HEADERS += \
     Code/Logic/DataModeller/scheduler.h \
     Code/Logic/DataModeller/schedulerds.h \
     Code/Logic/DataModeller/schedulermodel.h \
-    Code/Logic/Datasources/credentialsmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
-    Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/FreeTier/freetierconnectorsmanager.h \
-    Code/Logic/FreeTier/freetierextractsmanager.h \
     Code/Logic/General/chartsapithread.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \

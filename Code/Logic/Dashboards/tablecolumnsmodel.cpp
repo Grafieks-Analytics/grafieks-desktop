@@ -30,12 +30,6 @@ void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName,
 
 }
 
-QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
-{
-    return this->allColumnVisibleMap.value(dashboardId);
-}
-
-
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
 { 
     QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
@@ -608,20 +602,6 @@ void TableColumnsModel::generateColumnsForReader(duckdb::Connection *con)
 
 void TableColumnsModel::getExtractTableColumns(QJsonObject tableColumnParams)
 {
-
-    qDebug() << Q_FUNC_INFO << tableColumnParams;
-    //    QMap<int, QMap<int, QStringList>> filteredChartData;
-    //    QMap<int, QStringList *> newChartData;
-    //    QMap<int, QString> newChartHeader;
-    //    QMap<int, QStringList> chartHeaderDetails;
-
-    //    QStringList numericalList;
-    //    QStringList categoryList;
-    //    QStringList dateList;
-    //    QMap<int, QVariantMap> allColumnVisibleMap;         // dashboardId - <columnName - columnType>
-    //    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
-    //    QMap<QString, QString> columnTypes;
-    //    QStringList columnDataList;
 
     QJsonObject mainObj;
     mainObj = tableColumnParams.value("allColumnVisibleMap").toObject();

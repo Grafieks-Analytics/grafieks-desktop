@@ -61,7 +61,6 @@ public:
     explicit TableColumnsModel(DashboardParamsModel *dashboardParamsModel, QObject *parent = nullptr);
 
     Q_INVOKABLE void setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show = true);
-    Q_INVOKABLE QVariantMap fetchVisibleColumns(int dashboardId);
     Q_INVOKABLE void applyColumnVisibility(int dashboardId);
     Q_INVOKABLE void addNewDashboard(int dashboardId);
     Q_INVOKABLE void deleteDashboard(int dashboardId, bool deleteAll = false);

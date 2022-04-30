@@ -32,21 +32,6 @@ Popup {
     // Connection  Starts
 
     Connections{
-        target: CredentialsModel
-
-        function onSignalCredentialsReceived(credentials){
-
-            if(credentials.dbTypeString === "oracle"){
-                server.text = credentials.host
-                port.text = credentials.port
-                database.text = credentials.database
-                username.text = credentials.username
-                password.text = credentials.password
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         function onOracleLoginStatus(status){

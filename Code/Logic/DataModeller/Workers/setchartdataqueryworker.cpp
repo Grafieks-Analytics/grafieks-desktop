@@ -9,9 +9,6 @@ SetChartDataQueryWorker::SetChartDataQueryWorker(QSqlQueryModel *queryModel, int
 
 SetChartDataQueryWorker::~SetChartDataQueryWorker()
 {
-//    for(int i = 0; i < this->maxColCount; i++){
-//        delete vectorStringList.at(i);
-//    }
 }
 
 QMap<int, QStringList *> SetChartDataQueryWorker::getSqlChartData()
