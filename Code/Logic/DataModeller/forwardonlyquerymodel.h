@@ -15,7 +15,6 @@
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
-#include "../FreeTier/freetierextractsmanager.h"
 #include "./Workers/saveextractforwardonlyworker.h"
 #include "./Workers/saveliveforwardonlyworker.h"
 #include "../General/generalparamsmodel.h"

@@ -137,7 +137,6 @@ void ForwardOnlyQueryModel::extractSaved(QString errorMsg)
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     if(errorMsg.length() == 0){
-        FreeTierExtractsManager freeTierExtractsManager;
         QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
     } else {
         emit extractCreationError(errorMsg);

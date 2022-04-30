@@ -158,7 +158,6 @@ void ExcelQueryModel::extractSaved(QString errorMsg)
     // This goes using QTimer because, syncing files cannot be directly deleted
 
     if(errorMsg.length() == 0){
-        FreeTierExtractsManager freeTierExtractsManager;
         QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ExcelQueryModel::extractSizeLimit);
     } else {
         emit extractCreationError(errorMsg);
