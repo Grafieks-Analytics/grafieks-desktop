@@ -43,7 +43,7 @@ void WorkbookProcessor::processDS()
             qDebug() << Q_FUNC_INFO << "Blank JsonDocument" ;
         } else {
 
-            if(doc.object().value("connectionType").toString() == Constants::duckType){
+            if(doc.object().value("connectionType").toString() == Constants::extractType){
                 QString filePath = doc.object().value("datasourcePath").toString();
                 QFileInfo fi(filePath);
 
@@ -70,7 +70,7 @@ void WorkbookProcessor::processDS()
 
                 QString fileName = fi.fileName();
                 // For sqltype and forward type
-                QString dsType = Constants::sqlType;
+                QString dsType = doc.object().value("currentDbClassification").toString();
                 Statics::currentDSFile = fileName;
                 Statics::currentDbClassification = dsType;
                 Statics::livePath = doc.object().value("datasourcePath").toString();
@@ -104,7 +104,7 @@ void WorkbookProcessor::processAfterSelectingDS(QString dsPath)
         QJsonParseError jsonError;
         QJsonDocument doc = QJsonDocument::fromJson(workbookData, &jsonError);
 
-        if(doc.object().value("connectionType").toString() == Constants::duckType){
+        if(doc.object().value("connectionType").toString() == Constants::extractType){
 
             QString filePath = dsPath;
             QFileInfo fi(filePath);
@@ -186,7 +186,7 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
     finalObj.insert("workbook_version", Constants::workbookVersion);
     finalObj.insert("unique_hash", uniqueHash); // This is to identify the extract irrespective of its filename
     finalObj.insert("last_update", QString::number(currentTimestamp));
-    finalObj.insert("connectionType", Statics::currentDbClassification == Constants::duckType ? Constants::duckType : Constants::sqlType);
+    finalObj.insert("connectionType", Statics::dsType);
 
     finalObj.insert("reportParams", this->reportParams);
     finalObj.insert("dashboardParams", this->dashboardParams);

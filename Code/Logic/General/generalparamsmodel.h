@@ -98,8 +98,6 @@ public:
 
     Q_INVOKABLE void resetGeneralParams();
 
-    Q_INVOKABLE void setDBClassification(bool isLive);
-
     Q_INVOKABLE QString getDSNameWithoutExtension();
 
 public slots:

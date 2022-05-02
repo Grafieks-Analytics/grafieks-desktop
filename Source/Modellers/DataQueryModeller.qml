@@ -215,8 +215,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            let isLive = DSParamsModel.dsType === Constants.extractDS ? false : true
-            GeneralParamsModel.setDBClassification(isLive)
         }
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
@@ -245,8 +243,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            let isLive = DSParamsModel.dsType === Constants.extractDS ? false : true
-            GeneralParamsModel.setDBClassification(isLive)
         }
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
@@ -275,7 +271,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            GeneralParamsModel.setDBClassification(false)
 
         }
 
@@ -295,7 +290,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            GeneralParamsModel.setDBClassification(false)
         }
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){

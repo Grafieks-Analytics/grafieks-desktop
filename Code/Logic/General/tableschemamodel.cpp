@@ -585,7 +585,7 @@ void TableSchemaModel::dataReadFinished()
                 QJsonArray finalValue = data.toArray();
 
                 QVariantList valueList = finalValue.toVariantList();
-                if(Statics::currentDbClassification == Constants::duckType){
+                if(Statics::dsType == Constants::extractType){
                     valueList.replace(4, valueList.at(1));
                 }
 
