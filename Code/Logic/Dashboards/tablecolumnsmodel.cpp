@@ -39,7 +39,7 @@ void TableColumnsModel::applyColumnVisibility(int dashboardId)
     foreach(QString tmpType, visibleColumns){
 
         QString type;
-        if(Statics::currentDbClassification == Constants::duckType){
+        if(Statics::dsType == Constants::extractType){
             type = tmpType;
         } else {
             QStringList pieces = tmpType.split( "." );
@@ -666,7 +666,7 @@ void TableColumnsModel::columnReadFinished()
 
             QString tableColumnName;
 
-            if(Statics::currentDbClassification == Constants::duckType){
+            if(Statics::dsType == Constants::extractType){
                 tableColumnName = finalValue.at(1).toString();
             } else {
                 tableColumnName = finalValue.at(4).toString();
