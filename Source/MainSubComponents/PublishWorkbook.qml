@@ -423,7 +423,7 @@ Popup {
         CustomButton{
 
             id: btn_publish
-            textValue: Messages.msc_pwb_publishBtn
+            textValue: Messages.publishBtnTxt
             onClicked: onPublishWorkbookClicked()
         }
 
