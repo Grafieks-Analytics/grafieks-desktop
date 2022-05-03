@@ -481,6 +481,7 @@ int main(int argc, char *argv[])
 
     // Define singletons
     qmlRegisterSingletonType(QUrl("qrc:/Source/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants");
+    qmlRegisterSingletonType(QUrl("qrc:/Source/Messages.qml"), "com.grafieks.singleton.messages", 1, 0, "Messages");
     qmlRegisterType<DocumentHandlerModel>("io.qt.examples.texteditor", 1, 0, "DocumentHandlerModel");
 
     // Set contexts for QML

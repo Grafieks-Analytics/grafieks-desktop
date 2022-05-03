@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -262,7 +263,7 @@ Popup {
                 height: 40
 
                 Text{
-                    text: Constants.openFileText
+                    text: Messages.openFileText
                     anchors.centerIn: parent
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"

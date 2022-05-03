@@ -14,6 +14,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 Rectangle{
@@ -127,7 +128,7 @@ Rectangle{
                     id: dbMenuText
                     anchors.bottom: dbMenuIcon.bottom
                     anchors.bottomMargin: 100
-                    text: Constants.dataDesignerText
+                    text: Messages.lmb_dataDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
 
@@ -204,7 +205,7 @@ Rectangle{
                 Text{
                     anchors.top: chartMenuIcon.bottom
                     anchors.topMargin: -80
-                    text: Constants.dashboardDesignerText
+                    text: Messages.lmb_dashboardDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
 

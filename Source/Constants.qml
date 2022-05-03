@@ -16,18 +16,7 @@ QtObject {
     property int initialIndex: 3
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
-    property int newReportIndex: 7
-
-    // General Strings
-
-    property string applicationName : qsTr("Grafieks")
-    property string signInText : qsTr("Sign In")
-    property string signOutText : qsTr("Sign Out")
-    property string openFileText : qsTr("Open")
-    property string dataDesignerText : qsTr("Data Designer")
-    property string dashboardDesignerText : qsTr("Dashboard Designer")
-    property string sessionExpiredText : qsTr("Login incorrect")
-    property string dsExists: qsTr("Datasource name already exists")
+    property int newReportIndex: 7 
 
     property string gaugePointerLabel: 'Pointer/Actual';
 

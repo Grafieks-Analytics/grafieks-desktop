@@ -15,6 +15,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 Popup {
@@ -59,11 +60,11 @@ Popup {
         }
 
         function onDsUploadPercentage(percentage){
-            errorMsg.text = "Uploading Datasource " + percentage + "%"
+            errorMsg.text = Messages.pds_uploading + " " + percentage + "%"
         }
 
         function onDsUploadFinished(){
-            errorMsg.text = "Datasource is published now. Please close this window"
+            errorMsg.text = Messages.pds_uploadSuccess
 //            closePopup()
 
             // If called from modelere screen, then redirect to reports screen
@@ -79,7 +80,7 @@ Popup {
 
         function onDsExists(status){
 
-            if(status.msg === Constants.dsExists){
+            if(status.msg === Messages.pds_dsExists){
                 confirmPublishDsComponent.open()
             } else if (status.code !== 200){
                 errorMsg.text = status.msg
@@ -181,7 +182,7 @@ Popup {
         // First save the extract file
         // Then publish the data and file
         if(GeneralParamsModel.getExtractPath().length > 0 || GeneralParamsModel.getLivePath().length > 0){
-            errorMsg.text = "Processing. Please wait.."
+            errorMsg.text = Messages.pds_pleaseWait
             checkDSName()
         } else {
             saveFilePrompt.open()
@@ -211,30 +212,30 @@ Popup {
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
             if(ifPublish && !freeLimit){
-                errorMsg.text = "Processing. Please wait.."
+                errorMsg.text = Messages.pds_pleaseWait
                 publishData()
             }
 
         } else {
             if(ifPublish){
-                errorMsg.text = "Processing. Please wait.."
+                errorMsg.text = Messages.pds_pleaseWait
                 publishData()
             }
         }
     }
 
     function saveLiveLimit(freeLimit, ifPublish){
-        errorMsg.text = "Processing. Please wait.."
+        errorMsg.text = Messages.pds_pleaseWait
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
             if(ifPublish && !freeLimit){
-                errorMsg.text = "Processing. Please wait.."
+                errorMsg.text = Messages.pds_pleaseWait
                 publishData()
             }
 
         } else {
             if(ifPublish){
-                errorMsg.text = "Processing. Please wait.."
+                errorMsg.text = Messages.pds_pleaseWait
                 publishData()
             }
 
@@ -253,9 +254,9 @@ Popup {
 
     FileDialog{
         id: fileDialog1
-        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        title: Messages.pds_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+        nameFilters: [ Messages.pds_selectImageNamedFiltersTxt ]
     }
 
 
@@ -295,7 +296,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Publish Data Source"
+            text: Messages.pds_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -336,7 +337,7 @@ Popup {
 
             Text{
                 id : dsNameLabel
-                text: "Data Source Name"
+                text: Messages.pds_dsName
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -372,7 +373,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Description"
+                text: Messages.pds_description
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -406,7 +407,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Upload Image"
+                text: Messages.pds_uploadImage
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -417,7 +418,7 @@ Popup {
             id: file
             btnHeight: 40
             btnWidth: 370
-            textValue: "Click to upload image (*.jpg *.jpeg *.png  only)"
+            textValue: Messages.pds_uploadImageDialogTxt
 
             MouseArea{
                 anchors.fill: parent
@@ -444,13 +445,13 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: "Publish"
+            textValue: Messages.pds_publishBtn
             onClicked: onPublishDataSourceClicked()
         }
 
         CustomButton{
             id: btn_cancel
-            textValue: "Cancel"
+            textValue: Messages.cancelBtnTxt
             onClicked: closePopup()
         }
     }
@@ -464,7 +465,7 @@ Popup {
         anchors.leftMargin: 30
 
         Text {
-            text: qsTr("For Data Source access permission, contact Project Admin ")
+            text: Messages.pds_contactAdminTxt
         }
 
         Text {
