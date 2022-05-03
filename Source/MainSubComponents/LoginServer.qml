@@ -41,7 +41,7 @@ Popup {
                 server_address.text = ""
 
             } else {
-                errorMsg.text = status.msg + " " + Messages.lsr_hostNotFound
+                errorMsg.text = status.msg +  Messages.msc_lsr_hostNotFound
             }
         }
     }
@@ -61,7 +61,7 @@ Popup {
 
         Text{
             id: text2
-            text: Messages.lsr_header
+            text: Messages.msc_lsr_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -104,7 +104,7 @@ Popup {
             height: 40
 
             Text{
-                text: Messages.lsr_serverUrl
+                text: Messages.msc_lsr_serverUrl
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -162,7 +162,7 @@ Popup {
 
                 }
                 Text{
-                    text: Messages.lsr_connectBtn
+                    text: Messages.msc_lsr_connectBtn
                     anchors.centerIn: parent
                     color: btn_con.hovered ? "white" : "black"
                     font.pixelSize: Constants.fontCategoryHeader

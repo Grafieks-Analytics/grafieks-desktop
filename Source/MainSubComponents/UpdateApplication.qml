@@ -29,7 +29,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: qsTr("Update Application")
+            text: Messages.msc_uan_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -94,7 +94,7 @@ Popup {
                 }
             }
             onClicked: {
-                error_connection_text.text = "Logging out. Please wait.."
+                error_connection_text.text = Messages.msc_uan_pleaseWait
                 User.logout()
             }
         }
@@ -117,7 +117,7 @@ Popup {
                 }
 
                 Text{
-                    text:"Cancel"
+                    text: Messages.cancelBtnTxt
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
                     anchors.centerIn: parent

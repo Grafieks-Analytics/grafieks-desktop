@@ -60,11 +60,11 @@ Popup {
         }
 
         function onDsUploadPercentage(percentage){
-            errorMsg.text = Messages.pds_uploading + " " + percentage + "%"
+            errorMsg.text = Messages.msc_pds_uploading + percentage + "%"
         }
 
         function onDsUploadFinished(){
-            errorMsg.text = Messages.pds_uploadSuccess
+            errorMsg.text = Messages.msc_pds_uploadSuccess
 //            closePopup()
 
             // If called from modelere screen, then redirect to reports screen
@@ -80,7 +80,7 @@ Popup {
 
         function onDsExists(status){
 
-            if(status.msg === Messages.pds_dsExists){
+            if(status.msg === Messages.msc_pds_dsExists){
                 confirmPublishDsComponent.open()
             } else if (status.code !== 200){
                 errorMsg.text = status.msg
@@ -182,7 +182,7 @@ Popup {
         // First save the extract file
         // Then publish the data and file
         if(GeneralParamsModel.getExtractPath().length > 0 || GeneralParamsModel.getLivePath().length > 0){
-            errorMsg.text = Messages.pds_pleaseWait
+            errorMsg.text = Messages.msc_pds_pleaseWait
             checkDSName()
         } else {
             saveFilePrompt.open()
@@ -212,30 +212,30 @@ Popup {
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
             if(ifPublish && !freeLimit){
-                errorMsg.text = Messages.pds_pleaseWait
+                errorMsg.text = Messages.msc_pds_pleaseWait
                 publishData()
             }
 
         } else {
             if(ifPublish){
-                errorMsg.text = Messages.pds_pleaseWait
+                errorMsg.text = Messages.msc_pds_pleaseWait
                 publishData()
             }
         }
     }
 
     function saveLiveLimit(freeLimit, ifPublish){
-        errorMsg.text = Messages.pds_pleaseWait
+        errorMsg.text = Messages.msc_pds_pleaseWait
 
         if(GeneralParamsModel.ifFreeRelease() === "Free"){
             if(ifPublish && !freeLimit){
-                errorMsg.text = Messages.pds_pleaseWait
+                errorMsg.text = Messages.msc_pds_pleaseWait
                 publishData()
             }
 
         } else {
             if(ifPublish){
-                errorMsg.text = Messages.pds_pleaseWait
+                errorMsg.text = Messages.msc_pds_pleaseWait
                 publishData()
             }
 
@@ -254,9 +254,9 @@ Popup {
 
     FileDialog{
         id: fileDialog1
-        title: Messages.pds_selectImageDialogTxt
+        title: Messages.msc_pds_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [ Messages.pds_selectImageNamedFiltersTxt ]
+        nameFilters: [ Messages.msc_pds_selectImageNamedFiltersTxt ]
     }
 
 
@@ -296,7 +296,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: Messages.pds_header
+            text: Messages.msc_pds_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -337,7 +337,7 @@ Popup {
 
             Text{
                 id : dsNameLabel
-                text: Messages.pds_dsName
+                text: Messages.msc_pds_dsName
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -373,7 +373,7 @@ Popup {
             height: 40
 
             Text{
-                text: Messages.pds_description
+                text: Messages.msc_pds_description
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -407,7 +407,7 @@ Popup {
             height: 40
 
             Text{
-                text: Messages.pds_uploadImage
+                text: Messages.msc_pds_uploadImage
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -418,7 +418,7 @@ Popup {
             id: file
             btnHeight: 40
             btnWidth: 370
-            textValue: Messages.pds_uploadImageDialogTxt
+            textValue: Messages.msc_pds_uploadImageDialogTxt
 
             MouseArea{
                 anchors.fill: parent
@@ -445,7 +445,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Messages.pds_publishBtn
+            textValue: Messages.msc_pds_publishBtn
             onClicked: onPublishDataSourceClicked()
         }
 
@@ -465,7 +465,7 @@ Popup {
         anchors.leftMargin: 30
 
         Text {
-            text: Messages.pds_contactAdminTxt
+            text: Messages.msc_pds_contactAdminTxt
         }
 
         Text {

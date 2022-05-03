@@ -128,7 +128,7 @@ Rectangle{
                     id: dbMenuText
                     anchors.bottom: dbMenuIcon.bottom
                     anchors.bottomMargin: 100
-                    text: Messages.lmb_dataDesignerText
+                    text: Messages.msc_lmb_dataDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
 
@@ -205,7 +205,7 @@ Rectangle{
                 Text{
                     anchors.top: chartMenuIcon.bottom
                     anchors.topMargin: -80
-                    text: Messages.lmb_dashboardDesignerText
+                    text: Messages.msc_lmb_dashboardDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
 

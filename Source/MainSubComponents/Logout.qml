@@ -70,7 +70,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: Messages.logt_header
+            text: Messages.msc_logt_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -135,7 +135,7 @@ Popup {
                 }
             }
             onClicked: {
-                error_connection_text.text = Messages.logtPleaseWait
+                error_connection_text.text = Messages.msc_logt_pleaseWait
                 User.logout()
             }
         }

@@ -81,7 +81,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Sign in to Grafieks Reporting Server"
+            text: Messages.msc_lcr_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -124,7 +124,7 @@ Popup {
             height: 40
 
             Text{
-                text: Messages.lcr_username
+                text: Messages.msc_lcr_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -168,7 +168,7 @@ Popup {
             height: 40
 
             Text{
-                text: Messages.lcr_password
+                text: Messages.msc_lcr_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -235,7 +235,7 @@ Popup {
             }
             onClicked: {
 
-                error_connection_text.text = Messages.lcr_pleaseWait
+                error_connection_text.text = Messages.msc_lcr_pleaseWait
                 User.setUsername(username_field.text);
                 User.setPassword(password_field.text);
 
