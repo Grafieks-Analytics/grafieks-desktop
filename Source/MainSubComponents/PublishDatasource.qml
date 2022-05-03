@@ -445,7 +445,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Messages.msc_pds_publishBtn
+            textValue: Messages.publishBtnTxt
             onClicked: onPublishDataSourceClicked()
         }
 
