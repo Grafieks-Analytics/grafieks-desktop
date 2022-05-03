@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4 as OldControls
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -86,7 +87,6 @@ Page {
 
         Button{
             id: next_btn
-//            text: "Next"
             anchors.right: parent.right
             anchors.top: submenu.top
             anchors.topMargin: 0
@@ -95,12 +95,12 @@ Page {
 
             onClicked: processDS()
             Image {
-                        id: dashboardIcon
-                        source: "/Images/icons/create_dashboard_20.png"
-                        height: 20
-                        width: 20
-                        anchors.centerIn: parent
-                    }
+                id: dashboardIcon
+                source: "/Images/icons/create_dashboard_20.png"
+                height: 20
+                width: 20
+                anchors.centerIn: parent
+            }
 
             background: Rectangle{
                 id: next_btn_background
@@ -111,7 +111,7 @@ Page {
             ToolTip.delay:Constants.tooltipShowTime
             ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("Create Datasource")
+            ToolTip.text: Messages.ds_ds_create
 
 
         }
@@ -149,7 +149,7 @@ Page {
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipShowTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Grid view")
+                ToolTip.text: Messages.ds_ds_grid
 
 
             }
@@ -174,7 +174,7 @@ Page {
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipShowTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("List view")
+                ToolTip.text: Messages.ds_ds_list
 
             }
         }
@@ -226,7 +226,7 @@ Page {
 
                 Text{
                     id: ds_server_label_header
-                    text: "Server Address"
+                    text: Messages.ds_ds_server
                 }
                 Text{
                     id: ds_server_header
@@ -234,11 +234,11 @@ Page {
                 }
                 Text{
                     id: ds_name_label_header
-                    text: "Data Source Name"
+                    text: Messages.ds_ds_name
                 }
                 Text{
                     id: ds_name_header
-                    text: "Not Selected"
+                    text: Messages.ds_ds_notSelected
                 }
             }
 
@@ -253,33 +253,23 @@ Page {
                 border.color: Constants.darkThemeColor
                 width: 300
                 height: 40
-//                radius: 10
 
                 TextField {
                     id: search_text
-//                    text: "Search"
-
-//                    cursorVisible: true
-                    placeholderText: "Search"
+                    placeholderText: Messages.ds_ds_search
                     width:300
                     height: 40
                     anchors.left: search_rect.left
-//                    anchors.leftMargin: 10
                     verticalAlignment:TextEdit.AlignVCenter
-//                    property string placeholderText: "Search"
-
-//                            Text {
-//                                text: "textEdit.placeholderText"
-//                                color: "red"
-
-//                                visible: !textEdit.text
-//                            }
 
                     onTextChanged: DatasourceDS.fetchDatsources(0, true, true, search_text.text)
                 }
+
+
             }
         }
     }
+
 
     ToolSeparator{
         id: toolsep2
