@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Popup {
     id: sessionExpiredPopup
@@ -39,7 +40,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Session Expired"
+            text: Messages.msc_sed_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -83,7 +84,7 @@ Popup {
 
             Text{
                 id : dsNameLabel
-                text: "Your current session has expired. Sign in again"
+                text: Messages.msc_sed_mainText
                 // anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter

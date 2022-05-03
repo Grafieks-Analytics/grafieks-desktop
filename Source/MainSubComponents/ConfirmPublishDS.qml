@@ -42,7 +42,7 @@ Popup {
         anchors.horizontalCenter: confirmPublishDs.horizontalCenter
 
         Text{
-            text: Messages.cpd_header
+            text: Messages.msc_cpd_header
             anchors.verticalCenter: parent.verticalCenter
             // anchors.left : parent.left
             anchors.leftMargin: 10
@@ -85,7 +85,7 @@ Popup {
 
             Text{
                 id : dsNameLabel
-                text: Messages.cpd_mainText
+                text: Messages.msc_cpd_mainText
                 // anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
