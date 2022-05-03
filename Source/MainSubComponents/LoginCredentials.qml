@@ -16,6 +16,7 @@ import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 
@@ -45,7 +46,7 @@ Popup {
                 var capitalizeLastName = lastname.charAt(0).toUpperCase() + lastname.slice(1)
                 var name = capitalizeFirstName + " "+ capitalizeLastName
 
-                action_signin.text  = Constants.signOutText
+                action_signin.text  = Messages.signOutText
 
                 // Load datasources in GRS for first time
                 DatasourceDS.fetchDatsources(0,true, false)
@@ -123,7 +124,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.lcr_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -167,7 +168,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.lcr_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -179,7 +180,7 @@ Popup {
             id: password_field
             maximumLength: 250
             selectByMouse: true
-            echoMode: "Password"
+            echoMode: Messages.lcr_password
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
@@ -226,7 +227,7 @@ Popup {
                 }
 
                 Text{
-                    text:Constants.signInText
+                    text:Messages.signInText
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent
@@ -234,7 +235,7 @@ Popup {
             }
             onClicked: {
 
-                error_connection_text.text = "Signing in. Please wait.."
+                error_connection_text.text = Messages.lcr_pleaseWait
                 User.setUsername(username_field.text);
                 User.setPassword(password_field.text);
 

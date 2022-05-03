@@ -14,6 +14,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Popup {
     id: popupLoginServer
@@ -31,7 +32,6 @@ Popup {
         target: User
 
         function onSitelookupStatus(status){
-            console.log(JSON.stringify(status))
 
             if(status.code === 200){
                 popupLoginServer.visible = false
@@ -41,7 +41,7 @@ Popup {
                 server_address.text = ""
 
             } else {
-                errorMsg.text = status.msg + " Host not found"
+                errorMsg.text = status.msg + " " + Messages.lsr_hostNotFound
             }
         }
     }
@@ -61,7 +61,7 @@ Popup {
 
         Text{
             id: text2
-            text: "Sign in to Grafieks Reporting Server"
+            text: Messages.lsr_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -104,7 +104,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Server URL"
+                text: Messages.lsr_serverUrl
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -162,7 +162,7 @@ Popup {
 
                 }
                 Text{
-                    text: "Connect"
+                    text: Messages.lsr_connectBtn
                     anchors.centerIn: parent
                     color: btn_con.hovered ? "white" : "black"
                     font.pixelSize: Constants.fontCategoryHeader
@@ -191,7 +191,7 @@ Popup {
                 }
 
                 Text{
-                    text: "Cancel"
+                    text: Messages.cancelBtnTxt
                     anchors.centerIn: parent
                     color: btn_cancel.hovered ? "white" : "black"
                     font.pixelSize: Constants.fontCategoryHeader

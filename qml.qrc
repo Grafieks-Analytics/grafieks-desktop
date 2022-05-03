@@ -299,5 +299,8 @@
         <file>Source/MainSubComponents/ConfirmPublishDS.qml</file>
         <file>Source/Datasources/SubComponents/ConnectionError.qml</file>
         <file>Source/MainSubComponents/SessionExpired.qml</file>
+        <file>Source/MainSubComponents/VersionMismatch.qml</file>
+        <file>Source/MainSubComponents/UpdateApplication.qml</file>
+        <file>Source/Messages.qml</file>
     </qresource>
 </RCC>

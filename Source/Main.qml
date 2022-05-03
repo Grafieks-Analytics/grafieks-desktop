@@ -16,6 +16,7 @@ import Qt.labs.platform 1.1
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 import "./Modellers"
@@ -40,7 +41,7 @@ ApplicationWindow {
     minimumWidth: 1300
     minimumHeight: 700
 
-    title: Constants.applicationName
+    title: Messages.applicationName
     property var selectMissingDS : false
 
     // Handle splash screen
@@ -200,7 +201,7 @@ ApplicationWindow {
             var capitalizeLastName = lastname.charAt(0).toUpperCase() + lastname.slice(1)
             var name = capitalizeFirstName + " "+ capitalizeLastName
 
-            action_signin.text  = Constants.signOutText
+            action_signin.text  = Messages.signOutText
             menu_signIn.title = qsTr(name)
 
         }
@@ -455,8 +456,6 @@ ApplicationWindow {
     }
 
 
-    // SubComponents Starts
-
     // This is a component because it uses Qt.labs.Platform
     // and this conflicts with the current file
     SaveWorkbook{
@@ -467,6 +466,8 @@ ApplicationWindow {
     SessionExpired{
         id: sessionExpired
     }
+
+
 
 
     // SubComponents Ends
@@ -703,7 +704,7 @@ ApplicationWindow {
 
             MenuItem{
                 id: action_signin
-                text: Constants.signInText
+                text: Messages.signInText
                 enabled: true
                 shortcut: "Ctrl+L"
                 onTriggered: {

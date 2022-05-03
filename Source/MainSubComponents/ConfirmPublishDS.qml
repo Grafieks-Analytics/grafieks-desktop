@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Popup {
     id: confirmPublishDs
@@ -41,7 +42,7 @@ Popup {
         anchors.horizontalCenter: confirmPublishDs.horizontalCenter
 
         Text{
-            text: "Confirm Datasource Overwrite"
+            text: Messages.cpd_header
             anchors.verticalCenter: parent.verticalCenter
             // anchors.left : parent.left
             anchors.leftMargin: 10
@@ -84,7 +85,7 @@ Popup {
 
             Text{
                 id : dsNameLabel
-                text: "Datasource name already exists. Confirm to publish and overwrite"
+                text: Messages.cpd_mainText
                 // anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -109,13 +110,13 @@ Popup {
 
         Button{
             id: confirm
-            text: "Confirm"
+            text: Messages.confirmBtnTxt
             onClicked: publishDS()
         }
 
         Button{
             id: reject
-            text: "Cancel"
+            text: Messages.cancelBtnTxt
             onClicked: closePopup()
         }
 
