@@ -333,7 +333,7 @@ Page {
     FileDialog{
         id: fileDialog1
 
-        title: Messages.cn_sel_selectFile
+        title: Messages.selectFile
 
         onAccepted: {
             messageDialog1.open()

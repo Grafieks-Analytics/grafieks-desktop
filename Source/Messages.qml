@@ -9,14 +9,15 @@ QtObject {
     property string applicationName : qsTr("Grafieks")
     property string signInText : qsTr("Sign In")
     property string signOutText : qsTr("Sign Out")
-    property string openFileText : qsTr("Open")
 
     property string publishBtnTxt: qsTr("Publish")
     property string confirmBtnTxt : qsTr("Confirm")
     property string cancelBtnTxt : qsTr("Cancel")
     property string closeBtnTxt : qsTr("Close")
 
-
+    property string openFileText : qsTr("Open")
+    property string selectFile : qsTr("Select a file")
+    property string noSelectedFile : qsTr("No file selected")
 
 
     // Module/Screen specific
@@ -156,11 +157,135 @@ QtObject {
     property string cn_sub_common_db : qsTr("Database")
     property string cn_sub_common_username : qsTr("Username")
     property string cn_sub_common_password : qsTr("Password")
+    property string cn_sub_common_allow : qsTr("Allow")
+    property string cn_sub_common_afterAuthMsg : qsTr("Once you authorize this connection you will be returned to this page.")
+
+    // SubComponents/AccessConnection
+    property string cn_sub_access_header : qsTr("Select a Microsoft Access file")
+    property string cn_sub_access_subHeader : qsTr("Microsoft Access Connection")
+    property string cn_sub_access_selFile : qsTr("Select a Microsoft Access file")
+    property string cn_sub_access_namedFilter : qsTr("Access files (*.mdb *.accdb )")
+    property string cn_sub_access_missingDriver : qsTr("Microsoft Excel Driver missing")
+    property string cn_sub_access_driverDownload : qsTr("You don't have Microsoft Access driver. Download Microsoft Access to enable this")
+
+
+    // SubComponents/BoxConnection
+    property string cn_sub_box_header : qsTr("Connect to Box")
+    property string cn_sub_box_allowReqMsg : qsTr(" wants to access to your Box")
+    property string cn_sub_box_allowAuthMsg : qsTr("Click the allow button above to open the Box authorization page on a separate window.")
+
+
+    // SubComponents/CSVConnection
+    property string cn_sub_csv_header : qsTr("Select a CSV file")
+    property string cn_sub_csv_subHeader : qsTr("CSV Connection")
+    property string cn_sub_csv_csvName : qsTr("File Name")
+    property string cn_sub_csv_separator : qsTr("Separator")
+    property string cn_sub_csv_importErr : qsTr("CSV import Error")
+    property string cn_sub_csv_namedFilter : qsTr("CSV files (*.csv)")
+
+
+    // SubComponents/DriveConnection
+    property string cn_sub_drive_header : qsTr("Connect to Google Drive")
+    property string cn_sub_drive_allowReqMsg : qsTr(" wants to access to your Google Drive")
+    property string cn_sub_drive_allowAuthMsg : qsTr("Click the allow button above to open the Google Drive authorization page on a separate window.")
+
+
+    // SubComponents/DropboxConnection
+    property string cn_sub_dropbox_header : qsTr("Connect to Dropbox")
+    property string cn_sub_dropbox_allowReqMsg : qsTr(" wants to access to your Dropbox")
+    property string cn_sub_dropbox_allowAuthMsg : qsTr("Click the allow button above to open the Dropbox authorization page on a separate window.")
+
+
+    // SubComponents/ExcelOdbcConnection
+    // SubComponents/ExcelConnection
+    property string cn_sub_excodbc_header : qsTr("Select an Excel file")
+    property string cn_sub_excodbc_subHeader : qsTr("Excel Connection")
+    property string cn_sub_excodbc_importErr : qsTr("Excel import Error")
+    property string cn_sub_excodbc_namedFilter : qsTr("Excel files (*.xls *.xlsx)")
+    property string cn_sub_excodbc_missingDriver : qsTr("Microsoft Excel Driver missing")
+    property string cn_sub_excodbc_driverDownload : qsTr("You don't have Excel driver. Download Microsoft Excel to enable this")
+
+
+    // SubComponents/GithubConnection
+    property string cn_sub_github_header : qsTr("Connect to Github")
+    property string cn_sub_github_allowReqMsg : qsTr(" wants to access to your Github account")
+    property string cn_sub_github_allowAuthMsg : qsTr("Click the allow button above to open the Github authorization page on a separate window.")
+
+    // SubComponents/HiveConnection
+    property string cn_sub_hive_header : qsTr("Sign In to Apache Hive Server")
+    property string cn_sub_hive_subHeader : qsTr("Apache Hive Connection")
+    property string cn_sub_hive_missingDriver : qsTr("Apache Hive ODBC Driver missing")
+    property string cn_sub_hive_driverDownload : qsTr("You don't have Apache Hive ODBC driver.Click Ok to Download")
+
+    // SubComponents/ImpalaConnection
+    property string cn_sub_impala_header : qsTr("Sign In to Impala Server")
+    property string cn_sub_impala_subHeader : qsTr("Impala Connection")
+    property string cn_sub_impala_missingDriver : qsTr("Impala ODBC Driver missing")
+    property string cn_sub_impala_driverDownload : qsTr("You don't have Impala ODBC driver.Click Ok to Download")
+
+    // SubComponents/JsonConnection
+    property string cn_sub_json_header : qsTr("Select a Json file")
+    property string cn_sub_json_subHeader : qsTr("Json Connection")
+    property string cn_sub_json_importErr : qsTr("Json import Error")
+    property string cn_sub_json_namedFilter : qsTr("Json files (*.json)")
+
+    // SubComponents/MongoConnection
+    property string cn_sub_mongodb_header : qsTr("Sign In to MongoDb Server")
+    property string cn_sub_mongodb_subHeader : qsTr("MongoDb Connection")
+    property string cn_sub_mongodb_missingDriver : qsTr("MongoDb ODBC Driver missing")
+    property string cn_sub_mongodb_driverDownload : qsTr("You don't have MongoDb ODBC driver.Click Ok to Download")
 
     // SubComponents/MSSqlConnection
     property string cn_sub_mssql_header : qsTr("Sign In to Microsoft SQL Server")
     property string cn_sub_mssql_subHeader : qsTr("Microsoft SQL Connection")
-    property string cn_sub_mssql_missingDriver : qsTr("Microsoft SQL Driver missing")
-    property string cn_sub_mssql_driverDownload : qsTr("You don't have Microsoft SQL driver.Click Ok to Download")
+    property string cn_sub_mssql_missingDriver : qsTr("Microsoft SQL ODBC Driver missing")
+    property string cn_sub_mssql_driverDownload : qsTr("You don't have Microsoft SQL ODBC driver.Click Ok to Download")
+
+    // SubComponents/MySqlConnection
+    property string cn_sub_mysql_header : qsTr("Sign In to MySql Server")
+    property string cn_sub_mysql_subHeader : qsTr("MySql Connection")
+    property string cn_sub_mysql_missingDriver : qsTr("MySql ODBC Driver missing")
+    property string cn_sub_mysql_driverDownload : qsTr("You don't have MySql ODBC driver.Click Ok to Download")
+
+    // SubComponents/OracleConnection
+    property string cn_sub_oracle_header : qsTr("Sign In to Oracle Server")
+    property string cn_sub_oracle_subHeader : qsTr("Oracle Connection")
+    property string cn_sub_oracle_missingDriver : qsTr("Oracle ODBC Driver missing")
+    property string cn_sub_oracle_driverDownload : qsTr("You don't have Oracle ODBC driver.Click Ok to Download")
+
+    // SubComponents/PostgresConnection
+    property string cn_sub_postgres_header : qsTr("Sign In to Postgres Server")
+    property string cn_sub_postgres_subHeader : qsTr("Postgres Connection")
+    property string cn_sub_postgres_missingDriver : qsTr("Postgres ODBC Driver missing")
+    property string cn_sub_postgres_driverDownload : qsTr("You don't have Postgres ODBC driver.Click Ok to Download")
+
+    // SubComponents/RedshiftConnection
+    property string cn_sub_redshift_header : qsTr("Sign In to Redshift Server")
+    property string cn_sub_redshift_subHeader : qsTr("Redshift Connection")
+    property string cn_sub_redshift_missingDriver : qsTr("Redshift ODBC Driver missing")
+    property string cn_sub_redshift_driverDownload : qsTr("You don't have Redshift ODBC driver.Click Ok to Download")
+
+    // SubComponents/SheetConnection
+    property string cn_sub_sheet_header : qsTr("Connect to Google sheets")
+    property string cn_sub_sheet_allowReqMsg : qsTr(" wants to access to your Google sheets")
+    property string cn_sub_sheet_allowAuthMsg : qsTr("Click the allow button above to open the Google Sheet authorization page on a separate window.")
+
+    // SubComponents/SnowflakeConnection
+    property string cn_sub_snowflake_header : qsTr("Sign In to Snowflake Server")
+    property string cn_sub_snowflake_subHeader : qsTr("Snowflake Connection")
+    property string cn_sub_snowflake_missingDriver : qsTr("Snowflake ODBC Driver missing")
+    property string cn_sub_snowflake_driverDownload : qsTr("You don't have Snowflake ODBC driver.Click Ok to Download")
+
+    // SubComponents/SqliteConnection
+    property string cn_sub_sqlite_header : qsTr("Sign In to Sqlite")
+    property string cn_sub_sqlite_subHeader : qsTr("Sqlite Connection")
+    property string cn_sub_sqlite_selFile : qsTr("Select an sqlite file")
+    property string cn_sub_sqlite_namedFilter : qsTr("Sqlite files (*.sqlite *.db)")
+
+    // SubComponents/TeradataConnenction
+    property string cn_sub_teradata_header : qsTr("Sign In to Teradata Server")
+    property string cn_sub_teradata_subHeader : qsTr("Teradata Connection")
+    property string cn_sub_teradata_missingDriver : qsTr("Teradata ODBC Driver missing")
+    property string cn_sub_teradata_driverDownload : qsTr("You don't have Teradata ODBC driver.Click Ok to Download")
 
 }

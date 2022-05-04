@@ -76,7 +76,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Sqlite"
+            text: Messages.cn_sub_sqlite_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -126,7 +126,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -136,7 +136,7 @@ Popup {
 
         Button{
             id : file_btn
-            text: "Select Sqlite file"
+            text: Messages.cn_sub_sqlite_selFile
             onClicked: promptSqlite.open();
         }
 
@@ -193,7 +193,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Sqlite Connection"
+        title: Messages.cn_sub_sqlite_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
@@ -201,8 +201,8 @@ Popup {
     // Select SQLITE file
     FileDialog{
         id: promptSqlite
-        title: "Select a file"
-        nameFilters: ["Sqlite files (*.sqlite *.db)"];
+        title: Messages.cn_sub_sqlite_selFile
+        nameFilters: [Messages.cn_sub_sqlite_namedFilter];
 
         onAccepted: {
             sqliteFileName.text = GeneralParamsModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')

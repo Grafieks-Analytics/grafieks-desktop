@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -114,7 +115,7 @@ Popup {
 
             ConnectorsLoginModel.excelOdbcLogin(control.currentText, excelFileName)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -132,7 +133,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Excel Connection"
+        title: Messages.cn_sub_excodbc_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
@@ -164,7 +165,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Select Excel File"
+            text: Messages.cn_sub_excodbc_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -207,7 +208,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -325,7 +326,7 @@ Popup {
 
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: "Select Excel file"
+                text: Message.cn_sub_excodbc_header
                 onClicked: promptExcel.open();
             }
         }
@@ -387,7 +388,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: "Open"
+            textValue: Messages.openFileText
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: handleExcel(selectedFile)
         }
@@ -402,16 +403,16 @@ Popup {
     MessageDialog {
         id: excelOdbcModalError
         visible: false
-        title: "Excel Driver missing"
-        text: qsTr("You don't have Excel driver. Download Microsoft Excel to enable this")
+        title: Messages.cn_sub_excodbc_missingDriver
+        text: Messages.cn_sub_excodbc_driverDownload
 
     }
 
     // Select Excel file
     FileDialog{
         id: promptExcel
-        title: "Select a file"
-        nameFilters: ["Excel files (*.xls *.xlsx)"];
+        title: Messages.selectFile
+        nameFilters: [Messages.cn_sub_excodbc_namedFilter];
 
 
         onAccepted: {

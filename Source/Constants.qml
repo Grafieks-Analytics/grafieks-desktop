@@ -133,6 +133,20 @@ QtObject {
     // Checbox Size
     property int defaultCheckBoxDimension: 16
 
+    // ODBC Driver url starts
+    property string hiveDriverUrl: ""
+    property string impalaDriverUrl: "https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html"
+    property string mongodbDriverUrl: "https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0"
+    property string mssqlDriverUrl: "https://www.microsoft.com/en-in/download/details.aspx?id=36434"
+    property string mysqlDriverUrl: "https://dev.mysql.com/downloads/connector/odbc/"
+    property string oracleDriverUrl: "https://www.oracle.com/database/technologies/instant-client/downloads.html"
+    property string postgresDriverUrl: "https://www.postgresql.org/ftp/odbc/versions"
+    property string redshiftDriverUrl: "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html"
+    property string snowflakeDriverUrl: "https://sfc-repo.snowflakecomputing.com/odbc/index.html"
+    property string teradataDriverUrl: "https://downloads.teradata.com/tag/odbc"
+
+    // ODBC Driver url ends
+
     // SQL Relations
     property string likeRelation: "LIKE"
     property string notLikeRelation: "NOT LIKE"
@@ -254,20 +268,6 @@ QtObject {
     property string numericalItemType: "numerical"
 
     // Report Ends
-
-    // ODBC Driver url starts
-    property string hiveDriverUrl: ""
-    property string impalaDriverUrl: "https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html"
-    property string mongodbDriverUrl: "https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0"
-    property string mssqlDriverUrl: "https://www.microsoft.com/en-in/download/details.aspx?id=36434"
-    property string mysqlDriverUrl: "https://dev.mysql.com/downloads/connector/odbc/"
-    property string oracleDriverUrl: "https://www.oracle.com/database/technologies/instant-client/downloads.html"
-    property string postgresDriverUrl: "https://www.postgresql.org/ftp/odbc/versions"
-    property string redshiftDriverUrl: "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html"
-    property string snowflakeDriverUrl: "https://sfc-repo.snowflakecomputing.com/odbc/index.html"
-    property string teradataDriverUrl: "https://downloads.teradata.com/tag/odbc"
-
-    // ODBC Driver url ends
 
 
     // Charts Start

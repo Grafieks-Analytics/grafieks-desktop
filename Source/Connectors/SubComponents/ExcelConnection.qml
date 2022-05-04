@@ -91,7 +91,7 @@ Popup {
 
             ConnectorsLoginModel.excelLogin(excelFileName, true)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -113,7 +113,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Choose an Excel file"
+            text: Messages.cn_sub_excodbc_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -162,7 +162,7 @@ Popup {
 
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: "Select Excel file"
+                text: Messages.cn_sub_excodbc_header
                 onClicked: promptExcel.open();
             }
         }
@@ -250,14 +250,14 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Excel Connection"
+        title: Messages.cn_sub_excodbc_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
-        title: "Excel Import Error"
+        title: Messages.cn_sub_excodbc_importErr
         text: ""
         icon: StandardIcon.Critical
     }
@@ -265,8 +265,8 @@ Popup {
     // Select Excel file
     FileDialog{
         id: promptExcel
-        title: "Select a file"
-        nameFilters: ["Excel files (*.xls *.xlsx)"];
+        title: Messages.selectFile
+        nameFilters: [Messages.cn_sub_excodbc_namedFilter];
 
 
         onAccepted: {

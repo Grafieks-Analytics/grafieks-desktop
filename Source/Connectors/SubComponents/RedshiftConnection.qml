@@ -152,7 +152,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Amazon Redshift Connection"
+        title: Messages.cn_sub_redshift_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
@@ -184,7 +184,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Amazon Redshift"
+            text: Messages.cn_sub_redshift_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -227,7 +227,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -339,7 +339,7 @@ Popup {
             width:label_col
             height: 40
             Text{
-                text: "Server"
+                text: Messages.cn_sub_common_server
                 anchors.right: parent.right
                 anchors.rightMargin: 10
 
@@ -369,7 +369,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Port"
+                text: Messages.cn_sub_common_port
                 leftPadding: 10
                 anchors.left: server.right
                 anchors.rightMargin: 20
@@ -414,7 +414,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -460,7 +460,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.cn_sub_common_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -505,7 +505,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.cn_sub_common_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -564,11 +564,8 @@ Popup {
     MessageDialog {
         id: redshiftOdbcModalError
         visible: false
-        title: "Amazon Redshift Driver missing"
-        //           text: qsTr("You don't have Amazon Redshift driver. Download it here <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
-        // \">https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
-        // </a>")
-        text: qsTr("You don't have Amazon Redshift driver.Click Ok to Download")
+        title: Messages.cn_sub_redshift_missingDriver
+        text: Messages.cn_sub_redshift_driverDownload
 
         standardButtons: StandardButton.Ok
 
