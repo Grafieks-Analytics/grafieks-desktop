@@ -572,10 +572,10 @@ Popup {
 
         text: qsTr("You don't have Postgres driver.Click Ok to Download")
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://www.postgresql.org/ftp/odbc/versions")
-}
+        onAccepted: {Qt.openUrlExternally(Constants.postgresDriverUrl)
+        }
 
     }
     

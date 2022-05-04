@@ -56,31 +56,31 @@ Popup {
 
         function onRedshiftLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
-                 if(setFromLiveFile){
-                     LiveProcessor.processLiveQueries()
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
+                    LiveProcessor.processLiveQueries()
 
-                     var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
-                     if(ifJsonFromWorkbookSet)
-                         WorkbookProcessor.processJsonAfterLoginCredentials()
+                    var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
+                    if(ifJsonFromWorkbookSet)
+                        WorkbookProcessor.processJsonAfterLoginCredentials()
 
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                     stacklayout_home.currentIndex = 6
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    stacklayout_home.currentIndex = 6
 
-                 } else {
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                     stacklayout_home.currentIndex = 5
-                 }
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){
@@ -135,7 +135,7 @@ Popup {
     }
 
     function connectToRedshift(){
-//        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "18.142.18.19", database.text, port.text, username.text, password.text)
+        //        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "18.142.18.19", database.text, port.text, username.text, password.text)
         ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
     }
 
@@ -561,22 +561,22 @@ Popup {
 
     // Page Design Ends
     /***********************************************************************************************************************/
-      MessageDialog {
-          id: redshiftOdbcModalError
-          visible: false
-          title: "Amazon Redshift Driver missing"
-//           text: qsTr("You don't have Amazon Redshift driver. Download it here <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
-// \">https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
-// </a>")
- text: qsTr("You don't have Amazon Redshift driver.Click Ok to Download")
+    MessageDialog {
+        id: redshiftOdbcModalError
+        visible: false
+        title: "Amazon Redshift Driver missing"
+        //           text: qsTr("You don't have Amazon Redshift driver. Download it here <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+        // \">https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+        // </a>")
+        text: qsTr("You don't have Amazon Redshift driver.Click Ok to Download")
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html")
-}
-    
+        onAccepted: {Qt.openUrlExternally(Constants.redshiftDriverUrl)
+        }
 
-      }
+
+    }
 
 
 }

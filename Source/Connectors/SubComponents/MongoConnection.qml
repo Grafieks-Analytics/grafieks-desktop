@@ -565,12 +565,12 @@ Popup {
         visible: false
         title: "MongoDB Driver missing"
         // text: qsTr("You don't have MongoDB driver. Download it here <a href=\"https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0\">https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0</a>")
-text: qsTr("You don't have MongoDB driver.Click Ok to Download")
+        text: qsTr("You don't have MongoDB driver.Click Ok to Download")
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0")
-}
+        onAccepted: {Qt.openUrlExternally(Constants.mongodbDriverUrl)
+        }
     }
 
 }

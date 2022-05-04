@@ -16,7 +16,7 @@ QtObject {
     property int initialIndex: 3
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
-    property int newReportIndex: 7 
+    property int newReportIndex: 7
 
     property string gaugePointerLabel: 'Pointer/Actual';
 
@@ -203,6 +203,7 @@ QtObject {
 
     // FILTERS ends
 
+
     // DASHBOARD starts
 
     property int defaultDroppedReportWidth : 500
@@ -253,6 +254,20 @@ QtObject {
     property string numericalItemType: "numerical"
 
     // Report Ends
+
+    // ODBC Driver url starts
+    property string hiveDriverUrl: ""
+    property string impalaDriverUrl: "https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html"
+    property string mongodbDriverUrl: "https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0"
+    property string mssqlDriverUrl: "https://www.microsoft.com/en-in/download/details.aspx?id=36434"
+    property string mysqlDriverUrl: "https://dev.mysql.com/downloads/connector/odbc/"
+    property string oracleDriverUrl: "https://www.oracle.com/database/technologies/instant-client/downloads.html"
+    property string postgresDriverUrl: "https://www.postgresql.org/ftp/odbc/versions"
+    property string redshiftDriverUrl: "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html"
+    property string snowflakeDriverUrl: "https://sfc-repo.snowflakecomputing.com/odbc/index.html"
+    property string teradataDriverUrl: "https://downloads.teradata.com/tag/odbc"
+
+    // ODBC Driver url ends
 
 
     // Charts Start
@@ -308,7 +323,7 @@ QtObject {
     property string lineChartUrl: "LineChart.html";
     property string horizontalLineChartUrl: "HorizontalLineChart.html"
     property string multiLineChartUrl: "MultipleLineChart.html";
-    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";    
+    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";
     property string areaChartUrl: "AreaChart.html";
     property string horizontalAreaChartUrl: "HorizontalAreaChart.html"
     property string multipleAreaChartUrl: "MultipleAreaChart.html"

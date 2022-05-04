@@ -56,32 +56,32 @@ Popup {
 
         function onImpalaLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
-                 if(setFromLiveFile){
-                     LiveProcessor.processLiveQueries()
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
+                    LiveProcessor.processLiveQueries()
 
-                     var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
-                     if(ifJsonFromWorkbookSet)
-                         WorkbookProcessor.processJsonAfterLoginCredentials()
+                    var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
+                    if(ifJsonFromWorkbookSet)
+                        WorkbookProcessor.processJsonAfterLoginCredentials()
 
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                     GeneralParamsModel.setFromLiveFile(false)
-                     stacklayout_home.currentIndex = 6
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    GeneralParamsModel.setFromLiveFile(false)
+                    stacklayout_home.currentIndex = 6
 
-                 } else {
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                     stacklayout_home.currentIndex = 5
-                 }
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){
@@ -566,12 +566,12 @@ Popup {
         visible: false
         title: "Impala Driver missing"
         // text: qsTr("You don't have Impala driver. Download it here <a href=\"https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html\">https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html</a>")
-text: qsTr("You don't have Impala driver.Click Ok to Download")
+        text: qsTr("You don't have Impala driver.Click Ok to Download")
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html")
-}
+        onAccepted: {Qt.openUrlExternally(Constants.impalaDriverUrl)
+        }
     }
 
 }

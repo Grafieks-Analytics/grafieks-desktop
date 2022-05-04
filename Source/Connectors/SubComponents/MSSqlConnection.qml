@@ -54,33 +54,33 @@ Popup {
 
         function onMssqlLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
-                 if(setFromLiveFile){
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
 
-                     LiveProcessor.processLiveQueries()
+                    LiveProcessor.processLiveQueries()
 
-                     var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
-                     if(ifJsonFromWorkbookSet)
-                         WorkbookProcessor.processJsonAfterLoginCredentials()
+                    var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
+                    if(ifJsonFromWorkbookSet)
+                        WorkbookProcessor.processJsonAfterLoginCredentials()
 
 
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-                     stacklayout_home.currentIndex = 6
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    stacklayout_home.currentIndex = 6
 
-                 } else {
-                     popup.visible = false
-                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                     stacklayout_home.currentIndex = 5
-                 }
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){
@@ -151,7 +151,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Microsoft SQL Connection"
+        title: Messages.cn_sub_mssql_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
@@ -183,7 +183,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Microsoft SQL Server"
+            text: Messages.cn_sub_mssql_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -226,7 +226,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -338,7 +338,7 @@ Popup {
             width:label_col
             height: 40
             Text{
-                text: "Server"
+                text: Messages.cn_sub_common_server
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -367,7 +367,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Port"
+                text: Messages.cn_sub_common_port
                 leftPadding: 10
                 anchors.left: server.right
                 anchors.rightMargin: 20
@@ -412,7 +412,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -458,7 +458,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.cn_sub_common_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -503,7 +503,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.cn_sub_common_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -565,14 +565,13 @@ Popup {
     MessageDialog {
         id: mssqlOdbcModalError
         visible: false
-        title: "Microsoft SQL Driver missing"
-        // text: qsTr("You don't have Microsoft SQL driver. Download it here <a href=\"https://www.microsoft.com/en-in/download/details.aspx?id=36434\">https://www.microsoft.com/en-in/download/details.aspx?id=36434</a>")
-text: qsTr("You don't have Microsoft SQL driver.Click Ok to Download")
+        title:Messages.cn_sub_mssql_missingDriver
+        text: Messages.cn_sub_mssql_driverDownload
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://www.microsoft.com/en-in/download/details.aspx?id=36434")
-}
+        onAccepted: {Qt.openUrlExternally(Constants.mssqlDriverUrl)
+        }
     }
 
 }
