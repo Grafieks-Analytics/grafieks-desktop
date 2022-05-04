@@ -152,7 +152,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Impala Connection"
+        title: Messages.cn_sub_impala_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
@@ -184,7 +184,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Impala"
+            text: Messages.cn_sub_impala_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -227,7 +227,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -339,7 +339,7 @@ Popup {
             width:label_col
             height: 40
             Text{
-                text: "Server"
+                text: Messages.cn_sub_common_server
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -368,7 +368,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Port"
+                text: Messages.cn_sub_common_port
                 leftPadding: 10
                 anchors.left: server.right
                 anchors.rightMargin: 20
@@ -413,7 +413,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -459,7 +459,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.cn_sub_common_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -504,7 +504,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.cn_sub_common_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -564,9 +564,8 @@ Popup {
     MessageDialog {
         id: impalaOdbcModalError
         visible: false
-        title: "Impala Driver missing"
-        // text: qsTr("You don't have Impala driver. Download it here <a href=\"https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html\">https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html</a>")
-        text: qsTr("You don't have Impala driver.Click Ok to Download")
+        title: Messages.cn_sub_hive_missingDriver
+        text: Messages.cn_sub_hive_driverDownload
 
         standardButtons: StandardButton.Ok
 

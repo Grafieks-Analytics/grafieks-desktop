@@ -115,7 +115,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Microsoft Access Connection"
+        title: Messages.cn_sub_access_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
@@ -147,7 +147,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Microsoft Access"
+            text: Messages.cn_sub_access_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -190,7 +190,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -305,7 +305,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -313,7 +313,7 @@ Popup {
             }
         }
         Button{
-            text: "Choose file"
+            text: Messages.selectFile
             onClicked: promptAccess.open();
         }
 
@@ -344,7 +344,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.cn_sub_common_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -389,7 +389,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.cn_sub_common_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -451,16 +451,16 @@ Popup {
     MessageDialog {
         id: accessOdbcModalError
         visible: false
-        title: "Microsft Access Driver missing"
-        text: qsTr("You don't have Microsoft Access driver. Download Microsoft Access to enable it")
+        title: Messages.cn_sub_access_missingDriver
+        text: Messages.cn_sub_access_driverDownload
 
     }
 
     // Select Access file
     FileDialog{
         id: promptAccess
-        title: "Select an Access db file"
-        nameFilters: ["Access files (*.mdb *.accdb )"];
+        title: Messages.cn_sub_access_selFile
+        nameFilters: [Messages.cn_sub_access_namedFilter];
 
         onAccepted: {
 
