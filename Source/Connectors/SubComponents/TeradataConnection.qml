@@ -564,13 +564,13 @@ Popup {
         visible: false
         title: "Teradata Driver missing"
         // text: qsTr("You don't have Teradata driver. Download it here <a href=\"https://downloads.teradata.com/tag/odbc\">https://downloads.teradata.com/tag/odbc</a>")
- text: qsTr("You don't have Teradata driver.Click Ok to Download")
+        text: qsTr("You don't have Teradata driver.Click Ok to Download")
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://downloads.teradata.com/tag/odbc")
-}
-    
+        onAccepted: {Qt.openUrlExternally(Constants.teradataDriverUrl)
+        }
+
     }
 
 }

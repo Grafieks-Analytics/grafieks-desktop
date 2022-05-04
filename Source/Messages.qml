@@ -133,4 +133,34 @@ QtObject {
 
     // Subcomponents/DataSourcesList
     property var ds_sub_dsl_headers : [qsTr("Data Source Name"), qsTr("Published By"), qsTr("Live/Extract"), qsTr("Published On"), qsTr("Last Refreshed")]
+
+
+
+
+    // Connectors
+
+    // SelectConnection
+    property string cn_sel_headers : qsTr("Data Connectors")
+    property string cn_sel_search : qsTr("Search")
+    property string cn_sel_selectFile : qsTr("Select a file")
+    property string cn_sel_processFile : qsTr("Processing file")
+    property string cn_sel_pleaseWait : qsTr("Please wait. We are processing your input file. Hit Ok to continue")
+
+
+    // SubComponents
+
+    // SubComponents/Common
+    property string cn_sub_common_driver : qsTr("Driver")
+    property string cn_sub_common_server : qsTr("Server")
+    property string cn_sub_common_port : qsTr("Port")
+    property string cn_sub_common_db : qsTr("Database")
+    property string cn_sub_common_username : qsTr("Username")
+    property string cn_sub_common_password : qsTr("Password")
+
+    // SubComponents/MSSqlConnection
+    property string cn_sub_mssql_header : qsTr("Sign In to Microsoft SQL Server")
+    property string cn_sub_mssql_subHeader : qsTr("Microsoft SQL Connection")
+    property string cn_sub_mssql_missingDriver : qsTr("Microsoft SQL Driver missing")
+    property string cn_sub_mssql_driverDownload : qsTr("You don't have Microsoft SQL driver.Click Ok to Download")
+
 }

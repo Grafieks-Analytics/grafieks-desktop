@@ -137,7 +137,7 @@ Popup {
 
     function connectToMySQL(){
         ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-//        ConnectorsLoginModel.mysqlLogin('localhost', 'grafieks_my', '3306', 'root', '')
+        //        ConnectorsLoginModel.mysqlLogin('localhost', 'grafieks_my', '3306', 'root', '')
 
     }
 
@@ -555,7 +555,7 @@ Popup {
             id: btn_signin
             textValue: Messages.signInText
             fontPixelSize: Constants.fontCategoryHeader
-//                        onClicked: connectToOdbcMySQL()
+            //                        onClicked: connectToOdbcMySQL()
             onClicked: connectToMySQL()
 
         }
@@ -573,12 +573,12 @@ Popup {
         visible: false
         title: "MySql Driver missing"
         // text: qsTr("You don't have MySql driver. Download it here <a href=\"https://dev.mysql.com/downloads/connector/odbc/\">https://dev.mysql.com/downloads/connector/odbc/</a>")
-text: qsTr("You don't have MySql driver.Click Ok to Download")
+        text: qsTr("You don't have MySql driver.Click Ok to Download")
 
- standardButtons: StandardButton.Ok
+        standardButtons: StandardButton.Ok
 
-onAccepted: {Qt.openUrlExternally("https://dev.mysql.com/downloads/connector/odbc/")
-}
+        onAccepted: {Qt.openUrlExternally(Constants.mysqlDriverUrl)
+        }
     }
 
 }
