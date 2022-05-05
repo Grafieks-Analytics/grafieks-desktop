@@ -1,7 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import QtQuick.Dialogs 1.3
 
@@ -152,7 +154,7 @@ Rectangle{
 
             Text {
                 id: backgroundColor
-                text: qsTr("Background Color")
+                text: Messages.da_sub_csm_bgcolor
             }
 
             Image {

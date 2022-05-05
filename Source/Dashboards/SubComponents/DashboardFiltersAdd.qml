@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -42,7 +43,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 5
         Text{
-            text: "Add Filter"
+            text: Messages.da_sub_dfa_header
 
             anchors.topMargin: 5
 
@@ -73,7 +74,7 @@ Item {
 
         TabButton{
             id: filter_cancel_btn
-            text: "Cancel"
+            text: Messages.cancelBtnTxt
             onClicked: hideColumn()
 
 
@@ -95,7 +96,7 @@ Item {
 
         TabButton{
             id: filter_apply_btn
-            text: "Add"
+            text: Messages.applyBtnTxt
             onClicked: addNewFilterColumns()
 
             background: Rectangle {
@@ -136,7 +137,7 @@ Item {
 
             TextField{
                 id:searchTextBox
-                placeholderText: "Search"
+                placeholderText: Messages.search
                 selectByMouse: true
                 width: parent.width - search_icon.width
                 height:30
@@ -207,7 +208,7 @@ Item {
                 anchors.leftMargin: 10
                    anchors.verticalCenter: parent.verticalCenter
 
-                text: qsTr("Categorical")
+                text: Messages.filterCategorical
                 font.pixelSize: 15
 
             }
@@ -251,7 +252,7 @@ Item {
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
 
-                    text: qsTr("Numerical")
+                    text: Messages.filterNumerical
                     font.pixelSize: 15
 
 
@@ -296,7 +297,7 @@ Item {
                     //                anchors.bottom: parent.bottom
                     //                anchors.bottomMargin: 0
 
-                    text: qsTr("Date")
+                    text: Messages.filterDate
                     font.pixelSize: 15
 
 

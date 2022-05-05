@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "../../Reports/SubComponents/MiniSubComponents"
@@ -131,7 +132,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 5
         Text{
-            text: "Select Filter"
+            text: Messages.da_sub_dfa_header
 
             anchors.topMargin: 5
 
@@ -159,7 +160,7 @@ Item {
 
         TabButton{
             id: filter_cancel_btn
-            text: "Cancel"
+            text: Messages.cancelBtnTxt
 
             background: Rectangle {
                 id: filter_cancel_btn_background
@@ -179,7 +180,7 @@ Item {
 
         TabButton{
             id: filter_apply_btn
-            text: "Add"
+            text: Messages.applyBtnTxt
 
             background: Rectangle {
                 id: filter_apply_btn_background
@@ -282,7 +283,7 @@ Item {
                 anchors.top: parent.top
 
 
-                placeholderText: qsTr("Search")
+                placeholderText: Messages.search
                 background: Rectangle {
                     border.color: Constants.themeColor
                     width: parent.width
@@ -627,7 +628,7 @@ Item {
                         }
                         Text {
 
-                            text: qsTr("Apply")
+                            text: Messages.applyBtnTxt
                             font.pixelSize: 17
                             anchors.verticalCenter: parent.verticalCenter
                             x:30

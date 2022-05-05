@@ -1,7 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -69,7 +71,7 @@ Rectangle{
                 width: parent.width/2
                 spacing: 10
                 Text {
-                    text: qsTr("Width")
+                    text: Messages.da_sub_ccsm_width
                 }
                 CustomSpinBox {
                     id: widthId
@@ -86,7 +88,7 @@ Rectangle{
                 width: parent.width/2
                 spacing: 10
                 Text {
-                    text: qsTr("Height")
+                    text: Messages.da_sub_ccsm_height
                 }
                 CustomSpinBox {
                     id: heightId

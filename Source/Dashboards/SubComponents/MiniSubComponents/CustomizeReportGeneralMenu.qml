@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Rectangle{
 
@@ -42,7 +43,7 @@ Rectangle{
         spacing: 5
 
         Text {
-            text: qsTr("Report Name")
+            text: Messages.da_sub_crgm_header
         }
 
         TextField{
