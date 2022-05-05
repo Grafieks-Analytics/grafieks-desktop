@@ -9,15 +9,46 @@ QtObject {
     property string applicationName : qsTr("Grafieks")
     property string signInText : qsTr("Sign In")
     property string signOutText : qsTr("Sign Out")
+    property string search : qsTr("Search")
+    property string warningTitle : qsTr("Warning")
 
     property string publishBtnTxt: qsTr("Publish")
     property string confirmBtnTxt : qsTr("Confirm")
+    property string applyBtnTxt : qsTr("Apply")
+    property string resetBtnTxt : qsTr("Reset")
     property string cancelBtnTxt : qsTr("Cancel")
     property string closeBtnTxt : qsTr("Close")
 
     property string openFileText : qsTr("Open")
     property string selectFile : qsTr("Select a file")
     property string noSelectedFile : qsTr("No file selected")
+
+
+    property string filterList : qsTr("List")
+    property string filterWildcard : qsTr("Wildcard")
+    property string filterCalendar : qsTr("Calendar")
+    property string filterTimeframe : qsTr("Timeframe")
+    property string filterCategorical : qsTr("Categorical")
+    property string filterDate : qsTr("Date")
+    property string filterNumerical : qsTr("Numerical")
+
+    property string filterMultiSelect : qsTr("Multi Select")
+    property string filterSingleSelect : qsTr("Single Select")
+    property string filterAll : qsTr("All")
+    property string filterIncludeNull : qsTr("Include Null")
+    property string filterExclude : qsTr("Exclude")
+
+    property string mo_mini_cfwc_header : qsTr("Select Wildcard")
+    property string mo_mini_cfwc_addWildcard : qsTr("Add Wildcard")
+    property string mo_mini_cfwc_enterValue : qsTr("Enter Value")
+
+    property string filterDateRange: qsTr("Date Range")
+    property string filterFrom: qsTr("From")
+    property string filterTo: qsTr("To")
+    property string filterDefaultDateFormat : qsTr("dd/mm/yyyy")
+
+    property string filterAddCharacter : qsTr("Add Character")
+    property string filterConditionText : qsTr("Condition")
 
 
     // Module/Screen specific
@@ -82,9 +113,6 @@ QtObject {
     // SaveWorkbook
     property string msc_swb_header: qsTr("Save Workbook As")
 
-    // SearchBar
-    property string msc_shb_header: qsTr("Search")
-
     // SessionExpired
     property string msc_sed_header : qsTr("Session Expired")
     property string msc_sed_mainText : qsTr("Your current session has expired. Sign in again")
@@ -120,7 +148,6 @@ QtObject {
     property string ds_ds_server : qsTr("Server Address")
     property string ds_ds_name : qsTr("Datasource name")
     property string ds_ds_notSelected : qsTr("Not selected")
-    property string ds_ds_search : qsTr("Search")
 
 
     // Subcomponents/ConnectionError
@@ -142,7 +169,6 @@ QtObject {
 
     // SelectConnection
     property string cn_sel_headers : qsTr("Data Connectors")
-    property string cn_sel_search : qsTr("Search")
     property string cn_sel_selectFile : qsTr("Select a file")
     property string cn_sel_processFile : qsTr("Processing file")
     property string cn_sel_pleaseWait : qsTr("Please wait. We are processing your input file. Hit Ok to continue")
@@ -277,7 +303,7 @@ QtObject {
     property string cn_sub_snowflake_driverDownload : qsTr("You don't have Snowflake ODBC driver.Click Ok to Download")
 
     // SubComponents/SqliteConnection
-    property string cn_sub_sqlite_header : qsTr("Sign In to Sqlite")
+    property string cn_sub_sqlite_header : qsTr("Open Sqlite file")
     property string cn_sub_sqlite_subHeader : qsTr("Sqlite Connection")
     property string cn_sub_sqlite_selFile : qsTr("Select an sqlite file")
     property string cn_sub_sqlite_namedFilter : qsTr("Sqlite files (*.sqlite *.db)")
@@ -288,4 +314,95 @@ QtObject {
     property string cn_sub_teradata_missingDriver : qsTr("Teradata ODBC Driver missing")
     property string cn_sub_teradata_driverDownload : qsTr("You don't have Teradata ODBC driver.Click Ok to Download")
 
+
+    // Modelers
+
+    // DataQueryModeller
+    property string mo_dqm_dataTabName : qsTr("Data Modeler")
+    property string mo_dqm_dataTabDesc : qsTr("Use GUI interface to generate dataset from Datasource")
+    property string mo_dqm_queryTabName : qsTr("Query Editor")
+    property string mo_dqm_queryTabDesc : qsTr("Write SQL query to generate dataset")
+    property string mo_dqm_inmemoryDesc : qsTr("Configure Extract parameters")
+
+    property string mo_dqm_filterName : qsTr("Filter")
+    property string mo_dqm_filterDesc : qsTr("Apply filters to the SQL query")
+    property string mo_dqm_extractName : qsTr("Extract")
+    property string mo_dqm_extractDesc : qsTr("Save datasource offline and process as an Extract database")
+    property string mo_dqm_liveName : qsTr("Live")
+    property string mo_dqm_liveDesc : qsTr("Save datasource for a live connection")
+
+    property string mo_dqm_dsNamePlaceholder : qsTr("Data Source Name")
+    property string mo_dqm_publishDs : qsTr("Publish Datasource")
+    property string mo_dqm_createDashboard : qsTr("Create Dashboard")
+    property string mo_dqm_connectedTo : qsTr("Connected To ")
+    property string mo_dqm_connectedDb : qsTr("Current connected database: ")
+    property string mo_dqm_disconnect : qsTr("Disconnect")
+    property string mo_dqm_showHideTables : qsTr("Hide/Show database tables")
+
+    property string mo_dqm_warningQueryLoss : qsTr("Your query will be lost. Are you sure you want to proceed?")
+    property string mo_dqm_warningModelLoss : qsTr("Your diagram will be lost. Are you sure you want to proceed?")
+    property string mo_dqm_mandatoryDSName : qsTr("Datasource name is mandatory")
+    property string mo_dqm_freeExtractSizeLimit : qsTr("Free users cannot create extracts more than 1 GB")
+    property string mo_dqm_extractCreateErr : qsTr("Extract create error")
+    property string mo_dqm_timeElapsed : qsTr("Time elapsed: ")
+    property string mo_dqm_waitCreateExtract : qsTr("Creating extract. Please wait..")
+
+
+    // SubComponents
+
+    // SubComponents/Common
+    property string mo_sub_common_header : qsTr("Data Source Filter")
+
+    // SubComponents/DataModeller
+    property string mo_sub_dmr_joinIncomplete : qsTr("JOIN is not complete")
+    property string mo_sub_dmr_queryErr : qsTr("Query Error")
+    property string mo_sub_dmr_selPrimaryTable : qsTr("Select Primary table")
+
+    // SubComponents/InfoTable
+    property string mo_sub_inft_sqlSuccesMsg : qsTr("SQL query succesfully executed")
+    property string mo_sub_inft_dataFetchSuccess : qsTr("Data fetched successfully")
+    property string mo_sub_inft_displayLimitText : qsTr("Display limited to top ")
+    property string mo_sub_inft_selectQueriesOnly : qsTr("Only SELECT (without Common Table Expressions) query allowed")
+    property string mo_sub_inft_messageHead : qsTr("Message")
+    property string mo_sub_inft_actionOut : qsTr("Action Output")
+    property string mo_sub_inft_queryPerformance : qsTr("SQL query performance result")
+    property string mo_sub_inft_dataPreview : qsTr("Data Preview")
+    property string mo_sub_inft_queryLimit : qsTr("Limit SQL result data preview")
+    property string mo_sub_inft_display100 : qsTr("Display top 100")
+    property string mo_sub_inft_display200 : qsTr("Display top 200")
+    property string mo_sub_inft_runsql : qsTr("Run SQL")
+    property string mo_sub_inft_minimize : qsTr("Minimize panel")
+
+    // SubComponents/InMemory
+    property string mo_sub_inm_dataExtract : qsTr("Data Extract")
+    property string mo_sub_inm_fullExtract : qsTr("Full Extract")
+    property string mo_sub_inm_incrementalExtract : qsTr("Incremental Extract")
+    property string mo_sub_inm_incrExtractCol : qsTr("Select the column for incremental extract")
+    property string mo_sub_inm_selSchedule : qsTr("Select schedule for data extraction")
+    property string mo_sub_inm_showFieldMsg : qsTr("Above field will show all data extract schedule that is set up in GRS")
+
+    // SubComponents/TestQueryResultsTable
+    property string mo_sub_tqrt_duration : qsTr("Duration")
+    property string mo_sub_tqrt_action : qsTr("Action")
+    property string mo_sub_tqrt_message : qsTr("Message")
+
+
+    // MiniComponents
+
+    // MiniComponents/DroppedRectangle
+    property string mo_mini_drect_rename : qsTr("Rename")
+    property string mo_mini_drect_convertTo : qsTr("Convert To")
+    property string mo_mini_drect_remove : qsTr("Remove")
+
+    // MiniComponents/JoinBox
+    property string mo_mini_jbox_joinType : qsTr("Click to see join between columns and change the join type")
+    property string mo_mini_jbox_deleteJoin : qsTr("Delete join between tables")
+
+    // MiniComponents/JoinPopup
+    property string mo_mini_jpopup_relationship : qsTr("Relationship")
+    property string mo_mini_jpopup_innerJoin : qsTr("Inner Join")
+    property string mo_mini_jpopup_leftJoin : qsTr("Left Join")
+    property string mo_mini_jpopup_rightJoin : qsTr("Right Join")
+    property string mo_mini_jpopup_fullOuterJoin : qsTr("Full Outer Join")
+    property string mo_mini_jpopup_addKey : qsTr("Add Key")
 }

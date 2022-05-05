@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -210,7 +211,7 @@ TableView {
             id: durationColumn
             width: columnWidths[1]
             height: 30
-            text: "Duration"
+            text: Messages.mo_sub_tqrt_duration
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
@@ -233,7 +234,7 @@ TableView {
             id: actionCoulmn
             width: columnWidths[2]
             height: 30
-            text: "Action"
+            text: Messages.mo_sub_tqrt_action
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
@@ -259,7 +260,7 @@ TableView {
             id: messageColumn
             width: columnWidths[3]
             height: 30
-            text: "Message"
+            text: Messages.mo_sub_tqrt_message
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{

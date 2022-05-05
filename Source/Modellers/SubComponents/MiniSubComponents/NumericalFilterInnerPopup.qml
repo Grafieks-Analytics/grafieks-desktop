@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -340,7 +341,7 @@ Rectangle{
 
         Text {
             id: name
-            text: qsTr("Condition")
+            text: Messages.filterConditionText
             leftPadding: 20
         }
 
@@ -394,7 +395,7 @@ Rectangle{
                     selectByMouse: true
                     height : parent.height
                     width : parent.width
-                    placeholderText: "Enter Text"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     onActiveFocusChanged: {
                         numericalTextBox.border.color = "blue"
                     }
@@ -419,7 +420,7 @@ Rectangle{
                     selectByMouse: true
                     height : parent.height
                     width : parent.width
-                    placeholderText: "Enter Text"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     onActiveFocusChanged: {
                         numericalTextBox.border.color = "blue"
                     }

@@ -409,7 +409,7 @@ Page {
             id: search_text
             width: 400
             height: 50
-            placeholderText: Messages.cn_sel_search
+            placeholderText: Messages.search
             cursorVisible: true
             anchors.left: searchRectangle.left
             leftPadding: 15

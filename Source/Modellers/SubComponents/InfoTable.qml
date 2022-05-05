@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 import "../../MainSubComponents"
@@ -21,7 +22,7 @@ Item{
     property bool profilingStatus: false
     property bool infoTableResizingFixed: true
     property var errorMsg: ""
-    property string defaultMsg: "SQL query succesfully executed"
+    property string defaultMsg: Messages.mo_sub_inft_sqlSuccesMsg
 
 
     /***********************************************************************************************************************/
@@ -95,7 +96,7 @@ Item{
                 errorMsg = errMsg
                 queryUpdate.icon = StandardIcon.Critical
             } else{
-                errorMsg = "Data fetched successfully"
+                errorMsg = Messages.mo_sub_inft_dataFetchSuccess
                 queryUpdate.icon = StandardIcon.NoIcon
             }
         }
@@ -178,7 +179,7 @@ Item{
 
     function onDisplayLimitSelected(value){
         // Change display limit of query results here
-        displayLimit.text = "Display limited to top "+ value
+        displayLimit.text = Messages.mo_sub_inft_displayLimitText + value
         DSParamsModel.setDisplayRowsCount(value)
         selectLimitOptions.close()
     }
@@ -291,8 +292,8 @@ Item{
 
     MessageDialog{
         id: sqlQueryNotAllowedDialog
-        title: "Warning"
-        text: "Only SELECT (without Common Table Expressions) query allowed"
+        title: Messages.warningTitle
+        text: Messages.mo_sub_inft_selectQueriesOnly
         //icon: StandardIcon.Critical
 
         onAccepted: {
@@ -304,7 +305,7 @@ Item{
     MessageDialog{
         id: queryUpdate
         visible: false
-        title: "Message"
+        title: Messages.mo_sub_inft_messageHead
         text: errorMsg
         icon: StandardIcon.NoIcon
 
@@ -375,7 +376,7 @@ Item{
                 //                leftPadding: 10
 
                 Text{
-                    text: "Action Output"
+                    text: Messages.mo_sub_inft_actionOut
                     anchors.centerIn: parent
                 }
 
@@ -390,7 +391,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("SQL query performance result")
+                ToolTip.text: Messages.mo_sub_inft_queryPerformance
             }
 
 
@@ -429,7 +430,7 @@ Item{
                 leftPadding: 10
 
                 Text{
-                    text: "Data Preview"
+                    text: Messages.mo_sub_inft_dataPreview
                     anchors.centerIn: parent
                 }
 
@@ -486,7 +487,7 @@ Item{
 
                 Text{
                     id : displayLimit
-                    text: "Display limited to top 100"
+                    text: Messages.mo_sub_inft_displayLimitText + "100"
                     anchors.centerIn: parent
                 }
 
@@ -502,7 +503,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Limit SQL result data preview")
+                ToolTip.text: Messages.mo_sub_inft_queryLimit
 
             }
 
@@ -513,11 +514,11 @@ Item{
                 id:selectLimitList
                 ListElement{
                     value : 100
-                    menuItem: "Display Top 100"
+                    menuItem: Messages.mo_sub_inft_display100
                 }
                 ListElement{
                     value : 200
-                    menuItem: "Display Top 200"
+                    menuItem: Messages.mo_sub_inft_display200
                 }
             }
 
@@ -605,7 +606,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Run SQL")
+                ToolTip.text: Messages.mo_sub_inft_runsql
 
             }
 
@@ -654,7 +655,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Minimize panel")
+                ToolTip.text: Messages.mo_sub_inft_minimize
 
 
             }

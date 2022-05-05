@@ -27,7 +27,7 @@ Item {
 
         TextEdit {
             id: search_text
-            text: Messages.msc_shb_header
+            text: Messages.search
             cursorVisible: true
             width:250
             height: 40

@@ -256,7 +256,7 @@ Page {
 
                 TextField {
                     id: search_text
-                    placeholderText: Messages.ds_ds_search
+                    placeholderText: Messages.search
                     width:300
                     height: 40
                     anchors.left: search_rect.left
