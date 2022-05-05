@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "./MiniSubComponents";
 
@@ -78,7 +80,7 @@ Column{
                 border.color: Constants.darkThemeColor
             Text {
                 id: categoricalHeading
-                text: qsTr("Categorical")
+                text: Messages.filterCategorical
                 anchors.left: parent.left
 
                 anchors.leftMargin: 10
@@ -144,7 +146,7 @@ Column{
 
                 Text {
                     id: numericalHeading
-                    text: qsTr("Numerical")
+                    text: Messages.filterNumerical
                     anchors.left: parent.left
 
                     anchors.leftMargin: 10
@@ -205,7 +207,7 @@ Column{
             border.color: Constants.darkThemeColor
         Text {
             id: dateHeading
-            text: qsTr("Date")
+            text: Messages.filterDate
             anchors.left: parent.left
 
             anchors.leftMargin: 10

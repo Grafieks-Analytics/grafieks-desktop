@@ -18,6 +18,8 @@ QtObject {
 
     property string publishBtnTxt: qsTr("Publish")
     property string confirmBtnTxt : qsTr("Confirm")
+    property string updateBtnTxt : qsTr("Update")
+    property string addBtnTxt : qsTr("Add")
     property string applyBtnTxt : qsTr("Apply")
     property string resetBtnTxt : qsTr("Reset")
     property string cancelBtnTxt : qsTr("Cancel")
@@ -31,14 +33,14 @@ QtObject {
     property string selectImage : qsTr("Select an image")
     property string noSelectedFile : qsTr("No file selected")
 
+    property string filterCategorical : qsTr("Categorical")
+    property string filterDate : qsTr("Date")
+    property string filterNumerical : qsTr("Numerical")
 
     property string filterList : qsTr("List")
     property string filterWildcard : qsTr("Wildcard")
     property string filterCalendar : qsTr("Calendar")
     property string filterTimeframe : qsTr("Timeframe")
-    property string filterCategorical : qsTr("Categorical")
-    property string filterDate : qsTr("Date")
-    property string filterNumerical : qsTr("Numerical")
 
     property string filterMultiSelect : qsTr("Multi Select")
     property string filterSingleSelect : qsTr("Single Select")
@@ -515,4 +517,29 @@ QtObject {
     // MiniComponents/WidgetTextEditor
     property string da_sub_wte_header: qsTr("Edit Text")
 
+
+
+
+    // Reports
+
+    // NewReport
+    property string re_nr_header: qsTr("Add Report Title")
+    property string re_nr_customize: qsTr("Customize")
+
+
+    // SubComponents
+
+    // SubComponents/Common
+    property string re_sub_common_header : qsTr("Data Source Filter")
+
+    // SubComponents/EditColorPopup
+    property string re_sub_ecp_selDataItem : qsTr("Select Data Item")
+    property string re_sub_ecp_selColorScheme : qsTr("Select Color Scheme")
+
+    // SubComponents/ReportCustomizations
+    property string re_sub_rc_chooseColor : qsTr("Please choose a color")
+    property string re_sub_rc_filter : qsTr("Filter [0]")
+
+    // SubComponents/YAxisSettingPopup
+    property string re_sub_yasp_filter : qsTr("Axis")
 }

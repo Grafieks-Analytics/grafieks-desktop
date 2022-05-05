@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents";
 import "./MiniSubComponents";
@@ -174,7 +175,7 @@ Popup {
 
                         Text {
                             id: axisMenuText
-                            text: qsTr("Axis")
+                            text: Messages.re_sub_yasp_filter
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.leftMargin: 10
