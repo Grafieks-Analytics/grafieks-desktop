@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -55,7 +56,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 5
         Text{
-            text: "Select Filter"
+            text: Messages.da_sub_df_header
 
             anchors.topMargin: 5
             id:selectFilter
@@ -81,7 +82,7 @@ Item {
 
         TabButton{
             id: filter_cancel_btn
-            text: "Cancel"
+            text: Messages.cancelBtnTxt
             onClicked: hideColumn()
 
             background: Rectangle {
@@ -102,7 +103,7 @@ Item {
 
         TabButton{
             id: filter_apply_btn
-            text: "Apply"
+            text: Messages.applyBtnTxt
             onClicked: {
                 let currentDashboard = DashboardParamsModel.currentDashboard
                 DashboardParamsModel.applyFilterToDashboard(currentDashboard)

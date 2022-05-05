@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.qmlmodels 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 import "../MiniSubComponents"
@@ -111,7 +112,7 @@ Item {
 
         contentItem: Text {
             rightPadding: rangeText.indicator.width + rangeText.spacing+100
-            text: qsTr("Range")
+            text: Messages.da_sub_fcn_rangeText
 
             elide: Text.ElideRight
             font.pixelSize: 17
@@ -124,7 +125,7 @@ Item {
 
     Text {
         id: conditionText
-        text: qsTr("Condition")
+        text: Messages.da_sub_fcn_conditionText
         font.pixelSize: 17
         anchors.top: rangeText.bottom
         anchors.margins: 15
@@ -166,7 +167,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Equal To")
+                text: Messages.da_sub_fcn_equal
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -201,7 +202,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Not Equal To")
+                text: Messages.da_sub_fcn_notequal
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -233,7 +234,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Smaller Than")
+                text: Messages.da_sub_fcn_smaller
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -265,7 +266,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Greater Than")
+                text: Messages.da_sub_fcn_greater
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -297,7 +298,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Equal or Smaller Than")
+                text: Messages.da_sub_fcn_equalorsmaller
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -329,7 +330,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Equal or Greater Than")
+                text: Messages.da_sub_fcn_equalorgreater
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -361,7 +362,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: 200
-                text: qsTr("Between")
+                text: Messages.da_sub_fcn_between
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.qmlmodels 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 import "../MiniSubComponents"
@@ -63,7 +64,7 @@ Item {
 
     Text {
         id: listText
-        text: qsTr("List")
+        text: Messages.da_sub_fcc_listText
         font.pixelSize: 17
 
         anchors.horizontalCenter:  parent.horizontalCenter
@@ -104,7 +105,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: control1.indicator.width + control1.spacing+60
-                text: qsTr("Single Value")
+                text: Messages.da_sub_fcc_singleValue
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -137,7 +138,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: control2.indicator.width + control2.spacing+49
-                text: qsTr("Multiple Value")
+                text: Messages.da_sub_fcc_multiValue
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -147,7 +148,7 @@ Item {
     }
     Text {
         id: dropDownText
-        text: qsTr("Drop Down")
+        text: Messages.da_sub_fcc_dropdown
         font.pixelSize: 17
         anchors.top: radioGroup1.bottom
 
@@ -192,7 +193,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: control3.indicator.width + control3.spacing+60
-                text: qsTr("Single Value")
+                text: Messages.da_sub_fcc_singleValue
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
@@ -226,7 +227,7 @@ Item {
 
             contentItem: Text {
                 rightPadding: control4.indicator.width + control4.spacing+49
-                text: qsTr("Multiple Value")
+                text: Messages.da_sub_fcc_multiValue
                 elide: Text.ElideRight
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter

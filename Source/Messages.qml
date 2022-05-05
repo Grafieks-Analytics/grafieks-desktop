@@ -3,12 +3,16 @@ import QtQuick 2.15
 
 QtObject {
 
-
-    // General Strings
+    /****************************************************/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    // GENERAL STRINGS
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /****************************************************/
 
     property string applicationName : qsTr("Grafieks")
     property string signInText : qsTr("Sign In")
     property string signOutText : qsTr("Sign Out")
+    property string emptyString : qsTr("")
     property string search : qsTr("Search")
     property string warningTitle : qsTr("Warning")
 
@@ -19,8 +23,12 @@ QtObject {
     property string cancelBtnTxt : qsTr("Cancel")
     property string closeBtnTxt : qsTr("Close")
 
+    property string da_sub_dc_edit : qsTr("Edit")
+    property string da_sub_dc_delete : qsTr("Delete")
+
     property string openFileText : qsTr("Open")
     property string selectFile : qsTr("Select a file")
+    property string selectImage : qsTr("Select an image")
     property string noSelectedFile : qsTr("No file selected")
 
 
@@ -37,6 +45,7 @@ QtObject {
     property string filterAll : qsTr("All")
     property string filterIncludeNull : qsTr("Include Null")
     property string filterExclude : qsTr("Exclude")
+    property string filterInclude : qsTr("Include")
 
     property string mo_mini_cfwc_header : qsTr("Select Wildcard")
     property string mo_mini_cfwc_addWildcard : qsTr("Add Wildcard")
@@ -50,10 +59,16 @@ QtObject {
     property string filterAddCharacter : qsTr("Add Character")
     property string filterConditionText : qsTr("Condition")
 
-
+    /****************************************************/
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     // Module/Screen specific
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+    /****************************************************/
 
+
+    /****************************************************/
     // Main SubComponents
+    /****************************************************/
 
     // ConfirmPublishDS
     property string msc_cpd_header : qsTr("Confirm Datasource Overwrite")
@@ -123,12 +138,13 @@ QtObject {
 
 
 
-
+    /****************************************************/
     // Others
+    /****************************************************/
 
     // About
     property string oth_abt_header : qsTr("Desktop")
-    property string oth_abt_version : qsTr("Free Edition 1.0.2 (x64)")
+    property string oth_abt_version : qsTr("Free Edition 1.0.3 (x64)")
     property string oth_abt_learn : qsTr("Grafieks is a Self-Service Analytics Platform.<a href=\"https://grafieks.com/\">Learn More</a> ")
     property string oth_abt_license : qsTr("End User License Agreement")
     property string oth_abt_copyright : qsTr("Copyright © 2022 Grafieks Analytics Ltd. All rights reserved.")
@@ -138,8 +154,9 @@ QtObject {
 
 
 
-
+    /****************************************************/
     // Datasources
+    /****************************************************/
 
     // Datasources
     property string ds_ds_create : qsTr("Create Datasource")
@@ -164,8 +181,9 @@ QtObject {
 
 
 
-
+    /****************************************************/
     // Connectors
+    /****************************************************/
 
     // SelectConnection
     property string cn_sel_headers : qsTr("Data Connectors")
@@ -314,8 +332,9 @@ QtObject {
     property string cn_sub_teradata_missingDriver : qsTr("Teradata ODBC Driver missing")
     property string cn_sub_teradata_driverDownload : qsTr("You don't have Teradata ODBC driver.Click Ok to Download")
 
-
+    /****************************************************/
     // Modelers
+    /****************************************************/
 
     // DataQueryModeller
     property string mo_dqm_dataTabName : qsTr("Data Modeler")
@@ -405,4 +424,95 @@ QtObject {
     property string mo_mini_jpopup_rightJoin : qsTr("Right Join")
     property string mo_mini_jpopup_fullOuterJoin : qsTr("Full Outer Join")
     property string mo_mini_jpopup_addKey : qsTr("Add Key")
+
+
+
+    /****************************************************/
+    // Dashboards
+    /****************************************************/
+
+    // NewDashboard
+    property string da_nd_addKey : qsTr("Sorry, your current plan allows upto ")
+    property string da_nd_deleteDashboard : qsTr("Delete")
+    property string da_nd_addFilter : qsTr("Filter")
+    property string da_nd_dashboardCustomize : qsTr("Customize")
+    property string da_nd_publishDashboard : qsTr("Publish Dashboard")
+    property string da_nd_createReport : qsTr("Create Report")
+    property string da_nd_stagePlaceholder : qsTr("Add Reports and Widgets Here")
+    property string da_nd_dashboardCustomizeLabel : qsTr("Customize Dashboard")
+
+
+
+    // SubComponents
+
+
+    // SubComponents/DashboardFilters
+    property string da_sub_df_header: qsTr("Select Filter")
+
+    // SubComponents/DashboardFiltersAdd
+    property string da_sub_dfa_header: qsTr("Add Filter")
+
+    // SubComponents/SaveWorkbookPopup
+    property string da_sub_swp_header: qsTr("Save Workbook Options")
+    property string da_sub_swp_publishDs: qsTr("Save & Publish Datasource")
+    property string da_sub_swp_publishWb: qsTr("Save & Publish Workbook")
+
+
+    // MiniComponents
+
+    // MiniComponents/CustomizeCanvasSizeMenu
+    property string da_sub_ccsm_width: qsTr("Width")
+    property string da_sub_ccsm_height: qsTr("Height")
+
+
+    // MiniComponents/CustomizeGeneralMenu
+    property string da_sub_cgm_header: qsTr("Dashboard Name")
+
+    // MiniComponents/CustomizeReportGeneralMenu
+    property string da_sub_crgm_header: qsTr("Report Name")
+
+    // MiniComponents/CustomizeReportStyleMenu
+    property string da_sub_crsm_bgcolor: qsTr("Background Color")
+    property string da_sub_crsm_linecolor: qsTr("Line Color")
+
+    // MiniComponents/CustomizeStyleMenu
+    property string da_sub_csm_bgcolor: qsTr("Background Color")
+
+    // MiniComponents/DroppedImage
+    property string da_sub_di_selectImageDialogTxt: qsTr("Select an image (*.jpg *.jpeg *.png  only)")
+    property string da_sub_di_selectImageNamedFiltersTxt: qsTr("Image files (*.jpg *.jpeg *.png  only)")
+
+    // MiniComponents/DroppedText
+    property string da_sub_dt_editTextPlaceholder: qsTr("Edit text")
+
+    // MiniComponents/FilterCustomize
+    property string da_sub_fc_filterText: qsTr("Filter")
+    property string da_sub_fc_propertyText: qsTr("Property")
+    property string da_sub_fc_filterTypeText: qsTr("Filter Type")
+    property string da_sub_fc_valueText: qsTr("Value")
+    property string da_sub_fc_renameText: qsTr("Rename")
+
+    // MiniComponents/FilterCustomizeCategorical
+    property string da_sub_fcc_listText: qsTr("List")
+    property string da_sub_fcc_singleValue: qsTr("Single Value")
+    property string da_sub_fcc_multiValue: qsTr("Multiple Value")
+    property string da_sub_fcc_dropdown: qsTr("Drop Down")
+    property string da_sub_fcc_renameText: qsTr("Rename")
+
+    // MiniComponents/FilterCustomizeNumerical
+    // Common to some other files as well
+    property string da_sub_fcn_rangeText: qsTr("Range")
+    property string da_sub_fcn_conditionText: qsTr("Condition")
+    property string da_sub_fcn_equal: qsTr("Equal To")
+    property string da_sub_fcn_notequal: qsTr("Not Equal To")
+    property string da_sub_fcn_smaller: qsTr("Smaller Than")
+    property string da_sub_fcn_greater: qsTr("Greater Than")
+    property string da_sub_fcn_equalorsmaller: qsTr("Equal or Smaller Than")
+    property string da_sub_fcn_equalorgreater: qsTr("Equal or Greater Than")
+    property string da_sub_fcn_between: qsTr("Between")
+    property string da_sub_fcn_and: qsTr("And")
+
+    // MiniComponents/WidgetTextEditor
+    property string da_sub_wte_header: qsTr("Edit Text")
+
 }

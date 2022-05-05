@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -146,7 +147,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Edit Text"
+            text: Messages.da_sub_wte_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -232,12 +233,12 @@ Popup {
             anchors.right: parent.right
 
             CustomButton{
-                textValue: "Cancel"
+                textValue: Messages.cancelBtnTxt
                 onClicked: hidePopup()
             }
 
             CustomButton{
-                textValue: "Apply"
+                textValue: Messages.applyBtnTxt
                 onClicked: saveText()
 
             }

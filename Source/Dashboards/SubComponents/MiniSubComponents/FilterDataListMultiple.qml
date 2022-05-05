@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -67,7 +68,7 @@ Item {
     }
 
     function processDataList(modelContent){
-        modelContent.unshift("Select All")
+        modelContent.unshift(Messages.filterAll)
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         var i = 0;
@@ -107,7 +108,7 @@ Item {
 
     function searchData(searchText){
         modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
-        modelContent.unshift("Select All")
+        modelContent.unshift(Messages.filterAll)
         console.log(modelContent)
 
         listModel.clear()
@@ -277,7 +278,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
 
-                placeholderText: qsTr("Search")
+                placeholderText: Messages.search
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     width: parent.width

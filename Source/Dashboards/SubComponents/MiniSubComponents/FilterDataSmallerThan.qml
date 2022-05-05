@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -142,7 +143,7 @@ Item {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
-            text: "Smaller Than"
+            text: Messages.da_sub_fcn_smaller
             elide: Text.ElideRight
             font.pixelSize: 12
             verticalAlignment: Text.AlignVCenter

@@ -14,6 +14,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -85,7 +86,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Save Workbook Options"
+            text: Messages.da_sub_swp_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -126,7 +127,7 @@ Popup {
             id: saveDatasource
             height: 30
             checkbox_checked: true
-            checkbox_text: "Save & Publish Datasource"
+            checkbox_text: Messages.da_sub_swp_publishDs
             parent_dimension: 16
         }
 
@@ -148,7 +149,7 @@ Popup {
             id: saveWorkbook
             height: 30
             checkbox_checked: true
-            checkbox_text: "Save & Publish Workbook"
+            checkbox_text: Messages.da_sub_swp_publishWb
             parent_dimension: 16
             enabled: false
         }
@@ -170,13 +171,13 @@ Popup {
         Button{
             id: save
             onClicked: onSaveClicked()
-            text: "Publish"
+            text: Messages.publishBtnTxt
         }
 
         Button{
             id: cancel
             onClicked: popupSave.close()
-            text: "Cancel"
+            text: Messages.cancelBtnTxt
         }
 
     }

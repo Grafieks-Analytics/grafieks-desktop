@@ -16,6 +16,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -321,16 +322,16 @@ Page {
     MessageDialog {
         id: dashboardPerWorkbookLimitAccess
         visible: false
-        title: "Limited Access"
-        text: qsTr("Sorry, your current plan allows upto "+ Constants.dashboardPerWorkbook +" Dashboards. To add more Dashboard in same workbook, please upgrade plan.")
+        title: Messages.warningTitle
+        text: qsTr(Messages.da_nd_addKey + Constants.dashboardPerWorkbook +" Dashboards. To add more Dashboard in same workbook, please upgrade plan.")
     }
 
     
     MessageDialog {
         id: workbookReportsLimitAccess
         visible: false
-        title: "Limited Access"
-        text: qsTr("Sorry, your current plan allows upto "+ Constants.reportsPerWorkbook +" reports. To add more reports in same workbook, please upgrade plan.")
+        title: Messages.warningTitle
+        text: qsTr(Messages.da_nd_addKey + Constants.reportsPerWorkbook +" reports. To add more reports in same workbook, please upgrade plan.")
     }
 
     SaveWorkbookPopup{
@@ -444,7 +445,7 @@ Page {
                         id: options
                         y: dashboardNameButton.height
                         MenuItem {
-                            text: qsTr("Delete")
+                            text: Messages.da_nd_deleteDashboard
                             onClicked: deleteDashboard(index)
                         }
                     }
@@ -642,7 +643,7 @@ Page {
 
                     Text{
                         id: filterText
-                        text: "Filter"
+                        text: Messages.da_nd_addFilter
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
@@ -738,18 +739,13 @@ Page {
 
                 Row{
                     spacing: 5
-                    //                    anchors.centerIn: parent
-
 
                     Text{
-                        text: "Customize"
+                        text: Messages.da_nd_dashboardCustomize
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
-                        //                        id: filterLeftSquareBracket
                         text: qsTr(":")
-                        //                        color: Constants.grafieksGreen
-
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -823,7 +819,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Dashboard")
+                    ToolTip.text: Messages.da_nd_publishDashboard
 
                 }
 
@@ -855,7 +851,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Create Report")
+                    ToolTip.text: Messages.da_nd_createReport
 
                 }
 
@@ -946,7 +942,7 @@ Page {
 
                 Text{
                     id:hintText
-                    text:  !is_dashboard_blank ? "Add Reports and Widgets Here" : ""
+                    text:  !is_dashboard_blank ? Messages.da_nd_stagePlaceholder : Messages.emptyString
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.grayColor
@@ -1015,7 +1011,7 @@ Page {
                 width: rectangle_newdashboard_right_col.width
 
                 Text{
-                    text: "Customize Dashboard"
+                    text: Messages.da_nd_dashboardCustomizeLabel
                     anchors.verticalCenter: rectangle_newdashboard_right_col1.verticalCenter
                     anchors.left: rectangle_newdashboard_right_col1.left
                     anchors.leftMargin: 10

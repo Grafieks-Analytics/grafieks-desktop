@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtWebView 1.1
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -325,7 +326,7 @@ Item{
 
     CustomButton{
         id: editText
-        textValue: "Edit Text"
+        textValue: Messages.da_sub_dt_editTextPlaceholder
         anchors.centerIn: parent
         visible: true
         onClicked: showTextEditor()
