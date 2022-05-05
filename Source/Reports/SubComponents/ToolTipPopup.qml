@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents";
 import "./MiniSubComponents";
@@ -253,7 +254,7 @@ Popup {
             anchors.topMargin: 20
             anchors.right: parent.right
             anchors.rightMargin: 20
-            textValue: "Apply"
+            textValue: Messages.applyBtnTxt
             onClicked: {
                 
                 updateChart();

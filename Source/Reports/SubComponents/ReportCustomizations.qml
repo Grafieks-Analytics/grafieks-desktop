@@ -15,6 +15,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -207,7 +208,7 @@ Item{
 
     ColorDialog {
         id: colorDialog
-        title: "Please choose a color"
+        title: Messages.re_sub_rc_chooseColor
         onAccepted: {
             console.log("You chose: " + colorDialog.color)
         }
@@ -298,7 +299,7 @@ Item{
     CustomButton{
         id:reportFilterButton
         width: parent.width
-        textValue: "Report Filter [0]"
+        textValue: Messages.re_sub_rc_filter
         onClicked: openReportFilters()
     }
 
