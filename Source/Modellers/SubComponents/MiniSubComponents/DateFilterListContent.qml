@@ -604,7 +604,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: multiSelectRadio
-                radio_text: qsTr("Multi Select")
+                radio_text: Messages.filterMultiSelect
                 radio_checked: true
                 parent_dimension: 16
                 ButtonGroup.group: selectTypeRadioGroup
@@ -624,7 +624,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: singleSelectRadio
-                radio_text: qsTr("Single Select")
+                radio_text: Messages.filterSingleSelect
                 radio_checked: false
                 parent_dimension: 16
                 ButtonGroup.group: selectTypeRadioGroup
@@ -654,7 +654,7 @@ Rectangle{
 
             TextField{
                 id: searchText
-                placeholderText: "Search"
+                placeholderText: Messages.search
                 leftPadding: 20
                 selectByMouse: true
                 height: 35
@@ -701,7 +701,7 @@ Rectangle{
         CheckBoxTpl {
             id: mainCheckBox
             checked: DSParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
-            text: "All"
+            text: Messages.filterAll
             parent_dimension: Constants.defaultCheckBoxDimension
             checkState: childGroup.checkState
 
@@ -874,7 +874,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: DSParamsModel.includeNull
-                text: qsTr("Include Null")
+                text: Messages.filterIncludeNull
 
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -893,7 +893,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: DSParamsModel.exclude
-                text: qsTr("Exclude")
+                text: Messages.filterExclude
                 parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {

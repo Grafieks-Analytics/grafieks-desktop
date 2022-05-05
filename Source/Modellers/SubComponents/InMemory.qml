@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -161,7 +162,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Data Extract"
+            text: Messages.mo_sub_inm_dataExtract
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -200,7 +201,7 @@ Popup {
             padding: 30
             CustomRadioButton{
                 id: radio_memory
-                radio_text: qsTr("Full Extract")
+                radio_text: Messages.mo_sub_inm_fullExtract
                 radio_checked: false
                 parent_dimension: 16
                 font.pixelSize: Constants.fontCategoryHeader
@@ -220,7 +221,7 @@ Popup {
             padding: 30
             CustomRadioButton{
                 id: radio_memory2
-                radio_text: qsTr("Incremental Extract")
+                radio_text: Messages.mo_sub_inm_incrementalExtract
                 font.pixelSize: Constants.fontCategoryHeader
                 radio_checked: false
                 enabled: false
@@ -248,7 +249,7 @@ Popup {
 
             Text {
                 id: incrementalExtactSelectbtnText
-                text: qsTr("Select the column for incremental extract")
+                text: Messages.mo_sub_inm_incrExtractCol
                 anchors.bottomMargin: 20
                 leftPadding: 30
             }
@@ -286,7 +287,7 @@ Popup {
 
 
             Text {
-                text: qsTr("Select schedule for data extraction")
+                text: Messages.mo_sub_inm_selSchedule
                 anchors.bottomMargin: 20
                 leftPadding: 30
             }
@@ -323,7 +324,7 @@ Popup {
                     leftPadding: 30
                     anchors.top: schedulerDropdown.bottom
                     anchors.topMargin: 10
-                    text: qsTr("Above field will show all data extract schedule that is set up in GRS")
+                    text: Messages.mo_sub_inm_showFieldMsg
                     font.pixelSize: Constants.fontCategoryHeaderSmall
                 }
 
@@ -337,7 +338,7 @@ Popup {
                 id: addBtn
                 anchors.right: parent.right
                 anchors.rightMargin: 60
-                textValue: "Add"
+                textValue: Messages.applyBtnTxt
 
                 onClicked: onAddClicked()
             }

@@ -273,7 +273,6 @@
         <file>Source/Charts/MultipleAreaChart.html</file>
         <file>Source/Charts/HorizontalAreaChart.html</file>
         <file>Source/Charts/HorizontalMultipleAreaChart.html</file>
-        <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
         <file>Source/Splash.qml</file>
         <file>Source/Main.qml</file>
         <file>Source/Charts/Data/dataTables.semanticui.min.js</file>
