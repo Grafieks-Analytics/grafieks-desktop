@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -67,7 +68,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Select Theme")
+                    text: Messages.re_mini_ptp_header
                 }
             }
 

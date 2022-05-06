@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -153,7 +154,7 @@ Popup {
                 width:parent.width
                 height: parent.height
 
-               text: qsTr("None")
+               text: Messages.re_mini_msp_markerShapeNone
 
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment:Text.AlignHCenter

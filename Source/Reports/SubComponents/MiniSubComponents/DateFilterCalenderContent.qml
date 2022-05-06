@@ -13,6 +13,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -22,7 +23,7 @@ Rectangle{
 
     property var locale: Qt.locale()
 
-    property string selectOption: "Select Wildcard"
+    property string selectOption: Messages.mo_mini_cfwc_header
 
     height: parent.height - 80 - 40
     width: parent.width - 40
@@ -217,7 +218,7 @@ Rectangle{
 
 
             Text {
-                text: qsTr("Date Range")
+                text: Messages.filterDateRange
             }
 
         }
@@ -243,7 +244,7 @@ Rectangle{
 
             Text {
                 id: fromDateText
-                text: qsTr("From")
+                text: Messages.filterFrom
             }
 
             Rectangle{
@@ -255,7 +256,7 @@ Rectangle{
 
                 TextField {
                     id:fromDateInput
-                    placeholderText: "dd/mm/yyyy"
+                    placeholderText: Messages.filterDefaultDateFormat
 
                     height: parent.height
                     onTextChanged: {
@@ -305,7 +306,7 @@ Rectangle{
 
             Text {
                 id: toDateText
-                text: qsTr("To")
+                text: Messages.filterTo
             }
 
             Rectangle{
@@ -315,7 +316,7 @@ Rectangle{
 
                 TextField {
                     id: toDateInput
-                    placeholderText: "dd/mm/yyyy"
+                    placeholderText: Messages.filterDefaultDateFormat
 
                     height: parent.height
                     onTextChanged: {
@@ -366,7 +367,7 @@ Rectangle{
 
         CheckBoxTpl {
             checked: ReportParamsModel.fetchIncludeNullMap(counter)[0]
-            text: qsTr("Include Null")
+            text: Messages.filterIncludeNull
             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckStateChanged: {
@@ -384,7 +385,7 @@ Rectangle{
 
         CheckBoxTpl {
             checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[0]
-            text: qsTr("Exclude")
+            text: Messages.filterExclude
             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckedChanged: {

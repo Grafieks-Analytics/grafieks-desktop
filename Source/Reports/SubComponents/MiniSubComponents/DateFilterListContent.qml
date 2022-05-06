@@ -13,6 +13,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
+
 import "../../../MainSubComponents"
 
 Rectangle{
@@ -563,7 +565,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: multiSelectRadio
-                radio_text: qsTr("Multi Select")
+                radio_text: Messages.filterMultiSelect
                 radio_checked: true
                 parent_dimension: 16
                 ButtonGroup.group: selectTypeRadioGroup
@@ -583,7 +585,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: singleSelectRadio
-                radio_text: qsTr("Single Select")
+                radio_text: Messages.filterSingleSelect
                 radio_checked: false
                 parent_dimension: 16
                 ButtonGroup.group: selectTypeRadioGroup
@@ -613,7 +615,7 @@ Rectangle{
 
             TextField{
                 id: searchText
-                placeholderText: "Search"
+                placeholderText: Messages.search
                 leftPadding: 20
                 selectByMouse: true
                 height: 35
@@ -660,7 +662,7 @@ Rectangle{
         CheckBoxTpl {
             id: mainCheckBox
             checked: ReportParamsModel.fetchSelectAllMap(counter)[0] === true ? true : false
-            text: "All"
+            text: Messages.filterAll
             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckedChanged: {
@@ -827,7 +829,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: ReportParamsModel.fetchIncludeNullMap(counter)[0]
-                text: qsTr("Include Null")
+                text: Messages.filterIncludeNull
 
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -846,7 +848,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[0]
-                text: qsTr("Exclude")
+                text: Messages.filterExclude
                 parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
