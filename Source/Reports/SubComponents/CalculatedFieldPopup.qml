@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents";
 import "./MiniSubComponents";
@@ -415,11 +416,11 @@ Popup {
                     CustomButton{
                         height: Constants.defaultElementHeight
                         onClicked: onCancelClicked()
-                        textValue: "Cancel"
+                        textValue: Messages.cancelBtnTxtt
                     }
                     CustomButton{
                         height: Constants.defaultElementHeight
-                        textValue: "Apply"
+                        textValue: Messages.applyBtnTxt
                     }
                 }
 

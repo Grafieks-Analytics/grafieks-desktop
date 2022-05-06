@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../SubComponents"
 import "../../MainSubComponents"
@@ -114,7 +115,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to sheet"
+            text: Messages.cn_sub_sheet_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -156,7 +157,7 @@ Popup {
                 anchors.top: parent.top
                 anchors.rightMargin: 10
 
-                text: qsTr("Allow " + GeneralParamsModel.getAppInfo().APP_NAME + " to access to your sheet account...")
+                text: qsTr(GeneralParamsModel.getAppInfo().APP_NAME + Messages.cn_sub_sheet_allowReqMsg)
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontHeader
             }
@@ -164,7 +165,7 @@ Popup {
             CustomButton{
 
                 id: allowBtn
-                textValue: "Allow"
+                textValue: Messages.cn_sub_common_allow
                 anchors.top: allowMsg.bottom
                 anchors.topMargin: 60
                 width: 100
@@ -185,7 +186,7 @@ Popup {
 
                 anchors.topMargin: 80
 
-                text: qsTr("Click the allow button above to open the sheet authorization page on a separate window.");
+                text: Messages.cn_sub_sheet_allowAuthMsg;
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
@@ -194,7 +195,7 @@ Popup {
                 id: infoMsg2
                 anchors.top: infoMsg.bottom
 
-                text: qsTr("Once you authorize this connection you will be returned to this page.")
+                text: Messages.cn_sub_common_afterAuthMsg
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }

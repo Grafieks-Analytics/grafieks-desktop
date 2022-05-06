@@ -10,7 +10,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
+
 import "./MiniSubComponents"
 Item{
 
@@ -374,7 +377,7 @@ Item{
                                 id:menuItem1
                                 implicitHeight: 30
                                 leftPadding: 15
-                                text: qsTr("Edit")
+                                text: Messages.da_sub_dc_edit
                                 onTriggered: editReport(reportId)
 
                             //   TODO:edit report
@@ -385,7 +388,7 @@ Item{
                                 id:menuItem2
                                 implicitHeight: 30
                                 leftPadding: 15
-                                text: qsTr("Delete")
+                                text: Messages.da_sub_dc_delete
                                 onTriggered: deleteReport(reportId)
                                 // TODO:Delete report
 

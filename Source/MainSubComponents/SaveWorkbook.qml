@@ -3,6 +3,7 @@ import QtQml 2.15
 import Qt.labs.platform 1.1
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // We are moving this here specially because
 // its dependent of Qt.Labs.Platform (the default filename preset)
@@ -11,7 +12,7 @@ import com.grafieks.singleton.constants 1.0
 
 FileDialog{
     id: saveWorkbookPromptDialog
-    title: "Save Workbook As"
+    title: Messages.msc_swb_header
     nameFilters: ["Workbook (*."+ Constants.workbookFileExt+" )"];
     fileMode: FileDialog.SaveFile
     currentFile: "file:///" + DashboardParamsModel.wbName

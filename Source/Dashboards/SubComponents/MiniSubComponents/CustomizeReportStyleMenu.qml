@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -131,7 +132,7 @@ Rectangle{
 
             Text {
                 id: backgroundColor
-                text: qsTr("Background Color")
+                text: Messages.da_sub_crsm_bgcolor
             }
 
             Image {
@@ -159,7 +160,7 @@ Rectangle{
 
             Text {
                 id: lineColor
-                text: qsTr("Line Color")
+                text: Messages.da_sub_crsm_linecolor
             }
 
             Image {

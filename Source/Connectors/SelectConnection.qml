@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -332,7 +333,7 @@ Page {
     FileDialog{
         id: fileDialog1
 
-        title: "Select a file"
+        title: Messages.selectFile
 
         onAccepted: {
             messageDialog1.open()
@@ -344,8 +345,8 @@ Page {
         id: messageDialog1
 
         modality: Qt.ApplicationModal
-        title: "Processing file"
-        text: "Please wait. We are processing your input file. Hit Ok to continue"
+        title: Messages.cn_sel_processFile
+        text: Messages.cn_sel_pleaseWait
         standardButtons: StandardButton.Ok | StandardButton.Close
 
         onAccepted: {
@@ -381,7 +382,7 @@ Page {
     Text{
         id: mainLabel
         scale : 0.8
-        text: qsTr("Data Connectors")
+        text: Messages.cn_sel_headers
         font.pointSize: Constants.fontHeader
         color:"gray"
         anchors.top:parent.top
@@ -408,7 +409,7 @@ Page {
             id: search_text
             width: 400
             height: 50
-            placeholderText: "Search"
+            placeholderText: Messages.search
             cursorVisible: true
             anchors.left: searchRectangle.left
             leftPadding: 15

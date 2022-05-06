@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtWebEngine 1.10
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // This is the Image Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
@@ -1189,12 +1190,12 @@ Item{
                             }
 
                             MenuItem {
-                                text: qsTr("Edit")
+                                text: Messages.da_sub_dc_edit
                                 onTriggered: editSelectedReport(newItem.reportId)
                             }
 
                             MenuItem {
-                                text: qsTr("Delete")
+                                text: Messages.da_sub_dc_delete
                                 onTriggered: destroyElement()
                             }
                         }

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.qmlmodels 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 import "../MiniSubComponents"
@@ -109,7 +110,7 @@ Popup {
         
         Text {
             id: text8
-            text: qsTr("Filter")
+            text: Messages.da_sub_fc_filterText
             font.pixelSize: 17
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
@@ -174,7 +175,7 @@ Popup {
                         }
                     }
                     Text {
-                        text: qsTr("Property")
+                        text: Messages.da_sub_fc_propertyText
                         font.pixelSize: 17
                         anchors.verticalCenter: parent.verticalCenter
                         x:30
@@ -207,7 +208,7 @@ Popup {
                     }
                     Text {
                         
-                        text: qsTr("Filter Type")
+                        text: Messages.da_sub_fc_filterTypeText
                         font.pixelSize: 17
                         anchors.verticalCenter: parent.verticalCenter
                         x:30
@@ -242,7 +243,7 @@ Popup {
                     }
                     Text {
                         
-                        text: qsTr("Value")
+                        text: Messages.da_sub_fc_valueText
                         font.pixelSize: 17
                         anchors.verticalCenter: parent.verticalCenter
                         x:30
@@ -287,7 +288,7 @@ Popup {
                         
                         Text {
                             id: rename
-                            text: qsTr("Rename")
+                            text: Messages.da_sub_fc_renameText
                             font.pixelSize: 17
                         }
                         
@@ -375,7 +376,7 @@ Popup {
                             
                             contentItem: Text {
                                 rightPadding: control13.indicator.width + control13.spacing+60
-                                text: qsTr("Include")
+                                text: Messages.filterInclude
                                 elide: Text.ElideRight
                                 font.pixelSize: 15
                                 verticalAlignment: Text.AlignVCenter
@@ -409,7 +410,7 @@ Popup {
                             
                             contentItem: Text {
                                 rightPadding: control14.indicator.width + control14.spacing+60
-                                text: qsTr("Exclude")
+                                text: Messages.filterExclude
                                 elide: Text.ElideRight
                                 font.pixelSize: 15
                                 verticalAlignment: Text.AlignVCenter
@@ -446,7 +447,7 @@ Popup {
             
             TabButton{
                 id: filter_cancel_btn1
-                text: "Close"
+                text: Messages.closeBtnTxt
                 
                 background: Rectangle {
                     id: filter_cancel_btn_background1

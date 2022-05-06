@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // This is the rectangle dynamically called in DataModeller
 // when a column is dropped from right side listview
@@ -283,18 +284,18 @@ Item{
 
 
                         MenuItem {
-                            text: qsTr("Rename")
+                            text: Messages.mo_mini_drect_rename
                             onTriggered: destroyElement()
                             visible: false
                         }
                         MenuItem {
-                            text: qsTr("Convert To")
+                            text: Messages.mo_mini_drect_convertTo
                             onTriggered: destroyElement()
                             visible: false
                         }
 
                         MenuItem {
-                            text: qsTr("Remove")
+                            text: Messages.mo_mini_drect_remove
                             onClicked: hideColumnSelection(colName, tableName)
                             visible: false
                         }

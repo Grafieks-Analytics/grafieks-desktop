@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents";
 import "./MiniSubComponents";
@@ -314,7 +315,7 @@ Popup {
                 height: 30
                 width: parent.width
                 Text {
-                    text: qsTr("Select Data Item")
+                    text: Messages.re_sub_ecp_selDataItem
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -387,7 +388,7 @@ Popup {
                 height: 30
                 width: parent.width
                 Text {
-                    text: qsTr("Select Color Scheme")
+                    text: Messages.re_sub_ecp_selColorScheme
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -441,7 +442,7 @@ Popup {
             anchors.topMargin: 20
             anchors.right: parent.right
             anchors.rightMargin: 20
-            textValue: "Apply"
+            textValue: Messages.applyBtnTxt
             onClicked: closePopup()
         }
 

@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -109,7 +110,7 @@ Column{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Alternate Rows")
+                text: Messages.re_mini_tc_alternateRows
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -150,7 +151,7 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Cell Borders")
+                text: Messages.re_mini_tc_cellBorders
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -192,7 +193,7 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Hover Status")
+                text: Messages.re_mini_tc_hoverStatus
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -233,7 +234,7 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Compact Status")
+                text: Messages.re_mini_tc_compactStatus
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -266,7 +267,7 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Quick Search")
+                text: Messages.search
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter

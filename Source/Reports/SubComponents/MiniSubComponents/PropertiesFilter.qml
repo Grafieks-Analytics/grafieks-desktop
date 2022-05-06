@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../SubComponents"
 import "../../../MainSubComponents"
@@ -328,7 +329,7 @@ Column{
             anchors.top: parent.top
             anchors.topMargin: 5
             font.pixelSize: Constants.fontCategoryHeaderSmall
-            text: "Color By"
+            text: Messages.re_mini_ptp_colorBy
         }
         Image {
             height: editImageSize
@@ -426,7 +427,7 @@ Column{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Tool Tip")
+                text: Messages.re_mini_ptp_toolTip
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -468,7 +469,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Size")
+                text: Messages.re_mini_ptp_size
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -510,7 +511,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Marker Shape")
+                text: Messages.re_mini_ptp_markerShape
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -553,7 +554,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Data Label")
+                text: Messages.re_mini_ptp_dataLabel
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -594,7 +595,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Line Type")
+                text: Messages.re_mini_ptp_lineType
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -636,7 +637,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Themes")
+                text: Messages.re_mini_ptp_themes
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -676,7 +677,7 @@ Column{
             width: parent.width
 
             Text {
-                text: qsTr("Grid Line")
+                text: Messages.re_mini_ptp_gridLine
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -716,7 +717,7 @@ Column{
             width: parent.width
 
             Text {
-                text: qsTr("Dynamic Height")
+                text: Messages.re_mini_ptp_dynamicHeight
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -755,7 +756,7 @@ Column{
             width: parent.width
 
             Text {
-                text: qsTr("Bottom Pinch")
+                text: Messages.re_mini_ptp_bottomPinch
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter

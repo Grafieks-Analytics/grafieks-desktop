@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 import "../MainSubComponents"
 
 
@@ -35,7 +36,7 @@ Popup {
 
     Text{
         id: header
-        text: "Desktop"
+        text: Messages.oth_abt_header
         font.pointSize: 8
         font.family: Constants.fontDefault
         anchors.top: grafieks_logo.bottom
@@ -45,14 +46,14 @@ Popup {
     }
     Text{
         id: version
-        text: "Free Edition 1.0.2 (x64)"
+        text: Messages.oth_abt_version
         font.pointSize: 8
         font.family: Constants.fontDefault
         anchors.top: header.bottom
         anchors.horizontalCenter:parent.horizontalCenter
         anchors.topMargin:17
     }
-       ToolSeparator{
+    ToolSeparator{
         id: toolsep1
         orientation: Qt.Horizontal
         width: parent.width-100
@@ -68,9 +69,9 @@ Popup {
         }
 
     }
-     Text{
+    Text{
         id: learn
-        text: "Grafieks is a Self-Service Analytics Platform.<a href=\"https://grafieks.com/\">Learn More</a> "
+        text: Messages.oth_abt_learn
         onLinkActivated: Qt.openUrlExternally(link)
         font.pointSize: 8
         font.family: Constants.fontDefault
@@ -78,9 +79,9 @@ Popup {
         anchors.horizontalCenter:parent.horizontalCenter
         anchors.topMargin:17
     }
-     Text{
+    Text{
         id: license
-        text: "End User License Agreement"
+        text: Messages.oth_abt_license
         font.pointSize: 8
         color:"blue"
         font.underline :true
@@ -90,15 +91,15 @@ Popup {
         anchors.topMargin:17
         MouseArea{
             anchors.fill:parent
-             onClicked:{
-            aboutPopup.close()
-            openLicense();
-        }
+            onClicked:{
+                aboutPopup.close()
+                openLicense();
+            }
 
         }
-       
+
     }
-     ToolSeparator{
+    ToolSeparator{
         id: toolsep2
         orientation: Qt.Horizontal
         width: parent.width-100
@@ -114,9 +115,9 @@ Popup {
         }
 
     }
-     Text{
+    Text{
         id: copyright
-        text: "Copyright © 2022 Grafieks Analytics Ltd. All rights reserved."
+        text: Messages.oth_abt_copyright
         font.pointSize: 8
         font.family: Constants.fontDefault
         anchors.top: toolsep2.bottom
@@ -124,32 +125,32 @@ Popup {
         anchors.topMargin:17
     }
     CustomButton{
-            id: closeBtn
-            
-            height:40
-            width:120
-            contentItem:Text {
-                text: "Close"
-                color:"white"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-            
+        id: closeBtn
 
-            anchors.right: parent.right
-            anchors.rightMargin: 30
-            anchors.bottom:parent.bottom
-
-
-            onClicked: {
-                aboutPopup.close()
-            }
-            background:Rectangle{
-                height:parent.height
-                width:parent.width
-                color:Constants.buttonHoverColor
-            }
+        height:40
+        width:120
+        contentItem:Text {
+            text: Messages.closeBtnTxt
+            color:"white"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
+
+
+        anchors.right: parent.right
+        anchors.rightMargin: 30
+        anchors.bottom:parent.bottom
+
+
+        onClicked: {
+            aboutPopup.close()
+        }
+        background:Rectangle{
+            height:parent.height
+            width:parent.width
+            color:Constants.buttonHoverColor
+        }
+    }
 
     // Text{
     //     id: header

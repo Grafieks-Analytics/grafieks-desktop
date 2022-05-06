@@ -13,6 +13,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -106,7 +107,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Permission Denied"
+            text: Messages.ds_sub_cer_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 20
@@ -148,7 +149,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("You do not have permission to connect to this Datasource")
+                text: Messages.ds_sub_cer_mainText
             }
         }
 
@@ -163,7 +164,7 @@ Popup {
 
             Button{
                 id: closeBtn
-                text: "OK"
+                text: Messages.closeBtn
                 onClicked: closePopup()
             }
         }

@@ -13,11 +13,12 @@ import QtQuick.Controls 2.15
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Page {
 
     id: data_source_list_page
-    property var headersModel : ["Data Source Name","Published By", "Live/Extract", "Published On", "Last Refreshed"]
+    property var headersModel : Messages.ds_sub_dsl_headers
     property int headerSize : headersModel.length
 
 
@@ -142,11 +143,8 @@ Page {
 
 
                 Rectangle {
-//                    color: Constants.themeColor
                     height: 30
                     width: listView.width / headerSize
-//                    border.color: Constants.grayColor
-
 
 
                     Text{
@@ -158,12 +156,6 @@ Page {
             }
 
         }
-//        Rectangle {
-//            anchors.bottom: dsHeader.bottom
-//            color: Constants.themeColor
-//            width: parent.width
-//            height: 1
-//        }
 
 
         highlight: Rectangle{

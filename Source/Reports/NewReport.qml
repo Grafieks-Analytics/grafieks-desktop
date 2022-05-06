@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 import QtWebEngine 1.7
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -530,11 +531,11 @@ Page {
                 return;
             }
             if(reportId != "false"){
-                addReportButton.text = "Update";
+                addReportButton.text = Messages.updateBtnTxt;
                 editReportFlag = true;
                 setValuesOnEditReport(reportId);
             }else{
-                addReportButton.text = "Add";
+                addReportButton.text = Messages.addBtnTxt;
                 //                ReportParamsModel.setReportId(reportIdMain);
                 
                 ReportParamsModel.setChartType(Constants.barChartTitle);
@@ -2247,7 +2248,7 @@ Page {
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
         // ReportsDataModel.removeTmpChartData()
 
-        if (addReportButton.text == "Add") {
+        if (addReportButton.text == Messages.addBtnTxt) {
             console.log("Deleting Report", reportIdMain);
             ReportParamsModel.deleteReport(reportIdMain, false);
         } else {
@@ -3318,7 +3319,7 @@ Page {
             color: Constants.themeColor
 
             Text{
-                text: "Customize"
+                text: Messages.re_nr_customize
                 anchors.horizontalCenter:parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 14
@@ -3333,7 +3334,7 @@ Page {
 
             TextField{
                 id: report_title_text
-                placeholderText: "Add Report Title"
+                placeholderText: Messages.re_nr_header
                 selectByMouse: true
                 width:250
                 height: 40
@@ -4136,7 +4137,7 @@ Page {
                 Button{
                     anchors.left: parent.left
                     width: parent.width/2-0.5
-                    text:"Cancel"
+                    text: Messages.cancelBtnTxt
                     height: parent.height
                     background: Rectangle{
                         color: Constants.grafieksLightGreenColor
@@ -4154,7 +4155,7 @@ Page {
 
                 Button{
                     id: addReportButton
-                    text:"Add"
+                    text: Messages.addBtnTxt
                     height: parent.height
                     anchors.right: parent.right
                     width: parent.width/2-0.5

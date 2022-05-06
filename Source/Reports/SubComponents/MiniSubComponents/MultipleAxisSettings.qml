@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 Rectangle{
@@ -58,7 +59,7 @@ Rectangle{
                     height: boxHeight
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Series")
+                        text: Messages.re_mini_mas_series
                         font.bold: true
                     }
                 }
@@ -99,7 +100,7 @@ Rectangle{
                     width: parent.width
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Combo Options")
+                        text: Messages.re_mini_mas_comboOptions
                         font.bold: true
                     }
                 }

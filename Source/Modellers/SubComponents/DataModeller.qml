@@ -15,6 +15,7 @@ import QtQuick.Dialogs 1.2
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../SubComponents"
 import "../SubComponents/MiniSubComponents"
@@ -469,7 +470,7 @@ Item {
 
         } else{
             // Throw an error here
-            queryErrorModal.text = "JOIN is not complete"
+            queryErrorModal.text = Messages.mo_sub_dmr_joinIncomplete
             queryErrorModal.open();
 
             DSParamsModel.setTmpSql("")
@@ -1390,7 +1391,7 @@ Item {
         id: queryErrorModal
 
         modality: Qt.ApplicationModal
-        title: "Query Error"
+        title: Messages.mo_sub_dmr_queryErr
         standardButtons: StandardButton.Close
     }
 
@@ -1398,7 +1399,7 @@ Item {
         id: promptPrimaryTableModal
 
         modality: Qt.ApplicationModal
-        title: "Select Primary table"
+        title: Messages.mo_sub_dmr_selPrimaryTable
         standardButtons: StandardButton.Close
     }
 }

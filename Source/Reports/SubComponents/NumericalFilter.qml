@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "../SubComponents/MiniSubComponents"
@@ -203,7 +204,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Numerical Data Filter"
+            text: Messages.re_sub_common_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -252,7 +253,7 @@ Popup {
 
         CustomButton{
             id: resetBtn
-            textValue:  "Reset"
+            textValue:  Messages.resetBtnTxt
 
             anchors.left: parent.left
             anchors.leftMargin: 20
@@ -267,7 +268,7 @@ Popup {
 
         CustomButton{
             id: apply_btn1
-            textValue:  "Apply"
+            textValue:  Messages.applyBtnTxt
 
             anchors.right: parent.right
             anchors.rightMargin: 20
@@ -287,7 +288,7 @@ Popup {
             anchors.right: apply_btn1.left
             anchors.rightMargin: 20
 
-            textValue: "Cancel"
+            textValue: Messages.cancelBtnTxt
             onClicked: {
                 onCancelClicked()
             }

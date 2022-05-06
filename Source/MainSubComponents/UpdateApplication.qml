@@ -1,60 +1,19 @@
-/****************************************************************************
-**
-** Copyright (C) 2019 Grafieks.
-** Contact: https://grafieks.com/
-**
-** MainSubComponents
-** Logout
-** Popup code to Logout from Grafieks server
-**
-****************************************************************************/
-
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
-import Qt.labs.settings 1.0
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
 
-
-
 Popup {
-    id: popupLogout
+    id: updateApplication
     width: 600
-    height: 200
+    height: 300
     modal: true
     visible: false
     x: parent.width / 2 - 300
     y: parent.height / 2 - 200
     padding: 0
-
-    property int label_col : 150
-
-    Connections{
-        target: User
-        function onLogoutStatus(status){
-
-             error_connection_text.text = ""
-
-            if(status.code === 200){
-                popupLogout.visible = false
-                action_signin.text = Messages.signInText
-
-                if(GeneralParamsModel.currentScreen === Constants.grsScreen){
-                    stacklayout_home.currentIndex = 3
-                }
-            }
-            else{
-                error_connection_text.text = status.msg
-            }
-
-
-        }
-
-    }
-
-
 
     // Popup Header starts
 
@@ -70,7 +29,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: Messages.msc_logt_header
+            text: Messages.msc_uan_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -88,7 +47,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popupLogout.visible = false
+                    updateApplication.visible = false
                 }
             }
         }
@@ -135,7 +94,7 @@ Popup {
                 }
             }
             onClicked: {
-                error_connection_text.text = Messages.msc_logt_pleaseWait
+                error_connection_text.text = Messages.msc_uan_pleaseWait
                 User.logout()
             }
         }
@@ -158,7 +117,7 @@ Popup {
                 }
 
                 Text{
-                    text:"Cancel"
+                    text: Messages.cancelBtnTxt
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
                     anchors.centerIn: parent
@@ -193,11 +152,4 @@ Popup {
     }
 
     // Row 2: Error message ends
-
-
-    Settings{
-        id: settings
-
-    }
-
 }

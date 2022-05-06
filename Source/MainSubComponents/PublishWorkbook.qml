@@ -15,6 +15,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 Popup {
@@ -64,11 +65,11 @@ Popup {
         }
 
         function onWbUploadPercentage(percentage){
-            errorMsg.text = "Uploading Workbook " + percentage + "%"
+            errorMsg.text = Messages.msc_pwb_uploading + percentage + "%"
         }
 
         function onWbUploadFinished(){
-            errorMsg.text = "Workbook is published now. Please close this window"
+            errorMsg.text = Messages.msc_pwb_uploadSuccess
 //            closePopup()
         }
 
@@ -200,9 +201,9 @@ Popup {
 
     FileDialog{
         id: fileDialog1
-        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        title: Messages.msc_pwb_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+        nameFilters: [ Messages.msc_pwb_selectImageNamedFiltersTxt]
     }
 
     SaveWorkbook{
@@ -236,7 +237,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Publish Workbook"
+            text: Messages.msc_pwb_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -277,7 +278,7 @@ Popup {
 
             Text{
                 id : projectNameLabel
-                text: "Project Name"
+                text: Messages.msc_pwb_projectName
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -314,7 +315,7 @@ Popup {
 
             Text{
                 id : wbNameLabel
-                text: "Workbook Name"
+                text: Messages.msc_pwb_workbookName
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -350,7 +351,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Description"
+                text: Messages.msc_pwb_description
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -384,7 +385,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Upload Image"
+                text: Messages.msc_pwb_uploadImage
                 anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -395,7 +396,7 @@ Popup {
             id: file
             btnHeight: 40
             btnWidth: 370
-            textValue: "Click to upload image (*.jpg *.jpeg *.png  only)"
+            textValue: Messages.msc_pwb_uploadImageDialogTxt
 
             MouseArea{
                 anchors.fill: parent
@@ -422,13 +423,13 @@ Popup {
         CustomButton{
 
             id: btn_publish
-            textValue: "Publish"
+            textValue: Messages.publishBtnTxt
             onClicked: onPublishWorkbookClicked()
         }
 
         CustomButton{
             id: btn_cancel
-            textValue: "Cancel"
+            textValue: Messages.cancelBtnTxt
             onClicked: closePopup()
         }
     }
@@ -442,7 +443,7 @@ Popup {
         anchors.leftMargin: 30
 
         Text {
-            text: qsTr("For Workbook access permission assignment, contact Admin or Project Leader ")
+            text: qsTr(Messages.msc_pwb_contactAdminTxt)
         }
 
         Text {

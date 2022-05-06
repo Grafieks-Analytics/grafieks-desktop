@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -161,7 +162,7 @@ Item {
                                 id:menuItem1
                                 implicitHeight: 30
                                 leftPadding: 15
-                                text: qsTr("Categorical")
+                                text: Messages.filterCategorical
 
                                 onClicked: changeDataType(colName, colType, tableName, Constants.categoricalTab)
 
@@ -171,7 +172,7 @@ Item {
                                 id:menuItem2
                                 implicitHeight: 30
                                 leftPadding: 15
-                                text: qsTr("Numerical")
+                                text: Messages.filterNumerical
 
                                 onClicked: changeDataType(colName, colType, tableName, Constants.numericalTab)
                             }
