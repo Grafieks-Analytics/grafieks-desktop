@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 //import QtQuick.Controls 1.4 as OldControls
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -154,7 +155,6 @@ Page {
 
                 Text{
                     id: title
-//                    text:  datasourceName + "-" + databaseName
                     text: datasourceName
                     font.pointSize: Constants.fontCategoryHeaderSmall
                     anchors.centerIn: parent
@@ -235,7 +235,7 @@ Page {
                 anchors.rightMargin: 10
 
                 Text{
-                    text: "Description"
+                    text: Messages.ds_sub_dsg_description
                 }
                 Text{
                     id: description_id
@@ -259,7 +259,7 @@ Page {
                 Column{
 
                     Text{
-                        text: "Published by"
+                        text: Messages.ds_sub_dsg_publishedBy
                     }
                     Text{
                         id: owner_name_id
@@ -272,7 +272,7 @@ Page {
                 Column{
                     anchors.right: parent.right
                     Text{
-                        text: "Live / Extract"
+                        text: Messages.ds_sub_dsg_liveExtract
 
                     }
                     Text{

@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -198,7 +199,7 @@ Column{
 
 
             Text {
-                text: qsTr("Show Legend")
+                text: Messages.re_mini_cl_showLegend
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -250,7 +251,7 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Right")
+                        text: Messages.re_mini_cl_showLegendRight
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
@@ -280,7 +281,7 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Left")
+                        text: Messages.re_mini_cl_showLegendLeft
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
@@ -321,7 +322,7 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Bottom")
+                        text: re_mini_cl_showLegendBottom
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
@@ -351,7 +352,7 @@ Column{
                 Column{
                     anchors.fill: parent
                     Text {
-                        text: qsTr("Top")
+                        text: Messages.re_mini_cl_showLegendTop
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }

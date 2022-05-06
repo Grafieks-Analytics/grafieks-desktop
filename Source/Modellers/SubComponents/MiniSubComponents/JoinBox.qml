@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Item {
 
@@ -125,7 +126,7 @@ Item {
 
         ToolTip.delay: Constants.tooltipShowTime
         ToolTip.timeout: Constants.tooltipHideTime
-        ToolTip.text: qsTr("Click to see join between columns and change the join type")
+        ToolTip.text: Messages.mo_mini_jbox_joinType
         ToolTip.visible: mouseAreaBox1.containsMouse ? true: false
 
 
@@ -207,7 +208,7 @@ Item {
 
         ToolTip.delay: Constants.tooltipShowTime
         ToolTip.timeout: Constants.tooltipHideTime
-        ToolTip.text: qsTr("Delete join between tables")
+        ToolTip.text: Messages.mo_mini_jbox_deleteJoin
         ToolTip.visible: mouseAreaDelete.containsMouse ? true: false
 
     }

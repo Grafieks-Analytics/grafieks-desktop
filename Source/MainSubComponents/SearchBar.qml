@@ -12,6 +12,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Item {
 
@@ -26,7 +27,7 @@ Item {
 
         TextEdit {
             id: search_text
-            text: "Search"
+            text: Messages.search
             cursorVisible: true
             width:250
             height: 40

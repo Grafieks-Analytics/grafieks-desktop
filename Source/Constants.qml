@@ -18,17 +18,6 @@ QtObject {
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
 
-    // General Strings
-
-    property string applicationName : qsTr("Grafieks")
-    property string signInText : qsTr("Sign In")
-    property string signOutText : qsTr("Sign Out")
-    property string openFileText : qsTr("Open")
-    property string dataDesignerText : qsTr("Data Designer")
-    property string dashboardDesignerText : qsTr("Dashboard Designer")
-    property string sessionExpiredText : qsTr("Login incorrect")
-    property string dsExists: qsTr("Datasource name already exists")
-
     property string gaugePointerLabel: 'Pointer/Actual';
 
     property string liveDS : qsTr("live")
@@ -144,6 +133,20 @@ QtObject {
     // Checbox Size
     property int defaultCheckBoxDimension: 16
 
+    // ODBC Driver url starts
+    property string hiveDriverUrl: ""
+    property string impalaDriverUrl: "https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html"
+    property string mongodbDriverUrl: "https://github.com/mongodb/mongo-odbc-driver/releases/tag/v1.0.0"
+    property string mssqlDriverUrl: "https://www.microsoft.com/en-in/download/details.aspx?id=36434"
+    property string mysqlDriverUrl: "https://dev.mysql.com/downloads/connector/odbc/"
+    property string oracleDriverUrl: "https://www.oracle.com/database/technologies/instant-client/downloads.html"
+    property string postgresDriverUrl: "https://www.postgresql.org/ftp/odbc/versions"
+    property string redshiftDriverUrl: "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html"
+    property string snowflakeDriverUrl: "https://sfc-repo.snowflakecomputing.com/odbc/index.html"
+    property string teradataDriverUrl: "https://downloads.teradata.com/tag/odbc"
+
+    // ODBC Driver url ends
+
     // SQL Relations
     property string likeRelation: "LIKE"
     property string notLikeRelation: "NOT LIKE"
@@ -213,6 +216,7 @@ QtObject {
     property string modeEdit: "edit"
 
     // FILTERS ends
+
 
     // DASHBOARD starts
 
@@ -319,7 +323,7 @@ QtObject {
     property string lineChartUrl: "LineChart.html";
     property string horizontalLineChartUrl: "HorizontalLineChart.html"
     property string multiLineChartUrl: "MultipleLineChart.html";
-    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";    
+    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";
     property string areaChartUrl: "AreaChart.html";
     property string horizontalAreaChartUrl: "HorizontalAreaChart.html"
     property string multipleAreaChartUrl: "MultipleAreaChart.html"

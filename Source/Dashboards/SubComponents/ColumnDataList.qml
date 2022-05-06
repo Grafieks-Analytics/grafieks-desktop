@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.qmlmodels 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"

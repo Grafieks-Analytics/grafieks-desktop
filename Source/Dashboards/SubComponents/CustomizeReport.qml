@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtWebEngine 1.7
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "../SubComponents"

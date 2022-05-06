@@ -155,7 +155,7 @@ void ChartsThread::getBarChartValues()
     int index;
     int totalRows = 0;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -217,7 +217,7 @@ void ChartsThread::getBarChartValues()
     QString xParam;
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
     } else {
@@ -281,7 +281,7 @@ void ChartsThread::getGroupedBarChartValues()
     int xIndex;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -401,7 +401,7 @@ void ChartsThread::getNewGroupedBarChartValues()
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -538,7 +538,7 @@ void ChartsThread::getLineBarChartValues()
     int totalRows;
 
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -609,7 +609,7 @@ void ChartsThread::getLineBarChartValues()
     QString yParam;
     QString splitParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
         splitParam = xSplitKey;
@@ -664,7 +664,7 @@ void ChartsThread::getPieChartValues()
     int totalRows;
 
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -722,7 +722,7 @@ void ChartsThread::getPieChartValues()
     QString xParam;
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
 
@@ -772,7 +772,7 @@ void ChartsThread::getFunnelChartValues()
     int totalRows;
 
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -839,7 +839,7 @@ void ChartsThread::getFunnelChartValues()
     QString xParam;
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
 
@@ -886,7 +886,7 @@ void ChartsThread::getRadarChartValues()
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -953,7 +953,7 @@ void ChartsThread::getRadarChartValues()
     QString xParam;
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
 
@@ -1007,7 +1007,7 @@ void ChartsThread::getScatterChartValues()
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1097,7 +1097,7 @@ void ChartsThread::getScatterChartValues()
     QString yParam;
     QString splitParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
         splitParam = xSplitKey;
@@ -1148,7 +1148,7 @@ void ChartsThread::getScatterChartNumericalValues()
     QString xAxisValue;
     QString yAxisValue;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1187,7 +1187,7 @@ void ChartsThread::getScatterChartNumericalValues()
     QString xParam;
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
 
@@ -1242,7 +1242,7 @@ void ChartsThread::getHeatMapChartValues()
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1340,7 +1340,7 @@ void ChartsThread::getHeatMapChartValues()
     QString yParam;
     QString splitParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
         splitParam = xSplitKey;
@@ -1404,7 +1404,7 @@ void ChartsThread::getGaugeChartValues()
     float output = 0.0;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1446,7 +1446,7 @@ void ChartsThread::getGaugeChartValues()
 
     QString calculateParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         calculateParam = calculateColumn;
 
     } else {
@@ -1497,7 +1497,7 @@ void ChartsThread::getSankeyChartValues()
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1619,7 +1619,7 @@ void ChartsThread::getKPIChartValues()
     float output = 0.0;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1662,7 +1662,7 @@ void ChartsThread::getKPIChartValues()
 
     QString calculateParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         calculateParam = calculateColumn;
 
     } else {
@@ -1731,7 +1731,7 @@ void ChartsThread::getTableChartValues()
     }
 
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1800,7 +1800,7 @@ void ChartsThread::getTableChartValues()
 
                 QString xParam;
 
-                if(this->datasourceType == Constants::duckType){
+                if(this->datasourceType == Constants::extractType){
                     xParam = xAxisColumnList.at(i).toString();
                 } else {
                     QStringList xPieces = xAxisColumnList.at(i).toString().split( "." );
@@ -1824,7 +1824,7 @@ void ChartsThread::getTableChartValues()
 
                 QString yParam;
 
-                if(this->datasourceType == Constants::duckType){
+                if(this->datasourceType == Constants::extractType){
                     yParam = yAxisColumnList.at(i).toString();
                 } else {
                     QStringList xPieces = yAxisColumnList.at(i).toString().split( "." );
@@ -2071,7 +2071,7 @@ void ChartsThread::getPivotChartValues()
     int totalRows;
 
     if(xAxisColumnList.length() > 0 && yAxisColumnList.length() > 0){
-        if(this->datasourceType == Constants::duckType){
+        if(this->datasourceType == Constants::extractType){
 
             // Fetch data from extract
             QString tableName = this->getTableName();
@@ -2335,7 +2335,7 @@ void ChartsThread::getPivotChartValues()
         QJsonArray finalColumns;
         QVariantList finalRow3ColumnOut;
 
-        if(this->datasourceType == Constants::duckType){
+        if(this->datasourceType == Constants::extractType){
             finalColumns = columns;
             finalRow3ColumnOut = row3ColumnOut;
 
@@ -2408,7 +2408,7 @@ void ChartsThread::getMultiLineChartValues()
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -2506,7 +2506,7 @@ void ChartsThread::getMultiLineChartValues()
     QString yParam;
     QString splitParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
         splitParam = xSplitKey;
@@ -2562,7 +2562,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     int index;
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -2627,7 +2627,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
     QString xParam;
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
 
@@ -2697,7 +2697,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     // if there is an exact match with the hash, then it exists. Else create a new hash
     QScopedPointer<QHash<QString, int>> masterHash(new QHash<QString, int>);
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -2971,7 +2971,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
     QString yParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         yParam = yAxisColumn;
 
     } else {
@@ -2991,7 +2991,7 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     foreach(QVariant xCol, xAxisColumn){
         QString xParam;
 
-        if(this->datasourceType == Constants::duckType){
+        if(this->datasourceType == Constants::extractType){
             xParam = xCol.toString();
 
         } else {
@@ -3050,7 +3050,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     int totalRows;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -3152,7 +3152,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QString yParam;
     QString splitParam;
 
-    if(this->datasourceType == Constants::duckType){
+    if(this->datasourceType == Constants::extractType){
         xParam = xAxisColumn;
         yParam = yAxisColumn;
         splitParam = xSplitKey;

@@ -4,6 +4,7 @@ import QtWebView 1.1
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -226,9 +227,9 @@ Item{
 
     FileDialog{
         id: fileDialog
-        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        title: Messages.da_sub_di_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+        nameFilters: [Messages.da_sub_di_selectImageNamedFiltersTxt]
 
         onAccepted: saveImage(fileUrl)
         onRejected: webengine.url = ""
@@ -371,7 +372,7 @@ Item{
 
     CustomButton{
         id: chooseImage
-        textValue: "Choose Image"
+        textValue: Messages.selectImage
         anchors.centerIn: parent
         visible: true
         onClicked: selectFile()

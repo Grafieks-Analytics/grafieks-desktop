@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -84,7 +85,7 @@ Popup {
 
             ConnectorsLoginModel.csvLogin(csvFileName, true, separatorText)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -105,7 +106,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to CSV"
+            text: Messages.cn_sub_csv_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -150,7 +151,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_csv_csvName
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -160,7 +161,7 @@ Popup {
 
         Button{
             id : file_btn
-            text: "Select CSV file"
+            text: Messages.cn_sub_csv_header
             onClicked: promptCSV.open();
         }
 
@@ -186,7 +187,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Separator"
+                text: Messages.cn_sub_csv_separator
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -262,7 +263,7 @@ Popup {
                 height: 40
 
                 Text{
-                    text: Constants.openFileText
+                    text: Messages.openFileText
                     anchors.centerIn: parent
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
@@ -277,14 +278,14 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "CSV Connection"
+        title: Messages.cn_sub_csv_subHeader
         text: ""
         icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
-        title: "CSV Import Error"
+        title: Messages.cn_sub_csv_importErr
         text: ""
         icon: StandardIcon.Critical
     }
@@ -292,8 +293,8 @@ Popup {
     // Select SQLITE file
     FileDialog{
         id: promptCSV
-        title: "Select a CSV file"
-        nameFilters: ["CSV files (*.csv)"];
+        title: Messsages.cn_sub_csv_header
+        nameFilters: [Messsages.cn_sub_csv_namedFilter];
 
         onAccepted: {
 

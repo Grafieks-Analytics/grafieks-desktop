@@ -652,7 +652,7 @@ void ReportsDataModel::columnReadFinished()
 
             int dbIntType = Statics::currentDbIntType;QString tableColumnName;
 
-            if(Statics::currentDbClassification == Constants::duckType){
+            if(Statics::dsType == Constants::extractType){
                 tableColumnName = finalValue.at(1).toString();
             } else {
                 tableColumnName = finalValue.at(4).toString();

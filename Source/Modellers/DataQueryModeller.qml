@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 import "../MainSubComponents"
@@ -215,8 +216,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            let isLive = DSParamsModel.dsType === Constants.extractDS ? false : true
-            GeneralParamsModel.setDBClassification(isLive)
         }
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
@@ -245,8 +244,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            let isLive = DSParamsModel.dsType === Constants.extractDS ? false : true
-            GeneralParamsModel.setDBClassification(isLive)
         }
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
@@ -275,7 +272,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            GeneralParamsModel.setDBClassification(false)
 
         }
 
@@ -295,7 +291,6 @@ Page {
 
         function onShowSaveExtractWaitPopup(){
             saveExtractPopupFunction(false)
-            GeneralParamsModel.setDBClassification(false)
         }
 
         function onExtractFileExceededLimit(freeLimit, ifPublish){
@@ -894,8 +889,8 @@ Page {
 
     MessageDialog{
         id: dataRemovalWarningDataModel
-        title: "Warning"
-        text: "Your query will be lost. Are you sure you want to proceed?"
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_warningQueryLoss
         icon: StandardIcon.Critical
 
         onAccepted: {
@@ -908,15 +903,15 @@ Page {
 
     MessageDialog{
         id: datasourceNameWarningModal
-        title: "Warning"
-        text: "Datasource name is mandatory"
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_mandatoryDSName
         icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: dataRemovalWarningQueryModel
-        title: "Warning"
-        text: "Your diagram will be lost. Are you sure you want to proceed?"
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_warningModelLoss
         icon: StandardIcon.Critical
 
         onAccepted: {
@@ -930,15 +925,15 @@ Page {
 
     MessageDialog{
         id: freeLimitExtractWarning
-        title: "Warning"
-        text: "Free users cannot create extracts more than 1 GB"
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_freeExtractSizeLimit
         icon: StandardIcon.Critical
 
     }
 
     MessageDialog{
         id: extractCreationError
-        title: "Extract create error"
+        title: Messages.mo_dqm_extractCreateErr
         icon: StandardIcon.Critical
     }
 
@@ -956,7 +951,7 @@ Page {
         repeat: true
         onTriggered: {
             queryModellerPage.timeElapsed++
-            saveExtractPopup.timerText = "Time elapsed: " + queryModellerPage.timeElapsed + " seconds"
+            saveExtractPopup.timerText = Messages.mo_dqm_timeElapsed + queryModellerPage.timeElapsed + " seconds"
         }
     }
 
@@ -981,14 +976,14 @@ Page {
 
         Text{
             id: waitText
-            text: "Creating extract. Please wait.."
+            text: Messages.mo_dqm_waitCreateExtract
             anchors.top: busyIndicator.bottom
             anchors.horizontalCenter: busyIndicator.horizontalCenter
         }
 
         Text{
             id: timeText
-            text: "Time elapsed: 0 seconds"
+            text: Messages.mo_dqm_timeElapsed +  "0 seconds"
             anchors.top: waitText.bottom
             anchors.horizontalCenter: waitText.horizontalCenter
         }
@@ -1035,7 +1030,7 @@ Page {
 
             TabButton{
                 id: datamodeller_querymodeller
-                text: "Data Modeler"
+                text: Messages.mo_dqm_dataTabName
                 width:100
 
                 onClicked: onDataModellerClicked()
@@ -1064,7 +1059,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Use GUI interface to generate dataset from Datasource")
+                ToolTip.text: Messages.mo_dqm_dataTabDesc
 
             }
 
@@ -1076,7 +1071,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Editor"
+                text: Messages.mo_dqm_queryTabName
                 width:100
 
                 onClicked: onQueryModellerClicked()
@@ -1099,7 +1094,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Write SQL query to generate dataset")
+                ToolTip.text: Messages.mo_dqm_queryTabDesc
 
             }
 
@@ -1162,7 +1157,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Configure InMemory parameters")
+                ToolTip.text: Messages.mo_dqm_inmemoryDesc
 
             }
 
@@ -1193,7 +1188,7 @@ Page {
 
                 Text{
                     id: filterText
-                    text: "Filter"
+                    text: Messages.mo_dqm_filterName
                     anchors.top: filter_btn.top
                     anchors.left: filter_querymodeller.right
                     anchors.topMargin: 6
@@ -1234,7 +1229,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Apply filters to the SQL query")
+                ToolTip.text: Messages.mo_dqm_filterDesc
             }
 
             // Filter button ends
@@ -1243,7 +1238,7 @@ Page {
 
             CustomRadioButton{
                 id: radio_memory
-                radio_text: qsTr("Extract")
+                radio_text: Messages.mo_dqm_extractName
                 parent_dimension: 16
 
                 ButtonGroup.group: memoryType
@@ -1252,7 +1247,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Save datasource offline and process as an InMemory database")
+                ToolTip.text: Messages.mo_dqm_extractDesc
             }
 
             // In memory radio button ends
@@ -1262,7 +1257,7 @@ Page {
 
             CustomRadioButton{
                 id: radio_live
-                radio_text: qsTr("Live")
+                radio_text: Messages.mo_dqm_liveName
                 enabled: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
@@ -1271,7 +1266,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Save datasource for a live connection")
+                ToolTip.text: Messages.mo_dqm_liveDesc
             }
 
             // Live radio button ends
@@ -1478,7 +1473,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Datasource")
+                    ToolTip.text: Messages.mo_dqm_publishDs
 
                 }
 
@@ -1510,7 +1505,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Create Dashboard")
+                    ToolTip.text: Messages.mo_dqm_createDashboard
 
                 }
 
@@ -1537,7 +1532,7 @@ Page {
 
                 TextField{
                     id: ds_name
-                    placeholderText: "Data Source Name"
+                    placeholderText: Messages.mo_dqm_dsNamePlaceholder
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
@@ -1603,7 +1598,7 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To "
+                    text: Messages.mo_dqm_connectedTo
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -1632,7 +1627,7 @@ Page {
 
                     TextField{
                         id:searchTextBox
-                        placeholderText: "Search"
+                        placeholderText: Messages.search
                         selectByMouse: true
                         width: parent.width -8
                         height:30
@@ -1719,7 +1714,7 @@ Page {
 
                                 ToolTip.delay:Constants.tooltipShowTime
                                 ToolTip.timeout: Constants.tooltipHideTime
-                                ToolTip.text: qsTr("Current connected database:" + ConnectorsLoginModel.connectedDB + " ")
+                                ToolTip.text: qsTr(Messages.mo_dqm_connectedDb + ConnectorsLoginModel.connectedDB + " ")
                                 ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
 
                                 MouseArea{
@@ -1742,7 +1737,7 @@ Page {
 
                                 ToolTip.delay:Constants.tooltipShowTime
                                 ToolTip.timeout: Constants.tooltipHideTime
-                                ToolTip.text: qsTr("Disconnect")
+                                ToolTip.text: Messages.mo_dqm_disconnect
                                 ToolTip.visible: mousePowerIcon.containsMouse ? true: false
 
                                 MouseArea{
@@ -1769,7 +1764,7 @@ Page {
 
                                 ToolTip.delay:Constants.tooltipShowTime
                                 ToolTip.timeout: Constants.tooltipHideTime
-                                ToolTip.text: qsTr("Hide/Show database tables")
+                                ToolTip.text: Messages.mo_dqm_showHideTables
                                 ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
 
                                 MouseArea {

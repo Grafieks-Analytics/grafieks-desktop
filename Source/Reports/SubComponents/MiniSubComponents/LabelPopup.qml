@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -91,12 +92,12 @@ Popup {
 
 
     
-   Connections{
+    Connections{
         target: ReportParamsModel
 
         function onEditReportToggleChanged(reportId){
             if(reportId=="-1"){
-                 return;
+                return;
             }
             if(reportId != "false"){
                 var reportProperties = ReportParamsModel.getReport(reportIdMain);
@@ -150,14 +151,14 @@ Popup {
         d3PropertyConfig.labelConfig = labelConfig;
         updateChart();
     }
-      function openColorDialog(dialogName){
+    function openColorDialog(dialogName){
         switch(dialogName){
         case "dataLabel": dataLabeleDialog.open();
             break;
         }
     }
 
-      ColorDialog{
+    ColorDialog{
         id: dataLabeleDialog
 
         onColorChanged:{
@@ -194,7 +195,7 @@ Popup {
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Data Label")
+                        text: Messages.re_mini_lp_dataLabel
                         anchors.left: parent.left
                         anchors.leftMargin: leftMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -219,33 +220,33 @@ Popup {
                 }
 
             }
-              Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Font Color: ")
-                                    width: 118
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                Rectangle {
-                                    id: dataLabelFontColorBox
-                                    color: Constants.defaultDataLabelColor
-                                    border.color: Constants.borderBlueColor
-                                    width: 15
-                                    height: 15
-                                    MouseArea{
-                                        anchors.fill: parent
-                                        onClicked: openColorDialog("dataLabel");
-                                    }
+            Row{
+                width: parent.width
+                Text {
+                    text: Messages.re_mini_common_fontColor
+                    width: 118
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Rectangle {
+                    id: dataLabelFontColorBox
+                    color: Constants.defaultDataLabelColor
+                    border.color: Constants.borderBlueColor
+                    width: 15
+                    height: 15
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: openColorDialog("dataLabel");
+                    }
 
-                                }
-                            }
+                }
+            }
 
             Rectangle{
                 height: 20
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font Family")
+                    text: Messages.re_mini_common_fontFamily
                 }
             }
 
@@ -316,7 +317,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font Size")
+                    text: Messages.re_mini_common_fontsize
                 }
             }
 
@@ -329,7 +330,7 @@ Popup {
                     height: 500
 
                     onCurrentValueChanged: {
-              
+
                         d3PropertyConfig.dataLabelfontSize=fontSizescombo.currentValue;
                         updateChart();
                     }
@@ -347,7 +348,7 @@ Popup {
                 }
 
             }
-             
+
 
         }
 

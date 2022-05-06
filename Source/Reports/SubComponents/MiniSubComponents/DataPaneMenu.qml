@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -54,7 +55,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Rename")
+                    text: Messages.re_mini_dpm_rename
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -74,7 +75,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Create")
+                    text: Messages.re_mini_dpm_create
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -103,7 +104,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Convert To")
+                    text: Messages.re_mini_dpm_convertTo
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }

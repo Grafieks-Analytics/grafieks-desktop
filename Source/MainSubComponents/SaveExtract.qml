@@ -3,6 +3,7 @@ import QtQml 2.15
 import Qt.labs.platform 1.1
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // We are moving this here specially because
 // its dependent of Qt.Labs.Platform (the default filename preset)
@@ -11,7 +12,7 @@ import com.grafieks.singleton.constants 1.0
 
 FileDialog{
     id: saveFilePromptDialog
-    title: DSParamsModel.dsType === Constants.extractDS ? "Save Extract File As" : "Save Live File As"
+    title: DSParamsModel.dsType === Constants.extractDS ? Messages.msc_set_header_extract : Messages.msc_set_header_live
     nameFilters: DSParamsModel.dsType === Constants.extractDS ? ["Extract (*."+ Constants.extractFileExt+" )"] : ["Live (*."+ Constants.liveFileExt+" )"];
     fileMode: FileDialog.SaveFile
     currentFile : "file:///" + DSParamsModel.dsName

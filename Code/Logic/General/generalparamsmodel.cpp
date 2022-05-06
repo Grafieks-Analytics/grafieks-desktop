@@ -291,8 +291,7 @@ bool GeneralParamsModel::getAPISwitch()
 void GeneralParamsModel::setFromLiveFile(bool setForLiveFile)
 {
     this->setForLiveFile = setForLiveFile;
-    Statics::dsType = setForLiveFile == true ? Constants::sqlType : Constants::duckType;
-    Statics::currentDbClassification = Statics::dsType;
+    Statics::dsType = setForLiveFile == true ? Constants::liveType : Constants::extractType;
 }
 
 QString GeneralParamsModel::randomStringGenerator()
@@ -344,14 +343,6 @@ void GeneralParamsModel::resetGeneralParams()
     this->setForLiveQuery = false;
     this->currentWorkbookName = "";
 
-}
-
-void GeneralParamsModel::setDBClassification(bool isLive){
-    if(isLive){
-        Statics::currentDbClassification = Constants::sqlType;
-    } else {
-        Statics::currentDbClassification = Constants::duckType;
-    }
 }
 
 QString GeneralParamsModel::getDSNameWithoutExtension(){

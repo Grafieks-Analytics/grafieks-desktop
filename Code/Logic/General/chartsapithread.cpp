@@ -227,7 +227,7 @@ void ChartsAPIThread::getBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -267,7 +267,7 @@ void ChartsAPIThread::getStackedBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -307,7 +307,7 @@ void ChartsAPIThread::getGroupedBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -347,7 +347,7 @@ void ChartsAPIThread::getNewGroupedBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -387,7 +387,7 @@ void ChartsAPIThread::getAreaChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -428,7 +428,7 @@ void ChartsAPIThread::getLineChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -469,7 +469,7 @@ void ChartsAPIThread::getLineBarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -509,7 +509,7 @@ void ChartsAPIThread::getPieChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -549,7 +549,7 @@ void ChartsAPIThread::getFunnelChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -589,7 +589,7 @@ void ChartsAPIThread::getRadarChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -630,7 +630,7 @@ void ChartsAPIThread::getScatterChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -670,7 +670,7 @@ void ChartsAPIThread::getScatterChartNumericalValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -711,7 +711,7 @@ void ChartsAPIThread::getHeatMapChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -751,7 +751,7 @@ void ChartsAPIThread::getSunburstChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -791,7 +791,7 @@ void ChartsAPIThread::getWaterfallChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -832,7 +832,7 @@ void ChartsAPIThread::getGaugeChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -872,7 +872,7 @@ void ChartsAPIThread::getSankeyChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -912,7 +912,7 @@ void ChartsAPIThread::getTreeChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -951,7 +951,7 @@ void ChartsAPIThread::getTreeMapChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -990,7 +990,7 @@ void ChartsAPIThread::getKPIChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1031,7 +1031,7 @@ void ChartsAPIThread::getTableChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1073,7 +1073,7 @@ void ChartsAPIThread::getPivotChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1113,7 +1113,7 @@ void ChartsAPIThread::getStackedAreaChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
@@ -1153,7 +1153,7 @@ void ChartsAPIThread::getMultiLineChartValues()
     obj.insert("dbType", Statics::currentDbClassification);
     obj.insert("dsName", Statics::currentDSFile);
     obj.insert("dbIntType", Statics::currentDbIntType);
-    obj.insert("isLive", Statics::currentDbClassification == Constants::duckType ? false : true);
+    obj.insert("isLive", Statics::dsType == Constants::extractType ? false : true);
     obj.insert("sitename", sitename);
     obj.insert("reportWhereConditions", this->reportWhereConditions);
     obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);

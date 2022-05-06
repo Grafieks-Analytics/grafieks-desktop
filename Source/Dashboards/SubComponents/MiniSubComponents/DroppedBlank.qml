@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // This is the Blank Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
@@ -220,13 +221,13 @@ Item{
                             id: editOptions
 
                             MenuItem {
-                                text: qsTr("Edit")
+                                text: Messages.da_sub_dc_edit
                                 onTriggered: showTextEditor()
                                 onHoveredChanged: showMenus()
                             }
 
                             MenuItem {
-                                text: qsTr("Delete")
+                                text: Messgaes.da_sub_dc_delete
                                 onTriggered: destroyElement()
                                 onHoveredChanged: showMenus()
                             }
