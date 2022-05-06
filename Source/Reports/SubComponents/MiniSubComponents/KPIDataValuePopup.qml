@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -105,12 +106,12 @@ Popup {
 
 
 
-   Connections{
+    Connections{
         target: ReportParamsModel
 
         function onEditReportToggleChanged(reportId){
             if(reportId=="-1"){
-                 return;
+                return;
             }
             if(reportId != "false"){
                 var reportProperties = ReportParamsModel.getReport(reportIdMain);
@@ -221,7 +222,7 @@ Popup {
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Bold")
+                        text: Messages.re_mini_common_Bold
                         anchors.left: parent.left
                         anchors.leftMargin: leftMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -256,7 +257,7 @@ Popup {
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Italic")
+                        text: Messages.re_mini_common_Italic
                         anchors.left: parent.left
                         anchors.leftMargin: leftMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -291,7 +292,7 @@ Popup {
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Underline")
+                        text: Messages.re_mini_common_Underline
                         anchors.left: parent.left
                         anchors.leftMargin: leftMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -319,7 +320,7 @@ Popup {
             Row{
                 width: parent.width
                 Text {
-                    text: qsTr("Font Color: ")
+                    text: Messages.re_mini_common_fontColor
                     width: 118
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -343,7 +344,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font Family")
+                    text: Messages.re_mini_common_fontFamily
                 }
             }
 
@@ -383,7 +384,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font Size")
+                    text: Messages.re_mini_common_fontsize
                 }
             }
 

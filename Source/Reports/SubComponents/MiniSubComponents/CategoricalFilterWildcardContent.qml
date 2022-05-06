@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -334,7 +335,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CustomButton {
-                textValue: qsTr("Add Wildcard")
+                textValue: Messages.mo_mini_cfwc_addWildcard
 
                 onClicked: onAddWildcard();
             }
@@ -387,7 +388,7 @@ Rectangle{
 
                 CustomTextBox{
                     id: valueText
-                    placeholderText: "Enter Text"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     boxWidth: parent.width * 2 / 3
                     boxHeight: 30
 

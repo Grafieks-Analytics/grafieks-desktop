@@ -56,6 +56,7 @@ QtObject {
     property string filterDateRange: qsTr("Date Range")
     property string filterFrom: qsTr("From")
     property string filterTo: qsTr("To")
+    property string filterBy: qsTr("By")
     property string filterDefaultDateFormat : qsTr("dd/mm/yyyy")
 
     property string filterAddCharacter : qsTr("Add Character")
@@ -389,8 +390,6 @@ QtObject {
     property string mo_sub_inft_queryPerformance : qsTr("SQL query performance result")
     property string mo_sub_inft_dataPreview : qsTr("Data Preview")
     property string mo_sub_inft_queryLimit : qsTr("Limit SQL result data preview")
-    property string mo_sub_inft_display100 : qsTr("Display top 100")
-    property string mo_sub_inft_display200 : qsTr("Display top 200")
     property string mo_sub_inft_runsql : qsTr("Run SQL")
     property string mo_sub_inft_minimize : qsTr("Minimize panel")
 
@@ -542,4 +541,91 @@ QtObject {
 
     // SubComponents/YAxisSettingPopup
     property string re_sub_yasp_filter : qsTr("Axis")
+
+
+    // MiniComponents
+
+    // MiniComponents/Common
+    property string re_mini_common_xAxis : qsTr("X Axis")
+    property string re_mini_common_yAxis : qsTr("Y Axis")
+    property string re_mini_common_label : qsTr("Label")
+    property string re_mini_common_name : qsTr("Name: ")
+    property string re_mini_common_font : qsTr("Font: ")
+    property string re_mini_common_fontFamily : qsTr("Font Family: ")
+    property string re_mini_common_fontsize : qsTr("Font Size: ")
+    property string re_mini_common_B : qsTr("B")
+    property string re_mini_common_I : qsTr("I")
+    property string re_mini_common_Bold : qsTr("Bold")
+    property string re_mini_common_Italic : qsTr("Italic")
+    property string re_mini_common_Underline : qsTr("Underline")
+    property string re_mini_common_fontColor : qsTr("Font Color: ")
+    property string re_mini_common_tickMark : qsTr("Tick Mark")
+
+    // MiniComponents/CategoricalFilterListContent
+    property string re_mini_cflc_xAxis : qsTr("X Axis")
+
+    // MiniComponents/CustomizeLegend
+    property string re_mini_cl_showLegend : qsTr("Show Legend")
+    property string re_mini_cl_showLegendLeft : qsTr("Left")
+    property string re_mini_cl_showLegendRight : qsTr("Right")
+    property string re_mini_cl_showLegendTop : qsTr("Top")
+    property string re_mini_cl_showLegendBottom : qsTr("Bottom")
+
+    // MiniComponents/CustomizeReferenceLine
+    property string re_mini_crl_header : qsTr("Add Reference Line")
+
+    // MiniComponents/CustomizeTotal
+    property string re_mini_ct_rowTotal : qsTr("Row Total")
+    property string re_mini_ct_grandTotal : qsTr("Grand Total")
+    property string re_mini_ct_subTotal : qsTr("Sub Total")
+    property string re_mini_ct_exportReport : qsTr("Export Report")
+
+    // MiniComponents/DataPaneMenu
+    property string re_mini_dpm_rename : qsTr("Rename")
+    property string re_mini_dpm_create : qsTr("Create")
+    property string re_mini_dpm_convertTo : qsTr("Convert To")
+
+    // MiniComponents/DataPaneSubMenu
+    property string re_mini_dpsm_calculatedField : qsTr("Calculated Field")
+    property string re_mini_dpsm_group : qsTr("Group")
+    property string re_mini_dpsm_date : qsTr("Date")
+    property string re_mini_dpsm_number : qsTr("Number")
+
+    // MiniComponents/KPICustomization
+    property string re_mini_kpic_dataValue : qsTr("Data Value")
+    property string re_mini_kpic_dataLabel : qsTr("Data Label")
+
+    // MiniComponents/LabelPopup
+    property string re_mini_lp_dataLabel : qsTr("Data Label")
+
+    // MiniComponents/LineTypePopup
+    property string re_mini_ltp_header : qsTr("Select Line")
+
+    // MiniComponents/MarkerShapePopup
+    property string re_mini_msp_markerShapeNone : qsTr("None")
+
+    // MiniComponents/MultipleAxisSettings
+    property string re_mini_mas_series : qsTr("Series")
+    property string re_mini_mas_comboOptions : qsTr("Combo Options")
+
+    // MiniComponents/PivotThemesPopup
+    property string re_mini_ptp_header : qsTr("Select Theme")
+
+    // MiniComponents/PropertiesFilter
+    property string re_mini_ptp_colorBy : qsTr("Color By")
+    property string re_mini_ptp_toolTip : qsTr("Tool Tip")
+    property string re_mini_ptp_size : qsTr("Size")
+    property string re_mini_ptp_markerShape : qsTr("Marker Shape")
+    property string re_mini_ptp_dataLabel : qsTr("Data Label")
+    property string re_mini_ptp_lineType : qsTr("Line Type")
+    property string re_mini_ptp_themes : qsTr("Themes")
+    property string re_mini_ptp_gridLine : qsTr("Grid Line")
+    property string re_mini_ptp_dynamicHeight : qsTr("Dynamic Height")
+    property string re_mini_ptp_bottomPinch : qsTr("Bottom Pinch")
+
+    // MiniComponents/TableCustomization
+    property string re_mini_tc_alternateRows : qsTr("Alternate Rows")
+    property string re_mini_tc_cellBorders : qsTr("Cell Borders")
+    property string re_mini_tc_hoverStatus : qsTr("Hover Status")
+    property string re_mini_tc_compactStatus : qsTr("Compact Status")
 }

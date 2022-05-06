@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 
@@ -519,7 +520,7 @@ Rectangle{
                     }
 
                     Text {
-                        text: qsTr("X Axis")
+                        text: Messages.re_mini_common_xAxis
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -536,7 +537,7 @@ Rectangle{
                         height: nameInputRow.height
 
                         Text {
-                            text: qsTr("Label")
+                            text: Messages.re_mini_common_label
                             anchors.left: parent.left
                             anchors.leftMargin: xaxisCheckbox.width
                             anchors.verticalCenter: parent.verticalCenter
@@ -557,7 +558,7 @@ Rectangle{
                                 id: nameInputRow
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Name: ")
+                                    text: Messages.re_mini_common_name
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -584,7 +585,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font: ")
+                                    text: Messages.re_mini_common_font
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -614,7 +615,7 @@ Rectangle{
                                 width: parent.width
 
                                 Text {
-                                    text: qsTr("Font Size:")
+                                    text: Messages.re_mini_common_fontsize
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -656,7 +657,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("B")
+                                            text: Messages.re_mini_common_B
                                             font.bold: true
                                         }
                                         onClicked: boldToggleXLabel();
@@ -681,7 +682,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("I")
+                                            text: Messages.re_mini_common_I
                                             font.bold: true
                                             font.italic: true
                                         }
@@ -706,7 +707,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font Color: ")
+                                    text: Messages.re_mini_common_fontColor
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -742,7 +743,7 @@ Rectangle{
                         height: nameInputRow.height
 
                         Text {
-                            text: qsTr("Tick Mark")
+                            text: Messages.re_mini_common_tickMark
                             anchors.left: parent.left
                             anchors.leftMargin: xaxisCheckbox.width
                             anchors.verticalCenter: parent.verticalCenter
@@ -764,7 +765,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font: ")
+                                    text: Messages.re_mini_common_font
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -795,7 +796,7 @@ Rectangle{
                                 width: parent.width
 
                                 Text {
-                                    text: qsTr("Font Size:")
+                                    text: Messages.re_mini_common_fontsize
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -836,7 +837,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("B")
+                                            text: Messages.re_mini_common_B
                                             font.bold: true
                                         }
                                         onClicked: boldToggleXTick();
@@ -861,7 +862,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("I")
+                                            text: Messages.re_mini_common_I
                                             font.bold: true
                                             font.italic: true
                                         }
@@ -886,7 +887,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font Color: ")
+                                    text: Messages.re_mini_common_fontColor
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -936,7 +937,7 @@ Rectangle{
                     }
 
                     Text {
-                        text: qsTr("Y Axis")
+                        text: Messages.re_mini_common_yAxis
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -953,7 +954,7 @@ Rectangle{
                         height: nameInputRow.height
 
                         Text {
-                            text: qsTr("Label")
+                            text: Messages.re_mini_common_label
                             anchors.left: parent.left
                             anchors.leftMargin: xaxisCheckbox.width
                             anchors.verticalCenter: parent.verticalCenter
@@ -973,7 +974,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Name: ")
+                                    text: Messages.re_mini_common_name
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -998,7 +999,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font: ")
+                                    text: Messages.re_mini_common_font
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -1026,7 +1027,7 @@ Rectangle{
                                 width: parent.width
 
                                 Text {
-                                    text: qsTr("Font Size:")
+                                    text: Messages.re_mini_common_fontsize
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -1066,7 +1067,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("B")
+                                            text: Messages.re_mini_common_B
                                             font.bold: true
                                         }
                                         onClicked: boldToggleYLabel();
@@ -1089,7 +1090,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("I")
+                                            text: Messages.re_mini_common_I
                                             font.bold: true
                                             font.italic: true
                                         }
@@ -1114,7 +1115,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font Color: ")
+                                    text: Messages.re_mini_common_fontColor
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -1148,7 +1149,7 @@ Rectangle{
                         height: nameInputRow.height
 
                         Text {
-                            text: qsTr("Tick Marks")
+                            text: Messages.re_mini_common_tickMark
                             anchors.left: parent.left
                             anchors.leftMargin: xaxisCheckbox.width
                             anchors.verticalCenter: parent.verticalCenter
@@ -1170,7 +1171,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font: ")
+                                    text: Messages.re_mini_common_font
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -1201,7 +1202,7 @@ Rectangle{
                                 width: parent.width
 
                                 Text {
-                                    text: qsTr("Font Size:")
+                                    text: Messages.re_mini_common_fontsize
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -1242,7 +1243,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("B")
+                                            text: Messages.re_mini_common_B
                                             font.bold: true
                                         }
                                         onClicked: boldToggleYTick();
@@ -1265,7 +1266,7 @@ Rectangle{
                                         width: parent.width/3 - parent.spacing
                                         Text {
                                             anchors.centerIn: parent
-                                            text: qsTr("I")
+                                            text: Messages.re_mini_common_I
                                             font.bold: true
                                             font.italic: true
                                         }
@@ -1290,7 +1291,7 @@ Rectangle{
                             Row{
                                 width: parent.width
                                 Text {
-                                    text: qsTr("Font Color: ")
+                                    text: Messages.re_mini_common_fontColor
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }

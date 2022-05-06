@@ -514,11 +514,11 @@ Item{
                 id:selectLimitList
                 ListElement{
                     value : 100
-                    menuItem: Messages.mo_sub_inft_display100
+                    menuItem: "Display top 100" // Cannot replace with variable
                 }
                 ListElement{
                     value : 200
-                    menuItem: Messages.mo_sub_inft_display200
+                    menuItem: "Display top 200" // Cannot replace with variable
                 }
             }
 

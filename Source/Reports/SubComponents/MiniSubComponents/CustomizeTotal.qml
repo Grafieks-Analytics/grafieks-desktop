@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -55,7 +56,7 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-      function showRowTotal(checkedStatus){
+    function showRowTotal(checkedStatus){
         report_desiner_page.d3PropertyConfig['columnWiseGrandTotal'] = checkedStatus;
         qmlChartConfig.columnGrandTotalStatus = checkedStatus;
         report_desiner_page.updateChart();
@@ -121,7 +122,7 @@ Column{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Row Total")
+                text: Messages.re_mini_ct_rowTotal
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -144,7 +145,7 @@ Column{
 
     }
 
-/*
+    /*
     Tag: Future Release
     
     Rectangle{
@@ -250,7 +251,7 @@ Column{
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Grand Total")
+                text: Messages.re_mini_ct_grandTotal
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -269,22 +270,22 @@ Column{
 
             }
 
-//            HorizontalLineTpl{
-//                id: linebar2
-//                line_color: Constants.darkThemeColor
-//                line_width: parent.width-25
-//                anchors.horizontalCenter: parent.horizontalCenter
-//                anchors.top: parent.bottom
-//                width: parent.width-20
-//                height: 4
+            //            HorizontalLineTpl{
+            //                id: linebar2
+            //                line_color: Constants.darkThemeColor
+            //                line_width: parent.width-25
+            //                anchors.horizontalCenter: parent.horizontalCenter
+            //                anchors.top: parent.bottom
+            //                width: parent.width-20
+            //                height: 4
 
-//            }
+            //            }
 
         }
 
     }
 
-/*
+    /*
     Tag: Future Release
     
     Rectangle{
@@ -393,7 +394,7 @@ Column{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Sub Total")
+                text: Messages.re_mini_ct_subTotal
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -519,7 +520,7 @@ Column{
         visible: exportVisible
 
         CustomButton {
-            textValue: qsTr("Export Report")
+            textValue: Messages.re_mini_ct_exportReport
             anchors.left: parent.left
             anchors.leftMargin: leftMargin
             anchors.verticalCenter: parent.verticalCenter

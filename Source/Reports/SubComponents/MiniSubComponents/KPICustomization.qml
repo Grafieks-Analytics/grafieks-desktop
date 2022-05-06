@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -88,7 +89,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Data Value")
+                text: Messages.re_mini_kpic_dataValue
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -127,7 +128,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Data Label")
+                text: Messages.re_mini_kpic_dataLabel
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter

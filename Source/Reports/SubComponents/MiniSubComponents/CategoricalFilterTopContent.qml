@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -265,7 +266,7 @@ Rectangle{
                 rightPadding: 20
 
                 CustomTextBox {
-                    placeholderText: "Enter Value"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     boxWidth: parent.width
                     boxHeight:  30
                 }
@@ -305,7 +306,7 @@ Rectangle{
 
                 Text {
                     id: topByText
-                    text: qsTr("By")
+                    text: Messages.filterBy
                     y:6
 
                 }
