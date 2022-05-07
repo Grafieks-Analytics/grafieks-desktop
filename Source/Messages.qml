@@ -205,6 +205,7 @@ QtObject {
     property string cn_sub_common_username : qsTr("Username")
     property string cn_sub_common_password : qsTr("Password")
     property string cn_sub_common_allow : qsTr("Allow")
+    property string cn_sub_common_connectedTo : qsTr("Connected to: ")
     property string cn_sub_common_afterAuthMsg : qsTr("Once you authorize this connection you will be returned to this page.")
 
     // SubComponents/AccessConnection

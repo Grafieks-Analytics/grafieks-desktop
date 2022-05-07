@@ -14,6 +14,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -88,7 +89,7 @@ Popup {
         target: GithubDS
 
         function onGetGithubUsername(username){
-            connectedById.text = "Connected to: "+ username
+            connectedById.text = Messages.cn_sub_common_connectedTo + username
         }
 
         function onShowBusyIndicator(status){
