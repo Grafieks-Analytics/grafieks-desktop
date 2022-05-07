@@ -65,7 +65,7 @@ Popup {
         target: SheetDS
 
         function onGetSheetUsername(username){
-            connectedById.text = "Connected to: "+ username
+            connectedById.text = Messages.cn_sub_common_connectedTo + username
         }
 
         function onShowBusyIndicator(status){
