@@ -274,6 +274,12 @@ QString getExecutableDir(void);
 
 int main(int argc, char *argv[])
 {
+    QString dbName = "Fred";
+    QString appName = "myQtCrasher";
+    QString appVersion = "1.0";
+
+    initializeCrashpad(dbName, appName, appVersion);
+
     // Application basic initialization
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
@@ -602,6 +608,8 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Source/Splash.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/Source/Main.qml")));
 
+    *(volatile int *)0 = 0;
+
     // Check for updates
     updateApplicationModel.checkLatestApplication();
 
@@ -631,7 +639,7 @@ bool initializeCrashpad(QString dbName, QString appName, QString appVersion)
     FilePath metricsDir(Paths::getPlatformString(crashpadPaths.getMetricsPath()));
 
     // Configure url with your BugSplat database
-    QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
+    QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php1";
 
     // Metadata that will be posted to BugSplat
     QMap<std::string, std::string> annotations;
