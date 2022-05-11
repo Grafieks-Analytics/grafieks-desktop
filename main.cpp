@@ -275,7 +275,7 @@ QString getExecutableDir(void);
 int main(int argc, char *argv[])
 {
     QString dbName = "Fred";
-    QString appName = "myQtCrasher";
+    QString appName = "myQtCrasher1";
     QString appVersion = "1.0";
 
     initializeCrashpad(dbName, appName, appVersion);
@@ -639,7 +639,8 @@ bool initializeCrashpad(QString dbName, QString appName, QString appVersion)
     FilePath metricsDir(Paths::getPlatformString(crashpadPaths.getMetricsPath()));
 
     // Configure url with your BugSplat database
-    QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php1";
+//    QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
+    QString url = "http://mailer.grafieks.com/crashpad.php";
 
     // Metadata that will be posted to BugSplat
     QMap<std::string, std::string> annotations;
