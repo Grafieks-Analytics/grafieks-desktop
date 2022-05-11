@@ -15,6 +15,26 @@ Popup {
     y: parent.height / 2 - 200
     padding: 0
 
+
+    Connections{
+        target: UpdateApplicationModel
+
+        function onUpdateAppVersion(currentAppVersion, latestAppVersion){
+            updateApplication.visible = true
+        }
+    }
+
+
+    function confirmUpdate(){
+        error_connection_text.text = Messages.msc_uan_pleaseWait
+        UpdateApplicationModel.promptUpdater()
+        closePrompt()
+    }
+
+    function closePrompt(){
+        updateApplication.visible = false
+    }
+
     // Popup Header starts
 
     Rectangle{
@@ -46,9 +66,7 @@ Popup {
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    updateApplication.visible = false
-                }
+                onClicked: closePrompt()
             }
         }
     }
@@ -56,27 +74,38 @@ Popup {
     // Popup Header ends
 
 
+    Row{
+        id: row1
+        anchors.right: parent.right
+        spacing: 10
+
+        Text{
+            text: Messages.msc_uan_appUpdateMsg
+            wrapMode: Text.WordWrap
+        }
+    }
+
 
     // Row 1: Action Button starts
 
     Row{
 
-        id: row1
+        id: row2
         anchors.bottom: parent.bottom
-        anchors.bottomMargin:  60
+        anchors.bottomMargin:  30
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
 
         Button{
 
-            id: btn_signin
+            id: btn_download
             height: back_rec_1.height
             width: back_rec_1.width
 
             background: Rectangle{
                 id: back_rec_1
-                color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+                color: btn_download.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
                 width: 100
                 height: 40
                 Rectangle{
@@ -86,17 +115,15 @@ Popup {
 
                 }
 
+
                 Text{
-                    text: Messages.signOutText
+                    text: Messages.updateBtnTxt
                     font.pixelSize: Constants.fontCategoryHeader
-                    color: btn_signin.hovered ? "white" : "black"
+                    color: btn_download.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }
             }
-            onClicked: {
-                error_connection_text.text = Messages.msc_uan_pleaseWait
-                User.logout()
-            }
+            onClicked: confirmUpdate()
         }
 
         Button{
@@ -124,9 +151,7 @@ Popup {
                 }
             }
 
-            onClicked: {
-                popupLogout.visible = false
-            }
+            onClicked: closePrompt()
         }
 
 
@@ -137,8 +162,8 @@ Popup {
     // Row 2: Error message starts
     Row{
 
-        id: row2
-        anchors.top: row1.bottom
+        id: row3
+        anchors.top: row3.bottom
         anchors.topMargin: 30
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70

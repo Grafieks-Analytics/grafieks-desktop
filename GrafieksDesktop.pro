@@ -99,6 +99,7 @@ SOURCES += \
     Code/Logic/General/queryjoiner.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
+    Code/Logic/General/updateapplicationmodel.cpp \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Readers/extractprocessor.cpp \
     Code/Logic/Readers/liveprocessor.cpp \
@@ -217,6 +218,7 @@ HEADERS += \
     Code/Logic/General/queryjoiner.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
+    Code/Logic/General/updateapplicationmodel.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Readers/extractprocessor.h \
     Code/Logic/Readers/liveprocessor.h \
