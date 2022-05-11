@@ -11,6 +11,7 @@
 #include <QProcess>
 #include <QJsonDocument>
 #include <QDir>
+#include <QApplication>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -99,6 +100,8 @@ public:
     Q_INVOKABLE void resetGeneralParams();
 
     Q_INVOKABLE QString getDSNameWithoutExtension();
+
+    Q_INVOKABLE void quitApplication();
 
 public slots:
 

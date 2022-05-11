@@ -235,6 +235,10 @@ ApplicationWindow {
         GeneralParamsModel.openNewGrafieksInstance();
     }
 
+    function quitApplication(){
+        GeneralParamsModel.quitApplication()
+    }
+
     function disconnectDS(){
         DSParamsModel.disconnectDS()
     }
@@ -468,6 +472,10 @@ ApplicationWindow {
     }
 
 
+    UpdateApplication{
+        id: updateApplicationPopup
+    }
+
 
 
     // SubComponents Ends
@@ -507,6 +515,12 @@ ApplicationWindow {
         id: saveWbAction
         shortcut: "Ctrl+Alt+S"
         onTriggered: saveWorkbook()
+    }
+
+    Action {
+        id: quitAction
+        shortcut: StandardKey.Quit
+        onTriggered: quitApplication()
     }
 
     Action {
@@ -606,6 +620,14 @@ ApplicationWindow {
                 id: action_sampledata
                 text: qsTr("SampleData")
                 enabled: false
+            }
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_exit
+                text: qsTr("Quit")
+                onTriggered: quitApplication()
             }
 
 
@@ -760,6 +782,13 @@ ApplicationWindow {
                 onTriggered: {
                     // stacklayout_home.currentIndex = 2
                     Qt.openUrlExternally("https://grafieks.com/");
+                }
+            }
+            MenuItem{
+                text: qsTr("Bug Report")
+                onTriggered: {
+                    // stacklayout_home.currentIndex = 2
+                    Qt.openUrlExternally("https://pages.github.io/");
                 }
             }
             MenuItem{

@@ -62,6 +62,12 @@ QtObject {
     property int boxType: 19
     property int dropBoxType: 17
 
+    property string driveString : "Google Drive"
+    property string githubString : "Github"
+    property string sheetString : "Google Sheet"
+    property string boxString : "Box"
+    property string dropBoxString : "Dropbox"
+
 
     // Theme Colors
 
