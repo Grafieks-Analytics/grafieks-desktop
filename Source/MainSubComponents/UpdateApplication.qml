@@ -28,6 +28,7 @@ Popup {
     function confirmUpdate(){
         error_connection_text.text = Messages.msc_uan_pleaseWait
         UpdateApplicationModel.promptUpdater()
+        GeneralParamsModel.quitApplication()
         closePrompt()
     }
 
