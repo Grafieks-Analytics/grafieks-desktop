@@ -14,6 +14,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -30,7 +31,7 @@ Popup {
     closePolicy: Popup.NoAutoClose
 
     property int label_col : 135
-    property var pathFolder: "Box"
+    property var pathFolder: Messages.boxString
     property var folderName: "Folder name"
 
     property var fileName: ""
@@ -69,7 +70,7 @@ Popup {
         target: BoxDS
 
         function onGetBoxUsername(username){
-            connectedById.text = "Connected to: "+ username
+            connectedById.text = Messages.cn_sub_common_connectedTo + username
         }
 
         function onShowBusyIndicator(status){
@@ -95,12 +96,12 @@ Popup {
 
         function onFileDownloaded(filePath, fileType){
 
-            if(fileType === "csv"){
+            if(fileType === Constants.csvType.toLowerCase()){
                 ConnectorsLoginModel.csvLogin(filePath, true, ",")
-            } else if(fileType === "excel"){
+            } else if(fileType === Constants.excelType.toLowerCase()){
                 var drivers = ODBCDriversModel.fetchOdbcDrivers(Constants.excelType)
                 ConnectorsLoginModel.excelLogin(drivers, filePath)
-            } else if(fileType === "json"){
+            } else if(fileType === Constants.jsonType.toLowerCase()){
                 ConnectorsLoginModel.jsonLogin(filePath, true)
             }
         }
@@ -248,7 +249,6 @@ Popup {
     function onFolderDoubleClicked(name, type, folder_id = null){
 
         if(fileType === "folder"){
-            console.log(folder_id, "FOLDER ID")
             BoxDS.folderNav(folder_id)
             navigationPaths.push({"path": folder_id, "name": name})
         } else{
@@ -309,7 +309,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to Box"
+            text: Messages.cn_sub_box_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 20

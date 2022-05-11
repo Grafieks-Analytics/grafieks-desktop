@@ -103,7 +103,7 @@ void SaveExtractExcelWorker::run()
                 GeneralParamsModel generalParamsModel;
                 QString uniqueHash = generalParamsModel.randomStringGenerator();
 
-                QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version INTEGER,  unique_hash VARCHAR, last_update VARCHAR)";
+                QString tableCreateQuery = "CREATE TABLE " + Constants::masterExtractTable + "(tableName VARCHAR, app_version VARCHAR, mode VARCHAR, extract_version VARCHAR,  unique_hash VARCHAR, last_update VARCHAR)";
                 QString tableInserQuery = "INSERT INTO " + Constants::masterExtractTable + " VALUES ('" + fileName + "', '" + Constants::appVersion + "', '" + Constants::currentMode + "', '" + Constants::extractVersion + "', '" + uniqueHash + "',  '" + QString::number(currentTimestamp) + "')";
 
 

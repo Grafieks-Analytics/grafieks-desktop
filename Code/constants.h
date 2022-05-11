@@ -8,6 +8,7 @@ namespace Constants
     // General Constants
     const QString appName = "Grafieks Desktop";
     const QString appVersion = "Free";
+    const QString appVersionCode = "1.0.3";
 
     // Duckdb version 0.2.9
     const QString extractVersion = "1.0.3";

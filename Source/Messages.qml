@@ -137,7 +137,8 @@ QtObject {
 
     // UpdateApplication
     property string msc_uan_header : qsTr("Update Application")
-    property string msc_uan_pleaseWait : qsTr("Logging out. Please wait..")
+    property string msc_uan_pleaseWait : qsTr("Please wait..")
+    property string msc_uan_appUpdateMsg : qsTr("You are using an old version of the application. A new update is available. Please download to enjoy the latest features and bugfixes\n\n If you accept, then the application will be closed while update is on")
 
 
 
@@ -205,6 +206,7 @@ QtObject {
     property string cn_sub_common_username : qsTr("Username")
     property string cn_sub_common_password : qsTr("Password")
     property string cn_sub_common_allow : qsTr("Allow")
+    property string cn_sub_common_connectedTo : qsTr("Connected to: ")
     property string cn_sub_common_afterAuthMsg : qsTr("Once you authorize this connection you will be returned to this page.")
 
     // SubComponents/AccessConnection
