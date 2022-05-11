@@ -468,6 +468,10 @@ ApplicationWindow {
     }
 
 
+    UpdateApplication{
+        id: updateApplicationPopup
+    }
+
 
 
     // SubComponents Ends

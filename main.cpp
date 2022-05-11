@@ -75,6 +75,7 @@
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
+#include "Code/Logic/General/updateapplicationmodel.h"
 
 #include "Code/OS/odbcdriversmodel.h"
 #include "Code/OS/osentries.h"
@@ -332,6 +333,7 @@ int main(int argc, char *argv[])
     TableSchemaModel tableSchemaModel;
     NewTableColumnsModel newTableColumnsModel;
     ExtractsLiveQueryModel extractsLiveQueryModel;
+    UpdateApplicationModel updateApplicationModel;
 
     PublishWorkbookModel publishWorkbookModel;
     ProjectsListModel projectsListModel;
@@ -374,6 +376,8 @@ int main(int argc, char *argv[])
     ForwardOnlyQueryModel forwardOnlyQueryModel(&generalParamsModel);
     ExcelQueryModel excelQueryModel(&generalParamsModel);
     CSVJsonQueryModel csvJsonQueryModel(&generalParamsModel);
+
+//    qDebug() << "HOME" << QStandardPaths::standardLocations(QStandardPaths::HomeLocation)+"/AppData/Local/CrashDumps" << QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation);
 
 
     // OBJECT INITIALIZATION ENDS
@@ -536,6 +540,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("WorkbookProcessor", &workbookProcessor);
     engine.rootContext()->setContextProperty("PublishWorkbookModel", &publishWorkbookModel);
     engine.rootContext()->setContextProperty("ProjectsListModel", &projectsListModel);
+    engine.rootContext()->setContextProperty("UpdateApplicationModel", &updateApplicationModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
@@ -569,6 +574,9 @@ int main(int argc, char *argv[])
 
     engine.load(QUrl(QStringLiteral("qrc:/Source/Splash.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/Source/Main.qml")));
+
+    // Check for updates
+    updateApplicationModel.checkLatestApplication();
 
     if (engine.rootObjects().isEmpty())
         return -1;
