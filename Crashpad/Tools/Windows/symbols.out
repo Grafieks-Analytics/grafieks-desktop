@@ -1,0 +1,4 @@
+
+C:\Users\chill\Projects\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Release>C:\Users\chill\Projects\grafieks-desktop\Crashpad\Tools\Windows\symupload.exe --product myQtCrasher "C:\Users\chill\Projects\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Release\release\myQtCrasher.exe" "https://fred.bugsplat.com/post/bp/symbol/breakpadsymbols.php?appName=myQtCrasher&appVer=1.0" 
+loadDataForExe failed for C:\Users\chill\Projects\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Release\release\myQtCrasher.exe
+Could not get symbol data from C:\Users\chill\Projects\build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Release\release\myQtCrasher.exe
