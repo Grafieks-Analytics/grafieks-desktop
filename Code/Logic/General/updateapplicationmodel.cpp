@@ -28,7 +28,6 @@ void UpdateApplicationModel::checkLatestApplication()
 void UpdateApplicationModel::promptUpdater()
 {
     QProcess::startDetached(QDir::currentPath() + "/updates.exe");
-    QApplication::quit();
 }
 
 void UpdateApplicationModel::checkDsVersion(QString currentVersion)

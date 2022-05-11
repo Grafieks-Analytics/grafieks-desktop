@@ -12,7 +12,6 @@
 #include <QJsonArray>
 #include <QProcess>
 #include <QDir>
-#include <QApplication>
 
 #include "../../constants.h"
 #include "../../statics.h"

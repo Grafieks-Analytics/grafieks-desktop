@@ -235,6 +235,10 @@ ApplicationWindow {
         GeneralParamsModel.openNewGrafieksInstance();
     }
 
+    function quitApplication(){
+        GeneralParamsModel.quitApplication()
+    }
+
     function disconnectDS(){
         DSParamsModel.disconnectDS()
     }
@@ -514,6 +518,12 @@ ApplicationWindow {
     }
 
     Action {
+        id: quitAction
+        shortcut: StandardKey.Quit
+        onTriggered: quitApplication()
+    }
+
+    Action {
         id: disconnectAction
         shortcut: "Ctrl+D"
         onTriggered: disconnectDS()
@@ -610,6 +620,14 @@ ApplicationWindow {
                 id: action_sampledata
                 text: qsTr("SampleData")
                 enabled: false
+            }
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_exit
+                text: qsTr("Quit")
+                onTriggered: quitApplication()
             }
 
 
@@ -764,6 +782,13 @@ ApplicationWindow {
                 onTriggered: {
                     // stacklayout_home.currentIndex = 2
                     Qt.openUrlExternally("https://grafieks.com/");
+                }
+            }
+            MenuItem{
+                text: qsTr("Bug Report")
+                onTriggered: {
+                    // stacklayout_home.currentIndex = 2
+                    Qt.openUrlExternally("https://pages.github.io/");
                 }
             }
             MenuItem{

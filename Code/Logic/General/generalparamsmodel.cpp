@@ -351,6 +351,11 @@ QString GeneralParamsModel::getDSNameWithoutExtension(){
     return dsNameParts.at(0);
 }
 
+void GeneralParamsModel::quitApplication()
+{
+    QApplication::quit();
+}
+
 void GeneralParamsModel::setMenuType(int menuType)
 {
     if (m_menuType == menuType)
