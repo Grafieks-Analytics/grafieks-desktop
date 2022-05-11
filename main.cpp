@@ -608,7 +608,7 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Source/Splash.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/Source/Main.qml")));
 
-    *(volatile int *)0 = 0;
+//    *(volatile int *)0 = 0;
 
     // Check for updates
     updateApplicationModel.checkLatestApplication();
