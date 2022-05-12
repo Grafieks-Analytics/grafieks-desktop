@@ -31,11 +31,6 @@ namespace Secret
     const QString githubSecret = "f13ef7cd7c634af523ea8d0a759393b535b1d190";
     const int githubPort = 5481;
 
-    // FTP
-    const QString ftpUser = "F08976CB8C70830B228B0EAE6EC2";
-    const QString ftpPass = "4379D9A952A68BE66B64D1D7C4376923220A7219BC5F1";
-    const QString ftpPort = "5475";
-
     // SimpleCrypt
     const int simpleCryptHash = 45715476;
 
