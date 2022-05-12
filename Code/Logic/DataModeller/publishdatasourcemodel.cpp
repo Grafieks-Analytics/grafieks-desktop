@@ -229,10 +229,13 @@ void PublishDatasourceModel::uploadFile()
     //    QString ftpAddress = settings.value("general/ftpAddress").toString();
     QString ftpAddress = Constants::defaultFTPEndpoint;
     QString siteName = settings.value("user/sitename").toString();
+    QString ftpUser = settings.value("user/ftpUser").toString();
+    QString ftpPass = settings.value("user/ftpPass").toString();
+    QString ftpPort = settings.value("user/ftpPort").toString();
 
-    QUrl url("ftp://" + ftpAddress + ":" + Secret::ftpPort + "/" + siteName + "/datasources/" + this->outputFileName);
-    url.setUserName(Secret::ftpUser);
-    url.setPassword(Secret::ftpPass);
+    QUrl url("ftp://" + ftpAddress + ":" + ftpPort + "/" + siteName + "/datasources/" + this->outputFileName);
+    url.setUserName(ftpUser);
+    url.setPassword(ftpPass);
     url.setScheme("ftp");
 
     if (dataFile->open(QIODevice::ReadOnly))
