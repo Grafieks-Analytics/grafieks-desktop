@@ -145,11 +145,13 @@ Rectangle{
 
         function onColumnListModelDataChanged(values){
             idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
         }
 
         function onFetchingColumnListModel(){
             idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -158,11 +160,13 @@ Rectangle{
 
         function onColumnListModelDataChanged(values){
             idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
         }
 
         function onFetchingColumnListModel(){
             idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -171,11 +175,13 @@ Rectangle{
 
         function onColumnListModelDataChanged(values){
             idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
         }
 
         function onFetchingColumnListModel(){
             idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -184,11 +190,13 @@ Rectangle{
 
         function onColumnListModelDataChanged(values){
             idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
         }
 
         function onFetchingColumnListModel(){
             idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -707,10 +715,16 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
         Text {
             id: idPlesaeWaitText
             text: Messages.loadingPleaseWait
-            anchors.centerIn: parent
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
 
