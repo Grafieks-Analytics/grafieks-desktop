@@ -111,10 +111,7 @@ Item{
 
     Component.onCompleted: {
 
-        //        if(GeneralParamsModel.isWorkbookInEditMode() === false){
-        //            selectFile()
-        //            webengine.url = ""
-        //        }
+        fileDialog.nameFilters = Messages.da_sub_di_selectImageNamedFiltersTxt
     }
 
     function selectFile(){
@@ -229,7 +226,6 @@ Item{
         id: fileDialog
         title: Messages.da_sub_di_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [Messages.da_sub_di_selectImageNamedFiltersTxt]
 
         onAccepted: saveImage(fileUrl)
         onRejected: webengine.url = ""

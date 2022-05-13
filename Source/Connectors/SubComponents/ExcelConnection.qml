@@ -77,6 +77,9 @@ Popup {
         busyindicator.running = false
         mainTimer.running = false
         displayTime.text = ""
+
+        promptExcel.nameFilters = Messages.cn_sub_excodbc_namedFilter
+        file_btn.text = Messages.cn_sub_excodbc_header
     }
 
 
@@ -159,12 +162,11 @@ Popup {
 
             Button{
                 id : file_btn
-
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: Messages.cn_sub_excodbc_header
                 onClicked: promptExcel.open();
             }
+
         }
 
 

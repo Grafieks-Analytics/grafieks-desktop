@@ -460,7 +460,11 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+        Text {
+            id: plesaeWaitText
+            text: "PLEASE WAIT AA"
 
+        }
 
         // Checkbox ListView
         // List Filters starts
