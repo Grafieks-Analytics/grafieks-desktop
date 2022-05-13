@@ -144,7 +144,12 @@ Rectangle{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -152,7 +157,12 @@ Rectangle{
         target: ExcelDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -160,7 +170,12 @@ Rectangle{
         target: ForwardOnlyDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -168,8 +183,12 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(values){
-            console.log("VALUEs", values)
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -687,6 +706,12 @@ Rectangle{
 
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.centerIn: parent
+        }
 
 
         // Checklist Button ListView
