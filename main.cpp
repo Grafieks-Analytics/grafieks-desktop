@@ -274,9 +274,9 @@ QString getExecutableDir(void);
 
 int main(int argc, char *argv[])
 {
-    QString dbName = "Fred";
-    QString appName = "myQtCrasher1";
-    QString appVersion = "1.0";
+    QString dbName = "support_grafieks_com";
+    QString appName = "grafieks.desktop";
+    QString appVersion = "1.0.3";
 
     initializeCrashpad(dbName, appName, appVersion);
 

@@ -56,6 +56,10 @@ Popup {
         }
     }
 
+    Component.onCompleted: {
+        promptSqlitenameFilters = Messages.cn_sub_sqlite_namedFilter
+    }
+
     function connectToSqlite(selectedFile){
         ConnectorsLoginModel.sqliteLogin(selectedFile)
     }
@@ -202,7 +206,6 @@ Popup {
     FileDialog{
         id: promptSqlite
         title: Messages.cn_sub_sqlite_selFile
-        nameFilters: [Messages.cn_sub_sqlite_namedFilter];
 
         onAccepted: {
             sqliteFileName.text = GeneralParamsModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')

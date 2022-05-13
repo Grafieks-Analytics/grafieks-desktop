@@ -135,6 +135,7 @@ Popup {
 
     Component.onCompleted:  {
        errorMsg.text = ""
+       fileDialog1.nameFilters = Messages.msc_pwb_selectImageNamedFiltersTxt
     }
 
     function closePopup(){
@@ -203,7 +204,6 @@ Popup {
         id: fileDialog1
         title: Messages.msc_pwb_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [ Messages.msc_pwb_selectImageNamedFiltersTxt]
     }
 
     SaveWorkbook{

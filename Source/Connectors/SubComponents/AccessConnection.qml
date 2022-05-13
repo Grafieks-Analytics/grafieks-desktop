@@ -94,6 +94,10 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        promptAccess.nameFilters = Messages.cn_sub_access_namedFilter
+    }
+
     function hidePopup(){
         popup.visible = false
     }
@@ -460,7 +464,6 @@ Popup {
     FileDialog{
         id: promptAccess
         title: Messages.cn_sub_access_selFile
-        nameFilters: [Messages.cn_sub_access_namedFilter];
 
         onAccepted: {
 
