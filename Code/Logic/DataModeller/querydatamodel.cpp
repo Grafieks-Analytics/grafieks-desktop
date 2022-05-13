@@ -43,6 +43,7 @@ QHash<int, QByteArray> QueryDataModel::roleNames() const
 
 void QueryDataModel::columnData(QString col, QString tableName, QString options)
 {
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName);
@@ -60,6 +61,7 @@ void QueryDataModel::columnData(QString col, QString tableName, QString options)
 void QueryDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName + " WHERE '" + col + "' LIKE '%"+searchString+"%'");

@@ -62,6 +62,8 @@ QtObject {
     property string filterAddCharacter : qsTr("Add Character")
     property string filterConditionText : qsTr("Condition")
 
+    property string loadingPleaseWait : qsTr("Loading. Please wait...")
+
     /****************************************************/
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     // Module/Screen specific

@@ -44,10 +44,11 @@ private:
     QString getQueryJoiner();
 
 signals:
-     void columnListModelDataChanged(QString options, bool searchMode = false);
+    void fetchingColumnListModel();
+    void columnListModelDataChanged(QString options, bool searchMode = false);
 
 private:
-     QStringList getData(QString query);
+    QStringList getData(QString query);
 
 
 };

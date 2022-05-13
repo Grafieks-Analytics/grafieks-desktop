@@ -73,7 +73,12 @@ Rectangle{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -81,7 +86,12 @@ Rectangle{
         target: ExcelDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -89,7 +99,12 @@ Rectangle{
         target: ForwardOnlyDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -97,7 +112,12 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
         }
     }
 
@@ -117,7 +137,6 @@ Rectangle{
             mainCheckBox.visible = true
         }
     }
-
 
     // SLOT function
     function slotDataCleared(){
@@ -461,10 +480,12 @@ Rectangle{
         border.color: Constants.darkThemeColor
 
         Text {
-            id: plesaeWaitText
-            text: "PLEASE WAIT AA"
-
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.centerIn: parent
         }
+
+
 
         // Checkbox ListView
         // List Filters starts
