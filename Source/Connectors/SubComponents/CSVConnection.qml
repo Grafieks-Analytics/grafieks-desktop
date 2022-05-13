@@ -33,6 +33,10 @@ Popup {
     property var startTime: 0
     property var separator: ","
 
+    Component.onCompleted: {
+        promptCSV.nameFilters = Messages.cn_sub_csv_namedFilter
+    }
+
     onClosed: {
         mainTimer.stop()
         mainTimer.running = false
@@ -290,11 +294,10 @@ Popup {
         icon: StandardIcon.Critical
     }
 
-    // Select SQLITE file
+    // Select CSV file
     FileDialog{
         id: promptCSV
         title: Messsages.cn_sub_csv_header
-        nameFilters: [Messsages.cn_sub_csv_namedFilter];
 
         onAccepted: {
 

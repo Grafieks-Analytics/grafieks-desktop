@@ -157,6 +157,7 @@ Popup {
 
     Component.onCompleted:  {
        errorMsg.text = ""
+       fileDialog1.nameFilters = Messages.msc_pds_selectImageNamedFiltersTxt
     }
 
     function closePopup(){
@@ -256,7 +257,6 @@ Popup {
         id: fileDialog1
         title: Messages.msc_pds_selectImageDialogTxt
         selectMultiple: false
-        nameFilters: [ Messages.msc_pds_selectImageNamedFiltersTxt ]
     }
 
 

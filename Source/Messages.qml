@@ -104,7 +104,7 @@ QtObject {
     property string msc_pds_uploadImage: qsTr("Upload Image")
     property string msc_pds_uploadImageDialogTxt: qsTr("Click to upload image (*.jpg *.jpeg *.png  only)")
     property string msc_pds_selectImageDialogTxt: qsTr("Select an image (*.jpg *.jpeg *.png  only)")
-    property string msc_pds_selectImageNamedFiltersTxt: qsTr("Image files (*.jpg *.jpeg *.png  only)")
+    property var msc_pds_selectImageNamedFiltersTxt: [qsTr("Image files (*.jpg *.jpeg *.png  only)")]
     property string msc_pds_contactAdminTxt: qsTr("For Data Source access permission, contact Project Admin")
     property string msc_pds_dsExists: qsTr("Datasource name already exists")
     property string msc_pds_uploading: qsTr("Uploading Datasource ")
@@ -119,7 +119,7 @@ QtObject {
     property string msc_pwb_uploadImage: qsTr("Upload Image")
     property string msc_pwb_uploadImageDialogTxt: qsTr("Click to upload image (*.jpg *.jpeg *.png  only)")
     property string msc_pwb_selectImageDialogTxt: qsTr("Select an image (*.jpg *.jpeg *.png  only)")
-    property string msc_pwb_selectImageNamedFiltersTxt: qsTr("Image files (*.jpg *.jpeg *.png  only)")
+    property var msc_pwb_selectImageNamedFiltersTxt: [qsTr("Image files (*.jpg *.jpeg *.png  only)")]
     property string msc_pwb_contactAdminTxt: qsTr("For Workbook access permission assignment, contact Admin or Project Admin")
     property string msc_pwb_uploading: qsTr("Uploading Workbook ")
     property string msc_pwb_uploadSuccess: qsTr("Workbook is published now. Please close this window")
@@ -213,7 +213,7 @@ QtObject {
     property string cn_sub_access_header : qsTr("Select a Microsoft Access file")
     property string cn_sub_access_subHeader : qsTr("Microsoft Access Connection")
     property string cn_sub_access_selFile : qsTr("Select a Microsoft Access file")
-    property string cn_sub_access_namedFilter : qsTr("Access files (*.mdb *.accdb )")
+    property var cn_sub_access_namedFilter : [qsTr("Access files (*.mdb *.accdb )")]
     property string cn_sub_access_missingDriver : qsTr("Microsoft Excel Driver missing")
     property string cn_sub_access_driverDownload : qsTr("You don't have Microsoft Access driver. Download Microsoft Access to enable this")
 
@@ -230,7 +230,7 @@ QtObject {
     property string cn_sub_csv_csvName : qsTr("File Name")
     property string cn_sub_csv_separator : qsTr("Separator")
     property string cn_sub_csv_importErr : qsTr("CSV import Error")
-    property string cn_sub_csv_namedFilter : qsTr("CSV files (*.csv)")
+    property var cn_sub_csv_namedFilter : ["CSV files (*.csv)"]
 
 
     // SubComponents/DriveConnection
@@ -250,7 +250,7 @@ QtObject {
     property string cn_sub_excodbc_header : qsTr("Select an Excel file")
     property string cn_sub_excodbc_subHeader : qsTr("Excel Connection")
     property string cn_sub_excodbc_importErr : qsTr("Excel import Error")
-    property string cn_sub_excodbc_namedFilter : qsTr("Excel files (*.xls *.xlsx)")
+    property var cn_sub_excodbc_namedFilter : [qsTr("Excel files (*.xls *.xlsx)")]
     property string cn_sub_excodbc_missingDriver : qsTr("Microsoft Excel Driver missing")
     property string cn_sub_excodbc_driverDownload : qsTr("You don't have Excel driver. Download Microsoft Excel to enable this")
 
@@ -276,7 +276,7 @@ QtObject {
     property string cn_sub_json_header : qsTr("Select a Json file")
     property string cn_sub_json_subHeader : qsTr("Json Connection")
     property string cn_sub_json_importErr : qsTr("Json import Error")
-    property string cn_sub_json_namedFilter : qsTr("Json files (*.json)")
+    property var cn_sub_json_namedFilter : [qsTr("Json files (*.json)")]
 
     // SubComponents/MongoConnection
     property string cn_sub_mongodb_header : qsTr("Sign In to MongoDb Server")
@@ -329,7 +329,7 @@ QtObject {
     property string cn_sub_sqlite_header : qsTr("Open Sqlite file")
     property string cn_sub_sqlite_subHeader : qsTr("Sqlite Connection")
     property string cn_sub_sqlite_selFile : qsTr("Select an sqlite file")
-    property string cn_sub_sqlite_namedFilter : qsTr("Sqlite files (*.sqlite *.db)")
+    property var cn_sub_sqlite_namedFilter : [qsTr("Sqlite files (*.sqlite *.db)")]
 
     // SubComponents/TeradataConnenction
     property string cn_sub_teradata_header : qsTr("Sign In to Teradata Server")

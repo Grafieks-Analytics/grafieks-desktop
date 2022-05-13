@@ -73,6 +73,11 @@ Popup {
     }
 
 
+    Component.onCompleted: {
+        promptJson.nameFilters = Messages.cn_sub_json_namedFilter
+        file_btn.text = Messages.selectFile
+    }
+
     function handleJson(jsonFileName){
 
         if(jsonFileName !== ""){
@@ -171,7 +176,6 @@ Popup {
                 id : file_btn
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: Messages.selectFile
                 onClicked: promptJson.open();
             }
         }
@@ -274,7 +278,6 @@ Popup {
     FileDialog{
         id: promptJson
         title: Messages.selectFile
-        nameFilters: [Messages.cn_sub_json_namedFilter];
 
 
         onAccepted: {
