@@ -99,6 +99,11 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        promptExcel.nameFilters = Messages.cn_sub_excodbc_namedFilter
+        file_btn.text = Messages.cn_sub_excodbc_header
+    }
+
     function hidePopup(){
         popup.visible = false
     }
@@ -326,7 +331,6 @@ Popup {
 
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: Message.cn_sub_excodbc_header
                 onClicked: promptExcel.open();
             }
         }
@@ -412,7 +416,6 @@ Popup {
     FileDialog{
         id: promptExcel
         title: Messages.selectFile
-        nameFilters: [Messages.cn_sub_excodbc_namedFilter];
 
 
         onAccepted: {

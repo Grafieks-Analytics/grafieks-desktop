@@ -180,7 +180,7 @@ Popup {
             id: password_field
             maximumLength: 250
             selectByMouse: true
-            echoMode: Messages.lcr_password
+            echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
