@@ -49,6 +49,9 @@ QHash<int, QByteArray> CSVJsonDataModel::roleNames() const
 
 void CSVJsonDataModel::columnData(QString col, QString tableName, QString options)
 {
+
+    emit fetchingColumnListModel();
+
     bool firstLine = true;
     QString delimiter = Statics::separator;
 
@@ -109,10 +112,14 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
 
 void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
+
     this->modelOutput.clear();
+    emit fetchingColumnListModel();
+
     QStringList output = this->masterResultData.filter(searchString, Qt::CaseInsensitive);
     this->modelOutput = output;
     this->totalRowCount = output.length();
+
     emit columnListModelDataChanged(options);
 }
 

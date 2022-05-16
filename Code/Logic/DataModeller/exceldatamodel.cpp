@@ -50,6 +50,8 @@ QHash<int, QByteArray> ExcelDataModel::roleNames() const
 void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 {
     this->modelOutput.clear();
+    emit fetchingColumnListModel();
+
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+tableName;
 
@@ -69,6 +71,8 @@ void ExcelDataModel::columnSearchData(QString col, QString tableName, QString se
 {
 
     this->modelOutput.clear();
+    emit fetchingColumnListModel();
+
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+ tableName + " WHERE [" + col + "] LIKE '%" + searchString + "%'";
 
