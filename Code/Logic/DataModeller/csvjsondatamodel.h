@@ -52,6 +52,7 @@ public:
 private:
 
 signals:
+    void fetchingColumnListModel();
     void columnListModelDataChanged(QString options = "");
 
 };
