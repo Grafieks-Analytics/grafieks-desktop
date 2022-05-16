@@ -23,6 +23,10 @@ Item{
 
 
     onComponentNameChanged: {
+
+        idPlesaeWaitThorbber.visible = true
+        idPlesaeWaitText.visible = true
+
         if(GeneralParamsModel.getAPISwitch()) {
             // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
@@ -71,6 +75,9 @@ Item{
                              })
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        idPlesaeWaitThorbber.visible = false
+        idPlesaeWaitText.visible = false
     }
 
     function onRadioSelect(modelData){
@@ -146,6 +153,18 @@ Item{
 
             }
 
+        }
+
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         ComboBox {
