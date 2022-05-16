@@ -43,7 +43,6 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
     connect(this->box, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::boxIntType;
 
         // api link - https://developer.box.com/reference/get-folders-id-items/
 
@@ -223,6 +222,7 @@ void BoxDS::dataReadFinished()
         qDebug() <<"There was some error : "<< m_networkReply->errorString();
     }
     else{
+        Statics::onlineStorageType = Constants::boxIntType;
 
         QStringList requiredExtensions;
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
