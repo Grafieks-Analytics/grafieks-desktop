@@ -50,7 +50,6 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::driveIntType;
 
         // Get files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
@@ -169,6 +168,9 @@ void DriveDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+
+        Statics::onlineStorageType = Constants::driveIntType;
+
         QStringList requiredExtensions;
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
