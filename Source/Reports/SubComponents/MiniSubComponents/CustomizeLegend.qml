@@ -322,7 +322,7 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: re_mini_cl_showLegendBottom
+                        text: Messages.re_mini_cl_showLegendBottom
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }

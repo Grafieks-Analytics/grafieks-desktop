@@ -127,6 +127,10 @@ Rectangle{
         function onFilterIndexChanged(){
 
             if(ReportParamsModel.section === Constants.dateTab){
+
+                idPlesaeWaitText.visible = true
+                idPlesaeWaitThorbber.visible = true
+
                 var colName = ReportParamsModel.colName
                 var colData
                 ReportParamsModel.removeTmpSelectedValues(0, true)
@@ -215,6 +219,9 @@ Rectangle{
                 ReportParamsModel.setTmpSelectedValues(values)
             }
         }
+
+        idPlesaeWaitText.visible = false
+        idPlesaeWaitThorbber.visible = false
     }
 
     function slotDataCleared(){
@@ -648,6 +655,18 @@ Rectangle{
 
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
+
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
 
         // Checklist Button ListView
