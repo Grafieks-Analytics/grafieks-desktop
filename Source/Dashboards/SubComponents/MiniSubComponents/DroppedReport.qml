@@ -7,6 +7,8 @@ import QtWebEngine 1.10
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
 
+import "../../../MainSubComponents"
+
 // This is the Image Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
 
@@ -442,6 +444,10 @@ Item{
         }else{
             droppedReportId.color = "transparent";
         }
+
+
+        idPlesaeWaitText.visible = false
+        idPlesaeWaitThorbber.visible = false
     }
 
 
@@ -654,6 +660,9 @@ Item{
     // Add a comment whenever a different change is made
 
     function drawChart(reportProperties){
+
+        idPlesaeWaitText.visible = true
+        idPlesaeWaitThorbber.visible = true
 
         // Check if chart is still loading or not.
         if(webEngineView.loading){
@@ -1226,6 +1235,19 @@ Item{
 
 
         }
+
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
         WebEngineView{
             id: webEngineView
             anchors.top : mainChart.bottom
