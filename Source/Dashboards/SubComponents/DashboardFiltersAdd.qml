@@ -26,8 +26,8 @@ Item {
             idPlesaeWaitTextCategorical.visible = false
             idPlesaeWaitThorbberDate.visible = false
             idPlesaeWaitTextDate.visible = false
-            idPlesaeWaitThorbberNumerical.visible = false
-            idPlesaeWaitTextNumerical.visible = false
+            idPlesaeWaitThorbberNumerical.visible = true
+            idPlesaeWaitTextNumerical.visible = true
         }
 
         function onFetchingFilteredColumn(){

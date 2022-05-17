@@ -23,7 +23,7 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
         addConnector(new Connector("Google Drive","/Images/icons/drive.png","cloud", true));
         addConnector(new Connector("Google Sheets","/Images/icons/16_google-sheets_1b1915a4b0.png","online", true));
         addConnector(new Connector("GRS","/Images/icons/GRS.png","grs", true));
-//        addConnector(new Connector("JSON","/Images/icons/json-icon.png","file", true));
+        addConnector(new Connector("JSON","/Images/icons/json-icon.png","file", true));
         addConnector(new Connector("Microsoft Access","/Images/icons/microsoft-access-1.png","rdbms", true));
         addConnector(new Connector("Microsoft Excel","/Images/icons/microsoft-excel-2013.png","file", true));
         addConnector(new Connector("MySQL", "/Images/icons/mysql-6.png", "rdbms", true));
@@ -51,7 +51,7 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
         addConnector(new Connector("Google Drive","/Images/icons/connectors/drive.png","cloud", true));
         addConnector(new Connector("Google Sheets","/Images/icons/connectors/sheets.png","online", true));
         addConnector(new Connector("GRS","/Images/icons/connectors/grs.png","grs", true));
-//        addConnector(new Connector("JSON","/Images/icons/connectors/json.png","file", true));
+        addConnector(new Connector("JSON","/Images/icons/connectors/json.png","file", true));
         addConnector(new Connector("Microsoft Access","/Images/icons/connectors/access.png","rdbms", true));
         addConnector(new Connector("Microsoft Excel","/Images/icons/connectors/excel.png","file", true));
         addConnector(new Connector("MySQL", "/Images/icons/connectors/mysql.png", "rdbms", true));
