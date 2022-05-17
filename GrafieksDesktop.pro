@@ -19,6 +19,7 @@ SOURCES += \
     Code/Connectors/hivecon.cpp \
     Code/Connectors/impalacon.cpp \
     Code/Connectors/jsoncon.cpp \
+    Code/Connectors/jsonnewcon.cpp \
     Code/Connectors/mongocon.cpp \
     Code/Connectors/mssqlcon.cpp \
     Code/Connectors/mysqlcon.cpp \
@@ -139,6 +140,7 @@ HEADERS += \
     Code/Connectors/hivecon.h \
     Code/Connectors/impalacon.h \
     Code/Connectors/jsoncon.h \
+    Code/Connectors/jsonnewcon.h \
     Code/Connectors/mongocon.h \
     Code/Connectors/mssqlcon.h \
     Code/Connectors/mysqlcon.h \
@@ -229,6 +231,7 @@ HEADERS += \
     Code/OS/odbcdriversmodel.h \
     Code/OS/osentries.h \
     Code/duckdb.hpp \
+    Code/json.hpp \
     Code/messages.h \
     Code/constants.h \
     Code/paths.h \
@@ -240,7 +243,6 @@ HEADERS += \
 INCLUDEPATH += $$PWD/Libraries
 INCLUDEPATH += $$PWD/Libraries/jsoncons
 INCLUDEPATH += $$PWD/Libraries/jsoncons_ext
-INCLUDEPATH += $$PWD/Libraries/ParquetDuckDb
 
 DEPENDPATH += $$PWD/Libraries
 
@@ -254,9 +256,9 @@ CONFIG += force_debug_info
 CONFIG += separate_debug_info
 
 # Include directories for Crashpad libraries
-INCLUDEPATH += $$PWD/Crashpad/Include/crashpad
-INCLUDEPATH += $$PWD/Crashpad/Include/crashpad/third_party/mini_chromium/mini_chromium
-INCLUDEPATH += $$PWD/Crashpad/Include/crashpad/out/Default/gen
+INCLUDEPATH += $$PWD/Libraries/Crashpad/Include/crashpad
+INCLUDEPATH += $$PWD/Libraries/Crashpad/Include/crashpad/third_party/mini_chromium/mini_chromium
+INCLUDEPATH += $$PWD/Libraries/Crashpad/Include/crashpad/out/Default/gen
 
 # Crashpad rules for MacOS
 macx {
@@ -265,11 +267,11 @@ macx {
     ARCH = arm64
 
     # Crashpad libraries
-    LIBS += -L$$PWD/Crashpad/Libraries/MacOS/$$ARCH -lcommon
-    LIBS += -L$$PWD/Crashpad/Libraries/MacOS/$$ARCH -lclient
-    LIBS += -L$$PWD/Crashpad/Libraries/MacOS/$$ARCH -lbase
-    LIBS += -L$$PWD/Crashpad/Libraries/MacOS/$$ARCH -lutil
-    LIBS += -L$$PWD/Crashpad/Libraries/MacOS/$$ARCH -lmig_output
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lcommon
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lclient
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lbase
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lutil
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lmig_output
 
     # System libraries
     LIBS += -L/usr/lib/ -lbsm
@@ -278,19 +280,19 @@ macx {
 
     # Copy crashpad_handler to build directory and run dump_syms and symupload
     QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
-    QMAKE_POST_LINK += "&& cp $$PWD/Crashpad/Bin/MacOS/$$ARCH/crashpad_handler $$OUT_PWD/crashpad"
-    QMAKE_POST_LINK += "&& bash $$PWD/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD fred myQtCrasher 1.0 > $$PWD/Crashpad/Tools/MacOS/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/Bin/MacOS/$$ARCH/crashpad_handler $$OUT_PWD/crashpad"
+    QMAKE_POST_LINK += "&& bash $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD fred myQtCrasher 1.0 > $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.out 2>&1"
 }
 
 # Crashpad rules for Windows
 win32 {
     # Build variables
     CONFIG(debug, debug|release) {
-        LIBDIR = $$PWD/Crashpad/Libraries/Windows/MDd
+        LIBDIR = $$PWD\Libraries\Crashpad\Libraries\Windows\MDd
         EXEDIR = $$OUT_PWD\debug
     }
     CONFIG(release, debug|release) {
-        LIBDIR = $$PWD/Crashpad/Libraries/Windows/MD
+        LIBDIR = $$PWD\Libraries\Crashpad\Libraries\Windows\MD
         EXEDIR = $$OUT_PWD\release
     }
 
@@ -305,22 +307,22 @@ win32 {
 
     # Copy crashpad_handler to output directory and upload symbols
     QMAKE_POST_LINK += "if not exist $$shell_path($$OUT_PWD)\crashpad mkdir $$shell_path($$OUT_PWD)\crashpad"
-    QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Crashpad\Bin\Windows\crashpad_handler.exe $$shell_path($$OUT_PWD)\crashpad\crashpad_handler.exe"
-    QMAKE_POST_LINK += "&& $$shell_path($$PWD)\Crashpad\Tools\Windows\symbols.bat $$shell_path($$PWD) $$shell_path($$EXEDIR) support_grafieks_com grafieks.desktop 1.0.3 > $$shell_path($$PWD)\Crashpad\Tools\Windows\symbols.out 2>&1"
-    QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Crashpad\attachment.txt $$shell_path($$OUT_PWD)\attachment.txt"
+    QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Libraries\Crashpad\Bin\Windows\crashpad_handler.exe $$shell_path($$OUT_PWD)\crashpad\crashpad_handler.exe"
+    QMAKE_POST_LINK += "&& $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.bat $$shell_path($$PWD) $$shell_path($$EXEDIR) support_grafieks_com grafieks.desktop 1.0.3 > $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Libraries\Crashpad\attachment.txt $$shell_path($$OUT_PWD)\attachment.txt"
 }
 
 # Crashpad rules for Linux
 linux {
     # Crashpad libraries
-    LIBS += -L$$PWD/Crashpad/Libraries/Linux/ -lcommon
-    LIBS += -L$$PWD/Crashpad/Libraries/Linux/ -lclient
-    LIBS += -L$$PWD/Crashpad/Libraries/Linux/ -lutil
-    LIBS += -L$$PWD/Crashpad/Libraries/Linux/ -lbase
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lcommon
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lclient
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lutil
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lbase
 
     # Copy crashpad_handler to build directory and run dump_syms and symupload
-    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad && cp $$PWD/Crashpad/Bin/Linux/crashpad_handler $$OUT_PWD/crashpad/crashpad_handler"
-    QMAKE_POST_LINK += "&& $$PWD/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD fred myQtCrasher 1.0 > $$PWD/Crashpad/Tools/Linux/symbols.out 2>&1"
-    QMAKE_POST_LINK += "&& cp $$PWD/Crashpad/attachment.txt $$OUT_PWD/attachment.txt"
+    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad && cp $$PWD/Libraries/Crashpad/Bin/Linux/crashpad_handler $$OUT_PWD/crashpad/crashpad_handler"
+    QMAKE_POST_LINK += "&& $$PWD/Libraries/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD fred myQtCrasher 1.0 > $$PWD/Libraries/Crashpad/Tools/Linux/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/attachment.txt $$OUT_PWD/attachment.txt"
 }
 
