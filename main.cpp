@@ -1,5 +1,6 @@
 // GCS Bugfixes -- Fix Keyword
 
+// Crashpad include starts
 #if defined(Q_OS_WIN)
     #define NOMINMAX
     #include <windows.h>
@@ -13,6 +14,7 @@
     #include <unistd.h>
     #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
+// Crashpad include ends
 
 #include <QGuiApplication>
 #include <QQmlContext>
