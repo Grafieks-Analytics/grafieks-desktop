@@ -281,7 +281,7 @@ macx {
     # Copy crashpad_handler to build directory and run dump_syms and symupload
     QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
     QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/Bin/MacOS/$$ARCH/crashpad_handler $$OUT_PWD/crashpad"
-    QMAKE_POST_LINK += "&& bash $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD fred myQtCrasher 1.0 > $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& bash $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.3 > $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.out 2>&1"
 }
 
 # Crashpad rules for Windows
@@ -322,7 +322,7 @@ linux {
 
     # Copy crashpad_handler to build directory and run dump_syms and symupload
     QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad && cp $$PWD/Libraries/Crashpad/Bin/Linux/crashpad_handler $$OUT_PWD/crashpad/crashpad_handler"
-    QMAKE_POST_LINK += "&& $$PWD/Libraries/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD fred myQtCrasher 1.0 > $$PWD/Libraries/Crashpad/Tools/Linux/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& $$PWD/Libraries/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.3 > $$PWD/Libraries/Crashpad/Tools/Linux/symbols.out 2>&1"
     QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/attachment.txt $$OUT_PWD/attachment.txt"
 }
 
