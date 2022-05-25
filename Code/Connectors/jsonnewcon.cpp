@@ -2,12 +2,11 @@
 
 JsonNewCon::JsonNewCon(QObject *parent) : QObject(parent)
 {
-    this->finalValueMap.clear();
 }
 
-QMultiHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
+QHash<QString, QStringList> JsonNewCon::flatten_json_to_map(const njson &j)
 {
-    QMultiHash<QString, QString> result;
+    QHash<QString, QStringList> result;
 
     auto flattened_j = j.flatten();
 
@@ -23,7 +22,13 @@ QMultiHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
             QString key = stdKey.c_str();
             QString value = stdValue.c_str();
 
-            result.insert(key, value);
+            QStringList valuesList;
+            if(result.contains(key)){
+                valuesList = result.value(key);
+            }
+
+            valuesList.append(value);
+            result.insert(key, valuesList);
         }
 
 
@@ -37,7 +42,13 @@ QMultiHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
             QString key = stdKey.c_str();
             QString value = stdValue.c_str();
 
-            result.insert(key, value);
+            QStringList valuesList;
+            if(result.contains(key)){
+                valuesList = result.value(key);
+            }
+
+            valuesList.append(value);
+            result.insert(key, valuesList);
             break;
         }
     }
@@ -87,9 +98,48 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
 
     if(!jsonResponse.isEmpty()){
         njson j = njson::parse(jsonResponse.toJson());
-        QMultiHash<QString, QString> finalOutput =  flatten_json_to_map(j);
+        QHash<QString, QStringList> finalInput =  flatten_json_to_map(j);
 
-        qDebug() << finalOutput;
+//        qDebug() << finalInput;
+
+        QString csvValues;
+        int i = 0;
+        int totalColumns = finalInput.size();
+
+
+        // CSV headers
+        foreach(QString headers, finalInput.keys()){
+            QString header = headers.replace("/",".").remove(0,1).append(",");
+            csvValues.append(header);
+        }
+
+        csvValues.chop(1);
+        csvValues.append("\n");
+
+        // CSV values
+        foreach(QStringList valuesList, finalInput){
+            int prePosition  = i - 0;
+            int postPosition = totalColumns - i;
+            foreach(QString value, valuesList){
+
+                for(int x = 0; x < prePosition; x++){
+                    csvValues.append(",");
+                }
+
+                csvValues.append(value);
+
+                for(int x = 0; x < postPosition; x++){
+                    if(x < postPosition - 1)
+                        csvValues.append(",");
+                }
+
+                csvValues.append("\n");
+            }
+            i++;
+        }
+        csvValues.chop(1);
+
+        qDebug() << csvValues;
     } else {
         qWarning() << Q_FUNC_INFO << "Empty or bad json";
     }
