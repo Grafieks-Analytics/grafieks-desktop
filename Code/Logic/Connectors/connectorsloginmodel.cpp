@@ -153,7 +153,6 @@ void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 //    response = jsoncon->JsonInstance(filename);
 //    this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);
 //    emit jsonLoginStatus(response, directLogin);
-    qDebug() << "JSON FILE" <<  filename;
 
     response = jsonnewcon->JsonInstance(filename);
     this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);

@@ -3,56 +3,13 @@
 JsonNewCon::JsonNewCon(QObject *parent) : QObject(parent)
 {
 
-
-    // create JSON value
-//    njson j =R"({
-//"problems": [{
-//    "Diabetes":[{
-//        "medications":[{
-//            "medicationsClasses":[{
-//                "className":[{
-//                    "associatedDrug":[{
-//                        "name":"asprin",
-//                        "dose":"",
-//                        "strength":"500 mg"
-//                    }],
-//                    "associatedDrug#2":[{
-//                        "name":"somethingElse",
-//                        "dose":"",
-//                        "strength":"500 mg"
-//                    }]
-//                }],
-//                "className2":[{
-//                    "associatedDrug":[{
-//                        "name":"asprin",
-//                        "dose":"",
-//                        "strength":"500 mg"
-//                    }],
-//                    "associatedDrug#2":[{
-//                        "name":"somethingElse",
-//                        "dose":"",
-//                        "strength":"500 mg"
-//                    }]
-//                }]
-//            }]
-//        }],
-//        "labs":[{
-//            "missing_field": "missing_value"
-//        }]
-//    }],
-//    "Asthma":[{}]
-//}]})"_json;
-
-//    QHash<QString, QString> a =  flatten_json_to_map(j);
-
-//    qDebug() << a;
 }
 
-QHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
+QHash<QString, QStringList> JsonNewCon::flatten_json_to_map(const njson &j)
 {
-    QHash<QString, QString> result;
 
     auto flattened_j = j.flatten();
+    this->finalValueMap.clear();
 
     for (auto entry : flattened_j.items())
     {
@@ -60,8 +17,20 @@ QHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
         {
         // avoid escaping string value
         case njson::value_t::string:{
-            std::string x =  entry.value();
-            result.insert(entry.key().c_str(), x.c_str());
+            std::string stdKey = entry.key();
+            std::string stdValue = entry.value();
+
+            QString key = stdKey.c_str();
+            QString value = stdValue.c_str();
+
+            QStringList tmpValueList;
+
+            if(this->finalValueMap.contains(key)){
+                tmpValueList = this->finalValueMap.value(key);
+            }
+
+            tmpValueList.append(value);
+            this->finalValueMap.insert(key, tmpValueList);
         }
 
 
@@ -69,12 +38,26 @@ QHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
 
             // use dump() for all other value types
         default:
-            result[entry.key().c_str()] = entry.value().dump().c_str();
+            std::string stdKey = entry.key();
+            std::string stdValue = entry.value().dump();
+
+            QString key = stdKey.c_str();
+            QString value = stdValue.c_str();
+
+            QStringList tmpValueList;
+
+            if(this->finalValueMap.contains(key)){
+                tmpValueList = this->finalValueMap.value(key);
+            }
+
+            tmpValueList.append(value);
+            this->finalValueMap.insert(key, tmpValueList);
             break;
         }
     }
 
-    return result;
+
+    return this->finalValueMap;
 }
 
 void JsonNewCon::closeConnection()
@@ -117,10 +100,16 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
 
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(jsonFile.readAll());
-    njson j = njson::parse(jsonResponse.toJson());
-    QHash<QString, QString> a =  flatten_json_to_map(j);
+    qDebug() << "JSON X" << jsonResponse.isEmpty();
+    if(!jsonResponse.isEmpty()){
+        njson j = njson::parse(jsonResponse.toJson());
+        QHash<QString, QStringList> a =  flatten_json_to_map(j);
 
-    qDebug() << a;
+        qDebug() << a;
+    } else {
+        qWarning() << Q_FUNC_INFO << "Empty or bad JSON";
+    }
+
 
 //    ojson j = ojson::parse(jsonResponse.toJson());
 
