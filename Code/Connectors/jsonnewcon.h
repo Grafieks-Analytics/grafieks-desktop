@@ -11,6 +11,8 @@
 #include <QJsonObject>
 #include <QDir>
 #include <QDir>
+#include <QHash>
+
 
 
 #include "../constants.h"
@@ -23,11 +25,11 @@ using njson =  nlohmann::json;
 class JsonNewCon : public QObject
 {
     Q_OBJECT
-    QHash<QString, QStringList> finalValueMap;
+    QMultiHash<QString, QString> finalValueMap;
 
 public:
     explicit JsonNewCon(QObject *parent = nullptr);
-    QHash<QString, QStringList> flatten_json_to_map(const njson& j);
+    QMultiHash<QString, QString> flatten_json_to_map(const njson& j);
     void closeConnection();
 
     QVariantMap JsonInstance(const QString &filepath);

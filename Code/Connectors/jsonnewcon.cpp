@@ -2,14 +2,14 @@
 
 JsonNewCon::JsonNewCon(QObject *parent) : QObject(parent)
 {
-
+    this->finalValueMap.clear();
 }
 
-QHash<QString, QStringList> JsonNewCon::flatten_json_to_map(const njson &j)
+QMultiHash<QString, QString> JsonNewCon::flatten_json_to_map(const njson &j)
 {
+    QMultiHash<QString, QString> result;
 
     auto flattened_j = j.flatten();
-    this->finalValueMap.clear();
 
     for (auto entry : flattened_j.items())
     {
@@ -23,14 +23,7 @@ QHash<QString, QStringList> JsonNewCon::flatten_json_to_map(const njson &j)
             QString key = stdKey.c_str();
             QString value = stdValue.c_str();
 
-            QStringList tmpValueList;
-
-            if(this->finalValueMap.contains(key)){
-                tmpValueList = this->finalValueMap.value(key);
-            }
-
-            tmpValueList.append(value);
-            this->finalValueMap.insert(key, tmpValueList);
+            result.insert(key, value);
         }
 
 
@@ -44,20 +37,11 @@ QHash<QString, QStringList> JsonNewCon::flatten_json_to_map(const njson &j)
             QString key = stdKey.c_str();
             QString value = stdValue.c_str();
 
-            QStringList tmpValueList;
-
-            if(this->finalValueMap.contains(key)){
-                tmpValueList = this->finalValueMap.value(key);
-            }
-
-            tmpValueList.append(value);
-            this->finalValueMap.insert(key, tmpValueList);
+            result.insert(key, value);
             break;
         }
     }
-
-
-    return this->finalValueMap;
+    return result;
 }
 
 void JsonNewCon::closeConnection()
@@ -100,14 +84,14 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
 
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(jsonFile.readAll());
-    qDebug() << "JSON X" << jsonResponse.isEmpty();
+
     if(!jsonResponse.isEmpty()){
         njson j = njson::parse(jsonResponse.toJson());
-        QHash<QString, QStringList> a =  flatten_json_to_map(j);
+        QMultiHash<QString, QString> finalOutput =  flatten_json_to_map(j);
 
-        qDebug() << a;
+        qDebug() << finalOutput;
     } else {
-        qWarning() << Q_FUNC_INFO << "Empty or bad JSON";
+        qWarning() << Q_FUNC_INFO << "Empty or bad json";
     }
 
 
