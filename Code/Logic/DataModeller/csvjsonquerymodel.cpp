@@ -207,6 +207,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
 
                 QList<QByteArray> colData = line.split(*delimiter.toStdString().c_str());
+
                 QStringList x;
                 int i = 0;
                 foreach(QByteArray a, colData){
@@ -223,6 +224,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
     this->colCount = this->headerDataPreview.count();
     this->previewRowCount = this->resultData.count();
+
     file.close();
 
     this->resultData.count() > 0 ? emit csvJsonHasData(true) : emit csvJsonHasData(false);

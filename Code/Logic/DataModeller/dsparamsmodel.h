@@ -359,7 +359,6 @@ signals:
     // For Datasource Read/Write
     void dataReadComplete(uint time, bool status, QString msg);
     void csvReadComplete(uint time, bool status, QString msg);
-    void parquetReadComplete(uint time, bool status, QString msg);
     void exportDataComplete(uint time, bool status, QString msg);
     void importDataComplete(uint time, bool status, QString msg);
 

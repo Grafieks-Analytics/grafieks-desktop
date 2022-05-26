@@ -36,6 +36,7 @@ class ConnectorsLoginModel : public QObject
     QScopedPointer<ExcelCon> excelcon;
     QScopedPointer<CSVCon> csvcon;
     QScopedPointer<JsonCon> jsoncon;
+    QScopedPointer<JsonNewCon> jsonnewcon;
 
     QString m_connectedDB;
     GeneralParamsModel generalParamsModel;

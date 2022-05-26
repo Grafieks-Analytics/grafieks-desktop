@@ -15,6 +15,7 @@
 #include "teradatacon.h"
 #include "csvcon.h"
 #include "jsoncon.h"
+#include "jsonnewcon.h"
 #include "accesscon.h"
 
 
