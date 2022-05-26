@@ -70,10 +70,10 @@ QVariantMap JsonNewCon::JsonInstance(const QString &filepath)
 
     if (!file.open(QIODevice::ReadOnly)) {
 
-            outputStatus.insert("status", false);
-            outputStatus.insert("msg", file.errorString());
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", file.errorString());
 
-            file.close();
+        file.close();
     }
     else{
 
@@ -100,7 +100,7 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
         njson j = njson::parse(jsonResponse.toJson());
         QHash<QString, QStringList> finalInput =  flatten_json_to_map(j);
 
-//        qDebug() << finalInput;
+        //        qDebug() << finalInput;
 
         QString csvValues;
         int i = 0;
@@ -109,11 +109,11 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
 
         // CSV headers
         foreach(QString headers, finalInput.keys()){
-            QString header = headers.replace("/",".").remove(0,1).append(",");
+            QString header = headers.replace("/","").append(",");
             csvValues.append(header);
         }
 
-        csvValues.chop(1);
+//        csvValues.chop(1);
         csvValues.append("\n");
 
         // CSV values
@@ -123,14 +123,15 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
             foreach(QString value, valuesList){
 
                 for(int x = 0; x < prePosition; x++){
-                    csvValues.append(",");
+                    csvValues.append("null,");
                 }
 
                 csvValues.append(value);
+                csvValues.append(",");
 
                 for(int x = 0; x < postPosition; x++){
                     if(x < postPosition - 1)
-                        csvValues.append(",");
+                        csvValues.append("null,");
                 }
 
                 csvValues.append("\n");
@@ -139,31 +140,25 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
         }
         csvValues.chop(1);
 
-        qDebug() << csvValues;
+
+        QFileInfo fi(jsonPath);
+
+        QString outPath = QDir::tempPath() + "/" + fi.completeBaseName();
+        QFile csvFile(outPath);
+        if( csvFile.open(QIODevice::WriteOnly | QFile::Truncate |QIODevice::Append))
+        {
+            QByteArray ba = csvValues.toLocal8Bit();
+            QTextStream out(&csvFile);
+            out << ba;
+            csvFile.close();
+        }
+
+        jsonFile.close();
+
+        Statics::csvJsonPath = outPath;
+        Statics::separator = ",";
+
     } else {
         qWarning() << Q_FUNC_INFO << "Empty or bad json";
     }
-
-
-//    ojson j = ojson::parse(jsonResponse.toJson());
-
-//    std::string output;
-//    csv::encode_csv(j, output);
-
-
-//    QFile csvFile;
-//    QFileInfo fi(jsonPath);
-
-//    QString outPath = QDir::tempPath() + "/" + fi.completeBaseName();
-//    csvFile.setFileName(outPath);
-//    if( csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
-//    {
-//        QTextStream stream(&csvFile);
-//        stream << output.c_str();
-
-//        csvFile.close();
-//    }
-
-//    jsonFile.close();
-//    emit convertedJsonPaths(outPath);
 }
