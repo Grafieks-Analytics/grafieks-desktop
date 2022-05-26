@@ -58,7 +58,6 @@ Rectangle {
         function onCsvJsonHeaderDataChanged(tableHeaders){
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
-            console.log("TABLE HEADERS", tableHeaders)
         }
 
         // Clear table
