@@ -138,7 +138,8 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
         QByteArray line = file.readLine().simplified();
         QString lineAsString = QString(line);
-        this->dataFinalList = lineAsString.split(QRegExp(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
+        QRegExp rx(delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        this->dataFinalList = lineAsString.split(rx);
 
         if(firstLine){
 
@@ -209,7 +210,8 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 truthList.clear();
             } else {
 
-                QStringList colData = lineAsString.split(QRegExp(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
+                QRegExp rx( delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                QStringList colData = lineAsString.split(rx);
                 QStringList x;
                 int i = 0;
                 foreach(QString a, colData){
