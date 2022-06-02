@@ -18,6 +18,12 @@ ChartsThread::~ChartsThread()
 {
 }
 
+void ChartsThread::clearCache()
+{
+    this->dashboardReportDataCached.clear();
+    this->liveDashboardFilterParamsCached.clear();
+}
+
 void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId, QString datasourceType)
 {
     this->reportWhereConditions = reportWhereConditions;
