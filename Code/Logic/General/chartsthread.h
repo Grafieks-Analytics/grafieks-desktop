@@ -68,6 +68,8 @@ public:
     explicit ChartsThread(QObject *parent = nullptr);
     ~ChartsThread();
 
+    Q_INVOKABLE void clearCache();
+
     void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0, QString datasourceType = Constants::liveType);
     void queryParams(QString masterTable = "", QString masterWhereParams = "", QString masterJoinParams = "");
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
