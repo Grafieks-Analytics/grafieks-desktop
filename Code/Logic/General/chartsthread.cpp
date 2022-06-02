@@ -2113,11 +2113,9 @@ void ChartsThread::getPivotChartValues()
 
                             QString convertedDate;
                             QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
-
                             foreach(QString format, list){
                                 QVariantList dateType = dataType.checkDateTimeType(xDataListExtract->GetValue(i, j).ToString().c_str());
                                 QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), dateType.at(1).toString());
-
                                 if(format.toLower() == "day"){
                                     convertedDate += QString::number(dateTime.date().day()) + separator;
                                 } else if(format.toLower() == "month"){
