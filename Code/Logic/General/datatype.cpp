@@ -80,7 +80,7 @@ QVariantList DataType::checkDateTimeType(QString inputVariable)
                     << "dd.MM.yy" << "d. MMMM yyyy" << "ddd, d. MMMM yyyy" << "dd.MM.yyyy" << "dd.MM.yy HH:mm" << "d. MMMM yyyy HH:mm:ss z" << "dd.MM.yyyy HH:mm:ss" << "dd.MM.yy HH:mm:ss" << "dd.MM.yyyy HH:mm"
                     << "d-MMM-yyyy" << "dd/MM/yy h:mm A" << "d-MMM-yyyy h:mm:ss A"
                     << "dd MMMM yyyy" << "dddd, d MMMM yyyy" << "dd-MMM-yyyy" << "dd MMMM yyyy HH:mm:ss z" << "dd-MMM-yyyy HH:mm:ss"
-                    << "M/d/yy" << "MM/dd/yy" << "MM-dd-yy" << "M-d-yy" << "MMM d, yyyy" << "MMMM d, yyyy" << "dddd, MMMM d, yyyy" << "MMM d yyyy" << "MMMM d yyyy" << "MM-dd-yyyy" << "M-d-yyyy" << "dd/MM/yyyy" << "d/M/yyyy" << "MM/dd/yyyy" << "M/d/yyyy" << "yyyy/M/d" << "M/d/yy h:mm A" << "MM/dd/yy h:mm A" << "MM-dd-yy h:mm A" << "M-d-yy h:mm A" << "MMM d, yyyy h:mm:ss A" << "M-d-yyyy h:mm:ss A" << "yyyy-MM-dd h:mm:ss A" << "yyyy-M-d h:mm:ss a" << "dd/MM/yyyy h:mm:ss a" << "d/M/yyyy h:mm:ss a" << "MM/dd/yyyy h:mm:ss a" << "M/d/yyyy h:mm:ss a" << "MM/dd/yy h:mm:ss a" << "MM/dd/yy H:mm:ss" << "M/d/yy H:mm:ss" << "dd/MM/yyyy h:mm a" << "d/M/yyyy h:mm a" << "MM/dd/yyyy h:mm a" << "M/d/yyyy h:mm a" << "MM-dd-yy h:mm:ss a" << "M-d-yy h:mm:ss a" << "MM-dd-yyyy h:mm a" << "M-d-yyyy h:mm a" <<  "yyyy-MM-dd h:mm a" << "yyyy-M-d h:mm a" << "MMM.dd.yyyy" << "d/MMM/yyyy H:mm:ss zzz" << "dd/MMM/yy h:mm a"
+                    << "M/d/yy" << "MM/dd/yy" << "MM-dd-yy" << "M-d-yy" << "MMM d, yyyy" << "MMMM d, yyyy" << "dddd, MMMM d, yyyy" << "MMM d yyyy" << "MMMM d yyyy" << "MM-dd-yyyy" << "M-d-yyyy" << "dd/MM/yyyy" << "d/M/yyyy" << "MM/dd/yyyy" << "M/d/yyyy" << "yyyy/M/d" << "M/d/yy h:mm A" << "MM/dd/yy h:mm A" << "MM-dd-yy h:mm A" << "M-d-yy h:mm A" << "MMM d, yyyy h:mm:ss A" << "M-d-yyyy h:mm:ss A" << "yyyy-MM-dd h:mm:ss A" << "yyyy-MM-dd h:mm:ss" << "yyyy-M-d h:mm:ss a" << "dd/MM/yyyy h:mm:ss a" << "d/M/yyyy h:mm:ss a" << "MM/dd/yyyy h:mm:ss a" << "M/d/yyyy h:mm:ss a" << "MM/dd/yy h:mm:ss a" << "MM/dd/yy H:mm:ss" << "M/d/yy H:mm:ss" << "dd/MM/yyyy h:mm a" << "d/M/yyyy h:mm a" << "MM/dd/yyyy h:mm a" << "M/d/yyyy h:mm a" << "MM-dd-yy h:mm:ss a" << "M-d-yy h:mm:ss a" << "MM-dd-yyyy h:mm a" << "M-d-yyyy h:mm a" <<  "yyyy-MM-dd h:mm a" << "yyyy-M-d h:mm a" << "MMM.dd.yyyy" << "d/MMM/yyyy H:mm:ss zzz" << "dd/MMM/yy h:mm a"
                     << "d/MM/yy" << "d/MM/yy H:mm" << "d.M.yy H:mm"
                     << "yy/MM/dd HH:mm"
                     << "yyyy.MM.dd" << "yyyy.MM.dd HH:mm:ss" << "yyyy.MM.dd HH:mm"
@@ -101,6 +101,7 @@ QVariantList DataType::checkDateTimeType(QString inputVariable)
 
     output.append(isDate);
     output.append(matchedFormat);
+    qDebug() << "OUTPUT FORMAT" << output;
     return output;
 }
 
