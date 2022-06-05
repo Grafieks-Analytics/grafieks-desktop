@@ -248,6 +248,8 @@ QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnN
 
 void TableColumnsModel::searchColumnNames(int dashboardId, QString keyword)
 {
+    emit fetchingFilteredColumn();
+
     this->dashboardId = dashboardId;
 
     QVariantMap tmpCategorical, tmpNumerical, tmpDate;
@@ -385,7 +387,7 @@ void TableColumnsModel::clearFilters(){
 void TableColumnsModel::addNewDashboard(int dashboardId)
 {
     this->dashboardId = dashboardId;
-
+    emit fetchingFilteredColumn();
     emit sendFilteredColumn(this->dashboardId, this->categoricalMap, this->numericalMap, this->dateMap);
 }
 
@@ -527,6 +529,8 @@ void TableColumnsModel::generateColumnsForExtract()
 
 void TableColumnsModel::generateColumnsFromAPI()
 {
+    emit fetchingFilteredColumn();
+
     // Fetch value from settings
     QSettings settings;
     // GCS Bugfixes -- Fix Keyword
@@ -559,6 +563,7 @@ void TableColumnsModel::generateColumnsFromAPI()
 
 void TableColumnsModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
+    emit fetchingFilteredColumn();
 
     // Clear existing chart headers data
     this->numericalMap.clear();
@@ -733,6 +738,8 @@ void TableColumnsModel::columnDataReadFinished()
 
 void TableColumnsModel::generateColumns(duckdb::Connection *con)
 {
+
+    emit fetchingFilteredColumn();
 
     // Fetch data from duckdb
     QString extractPath = Statics::extractPath;

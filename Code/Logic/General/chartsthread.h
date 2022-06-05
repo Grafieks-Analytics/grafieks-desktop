@@ -59,11 +59,16 @@ class ChartsThread : public QObject
     QString redValue;
     QJsonArray dateConversionOptions;
 
+    QHash<int, QString> dashboardReportDataCached;
+    QHash<int, QString> liveDashboardFilterParamsCached;
+
     DataType dataType;
 
 public:
     explicit ChartsThread(QObject *parent = nullptr);
     ~ChartsThread();
+
+    Q_INVOKABLE void clearCache();
 
     void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0, QString datasourceType = Constants::liveType);
     void queryParams(QString masterTable = "", QString masterWhereParams = "", QString masterJoinParams = "");
@@ -94,12 +99,12 @@ public slots:
 
     void getSunburstChartValues(); // getTreeSunburstValues
     void getWaterfallChartValues(); // getLineAreaWaterfallValues
-    void getGaugeChartValues(); // float
+    void getGaugeChartValues();
     void getSankeyChartValues();
 
     void getTreeChartValues(); // getTreeSunburstValues
     void getTreeMapChartValues(); // getTreeSunburstValues
-    void getKPIChartValues(); // float
+    void getKPIChartValues();
     void getTableChartValues();
     void getPivotChartValues();
     void getStackedAreaChartValues(); // getStackedBarAreaValues

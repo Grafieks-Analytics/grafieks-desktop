@@ -150,7 +150,11 @@ void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString 
 
 void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 {
-    response = jsoncon->JsonInstance(filename);
+//    response = jsoncon->JsonInstance(filename);
+//    this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);
+//    emit jsonLoginStatus(response, directLogin);
+
+    response = jsonnewcon->JsonInstance(filename);
     this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);
     emit jsonLoginStatus(response, directLogin);
 }

@@ -23,6 +23,10 @@ Item {
     }
 
     onComponentNameChanged: {
+
+        idPlesaeWaitThorbber.visible = true
+        idPlesaeWaitText.visible = true
+
         if(GeneralParamsModel.getAPISwitch()) {
             // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
@@ -80,6 +84,9 @@ Item {
 
         // for the first time, select all values
         master = true
+
+        idPlesaeWaitThorbber.visible = false
+        idPlesaeWaitText.visible = false
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked, index){
@@ -175,6 +182,17 @@ Item {
             }
         }
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
         ComboBox {
             id: comboBox

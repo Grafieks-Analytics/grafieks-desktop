@@ -51,6 +51,7 @@ private:
     QStringList getTableListQAXObject();
 
 signals:
+    void fetchingColumnListModel();
     void columnListModelDataChanged(QString options);
 };
 

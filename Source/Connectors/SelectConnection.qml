@@ -181,19 +181,36 @@ Page {
             break;
 
         case "dropbox":
-            dropboxModal.visible = true
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.dropBoxType){
+                dropboxModal.visible = true
+            } else {
+                fileListPopup.visible = true
+            }
+
             break;
 
         case "google drive":
-            driveModal.visible = true;
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.driveType){
+                driveModal.visible = true
+            } else {
+                driveListPopup.visible = true
+            }
             break;
 
         case "box":
-            boxModal.visible = true;
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.boxType){
+                boxModal.visible = true
+            } else {
+                boxListPopup.visible = true
+            }
             break;
 
         case "google sheets":
-            sheetModal.visible = true;
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.sheetType){
+                sheetModal.visible = true
+            } else {
+                sheetListPopup.visible = true
+            }
             break;
 
         default:

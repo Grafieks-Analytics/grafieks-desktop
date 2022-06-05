@@ -55,6 +55,7 @@ QHash<int, QByteArray> ForwardOnlyDataModel::roleNames() const
 
 void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString options)
 {
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
@@ -66,6 +67,7 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString op
 
 void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE UPPER(" + col + ") LIKE UPPER('%"+searchString+"%')");
