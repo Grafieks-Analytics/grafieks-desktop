@@ -28,7 +28,7 @@ Item{
     property var originalPoint: Object()
     property var originalDimensions: Object()
 
-    property var chartUrl: "qrc:/Source/Charts/BarChartArrayInput.html";
+    property var chartUrl: "qrc:/Source/Charts/build/index.html";
     property int reportId: 0;
     property var standardChart: null;
     property int dashboardId: 0
@@ -267,7 +267,6 @@ Item{
 
         const reportProperties = ReportParamsModel.getReport(reportId);
         var chartTitle = reportProperties.chartTitle;
-        var chartUrl = reportProperties.chartUrl;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         var optionalParams = JSON.parse(reportProperties.optionalConfig);
 
@@ -433,9 +432,9 @@ Item{
                    window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
-
+        scriptValue = "";
         clearChartValue();
-        var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+        var runScriptString = 'grafieks.drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
         webEngineView.runJavaScript(runScriptString);
         if(backgroundColorValue){
             setChartBackgroundColor(backgroundColorValue);
@@ -546,7 +545,7 @@ Item{
     }
 
     function setChartUrl(chartUrl){
-        webEngineView.url = Constants.chartsBaseUrl+chartUrl;
+        // webEngineView.url = Constants.chartsBaseUrl;
     }
 
     function setChartBackgroundColor(background){
@@ -555,7 +554,7 @@ Item{
 
     // Clear the chart defaults
     function clearChartValue(){
-        webEngineView.runJavaScript('window.clearChart && clearChart()');
+        webEngineView.runJavaScript('window.grafieks.clearChart()');
     }
 
     function setReportName(reportTitle){
@@ -955,30 +954,6 @@ Item{
             if(!dataValues){
                 return;
             }
-
-            //     console.log('Webengine View Loading Status:',webEngineView.loading);
-            //     console.log('Data Values:',JSON.stringify(dataValues));
-            //     var colorData = [];
-            //     console.log("colorData5",colorData)
-            //     colorData = JSON.parse(dataValues)[1] || [];
-
-            //     console.log("colorData2" ,colorData)
-            //     console.log("dataValues" ,JSON.parse(dataValues))
-
-            //     console.log('Selected Chart Title:',chartTitle)
-            //     console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
-            //     console.log('Starting to plot');
-
-            //    var scriptValue = 'window.addEventListener("resize", function () {
-            //              window.clearChart && clearChart();
-            //             drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-            //    });';
-
-            //    clearChartValue();
-            //    webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
-
-            // Clear Chart Data
-            // ReportsDataModel.clearData();
             return;
         }
 
@@ -1048,39 +1023,16 @@ Item{
             hoverEnabled: true
             onEntered: showMenusReport()
             onExited: hideMenusReport()
-            //            onEntered: {
-            //                mainContainer.rulerStatus=true
-
-            //            }
-            //            onExited: {
-            //                mainContainer.rulerStatus=false
-            //            }
             drag{
                 target: mainContainer
-
-                //                maximumX: (mainContainer.parent.width)
-                //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
-                //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
-
-                //                 maximumY: Qt.binding(function(){ return (dashboard_summary.height - mainContainer.height + Constants.subMenuWidth) })
-                //                 maximumX: Qt.binding(function(){ return (dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth) })
-
-                //                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
-                //                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
                 minimumX: 0
                 minimumY: 0
                 maximumY: dashboard_summary.height- mainContainer.height
                 maximumX: dashboard_summary.width- mainContainer.width
-
-
-
             }
             onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
-            //            Drag.hotSpot.x: 2
-            //            Drag.hotSpot.y: 2
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
-//            onPositionChanged:  onDropAreaPositionChangedReport()
         }
 
         Rectangle{
@@ -1231,6 +1183,7 @@ Item{
             anchors.top : mainChart.bottom
             anchors.topMargin: 10
             anchors.horizontalCenter: parent.horizontalCenter
+            url: Constants.chartsBaseUrl
             onLoadingChanged: onChartLoaded(loadRequest)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
