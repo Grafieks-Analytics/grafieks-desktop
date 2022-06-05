@@ -297,7 +297,7 @@ Popup {
     // Select CSV file
     FileDialog{
         id: promptCSV
-        title: Messsages.cn_sub_csv_header
+        title: Messages.cn_sub_csv_header
 
         onAccepted: {
 

@@ -109,7 +109,7 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/CategoricalList.qml</file>
         <file>Source/Connectors/SubComponents/OdbcConnection.qml</file>
         <file>Source/Reports/SubComponents/AxisDroppedRectangle.qml</file>
-        <file>Source/Reports/SubComponents/YAxisSettingPopup.qml</file>
+        <file>Source/Reports/SubComponents/AxisSettingPopup.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeTotal.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisSettings.qml</file>
         <file>Source/Reports/SubComponents/EditColorPopup.qml</file>
@@ -150,17 +150,7 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/DateTimeFrameQuarterContent.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/DateTimeFrameYearContent.qml</file>
         <file>Source/Dashboards/SubComponents/DashboardFiltersAdd.qml</file>
-        <file>Source/Charts/Data/d3.v4-alpha.40.min.js</file>
-        <file>Source/Charts/Data/general.css</file>
-        <file>Source/Charts/Data/tabulator_style.css</file>
-        <file>Source/Charts/Data/tabulator.min.css</file>
-        <file>Source/Charts/Data/tabulator.min.js</file>
-        <file>Source/Charts/BarChartArrayInput.html</file>
-        <file>Source/Charts/Data/qwebchannel.js</file>
-        <file>Source/Charts/Data/d3.v4.min.js</file>
-        <file>Source/Charts/AreaChart.html</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ColorByMenuOption.qml</file>
-        <file>Source/Charts/StackedBarChart.html</file>
         <file>Source/Connectors/SubComponents/ExcelOdbcConnection.qml</file>
         <file>Source/Connectors/SubComponents/PostgresConnection.qml</file>
         <file>Source/Connectors/SubComponents/MSSqlConnection.qml</file>
@@ -172,78 +162,22 @@
         <file>Source/Connectors/SubComponents/OracleConnection.qml</file>
         <file>Source/Connectors/SubComponents/SnowflakeConnection.qml</file>
         <file>Source/Connectors/SubComponents/TeradataConnection.qml</file>
-        <file>Source/Charts/Data/d3-scale-chromatic.v1.min.js</file>
-        <file>Source/Charts/Data/d3DefaultConfig.js</file>
-        <file>Source/Charts/LineChart.html</file>
         <file>Source/Others/TableTest.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LineTypePopup.qml</file>
-        <file>Source/Charts/PieChart.html</file>
         <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
-        <file>Source/Charts/DoughnutChart.html</file>
-        <file>Source/Charts/ScatterChart.html</file>
-        <file>Source/Charts/KPI.html</file>
-        <file>Source/Charts/TreeChart.html</file>
         <file>Source/MainSubComponents/VerticalLineTpl.qml</file>
-        <file>Source/Charts/RadialTreeChart.html</file>
-        <file>Source/Charts/Data/d3.v3.min.js</file>
-        <file>Source/Charts/FunnelChart.html</file>
-        <file>Source/Charts/TreeMapChart.html</file>
-        <file>Source/Charts/SunburstChart.html</file>
-        <file>Source/Charts/RadarChart.html</file>
-        <file>Source/Charts/Data/d3.v5.min.js</file>
-        <file>Source/Charts/Data/funnel.js</file>
-        <file>Source/Charts/Data/d3-funnel.min.js</file>
-        <file>Source/Charts/Data/radar.js</file>
-        <file>Source/Charts/GeoChart.html</file>
-        <file>Source/Charts/Data/d3-geo-projection.v2.min.js</file>
-        <file>Source/Charts/ChordChart.html</file>
-        <file>Source/Charts/SankeyChart.html</file>
         <file>Source/Connectors/SubComponents/GithubConnection.qml</file>
         <file>Source/Connectors/SubComponents/GithubConnectionFiles.qml</file>
-        <file>Source/Charts/Data/geoCoordinates.js</file>
-        <file>Source/Charts/HeatmapChart.html</file>
-        <file>Source/Charts/MultipleLineChart.html</file>
-        <file>Source/Charts/HorizontalMultipleLineChart.html</file>
-        <file>Source/Charts/Data/sankeySingle.js</file>
         <file>Source/Connectors/SubComponents/JsonConnection.qml</file>
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
-        <file>Source/Charts/WaterfallChart.html</file>
-        <file>Source/Charts/GaugeChart.html</file>
-        <file>Source/Charts/Data/utils.js</file>
-        <file>Source/Charts/TableChart.html</file>
-        <file>Source/Charts/LineBarChart.html</file>
-        <file>Source/Charts/NormalizedStackedBarChart.html</file>
-        <file>Source/Charts/NormalizedStackedAreaChart.html</file>
-        <file>Source/Charts/StackedAreaChart.html</file>
-        <file>Source/Charts/Data/pivot.min.css</file>
-        <file>Source/Charts/Data/pivot.min.js</file>
         <file>Source/MainSubComponents/BusyIndicatorTpl.qml</file>
-        <file>Source/Charts/BarGroupedChart.html</file>
-        <file>Source/Charts/Error.html</file>
-        <file>Source/Charts/PivotTableMultipleSubtotal.html</file>
-        <file>Source/Charts/PivotTable.html</file>
-        <file>Source/Charts/Data/bootstrap-3.3.1/js/bootstrap.js</file>
-        <file>Source/Charts/Data/bootstrap-3.3.1/js/bootstrap.min.js</file>
-        <file>Source/Charts/Data/bootstrap-3.3.1/js/npm.js</file>
-        <file>Source/Charts/Data/orb.css</file>
-        <file>Source/Charts/Data/orb.js</file>
-        <file>Source/Charts/Data/orb.min.css</file>
-        <file>Source/Charts/Data/orb.min.js</file>
-        <file>Source/Charts/Data/react-0.12.2.js</file>
-        <file>Source/Charts/Data/react-0.12.2.min.js</file>
-        <file>Source/Charts/Data/demo.data.js</file>
-        <file>Source/Charts/Data/bootstrap-3.3.1/css/bootstrap.css</file>
-        <file>Source/Charts/Data/bootstrap-3.3.1/css/bootstrap-theme.css</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/PivotThemesPopup.qml</file>
-        <file>Source/Charts/HorizontalBarChart.html</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisItemMenuPopup.qml</file>
-        <file>Source/Charts/HorizontalStackBarChart.html</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/GithubDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/SheetDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/DriveDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/DropboxDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
-        <file>Source/Charts/HorizontalBarGroupedChart.html</file>
         <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
         <file>Source/Modellers/SubComponents/DataPreviewTable_backup.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CategoricalList.qml</file>
@@ -267,24 +201,8 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataGreaterThan.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeNumerical.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeCategorical.qml</file>
-        <file>Source/Charts/HorizontalLineChart.html</file>
-        <file>Source/Charts/MultipleLineChart.html</file>
-        <file>Source/Charts/HorizontalMultipleLineChart.html</file>
-        <file>Source/Charts/MultipleAreaChart.html</file>
-        <file>Source/Charts/HorizontalAreaChart.html</file>
-        <file>Source/Charts/HorizontalMultipleAreaChart.html</file>
         <file>Source/Splash.qml</file>
         <file>Source/Main.qml</file>
-        <file>Source/Charts/Data/dataTables.semanticui.min.js</file>
-        <file>Source/Charts/Data/semantic-icons.css</file>
-        <file>Source/Charts/Data/dataTables.min.js</file>
-        <file>Source/Charts/Data/dataTables.semanticui.min.css</file>
-        <file>Source/Charts/Data/jquery-3.5.1.min.js</file>
-        <file>Source/Charts/Data/icons.ttf</file>
-        <file>Source/Charts/Data/icons.woff</file>
-        <file>Source/Charts/Data/icons.woff2</file>
-        <file>Source/Charts/Data/semantic.min.css</file>
-        <file>Source/Charts/Data/semantic.min.js</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/TableCustomization.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/KPICustomization.qml</file>
         <file>Source/Others/About.qml</file>
@@ -301,5 +219,15 @@
         <file>Source/MainSubComponents/VersionMismatch.qml</file>
         <file>Source/MainSubComponents/UpdateApplication.qml</file>
         <file>Source/Messages.qml</file>
+        <file>Source/Reports/reportUtils.js</file>
+        <file>Source/Reports/reports.js</file>
+        <file>Source/Reports/chartsConfig.js</file>
+        <file>Source/Reports/drawChartUtils.js</file>
+        <file>Source/Reports/dataPanesDropHandlers.js</file>
+        <file>Source/Reports/colorPalleteHandler.js</file>
+        <file>Source/Reports/chartsWebViewHandlers.js</file>
+        <file>Source/Charts/build/index.html</file>
+        <file>Source/Charts/build/grafieks-charts.js</file>
+        <file>Source/Charts/build/styles.css</file>
     </qresource>
 </RCC>
