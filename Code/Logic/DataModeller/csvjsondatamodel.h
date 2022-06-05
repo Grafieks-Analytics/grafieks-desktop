@@ -19,10 +19,10 @@ class CSVJsonDataModel : public QAbstractTableModel
 {
     Q_OBJECT
     QStringList masterResultData;
-    QList<QByteArray> headerDataFinal;
+    QStringList headerDataFinal;
     QString fileName;
 
-    QHash<int, QByteArray> m_roleNames;
+    QHash<int, QString> m_roleNames;
     QStringList modelOutput;
     int totalRowCount;
     int totalColCount;
@@ -52,6 +52,7 @@ public:
 private:
 
 signals:
+    void fetchingColumnListModel();
     void columnListModelDataChanged(QString options = "");
 
 };

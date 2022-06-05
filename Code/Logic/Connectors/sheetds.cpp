@@ -50,8 +50,6 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::sheetIntType;
-
         // Get Files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
@@ -183,6 +181,9 @@ void SheetDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+
+        Statics::onlineStorageType = Constants::sheetIntType;
+
         QStringList requiredExtensions;
         requiredExtensions << ".gsheet";
 

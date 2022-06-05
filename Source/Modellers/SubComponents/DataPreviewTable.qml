@@ -58,7 +58,6 @@ Rectangle {
         function onCsvJsonHeaderDataChanged(tableHeaders){
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
-            console.log("TABLE HEADERS", tableHeaders)
         }
 
         // Clear table
@@ -212,16 +211,49 @@ Rectangle {
                     renderType: Text.NativeRendering
                     // text: modelData
                     onObjectNameChanged: {
+                        var colValue;
+                        var newDate;
                         if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
-                            textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
+                            colValue = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
+                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
+                                newDate = new Date(colValue)
+                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
+                            } else {
+                                textItem1.text = colValue
+                            }
+
                         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
+                            colValue = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
+                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
+                                newDate = new Date(colValue)
+                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
+                            } else {
+                                textItem1.text = colValue
+                            }
                         } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
-                            textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
+                            colValue = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
+                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
+                                newDate = new Date(colValue)
+                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
+                            } else {
+                                textItem1.text = colValue
+                            }
                         } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-                            textItem1.text = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
+                            colValue = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
+                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
+                                newDate = new Date(colValue)
+                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
+                            } else {
+                                textItem1.text = colValue
+                            }
                         } else {
-                            textItem1.text = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
+                            colValue = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
+                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
+                                newDate = new Date(colValue)
+                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
+                            } else {
+                                textItem1.text = colValue
+                            }
                         }
                     }
 

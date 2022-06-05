@@ -59,6 +59,10 @@ Rectangle{
 
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.categoricalTab){
+
+                idPlesaeWaitText.visible = true
+                idPlesaeWaitThorbber.visible = true
+
                 var colName = ReportParamsModel.colName
                 var colData
                 ReportParamsModel.removeTmpSelectedValues(0, true)
@@ -145,6 +149,9 @@ Rectangle{
             }
 
         }
+
+        idPlesaeWaitText.visible = false
+        idPlesaeWaitThorbber.visible = false
     }
 
 
@@ -430,6 +437,18 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
 
         // Checkbox ListView

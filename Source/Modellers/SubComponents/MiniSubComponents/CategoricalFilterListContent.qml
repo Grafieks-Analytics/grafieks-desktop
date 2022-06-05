@@ -73,7 +73,14 @@ Rectangle{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -81,7 +88,14 @@ Rectangle{
         target: ExcelDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -89,7 +103,14 @@ Rectangle{
         target: ForwardOnlyDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -97,7 +118,14 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -117,7 +145,6 @@ Rectangle{
             mainCheckBox.visible = true
         }
     }
-
 
     // SLOT function
     function slotDataCleared(){
@@ -460,11 +487,19 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
-        Text {
-            id: plesaeWaitText
-            text: "PLEASE WAIT AA"
-
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
         }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+
 
         // Checkbox ListView
         // List Filters starts
