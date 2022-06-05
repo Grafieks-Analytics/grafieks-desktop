@@ -278,7 +278,7 @@ QtObject {
 
     // Charts Start
 
-    property string chartsBaseUrl: "qrc:/Source/Charts/"
+    property string chartsBaseUrl: "qrc:/Source/Charts/build/index.html"
 
     property string barChartTitle: "Bar Chart"
     property string pieChartTitle: "Pie Chart"
@@ -316,7 +316,7 @@ QtObject {
     property string multipleHorizontalAreaChartTitle: "Multiple Horizontal Area Chart"
 
     // Chart Urls
-    property string baseChartUrl: "qrc:/Source/Charts/";
+    property string baseChartUrl: "qrc:/Source/Charts/build/index.html";
     property string waterfallChartUrl: "WaterfallChart.html"
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
