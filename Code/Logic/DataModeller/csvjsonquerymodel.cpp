@@ -136,25 +136,29 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
     while(!file.atEnd()){
 
-        const QByteArray line = file.readLine().simplified();
-        this->dataFinal = line.split(*delimiter.toStdString().c_str());
+        QByteArray line = file.readLine().simplified();
+        QString lineAsString = QString(line);
+        QRegExp rx(delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        this->dataFinalList = lineAsString.split(rx);
 
         if(firstLine){
 
             firstLine = false;
 
-            if (this->dataFinal.at(0).contains("\xEF\xBB\xBF")){
-                this->dataFinal[0] =  this->dataFinal.at(0).right(this->dataFinal.at(0).length() - 3);
-            }
+//            if (this->dataFinalList.at(0).contains("\xEF\xBB\xBF")){
+//                this->dataFinalList[0] =  this->dataFinalList.at(0).right(this->dataFinal.at(0).length() - 3);
+//            }
 
-            for(int i = 0; i < this->dataFinal.length(); i++){
-                if(!this->hideParams.contains(this->dataFinal.at(i).toStdString().c_str())){
-                    this->headerDataPreview.append(db + "." + this->dataFinal.at(i).toStdString().c_str());
+            for(int i = 0; i < this->dataFinalList.length(); i++){
+                if(!this->hideParams.contains(this->dataFinalList.at(i))){
+                    this->headerDataPreview.append(db + "." + this->dataFinalList.at(i));
                 } else {
                     this->rejectIds.append(i);
                 }
-                this->columnNamesMap.insert(i, this->dataFinal.at(i).toStdString().c_str());
+                this->columnNamesMap.insert(i, this->dataFinalList.at(i));
             }
+
+
 
         } else {
 
@@ -164,17 +168,18 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
             if(this->totalFiltersCount > 0){
 
+
                 if(categoricalFilter != nullptr)
                     foreach(FilterCategoricalList *tmpCategoricalFilter, this->categoricalFilter->getFilters()){
                         int key = this->columnNamesMap.key(tmpCategoricalFilter->columnName());
-                        bool returnVar = filterCsvJson.filteredValue(this->dataFinal.at(key), tmpCategoricalFilter->value(), tmpCategoricalFilter->slug());
+                        bool returnVar = filterCsvJson.filteredValue(this->dataFinalList.at(key), tmpCategoricalFilter->value(), tmpCategoricalFilter->slug());
                         truthList.append(returnVar);
                     }
 
                 if(numericalFilter != nullptr){
                     foreach(FilterNumericalList *tmpNumericalFilter, this->numericalFilter->getFilters()){
                         int key = this->columnNamesMap.key(tmpNumericalFilter->columnName());
-                        bool returnVar = filterCsvJson.filteredValue(this->dataFinal.at(key), tmpNumericalFilter->value(), tmpNumericalFilter->slug());
+                        bool returnVar = filterCsvJson.filteredValue(this->dataFinalList.at(key), tmpNumericalFilter->value(), tmpNumericalFilter->slug());
                         truthList.append(returnVar);
                     }
                 }
@@ -182,7 +187,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 if(dateFilter != nullptr){
                     foreach(FilterDateList *tmpDateFilter, this->dateFilter->getFilters()){
                         int key = this->columnNamesMap.key(tmpDateFilter->columnName());
-                        bool returnVar = filterCsvJson.filteredValue(this->dataFinal.at(key), tmpDateFilter->value(), tmpDateFilter->slug());
+                        bool returnVar = filterCsvJson.filteredValue(this->dataFinalList.at(key), tmpDateFilter->value(), tmpDateFilter->slug());
                         truthList.append(returnVar);
                     }
                 }
@@ -190,9 +195,9 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 if(!truthList.contains(false)){
                     QStringList x;
                     int i = 0;
-                    foreach(QByteArray a, this->dataFinal){
+                    foreach(QString a, this->dataFinalList){
                         if(!this->rejectIds.contains(i)){
-                            x.append(a.toStdString().c_str()); 
+                            x.append(a);
                         }
 
                         i++;
@@ -205,13 +210,13 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 truthList.clear();
             } else {
 
-
-                QList<QByteArray> colData = line.split(*delimiter.toStdString().c_str());
+                QRegExp rx( delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                QStringList colData = lineAsString.split(rx);
                 QStringList x;
                 int i = 0;
-                foreach(QByteArray a, colData){
+                foreach(QString a, colData){
                     if(!this->rejectIds.contains(i)){
-                        x.append(a.toStdString().c_str());
+                        x.append(a);
                     }
                     i++;
                 }
@@ -223,6 +228,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
     this->colCount = this->headerDataPreview.count();
     this->previewRowCount = this->resultData.count();
+
     file.close();
 
     this->resultData.count() > 0 ? emit csvJsonHasData(true) : emit csvJsonHasData(false);

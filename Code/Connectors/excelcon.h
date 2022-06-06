@@ -12,15 +12,9 @@
 #include <QAxObject>
 #include <QDir>
 
-#include <jsoncons/json.hpp>
-#include <jsoncons_ext/csv/csv.hpp>
-
 #include "../constants.h"
 #include "../Messages.h"
 #include "../statics.h"
-
-using namespace jsoncons;
-using namespace jsoncons::csv;
 
 /*!
  * \brief Handles the connection with Excel database across the application

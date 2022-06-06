@@ -217,5 +217,6 @@
         <file>Images/icons/connectors/excel.png</file>
         <file>Images/logos/logo_large.png</file>
         <file>Images/icons/Data Sourse.png</file>
+        <file>Images/icons/connectors/json.png</file>
     </qresource>
 </RCC>

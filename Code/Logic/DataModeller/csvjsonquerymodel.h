@@ -36,7 +36,7 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QStringList headerDataPreview;
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
-    QList<QByteArray> dataFinal;
+    QStringList dataFinalList;
     QStringList hideParams;
 
     QMap<int, QString> columnNamesMap;

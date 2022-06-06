@@ -13,6 +13,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import "../chartsConfig.js" as ChartsConfig
 
 Rectangle{
     id: rectangle_left
@@ -71,6 +72,8 @@ Rectangle{
         // If any mapping is added please update 
         // New Reports.qml File in onChartTitleChanged function
 
+        ChartsConfig.setAllChartsModel();
+
         for(var i=0; i< allCharts.count; i++){
             var chartTitle = allCharts.get(i).title;
 
@@ -109,7 +112,6 @@ Rectangle{
         if(allChartsMapping[chartTitle].disabled){
             return
         }
-        report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.previousChartTitle = report_desiner_page.chartTitle;
         report_desiner_page.chartTitle = chartTitle;
 
@@ -122,19 +124,18 @@ Rectangle{
         if(chartTitle === Constants.barChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
-                    chartHtml = Constants.horizontalBarChartUrl;
-//                    switchChart(Constants.horizontalBarChartTitle);
+                    chartTitle = Constants.horizontalBarChartTitle;
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
-                    chartHtml = Constants.horizontalStackedBarChartUrl;
+                    chartTitle = Constants.horizontalStackedBarChartTitle;
                 }else if(xAxisColumns.length === 1 && yAxisColumns.length === 2){
-                    chartHtml = Constants.horizontalBarGroupedChartUrl;
+                    chartTitle = Constants.horizontalBarGroupedChartTitle;
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
-                    chartHtml = Constants.stackedBarChartUrl;
+                    chartTitle = Constants.stackedBarChartTitle;
                 }else if(xAxisColumns.length === 1 && yAxisColumns.length === 2){
-                    chartHtml = Constants.barGroupedChartUrl;
+                    chartTitle = Constants.barGroupedChartTitle;
                 }
             }
         }
@@ -178,39 +179,28 @@ Rectangle{
         }
         
 
-        console.log(chartTitle);
-        console.log('Loading Chart from LeftMenuBarReports.qml',chartHtml)
-        loadchart("../Charts/"+chartHtml);
-
 //        add toggle left menu
 
 
 //        yAxisVisible  = allCharts.get(index).yAxisVisible;
 
         const yAxisLabelNameData = allCharts.get(index).yAxisLabelName;
-        if(yAxisLabelNameData){
-            yAxisLabelName = yAxisLabelNameData;
-        }else{
-            yAxisLabelName = Constants.yAxisName
-        }
+        yAxisLabelName = yAxisLabelNameData ? yAxisLabelNameData: Constants.yAxisName; 
 
         const xAxisLabelNameData = allCharts.get(index).xAxisLabelName;
-        if(xAxisLabelNameData){
-            xAxisLabelName = xAxisLabelNameData;
-        }else{
-            xAxisLabelName = Constants.xAxisName
-        }
-
-
-        var chartObject = allCharts.get(index);
-
+        xAxisLabelName = xAxisLabelNameData ? xAxisLabelNameData: Constants.xAxisName;
+        
+        // Setting line chart visibilities at global level
         lineTypeChartVisible = allCharts.get(index).lineTypeChartVisible;
         pivotThemeVisible = !!allCharts.get(index).themeVisible;
 
+        makeChartActive(index)
+    }
+
+    function makeChartActive(index){
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;
         allCharts.set(index,{activeChart: true})
-
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -264,7 +254,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  getChart(chartHtml,index,title,mainCustomizations,subMenuCustomizations)
+                    onClicked:  getChart(chartHtml,index,title,mainCustomizations,subMenuCustomizations) // When chart is clicked from the right side, Chart is switched 
                     onEntered: displayToolTipVisible=true
                     onExited: displayToolTipVisible=false
                 }
