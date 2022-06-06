@@ -900,7 +900,7 @@ Item {
                         }
                         Text {
                             id: dropDownText
-                            text: qsTr("Drop Down")
+                            text: qsTr("Drop Downss")
                             font.pixelSize: 17
                             anchors.top: radioGroup1.bottom
 
@@ -912,6 +912,7 @@ Item {
 
                         }
                         ColumnLayout {
+                            id:radioGroup2
                             anchors.top: dropDownText.bottom
                             x:15
                             anchors.margins: 15
@@ -987,6 +988,95 @@ Item {
 
 
                         }
+                         Text {
+                            id: dropDownTextDate
+                            text: qsTr("Date Range")
+                            font.pixelSize: 17
+                            anchors.top: radioGroup2.bottom
+
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                            horizontalAlignment: Text.horizontalAlignment
+                            anchors.left: parent.left
+                            anchors.leftMargin: 10
+                            anchors.margins: 15
+
+                        }
+                        // ColumnLayout {
+                        //     anchors.top: dropDownText.bottom
+                        //     x:15
+                        //     anchors.margins: 15
+                        //     spacing: 15
+                        //     RadioButton {
+                        //         id: control3
+                        //         ButtonGroup.group: buttonGroupFilterType
+                        //         indicator: Rectangle {
+                        //             implicitWidth: 16
+                        //             implicitHeight: 16
+                        //             x: control3.width - width - control3.rightPadding
+                        //             y: parent.height / 2 - height / 2
+                        //             radius: 13
+                        //             color: "transparent"
+                        //             border.color: "black"
+
+                        //             Rectangle {
+                        //                 width: 16/2
+                        //                 height: width
+                        //                 radius: width/2
+                        //                 anchors.verticalCenter: parent.verticalCenter
+                        //                 anchors.horizontalCenter: parent.horizontalCenter
+                        //                 color: "black"
+                        //                 visible: control3.checked
+                        //             }
+                        //         }
+
+                        //         contentItem: Text {
+                        //             rightPadding: control3.indicator.width + control3.spacing+60
+                        //             text: qsTr("Date")
+                        //             elide: Text.ElideRight
+                        //             font.pixelSize: 15
+                        //             verticalAlignment: Text.AlignVCenter
+                        //         }
+
+
+
+                        //     }
+                        //     RadioButton {
+                        //         id: control4
+                        //         ButtonGroup.group: buttonGroupFilterType
+                        //         indicator: Rectangle {
+                        //             implicitWidth: 16
+                        //             implicitHeight: 16
+                        //             x: control4.width - width - control4.rightPadding
+                        //             y: parent.height / 2 - height / 2
+                        //             radius: 13
+                        //             color: "transparent"
+                        //             border.color: "black"
+
+                        //             Rectangle {
+                        //                 width: 16/2
+                        //                 height: width
+                        //                 radius: width/2
+                        //                 anchors.verticalCenter: parent.verticalCenter
+                        //                 anchors.horizontalCenter: parent.horizontalCenter
+                        //                 color: "black"
+                        //                 visible: control4.checked
+                        //             }
+                        //         }
+
+                        //         contentItem: Text {
+                        //             rightPadding: control4.indicator.width + control4.spacing+49
+                        //             text: qsTr("Multiple Value")
+                        //             elide: Text.ElideRight
+                        //             font.pixelSize: 15
+                        //             verticalAlignment: Text.AlignVCenter
+                        //         }
+
+
+
+                        //     }
+
+
+                        // }
                     }
                 }
                 Item {

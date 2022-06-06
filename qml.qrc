@@ -301,5 +301,6 @@
         <file>Source/MainSubComponents/VersionMismatch.qml</file>
         <file>Source/MainSubComponents/UpdateApplication.qml</file>
         <file>Source/Messages.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataDateRange.qml</file>
     </qresource>
 </RCC>
