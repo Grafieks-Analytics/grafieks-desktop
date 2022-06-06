@@ -102,6 +102,7 @@ Rectangle {
             DelegateChoice { roleValue: Constants.filterCategoricalTypes[1]; FilterDataListSingle { componentName: name } }
             DelegateChoice { roleValue: Constants.filterCategoricalTypes[2]; FilterDataSingleDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterCategoricalTypes[3]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[4]; FilterDataDateRange { componentName: name } }
             DelegateChoice { roleValue: Constants.filterNumericalTypes[0]; FilterDataRange { componentName: name } }
             DelegateChoice { roleValue: Constants.filterNumericalTypes[1]; FilterDataEqual { componentName: name } }
             DelegateChoice { roleValue: Constants.filterNumericalTypes[2]; FilterDataNotEqual { componentName: name } }
