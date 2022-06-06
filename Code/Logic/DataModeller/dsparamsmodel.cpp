@@ -3,8 +3,6 @@
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
 {
 
-    //    db.LoadExtension<duckdb::ParquetExtension>();
-
     m_section = Constants::defaultTabSection;
     m_category = Constants::defaultCategory;
     m_subCategory = Constants::defaultSubCategory;

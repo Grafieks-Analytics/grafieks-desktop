@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../dataPanesDropHandlers.js" as DataPanesDropHandler
+
 Rectangle{
     id:rightDataDrag
     height: 24
@@ -174,10 +176,12 @@ Rectangle{
 
                 ReportParamsModel.itemName = key;
                 ReportParamsModel.itemType = itemType;
-                ReportParamsModel.setXAxisActive(xAxisDropEligible(key));
-                ReportParamsModel.setYAxisActive(yAxisDropEligible(key));
-                report_desiner_page.row3Active = row3AxisDropEligible(key);
-                report_desiner_page.row4Active = row4AxisDropEligible(key);
+                
+                report_desiner_page.xaxisActive = DataPanesDropHandler.xAxisDropEligible(itemType);
+                report_desiner_page.yaxisActive = DataPanesDropHandler.yAxisDropEligible(itemType);
+
+                report_desiner_page.row3Active = DataPanesDropHandler.row3AxisDropEligible(itemType);
+                report_desiner_page.row4Active = DataPanesDropHandler.row4AxisDropEligible(itemType);
 
                 if(isDropEligible(itemType, key)){
                     ReportParamsModel.setColorByActive(true);
@@ -187,8 +191,10 @@ Rectangle{
             }else{
                 rightDataDrag.color= "white"
                 rightDataDrag.radius=0
-                ReportParamsModel.setXAxisActive(false);
-                ReportParamsModel.setYAxisActive(false);
+
+                report_desiner_page.xaxisActive = false;
+                report_desiner_page.yaxisActive = false;
+
                 ReportParamsModel.setColorByActive(false);
                 report_desiner_page.row3Active = false;
                 report_desiner_page.row4Active = false;

@@ -71,15 +71,18 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
 
         int dataTypeCounter = 0;
         while(!file.atEnd()){
-            const QByteArray line = file.readLine().simplified();
+            QByteArray line = file.readLine().simplified();
+            QString lineAsString = QString(line);
+
             if(firstLine){
 
                 firstLine = false;
-                this->headerDataFinal = line.split(*delimiter.toStdString().c_str());
+                QRegExp rx( delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                this->headerDataFinal = lineAsString.split(rx);
 
-                if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){
-                    this->headerDataFinal[0] =  this->headerDataFinal.at(0).right(this->headerDataFinal.at(0).length() - 3);
-                }
+//                if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){
+//                    this->headerDataFinal[0] =  this->headerDataFinal.at(0).right(this->headerDataFinal.at(0).length() - 3);
+//                }
 
                 for(int i = 0; i < this->headerDataFinal.length(); i++){
                     this->m_roleNames.insert(i, this->headerDataFinal.at(i));

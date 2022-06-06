@@ -18,6 +18,12 @@ ChartsThread::~ChartsThread()
 {
 }
 
+void ChartsThread::clearCache()
+{
+    this->dashboardReportDataCached.clear();
+    this->liveDashboardFilterParamsCached.clear();
+}
+
 void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId, QString datasourceType)
 {
     this->reportWhereConditions = reportWhereConditions;
@@ -157,6 +163,16 @@ void ChartsThread::getBarChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
@@ -170,6 +186,16 @@ void ChartsThread::getBarChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -242,6 +268,14 @@ void ChartsThread::getBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
     emit signalBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -283,6 +317,16 @@ void ChartsThread::getGroupedBarChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
@@ -301,6 +345,16 @@ void ChartsThread::getGroupedBarChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -375,6 +429,15 @@ void ChartsThread::getGroupedBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -403,6 +466,16 @@ void ChartsThread::getNewGroupedBarChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
@@ -421,6 +494,16 @@ void ChartsThread::getNewGroupedBarChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -505,6 +588,14 @@ void ChartsThread::getNewGroupedBarChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalNewGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -540,6 +631,16 @@ void ChartsThread::getLineBarChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
@@ -554,6 +655,16 @@ void ChartsThread::getLineBarChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -641,6 +752,14 @@ void ChartsThread::getLineBarChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalLineBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -666,6 +785,16 @@ void ChartsThread::getPieChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
@@ -680,6 +809,16 @@ void ChartsThread::getPieChartValues()
         }
 
     } else{
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -747,6 +886,14 @@ void ChartsThread::getPieChartValues()
     doc.setArray(data);
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalPieChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -774,6 +921,16 @@ void ChartsThread::getFunnelChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
@@ -788,6 +945,16 @@ void ChartsThread::getFunnelChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -864,6 +1031,14 @@ void ChartsThread::getFunnelChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalFunnelChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -888,6 +1063,16 @@ void ChartsThread::getRadarChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
@@ -902,6 +1087,16 @@ void ChartsThread::getRadarChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -978,6 +1173,14 @@ void ChartsThread::getRadarChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalRadarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -1009,6 +1212,16 @@ void ChartsThread::getScatterChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
@@ -1028,6 +1241,16 @@ void ChartsThread::getScatterChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -1133,6 +1356,14 @@ void ChartsThread::getScatterChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalScatterChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -1150,6 +1381,16 @@ void ChartsThread::getScatterChartNumericalValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT SUM(\"" + xAxisColumn + "\"), SUM(\"" + yAxisColumn + "\") FROM "+tableName;
@@ -1159,6 +1400,16 @@ void ChartsThread::getScatterChartNumericalValues()
         yAxisValue = dataListExtract->GetValue(1, 0).ToString().c_str();
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -1213,6 +1464,14 @@ void ChartsThread::getScatterChartNumericalValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalScatterChartNumericalValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -1244,6 +1503,16 @@ void ChartsThread::getHeatMapChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
@@ -1263,6 +1532,16 @@ void ChartsThread::getHeatMapChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -1376,6 +1655,14 @@ void ChartsThread::getHeatMapChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalHeatMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -1406,6 +1693,16 @@ void ChartsThread::getGaugeChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
@@ -1418,6 +1715,16 @@ void ChartsThread::getGaugeChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -1470,6 +1777,14 @@ void ChartsThread::getGaugeChartValues()
     doc.setArray(cols);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
     emit signalGaugeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -1499,6 +1814,16 @@ void ChartsThread::getSankeyChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
@@ -1513,6 +1838,16 @@ void ChartsThread::getSankeyChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -1589,9 +1924,17 @@ void ChartsThread::getSankeyChartValues()
 
 
     QJsonDocument doc(output);
-    QString strJson(doc.toJson(QJsonDocument::Compact));
+    QString strData(doc.toJson(QJsonDocument::Compact));
 
-    emit signalSankeyChartValues(strJson, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalSankeyChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 
 }
 
@@ -1621,6 +1964,16 @@ void ChartsThread::getKPIChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
@@ -1633,6 +1986,16 @@ void ChartsThread::getKPIChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -1683,6 +2046,14 @@ void ChartsThread::getKPIChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalKPIChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -1732,6 +2103,16 @@ void ChartsThread::getTableChartValues()
 
 
     if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -1840,6 +2221,16 @@ void ChartsThread::getTableChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -2015,6 +2406,14 @@ void ChartsThread::getTableChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 
 }
@@ -2073,6 +2472,16 @@ void ChartsThread::getPivotChartValues()
     if(xAxisColumnList.length() > 0 && yAxisColumnList.length() > 0){
         if(this->datasourceType == Constants::extractType){
 
+            // Check the cache if data exists and the params havent changed
+            // Cache will currently work only on dashboards
+            if(this->currentChartSource == Constants::dashboardScreen){
+
+                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                    emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                    return;
+                }
+            }
+
             // Fetch data from extract
             QString tableName = this->getTableName();
             QString xQueryString =  "SELECT ";
@@ -2113,11 +2522,9 @@ void ChartsThread::getPivotChartValues()
 
                             QString convertedDate;
                             QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
-
                             foreach(QString format, list){
                                 QVariantList dateType = dataType.checkDateTimeType(xDataListExtract->GetValue(i, j).ToString().c_str());
                                 QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), dateType.at(1).toString());
-
                                 if(format.toLower() == "day"){
                                     convertedDate += QString::number(dateTime.date().day()) + separator;
                                 } else if(format.toLower() == "month"){
@@ -2160,6 +2567,16 @@ void ChartsThread::getPivotChartValues()
             }
 
         } else {
+
+            // Check the cache if data exists and the params havent changed
+            // Cache will currently work only on dashboards
+            if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                    emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                    return;
+                }
+            }
 
             // Fetch data from live
             if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -2373,6 +2790,13 @@ void ChartsThread::getPivotChartValues()
 
         QString strData = doc.toJson(QJsonDocument::Compact);
 
+        // Cache report results
+        this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+        // Cache filter params
+        if(this->datasourceType != Constants::extractType)
+            this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
 
         emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
@@ -2410,6 +2834,16 @@ void ChartsThread::getMultiLineChartValues()
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
@@ -2428,6 +2862,16 @@ void ChartsThread::getMultiLineChartValues()
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -2540,6 +2984,14 @@ void ChartsThread::getMultiLineChartValues()
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     emit signalMultiLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
@@ -2564,6 +3016,16 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
@@ -2577,6 +3039,16 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -2653,6 +3125,14 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     if(identifier == "getAreaChartValues"){
         emit signalAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getLineChartValues"){
@@ -2698,6 +3178,16 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
     QScopedPointer<QHash<QString, int>> masterHash(new QHash<QString, int>);
 
     if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from extract
         QString tableName = this->getTableName();
@@ -2825,6 +3315,16 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -3014,6 +3514,14 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
     QString strData = doc.toJson(QJsonDocument::Compact);
 
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
     if(identifier == "getSunburstChartValues"){
         emit signalSunburstChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     } else if(identifier == "getTreeChartValues"){
@@ -3052,6 +3560,16 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
+
         // Fetch data from extract
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
@@ -3070,6 +3588,16 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         }
 
     } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                return;
+            }
+        }
 
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
@@ -3186,6 +3714,13 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     doc.setArray(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
 
 
     if(identifier == "getStackedBarChartValues"){
