@@ -1,8 +1,6 @@
 name: Unit tests for Grafieks-Desktop
 
 on:
-    push:
-        branches: ["master"]
     pull_request:
         branches: ["master"]
 
