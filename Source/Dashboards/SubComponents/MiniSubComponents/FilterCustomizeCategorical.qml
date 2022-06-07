@@ -43,6 +43,9 @@ Item {
                 case Constants.filterCategoricalTypes[3]:
                     control4.checked = true
                     break;
+                case Constants.filterCategoricalTypes[4]:
+                    control5.checked = true
+                    break;
 
                 default:
                     control2.checked = true
@@ -233,6 +236,63 @@ Item {
                 verticalAlignment: Text.AlignVCenter
             }
         }
+    }
+    Text {
+        id: dateFilterText
+        text: "Date Filter"
+        font.pixelSize: 17
+        anchors.top: dropDownRadio.bottom
+
+        anchors.horizontalCenter:  parent.horizontalCenter
+        horizontalAlignment: Text.horizontalAlignment
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.margins: 15
+
+    }
+
+    ColumnLayout {
+        id: dateRangeRadio
+        anchors.top: dateFilterText.bottom
+        x:15
+        anchors.margins: 15
+        spacing: 15
+        RadioButton {
+            id: control5
+            ButtonGroup.group: buttonGroupFilterTypeCategorical
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[4])
+            indicator: Rectangle {
+                implicitWidth: 16
+                implicitHeight: 16
+                x: control5.width - width - control5.rightPadding
+                y: parent.height / 2 - height / 2
+                radius: 13
+                color: "transparent"
+                border.color: "black"
+
+                Rectangle {
+                    width: 16/2
+                    height: width
+                    radius: width/2
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: "black"
+                    visible: control5.checked
+                }
+
+            }
+
+            contentItem: Text {
+                rightPadding: control5.indicator.width + control5.spacing+60
+                text: "Date Range"
+                elide: Text.ElideRight
+                font.pixelSize: 15
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
+
+      
     }
 
 }
