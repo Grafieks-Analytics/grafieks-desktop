@@ -560,7 +560,7 @@ Item{
 
     // Clear the chart defaults
     function clearChartValue(){
-        webEngineView.runJavaScript('window.grafieks.clearChart()');
+        webEngineView.runJavaScript('window.grafieks.utils.clearChart()');
     }
 
     function setReportName(reportTitle){
@@ -671,7 +671,7 @@ Item{
 
         var chartTitle = reportProperties.chartTitle;
         var chartId = reportProperties.reportId;
-        var chartUrl = reportProperties.chartUrl;
+        // var chartUrl = reportProperties.chartUrl;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
 
         if(standardChart){
