@@ -60,7 +60,7 @@ Item {
     Rectangle{
         id: add_filter
         height:28
-        width:parent.width-5
+        width:500
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
