@@ -139,10 +139,10 @@ Rectangle{
                     ReportsDataModel.fetchColumnDataAPI(colName)
                 } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
                     colData = ReportsDataModel.fetchColumnDataLive(colName)
-                    processDataList(columnData)
+                    processDataList(colData)
                 } else {
                     colData = ReportsDataModel.fetchColumnData(colName)
-                    processDataList(columnData)
+                    processDataList(colData)
                 }
             }
         }

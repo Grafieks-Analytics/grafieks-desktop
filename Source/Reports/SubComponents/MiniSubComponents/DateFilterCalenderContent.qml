@@ -82,7 +82,7 @@ Rectangle{
 
         function onColumnDataChanged(columnData, options){
 
-            if(options !== ""){
+            if(options.length > 0){
                 var jsonOptions = JSON.parse(options)
                 if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
 
