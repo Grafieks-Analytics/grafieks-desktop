@@ -19,6 +19,11 @@ Item {
     property var modelContent: []
     property bool master: false
 
+    property var fromDateVar : ""
+    property var toDateVar : ""
+    property var beforeDateVar : ""
+    property var afterDateVar : ""
+
     Popup {
         id: popup
         x: 100
@@ -41,16 +46,26 @@ Item {
 
    
     function fromDate(d){
-        console.log("valueDate",d)
+        fromDate = d
+        console.log("valueDate from", fromDate)
     }
+
     function toDate(d){
-        console.log("valueDate",d)
+        toDateVar = d
+        console.log("valueDate to", toDateVar)
     }
     function beforeDate(d){
-        console.log("valueDate",d)
+        beforeDateVar = d
+        console.log("valueDate before", beforeDateVar)
     }
     function afterDate(d){
-        console.log("valueDate",d)
+        afterDateVar = d
+        console.log("valueDate after", afterDateVar)
+    }
+
+    function closePopup(){
+        console.log("Close popup", fromDateVar, toDateVar, beforeDateVar, afterDateVar)
+        filterDataDateRange.close()
     }
 
     Component.onCompleted: {
