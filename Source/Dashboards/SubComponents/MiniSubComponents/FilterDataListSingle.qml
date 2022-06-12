@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.2
+import QtQuick.Controls 1.4 as Old
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -18,10 +19,16 @@ Item {
     property var modelContent: []
     property bool master: false
 
+
+
     ListModel{
         id: listModel
         dynamicRoles: true
     }
+//     Calendar {
+//     minimumDate: new Date(2017, 0, 1)
+//     maximumDate: new Date(2018, 0, 1)
+// }
 
 
     onComponentNameChanged: {
