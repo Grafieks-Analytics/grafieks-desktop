@@ -33,6 +33,10 @@ Popup {
         FilterCustomizeNumerical{}
     }
     
+    Component{
+        id: filterCustDate
+        FilterCustomizeDate{}
+    }
     Connections{
         target: DashboardParamsModel
 
@@ -41,12 +45,15 @@ Popup {
             switch(currentColumnType){
 
             case Constants.categoricalTab:
-            case Constants.dateTab:
                 filterCustomizeLoader.sourceComponent = filterCustCat
                 break;
 
             case Constants.numericalTab:
                 filterCustomizeLoader.sourceComponent = filterCustNum
+                break;
+
+            case Constants.dateTab:
+                filterCustomizeLoader.sourceComponent = filterCustDate
                 break;
             }
         }

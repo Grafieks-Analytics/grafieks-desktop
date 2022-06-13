@@ -10,7 +10,7 @@ import "../../../MainSubComponents"
 import "../MiniSubComponents"
 
 Item {
-    id: filterCustomizeCategorical
+    id: filterCustomizeDate
     height: parent.height
     width: parent.width
 
@@ -20,28 +20,33 @@ Item {
 
         function onCurrentSelectedColumnChanged(currentSelectedColumn){
 
-            if(DashboardParamsModel.currentColumnType === Constants.categoricalTab){
+            if(DashboardParamsModel.currentColumnType === Constants.dateTab ){
                 var currentDashboard = DashboardParamsModel.currentDashboard
                 var currentColumn = DashboardParamsModel.currentSelectedColumn
                 var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
 
-                // filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
+                // filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
 
                 switch(columnFilter){
-                case Constants.filterCategoricalTypes[0]:
+                case Constants.filterDateTypes[0]:
                     control2.checked = true
                     break;
 
-                case Constants.filterCategoricalTypes[1]:
+                case Constants.filterDateTypes[1]:
                     control1.checked = true
                     break;
 
-                case Constants.filterCategoricalTypes[2]:
+                case Constants.filterDateTypes[2]:
                     control3.checked = true
                     break;
 
-                case Constants.filterCategoricalTypes[3]:
+                case Constants.filterDateTypes[3]:
                     control4.checked = true
+                    break;
+
+                case Constants.filterDateTypes[4]:
+                    control5.checked = true
+                    labelShapePopup1.closePopup()
                     break;
 
                 default:
@@ -59,7 +64,7 @@ Item {
     }
 
     ButtonGroup{
-        id:buttonGroupFilterTypeCategorical
+        id:buttonGroupFilterTypeDate
     }
 
     Text {
@@ -81,8 +86,8 @@ Item {
         spacing: 15
         RadioButton {
             id: control1
-            ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[1])
+            ButtonGroup.group: buttonGroupFilterTypeDate
+            onCheckedChanged: setFilterType(Constants.filterDateTypes[1])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -114,8 +119,8 @@ Item {
 
         RadioButton {
             id: control2
-            ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[0])
+            ButtonGroup.group: buttonGroupFilterTypeDate
+            onCheckedChanged: setFilterType(Constants.filterDateTypes[0])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -168,8 +173,8 @@ Item {
         spacing: 15
         RadioButton {
             id: control3
-            ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[2])
+            ButtonGroup.group: buttonGroupFilterTypeDate
+            onCheckedChanged: setFilterType(Constants.filterDateTypes[2])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -203,8 +208,8 @@ Item {
 
         RadioButton {
             id: control4
-            ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[3])
+            ButtonGroup.group: buttonGroupFilterTypeDate
+            onCheckedChanged: setFilterType(Constants.filterDateTypes[3])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -233,6 +238,63 @@ Item {
                 verticalAlignment: Text.AlignVCenter
             }
         }
+    }
+    Text {
+        id: dateFilterText
+        text: "Date Filter"
+        font.pixelSize: 17
+        anchors.top: dropDownRadio.bottom
+
+        anchors.horizontalCenter:  parent.horizontalCenter
+        horizontalAlignment: Text.horizontalAlignment
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.margins: 15
+
+    }
+
+    ColumnLayout {
+        id: dateRangeRadio
+        anchors.top: dateFilterText.bottom
+        x:15
+        anchors.margins: 15
+        spacing: 15
+        RadioButton {
+            id: control5
+            ButtonGroup.group: buttonGroupFilterTypeDate
+            onCheckedChanged: setFilterType(Constants.filterDateTypes[4])
+            indicator: Rectangle {
+                implicitWidth: 16
+                implicitHeight: 16
+                x: control5.width - width - control5.rightPadding
+                y: parent.height / 2 - height / 2
+                radius: 13
+                color: "transparent"
+                border.color: "black"
+
+                Rectangle {
+                    width: 16/2
+                    height: width
+                    radius: width/2
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: "black"
+                    visible: control5.checked
+                }
+
+            }
+
+            contentItem: Text {
+                rightPadding: control5.indicator.width + control5.spacing+60
+                text: "Date Range"
+                elide: Text.ElideRight
+                font.pixelSize: 15
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
+
+      
     }
 
 }

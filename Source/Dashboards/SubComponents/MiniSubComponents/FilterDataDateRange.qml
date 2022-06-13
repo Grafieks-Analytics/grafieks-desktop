@@ -19,10 +19,11 @@ Item {
     property var modelContent: []
     property bool master: false
 
+    // filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
+
     property var fromDateVar : ""
     property var toDateVar : ""
-    property var beforeDateVar : ""
-    property var afterDateVar : ""
+    property var referenceDateVar : ""
 
     Popup {
         id: popup
@@ -42,12 +43,51 @@ Item {
         }
     }
 
+    function setFilterType(newFilter){
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
+    }
+
+    function updateValue(){
+
+        var updateValue = ""
+
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+
+        // Fetch current filter type
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        let currentColumnFilterType = DashboardParamsModel.fetchColumnFilterType(currentDashboardId, currentSelectedCol)
+
+        if(currentColumnFilterType === Constants.filterDateTypes[4]){
+            updateValue = fromDateVar + "," + toDateVar
+        } else {
+            updateValue = referenceDateVar
+        }
+
+        // Update new value
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, updateValue)
+
+        closePopup()
+
+    }
+
+    function filterClicked(){
+
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
+        DashboardParamsModel.setCurrentColumnType(currentColumnType)
+        DashboardParamsModel.setCurrentSelectedColumn(componentName)
+
+        labelShapePopup1.visible = true
+    }
 
 
-   
     function fromDate(d){
-        fromDate = d
-        console.log("valueDate from", fromDate)
+        fromDateVar = d
+        console.log("valueDate from", fromDateVar)
     }
 
     function toDate(d){
@@ -55,17 +95,16 @@ Item {
         console.log("valueDate to", toDateVar)
     }
     function beforeDate(d){
-        beforeDateVar = d
-        console.log("valueDate before", beforeDateVar)
+        referenceDateVar = d
+        console.log("valueDate before", referenceDateVar)
     }
     function afterDate(d){
-        afterDateVar = d
-        console.log("valueDate after", afterDateVar)
+        referenceDateVar = d
+        console.log("valueDate after", referenceDateVar)
     }
 
     function closePopup(){
-        console.log("Close popup", fromDateVar, toDateVar, beforeDateVar, afterDateVar)
-        filterDataDateRange.close()
+        popupq.close()
     }
 
     Component.onCompleted: {
@@ -129,10 +168,11 @@ Item {
                             anchors.topMargin:10
                             anchors.horizontalCenter: container.horizontalCenter
                             text: qsTr("From - To")
+                            onClicked:  setFilterType(Constants.filterDateTypes[4])
                             Rectangle {
-                            anchors.fill: parent
-                            color: ( parent.pressed ? "white" : "#2E87C5" )
-                            opacity: 0.5
+                                anchors.fill: parent
+                                color: ( parent.pressed ? "white" : "#2E87C5" )
+                                opacity: 0.5
                             }
                         }
                         TabButton {
@@ -143,10 +183,11 @@ Item {
                             anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
                             text: qsTr("Before")
+                            onClicked:  setFilterType(Constants.filterDateTypes[5])
                             Rectangle {
-                            anchors.fill: parent
-                            color: ( parent.pressed ? "white" : "#2E87C5" )
-                            opacity: 0.5
+                                anchors.fill: parent
+                                color: ( parent.pressed ? "white" : "#2E87C5" )
+                                opacity: 0.5
                             }
                         }
                         TabButton {
@@ -157,10 +198,11 @@ Item {
                             anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
                             text: qsTr("After")
+                            onClicked: setFilterType(Constants.filterDateTypes[6])
                             Rectangle {
-                            anchors.fill: parent
-                            color: ( parent.pressed ? "white" : "#2E87C5" )
-                            opacity: 0.5
+                                anchors.fill: parent
+                                color: ( parent.pressed ? "white" : "#2E87C5" )
+                                opacity: 0.5
                             }
                         }
                         TabButton {
@@ -170,10 +212,11 @@ Item {
                             anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
                             text: qsTr("Relative")
+                            onClicked:  setFilterType(Constants.filterDateTypes[7])
                             Rectangle {
-                            anchors.fill: parent
-                            color: ( parent.pressed ? "white" : "#2E87C5" )
-                            opacity: 0.5
+                                anchors.fill: parent
+                                color: ( parent.pressed ? "white" : "#2E87C5" )
+                                opacity: 0.5
                             }
                         }
                     }
@@ -215,11 +258,11 @@ Item {
                                 anchors.bottom:parent.bottom
                                 // verticalAlignment: Text.AlignVCenter
                             }
-                            onClicked: closePopup()
+                            onClicked: updateValue()
 
                         }
                         TabButton{
-                             height:40
+                            height:40
                             anchors.bottom:parent.bottom
                             anchors.left:okBtn.right
                             anchors.leftMargin:15
@@ -258,12 +301,12 @@ Item {
 
                         TabButton{
                             id: filter_cancel_btn1
-                             height:40
-                             anchors.bottom:parent.bottom
+                            height:40
+                            anchors.bottom:parent.bottom
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1
-                                 color:  "white"
+                                color:  "white"
                                 border.color:"#2E87C5"
                                 border.width:2
                             }
@@ -271,7 +314,7 @@ Item {
                                 id: filter_cancel_btn_text1
                                 text: "cancel"
                                 
-                               color:  "#2E87C5"
+                                color:  "#2E87C5"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -287,7 +330,7 @@ Item {
                     width: parent.width
                     currentIndex: bar.currentIndex
                     Item {
-                        id: homeTab
+                        id: rangeDateTab
                         Rectangle{
                             height:300
                             width:580
@@ -301,7 +344,7 @@ Item {
                             }
                             Old.Calendar {
                                 anchors.right: parent.right
-                                 anchors.verticalCenter: parent.verticalCenter
+                                anchors.verticalCenter: parent.verticalCenter
                                 id: calendar2
                                 selectedDate: new Date()
                                 onSelectedDateChanged:toDate(selectedDate)
@@ -309,7 +352,7 @@ Item {
                         }
                     }
                     Item {
-                        id: discoverTab
+                        id: beforeDateTab
                         Rectangle{
                             height:300
                             width:580
@@ -323,7 +366,7 @@ Item {
                         }
                     }
                     Item {
-                        id: activityTab
+                        id: afterDateTab
                         Rectangle{
                             height:300
                             width:580
@@ -337,7 +380,7 @@ Item {
                         }
                     }
                     Item {
-                        id: activityTabq
+                        id: customDateTab
                         Rectangle{
                             height:300
                             width:580
@@ -348,7 +391,7 @@ Item {
                                 anchors.right: parent.right
                                 color:"transparent"
 
-                                width: parent.width 
+                                width: parent.width
                                 height: 200
                                 anchors.rightMargin: 20
 
@@ -402,61 +445,61 @@ Item {
                                     width:parent.width-20
                                     anchors.left:parent.left
                                     anchors.leftMargin:20
-                                  ComboBox {
-                                    id: selectOptio2
-                                    model: listModel2
-                                    width: 200
-                                    height: 50
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.left: parent.left
-                                    anchors.leftMargin:25
-                                       background: Rectangle {
-                                    color:"white"
-                                    border.width: parent && parent.activeFocus ? 2 : 1
-                                    border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
+                                    ComboBox {
+                                        id: selectOption2
+                                        model: listModel2
+                                        width: 200
+                                        height: 50
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.left: parent.left
+                                        anchors.leftMargin:25
+                                        background: Rectangle {
+                                            color:"white"
+                                            border.width: parent && parent.activeFocus ? 2 : 1
+                                            border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
+                                        }
+                                    }
+                                    TextField {
+                                        id: numeroTelefoneTextField
+
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.leftMargin:15
+                                        // anchors.right: selectOptio3.right
+                                        anchors.left: selectOption2.right
+
+                                        width: 100
+                                        height: 50
+
+                                        placeholderText: qsTr("7")
+
+                                        validator: IntValidator {
+                                            bottom: 1
+                                            top: 100
+                                        }
+
+                                        font.bold: true
+
+                                        inputMethodHints: Qt.ImhDigitsOnly
+                                    }
+                                    ComboBox{
+                                        id: selectOption3
+                                        model: listModel3
+                                        anchors.leftMargin:15
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: 150
+                                        height: 50
+                                        anchors.left: numeroTelefoneTextField.right
+                                        background: Rectangle {
+                                            color:"white"
+                                            border.width: parent && parent.activeFocus ? 2 : 1
+                                            border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
+                                        }
                                     }
                                 }
-                                TextField {
-                                    id: numeroTelefoneTextField
-
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.leftMargin:15
-                                    // anchors.right: selectOptio3.right
-                                    anchors.left: selectOptio2.right
-
-                                    width: 100
-                                    height: 50
-
-                                    placeholderText: qsTr("7")
-
-                                    validator: IntValidator {
-                                        bottom: 1
-                                        top: 100
-                                    }
-
-                                    font.bold: true
-
-                                    inputMethodHints: Qt.ImhDigitsOnly
-                                }
-                                ComboBox{
-                                    id: selectOptio3
-                                    model: listModel3
-                                    anchors.leftMargin:15
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: 150
-                                    height: 50
-                                    anchors.left: numeroTelefoneTextField.right
-                                       background: Rectangle {
-                                    color:"white"
-                                    border.width: parent && parent.activeFocus ? 2 : 1
-                                    border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
-                                    }
-                                }
-                                }
 
 
 
-                               
+
                                 
 
                             }
@@ -566,7 +609,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
-       
+
     }
 
 }
