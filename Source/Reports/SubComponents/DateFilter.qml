@@ -88,7 +88,7 @@ Popup {
 
         function onColumnDataChanged(columData, options){
 
-            if(options !== ""){
+            if(options.length > 0){
                 var jsonOptions = JSON.parse(options)
 
                 if(jsonOptions.section === Constants.dateTab){

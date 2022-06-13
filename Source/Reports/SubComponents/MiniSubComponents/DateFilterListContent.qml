@@ -139,10 +139,10 @@ Rectangle{
                     ReportsDataModel.fetchColumnDataAPI(colName)
                 } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
                     colData = ReportsDataModel.fetchColumnDataLive(colName)
-                    processDataList(columnData)
+                    processDataList(colData)
                 } else {
                     colData = ReportsDataModel.fetchColumnData(colName)
-                    processDataList(columnData)
+                    processDataList(colData)
                 }
             }
         }
@@ -204,10 +204,14 @@ Rectangle{
                                       })
 
             } else{
-                var checkedValues = values[0].split(",")
-                checkedValues.forEach((item) => {
-                                          ReportParamsModel.setTmpSelectedValues(item)
-                                      })
+                if (values.length > 0) {
+                    var checkedValues = values[0].split(",")
+                    checkedValues.forEach((item) => {
+                                              ReportParamsModel.setTmpSelectedValues(item)
+                                          })
+                }
+
+
             }
         } else{
             singleSelectRadio.checked = true

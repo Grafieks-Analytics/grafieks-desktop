@@ -655,7 +655,7 @@ Page {
         GeneralParamsModel.resetGeneralParams();
 
         // ChartsThread
-        ChartsThread.resetCache();
+        ChartsThread.clearCache();
 
         // Take back to select connection screen
         stacklayout_home.currentIndex = 3
