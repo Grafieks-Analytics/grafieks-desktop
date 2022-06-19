@@ -759,7 +759,7 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
     valueMap = this->columnValueMap.value(dashboardId);
     values = valueMap.value(columnName);
 
-    if(relation == "dataBetween" || relation == "dataRange"){
+    if(relation == "dataBetween" || relation == "dataRange" || relation == "dataDateRange"){
         values = value.split(",");
     } else{
         if(values.indexOf(value) < 0){
@@ -802,6 +802,7 @@ void DashboardParamsModel::deleteColumnValueMap(int dashboardId, QString columnN
 
 void DashboardParamsModel::applyFilterToDashboard(int dashboardId)
 {
+    qDebug() << "Col val map" << this->columnValueMap;
     emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 

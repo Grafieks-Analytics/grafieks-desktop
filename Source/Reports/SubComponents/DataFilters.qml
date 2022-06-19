@@ -228,6 +228,7 @@ Popup {
 
         allDates.forEach(function (element) {
             datesModel.append({"tableColName" : element[4], "colName" : element[1]});
+            console.log("DATES MODEL", element[4], element[1])
         });
 
         add_btn_1.model =  categoricalModel
@@ -243,13 +244,12 @@ Popup {
         }
 
         if(GeneralParamsModel.getAPISwitch()) {
-            ReportsDataModel.fetchColumnDataAPI(tableColName, options)
+            ReportsDataModel.fetchColumnDataAPI(tableColName, JSON.stringify(options))
         } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
-            ReportsDataModel.fetchColumnDataLive(tableColName, options)
+            ReportsDataModel.fetchColumnDataLive(tableColName, JSON.stringify(options))
         } else {
-            ReportsDataModel.fetchColumnData(tableColName, options)
+            ReportsDataModel.fetchColumnData(tableColName, JSON.stringify(options))
         }
-
 
 
         ReportParamsModel.setColName(tableColName)
@@ -646,6 +646,7 @@ Popup {
         valueRole: "tableColName"
 
         onActivated: {
+            console.log("TABLE COL NAME ORIG", currentText, currentValue)
             onAddMenuItemTriggered(currentText, currentValue, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
             onAddMenuItemClicked()
 
