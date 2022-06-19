@@ -427,12 +427,6 @@ function onChartTitleChanged() {
     if (chartTitle == Constants.sunburstChartTitle) {
         allowedXAxisDataPanes = 5;
     }
-
-    // If any column is removed on changing the chart name
-    // redraw the chart
-    if (dataValuesRemoved) {
-        redrawChart();
-    }
 }
 
 /**
