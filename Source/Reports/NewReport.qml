@@ -508,6 +508,7 @@ Page {
         // if (!allChartsMapping[chartTitle]) {
         //     allChartsMapping[chartTitle] = {};
         // }
+        reDrawChart();
     }
 
     function searchColumnNames(searchText) {
