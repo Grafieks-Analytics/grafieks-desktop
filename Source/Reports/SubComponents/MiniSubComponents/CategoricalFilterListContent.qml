@@ -133,10 +133,12 @@ Rectangle{
                                 })
             } else{
 
-                var checkedValues = values[0].split(",")
-                checkedValues.forEach((item) => {
-                                          ReportParamsModel.setTmpSelectedValues(item)
-                                      })
+                if (values.length > 0){
+                    var checkedValues = values[0].split(",")
+                    checkedValues.forEach((item) => {
+                                              ReportParamsModel.setTmpSelectedValues(item)
+                                          })
+                }
             }
         } else{
             singleSelectRadio.checked = true

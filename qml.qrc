@@ -230,5 +230,6 @@
         <file>Source/Charts/build/index.html</file>
         <file>Source/Charts/build/grafieks-charts.js</file>
         <file>Source/Charts/build/styles.css</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeDate.qml</file>
     </qresource>
 </RCC>

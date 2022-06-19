@@ -498,7 +498,25 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
             float value = filterValues.at(0).toFloat();
             whereConditions += joiner + currentColumnName + joiner + " >= " + QString::number(value) + " AND ";
 
-        } else{
+        }  else if(currentColumnRelation == "dataDateRange"){
+
+            qDebug() << "INSIDE" << filterValues;
+            QString min = filterValues.at(0);
+            QString max = filterValues.at(1);
+
+            whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + min + " AND " + max + " AND ";
+
+        } else if(currentColumnRelation == "dataDateAfter"){
+
+            QString value = filterValues.at(0);
+            whereConditions += joiner + currentColumnName + joiner + " > " + value + " AND ";
+
+        } else if(currentColumnRelation == "dataDateBefore"){
+
+            QString value = filterValues.at(0);
+            whereConditions += joiner + currentColumnName + joiner + " < " + value + " AND ";
+
+        }else{
             qDebug() << "ELSE CONDITION" << currentColumnRelation;
         }
     }

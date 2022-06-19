@@ -30,7 +30,6 @@ ListView{
             listmodel.clear()
             listmodel.append({"key" : Constants.tempGrafieksValue, "value": ""})
             for(const [key, value] of Object.entries(allNumericalMap)){
-                console.log("FIELD NAME AND ALIAS", key, value)
                 listmodel.append({"key" : key, "value": value})
             }
 
