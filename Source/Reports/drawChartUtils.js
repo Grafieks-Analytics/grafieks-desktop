@@ -799,14 +799,11 @@ function reDrawChart() {
 }
 
 function drawChartAfterReceivingSignal(dataValues) {
+    console.log(dataValues);
+
     if (webEngineView.loading) {
         return;
     }
-
-    var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-    var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
-    var row3Columns = getAxisColumnNames(Constants.row3Name);
-    var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
     var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
     var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
@@ -822,6 +819,7 @@ function drawChartAfterReceivingSignal(dataValues) {
     };
 
     d3PropertyConfig.chartName = chartTitle;
+    console.log(dataValues);
     console.log(d3PropertyConfig);
     ChartsWebViewHandler.startPlottingChart(dataValues, d3PropertyConfig);
 }

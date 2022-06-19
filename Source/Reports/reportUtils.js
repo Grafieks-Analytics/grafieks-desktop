@@ -254,7 +254,7 @@ function onChartTitleChanged() {
             break;
         case Constants.tableTitle:
             var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
-            if (checkAllValuesOfType(xAxisColumnDetails, "number")) {
+            if (checkAllValuesOfType(xAxisColumnDetails, "numerical")) {
                 xAxisListModel.clear();
             }
             yAxisVisible = false;
@@ -270,7 +270,7 @@ function onChartTitleChanged() {
             row3Visible = false;
             break;
         case Constants.kpiTitle:
-            if (!checkAllValuesOfType(xAxisColumnDetails, "number")) {
+            if (!checkAllValuesOfType(xAxisColumnDetails, "numerical")) {
                 xAxisListModel.clear();
             }
             yAxisVisible = false;
@@ -293,7 +293,7 @@ function onChartTitleChanged() {
                     xAxisListModel.clear();
                 }
 
-                if (!checkAllValuesOfType(yAxisColumnDetails, "number")) {
+                if (!checkAllValuesOfType(yAxisColumnDetails, "numerical")) {
                     yAxisListModel.clear();
                 }
 
@@ -314,7 +314,7 @@ function onChartTitleChanged() {
                 xAxisListModel.clear();
             }
 
-            if (!checkAllValuesOfType(yAxisColumnDetails, "number")) {
+            if (!checkAllValuesOfType(yAxisColumnDetails, "numerical")) {
                 yAxisListModel.clear();
             }
 
@@ -337,7 +337,7 @@ function onChartTitleChanged() {
                 xAxisListModel.clear();
             }
 
-            if (!checkAllValuesOfType(yAxisColumnDetails, "number")) {
+            if (!checkAllValuesOfType(yAxisColumnDetails, "numerical")) {
                 yAxisListModel.clear();
             }
 
@@ -364,7 +364,7 @@ function onChartTitleChanged() {
                 yAxisColumnDetails.clear();
             }
 
-            if (!checkAllValuesOfType(xAxisColumnDetails, "number")) {
+            if (!checkAllValuesOfType(xAxisColumnDetails, "numerical")) {
                 xAxisListModel.clear();
             }
 
@@ -401,11 +401,11 @@ function onChartTitleChanged() {
             row4Visible = false;
             break;
         case Constants.scatterChartTitle:
-            if (!checkAllValuesOfType(xAxisColumnDetails, "number")) {
+            if (!checkAllValuesOfType(xAxisColumnDetails, "numerical")) {
                 xAxisListModel.clear();
             }
 
-            if (!checkAllValuesOfType(yAxisColumnDetails, "number")) {
+            if (!checkAllValuesOfType(yAxisColumnDetails, "numerical")) {
                 yAxisListModel.clear();
             }
 
@@ -426,12 +426,6 @@ function onChartTitleChanged() {
 
     if (chartTitle == Constants.sunburstChartTitle) {
         allowedXAxisDataPanes = 5;
-    }
-
-    // If any column is removed on changing the chart name
-    // redraw the chart
-    if (dataValuesRemoved) {
-        redrawChart();
     }
 }
 
