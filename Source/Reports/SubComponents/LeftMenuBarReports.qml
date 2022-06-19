@@ -142,17 +142,16 @@ Rectangle{
         else if(chartTitle === Constants.areaChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
-                    chartHtml = Constants.horizontalAreaChartUrl;
-//                    switchChart(Constants.horizontalBarChartTitle);
+                   chartTitle = Constants.horizontalBarChartTitle;
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
-                    chartHtml = Constants.multipleHorizontalAreaChartUrl;
+                    chartTitle = Constants.multipleAreaChartTitle;
                 }else{
                     console.log('missed horizontal area case');
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
-                    chartHtml = Constants.multipleAreaChartUrl;
+                    chartTitle = Constants.multipleAreaChartTitle
                 }else{
                     console.log('missed area case',chartHtml);
                 }
@@ -161,19 +160,16 @@ Rectangle{
         else if(chartTitle === Constants.lineChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
-                    chartHtml = Constants.horizontalLineChartUrl;
+                    chartTitle = Constants.horizontalLineChartTitle;
                 }else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
-                    chartHtml = Constants.horizontalMultiLineChartUrl;
                     console.log('Horizontal Chart Load');
                 }else{
-                    // chartHtml = Constants.horizontalLineChartUrl; // Added on last day
                     console.log('Missed Horizontal Condition ---> Making it horizontal line chart!')
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
                     console.log('Debug: Loading multiline chart');
-                    chartHtml = Constants.multiLineChartUrl;
-                    // switchChart(Constants.multiLineChartTitle);
+                    chartTitle = Constants.multiLineChartTitle;
                 }
             }
         }
