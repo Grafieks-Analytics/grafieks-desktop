@@ -427,6 +427,7 @@ function onChartTitleChanged() {
     if (chartTitle == Constants.sunburstChartTitle) {
         allowedXAxisDataPanes = 5;
     }
+    reDrawChart();
 }
 
 /**
