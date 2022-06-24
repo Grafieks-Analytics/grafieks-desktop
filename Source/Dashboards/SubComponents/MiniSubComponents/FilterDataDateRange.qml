@@ -86,20 +86,20 @@ Item {
 
 
     function fromDate(d){
-        fromDateVar = d
+        fromDateVar = d.toISOString().split('T')[0]
         console.log("valueDate from", fromDateVar)
     }
 
     function toDate(d){
-        toDateVar = d
+        toDateVar = d.toISOString().split('T')[0]
         console.log("valueDate to", toDateVar)
     }
     function beforeDate(d){
-        referenceDateVar = d
+        referenceDateVar = d.toISOString().split('T')[0]
         console.log("valueDate before", referenceDateVar)
     }
     function afterDate(d){
-        referenceDateVar = d
+        referenceDateVar = d.toISOString().split('T')[0]
         console.log("valueDate after", referenceDateVar)
     }
 

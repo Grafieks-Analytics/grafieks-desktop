@@ -119,6 +119,7 @@ Popup {
         // Set the model of the `Add Button` in each tab
         function onExtractSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+            console.log("CALLED Extract")
         }
 
         function onApiSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
@@ -127,6 +128,7 @@ Popup {
 
         function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
             filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+            console.log("CALLED")
         }
 
         function onTableSchemaCleared(){
@@ -646,8 +648,8 @@ Popup {
         valueRole: "tableColName"
 
         onActivated: {
-            console.log("TABLE COL NAME ORIG", currentText, currentValue)
-            onAddMenuItemTriggered(currentText, currentValue, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
+            console.log("TABLE COL NAME ORIG", currentText, add_btn_1.model.get(currentIndex).tableColName, displayText, currentIndex)
+            onAddMenuItemTriggered(currentText, add_btn_1.model.get(currentIndex).tableColName, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
             onAddMenuItemClicked()
 
         }

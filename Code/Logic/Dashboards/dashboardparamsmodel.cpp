@@ -728,7 +728,7 @@ void DashboardParamsModel::setColumnFilterType(int dashboardId, QString columnNa
     colFilterType.insert(columnName, filterType);
     this->columnFilterType.insert(dashboardId, colFilterType);
 
-    emit columnFilterTypeChanged();
+    emit columnFilterTypeChanged(filterType);
 }
 
 QString DashboardParamsModel::fetchColumnFilterType(int dashboardId, QString columnName)
