@@ -68,8 +68,13 @@ Rectangle {
                                 })
         }
 
-        function onColumnFilterTypeChanged(){
-            listModel.clear()
+        function onColumnFilterTypeChanged(filterType){
+            const excludeList = [Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
+
+            console.log(excludeList.includes(filterType), "FTYPE", filterType)
+            if(!excludeList.includes(filterType)) {
+                listModel.clear()
+            }
 
             var dashboardId = DashboardParamsModel.currentDashboard
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
@@ -78,6 +83,7 @@ Rectangle {
                                     var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
                                     listModel.append({type: columnType, name: item})
                                 })
+
         }
     }
 
