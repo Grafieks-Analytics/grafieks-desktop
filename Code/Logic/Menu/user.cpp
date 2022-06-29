@@ -20,6 +20,7 @@ void User::login()
     QJsonObject obj;
     obj.insert("username", this->username);
     obj.insert("password", this->password);
+    obj.insert("source", Constants::source);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
