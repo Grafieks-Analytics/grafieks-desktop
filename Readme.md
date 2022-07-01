@@ -203,7 +203,8 @@ For those connectors not mentioned above, no special download is required.
 
 **Dashboard Designer Screen**
 
-<img src="https://user-images.githubusercontent.com/79040963/176976286-cbe7a12a-df49-4d1e-bae5-6476b940127d.png" width="800" />
+<img src="https://user-images.githubusercontent.com/79040963/176976459-a451f7d6-41b8-4556-a165-157205845ae6.png" width="800" />
+
 
   
 ## Roadmap (till now)
