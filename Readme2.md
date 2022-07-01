@@ -11,7 +11,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Grafieks-Analytics/grafieks-desktop">
-    <img src="https://i.imgur.com/eisvJi9.png" alt="Logo" width="80" height="80">
+    <img src="https://i.imgur.com/eisvJi9.png" alt="Logo">
   </a>
 
   <h3 align="center">Grafieks Desktop</h3>
