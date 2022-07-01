@@ -56,8 +56,6 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-![product screenshot](https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png)
-
 Grafieks is an open-source, simple Self-Service Business Intelligence tool that allows users to quickly and easily extract meaningful insights from data. It is a platform that combines data engineering and data analysis.
 
 ### Currently supported databases
@@ -154,7 +152,10 @@ Links to drivers for various databases to connect as datasource
 
 ## Product Screenshots
 
-Hirak add a few screenshots here with some description
+<div style="text-align: center">
+  <img src="https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png" width="500" />
+  <p>Connectors</p>
+</div>
 
 ## Roadmap (till now)
 
