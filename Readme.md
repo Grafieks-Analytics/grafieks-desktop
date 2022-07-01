@@ -256,7 +256,7 @@ We would like to thank the following repositories for their contribution to the 
 
 -   [DuckDb](https://duckdb.org)
 -   [Nlohmann JSON](https://github.com/nlohmann/json)
--   [D3.js](https://github.com/d3/d3)
+-   [D3.js](https://d3js.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
