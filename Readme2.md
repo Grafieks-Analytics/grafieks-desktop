@@ -151,12 +151,10 @@ Links to drivers for various databases to connect as datasource
 <!-- ROADMAP -->
 
 ## Product Screenshots
+**Connectors Screen**
 
-<div style="align: center">
-  <img src="https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png" width="800" />
-  <p>Connectors</p>
-</div>
-
+<img src="https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png" width="800" />
+  
 ## Roadmap (till now)
 
 -   [x] Connect to datasources
