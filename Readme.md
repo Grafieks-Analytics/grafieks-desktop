@@ -141,16 +141,17 @@ Links to drivers for various databases to connect as datasource
 
 #### Windows 10 & 11 drivers
 
-1. Amazon Redshift
-2. Microsoft Access
-3. Mongodb
-4. MySql
-5. PostgresSQL
-6. Sqlite
-7. Snowflake
-8. Micorosft Sql Server
-9. Teradata
-10. Microsoft Excel. You need to have Microsoft office installed on your system
+1. [Amazon Redshift driver](https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html)
+2. Microsoft Access. You need to have Microsoft office installed on your system
+3. [Mongodb](https://www.mongodb.com/docs/bi-connector/current/installation/)
+4. [MySql](https://dev.mysql.com/downloads/connector/odbc/)
+5. [PostgresSQL](https://www.postgresql.org/ftp/odbc/versions/)
+6. [Snowflake](https://sfc-repo.snowflakecomputing.com/odbc/index.html)
+7. [Micorosft Sql Server](https://www.microsoft.com/en-in/download/details.aspx?id=36434)
+8. [Teradata](https://downloads.teradata.com/tag/odbc)
+9. Microsoft Excel. You need to have Microsoft office installed on your system
+
+For those connectors not mentioned above, no special download is required. 
 
 ### Installation and Setup
 
