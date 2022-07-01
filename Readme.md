@@ -206,8 +206,8 @@ For those connectors not mentioned above, no special download is required.
 -   [x] Connect to datasources
 -   [x] Datasource filters, Report filters & Dashboard filters
 -   [x] Publish datasources
--   [x] Generate reports
--   [x] Generate and publish dashboards
+-   [x] Create reports
+-   [x] Create and publish dashboards
 
 See the [open issues](https://github.com/Grafieks-Analytics/grafieks-desktop/issues) for a full list of proposed features (and known issues).
 
