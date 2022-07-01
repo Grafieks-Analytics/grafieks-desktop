@@ -119,6 +119,20 @@ Core technologies behind the application
 
 This section gives a set of instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
 
+##### When you clone for first time
+
+```sh
+git clone --recurse-submodules https://github.com/Grafieks-Analytics/grafieks-desktop/
+```
+
+##### Already cloned or missed cloning with -recurse-submodule flag
+
+```sh
+git submodule update --init
+```
+
+These commands will add a folder "Charts" at `Sources/` folder
+
 ### Prerequisites
 
 Please choose whichever is applicable. You do not need to install all. e.g, if you need to process Mysql database, please download Mysql driver only.
