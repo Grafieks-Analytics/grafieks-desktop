@@ -194,6 +194,11 @@ For those connectors not mentioned above, no special download is required.
 **Connectors Screen**
 
 <img src="https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png" width="800" />
+
+
+**Report Designer Screen**
+![image](https://user-images.githubusercontent.com/79040963/176972231-e9230eb7-c914-4b29-90d3-7998385c6802.png)
+
   
 ## Roadmap (till now)
 
