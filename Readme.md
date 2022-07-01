@@ -173,7 +173,8 @@ For those connectors not mentioned above, no special download is required.
 ## Roadmap (till now)
 
 -   [x] Connect to datasources
--   [x] Datasourec filters, Report filters & Dashboard filters
+-   [x] Datasource filters, Report filters & Dashboard filters
+-   [x] Publish datasources
 -   [x] Generate reports
 -   [x] Generate and publish dashboards
 
