@@ -245,7 +245,6 @@ Distributed under the GPL v3 License. See `LICENSE.txt` for more information.
 - Project Link: [https://www.grafieks.com/](https://www.grafieks.com/)
 - Github: [https://github.com/Grafieks-Analytics/grafieks-desktop](https://github.com/Grafieks-Analytics/grafieks-desktop)
 
-- Support Email: support@grafieks.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
