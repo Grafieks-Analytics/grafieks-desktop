@@ -17,7 +17,7 @@
   <h3 align="center">Grafieks Desktop</h3>
 
   <p align="center">
-    An open-source Business Analytics tool built with Qt5 and C++
+    An open-source Business Intelligence platform built with Qt5 and C++
     <br />
     <br />
     <a href="https://www.grafieks.com/pricing">Download & Try</a>
