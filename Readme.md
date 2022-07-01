@@ -94,8 +94,33 @@ Grafieks is an open-source, simple Self-Service Business Intelligence tool that 
 
 ### Chart types
 
-1. Bar chart
-2.
+1.	Bar Chart
+    a)	Bar Chart 
+    b)	Grouped Bar Chart
+    c)	Stacked Bar Chart
+    d)	Horizontal Bar Chart
+    e)	Horizontal Grouped Bar Chart
+    f)	Horizontal Stacked Bar Chart
+2.	Line Chart
+    a)	Line Chart 
+    b)	Horizontal Line Chart, 
+    c)	Multiple Line Chart
+3.	Area Chart
+    a)	Area Chart
+    b)	Stacked Area Chart 
+4.	Pie Chart 
+5.	Donut Chart
+6.	Radar Chart
+7.	Scatter Plot
+8.	Funnel
+9.	Gauge
+10.	Heat Map
+11.	Sunburst
+12.	Tree Chart
+13.	Waterfall Chart
+14.	Pivot
+15.	Table
+
 
 **Note:** Currently, it has been tested to work with Windows 10 and 11 only. On other OS, some of the features may not work.
 
