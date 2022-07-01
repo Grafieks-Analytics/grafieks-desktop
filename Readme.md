@@ -200,6 +200,12 @@ For those connectors not mentioned above, no special download is required.
 
 <img src="https://user-images.githubusercontent.com/79040963/176972231-e9230eb7-c914-4b29-90d3-7998385c6802.png" width="800" />
 
+
+**Dashboard Designer Screen**
+
+<img src="https://user-images.githubusercontent.com/79040963/176976162-a00afcf9-6fdc-4c5f-ab5a-ac40af3d9696.png width="800" />
+
+
   
 ## Roadmap (till now)
 
