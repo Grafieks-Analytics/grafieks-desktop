@@ -56,7 +56,7 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-<video src='https://i.imgur.com/0bR7GRL.mp4' width=800 height=415/>
+![product screenshot](https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png)
 
 Grafieks is an open-source, simple Self-Service Business Intelligence tool that allows users to quickly and easily extract meaningful insights from data. It is a platform that combines data engineering and data analysis.
 
