@@ -191,7 +191,7 @@ For those connectors not mentioned above, no special download is required.
 <!-- ROADMAP -->
 
 ## Product Screenshots
-**Connectors Screen**
+**Data Connector Screen**
 
 <img src="https://user-images.githubusercontent.com/425193/176872613-da4ab8cd-e515-4e51-b6fa-1bb3b857c957.png" width="800" />
 
