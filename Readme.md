@@ -180,6 +180,9 @@ For those connectors not mentioned above, no special download is required.
 
 ### Installation and Setup
 
+**Important step**
+Rename **secrets.h.sample** to **secrets.h** and put up your credentials, else online storages section will not work.
+
 -   For detailed installation and setup on Windows, [Refer this Document](https://github.com/Grafieks-Analytics/grafieks-desktop/blob/master/Documentation/Configuration%20Windows%2010.md)
 
 -   **Duckdb v0.2.9** dll file is already included with the setup. However, if you manually want to install and setup **Duckdb** on Windows, [Refer this Document](https://github.com/Grafieks-Analytics/grafieks-desktop/blob/master/Documentation/DuckDB%20Installation.md).
