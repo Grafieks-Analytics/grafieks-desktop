@@ -181,7 +181,7 @@ For those connectors not mentioned above, no special download is required.
 ### Installation and Setup
 
 **Important step**
-- Rename **Code/secrets.h.sample** to **Code/secrets.h** and put up your credentials, else online storages section will not work.
+- Rename **Code/secrets.sample.h** to **Code/secrets.h** and put up your credentials, else online storages section will not work. Remember to remove all the commented section in the body
 
 -   For detailed installation and setup on Windows, [Refer this Document](https://github.com/Grafieks-Analytics/grafieks-desktop/blob/master/Documentation/Configuration%20Windows%2010.md)
 
