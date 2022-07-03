@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. If you describe your bug report properly, we will be able to understand the exact issue and also able to understand it saving a lot of time communicating to-and-fro.
 
 **To Reproduce**
 Steps to reproduce the behavior:
