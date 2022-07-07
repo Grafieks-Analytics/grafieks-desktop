@@ -140,7 +140,7 @@ QtObject {
     // UpdateApplication
     property string msc_uan_header : qsTr("Update Application")
     property string msc_uan_pleaseWait : qsTr("Please wait..")
-    property string msc_uan_appUpdateMsg : qsTr("You are using an old version of the application. A new update is available. Please download to enjoy the latest features and bugfixes\n\n If you accept, then the application will be closed while update is on")
+    property string msc_uan_appUpdateMsg : qsTr("You are using an old version of the application.A new update is available. Please download to enjoy the latest features and bugfixes If you accept, then the application will be closed while update is on")
 
 
 
