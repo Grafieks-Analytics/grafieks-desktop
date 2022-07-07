@@ -13,7 +13,7 @@ Item {
     id: filterDataDateRange
     // width: 400
     width: parent.width-25
-    height: 200
+    height: 90
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataDateRange.objectName
     property var modelContent: []
@@ -24,24 +24,9 @@ Item {
     property var fromDateVar : ""
     property var toDateVar : ""
     property var referenceDateVar : ""
+    property var toggleStatus : true
 
-    Popup {
-        id: popup
-        x: 100
-        y: 100
-        width: 200
-        height: 300
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-        Rectangle{
-            height: 300
-            width: 300
-            // color: "red"
-            border.color: Constants.darkThemeColor
-        }
-    }
 
     function setFilterType(newFilter){
         let currentDashboardId = DashboardParamsModel.currentDashboard
@@ -106,6 +91,18 @@ Item {
     function closePopup(){
         popupq.close()
     }
+    function toggleDateFilter(){
+        if( toggleStatus){
+            popupq.close()
+            toggleStatus = false;
+            return    
+        }
+        else{
+             popupq.open()
+             toggleStatus = true;
+            return
+        }
+    }
 
     Component.onCompleted: {
         popupq.open()
@@ -131,20 +128,21 @@ Item {
             width:parent.width
             height:25
             color: Constants.themeColor
-            // Button {
-            //     text: "Open"
-            //     onClicked: popupq.open()
-            // }
+            
 
             Popup {
                 id: popupq
-                x: -680
-                y: 50
+                x: -630
+                y: 72
                 width: 800
                 height: 400
                 modal: false
                 focus: true
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                background: Rectangle {
+                    color: "white"
+                    border.color: "lightgrey"
+                }
 
 
 
@@ -152,27 +150,39 @@ Item {
                     id:container
                     height: parent.height-60
                     width: 200
-                    border.color: Constants.darkThemeColor
-                    anchors.right:parent.right
+                    // border.color: Constants.darkThemeColor
+                    anchors.left:parent.left
+
+
 
 
                     TabBar {
                         id: bar
-                        width: parent.width-10
+                        width: parent.width-20
                         height:parent.height
                         anchors.right:parent.right
+                        anchors.rightMargin:30
                         TabButton {
                             id:btn1
                             width: 170
                             anchors.right:parent.right
-                            anchors.topMargin:10
-                            anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("From - To")
+                            // anchors.topMargin:10
+                            // anchors.horizontalCenter: container.horizontalCenter
+                            // text: qsTr("From - To")
                             onClicked:  setFilterType(Constants.filterDateTypes[4])
                             Rectangle {
+                                Text {
+                                    text: "From - To"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 0) ? "lightgray" : "white"
                             }
                         }
                         TabButton {
@@ -180,14 +190,23 @@ Item {
                             anchors.top:btn1.bottom
                             width: 170
                             anchors.right:parent.right
-                            anchors.topMargin:20
+                            // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("Before")
+                            // text: qsTr("Before")
                             onClicked:  setFilterType(Constants.filterDateTypes[5])
                             Rectangle {
+                                Text {
+                                    text: "Before"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 1) ? "lightgray" : "white"
                             }
                         }
                         TabButton {
@@ -195,38 +214,83 @@ Item {
                             anchors.top:btn2.bottom
                             width: 170
                             anchors.right:parent.right
-                            anchors.topMargin:20
+                            // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("After")
+                            
                             onClicked: setFilterType(Constants.filterDateTypes[6])
+                            // Rectangle {
+                            //     anchors.fill: parent
+                            //     color: ( parent.pressed ? "white" : "lightgray" )
+                            //     opacity: 0.5
+                            // }
                             Rectangle {
+                                Text {
+                                    text: "After"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 2) ? "lightgray" : "white"
                             }
                         }
                         TabButton {
                             anchors.top:btn3.bottom
                             anchors.right:parent.right
                             width: 170
-                            anchors.topMargin:20
+                            // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("Relative")
+                            // text: qsTr("Relative")
                             onClicked:  setFilterType(Constants.filterDateTypes[7])
                             Rectangle {
+                                Text {
+                                    text: "Relative"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 3) ? "lightgray" : "white"
                             }
                         }
                     }
+                    
+                    ToolSeparator{
+                        orientation: Qt.vertical
+                        height: parent.height + 10
+                        anchors.top:parent.top
+                        anchors.topMargin:-15
+                        anchors.verticalCenter:parent.centerIn
+                        anchors.right:bar.right
+                        anchors.leftMargin:-14
+                        anchors.bottom: allButtons.top
+                    }
+
 
 
                 }
+                ToolSeparator{
+                    orientation: Qt.Horizontal
+                    width: parent.width + 30
+                    anchors.rightMargin:-15
+                    anchors.horizontalCenter:parent.centerIn
+                    anchors.right:parent.right
+                    anchors.bottom: allButtons.top
+                }
                 Rectangle{
+                    id:allButtons
                     height:60
                     width:parent.width
                     anchors.bottom:parent.bottom
+
 
                     TabBar{
 
@@ -243,17 +307,20 @@ Item {
                         TabButton{
                             id:okBtn
                             height:40
+                            width:100
                             anchors.bottom:parent.bottom
                             
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1q
-                                color:  "#2E87C5"
+                                // color:  "#2E87C5"
+                                border.color:"#007bff"
+                                radius: 5
                             }
                             contentItem: Text{
                                 id: filter_cancel_btn_text1q
                                 text: "ok"
-                                color:  "white"
+                                color:  "#007bff"
                                 horizontalAlignment: Text.AlignHCenter
                                 anchors.bottom:parent.bottom
                                 // verticalAlignment: Text.AlignVCenter
@@ -269,15 +336,15 @@ Item {
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1qa
-                                color:  "white"
-                                border.color:"#2E87C5"
-                                border.width:2
+                                // color:  "#2E87C5"
+                                border.color:"#007bff"
+                                radius: 5
                             }
                             contentItem: Text{
                                 id: filter_cancel_btn_text1qa
                                 text: "Remove Filter"
                                 
-                                color:  "#2E87C5"
+                                color:  "#007bff"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -306,15 +373,15 @@ Item {
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1
-                                color:  "white"
-                                border.color:"#2E87C5"
-                                border.width:2
+                                // color:  "#2E87C5"
+                                border.color:"#007bff"
+                                radius: 5
                             }
                             contentItem: Text{
                                 id: filter_cancel_btn_text1
                                 text: "cancel"
                                 
-                                color:  "#2E87C5"
+                                color:  "#007bff"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -329,12 +396,15 @@ Item {
                 StackLayout {
                     width: parent.width
                     currentIndex: bar.currentIndex
+                    anchors.right:parent.right
                     Item {
                         id: rangeDateTab
+                        anchors.right:parent.right
                         Rectangle{
                             height:300
                             width:580
                             // color:"red"
+                            anchors.right:parent.right
                             Old.Calendar {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
@@ -357,6 +427,7 @@ Item {
                             height:300
                             width:580
                             // color:"yellow"
+                            anchors.right:parent.right
                             Old.Calendar {
                                 anchors.centerIn: parent
                                 id: calendar3
@@ -370,6 +441,7 @@ Item {
                         Rectangle{
                             height:300
                             width:580
+                            anchors.right:parent.right
                             // color:"blue"
                             Old.Calendar {
                                 anchors.centerIn: parent
@@ -384,6 +456,7 @@ Item {
                         Rectangle{
                             height:300
                             width:580
+                            anchors.right:parent.right
                             // color:"pink"
                             Rectangle{
                                 id: groupSelectRow
@@ -399,44 +472,36 @@ Item {
                                 ListModel{
                                     id: listModel2
                                     ListElement{
-                                        menuItem:"Value 1"
+                                        menuItem:"Last"
                                     }
                                     ListElement{
-                                        menuItem:"Value 2"
+                                        menuItem:"Previous"
                                     }
-                                    ListElement{
-                                        menuItem:"Value 3"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 4"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 5"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 6"
-                                    }
+
 
                                 }
                                 ListModel{
                                     id: listModel3
                                     ListElement{
-                                        menuItem:"Value 11"
+                                        menuItem:"Seconds"
                                     }
                                     ListElement{
-                                        menuItem:"Value 21"
+                                        menuItem:"Hours"
                                     }
                                     ListElement{
-                                        menuItem:"Value 31"
+                                        menuItem:"Days"
                                     }
                                     ListElement{
-                                        menuItem:"Value 41"
+                                        menuItem:"Weeks"
                                     }
                                     ListElement{
-                                        menuItem:"Value 51"
+                                        menuItem:"Months"
                                     }
                                     ListElement{
-                                        menuItem:"Value 61"
+                                        menuItem:"Quarters"
+                                    }
+                                    ListElement{
+                                        menuItem:"Years"
                                     }
 
                                 }
@@ -470,7 +535,7 @@ Item {
                                         width: 100
                                         height: 50
 
-                                        placeholderText: qsTr("7")
+                                        placeholderText: qsTr(" ")
 
                                         validator: IntValidator {
                                             bottom: 1
@@ -527,7 +592,8 @@ Item {
                 Text {
                     id: componentTitle
                     width:110
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    // text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text:"DateFilter"
                     elide: Text.ElideRight
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
@@ -541,6 +607,7 @@ Item {
                     width: 40
                     spacing: 5
                     anchors.verticalCenter: parent.verticalCenter
+                    
 
 
 
@@ -596,18 +663,26 @@ Item {
             }
 
         }
+        Button {
+            anchors.top:searchFilter.bottom
+            width:parent.width
 
-        BusyIndicatorTpl{
-            id: idPlesaeWaitThorbber
-            anchors.centerIn: parent
-        }
+            // text: "Open"
+            // onClicked: popupq.open()
+            onClicked: toggleDateFilter()
 
-        Text {
-            id: idPlesaeWaitText
-            text: Messages.loadingPleaseWait
-            anchors.top: idPlesaeWaitThorbber.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
         }
+        // BusyIndicatorTpl{
+        //     id: idPlesaeWaitThorbber
+        //     anchors.centerIn: parent
+        // }
+
+        // Text {
+        //     id: idPlesaeWaitText
+        //     text: Messages.loadingPleaseWait
+        //     anchors.top: idPlesaeWaitThorbber.bottom
+        //     anchors.horizontalCenter: parent.horizontalCenter
+        // }
 
 
     }
