@@ -242,6 +242,8 @@ QtObject {
     property var filterNumericalTypes: ["dataRange","dataEqual","dataNotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
     property var filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
 
+    property var filterDateUnits: ["Seconds", "Hours", "Days", "Weeks", "Months", "Quarters", "Years"]
+    property var filterComparators: ["Last", "Previous"]
     // DASHBOARD ends
 
 
