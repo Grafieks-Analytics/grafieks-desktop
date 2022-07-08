@@ -80,6 +80,8 @@ Item {
             updateValue = relativeValue + "," + today
             console.log(relativeValue, today)
 
+            DashboardParamsModel.setDateRelative(DashboardParamsModel.currentDashboard, componentName, customDateComparator, customDateValue, customDateUnit)
+
         } else {
             updateValue = referenceDateVar
         }
@@ -567,7 +569,9 @@ Item {
                                             border.width: parent && parent.activeFocus ? 2 : 1
                                             border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
                                         }
-                                        onCurrentIndexChanged: setCustomDateComparator(currentText, currentIndex)
+                                        onCurrentTextChanged: {
+                                            setCustomDateComparator(currentText)
+                                        }
                                     }
                                     TextField {
                                         id: numeroTelefoneTextField

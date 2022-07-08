@@ -759,7 +759,7 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
     valueMap = this->columnValueMap.value(dashboardId);
     values = valueMap.value(columnName);
 
-    if(relation == "dataBetween" || relation == "dataRange" || relation == "dataDateRange"){
+    if(relation == "dataBetween" || relation == "dataRange" || relation == "dataDateRange" || relation == "dataDateRelative"){
         values = value.split(",");
     } else{
         if(values.indexOf(value) < 0){
@@ -802,8 +802,48 @@ void DashboardParamsModel::deleteColumnValueMap(int dashboardId, QString columnN
 
 void DashboardParamsModel::applyFilterToDashboard(int dashboardId)
 {
-    qDebug() << "Col val map" << this->columnValueMap;
     emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
+}
+
+void DashboardParamsModel::setDateRelative(int dashboardId, QString colName, QString comparator, int dateValue, QString dateUnit)
+{
+    QVariantList filterValue;
+    filterValue << comparator << dateValue << dateUnit;
+
+    QMap<QString, QVariantList> columnFilterMap;
+    columnFilterMap.insert(colName, filterValue);
+
+    qDebug() << "Setcover" << filterValue << colName;
+
+    this->dateRelative.insert(dashboardId, columnFilterMap);
+}
+
+QVariantList DashboardParamsModel::fetchDateRelative(int dashboardId, QString columnName)
+{
+    QVariantList output;
+
+    if(this->dateRelative.contains(dashboardId)){
+        QMap<QString, QVariantList> columnFilterMap = this->dateRelative.value(dashboardId);
+
+        if(columnFilterMap.contains(columnName)){
+            output = columnFilterMap.value(columnName);
+        }
+    }
+
+    return output;
+}
+
+void DashboardParamsModel::deleteDateRelative(int dashboardId, QString columnName)
+{
+    if(this->dateRelative.contains(dashboardId)){
+        QMap<QString, QVariantList> columnFilterMap = this->dateRelative.value(dashboardId);
+
+        if(columnFilterMap.contains(columnName)){
+            columnFilterMap.remove(columnName);
+
+            this->dateRelative.insert(dashboardId, columnFilterMap);
+        }
+    }
 }
 
 void DashboardParamsModel::clearFilters(){
@@ -1666,6 +1706,7 @@ void DashboardParamsModel::saveDashboard()
 
     QJsonObject columnAliasMapObj;
     QJsonObject columnFilterTypeObj;
+    QJsonObject dateRelativeObj;
     QJsonObject columnIncludeExcludeMapObj;
     QJsonObject columnValueMapObj;
 
@@ -1764,6 +1805,13 @@ void DashboardParamsModel::saveDashboard()
 
         columnFilterTypeObj.insert(QString::number(dashboardId), columnFilterTypeTmpObj);
 
+        // dateRelative
+        QJsonObject dateRelativeTmpObj;
+        foreach(QString columnName, this->dateRelative.value(dashboardId).keys())
+            dateRelativeTmpObj.insert(columnName, QJsonValue::fromVariant(this->dateRelative.value(dashboardId).value(columnName)));
+
+        dateRelativeObj.insert(QString::number(dashboardId), dateRelativeTmpObj);
+
         // columnIncludeExcludeMap
         QJsonObject columnIncludeExcludeMapTmpObj;
         foreach(QString columnName, this->columnIncludeExcludeMap.value(dashboardId).keys())
@@ -1839,6 +1887,7 @@ void DashboardParamsModel::saveDashboard()
 
     dashboardParamsObject.insert("columnAliasMap", columnAliasMapObj);
     dashboardParamsObject.insert("columnFilterType", columnFilterTypeObj);
+    dashboardParamsObject.insert("dateRelative", dateRelativeObj);
     dashboardParamsObject.insert("columnIncludeExcludeMap", columnIncludeExcludeMapObj);
     dashboardParamsObject.insert("columnValueMap", columnValueMapObj);
 

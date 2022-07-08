@@ -42,6 +42,7 @@ class DashboardParamsModel : public QObject
     QMap<int, QVariantMap> columnFilterType;              // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
     QMap<int, QVariantMap> columnIncludeExcludeMap;       // dashboardId - If the filter data is to be included or excluded
     QMap<int, QMap<QString, QStringList>> columnValueMap; // dashboardId - <Column name - value list>
+    QMap<int, QMap<QString, QVariantList>> dateRelative;  // dashboardId - <dateColName <timeframe - unit>>
 
     // Customize Dashboard parameters
     QMap<int, QString> dashboardName;
@@ -150,6 +151,11 @@ public:
     Q_INVOKABLE QStringList fetchColumnValueMap(int dashboardId, QString columnName);
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
     Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
+
+    // Specific filter cases
+    Q_INVOKABLE void setDateRelative(int dashboardId, QString colName, QString comparator, int dateValue, QString dateUnit);
+    Q_INVOKABLE QVariantList fetchDateRelative(int dashboardId, QString columnName);
+    Q_INVOKABLE void deleteDateRelative(int dashboardId, QString columnName);
 
     Q_INVOKABLE void clearFilters();
 
