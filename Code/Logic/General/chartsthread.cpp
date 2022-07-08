@@ -3773,8 +3773,6 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryExtractFu
             }
         }
 
-        qDebug() << "WHERE" << Q_FUNC_INFO << this->dashboardWhereConditions;
-        qDebug() << "Final query string" << queryString;
 
         dataList = con.Query(queryString.toStdString());
         if(!dataList->error.empty())

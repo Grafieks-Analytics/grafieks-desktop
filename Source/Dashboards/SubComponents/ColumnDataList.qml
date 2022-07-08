@@ -72,6 +72,7 @@ Rectangle {
             const excludeList = [Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
 
             console.log(excludeList.includes(filterType), "FTYPE", filterType)
+
             if(!excludeList.includes(filterType)) {
                 listModel.clear()
             }
@@ -124,6 +125,9 @@ Rectangle {
             DelegateChoice { roleValue: Constants.filterDateTypes[2]; FilterDataSingleDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterDateTypes[3]; FilterDataMultiDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterDateTypes[4]; FilterDataDateRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[5]; FilterDataSingleDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[6]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[7]; FilterDataDateRange { componentName: name } }
         }
 
         delegate: chooser

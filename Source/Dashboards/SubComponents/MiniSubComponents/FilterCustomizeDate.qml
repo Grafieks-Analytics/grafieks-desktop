@@ -45,6 +45,10 @@ Item {
                     break;
 
                 case Constants.filterDateTypes[4]:
+                case Constants.filterDateTypes[5]:
+                case Constants.filterDateTypes[6]:
+                case Constants.filterDateTypes[7]:
+
                     control5.checked = true
                     labelShapePopup1.closePopup()
                     break;
@@ -294,7 +298,7 @@ Item {
         }
 
 
-      
+
     }
 
 }
