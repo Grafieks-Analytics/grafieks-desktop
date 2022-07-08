@@ -42,6 +42,23 @@ Item {
     }
 
     // Javascript
+
+    onComponentNameChanged: {
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            // Info
+            console.log("Date values Info", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard, componentName))
+
+            // Calendar values
+            console.log("Date values", previousCheckValues)
+
+            // Relative values
+            console.log("Date values relative", DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, componentName))
+        }
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+    }
+
     Component.onCompleted: {
         popupq.open()
 
