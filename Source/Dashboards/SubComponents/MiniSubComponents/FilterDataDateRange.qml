@@ -20,13 +20,56 @@ Item {
     property bool master: false
 
     // filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
+    // property var filterDateUnits: ["Seconds", "Hours", "Days", "Weeks", "Months", "Quarters", "Years"]
+    // property var filterComparators: ["Last", "Previous"]
 
     property var fromDateVar : ""
     property var toDateVar : ""
     property var referenceDateVar : ""
+    property var customDateComparator : Constants.filterComparators[0]
+    property var customDateValue : ""
+    property var customDateUnit : Constants.filterComparators[0]
     property var toggleStatus : true
 
 
+    // Subcomponents
+    ListModel{
+        id: listModel2
+    }
+
+    ListModel{
+        id: listModel3
+    }
+
+    // Javascript
+
+    onComponentNameChanged: {
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            // Info
+            console.log("Date values Info", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard, componentName))
+
+            // Calendar values
+            console.log("Date values", previousCheckValues)
+
+            // Relative values
+            console.log("Date values relative", DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, componentName))
+        }
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+    }
+
+    Component.onCompleted: {
+        popupq.open()
+
+        Constants.filterComparators.forEach(function(item){
+            listModel2.append({"name" : item})
+        })
+
+        Constants.filterDateUnits.forEach(function(item){
+            listModel3.append({"name" : item})
+        })
+    }
 
     function setFilterType(newFilter){
         let currentDashboardId = DashboardParamsModel.currentDashboard
@@ -48,6 +91,14 @@ Item {
 
         if(currentColumnFilterType === Constants.filterDateTypes[4]){
             updateValue = fromDateVar + "," + toDateVar
+        } else if (currentColumnFilterType === Constants.filterDateTypes[7]) {
+            let today= new Date();
+            let relativeValue = getRelativeValue(new Date())
+            updateValue = relativeValue + "," + today
+            console.log(relativeValue, today)
+
+            DashboardParamsModel.setDateRelative(DashboardParamsModel.currentDashboard, componentName, customDateComparator, customDateValue, customDateUnit)
+
         } else {
             updateValue = referenceDateVar
         }
@@ -57,6 +108,44 @@ Item {
 
         closePopup()
 
+    }
+
+    function getRelativeValue(today){
+        let comparedDate = today
+        switch(customDateUnit){
+
+            // Seconds
+        case Constants.filterDateUnits[0]:
+            comparedDate.setSeconds(comparedDate.getSeconds() - customDateValue)
+            break
+            // Hours
+        case Constants.filterDateUnits[1]:
+            comparedDate.setHours(comparedDate.getHours() - customDateValue)
+            break
+            // Days
+        case Constants.filterDateUnits[2]:
+            comparedDate.setDate(comparedDate.getDate() - customDateValue)
+            break
+            // Weeks
+        case Constants.filterDateUnits[3]:
+            comparedDate.setDate(comparedDate.getDate() - customDateValue * 7)
+            break
+            // Months
+        case Constants.filterDateUnits[4]:
+            comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 7)
+            break
+            // Quarters
+        case Constants.filterDateUnits[5]:
+             comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 3)
+            break
+            // Years
+        case Constants.filterDateUnits[6]:
+            comparedDate.setYear(comparedDate.getFullYear() - customDateValue)
+            break
+
+        }
+
+        return comparedDate
     }
 
     function filterClicked(){
@@ -88,6 +177,21 @@ Item {
         console.log("valueDate after", referenceDateVar)
     }
 
+    function setCustomDateComparator(p){
+        customDateComparator = p
+        console.log("custom date comparator", p)
+    }
+
+    function setCustomDateValue(p){
+        customDateValue = p
+        console.log("custom date value", p)
+    }
+
+    function setCustomDateUnit(p){
+        customDateUnit = p
+        console.log("custom date unit", p)
+    }
+
     function closePopup(){
         popupq.close()
     }
@@ -102,10 +206,6 @@ Item {
              toggleStatus = true;
             return
         }
-    }
-
-    Component.onCompleted: {
-        popupq.open()
     }
 
     ButtonGroup{
@@ -468,43 +568,6 @@ Item {
                                 height: 200
                                 anchors.rightMargin: 20
 
-
-                                ListModel{
-                                    id: listModel2
-                                    ListElement{
-                                        menuItem:"Last"
-                                    }
-                                    ListElement{
-                                        menuItem:"Previous"
-                                    }
-
-
-                                }
-                                ListModel{
-                                    id: listModel3
-                                    ListElement{
-                                        menuItem:"Seconds"
-                                    }
-                                    ListElement{
-                                        menuItem:"Hours"
-                                    }
-                                    ListElement{
-                                        menuItem:"Days"
-                                    }
-                                    ListElement{
-                                        menuItem:"Weeks"
-                                    }
-                                    ListElement{
-                                        menuItem:"Months"
-                                    }
-                                    ListElement{
-                                        menuItem:"Quarters"
-                                    }
-                                    ListElement{
-                                        menuItem:"Years"
-                                    }
-
-                                }
                                 Rectangle{
                                     height:80
                                     width:parent.width-20
@@ -522,6 +585,9 @@ Item {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
                                             border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
+                                        }
+                                        onCurrentTextChanged: {
+                                            setCustomDateComparator(currentText)
                                         }
                                     }
                                     TextField {
@@ -543,8 +609,8 @@ Item {
                                         }
 
                                         font.bold: true
-
                                         inputMethodHints: Qt.ImhDigitsOnly
+                                        onTextChanged: setCustomDateValue(numeroTelefoneTextField.text)
                                     }
                                     ComboBox{
                                         id: selectOption3
@@ -559,6 +625,7 @@ Item {
                                             border.width: parent && parent.activeFocus ? 2 : 1
                                             border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
                                         }
+                                        onCurrentTextChanged: setCustomDateUnit(currentText)
                                     }
                                 }
 
