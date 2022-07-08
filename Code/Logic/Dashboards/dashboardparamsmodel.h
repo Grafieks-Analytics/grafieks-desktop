@@ -150,13 +150,14 @@ public:
     Q_INVOKABLE void setColumnValueMap(int dashboardId, QString columnName, QString value);
     Q_INVOKABLE QStringList fetchColumnValueMap(int dashboardId, QString columnName);
     Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
-    Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
 
     // Specific filter cases
     Q_INVOKABLE void setDateRelative(int dashboardId, QString colName, QString comparator, int dateValue, QString dateUnit);
     Q_INVOKABLE QVariantList fetchDateRelative(int dashboardId, QString columnName);
     Q_INVOKABLE void deleteDateRelative(int dashboardId, QString columnName);
 
+
+    Q_INVOKABLE void applyFilterToDashboard(int dashboardId);
     Q_INVOKABLE void clearFilters();
 
     // Customize Dashboard parameters

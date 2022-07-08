@@ -813,8 +813,6 @@ void DashboardParamsModel::setDateRelative(int dashboardId, QString colName, QSt
     QMap<QString, QVariantList> columnFilterMap;
     columnFilterMap.insert(colName, filterValue);
 
-    qDebug() << "Setcover" << filterValue << colName;
-
     this->dateRelative.insert(dashboardId, columnFilterMap);
 }
 
@@ -993,10 +991,10 @@ void DashboardParamsModel::clearAllMapValuesAfterDisconnect(){
     this->dashboardWidgetCoordinates.clear(); // <dashboardId, <widgetId, [x1, y1, x2, y2]>>
     this->dashboardWidgetTypeMap.clear();              // <dashboardId, <widgetId, reportTypeId (constant)>>
     this->dashboardWidgetUrl.clear();                 // <dashboardId, <widgetId, URI Link>>
-    this->dashboardUniqueWidgetMap.clear();               
+    this->dashboardUniqueWidgetMap.clear();
     this->dashboardReportMap.clear();
 }
-    
+
 
 void DashboardParamsModel::setReportBackgroundColor(int dashboardId, int widgetId, QString color)
 {
@@ -1565,6 +1563,20 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         foreach(QString column, columnFilterTypeKeys){
             QString filter = childObj.value(column).toString();
             this->setColumnFilterType(dashboardId.toInt(), column, filter);
+        }
+
+        // dateRelative
+        mainObj = dashboardParams.value("dateRelative").toObject();
+        childObj = mainObj.value(dashboardId).toObject();
+        QStringList dateRelativeKeys = childObj.keys();
+
+        foreach(QString column, dateRelativeKeys){
+            QVariantList tmpParams =  childObj.value(column).toArray().toVariantList();
+            QString comparator = tmpParams.at(0).toString();
+            int value = tmpParams.at(1).toInt();
+            QString unit = tmpParams.at(2).toString();
+
+            this->setDateRelative(dashboardId.toInt(), column, comparator, value, unit);
         }
 
         // columnIncludeExcludeMap
