@@ -25,7 +25,7 @@ Item {
                 var currentColumn = DashboardParamsModel.currentSelectedColumn
                 var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
 
-                // filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
+                // filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAftypeer", "dataDateRelative"]
 
                 switch(columnFilter){
                 case Constants.filterDateTypes[0]:
@@ -266,7 +266,32 @@ Item {
         RadioButton {
             id: control5
             ButtonGroup.group: buttonGroupFilterTypeDate
-            onCheckedChanged: setFilterType(Constants.filterDateTypes[4])
+            onCheckedChanged: {
+                // console.log( "DashboardParamsModel.currentSelectedColumn", DashboardParamsModel.currentSelectedColumn)
+                  console.log("Date values Info oncompleted", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date"))
+
+                // GeneralParamsModel.isWorkbookInEditMode() ? DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,"Order_Date") : setFilterType(Constants.filterDateTypes[4])}
+
+                 if(GeneralParamsModel.isWorkbookInEditMode()){
+                     if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateRelative"){
+                           setFilterType(Constants.filterDateTypes[7])
+                        }
+                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateAfter"){
+                            setFilterType(Constants.filterDateTypes[6])
+                        }
+                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateBefore"){
+                            setFilterType(Constants.filterDateTypes[5])
+                        }
+                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateRange"){
+                            setFilterType(Constants.filterDateTypes[4])
+                        }
+
+                 }
+                 else{
+                          setFilterType(Constants.filterDateTypes[4])
+                        }
+                }
+                
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
