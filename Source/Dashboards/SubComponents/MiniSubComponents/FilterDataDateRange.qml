@@ -44,6 +44,9 @@ Item {
     // Javascript
 
     onComponentNameChanged: {
+         // console.log( "DashboardParamsModel.currentSelectedColumn", DashboardParamsModel.currentSelectedColumn)
+                  console.log("Date values Info oncompleted date", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date"))
+
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         if(previousCheckValues.length > 0){
             // Info
@@ -60,6 +63,7 @@ Item {
     }
 
     Component.onCompleted: {
+         
         popupq.open()
 
         Constants.filterComparators.forEach(function(item){
@@ -252,6 +256,7 @@ Item {
                     width: 200
                     // border.color: Constants.darkThemeColor
                     anchors.left:parent.left
+  
 
 
 
@@ -262,9 +267,29 @@ Item {
                         height:parent.height
                         anchors.right:parent.right
                         anchors.rightMargin:30
+                        currentIndex:{
+                        if(GeneralParamsModel.isWorkbookInEditMode()){
+                        if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateRelative"){
+                            3
+                        }
+                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateAfter"){
+                            2
+                        }
+                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateBefore"){
+                            1
+                        }
+                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateRange"){
+                            0
+                        }
+                        }
+                        
+                        else{
+                           0
+                        }
+                    } 
                         TabButton {
                             id:btn1
-                            width: 170
+                            width: 174
                             anchors.right:parent.right
                             // anchors.topMargin:10
                             // anchors.horizontalCenter: container.horizontalCenter
@@ -288,7 +313,7 @@ Item {
                         TabButton {
                             id:btn2
                             anchors.top:btn1.bottom
-                            width: 170
+                            width: 174
                             anchors.right:parent.right
                             // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
@@ -312,7 +337,7 @@ Item {
                         TabButton {
                             id:btn3
                             anchors.top:btn2.bottom
-                            width: 170
+                            width: 174
                             anchors.right:parent.right
                             // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
@@ -341,7 +366,7 @@ Item {
                         TabButton {
                             anchors.top:btn3.bottom
                             anchors.right:parent.right
-                            width: 170
+                            width: 174
                             // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
                             // text: qsTr("Relative")
@@ -370,12 +395,9 @@ Item {
                         anchors.topMargin:-15
                         anchors.verticalCenter:parent.centerIn
                         anchors.right:bar.right
-                        anchors.leftMargin:-14
+                        anchors.leftMargin:-10
                         anchors.bottom: allButtons.top
                     }
-
-
-
                 }
                 ToolSeparator{
                     orientation: Qt.Horizontal
@@ -397,6 +419,7 @@ Item {
                         id: apply_btn1q
                         anchors.top: bottomButtons.top
                         anchors.topMargin: 3
+                        
 
                         anchors.left: parent.left
                         anchors.leftMargin: 5
@@ -495,7 +518,7 @@ Item {
 
                 StackLayout {
                     width: parent.width
-                    currentIndex: bar.currentIndex
+                     currentIndex:bar.currentIndex
                     anchors.right:parent.right
                     Item {
                         id: rangeDateTab
@@ -509,7 +532,7 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 id: calendar1
-                                selectedDate: new Date()
+                                selectedDate: previousCheckValues
                                 onSelectedDateChanged:fromDate(selectedDate)
                             }
                             Old.Calendar {
@@ -581,6 +604,9 @@ Item {
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.left: parent.left
                                         anchors.leftMargin:25
+                                        displayText: {
+                                            GeneralParamsModel.isWorkbookInEditMode()?DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "Order_Date")[0]:""
+                                        }
                                         background: Rectangle {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
@@ -597,6 +623,7 @@ Item {
                                         anchors.leftMargin:15
                                         // anchors.right: selectOptio3.right
                                         anchors.left: selectOption2.right
+                                        text:{GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "Order_Date")[1]:""}
 
                                         width: 100
                                         height: 50
@@ -620,6 +647,9 @@ Item {
                                         width: 150
                                         height: 50
                                         anchors.left: numeroTelefoneTextField.right
+                                        displayText: {
+                                            GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "Order_Date")[2]:""
+                                        }
                                         background: Rectangle {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
