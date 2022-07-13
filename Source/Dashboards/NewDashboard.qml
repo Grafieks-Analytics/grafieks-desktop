@@ -58,7 +58,7 @@ Page {
     Connections {
         target: DashboardParamsModel
 
-        function onDashboardNameChanged(dashboardId, dashboardName){
+        function onDashboardNameChanged(dashboardId, dashboardName){      
             for(var i = 0; i < dashboardModel.rowCount(); i++){
                 if(dashboardModel.get(i).dashboardId === dashboardId){
                     dashboardModel.get(i).dashboardName = dashboardName
