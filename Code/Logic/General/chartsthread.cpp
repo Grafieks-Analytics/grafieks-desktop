@@ -329,7 +329,7 @@ void ChartsThread::getGroupedBarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -358,7 +358,7 @@ void ChartsThread::getGroupedBarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -478,7 +478,7 @@ void ChartsThread::getNewGroupedBarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalNewGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -507,7 +507,7 @@ void ChartsThread::getNewGroupedBarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalNewGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -643,7 +643,7 @@ void ChartsThread::getLineBarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalLineBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -668,7 +668,7 @@ void ChartsThread::getLineBarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalLineBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -797,7 +797,7 @@ void ChartsThread::getPieChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalPieChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -822,7 +822,7 @@ void ChartsThread::getPieChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalPieChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -933,7 +933,7 @@ void ChartsThread::getFunnelChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalFunnelChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -958,7 +958,7 @@ void ChartsThread::getFunnelChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalFunnelChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1075,7 +1075,7 @@ void ChartsThread::getRadarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalRadarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1100,7 +1100,7 @@ void ChartsThread::getRadarChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalRadarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1224,7 +1224,7 @@ void ChartsThread::getScatterChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalScatterChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1254,7 +1254,7 @@ void ChartsThread::getScatterChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalScatterChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1393,7 +1393,7 @@ void ChartsThread::getScatterChartNumericalValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalScatterChartNumericalValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1413,7 +1413,7 @@ void ChartsThread::getScatterChartNumericalValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalScatterChartNumericalValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1515,7 +1515,7 @@ void ChartsThread::getHeatMapChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalHeatMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1545,7 +1545,7 @@ void ChartsThread::getHeatMapChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalHeatMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1705,7 +1705,7 @@ void ChartsThread::getGaugeChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalGaugeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1728,7 +1728,7 @@ void ChartsThread::getGaugeChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalGaugeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1826,7 +1826,7 @@ void ChartsThread::getSankeyChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalSankeyChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1851,7 +1851,7 @@ void ChartsThread::getSankeyChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalSankeyChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1976,7 +1976,7 @@ void ChartsThread::getKPIChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalKPIChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1999,7 +1999,7 @@ void ChartsThread::getKPIChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalKPIChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2116,7 +2116,7 @@ void ChartsThread::getTableChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalTableChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2234,7 +2234,7 @@ void ChartsThread::getTableChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalTableChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2484,7 +2484,7 @@ void ChartsThread::getPivotChartValues()
             if(this->currentChartSource == Constants::dashboardScreen){
 
                 if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                    emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                    emit signalPivotChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                     return;
                 }
             }
@@ -2580,7 +2580,7 @@ void ChartsThread::getPivotChartValues()
             if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
                 if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                    emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                    emit signalPivotChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                     return;
                 }
             }
@@ -2846,7 +2846,7 @@ void ChartsThread::getMultiLineChartValues()
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalMultiLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2875,7 +2875,7 @@ void ChartsThread::getMultiLineChartValues()
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                emit signalMultiLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -3028,7 +3028,15 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(identifier == "getAreaChartValues"){
+                    emit signalAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getLineChartValues"){
+                    emit signalLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getWaterfallChartValues"){
+                    emit signalWaterfallChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalLineAreaWaterfallValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3052,7 +3060,16 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+
+                if(identifier == "getAreaChartValues"){
+                    emit signalAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getLineChartValues"){
+                    emit signalLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getWaterfallChartValues"){
+                    emit signalWaterfallChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalLineAreaWaterfallValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3191,7 +3208,15 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(identifier == "getSunburstChartValues"){
+                    emit signalSunburstChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeChartValues"){
+                    emit signalTreeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeMapChartValues"){
+                    emit signalTreeMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalTreeSunburstValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3328,7 +3353,15 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(identifier == "getSunburstChartValues"){
+                    emit signalSunburstChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeChartValues"){
+                    emit signalTreeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeMapChartValues"){
+                    emit signalTreeMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalTreeSunburstValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3572,7 +3605,13 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         if(this->currentChartSource == Constants::dashboardScreen){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(identifier == "getStackedBarChartValues"){
+                    emit signalStackedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getStackedAreaChartValues") {
+                    emit signalStackedAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else{
+                    emit signalStackedBarAreaValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3601,7 +3640,13 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
             if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(identifier == "getStackedBarChartValues"){
+                    emit signalStackedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getStackedAreaChartValues") {
+                    emit signalStackedAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else{
+                    emit signalStackedBarAreaValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
