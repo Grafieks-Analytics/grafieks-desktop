@@ -73,17 +73,19 @@ Rectangle {
 
             console.log(excludeList.includes(filterType), "FTYPE", filterType)
 
-            if(!excludeList.includes(filterType)) {
-                listModel.clear()
-            }
-
             var dashboardId = DashboardParamsModel.currentDashboard
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
 
-            showColumns.forEach((item) => {
-                                    var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
-                                    listModel.append({type: columnType, name: item})
-                                })
+            if(!excludeList.includes(filterType)) {
+                listModel.clear()
+
+                showColumns.forEach((item) => {
+                                        var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
+                                        listModel.append({type: columnType, name: item})
+                                    })
+            }
+
+
 
         }
     }
