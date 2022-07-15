@@ -7,7 +7,8 @@ namespace Constants
 {
     // General Constants
     const QString appName = "Grafieks Desktop";
-    const QString appVersion = "Free";
+//    const QString appVersion = "Free";
+    const QString appVersion = "Pro";
     const QString appVersionCode = "1.0.3";
     const QString source = "desktop";
 

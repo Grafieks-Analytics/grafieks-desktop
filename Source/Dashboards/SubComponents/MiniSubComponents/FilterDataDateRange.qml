@@ -44,8 +44,8 @@ Item {
     // Javascript
 
     onComponentNameChanged: {
-         // console.log( "DashboardParamsModel.currentSelectedColumn", DashboardParamsModel.currentSelectedColumn)
-                  console.log("Date values Info oncompleted date", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date"))
+        let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
+        console.log("Date values Info oncompleted date", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn))
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         if(previousCheckValues.length > 0){
@@ -63,7 +63,7 @@ Item {
     }
 
     Component.onCompleted: {
-         
+
         popupq.open()
 
         Constants.filterComparators.forEach(function(item){
@@ -140,7 +140,7 @@ Item {
             break
             // Quarters
         case Constants.filterDateUnits[5]:
-             comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 3)
+            comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 3)
             break
             // Years
         case Constants.filterDateUnits[6]:
@@ -203,11 +203,11 @@ Item {
         if( toggleStatus){
             popupq.close()
             toggleStatus = false;
-            return    
+            return
         }
         else{
-             popupq.open()
-             toggleStatus = true;
+            popupq.open()
+            toggleStatus = true;
             return
         }
     }
@@ -256,7 +256,7 @@ Item {
                     width: 200
                     // border.color: Constants.darkThemeColor
                     anchors.left:parent.left
-  
+
 
 
 
@@ -268,25 +268,26 @@ Item {
                         anchors.right:parent.right
                         anchors.rightMargin:30
                         currentIndex:{
-                        if(GeneralParamsModel.isWorkbookInEditMode()){
-                        if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateRelative"){
-                            3
+                            let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
+                            if(GeneralParamsModel.isWorkbookInEditMode()){
+                                if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[7]){
+                                    3
+                                }
+                                else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[6]){
+                                    2
+                                }
+                                else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[5]){
+                                    1
+                                }
+                                else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[4]){
+                                    0
+                                }
+                            }
+
+                            else{
+                                0
+                            }
                         }
-                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateAfter"){
-                            2
-                        }
-                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateBefore"){
-                            1
-                        }
-                        else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  "Order_Date")=="dataDateRange"){
-                            0
-                        }
-                        }
-                        
-                        else{
-                           0
-                        }
-                    } 
                         TabButton {
                             id:btn1
                             width: 174
@@ -518,7 +519,7 @@ Item {
 
                 StackLayout {
                     width: parent.width
-                     currentIndex:bar.currentIndex
+                    currentIndex:bar.currentIndex
                     anchors.right:parent.right
                     Item {
                         id: rangeDateTab
@@ -605,7 +606,7 @@ Item {
                                         anchors.left: parent.left
                                         anchors.leftMargin:25
                                         displayText: {
-                                            GeneralParamsModel.isWorkbookInEditMode()?DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "Order_Date")[0]:""
+                                            GeneralParamsModel.isWorkbookInEditMode()?DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[0]:""
                                         }
                                         background: Rectangle {
                                             color:"white"
@@ -623,7 +624,7 @@ Item {
                                         anchors.leftMargin:15
                                         // anchors.right: selectOptio3.right
                                         anchors.left: selectOption2.right
-                                        text:{GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "Order_Date")[1]:""}
+                                        text:{GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "DashboardParamsModel.currentSelectedColumn")[1]:""}
 
                                         width: 100
                                         height: 50
@@ -648,7 +649,7 @@ Item {
                                         height: 50
                                         anchors.left: numeroTelefoneTextField.right
                                         displayText: {
-                                            GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "Order_Date")[2]:""
+                                            GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[2]:""
                                         }
                                         background: Rectangle {
                                             color:"white"
