@@ -13,34 +13,66 @@ Item {
     id: filterDataDateRange
     // width: 400
     width: parent.width-25
-    height: 200
+    height: 90
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataDateRange.objectName
     property var modelContent: []
     property bool master: false
 
     // filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
+    // property var filterDateUnits: ["Seconds", "Hours", "Days", "Weeks", "Months", "Quarters", "Years"]
+    // property var filterComparators: ["Last", "Previous"]
 
     property var fromDateVar : ""
     property var toDateVar : ""
     property var referenceDateVar : ""
+    property var customDateComparator : Constants.filterComparators[0]
+    property var customDateValue : ""
+    property var customDateUnit : Constants.filterComparators[0]
+    property var toggleStatus : true
 
-    Popup {
-        id: popup
-        x: 100
-        y: 100
-        width: 200
-        height: 300
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-        Rectangle{
-            height: 300
-            width: 300
-            // color: "red"
-            border.color: Constants.darkThemeColor
+    // Subcomponents
+    ListModel{
+        id: listModel2
+    }
+
+    ListModel{
+        id: listModel3
+    }
+
+    // Javascript
+
+    onComponentNameChanged: {
+        let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
+        console.log("Date values Info oncompleted date", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn))
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            // Info
+            console.log("Date values Info", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard, componentName))
+
+            // Calendar values
+            console.log("Date values", previousCheckValues)
+
+            // Relative values
+            console.log("Date values relative", DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, componentName))
         }
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+    }
+
+    Component.onCompleted: {
+
+        popupq.open()
+
+        Constants.filterComparators.forEach(function(item){
+            listModel2.append({"name" : item})
+        })
+
+        Constants.filterDateUnits.forEach(function(item){
+            listModel3.append({"name" : item})
+        })
     }
 
     function setFilterType(newFilter){
@@ -63,6 +95,14 @@ Item {
 
         if(currentColumnFilterType === Constants.filterDateTypes[4]){
             updateValue = fromDateVar + "," + toDateVar
+        } else if (currentColumnFilterType === Constants.filterDateTypes[7]) {
+            let today= new Date();
+            let relativeValue = getRelativeValue(new Date())
+            updateValue = relativeValue + "," + today
+            console.log(relativeValue, today)
+
+            DashboardParamsModel.setDateRelative(DashboardParamsModel.currentDashboard, componentName, customDateComparator, customDateValue, customDateUnit)
+
         } else {
             updateValue = referenceDateVar
         }
@@ -72,6 +112,44 @@ Item {
 
         closePopup()
 
+    }
+
+    function getRelativeValue(today){
+        let comparedDate = today
+        switch(customDateUnit){
+
+            // Seconds
+        case Constants.filterDateUnits[0]:
+            comparedDate.setSeconds(comparedDate.getSeconds() - customDateValue)
+            break
+            // Hours
+        case Constants.filterDateUnits[1]:
+            comparedDate.setHours(comparedDate.getHours() - customDateValue)
+            break
+            // Days
+        case Constants.filterDateUnits[2]:
+            comparedDate.setDate(comparedDate.getDate() - customDateValue)
+            break
+            // Weeks
+        case Constants.filterDateUnits[3]:
+            comparedDate.setDate(comparedDate.getDate() - customDateValue * 7)
+            break
+            // Months
+        case Constants.filterDateUnits[4]:
+            comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 7)
+            break
+            // Quarters
+        case Constants.filterDateUnits[5]:
+            comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 3)
+            break
+            // Years
+        case Constants.filterDateUnits[6]:
+            comparedDate.setYear(comparedDate.getFullYear() - customDateValue)
+            break
+
+        }
+
+        return comparedDate
     }
 
     function filterClicked(){
@@ -86,29 +164,52 @@ Item {
 
 
     function fromDate(d){
-        fromDateVar = d
+        fromDateVar = d.toISOString().split('T')[0]
         console.log("valueDate from", fromDateVar)
     }
 
     function toDate(d){
-        toDateVar = d
+        toDateVar = d.toISOString().split('T')[0]
         console.log("valueDate to", toDateVar)
     }
     function beforeDate(d){
-        referenceDateVar = d
+        referenceDateVar = d.toISOString().split('T')[0]
         console.log("valueDate before", referenceDateVar)
     }
     function afterDate(d){
-        referenceDateVar = d
+        referenceDateVar = d.toISOString().split('T')[0]
         console.log("valueDate after", referenceDateVar)
+    }
+
+    function setCustomDateComparator(p){
+        customDateComparator = p
+        console.log("custom date comparator", p)
+    }
+
+    function setCustomDateValue(p){
+        customDateValue = p
+        console.log("custom date value", p)
+    }
+
+    function setCustomDateUnit(p){
+        customDateUnit = p
+        console.log("custom date unit", p)
     }
 
     function closePopup(){
         popupq.close()
     }
-
-    Component.onCompleted: {
-        popupq.open()
+    function toggleDateFilter(){
+        if( toggleStatus){
+            popupq.close()
+            toggleStatus = false;
+            return
+        }
+        else{
+            popupq.open()
+            toggleStatus = true;
+            return
+        }
     }
 
     ButtonGroup{
@@ -131,20 +232,21 @@ Item {
             width:parent.width
             height:25
             color: Constants.themeColor
-            // Button {
-            //     text: "Open"
-            //     onClicked: popupq.open()
-            // }
+            
 
             Popup {
                 id: popupq
-                x: -680
-                y: 50
+                x: -630
+                y: 72
                 width: 800
                 height: 400
                 modal: false
                 focus: true
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                background: Rectangle {
+                    color: "white"
+                    border.color: "lightgrey"
+                }
 
 
 
@@ -152,87 +254,173 @@ Item {
                     id:container
                     height: parent.height-60
                     width: 200
-                    border.color: Constants.darkThemeColor
-                    anchors.right:parent.right
+                    // border.color: Constants.darkThemeColor
+                    anchors.left:parent.left
+
+
+
 
 
                     TabBar {
                         id: bar
-                        width: parent.width-10
+                        width: parent.width-20
                         height:parent.height
                         anchors.right:parent.right
+                        anchors.rightMargin:30
+                        currentIndex:{
+                            let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
+                            if(GeneralParamsModel.isWorkbookInEditMode()){
+                                if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[7]){
+                                    3
+                                }
+                                else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[6]){
+                                    2
+                                }
+                                else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[5]){
+                                    1
+                                }
+                                else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[4]){
+                                    0
+                                }
+                            }
+
+                            else{
+                                0
+                            }
+                        }
                         TabButton {
                             id:btn1
-                            width: 170
+                            width: 174
                             anchors.right:parent.right
-                            anchors.topMargin:10
-                            anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("From - To")
+                            // anchors.topMargin:10
+                            // anchors.horizontalCenter: container.horizontalCenter
+                            // text: qsTr("From - To")
                             onClicked:  setFilterType(Constants.filterDateTypes[4])
                             Rectangle {
+                                Text {
+                                    text: "From - To"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 0) ? "lightgray" : "white"
                             }
                         }
                         TabButton {
                             id:btn2
                             anchors.top:btn1.bottom
-                            width: 170
+                            width: 174
                             anchors.right:parent.right
-                            anchors.topMargin:20
+                            // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("Before")
+                            // text: qsTr("Before")
                             onClicked:  setFilterType(Constants.filterDateTypes[5])
                             Rectangle {
+                                Text {
+                                    text: "Before"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 1) ? "lightgray" : "white"
                             }
                         }
                         TabButton {
                             id:btn3
                             anchors.top:btn2.bottom
-                            width: 170
+                            width: 174
                             anchors.right:parent.right
-                            anchors.topMargin:20
+                            // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("After")
+                            
                             onClicked: setFilterType(Constants.filterDateTypes[6])
+                            // Rectangle {
+                            //     anchors.fill: parent
+                            //     color: ( parent.pressed ? "white" : "lightgray" )
+                            //     opacity: 0.5
+                            // }
                             Rectangle {
+                                Text {
+                                    text: "After"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 2) ? "lightgray" : "white"
                             }
                         }
                         TabButton {
                             anchors.top:btn3.bottom
                             anchors.right:parent.right
-                            width: 170
-                            anchors.topMargin:20
+                            width: 174
+                            // anchors.topMargin:20
                             anchors.horizontalCenter: container.horizontalCenter
-                            text: qsTr("Relative")
+                            // text: qsTr("Relative")
                             onClicked:  setFilterType(Constants.filterDateTypes[7])
                             Rectangle {
+                                Text {
+                                    text: "Relative"
+                                    color: "black"
+                                    // anchors.horizontalCenter: parent.horizontalCenter
+                                    padding:20
+                                    anchors.verticalCenter: parent.verticalCenter
+
+
+                                }
+
                                 anchors.fill: parent
-                                color: ( parent.pressed ? "white" : "#2E87C5" )
-                                opacity: 0.5
+                                color:  (bar.currentIndex == 3) ? "lightgray" : "white"
                             }
                         }
                     }
-
-
+                    
+                    ToolSeparator{
+                        orientation: Qt.vertical
+                        height: parent.height + 10
+                        anchors.top:parent.top
+                        anchors.topMargin:-15
+                        anchors.verticalCenter:parent.centerIn
+                        anchors.right:bar.right
+                        anchors.leftMargin:-10
+                        anchors.bottom: allButtons.top
+                    }
+                }
+                ToolSeparator{
+                    orientation: Qt.Horizontal
+                    width: parent.width + 30
+                    anchors.rightMargin:-15
+                    anchors.horizontalCenter:parent.centerIn
+                    anchors.right:parent.right
+                    anchors.bottom: allButtons.top
                 }
                 Rectangle{
+                    id:allButtons
                     height:60
                     width:parent.width
                     anchors.bottom:parent.bottom
+
 
                     TabBar{
 
                         id: apply_btn1q
                         anchors.top: bottomButtons.top
                         anchors.topMargin: 3
+                        
 
                         anchors.left: parent.left
                         anchors.leftMargin: 5
@@ -243,17 +431,20 @@ Item {
                         TabButton{
                             id:okBtn
                             height:40
+                            width:100
                             anchors.bottom:parent.bottom
                             
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1q
-                                color:  "#2E87C5"
+                                // color:  "#2E87C5"
+                                border.color:"#007bff"
+                                radius: 5
                             }
                             contentItem: Text{
                                 id: filter_cancel_btn_text1q
                                 text: "ok"
-                                color:  "white"
+                                color:  "#007bff"
                                 horizontalAlignment: Text.AlignHCenter
                                 anchors.bottom:parent.bottom
                                 // verticalAlignment: Text.AlignVCenter
@@ -269,15 +460,15 @@ Item {
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1qa
-                                color:  "white"
-                                border.color:"#2E87C5"
-                                border.width:2
+                                // color:  "#2E87C5"
+                                border.color:"#007bff"
+                                radius: 5
                             }
                             contentItem: Text{
                                 id: filter_cancel_btn_text1qa
                                 text: "Remove Filter"
                                 
-                                color:  "#2E87C5"
+                                color:  "#007bff"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -306,15 +497,15 @@ Item {
 
                             background: Rectangle {
                                 id: filter_cancel_btn_background1
-                                color:  "white"
-                                border.color:"#2E87C5"
-                                border.width:2
+                                // color:  "#2E87C5"
+                                border.color:"#007bff"
+                                radius: 5
                             }
                             contentItem: Text{
                                 id: filter_cancel_btn_text1
                                 text: "cancel"
                                 
-                                color:  "#2E87C5"
+                                color:  "#007bff"
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -328,18 +519,21 @@ Item {
 
                 StackLayout {
                     width: parent.width
-                    currentIndex: bar.currentIndex
+                    currentIndex:bar.currentIndex
+                    anchors.right:parent.right
                     Item {
                         id: rangeDateTab
+                        anchors.right:parent.right
                         Rectangle{
                             height:300
                             width:580
                             // color:"red"
+                            anchors.right:parent.right
                             Old.Calendar {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 id: calendar1
-                                selectedDate: new Date()
+                                selectedDate: previousCheckValues
                                 onSelectedDateChanged:fromDate(selectedDate)
                             }
                             Old.Calendar {
@@ -357,6 +551,7 @@ Item {
                             height:300
                             width:580
                             // color:"yellow"
+                            anchors.right:parent.right
                             Old.Calendar {
                                 anchors.centerIn: parent
                                 id: calendar3
@@ -370,6 +565,7 @@ Item {
                         Rectangle{
                             height:300
                             width:580
+                            anchors.right:parent.right
                             // color:"blue"
                             Old.Calendar {
                                 anchors.centerIn: parent
@@ -384,6 +580,7 @@ Item {
                         Rectangle{
                             height:300
                             width:580
+                            anchors.right:parent.right
                             // color:"pink"
                             Rectangle{
                                 id: groupSelectRow
@@ -395,51 +592,6 @@ Item {
                                 height: 200
                                 anchors.rightMargin: 20
 
-
-                                ListModel{
-                                    id: listModel2
-                                    ListElement{
-                                        menuItem:"Value 1"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 2"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 3"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 4"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 5"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 6"
-                                    }
-
-                                }
-                                ListModel{
-                                    id: listModel3
-                                    ListElement{
-                                        menuItem:"Value 11"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 21"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 31"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 41"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 51"
-                                    }
-                                    ListElement{
-                                        menuItem:"Value 61"
-                                    }
-
-                                }
                                 Rectangle{
                                     height:80
                                     width:parent.width-20
@@ -453,10 +605,16 @@ Item {
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.left: parent.left
                                         anchors.leftMargin:25
+                                        displayText: {
+                                            GeneralParamsModel.isWorkbookInEditMode()?DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[0]:""
+                                        }
                                         background: Rectangle {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
                                             border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
+                                        }
+                                        onCurrentTextChanged: {
+                                            setCustomDateComparator(currentText)
                                         }
                                     }
                                     TextField {
@@ -466,11 +624,12 @@ Item {
                                         anchors.leftMargin:15
                                         // anchors.right: selectOptio3.right
                                         anchors.left: selectOption2.right
+                                        text:{GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "DashboardParamsModel.currentSelectedColumn")[1]:""}
 
                                         width: 100
                                         height: 50
 
-                                        placeholderText: qsTr("7")
+                                        placeholderText: qsTr(" ")
 
                                         validator: IntValidator {
                                             bottom: 1
@@ -478,8 +637,8 @@ Item {
                                         }
 
                                         font.bold: true
-
                                         inputMethodHints: Qt.ImhDigitsOnly
+                                        onTextChanged: setCustomDateValue(numeroTelefoneTextField.text)
                                     }
                                     ComboBox{
                                         id: selectOption3
@@ -489,11 +648,15 @@ Item {
                                         width: 150
                                         height: 50
                                         anchors.left: numeroTelefoneTextField.right
+                                        displayText: {
+                                            GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[2]:""
+                                        }
                                         background: Rectangle {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
                                             border.color: parent && parent.activeFocus ? comboBoxCustom.palette.highlight : comboBoxCustom.palette.button
                                         }
+                                        onCurrentTextChanged: setCustomDateUnit(currentText)
                                     }
                                 }
 
@@ -527,7 +690,8 @@ Item {
                 Text {
                     id: componentTitle
                     width:110
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    // text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text:"DateFilter"
                     elide: Text.ElideRight
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
@@ -541,6 +705,7 @@ Item {
                     width: 40
                     spacing: 5
                     anchors.verticalCenter: parent.verticalCenter
+                    
 
 
 
@@ -596,18 +761,26 @@ Item {
             }
 
         }
+        Button {
+            anchors.top:searchFilter.bottom
+            width:parent.width
 
-        BusyIndicatorTpl{
-            id: idPlesaeWaitThorbber
-            anchors.centerIn: parent
-        }
+            // text: "Open"
+            // onClicked: popupq.open()
+            onClicked: toggleDateFilter()
 
-        Text {
-            id: idPlesaeWaitText
-            text: Messages.loadingPleaseWait
-            anchors.top: idPlesaeWaitThorbber.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
         }
+        // BusyIndicatorTpl{
+        //     id: idPlesaeWaitThorbber
+        //     anchors.centerIn: parent
+        // }
+
+        // Text {
+        //     id: idPlesaeWaitText
+        //     text: Messages.loadingPleaseWait
+        //     anchors.top: idPlesaeWaitThorbber.bottom
+        //     anchors.horizontalCenter: parent.horizontalCenter
+        // }
 
 
     }

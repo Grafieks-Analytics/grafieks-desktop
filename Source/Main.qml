@@ -100,7 +100,7 @@ ApplicationWindow {
     Connections{
         target: DashboardParamsModel
 
-        function onMoveToDashboardScreen(){
+        function onMoveToDashboardScreen(){ 
             stacklayout_home.currentIndex = 6
         }
     }

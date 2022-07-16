@@ -33,6 +33,13 @@ void ChartsThread::methodSelector(QString functionName, QString reportWhereCondi
     this->currentReportId = reportId;
     this->datasourceType = datasourceType;
 
+    if(this->dashboardWhereConditionsCached.value(this->currentDashboardId) != this->dashboardWhereConditions){
+        this->dashboardWhereConditionsCached.insert(this->currentDashboardId, this->dashboardWhereConditions);
+        this->cachedDashboardConditions = true;
+    } else {
+        this->cachedDashboardConditions = false;
+    }
+
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
     } else if(functionName == "getStackedBarChartValues"){
@@ -167,7 +174,7 @@ void ChartsThread::getBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
                 emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
@@ -191,7 +198,7 @@ void ChartsThread::getBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
                 emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
@@ -321,8 +328,8 @@ void ChartsThread::getGroupedBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -350,8 +357,8 @@ void ChartsThread::getGroupedBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -470,8 +477,8 @@ void ChartsThread::getNewGroupedBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalNewGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -499,8 +506,8 @@ void ChartsThread::getNewGroupedBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalNewGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -635,8 +642,8 @@ void ChartsThread::getLineBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalLineBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -660,8 +667,8 @@ void ChartsThread::getLineBarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalLineBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -789,8 +796,8 @@ void ChartsThread::getPieChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalPieChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -814,8 +821,8 @@ void ChartsThread::getPieChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalPieChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -925,8 +932,8 @@ void ChartsThread::getFunnelChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalFunnelChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -950,8 +957,8 @@ void ChartsThread::getFunnelChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalFunnelChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1067,8 +1074,8 @@ void ChartsThread::getRadarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalRadarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1092,8 +1099,8 @@ void ChartsThread::getRadarChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalRadarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1216,8 +1223,8 @@ void ChartsThread::getScatterChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalScatterChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1246,8 +1253,8 @@ void ChartsThread::getScatterChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalScatterChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1385,8 +1392,8 @@ void ChartsThread::getScatterChartNumericalValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalScatterChartNumericalValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1405,8 +1412,8 @@ void ChartsThread::getScatterChartNumericalValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalScatterChartNumericalValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1507,8 +1514,8 @@ void ChartsThread::getHeatMapChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalHeatMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1537,8 +1544,8 @@ void ChartsThread::getHeatMapChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalHeatMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1697,8 +1704,8 @@ void ChartsThread::getGaugeChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalGaugeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1720,8 +1727,8 @@ void ChartsThread::getGaugeChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalGaugeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1818,8 +1825,8 @@ void ChartsThread::getSankeyChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalSankeyChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1843,8 +1850,8 @@ void ChartsThread::getSankeyChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalSankeyChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1968,8 +1975,8 @@ void ChartsThread::getKPIChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalKPIChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -1991,8 +1998,8 @@ void ChartsThread::getKPIChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalKPIChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2108,8 +2115,8 @@ void ChartsThread::getTableChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalTableChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2226,8 +2233,8 @@ void ChartsThread::getTableChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalTableChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2476,8 +2483,8 @@ void ChartsThread::getPivotChartValues()
             // Cache will currently work only on dashboards
             if(this->currentChartSource == Constants::dashboardScreen){
 
-                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                    emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                    emit signalPivotChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                     return;
                 }
             }
@@ -2572,8 +2579,8 @@ void ChartsThread::getPivotChartValues()
             // Cache will currently work only on dashboards
             if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                    emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                    emit signalPivotChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                     return;
                 }
             }
@@ -2838,8 +2845,8 @@ void ChartsThread::getMultiLineChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalMultiLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -2867,8 +2874,8 @@ void ChartsThread::getMultiLineChartValues()
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                emit signalMultiLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
                 return;
             }
         }
@@ -3020,8 +3027,16 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                if(identifier == "getAreaChartValues"){
+                    emit signalAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getLineChartValues"){
+                    emit signalLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getWaterfallChartValues"){
+                    emit signalWaterfallChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalLineAreaWaterfallValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3044,8 +3059,17 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+
+                if(identifier == "getAreaChartValues"){
+                    emit signalAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getLineChartValues"){
+                    emit signalLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getWaterfallChartValues"){
+                    emit signalWaterfallChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalLineAreaWaterfallValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3183,8 +3207,16 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                if(identifier == "getSunburstChartValues"){
+                    emit signalSunburstChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeChartValues"){
+                    emit signalTreeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeMapChartValues"){
+                    emit signalTreeMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalTreeSunburstValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3320,8 +3352,16 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                if(identifier == "getSunburstChartValues"){
+                    emit signalSunburstChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeChartValues"){
+                    emit signalTreeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeMapChartValues"){
+                    emit signalTreeMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalTreeSunburstValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3564,8 +3604,14 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                if(identifier == "getStackedBarChartValues"){
+                    emit signalStackedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getStackedAreaChartValues") {
+                    emit signalStackedAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else{
+                    emit signalStackedBarAreaValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3593,8 +3639,14 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         // Cache will currently work only on dashboards
         if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
 
-            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0){
-                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions){
+                if(identifier == "getStackedBarChartValues"){
+                    emit signalStackedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getStackedAreaChartValues") {
+                    emit signalStackedAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else{
+                    emit signalStackedBarAreaValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
                 return;
             }
         }
@@ -3765,6 +3817,7 @@ duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryExtractFu
                 queryString = mainQuery;
             }
         }
+
 
         dataList = con.Query(queryString.toStdString());
         if(!dataList->error.empty())

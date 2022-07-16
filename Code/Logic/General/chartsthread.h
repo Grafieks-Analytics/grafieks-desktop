@@ -61,6 +61,8 @@ class ChartsThread : public QObject
 
     QHash<int, QString> dashboardReportDataCached;
     QHash<int, QString> liveDashboardFilterParamsCached;
+    QHash<int, QString> dashboardWhereConditionsCached;
+    bool cachedDashboardConditions;
 
     DataType dataType;
 
