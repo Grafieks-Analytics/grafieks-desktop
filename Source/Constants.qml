@@ -304,7 +304,7 @@ QtObject {
     property string sankeyChartTitle: "Sankey"
     property string stackedAreaChartTitle: "Stacked Area Chart"
     property string horizontalStackedAreaChartTitle: "Horizontal Stacked Area Chart"
-    property string horizontalBarChartTitle: "HorizontalBarChart"
+    property string horizontalBarChartTitle: "Horizontal Bar Chart"
     property string horizontalStackedBarChartTitle: "Horizontal Stack Bar Chart"
     property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
     property string lineChartTitle: "Line Chart"
@@ -391,4 +391,7 @@ QtObject {
     // Free tier limits
     property var dashboardPerWorkbook : 2
     property var reportsPerWorkbook : 10
+
+    property var dashboardScreenName: "Dashboard"
+    property var reportScreenName: "Report"
 }

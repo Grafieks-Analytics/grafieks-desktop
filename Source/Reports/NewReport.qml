@@ -161,7 +161,22 @@ Page {
     property int activeChartIndex: 0;
 
     // Array List -> This will contain all the charts which can be converted to horizontal
-    property var horizontalChartList: [];
+    property var horizontalChartList: [
+        Constants.barChartTitle,
+        Constants.stackedBarChartTitle,
+        Constants.groupBarChartTitle,
+        Constants.horizontalBarChartTitle,
+        Constants.horizontalStackedBarChartTitle,
+        Constants.horizontalBarGroupedChartTitle,
+        Constants.lineChartTitle,
+        Constants.horizontalLineChartTitle,
+        Constants.multiLineChartTitle,
+        Constants.horizontalMultiLineChartTitle,
+        Constants.areaChartTitle,
+        Constants.horizontalAreaChartTitle,
+        Constants.multipleAreaChartTitle,
+        Constants.multipleHorizontalAreaChartTitle
+    ];
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS

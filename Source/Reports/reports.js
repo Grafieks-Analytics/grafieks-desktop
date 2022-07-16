@@ -282,7 +282,7 @@ function addReport(titleName) {
     isHorizontalGraph = false;
 
     chartTitle = Constants.barChartTitle;
-    chartUrl = Constants.barChartUrl;
+    // chartUrl = Constants.barChartUrl;
 
     console.log("Editing Flag?", editReportFlag);
     // On Edit => Redraw Only Updated chart in Dashboard

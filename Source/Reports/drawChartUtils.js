@@ -1,3 +1,32 @@
+function getSavedAxisColumnNames(axisName) {
+    var model = null;
+    const reportProperties = ReportParamsModel.getReport(reportId);
+    switch (axisName) {
+        case Constants.xAxisName:
+            var xAxisListModel = JSON.parse(reportProperties.d3PropertiesConfig)
+                .dataColumns.xAxisColumnDetails;
+            model = xAxisListModel;
+            break;
+        case Constants.yAxisName:
+            var yAxisListModel = JSON.parse(reportProperties.d3PropertiesConfig)
+                .dataColumns.yAxisColumnDetails;
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+            model = JSON.parse(reportProperties.d3PropertiesConfig).dataColumns
+                .row3ColumnDetails;
+            break;
+    }
+    if (!model) {
+        return [];
+    }
+    var columnsName = [];
+    for (var i = 0; i < model.length; i++) {
+        columnsName.push(model[i].tableValue);
+    }
+    return columnsName;
+}
+
 function isGaugeChart() {
     var row3Columns = getAxisColumnNames(Constants.row3Name);
     if (
@@ -702,7 +731,7 @@ function reDrawChart() {
                         switchChart(Constants.horizontalStackedBarChartTitle);
                         break;
                     }
-                    chartUrl = Constants.horizontalBarChartUrl;
+                    // chartUrl = Constants.horizontalBarChartUrl;
                     // webEngineView.url = Constants.baseChartUrl + chartUrl;
                     chartTitle = Constants.horizontalBarChartTitle;
                     break;
@@ -767,7 +796,7 @@ function reDrawChart() {
                 console.log(
                     "Redraw Function - Check which graph to be plotted here"
                 );
-                chartUrl = Constants.barChartUrl;
+                // chartUrl = Constants.barChartUrl;
                 // webEngineView.url = Constants.baseChartUrl + chartUrl;
                 chartTitle = Constants.barChartTitle;
             } else if (
@@ -799,8 +828,6 @@ function reDrawChart() {
 }
 
 function drawChartAfterReceivingSignal(dataValues) {
-    console.log(dataValues);
-
     if (webEngineView.loading) {
         return;
     }
@@ -820,6 +847,5 @@ function drawChartAfterReceivingSignal(dataValues) {
 
     d3PropertyConfig.chartName = chartTitle;
     console.log(dataValues);
-    console.log(d3PropertyConfig);
     ChartsWebViewHandler.startPlottingChart(dataValues, d3PropertyConfig);
 }
