@@ -128,7 +128,7 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportIdCpp = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
-                webEngineView.url = url;
+                webEngineView.url = chartUrl;
             }
         }
 
@@ -358,7 +358,6 @@ Item{
         case Constants.stackedAreaChartTitle:
         case Constants.multipleAreaChartTitle:
         case Constants.multiLineChartTitle:
-            console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
             colorData = (dataValues && dataValues[1]) || [];
             dataValues = JSON.stringify(dataValues);
@@ -418,17 +417,8 @@ Item{
             return;
         }
 
-        console.log('Debug: Colour Data',colorData);
-        console.log('data values',dataValues);
-
-        // Appending list to select color
-        // Check if this is required?
-        // if(colorData && colorData.length){
-        //     colorData.forEach(function (element,index) {
-        //         dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-        //     });
-        // }
-
+        console.log('[DEBUG {Here are you}]Chart Name',d3PropertyConfig.chartName,'chart',chartTitle)
+        d3PropertyConfig.chartName = chartTitle;
 
         var scriptValue = 'window.addEventListener("resize", function () {
                    window.clearChart && clearChart();
@@ -820,7 +810,6 @@ Item{
                 ChartsModel.getFunnelChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.radarChartTitle:
-                console.log("RADAR CLICKED")
                 ChartsModel.getRadarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
@@ -959,9 +948,6 @@ Item{
                 dateConversionOptions = JSON.stringify(dateConversionOptions);
                 ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,dateConversionOptions, [xAxisColumnNamesArray, yAxisColumnNamesArray, row3ColumnsArray]);
                 break;
-            }
-            if(!dataValues){
-                return;
             }
             return;
         }
