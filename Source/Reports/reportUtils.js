@@ -103,25 +103,6 @@ function onNewReportComponentLoad() {
     // yAxisListModel.clear();
 
     initializeQmlChartConfig();
-
-    // TODO: Move this array to config / Constant
-    // Pushing all the horiontal type chart
-    horizontalChartList.push(
-        Constants.barChartTitle,
-        Constants.stackedBarChartTitle,
-        Constants.groupBarChartTitle,
-        Constants.horizontalBarChartTitle,
-        Constants.horizontalStackedBarChartTitle,
-        Constants.horizontalBarGroupedChartTitle,
-        Constants.lineChartTitle,
-        Constants.horizontalLineChartTitle,
-        Constants.multiLineChartTitle,
-        Constants.horizontalMultiLineChartTitle,
-        Constants.areaChartTitle,
-        Constants.horizontalAreaChartTitle,
-        Constants.multipleAreaChartTitle,
-        Constants.multipleHorizontalAreaChartTitle
-    );
 }
 
 function onChartTitleChanged() {

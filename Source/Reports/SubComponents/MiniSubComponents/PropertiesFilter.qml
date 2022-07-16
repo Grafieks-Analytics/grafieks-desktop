@@ -221,6 +221,7 @@ Column{
             case Constants.groupBarChartTitle:
             case Constants.horizontalBarGroupedChartTitle:
             case Constants.horizontalAreaChartTitle:
+            case Constants.horizontalLineChartTitle:
                 colorByDropEligible = "categorical";    
 
         }
