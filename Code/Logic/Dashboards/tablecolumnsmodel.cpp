@@ -419,6 +419,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
     QMap<int, QStringList> tmpColData;
     QStringList tmp;
     QString joiner = Statics::extractPath.length() > 0 ? "\"" : "";
+    QString dateJoiner = "'";
 
     QList<int> chartKeys = this->newChartHeader.keys();
 
@@ -504,17 +505,17 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
             QString min = filterValues.at(0);
             QString max = filterValues.at(1);
 
-            whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + min + " AND " + max + " AND ";
+            whereConditions += joiner + currentColumnName + joiner  + " BETWEEN " + dateJoiner + min + dateJoiner + " AND " + dateJoiner + max + dateJoiner + " AND ";
 
         } else if(currentColumnRelation == "dataDateAfter"){
 
             QString value = filterValues.at(0);
-            whereConditions += joiner + currentColumnName + joiner + " > " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " > " + dateJoiner + value + dateJoiner + " AND ";
 
         } else if(currentColumnRelation == "dataDateBefore"){
 
             QString value = filterValues.at(0);
-            whereConditions += joiner + currentColumnName + joiner + " < " + value + " AND ";
+            whereConditions += joiner + currentColumnName + joiner + " < " + dateJoiner + value + dateJoiner + " AND ";
 
         }else{
             qDebug() << "ELSE CONDITION" << currentColumnRelation;

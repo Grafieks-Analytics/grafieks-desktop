@@ -68,16 +68,25 @@ Rectangle {
                                 })
         }
 
-        function onColumnFilterTypeChanged(){
-            listModel.clear()
+        function onColumnFilterTypeChanged(filterType){
+            const excludeList = [Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
+
+            console.log(excludeList.includes(filterType), "FTYPE", filterType)
 
             var dashboardId = DashboardParamsModel.currentDashboard
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
 
-            showColumns.forEach((item) => {
-                                    var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
-                                    listModel.append({type: columnType, name: item})
-                                })
+            if(!excludeList.includes(filterType)) {
+                listModel.clear()
+
+                showColumns.forEach((item) => {
+                                        var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
+                                        listModel.append({type: columnType, name: item})
+                                    })
+            }
+
+
+
         }
     }
 
@@ -118,6 +127,9 @@ Rectangle {
             DelegateChoice { roleValue: Constants.filterDateTypes[2]; FilterDataSingleDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterDateTypes[3]; FilterDataMultiDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterDateTypes[4]; FilterDataDateRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[5]; FilterDataSingleDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[6]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[7]; FilterDataDateRange { componentName: name } }
         }
 
         delegate: chooser
