@@ -11,7 +11,7 @@ function onGrafieksChartPageLoaded(loadRequest) {
 // Clear the chart defaults
 function clearChartValue() {
     webEngineView.runJavaScript(
-        "window.grafieks && grafieks.utils.clearChart()"
+        "window.grafieks && window.grafieks.utils.clearChart()"
     );
 }
 
@@ -31,7 +31,7 @@ function updateChart(d3PropertyConfig) {
     // grafieks.drawChart(grafieks.dataUtils.rawData, d3PropertyConfig)
 
     var runScriptString =
-        "grafieks.drawChart(grafieks.dataUtils.rawData," +
+        "window.grafieks && grafieks.drawChart(grafieks.dataUtils.rawData," +
         JSON.stringify(d3PropertyConfig) +
         ");";
 
@@ -40,7 +40,8 @@ function updateChart(d3PropertyConfig) {
 
 function startPlottingChart(dataValues, d3PropertyConfig) {
     console.log(
-        "[Plotting chart] d3PropertyConfig",
+        "[Plotting ",
+        d3PropertyConfig.chartName + "] d3PropertyConfig",
         JSON.stringify(d3PropertyConfig)
     );
 
