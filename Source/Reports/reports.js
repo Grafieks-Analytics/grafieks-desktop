@@ -230,6 +230,7 @@ function addReport(titleName) {
     //            ReportParamsModel.setReportId(reportIdMain);
     //       }
 
+    addReportClicked = true;
     stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
     let currentDashboard = DashboardParamsModel.currentDashboard;

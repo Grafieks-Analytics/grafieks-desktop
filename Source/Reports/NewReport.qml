@@ -53,6 +53,8 @@ Page {
 
     property int editImageSize: 16      // Edit icon size 
 
+    property bool addReportClicked: false    // This toggle is used to check if add report is clicked or not. This prevents in calling reDrawChart on title Changed
+
     property bool xaxisActive: false    // X axis is active => Green color the data pane droppable zone 
     property bool yaxisActive: false    // Y axis is active => Green color the data pane droppable zone
     property bool row3Active: null      // Row 3 is active => Green color the data pane droppable zone 
