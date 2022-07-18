@@ -162,7 +162,7 @@ Popup {
             }
             MouseArea{
                 anchors.fill: parent
-                onClicked: drawMarkerShape(false,"type")
+                onClicked: drawMarkerShape(true,"none")
             }
 
         }

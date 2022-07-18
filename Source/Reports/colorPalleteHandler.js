@@ -10,6 +10,7 @@
  */
 
 function setD3ColorPallete(dataValues) {
+    var colorByColumnName = colorByData[0] && colorByData[0].columnName;
     switch (chartTitle) {
         case Constants.horizontalBarChartTitle:
         case Constants.barChartTitle:
