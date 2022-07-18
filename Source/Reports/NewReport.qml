@@ -306,9 +306,8 @@ Page {
         // If single signal is not emitted, we will have to append each function here. again and again 
         // Also same this is there in dropped report.qml => we can elimate this 
         function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
-            console.log('Bar Chart Values');
             if(reportId === report_desiner_page.reportIdMain)
-                DrawChartUtils.drawChartAfterReceivingSignal(output, "bar Chart");
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
 
         function onSignalStackedBarChartValues(output, reportId, dashboardId, chartSource){
@@ -324,9 +323,8 @@ Page {
                 DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
         function onSignalAreaChartValues(output, reportId, dashboardId, chartSource){
-            console.log('Area Chart Values');
             if(reportId === report_desiner_page.reportIdMain)
-                DrawChartUtils.drawChartAfterReceivingSignal(output, "area chart");
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
         function onSignalLineChartValues(output, reportId, dashboardId, chartSource){
             if(reportId === report_desiner_page.reportIdMain)
