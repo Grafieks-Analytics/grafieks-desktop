@@ -53,6 +53,8 @@ Page {
 
     property int editImageSize: 16      // Edit icon size 
 
+    property bool addReportClicked: false    // This toggle is used to check if add report is clicked or not. This prevents in calling reDrawChart on title Changed
+
     property bool xaxisActive: false    // X axis is active => Green color the data pane droppable zone 
     property bool yaxisActive: false    // Y axis is active => Green color the data pane droppable zone
     property bool row3Active: null      // Row 3 is active => Green color the data pane droppable zone 
@@ -304,8 +306,9 @@ Page {
         // If single signal is not emitted, we will have to append each function here. again and again 
         // Also same this is there in dropped report.qml => we can elimate this 
         function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
+            console.log('Bar Chart Values');
             if(reportId === report_desiner_page.reportIdMain)
-                DrawChartUtils.drawChartAfterReceivingSignal(output);
+                DrawChartUtils.drawChartAfterReceivingSignal(output, "bar Chart");
         }
 
         function onSignalStackedBarChartValues(output, reportId, dashboardId, chartSource){
@@ -321,8 +324,9 @@ Page {
                 DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
         function onSignalAreaChartValues(output, reportId, dashboardId, chartSource){
+            console.log('Area Chart Values');
             if(reportId === report_desiner_page.reportIdMain)
-                DrawChartUtils.drawChartAfterReceivingSignal(output);
+                DrawChartUtils.drawChartAfterReceivingSignal(output, "area chart");
         }
         function onSignalLineChartValues(output, reportId, dashboardId, chartSource){
             if(reportId === report_desiner_page.reportIdMain)
