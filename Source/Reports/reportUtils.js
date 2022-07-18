@@ -408,7 +408,11 @@ function onChartTitleChanged() {
     if (chartTitle == Constants.sunburstChartTitle) {
         allowedXAxisDataPanes = 5;
     }
-    reDrawChart();
+    if (addReportClicked) {
+        addReportClicked = false;
+    } else {
+        reDrawChart();
+    }
 }
 
 /**
