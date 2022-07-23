@@ -426,7 +426,7 @@ Item{
            });';
         scriptValue = "";
         clearChartValue();
-        var runScriptString = 'grafieks.drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+        var runScriptString = 'grafieks.flags.isDataTransformed = false; grafieks.drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
         webEngineView.runJavaScript(runScriptString);
         if(backgroundColorValue){
             setChartBackgroundColor(backgroundColorValue);
