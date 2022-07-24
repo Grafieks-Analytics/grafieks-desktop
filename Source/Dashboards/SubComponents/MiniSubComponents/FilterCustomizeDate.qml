@@ -286,6 +286,7 @@ Item {
                 }
                 else{
                     setFilterType(Constants.filterDateTypes[4])
+                    
                 }
             }
 
