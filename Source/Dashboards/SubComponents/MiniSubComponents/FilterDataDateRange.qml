@@ -28,7 +28,7 @@ Item {
     property var referenceDateVar : ""
     property var customDateComparator : Constants.filterComparators[0]
     property var customDateValue : ""
-    property var customDateUnit : Constants.filterComparators[0]
+    property var customDateUnit : Constants.filterDateUnits[0]
     property var toggleStatus : true
 
 
@@ -100,8 +100,7 @@ Item {
         } else if (currentColumnFilterType === Constants.filterDateTypes[7]) {
             let today= new Date();
             let relativeValue = getRelativeValue(new Date())
-            updateValue = relativeValue + "," + today
-            console.log(relativeValue, today)
+            updateValue = relativeValue.toISOString().split('T')[0] + "," + today.toISOString().split('T')[0]
 
             DashboardParamsModel.setDateRelative(DashboardParamsModel.currentDashboard, componentName, customDateComparator, customDateValue, customDateUnit)
 
@@ -121,32 +120,32 @@ Item {
         let comparedDate = today
         switch(customDateUnit){
 
-            // Seconds
-        case Constants.filterDateUnits[0]:
-            comparedDate.setSeconds(comparedDate.getSeconds() - customDateValue)
-            break
-            // Hours
-        case Constants.filterDateUnits[1]:
-            comparedDate.setHours(comparedDate.getHours() - customDateValue)
-            break
+//            // Seconds
+//        case Constants.filterDateUnits[0]:
+//            comparedDate.setSeconds(comparedDate.getSeconds() - customDateValue)
+//            break
+//            // Hours
+//        case Constants.filterDateUnits[1]:
+//            comparedDate.setHours(comparedDate.getHours() - customDateValue)
+//            break
             // Days
-        case Constants.filterDateUnits[2]:
+        case Constants.filterDateUnits[0]:
             comparedDate.setDate(comparedDate.getDate() - customDateValue)
             break
             // Weeks
-        case Constants.filterDateUnits[3]:
+        case Constants.filterDateUnits[1]:
             comparedDate.setDate(comparedDate.getDate() - customDateValue * 7)
             break
             // Months
-        case Constants.filterDateUnits[4]:
+        case Constants.filterDateUnits[2]:
             comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 7)
             break
             // Quarters
-        case Constants.filterDateUnits[5]:
+        case Constants.filterDateUnits[3]:
             comparedDate.setMonth(comparedDate.getMonth() - customDateValue * 3)
             break
             // Years
-        case Constants.filterDateUnits[6]:
+        case Constants.filterDateUnits[4]:
             comparedDate.setYear(comparedDate.getFullYear() - customDateValue)
             break
 

@@ -415,6 +415,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
     QStringList equalRelationsList;
     QStringList betweenRelationList;
+    QStringList betweenDatesList;
 
     QMap<int, QStringList> tmpColData;
     QStringList tmp;
@@ -425,6 +426,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
     equalRelationsList << "dataListMulti" << "dataListSingle" << "dataDropdownSingle" << "dataDropdownMulti" << "dataEqual";
     betweenRelationList << "dataRange" << "dataBetween";
+    betweenDatesList << "dataDateRange" << "dataDateRelative";
 
     QString whereConditions;
 
@@ -443,6 +445,8 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
         QVector<int> filterValueIds;
         QStringList selectedValues;
+
+        qDebug() << "RELATIONS" << filterValues;
 
         // In relations
         if(equalRelationsList.indexOf(currentColumnRelation) >= 0){
@@ -499,7 +503,7 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
             float value = filterValues.at(0).toFloat();
             whereConditions += joiner + currentColumnName + joiner + " >= " + QString::number(value) + " AND ";
 
-        }  else if(currentColumnRelation == "dataDateRange"){
+        }  else if(betweenDatesList.indexOf(currentColumnRelation) >= 0){
 
             QString min = filterValues.at(0);
             QString max = filterValues.at(1);
