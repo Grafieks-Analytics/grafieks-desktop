@@ -100,7 +100,6 @@ QVariantList DataType::checkDateTimeType(QString inputVariable)
 
     output.append(isDate);
     output.append(matchedFormat);
-    qDebug() << "OUTPUT FORMAT" << output;
     return output;
 }
 
