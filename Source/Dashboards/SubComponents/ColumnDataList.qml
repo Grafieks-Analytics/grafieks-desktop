@@ -60,6 +60,7 @@ Rectangle {
         target: DashboardParamsModel
 
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
+            console.log("INSIDE slot onCurrentDashboardChanged")
             listModel.clear()
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
             showColumns.forEach((item) => {
@@ -71,6 +72,7 @@ Rectangle {
         function onColumnFilterTypeChanged(filterType){
             const excludeList = [Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
 
+            console.log("INSIDE slot onColumnFilterTypeChanged")
             console.log(excludeList.includes(filterType), "FTYPE", filterType)
 
             var dashboardId = DashboardParamsModel.currentDashboard
@@ -78,16 +80,11 @@ Rectangle {
 
             if(!excludeList.includes(filterType)) {
                 listModel.clear()
-                }
-
                 showColumns.forEach((item) => {
                                         var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
                                         listModel.append({type: columnType, name: item})
                                     })
-
-
-
-
+            }
         }
     }
 
