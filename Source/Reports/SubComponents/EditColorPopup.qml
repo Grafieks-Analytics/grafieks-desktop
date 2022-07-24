@@ -192,8 +192,18 @@ Popup {
         console.log("colorData3",colorData)
         Constants.d3ColorPalette = JSON.parse(colorPallete)
         updateChart();
+        resetDataItemListColor();
     }
 
+
+    function resetDataItemListColor(){
+        var colorScheme = d3PropertyConfig.d3colorPalette;
+        for(var i= 0; i<dataItemList.count; i++){
+            var color = colorScheme[i % colorScheme.length]; 
+            dataItemList.setProperty(i, 'colorValue', color)
+        }
+        
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -227,12 +237,11 @@ Popup {
 
         onColorChanged: {
             console.log("colorChanged",color,currentIndex)
-              Constants.d3ColorPalette[currentIndex]=color.toString();
+            Constants.d3ColorPalette[currentIndex]=color.toString();
             console.log("constantcolor1",Constants.d3ColorPalette)
-//                      d3PropertyConfig.d3colorPalette = JSON.parse(colorPallete);
             d3PropertyConfig.d3colorPalette =  Constants.d3ColorPalette;
-            drawChart()
-
+            resetDataItemListColor();
+            updateChart();
         }
 //        on__ValueSetChanged: {
 //            console.log("colorChanged1",color,currentIndex)

@@ -30,7 +30,6 @@ function checkAllValuesOfType(array, type) {
 // TODO: Combine this in a single function
 function allNumericalValues(details) {
     var flag = true;
-    console.log("detail", JSON.stringify(details));
     details.forEach((detail) => {
         if (detail.itemType && detail.itemType.toLowerCase() != "numerical") {
             flag = false;
@@ -44,9 +43,7 @@ function allNumericalValues(details) {
 
 function allCategoricalValues(details) {
     var flag = true;
-    console.log("detail", JSON.stringify(details));
     details.forEach((detail) => {
-        console.log("detail", detail);
         if (detail.itemType && detail.itemType.toLowerCase() != "categorical") {
             flag = false;
         }
@@ -59,9 +56,7 @@ function allCategoricalValues(details) {
 
 function allNonMeasures(details) {
     var flag = true;
-    console.log("detail", JSON.stringify(details));
     details.forEach((detail) => {
-        console.log("detail", detail);
         if (detail.itemType && detail.itemType.toLowerCase() == "numerical") {
             flag = false;
         }
@@ -73,7 +68,6 @@ function allNonMeasures(details) {
 }
 
 function allDateValues(details) {
-    console.log("detail", JSON.stringify(details));
     var flag = true;
     details.forEach((detail) => {
         if (detail.itemType && detail.itemType.toLowerCase() != "date") {
@@ -107,6 +101,10 @@ function onNewReportComponentLoad() {
 
 function onChartTitleChanged() {
     console.log("Chart Title Changed", chartTitle);
+
+    webEngineView.runJavaScript(
+        "window.grafieks && window.grafieks.utils.clearChart()"
+    );
 
     if (d3PropertyConfig.toolTip) {
         console.log(

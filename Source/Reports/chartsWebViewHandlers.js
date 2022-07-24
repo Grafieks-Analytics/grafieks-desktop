@@ -11,7 +11,8 @@ function onGrafieksChartPageLoaded(loadRequest) {
 // Clear the chart defaults
 function clearChartValue() {
     webEngineView.runJavaScript(
-        "window.grafieks && window.grafieks.utils.clearChart()"
+        "window.grafieks && window.grafieks.utils.clearChart(); " +
+            "if(window.grafieks && grafieks.dataUtils && grafieks.dataUtils.rawData){ grafieks.dataUtils.rawData = [] }"
     );
 }
 
@@ -21,9 +22,15 @@ function isWebEngineLoading() {
 
 function updateChart(d3PropertyConfig) {
     console.log(
-        "[Updatde Chart] d3PropertyConfig : ",
+        "[Updatde " + d3PropertyConfig.chartName + "] d3PropertyConfig : ",
+        chartTitle,
         JSON.stringify(d3PropertyConfig)
     );
+    if (d3PropertyConfig.chartName != chartTitle) {
+        delete d3PropertyConfig.chartName;
+        clearChartValue();
+        return;
+    }
 
     // In case of update, we take data from window
     // get data from window => grafieks.dataUtils.rawData
@@ -31,6 +38,7 @@ function updateChart(d3PropertyConfig) {
     // grafieks.drawChart(grafieks.dataUtils.rawData, d3PropertyConfig)
 
     var runScriptString =
+        "window.grafieks && window.grafieks.utils.clearChart();" +
         "window.grafieks && grafieks.drawChart(grafieks.dataUtils.rawData," +
         JSON.stringify(d3PropertyConfig) +
         ");";
