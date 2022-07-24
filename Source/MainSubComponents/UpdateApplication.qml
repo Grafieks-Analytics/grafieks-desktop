@@ -81,7 +81,7 @@ Popup {
                 Rectangle{
                     anchors.fill: parent
                     anchors.margins: 1
-                    color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+                    color: btn_download.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
 
                 }
 

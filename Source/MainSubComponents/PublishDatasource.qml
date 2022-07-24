@@ -83,7 +83,7 @@ Popup {
             if(status.msg === Messages.msc_pds_dsExists){
                 confirmPublishDsComponent.open()
             } else if (status.code !== 200){
-                errorMsg.text = status.msg
+                errorMsg.text = status.msg + ". " + status.statusMsg
             } else {
                 publishData()
             }
