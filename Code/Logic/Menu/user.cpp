@@ -141,8 +141,8 @@ void User::loginReadComplete()
             settings.setValue("user/sessionToken", dataObj["sessionToken"].toString());
             settings.setValue("user/sitename", dataObj["sitename"].toString());
             settings.setValue("user/ftpUser", dataObj["ftpuser"].toString());
-            settings.setValue("user/ftpPass", dataObj["ftppass"].toString());
-            settings.setValue("user/ftpPort", dataObj["ftpport"].toString());
+            settings.setValue("user/ftpPass", dataObj["ftppassword"].toString());
+            settings.setValue("user/ftpPort", dataObj["ftpport"].toInt());
         }
 
     }

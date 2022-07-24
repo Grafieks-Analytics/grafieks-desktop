@@ -166,7 +166,7 @@ void PublishDatasourceModel::readDSComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
-        outputStatus.insert("statusMsg", statusObj["data"].toString());
+        outputStatus.insert("statusMsg", statusMsg);
     }
 
     m_tempStorage->clear();
