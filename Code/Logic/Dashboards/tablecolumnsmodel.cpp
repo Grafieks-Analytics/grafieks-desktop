@@ -501,7 +501,6 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 
         }  else if(currentColumnRelation == "dataDateRange"){
 
-            qDebug() << "INSIDE" << filterValues;
             QString min = filterValues.at(0);
             QString max = filterValues.at(1);
 

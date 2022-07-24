@@ -146,6 +146,5 @@ QStringList ExcelDataModel::getTableListQAXObject()
     workbook->dynamicCall("Close()");
     excel->dynamicCall("Quit()");
 
-    qDebug() << Q_FUNC_INFO <<  this->output;
     return output;
 }
