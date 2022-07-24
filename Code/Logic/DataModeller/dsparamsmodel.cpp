@@ -121,7 +121,6 @@ QVariantList DSParamsModel::readDatasource(QString filename)
     // Check if file readable
     if (!file.open(QFile::ReadOnly))
     {
-        qDebug() << " Could not open file for writing" << file.errorString();
         return fileReadStatus << Messages::FILE_READ_ERROR << Messages::fileReadError;
     }
 
@@ -205,11 +204,6 @@ QVariantList DSParamsModel::readDatasource(QString filename)
     {
     }
 
-    qDebug() << dbDriver << typeOfConnection << modellerType << "GENERAL PARAM";
-    qDebug() << joinRelation << joinValue << joinRelationSlug << internalCounter << section << category << subCategory << tableName << colName << exclude << includeNull << selectAll << filterIndex << mode << "QUERY MODELLER PARAM";
-    qDebug() << hideColumns << joinBoxTableMap << joinTypeMap << joinIconMap << joinMapList << querySelectParamsList << joinOrder << joinId << "DATA MODELLER PARAM";
-    qDebug() << dsName << dsType << displayRowsCount << schedulerId << isFullExtract << extractColName << "OTHER PARAMS";
-    qDebug() << dbDriverCredential << dbHostCredential << dbPortCredential << dbUsernameCredential << "CREDENTIAL PARAMS";
 
     return fileReadStatus << Messages::FILE_READ_SUCCESS << Messages::fileReadSuccess;
 }

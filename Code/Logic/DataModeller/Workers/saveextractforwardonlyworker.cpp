@@ -119,7 +119,6 @@ void SaveExtractForwardOnlyWorker::run()
 
         createTableQuery.chop(1);
         createTableQuery += ")";
-        qDebug() << createTableQuery;
 
         auto createT = con.Query(createTableQuery.toStdString());
         if(createT->success) {

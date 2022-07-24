@@ -56,7 +56,6 @@ void GenerateRoleNamesForwardOnlyWorker::run()
         connection.setPassword(Statics::teradataPassword);
         connection.open();
 
-        qDebug() << Q_FUNC_INFO << connection.isOpen() << connection.lastError() << Statics::teradataDb << Statics::teradataPort << Statics::teradataHost << Statics::teradataUsername << Statics::teradataPassword;
         break;
     }
     }

@@ -50,7 +50,6 @@ void LiveProcessor::setArgumentsFromWorkbook(QString filePath)
 
 void LiveProcessor::processLive()
 {
-    qDebug() << "LIVE FILE READING";
 
     QString username;
     QString password;
