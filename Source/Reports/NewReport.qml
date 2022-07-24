@@ -267,27 +267,6 @@ Page {
             console.log('DEBUG::: Report id value',reportIdValue);
             if(!reportIdValue){
                 Reports.clearValuesOnAddNewReport();
-
-                // When New Report is added we clear all the fields -> So if multiple line/bar is changed then we have to revert it.
-                // We can also handle this from dropped page :think:
-                // console.log('This is a new report!. Please handle the charts in this section here');
-                // console.log(chartTitle);
-
-                // switch(chartTitle){
-                //     case Constants.horizontalFedBarChartTitle:
-                //     case Constants.stackedBarChartTitle:
-                //         switchChart(Constants.barChartTitle);
-                //         break;
-                //     case Constants.multipleHorizontalAreaChartTitle:
-                //     case Constants.multipleAreaChartTitle:
-                //         switchChart(Constants.areaChartTitle);
-                //         break;
-                //     case Constants.horizontalMultiLineChartTitle:
-                //     case Constants.multiLineChartTitle:
-                //         switchChart(Constants.lineChartTitle);
-                //         break;
-                // }
-                
             }
             report_desiner_page.reportIdMain = reportIdValue;
             ReportParamsModel.restoreMasterReportFilters(reportIdValue)
@@ -503,12 +482,9 @@ Page {
         }
     }
 
-    // Switch Chart Urls
-    // Whenever Chart is changed
-    // Perform these things
-    // 1. Change the title
-    // 2. Change the URL
-    // 3. Update the webEngine URL
+    // Switch Chart
+    // Change title
+    // onTitleChanged => Signal is fired
 
     function switchChart(chartTitleValue) {
         console.log("Switching to ", chartTitleValue, " chart");
@@ -522,9 +498,6 @@ Page {
             tempYModel.clear();
             tempColorByModel.clear();
         }
-        // if (!allChartsMapping[chartTitle]) {
-        //     allChartsMapping[chartTitle] = {};
-        // }
     }
 
     function searchColumnNames(searchText) {

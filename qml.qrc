@@ -235,6 +235,7 @@
         <file>Source/Charts/build/css/bootstrap-theme.min.css</file>
         <file>Source/Charts/build/lib/react-0.12.2.min.js</file>
         <file>Source/Charts/build/lib/orb.min.js</file>
+        <file>Source/Charts/build/lib/tabulator.min.js</file>
         <file>Source/Charts/build/styles.css</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeDate.qml</file>
     </qresource>
