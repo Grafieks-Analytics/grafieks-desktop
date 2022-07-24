@@ -78,12 +78,13 @@ Rectangle {
 
             if(!excludeList.includes(filterType)) {
                 listModel.clear()
+                }
 
                 showColumns.forEach((item) => {
                                         var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
                                         listModel.append({type: columnType, name: item})
                                     })
-            }
+
 
 
 
