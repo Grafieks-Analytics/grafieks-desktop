@@ -13,7 +13,7 @@ Item {
     id: filterDataDateRange
     // width: 400
     width: parent.width-25
-    height: 90
+    height: 65
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataDateRange.objectName
     property var modelContent: []
@@ -739,7 +739,7 @@ Item {
             id: searchFilter
             visible: false
             anchors.top: columnName.bottom
-            anchors.topMargin: 10
+            // anchors.topMargin: 10
             height: 0
             width: parent.width-10
             anchors.horizontalCenter: parent.horizontalCenter
@@ -765,7 +765,7 @@ Item {
             anchors.top:searchFilter.bottom
             width:parent.width
 
-            // text: "Open"
+            // text: "open"
             // onClicked: popupq.open()
             onClicked: toggleDateFilter()
 
