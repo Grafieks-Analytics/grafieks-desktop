@@ -66,6 +66,8 @@ Item {
 
         popupq.open()
 
+       
+
         Constants.filterComparators.forEach(function(item){
             listModel2.append({"name" : item})
         })
@@ -111,6 +113,7 @@ Item {
         DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, updateValue)
 
         closePopup()
+        
 
     }
 
@@ -266,6 +269,8 @@ Item {
                         width: parent.width-20
                         height:parent.height
                         anchors.right:parent.right
+                        anchors.top:parent.top
+                        anchors.topMargin:-9
                         anchors.rightMargin:30
                         currentIndex:{
                             let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
@@ -605,9 +610,10 @@ Item {
                                         anchors.verticalCenter: parent.verticalCenter
                                         anchors.left: parent.left
                                         anchors.leftMargin:25
-                                        displayText: {
-                                            GeneralParamsModel.isWorkbookInEditMode()?DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[0]:""
-                                        }
+                                        // displayText: {
+                                        //     GeneralParamsModel.isWorkbookInEditMode()?DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[0]:""
+                                        // }
+                                        currentIndex:GeneralParamsModel.isWorkbookInEditMode()? model.find("Last"):0
                                         background: Rectangle {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
@@ -648,9 +654,10 @@ Item {
                                         width: 150
                                         height: 50
                                         anchors.left: numeroTelefoneTextField.right
-                                        displayText: {
-                                            GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[2]:""
-                                        }
+                                        currentIndex:GeneralParamsModel.isWorkbookInEditMode()? listModel3.find(DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[2]):0
+                                        // displayText: {
+                                        //     GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[2]:""
+                                        // }
                                         background: Rectangle {
                                             color:"white"
                                             border.width: parent && parent.activeFocus ? 2 : 1
