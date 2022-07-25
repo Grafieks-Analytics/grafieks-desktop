@@ -236,24 +236,20 @@ void WorkbookProcessor::processJsonAfterLoginCredentials()
 void WorkbookProcessor::getReportParams(QJsonObject reportParams)
 {
     this->reportParams = reportParams;
-    qDebug() << Q_FUNC_INFO << "Slot Report params" << reportParams;
 }
 
 void WorkbookProcessor::getDashboardParams(QJsonObject dashboardParams)
 {
     this->dashboardParams = dashboardParams;
-    qDebug() << Q_FUNC_INFO << "Slot Dashboard params" << dashboardParams;
 }
 
 void WorkbookProcessor::getTableColumns(QJsonObject tableColumns)
 {
     this->tableColumnParams = tableColumns;
-    qDebug() << Q_FUNC_INFO << "Slot Table Column params" << tableColumns;
 }
 
 void WorkbookProcessor::getJoinAndWhereParams(QJsonObject joinAndWhereParams)
 {
-    qDebug() << Q_FUNC_INFO << "GOT WHERE" << joinAndWhereParams;
     this->joinAndWhereParams = joinAndWhereParams;
 }
 

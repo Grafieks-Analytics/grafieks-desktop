@@ -49,7 +49,6 @@ QString DataType::dataType(QString parameter)
     } else if(dateformat.contains(parameter, Qt::CaseInsensitive)){
         output =  Constants::dateType;
     } else{
-        qDebug() << "INPUT PARAM OTHER TYPE" << parameter;
         output =  Constants::otherType;
     }
 
@@ -101,7 +100,6 @@ QVariantList DataType::checkDateTimeType(QString inputVariable)
 
     output.append(isDate);
     output.append(matchedFormat);
-    qDebug() << "OUTPUT FORMAT" << output;
     return output;
 }
 
