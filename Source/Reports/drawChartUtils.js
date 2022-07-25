@@ -45,12 +45,21 @@ function isPivotChart() {
     var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
     var row3Columns = getAxisColumnNames(Constants.row3Name);
     if (
-        xAxisColumns.length > 0 ||
-        yAxisColumns.length > 0 ||
-        (xAxisColumns.length > 0 && row3Columns.length > 0) ||
-        (yAxisColumns.length > 0 && row3Columns.length > 0)
+        row3Columns.length &&
+        (xAxisColumns.length > 0 || yAxisColumns.length > 0)
     ) {
         console.log("Pivot is eliigble");
+        return true;
+    }
+    return false;
+}
+
+function isKpiValid() {
+    var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
+    if (
+        xAxisColumnDetails.length &&
+        xAxisColumnDetails[0].itemType.toLowerCase() == "numerical"
+    ) {
         return true;
     }
     return false;
@@ -67,10 +76,12 @@ function drawChart() {
     var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
 
     // If WebEngine is loading => Return
-    // [TODO] - Check if we need to call it recursively? Or this is being called from loadRequest handler
+    // TODO - Check if we need to call it recursively? Or this is being called from loadRequest handler
     if (ChartsWebViewHandler.isWebEngineLoading()) {
         return;
     }
+
+    ChartsWebViewHandler.clearChartValue();
 
     d3PropertyConfig.yAxisConfig = d3PropertyConfig.yAxisConfig || {};
     d3PropertyConfig.yAxisConfig.yaxisStatus = !!yAxisLabelStatus;
@@ -681,10 +692,19 @@ function checkHorizontalGraph() {
     }
 }
 
+// Clear the chart defaults
+function clearChartValue() {
+    webEngineView.runJavaScript(
+        "window.grafieks && window.grafieks.utils.clearChart();" +
+            "if(window.grafieks && grafieks.dataUtils && grafieks.dataUtils.rawData){ grafieks.dataUtils.rawData = [] }"
+    );
+}
+
 // TODO: Refactor this function
 function reDrawChart() {
     // Check if the chart is horizontal
     // set isHorizontalGraph true
+    clearChartValue();
     checkHorizontalGraph();
 
     var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
@@ -703,12 +723,15 @@ function reDrawChart() {
         return;
     }
 
-    if (
-        chartTitle == Constants.tableTitle ||
-        chartTitle == Constants.kpiTitle
-    ) {
+    if (chartTitle == Constants.tableTitle) {
         if (xAxisColumns.length > 0) {
-            console.log(xAxisColumns);
+            drawChart();
+        }
+        return;
+    }
+
+    if (chartTitle == Constants.kpiTitle) {
+        if (xAxisColumns.length > 0 && isKpiValid()) {
             drawChart();
         }
         return;
@@ -823,7 +846,6 @@ function reDrawChart() {
         }
     }
 
-    console.log("Calling draw chart.. Hurrrayy!!");
     drawChart();
 }
 

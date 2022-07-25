@@ -174,12 +174,6 @@ Rectangle{
             }
         }
         
-
-//        add toggle left menu
-
-
-//        yAxisVisible  = allCharts.get(index).yAxisVisible;
-
         const yAxisLabelNameData = allCharts.get(index).yAxisLabelName;
         yAxisLabelName = yAxisLabelNameData ? yAxisLabelNameData: Constants.yAxisName; 
 
