@@ -61,6 +61,7 @@ Item {
         }
     }
 
+
     function setFilterType(newFilter){
         let currentDashboardId = DashboardParamsModel.currentDashboard
         let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
