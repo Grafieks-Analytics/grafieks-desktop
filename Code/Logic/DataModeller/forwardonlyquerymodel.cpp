@@ -217,8 +217,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->finalSql, dbForward);
 
-    qDebug() << Q_FUNC_INFO << q.lastError() << q.lastQuery();
-
     if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
         emit errorSignal(q.lastError().text());
@@ -229,8 +227,6 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
 
         int totalRowCount = 0;
         while(q.next()){
-
-            qDebug() << Q_FUNC_INFO << q.value(0) << this->internalColCount;
 
             try{
                 for(int i = 0; i < this->internalColCount; i++){

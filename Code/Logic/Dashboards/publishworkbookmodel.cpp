@@ -97,7 +97,6 @@ void PublishWorkbookModel::readComplete()
         outputStatus.insert("msg", statusObj["msg"].toString());
         this->outputFileName = statusObj["workbook"].toString();
 
-        qDebug() << Q_FUNC_INFO << resultJson;
 
 
     }
