@@ -9,6 +9,8 @@ import com.grafieks.singleton.messages 1.0
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
 
+import "../../chartsWebViewHandlers.js" as ChartsWebViewHandler
+
 Popup {
 
     property int shapeWidth: 20
@@ -53,7 +55,7 @@ Popup {
     function onThemeChanged(curve){
         const themeValue = pivotSelectBox.currentValue;
         d3PropertyConfig.pivotTheme = pivotSelectBox.currentValue;
-        webEngineView.runJavaScript('window.changeThemeColour && changeThemeColour("'+themeValue+'")');
+        ChartsWebViewHandler.updateChart(d3PropertyConfig)
     }
 
     Rectangle{
