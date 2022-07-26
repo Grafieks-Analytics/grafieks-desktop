@@ -281,7 +281,7 @@ We would like to thank the following repositories for their contribution to the 
 [issues-shield]: https://img.shields.io/github/issues/Grafieks-Analytics/grafieks-desktop.svg?style=for-the-badge
 [issues-url]: https://github.com/Grafieks-Analytics/grafieks-desktop/issues
 [license-shield]: https://img.shields.io/github/license/Grafieks-Analytics/grafieks-desktop.svg?style=for-the-badge
-[license-url]: https://github.com/Grafieks-Analytics/grafieks-desktop/blob/master/LICENSE.txt
+[license-url]: https://github.com/Grafieks-Analytics/grafieks-desktop/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/grafieks/
 [product-screenshot]: product-scree.gif
