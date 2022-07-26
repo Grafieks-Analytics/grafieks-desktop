@@ -517,8 +517,15 @@ QtObject {
     property string da_sub_fcn_between: qsTr("Between")
     property string da_sub_fcn_and: qsTr("And")
 
+    // MiniComponents/FilterDataDateRange
+    property string da_sub_fddr_rangeText: qsTr("Range")
+    property string da_sub_fddr_before: qsTr("Before")
+    property string da_sub_fddr_after: qsTr("After")
+    property string da_sub_fddr_relative: qsTr("Relative")
+
+
     // MiniComponents/WidgetTextEditor
-    property string da_sub_wte_header: qsTr("Edit Text")
+    property string da_sub_wte_range: qsTr("Edit Text")
 
 
 
