@@ -54,23 +54,61 @@ Item {
         })
 
         let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
-        console.log("Date values Info oncompleted date", DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn))
+        let currentMode = GeneralParamsModel.isWorkbookInEditMode()
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
-        if(previousCheckValues.length > 0){
+        if(currentMode){
 
             let filterType = DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard, componentName)
             let calendarValues = previousCheckValues
             let relativeDates = DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, componentName)
 
+            // Set default values
             if (filterType === Constants.filterDateTypes[7]){
+                selectOption2.currentIndex = find(listModel2, function(item) { return item.name === relativeDates[0] })
                 customNumberField.text = relativeDates[1]
+                selectOption3.currentIndex = find(listModel3, function(item) { return item.name === relativeDates[2] })
 
+                setFilterType(Constants.filterDateTypes[7])
+
+                buttonDisplay.text = relativeDates[0] + " " + relativeDates[1] + " " + relativeDates[2]
+
+            } else if(filterType === Constants.filterDateTypes[6]){
+                afterDateId.selectedDate = new Date(calendarValues[0])
+
+                setFilterType(Constants.filterDateTypes[6])
+
+                buttonDisplay.text = Messages.da_sub_fddr_after + " " + calendarValues[0]
+
+            } else if(filterType === Constants.filterDateTypes[5]){
+                beforeDateId.selectedDate = new Date(calendarValues[0])
+
+                setFilterType(Constants.filterDateTypes[5])
+
+                buttonDisplay.text = Messages.da_sub_fddr_before + " " + calendarValues[0]
+
+            } else {
+                fromDateId.selectedDate = new Date(calendarValues[0])
+                toDateId.selectedDate = new Date(calendarValues[1])
+
+                setFilterType(Constants.filterDateTypes[4])
+
+                buttonDisplay.text = Messages.da_sub_fddr_rangeText + " " + calendarValues[0] + ":" + calendarValues[1]
             }
-
         }
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+    }
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                componentTitle.text = newAlias
+            }
+        }
+
     }
 
     Component.onCompleted: {
@@ -80,6 +118,13 @@ Item {
         if (!currentMode){
             popupq.open()
         }
+    }
+
+
+
+    function find(model, criteria) {
+        for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return i
+        return null
     }
 
     function setFilterType(newFilter){
@@ -102,15 +147,28 @@ Item {
 
         if(currentColumnFilterType === Constants.filterDateTypes[4]){
             updateValue = fromDateVar + "," + toDateVar
-        } else if (currentColumnFilterType === Constants.filterDateTypes[7]) {
+
+            buttonDisplay.text =  Messages.da_sub_fddr_rangeText + " " + updateValue
+
+        }  else if (currentColumnFilterType === Constants.filterDateTypes[5]) {
+            updateValue = referenceDateVar
+
+            buttonDisplay.text =  Messages.da_sub_fddr_before + " " + updateValue
+
+        } else if (currentColumnFilterType === Constants.filterDateTypes[6]) {
+            updateValue = referenceDateVar
+
+            buttonDisplay.text =  Messages.da_sub_fddr_after + " " + updateValue
+
+        }  else  {
             let today= new Date();
             let relativeValue = getRelativeValue(new Date())
             updateValue = relativeValue.toISOString().split('T')[0] + "," + today.toISOString().split('T')[0]
 
             DashboardParamsModel.setDateRelative(DashboardParamsModel.currentDashboard, componentName, customDateComparator, customDateValue, customDateUnit)
 
-        } else {
-            updateValue = referenceDateVar
+            buttonDisplay.text =  customDateComparator + " " + customDateValue + " " + customDateUnit
+
         }
 
         // Update new value
@@ -172,35 +230,28 @@ Item {
 
     function fromDate(d){
         fromDateVar = d.toISOString().split('T')[0]
-        console.log("valueDate from", fromDateVar)
     }
 
     function toDate(d){
         toDateVar = d.toISOString().split('T')[0]
-        console.log("valueDate to", toDateVar)
     }
     function beforeDate(d){
         referenceDateVar = d.toISOString().split('T')[0]
-        console.log("valueDate before", referenceDateVar)
     }
     function afterDate(d){
         referenceDateVar = d.toISOString().split('T')[0]
-        console.log("valueDate after", referenceDateVar)
     }
 
     function setCustomDateComparator(p){
         customDateComparator = p
-        console.log("custom date comparator", p)
     }
 
     function setCustomDateValue(p){
         customDateValue = p
-        console.log("custom date value", p)
     }
 
     function setCustomDateUnit(p){
         customDateUnit = p
-        console.log("custom date unit", p)
     }
 
     function closePopup(){
@@ -289,7 +340,7 @@ Item {
                     onClicked:  setFilterType(Constants.filterDateTypes[4])
                     Rectangle {
                         Text {
-                            text: "From - To"
+                            text: Messages.da_sub_fddr_rangeText
                             color: "black"
                             // anchors.horizontalCenter: parent.horizontalCenter
                             padding:20
@@ -307,15 +358,12 @@ Item {
                     anchors.top:btn1.bottom
                     width: 174
                     anchors.right:parent.right
-                    // anchors.topMargin:20
                     anchors.horizontalCenter: container.horizontalCenter
-                    // text: qsTr("Before")
                     onClicked:  setFilterType(Constants.filterDateTypes[5])
                     Rectangle {
                         Text {
-                            text: "Before"
+                            text: Messages.da_sub_fddr_before
                             color: "black"
-                            // anchors.horizontalCenter: parent.horizontalCenter
                             padding:20
                             anchors.verticalCenter: parent.verticalCenter
 
@@ -331,20 +379,13 @@ Item {
                     anchors.top:btn2.bottom
                     width: 174
                     anchors.right:parent.right
-                    // anchors.topMargin:20
                     anchors.horizontalCenter: container.horizontalCenter
 
                     onClicked: setFilterType(Constants.filterDateTypes[6])
-                    // Rectangle {
-                    //     anchors.fill: parent
-                    //     color: ( parent.pressed ? "white" : "lightgray" )
-                    //     opacity: 0.5
-                    // }
                     Rectangle {
                         Text {
-                            text: "After"
+                            text: Messages.da_sub_fddr_after
                             color: "black"
-                            // anchors.horizontalCenter: parent.horizontalCenter
                             padding:20
                             anchors.verticalCenter: parent.verticalCenter
 
@@ -359,15 +400,12 @@ Item {
                     anchors.top:btn3.bottom
                     anchors.right:parent.right
                     width: 174
-                    // anchors.topMargin:20
                     anchors.horizontalCenter: container.horizontalCenter
-                    // text: qsTr("Relative")
                     onClicked:  setFilterType(Constants.filterDateTypes[7])
                     Rectangle {
                         Text {
-                            text: "Relative"
+                            text: Messages.da_sub_fddr_relative
                             color: "black"
-                            // anchors.horizontalCenter: parent.horizontalCenter
                             padding:20
                             anchors.verticalCenter: parent.verticalCenter
 
@@ -523,14 +561,14 @@ Item {
                     Old.Calendar {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
-                        id: calendar1
-                        selectedDate: previousCheckValues
+                        id: fromDateId
+                        selectedDate: new Date()
                         onSelectedDateChanged:fromDate(selectedDate)
                     }
                     Old.Calendar {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        id: calendar2
+                        id: toDateId
                         selectedDate: new Date()
                         onSelectedDateChanged:toDate(selectedDate)
                     }
@@ -545,7 +583,7 @@ Item {
                     anchors.right:parent.right
                     Old.Calendar {
                         anchors.centerIn: parent
-                        id: calendar3
+                        id: beforeDateId
                         selectedDate: new Date()
                         onSelectedDateChanged:beforeDate(selectedDate)
                     }
@@ -560,7 +598,7 @@ Item {
                     // color:"blue"
                     Old.Calendar {
                         anchors.centerIn: parent
-                        id: calendar4
+                        id: afterDateId
                         selectedDate: new Date()
                         onSelectedDateChanged:afterDate(selectedDate)
                     }
@@ -640,9 +678,6 @@ Item {
                                 width: 150
                                 height: 50
                                 anchors.left: customNumberField.right
-                                 displayText: {
-                                     GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)[2]:""
-                                 }
                                 background: Rectangle {
                                     color:"white"
                                     border.width: parent && parent.activeFocus ? 2 : 1
@@ -693,8 +728,6 @@ Item {
                 Text {
                     id: componentTitle
                     width:110
-                    // text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
-                    text:"DateFilter"
                     elide: Text.ElideRight
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
@@ -739,12 +772,14 @@ Item {
         }
 
 
+
         Button {
-            anchors.top:searchFilter.bottom
+            id: buttonDisplay
+            anchors.top:columnName.bottom
             width:parent.width
-            text: "Click to open"
             onClicked: toggleDateFilter()
 
         }
+
     }
 }
