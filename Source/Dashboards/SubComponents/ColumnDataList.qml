@@ -80,7 +80,10 @@ Rectangle {
             var dashboardId = DashboardParamsModel.currentDashboard
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
 
-            if(!excludeList.includes(filterType)) {
+            let currentMode = GeneralParamsModel.isWorkbookInEditMode()
+
+
+            if((!currentMode && !excludeList.includes(filterType))) {
                 listModel.clear()
                 showColumns.forEach((item) => {
                                         var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
