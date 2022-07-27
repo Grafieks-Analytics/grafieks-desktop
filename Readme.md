@@ -131,7 +131,7 @@ Core technologies behind the application
 
 -   [Qt5](https://www.qt.io/) - Only open-source modules used.
 -   [C++ 11](https://isocpp.org)
--   [Javascript](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/)
+-   [Javascript](https://www.javascript.com/)
 -   [D3js](https://d3js.org/)
 -   [DuckDb](https://duckdb.org/)
 
