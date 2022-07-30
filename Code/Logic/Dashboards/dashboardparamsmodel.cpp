@@ -1357,7 +1357,6 @@ void DashboardParamsModel::setTmpCanvasHeight(int tmpCanvasHeight)
     m_tmpCanvasHeight = tmpCanvasHeight;
     // Change all the default heights of the canvases
     for(int i = 0; i < this->dashboardCount(); i++){
-        qDebug() << m_tmpCanvasHeight << "CANVAS HEIGHT";
         this->dashboardCanvasDimensions[i][1] = m_tmpCanvasHeight;
     }
     emit tmpCanvasHeightChanged(m_tmpCanvasHeight);
@@ -1372,7 +1371,6 @@ void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
 
     // Change all the default widths of the canvases
     for(int i = 0; i < this->dashboardCount(); i++){
-        qDebug() << m_tmpCanvasWidth << "CANVAS WIDTH";
         this->dashboardCanvasDimensions[i][0] = m_tmpCanvasWidth;
     }
     emit tmpCanvasWidthChanged(m_tmpCanvasWidth);

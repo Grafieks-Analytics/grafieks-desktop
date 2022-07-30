@@ -123,8 +123,6 @@ void ExcelCon::convertExcelToCsv()
     workbook->dynamicCall("Close()");
     excel->dynamicCall("Quit()");
 
-    qDebug() << outputList << "CONV PATHS";
-
     emit convertedExcelPaths(outputList);
 }
 

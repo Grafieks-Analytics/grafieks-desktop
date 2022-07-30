@@ -40,7 +40,6 @@ void ChartsThread::methodSelector(QString functionName, QString reportWhereCondi
         this->cachedDashboardConditions = false;
     }
 
-    qDebug() << "FUNCTION NAME" << functionName;
 
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
