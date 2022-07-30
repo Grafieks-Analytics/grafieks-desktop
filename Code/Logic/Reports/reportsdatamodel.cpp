@@ -305,8 +305,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // For date and categorical only
         if(filterSlug == Constants::slugLikeRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "LIKE REL 1";
-
             QStringList tmpValues;
 
             if(section == Constants::dateType){
@@ -334,15 +332,12 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Categorical & Date only
         else if(filterSlug == Constants::slugNotLikeRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug<< "NOT LIKE REL 2";
             this->whereConditions += joiner + columnName + joiner + " NOT LIKE % AND ";
         }
 
         // 3. In array relation
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugInRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "IN REL 3" << includeExclude;
             QString values;
 
             if(section == Constants::dateType){
@@ -378,8 +373,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "EQUAL REL 4";
-
             if(section == Constants::dateType){
                 whereConditions += joiner + columnName + joiner + " = '" + actualDateValues.at(0) + "' AND ";
             } else{
@@ -393,7 +386,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugNotEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "NOT EQUAL REL 5";
             QString param = filterValueList.at(0);
             whereConditions += joiner + columnName + joiner + " != '" + param.replace("'", "''") + "' AND ";
 
@@ -404,8 +396,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugBetweenRelation){
 
             QStringList tmpValues;
-
-            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6";
 
             if(section == Constants::dateType){
 
@@ -436,16 +426,12 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // 7. For smaller than relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN REL 7" << filterValueList.at(0).toFloat();
             whereConditions += joiner + columnName + joiner + " < " + filterValueList.at(0).toStdString().c_str() + " AND ";
         }
 
         // 8. For greater than relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN REL 8";
             whereConditions += joiner + columnName + joiner + " > " + filterValueList.at(0).toStdString().c_str() + " AND ";
         }
 
@@ -453,7 +439,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN EQUAL REL 9";
             whereConditions += joiner + columnName + joiner + " <= " + filterValueList.at(0).toStdString().c_str() + " AND ";
         }
 
@@ -461,7 +446,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN EQUAL REL 10";
             whereConditions += joiner + columnName + joiner + " >= " + filterValueList.at(0).toStdString().c_str() + " AND ";
 
         }
@@ -470,7 +454,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Categorical
         else if(filterSlug == Constants::slugContainingRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "CONTAINING REL 11";
 
             QString tmpVal = filterValueList.at(0);
             whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal.replace("'", "''") + "' AND ";
@@ -480,8 +463,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Categorical
         else if(filterSlug == Constants::slugEndsWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "ENDS With REL 12";
-
             QString tmpVal = filterValueList.at(0);
             whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal.replace("'", "''") + "' AND ";
         }
@@ -489,8 +470,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // 13. For Doesnt Start With relation
         // Categorical
         else if(filterSlug == Constants::slugDoesntStartWithRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "Doenst start with REL 13";
 
             QString tmpVal = filterValueList.at(0);
             whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal.replace("'", "''")  + "' AND ";
@@ -500,16 +479,12 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Categorical
         else if(filterSlug == Constants::slugDoesntEndWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "Doenst end with REL 14";
-
             QString tmpVal = filterValueList.at(0);
             whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal.replace("'", "''")  + "' AND ";
         }
 
         // 15. Filter
         else{
-
-            qDebug() << "FILTER HERE" << filterSlug << "UNKNOWN REL";
 
             qDebug() << "Else Filter values obtained"
                         <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
