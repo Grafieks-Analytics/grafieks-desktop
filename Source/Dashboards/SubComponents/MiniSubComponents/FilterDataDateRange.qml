@@ -114,8 +114,13 @@ Item {
     Component.onCompleted: {
 
         let currentMode  = GeneralParamsModel.isWorkbookInEditMode()
+        let currentDashboard = DashboardParamsModel.currentDashboard
+        let currentColumn = DashboardParamsModel.currentSelectedColumn
 
-        if (!currentMode){
+        var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
+        const excludeList = [Constants.filterDateTypes[4], Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
+
+        if (!currentMode && excludeList.includes(columnFilter)){
             popupq.open()
         }
     }

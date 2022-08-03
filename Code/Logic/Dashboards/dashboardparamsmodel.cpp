@@ -1094,6 +1094,37 @@ void DashboardParamsModel::deleteReportLineColor(int dashboardId, int widgetId)
     }
 }
 
+void DashboardParamsModel::fetchReportBackgroundAndLineColor(int dashboardId, int widgetId)
+{
+    QString outputBackground, outputLine;
+    QMap<int, QString> backgroundColor;
+    QMap<int, QString> lineColor;
+
+    if (!this->reportBackgroundColor.value(dashboardId).isEmpty())
+    {
+
+        backgroundColor = this->reportBackgroundColor.value(dashboardId);
+        if (backgroundColor.contains(widgetId))
+        {
+            outputBackground = backgroundColor.value(widgetId);
+        }
+    }
+
+
+    if (!this->reportLineColor.value(dashboardId).isEmpty())
+    {
+
+        lineColor = this->reportLineColor.value(dashboardId);
+        if (lineColor.contains(widgetId))
+        {
+            outputLine = lineColor.value(widgetId);
+        }
+    }
+
+    emit reportLineColorChanged(dashboardId, widgetId, outputLine);
+    emit reportBackgroundColorChanged(dashboardId, widgetId, outputBackground);
+}
+
 void DashboardParamsModel::setReportOpacity(int dashboardId, int widgetId, int percent)
 {
 
