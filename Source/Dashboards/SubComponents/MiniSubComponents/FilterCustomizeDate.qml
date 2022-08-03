@@ -269,26 +269,7 @@ Item {
             ButtonGroup.group: buttonGroupFilterTypeDate
             onCheckedChanged: {
                 let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
-
-                if(GeneralParamsModel.isWorkbookInEditMode()){
-                    if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[7]){
-                        setFilterType(Constants.filterDateTypes[7])
-                    }
-                    else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[6]){
-                        setFilterType(Constants.filterDateTypes[6])
-                    }
-                    else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[5]){
-                        setFilterType(Constants.filterDateTypes[5])
-                    }
-                    else if(DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard,  currentSelectedColumn) === Constants.filterDateTypes[4]){
-                        setFilterType(Constants.filterDateTypes[4])
-                    }
-
-                }
-                else{
-                    setFilterType(Constants.filterDateTypes[4])
-                    
-                }
+                setFilterType(Constants.filterDateTypes[4])
             }
 
             indicator: Rectangle {

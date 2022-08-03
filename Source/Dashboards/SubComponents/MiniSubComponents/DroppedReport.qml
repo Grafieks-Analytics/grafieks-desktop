@@ -83,6 +83,29 @@ Item{
             }
         }
 
+        function onReportUrlChanged(refDashboardId, refReportId, url){
+            // this signal is emitted whenever setDashboard cpp function is called
+            // setDashboard Report is called whenever a new report is dropped in dashboard area
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportIdCpp = DashboardParamsModel.currentReport
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
+                webEngineView.url = chartUrl;
+
+                // This step is to call for redundancy.
+                // Signals are fired serially in order while restoring dashboard
+                // But, reportbackgroundcolor and reportlinecolor do not change
+                // because even though the reporturlchanged signal is received first,
+                // QML takes time to draw the chart and the signals from CPP are missed
+                // by background color and line color as the report hasnt spawned yet
+
+                if(GeneralParamsModel.isWorkbookInEditMode())
+                    DashboardParamsModel.fetchReportBackgroundAndLineColor(refDashboardId, refReportId)
+
+            }
+        }
+
+
         function onReportBackgroundColorChanged(refDashboardId, refReportId, refColor){
 
             let dashboardId = DashboardParamsModel.currentDashboard
@@ -121,16 +144,6 @@ Item{
             reDrawChart();
         }
 
-        function onReportUrlChanged(refDashboardId, refReportId, url){
-            // this signal is emitted whenever setDashboard cpp function is called
-            // setDashboard Report is called whenever a new report is dropped in dashboard area
-
-            let dashboardId = DashboardParamsModel.currentDashboard
-            let reportIdCpp = DashboardParamsModel.currentReport
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
-                webEngineView.url = chartUrl;
-            }
-        }
 
         function onDashboardContentDestroyed(dashboardId){
             if(dashboardId === -1){

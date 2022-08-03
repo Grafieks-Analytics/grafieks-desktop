@@ -2432,7 +2432,7 @@ void ChartsThread::getPivotChartValues()
     QString masterKeyword;
     QVariantList masterTotal;
     QVariantList masterOutput;
-    QMap<QString, QMap<QString, QString>> dateConversionParams;
+    QHash<QString, QHash<QString, QString>> dateConversionParams;
 
     QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
@@ -2452,7 +2452,7 @@ void ChartsThread::getPivotChartValues()
     // Process date conversions, if any
     foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
 
-        QMap<QString, QString> itemDetails;
+        QHash<QString, QString> itemDetails;
         QJsonObject dateConversionObj = dateConversionValue.toObject();
 
         itemDetails.insert("separator", dateConversionObj.value("separator").toString());
@@ -2460,6 +2460,8 @@ void ChartsThread::getPivotChartValues()
 
         QString columnName = dateConversionObj.value("itemName").toString();
         dateConversionParams.insert(columnName, itemDetails);
+
+        qDebug() << "Date conversion" << columnName << itemDetails;
     }
 
     QStringList xAxisData;
@@ -2476,6 +2478,7 @@ void ChartsThread::getPivotChartValues()
     int xAxisLength = 0;
     int yAxisLength = 0;
     int totalRows;
+    QVariantList dateType;
 
     if(xAxisColumnList.length() > 0 && yAxisColumnList.length() > 0){
         if(this->datasourceType == Constants::extractType){
@@ -2531,7 +2534,9 @@ void ChartsThread::getPivotChartValues()
                             QString convertedDate;
                             QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
                             foreach(QString format, list){
-                                QVariantList dateType = dataType.checkDateTimeType(xDataListExtract->GetValue(i, j).ToString().c_str());
+                                if(dateType.isEmpty())
+                                    dateType = dataType.checkDateTimeType(xDataListExtract->GetValue(i, j).ToString().c_str());
+
                                 QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), dateType.at(1).toString());
                                 if(format.toLower() == "day"){
                                     convertedDate += QString::number(dateTime.date().day()) + separator;
@@ -2633,7 +2638,9 @@ void ChartsThread::getPivotChartValues()
                             QStringList list = dateConversionParams.value(originalColName).value("formats").split(",");
 
                             foreach(QString format, list){
-                                QVariantList dateType = dataType.checkDateTimeType(xDataListLive.value(i).toString());
+                                if(dateType.isEmpty())
+                                    dateType = dataType.checkDateTimeType(xDataListLive.value(i).toString());
+
                                 QDateTime dateTime = QDateTime::fromString(xDataListLive.value(i).toString(), dateType.at(1).toString());
 
                                 if(format.toLower() == "day"){
@@ -2806,6 +2813,7 @@ void ChartsThread::getPivotChartValues()
             this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
 
 
+        qDebug() << "EMITTED";
         emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 }

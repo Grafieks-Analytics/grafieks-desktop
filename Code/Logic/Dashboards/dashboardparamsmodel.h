@@ -190,6 +190,13 @@ public:
     Q_INVOKABLE void setReportLineColor(int dashboardId, int widgetId, QString color);
     Q_INVOKABLE void deleteReportLineColor(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
 
+    // This is extra step while restoring dashboards
+    // because charts are drawn a lot later in qml after signals are fired from CPP
+    // which results is some signals being missed by qml components and has to be manually called
+
+    Q_INVOKABLE void fetchReportBackgroundAndLineColor(int dashboardId, int widgetId);
+    // Ends here
+
     Q_INVOKABLE void setReportOpacity(int dashboardId, int widgetId, int percent);
     Q_INVOKABLE int getReportOpacity(int dashboardId, int widgetId);
     Q_INVOKABLE void deleteReportOpacity(int dashboardId, int widgetId); // TO CHANGE - MAKE PRIVATE
