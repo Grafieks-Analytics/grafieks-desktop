@@ -4,7 +4,6 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
@@ -132,7 +131,7 @@ Core technologies behind the application
 
 -   [Qt5](https://www.qt.io/) - Only open-source modules used.
 -   [C++ 11](https://isocpp.org)
--   [Javascript](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/)
+-   [Javascript](https://www.javascript.com/)
 -   [D3js](https://d3js.org/)
 -   [DuckDb](https://duckdb.org/)
 
@@ -281,7 +280,7 @@ We would like to thank the following repositories for their contribution to the 
 [issues-shield]: https://img.shields.io/github/issues/Grafieks-Analytics/grafieks-desktop.svg?style=for-the-badge
 [issues-url]: https://github.com/Grafieks-Analytics/grafieks-desktop/issues
 [license-shield]: https://img.shields.io/github/license/Grafieks-Analytics/grafieks-desktop.svg?style=for-the-badge
-[license-url]: https://github.com/Grafieks-Analytics/grafieks-desktop/blob/master/LICENSE.txt
+[license-url]: https://raw.githubusercontent.com/Grafieks-Analytics/grafieks-desktop/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/company/grafieks/
 [product-screenshot]: product-scree.gif
