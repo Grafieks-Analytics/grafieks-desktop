@@ -112,6 +112,15 @@ QString GeneralParamsModel::getExtractPath()
     return Statics::extractPath;
 }
 
+void GeneralParamsModel::setPath(QString path, QString type)
+{
+    if (type == Constants::extractType){
+        Statics::extractPath = path;
+    } else {
+        Statics::livePath = path;
+    }
+}
+
 void GeneralParamsModel::changeColumnTypes(QString columnName, QString tableName, QString newColumnType)
 {
 
