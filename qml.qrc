@@ -229,7 +229,8 @@
         <file>Source/Reports/chartsWebViewHandlers.js</file>
         <file>Source/Charts/build/index.html</file>
         <file>Source/Charts/build/grafieks-charts.js</file>
-        <file>Source/Charts/build/css/tabulator_semanticui.min.css</file>
+        <file>Source/Charts/build/css/tabulator.min.css</file>
+        <file>Source/Charts/build/css/tabulator_style.css</file>
         <file>Source/Charts/build/css/orb.min.css</file>
         <file>Source/Charts/build/css/bootstrap.min.css</file>
         <file>Source/Charts/build/css/bootstrap-theme.min.css</file>
