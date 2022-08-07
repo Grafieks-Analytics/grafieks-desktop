@@ -28,7 +28,7 @@ namespace Constants
 
     // For local testing
 //     const QString defaultAPIEndpoint = "http://localhost:5476";
-//     const QString defaultFTPEndpoint = "172.23.53.109";
+//     const QString defaultFTPEndpoint = "172.17.80.68";
 //     const QString defaultChartEndpoint = "http://localhost:5473";
 
     const int ApiWaitTime = 5000; // in ms
