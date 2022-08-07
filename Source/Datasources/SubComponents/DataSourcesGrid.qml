@@ -74,6 +74,15 @@ Page {
         }
     }
 
+    function onDataSourceNameClicked(datasourceName, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
+        updateDSName(datasourceName, connectionType, connectAllowed)
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -137,7 +146,7 @@ Page {
 
             MouseArea{
                 anchors.fill:parent
-                onClicked: updateDSName(datasourceName, connectionType, connectAllowed)
+                onClicked: onDataSourceNameClicked(datasourceName, connectionType, connectAllowed)
             }
 
             Rectangle{
