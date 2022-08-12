@@ -22,14 +22,14 @@ namespace Constants
 
     // Application level constants
     // Server level APIs
-   const QString defaultAPIEndpoint = "https://apit.grafieks.net";
-   const QString defaultFTPEndpoint = "95.217.117.126";
-   const QString defaultChartEndpoint = "http://95.217.117.126:5473";
+//   const QString defaultAPIEndpoint = "https://apit.grafieks.net";
+//   const QString defaultFTPEndpoint = "95.217.117.126";
+//   const QString defaultChartEndpoint = "http://95.217.117.126:5473";
 
     // For local testing
-//     const QString defaultAPIEndpoint = "http://localhost:5476";
-//     const QString defaultFTPEndpoint = "172.17.80.68";
-//     const QString defaultChartEndpoint = "http://localhost:5473";
+     const QString defaultAPIEndpoint = "http://localhost:5476";
+     const QString defaultFTPEndpoint = "172.17.80.68";
+     const QString defaultChartEndpoint = "http://localhost:5473";
 
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
