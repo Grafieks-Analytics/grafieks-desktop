@@ -125,11 +125,6 @@ Rectangle {
             
             ReportParamsModel.addDashboardReportInstance(reportObj, reportId);
             rectangles.set(counter, reportObj);
-            // Because i am unable to increment reportId, I am not able to apply dashboard filters
-            // All reportId becomes 0 and hence filter is applied to first Report only
-            // Dont know why but, if I increment it here, I am unable to drag a new report on dashboard stage
-
-            // reportId++
         }
 
         DashboardParamsModel.setDashboardReportMap(reportId);
