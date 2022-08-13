@@ -184,6 +184,12 @@ Item {
 
     }
 
+    function removeFilter(){
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "")
+        closePopup()
+    }
+
     function getRelativeValue(today){
         let comparedDate = today
         switch(customDateUnit){
