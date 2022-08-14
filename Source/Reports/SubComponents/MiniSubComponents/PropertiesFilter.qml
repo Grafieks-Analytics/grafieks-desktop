@@ -7,6 +7,8 @@ import com.grafieks.singleton.messages 1.0
 import "../../SubComponents"
 import "../../../MainSubComponents"
 
+import "../../colorPalleteHandler.js" as ColorPalleteHandler
+
 Column{
 
     id: propertiesFilter
@@ -258,6 +260,7 @@ Column{
 
     function openEditColorPopup(){
         editColorPopup.visible = true
+        ColorPalleteHandler.setD3ColorPallete(getLastDataValues());
     }
 
 

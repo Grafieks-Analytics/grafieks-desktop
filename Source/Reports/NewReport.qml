@@ -121,6 +121,7 @@ Page {
     property var dataValueDialogKpiColor: '#000000'
     property var dataValueKpiColorBoxColor: '#000000'
 
+    property var lastDataValues: ([])
 
     // This object will contain all the extra param models
     // TODO: Check if this is an additional dependancy and can be removed
@@ -410,6 +411,10 @@ Page {
 
     // Signal fired when drop is hovered on Y Axis
     onRow4ActiveChanged: ReportUtils.checkAndMakeElementDropEligible(row4Active, row4DropAreaRectangle);
+
+    function getLastDataValues(){
+        return lastDataValues;
+    }
 
     function updateChart() {
         if (chartTitle == Constants.gaugeChartTitle){
