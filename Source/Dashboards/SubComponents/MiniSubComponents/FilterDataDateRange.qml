@@ -184,6 +184,14 @@ Item {
 
     }
 
+    function removeFilter(){
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "")
+        buttonDisplay.text = ""
+        closePopup()
+    }
+
     function getRelativeValue(today){
         let comparedDate = today
         switch(customDateUnit){
@@ -339,9 +347,6 @@ Item {
                     id:btn1
                     width: 174
                     anchors.right:parent.right
-                    // anchors.topMargin:10
-                    // anchors.horizontalCenter: container.horizontalCenter
-                    // text: qsTr("From - To")
                     onClicked:  setFilterType(Constants.filterDateTypes[4])
                     Rectangle {
                         Text {
@@ -506,7 +511,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
-                    onClicked: closePopup()
+                    onClicked: removeFilter()
 
                 }
 

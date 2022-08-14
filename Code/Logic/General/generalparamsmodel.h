@@ -69,6 +69,9 @@ public:
     //! Get Extract Path
     Q_INVOKABLE QString getExtractPath();
 
+    //! Set ExtractLive Path without signal
+    Q_INVOKABLE void setPath(QString path, QString type);
+
     //! Change column types
     Q_INVOKABLE void changeColumnTypes(QString columnName, QString tableName, QString newColumnType);
     Q_INVOKABLE QVariantMap getChangedColumnTypes();

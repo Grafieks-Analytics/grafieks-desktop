@@ -59,26 +59,52 @@ Page {
     // JAVASCRIPT FUNCTION STARTS
 
     function onDataSourceNameClicked(datasourceName, index, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
+
         listView.currentIndex = index
         updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
     function onDataSourceOwnerClicked(datasourceName, index, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
         listView.currentIndex = index
         updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
     function onConnectionClicked(datasourceName, index, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
         listView.currentIndex = index;
         updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
     function onDateCreatedClicked(datasourceName, index, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
         listView.currentIndex = index;
         updateDSName(datasourceName, connectionType, connectAllowed)
     }
 
     function onLastRefreshedClicked(datasourceName, index, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
         listView.currentIndex = index;
         updateDSName(datasourceName, connectionType, connectAllowed)
 
