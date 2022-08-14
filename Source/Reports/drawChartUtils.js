@@ -853,12 +853,11 @@ function drawChartAfterReceivingSignal(dataValues) {
     if (webEngineView.loading) {
         return;
     }
+    lastDataValues = dataValues;
 
     var xAxisColumnDetails = getDataPaneAllDetails(Constants.xAxisName);
     var yAxisColumnDetails = getDataPaneAllDetails(Constants.yAxisName);
     var row3ColumnDetails = getDataPaneAllDetails(Constants.row3Name);
-
-    ColorPalleteHandler.setD3ColorPallete(dataValues);
 
     d3PropertyConfig["dataColumns"] = {
         xAxisColumnDetails,
@@ -868,6 +867,7 @@ function drawChartAfterReceivingSignal(dataValues) {
     };
 
     d3PropertyConfig.chartName = chartTitle;
+    console.log("Data Received, Sent for drawing");
     console.log(dataValues);
     ChartsWebViewHandler.startPlottingChart(dataValues, d3PropertyConfig);
 }
