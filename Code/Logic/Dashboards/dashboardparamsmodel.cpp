@@ -1227,13 +1227,15 @@ void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
     QString ext = fi.completeSuffix();
     QString finalFileName = newFilename + "." + ext;
 
-    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QStringList tmpPaths =  QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+
+    QString tmpFilePath = tmpPaths[0] + "/" + "tmp/";
     QDir tmpDir(tmpFilePath);
 
     // Check if tmp directory exists
     if (!tmpDir.exists())
     {
-        QDir().mkdir(tmpFilePath);
+        QDir().mkpath(tmpFilePath);
     }
 
     QString filePath = tmpFilePath + finalFileName;

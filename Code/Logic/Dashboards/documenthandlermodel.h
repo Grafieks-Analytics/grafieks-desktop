@@ -11,6 +11,7 @@
 #include <QtCore/QFileInfo>
 #include <QDir>
 #include <qqmlfile.h>
+#include <QStandardPaths>
 
 #include <QDebug>
 
