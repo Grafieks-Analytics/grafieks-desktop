@@ -641,8 +641,8 @@ bool initializeCrashpad(QString dbName, QString appName, QString appVersion)
     FilePath metricsDir(Paths::getPlatformString(crashpadPaths.getMetricsPath()));
 
     // Configure url with your BugSplat database
-//    QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
-    QString url = "http://mailer.grafieks.com/crashpad.php";
+    QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
+//    QString url = "http://mailer.grafieks.com/crashpad.php";
 
     // Metadata that will be posted to BugSplat
     QMap<std::string, std::string> annotations;
@@ -650,9 +650,9 @@ bool initializeCrashpad(QString dbName, QString appName, QString appVersion)
     annotations["database"] = dbName.toStdString();     // Required: BugSplat database
     annotations["product"] = appName.toStdString();     // Required: BugSplat appName
     annotations["version"] = appVersion.toStdString();  // Required: BugSplat appVersion
-    annotations["key"] = "Sample key";                  // Optional: BugSplat key field
-    annotations["user"] = "fred@bugsplat.com";          // Optional: BugSplat user email
-    annotations["list_annotations"] = "Sample comment";	// Optional: BugSplat crash description
+    annotations["key"] = "desktop_crash_key";                  // Optional: BugSplat key field
+    annotations["user"] = Secret::bugSplatEmail.toStdString();          // Optional: BugSplat user email
+    annotations["list_annotations"] = "";	// Optional: BugSplat crash description
 
     // Disable crashpad rate limiting so that all crashes have dmp files
     std::vector<std::string> arguments;

@@ -69,6 +69,7 @@ class DashboardParamsModel : public QObject
     Q_PROPERTY(int tmpCanvasWidth READ tmpCanvasWidth WRITE setTmpCanvasWidth NOTIFY tmpCanvasWidthChanged)
     Q_PROPERTY(QString currentColumnType READ currentColumnType WRITE setCurrentColumnType NOTIFY currentColumnTypeChanged)
     Q_PROPERTY(QString wbName READ wbName WRITE setWbName NOTIFY wbNameChanged)
+    Q_PROPERTY(bool dateRangeLoopStopper READ dateRangeLoopStopper WRITE setDateRangeLoopStopper NOTIFY dateRangeLoopStopperChanged)
 
     // Filter
     Q_PROPERTY(QString currentSelectedColumn READ currentSelectedColumn WRITE setCurrentSelectedColumn NOTIFY currentSelectedColumnChanged)
@@ -88,6 +89,8 @@ class DashboardParamsModel : public QObject
     QString m_currentSelectedColumn;
 
     GeneralParamsModel generalParamsModel;
+
+    bool m_dateRangeLoopStopper;
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -141,7 +144,7 @@ public:
     Q_INVOKABLE void setColumnAliasName(int dashboardId, QString columnName, QString columnAlias);
     Q_INVOKABLE QString fetchColumnAliasName(int dashboardCountdashboardId, QString columnName);
 
-    Q_INVOKABLE void setColumnFilterType(int dashboardId, QString columnName, QString filterType);
+    Q_INVOKABLE void setColumnFilterType(int dashboardId, QString columnName, QString filterType, bool emitSignal = true);
     Q_INVOKABLE QString fetchColumnFilterType(int dashboardId, QString columnName);
 
     Q_INVOKABLE void setIncludeExcludeMap(int dashboardId, QString columnName, QString type);
@@ -234,6 +237,8 @@ public:
     // Function to call to emit a signal to hide all right columns in dashboard
     Q_INVOKABLE void hideAllDashboardRight();
 
+    bool dateRangeLoopStopper() const;
+
 public slots:
     void setLastContainerType(QString lastContainerType);
     void setPositionY(int positionY);
@@ -253,6 +258,8 @@ public slots:
 
     // Receive extract workbook data params
     void getExtractDashboardParams(QJsonObject dashboardParams);
+
+    void setDateRangeLoopStopper(bool dateRangeLoopStopper);
 
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
@@ -293,6 +300,7 @@ signals:
     void sendDashboardParams(QJsonObject dashboardParamsObj);
     void moveToDashboardScreen();
     void generateDashboards();
+    void dateRangeLoopStopperChanged(bool dateRangeLoopStopper);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

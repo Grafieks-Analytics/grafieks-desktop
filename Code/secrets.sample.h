@@ -35,6 +35,8 @@
 //    const int simpleCryptHash = 112233; // Replace it with your own hash
 
 
+//    // Bugsplat
+//    const QString bugSplatEmail = "email@email.com";
 //}
 
 #endif // SECRETS_SAMPLE_H
