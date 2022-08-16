@@ -150,7 +150,7 @@ QtObject {
 
     // About
     property string oth_abt_header : qsTr("Desktop")
-    property string oth_abt_version : qsTr("Free Edition 1.0.3 (x64)")
+    property string oth_abt_version : qsTr("Free Edition 1.0.4 (x64)")
     property string oth_abt_learn : qsTr("Grafieks is a Self-Service Analytics Platform.<a href=\"https://grafieks.com/\">Learn More</a> ")
     property string oth_abt_license : qsTr("End User License Agreement")
     property string oth_abt_copyright : qsTr("Copyright © 2022 Grafieks Analytics Ltd. All rights reserved.")

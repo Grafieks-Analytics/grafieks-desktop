@@ -12,6 +12,7 @@
 #include <QJsonDocument>
 #include <QDir>
 #include <QApplication>
+#include <QStandardPaths>
 
 #include "../../statics.h"
 #include "../../constants.h"
