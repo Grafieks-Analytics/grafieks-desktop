@@ -522,6 +522,7 @@ QtObject {
     property string da_sub_fddr_before: qsTr("Before")
     property string da_sub_fddr_after: qsTr("After")
     property string da_sub_fddr_relative: qsTr("Relative")
+    property string da_sub_fddr_custom: qsTr("Custom Date Filter")
 
 
     // MiniComponents/WidgetTextEditor
