@@ -722,13 +722,14 @@ QString DashboardParamsModel::fetchColumnAliasName(int dashboardId, QString colu
     return colAliasNames.value(columnName).toString();
 }
 
-void DashboardParamsModel::setColumnFilterType(int dashboardId, QString columnName, QString filterType)
+void DashboardParamsModel::setColumnFilterType(int dashboardId, QString columnName, QString filterType, bool emitSignal)
 {
     QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
     colFilterType.insert(columnName, filterType);
     this->columnFilterType.insert(dashboardId, colFilterType);
 
-    emit columnFilterTypeChanged(filterType);
+    if(emitSignal)
+        emit columnFilterTypeChanged(filterType);
 }
 
 QString DashboardParamsModel::fetchColumnFilterType(int dashboardId, QString columnName)
@@ -1311,6 +1312,11 @@ void DashboardParamsModel::hideAllDashboardRight()
     emit hideAllDashboardParams();
 }
 
+bool DashboardParamsModel::dateRangeLoopStopper() const
+{
+    return m_dateRangeLoopStopper;
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -1721,6 +1727,15 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         emit reportLineColorChanged(dashboardIds.at(0).toInt(), widgetId, this->reportLineColor.value(dashboardIds.at(0).toInt()).value(widgetId));
     }
 
+}
+
+void DashboardParamsModel::setDateRangeLoopStopper(bool dateRangeLoopStopper)
+{
+    if (m_dateRangeLoopStopper == dateRangeLoopStopper)
+        return;
+
+    m_dateRangeLoopStopper = dateRangeLoopStopper;
+    emit dateRangeLoopStopperChanged(m_dateRangeLoopStopper);
 }
 
 void DashboardParamsModel::setDashboardReportMap(int reportId){
