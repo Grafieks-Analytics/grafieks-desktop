@@ -57,7 +57,8 @@ Item {
         let currentMode = GeneralParamsModel.isWorkbookInEditMode()
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
-        if(currentMode){
+        if(currentMode && DashboardParamsModel.dateRangeLoopStopper){
+
 
             let filterType = DashboardParamsModel.fetchColumnFilterType(DashboardParamsModel.currentDashboard, componentName)
             let calendarValues = previousCheckValues
@@ -98,6 +99,10 @@ Item {
         }
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        if (buttonDisplay.text === ""){
+            buttonDisplay.text = Messages.da_sub_fddr_custom
+        }
     }
 
     Connections{
@@ -120,6 +125,8 @@ Item {
         var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
         const excludeList = [Constants.filterDateTypes[4], Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
 
+        DashboardParamsModel.setDateRangeLoopStopper(false)
+
         if (!currentMode && excludeList.includes(columnFilter)){
             popupq.open()
         }
@@ -132,10 +139,10 @@ Item {
         return null
     }
 
-    function setFilterType(newFilter){
+    function setFilterType(newFilter, emitSignal = true){
         let currentDashboardId = DashboardParamsModel.currentDashboard
         let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
-        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
+        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter, emitSignal)
     }
 
     function updateValue(){
@@ -347,7 +354,7 @@ Item {
                     id:btn1
                     width: 174
                     anchors.right:parent.right
-                    onClicked:  setFilterType(Constants.filterDateTypes[4])
+                    onClicked:  setFilterType(Constants.filterDateTypes[4], false)
                     Rectangle {
                         Text {
                             text: Messages.da_sub_fddr_rangeText
