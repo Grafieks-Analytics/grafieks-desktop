@@ -152,8 +152,9 @@ void WorkbookProcessor::saveWorkbooks(QString filePath)
 {
     QJsonObject finalObj;
 
+    QStringList tmpPaths =  QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 
-    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QString tmpFilePath = tmpPaths[0] + "/" + "tmp/";
     QDir directory(tmpFilePath);
     QVariantMap filesMap;
 
@@ -259,11 +260,13 @@ void WorkbookProcessor::processRemaining(QJsonDocument doc)
     QJsonObject files = doc.object().value("files").toObject();
     if(files.count() > 0){
 
-        QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+        QStringList tmpPaths =  QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+
+        QString tmpFilePath = tmpPaths[0] + "/" + "tmp/";
         QDir tmpDir(tmpFilePath);
 
         // Check if tmp directory exists
-        if (!tmpDir.exists()) QDir().mkdir(tmpFilePath);
+        if (!tmpDir.exists()) QDir().mkpath(tmpFilePath);
 
         QStringList filesList = files.keys();
         foreach(QString file, filesList){

@@ -284,7 +284,7 @@ macx {
     # Copy crashpad_handler to build directory and run dump_syms and symupload
     QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
     QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/Bin/MacOS/$$ARCH/crashpad_handler $$OUT_PWD/crashpad"
-    QMAKE_POST_LINK += "&& bash $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.3 > $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& bash $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.4 > $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.out 2>&1"
 }
 
 # Crashpad rules for Windows
@@ -311,7 +311,7 @@ win32 {
     # Copy crashpad_handler to output directory and upload symbols
     QMAKE_POST_LINK += "if not exist $$shell_path($$OUT_PWD)\crashpad mkdir $$shell_path($$OUT_PWD)\crashpad"
     QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Libraries\Crashpad\Bin\Windows\crashpad_handler.exe $$shell_path($$OUT_PWD)\crashpad\crashpad_handler.exe"
-    QMAKE_POST_LINK += "&& $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.bat $$shell_path($$PWD) $$shell_path($$EXEDIR) support_grafieks_com grafieks.desktop 1.0.3 > $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.bat $$shell_path($$PWD) $$shell_path($$EXEDIR) support_grafieks_com grafieks.desktop 1.0.4 > $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.out 2>&1"
     QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Libraries\Crashpad\attachment.txt $$shell_path($$OUT_PWD)\attachment.txt"
 }
 
@@ -325,7 +325,7 @@ linux {
 
     # Copy crashpad_handler to build directory and run dump_syms and symupload
     QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad && cp $$PWD/Libraries/Crashpad/Bin/Linux/crashpad_handler $$OUT_PWD/crashpad/crashpad_handler"
-    QMAKE_POST_LINK += "&& $$PWD/Libraries/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.3 > $$PWD/Libraries/Crashpad/Tools/Linux/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& $$PWD/Libraries/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.4 > $$PWD/Libraries/Crashpad/Tools/Linux/symbols.out 2>&1"
     QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/attachment.txt $$OUT_PWD/attachment.txt"
 }
 

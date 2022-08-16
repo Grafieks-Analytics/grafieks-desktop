@@ -9,13 +9,13 @@ namespace Constants
     const QString appName = "Grafieks Desktop";
 //    const QString appVersion = "Free";
     const QString appVersion = "Pro";
-    const QString appVersionCode = "1.0.3";
+    const QString appVersionCode = "1.0.4";
     const QString source = "desktop";
 
     // Duckdb version 0.2.9
-    const QString extractVersion = "1.0.3";
-    const QString liveVersion = "1.0.3";
-    const QString workbookVersion = "1.0.3";
+    const QString extractVersion = "1.0.4";
+    const QString liveVersion = "1.0.4";
+    const QString workbookVersion = "1.0.4";
 //    const QString currentMode = "DEBUG";
     const QString currentMode = "RELEASE";
 
