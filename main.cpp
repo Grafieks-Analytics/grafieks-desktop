@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
 {
     QString dbName = "support_grafieks_com";
     QString appName = "grafieks.desktop";
-    QString appVersion = "1.0.3";
+    QString appVersion = "1.0.4";
 
     initializeCrashpad(dbName, appName, appVersion);
 
@@ -318,7 +318,9 @@ int main(int argc, char *argv[])
     settings.setValue("general/chartsUrl", Constants::defaultChartEndpoint); // Delete this later when the API is resolved finally
 
     // Delete existing tmp folder storing dashboard files
-    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QStringList tmpPaths =  QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+
+    QString tmpFilePath = tmpPaths[0] + "/" + "tmp/";
     QDir(tmpFilePath).removeRecursively();
 
     // Registry entries
@@ -330,6 +332,7 @@ int main(int argc, char *argv[])
 #else
 #error "We don't support that version yet..."
 #endif
+
 
     /***********************************************************************************************************************/
     // SETTINS ENDS

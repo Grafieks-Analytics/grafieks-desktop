@@ -17,7 +17,9 @@ QString GeneralParamsModel::getFileToken()
 
 QString GeneralParamsModel::getTmpPath()
 {
-    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QStringList tmpPaths =  QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+
+    QString tmpFilePath = tmpPaths[0] + "/" + "tmp/";
     return tmpFilePath;
 }
 
