@@ -137,6 +137,10 @@ QtObject {
     property string msc_sed_header : qsTr("Session Expired")
     property string msc_sed_mainText : qsTr("Your current session has expired. Sign in again")
 
+    // ErrorPopup
+    property string msc_epp_header : qsTr("Error opening file")
+    property string msc_epp_mainText : qsTr("Error opening file. 0 bytes")
+
     // UpdateApplication
     property string msc_uan_header : qsTr("Update Application")
     property string msc_uan_pleaseWait : qsTr("Please wait..")
