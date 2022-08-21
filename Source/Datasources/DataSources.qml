@@ -29,7 +29,7 @@ Page {
 
 
     Component.onCompleted: {
-        DatasourceDS.fetchDatsources(0, true, true)
+        DatasourceDS.fetchDatsources(0, false, true)
 
         // Connect signal and slot
         data_source_grid.updateDSName.connect(datasourcelist_page.updateDSNameTitle)
@@ -262,7 +262,7 @@ Page {
                     anchors.left: search_rect.left
                     verticalAlignment:TextEdit.AlignVCenter
 
-                    onTextChanged: DatasourceDS.fetchDatsources(0, true, true, search_text.text)
+                    onTextChanged: DatasourceDS.fetchDatsources(0, false, true, search_text.text)
                 }
 
 
