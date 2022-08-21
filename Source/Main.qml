@@ -100,7 +100,7 @@ ApplicationWindow {
     Connections{
         target: DashboardParamsModel
 
-        function onMoveToDashboardScreen(){ 
+        function onMoveToDashboardScreen(){
             stacklayout_home.currentIndex = 6
         }
     }
@@ -365,34 +365,40 @@ ApplicationWindow {
         onAccepted: {
             disconnectDS()
             var readerFile = GeneralParamsModel.urlToFilePath(readerDialog.file)
-            var filenameSansExt = basename(readerFile)
-            DSParamsModel.setDsName(filenameSansExt)
+            var fileSize = GeneralParamsModel.getFileSize(readerFile)
+            if(fileSize > 0) {
 
-            if(readerFile.includes(Constants.extractFileExt)){
-                console.log("Extract file")
-                GeneralParamsModel.setFromLiveFile(false)
-                DSParamsModel.setDsType(Constants.extractDS)
+                var filenameSansExt = basename(readerFile)
+                DSParamsModel.setDsName(filenameSansExt)
 
-                if(selectMissingDS){
-                    WorkbookProcessor.processAfterSelectingDS(readerFile)
+                if(readerFile.includes(Constants.extractFileExt)){
+                    console.log("Extract file")
+                    GeneralParamsModel.setFromLiveFile(false)
+                    DSParamsModel.setDsType(Constants.extractDS)
+
+                    if(selectMissingDS){
+                        WorkbookProcessor.processAfterSelectingDS(readerFile)
+                    } else {
+                        ExtractProcessor.setArgumentsFromMenu(readerFile)
+                    }
+
+                } else if(readerFile.includes(Constants.workbookFileExt)){
+                    console.log("Workbook file")
+                    WorkbookProcessor.setArgumentsFromMenu(readerFile)
                 } else {
-                    ExtractProcessor.setArgumentsFromMenu(readerFile)
-                }
+                    console.log("Live file")
+                    GeneralParamsModel.setFromLiveFile(true)
+                    DSParamsModel.setDsType(Constants.liveDS)
 
-            } else if(readerFile.includes(Constants.workbookFileExt)){
-                console.log("Workbook file")
-                WorkbookProcessor.setArgumentsFromMenu(readerFile)
+                    if(selectMissingDS){
+                        WorkbookProcessor.processAfterSelectingDS(readerFile)
+                        LiveProcessor.processLiveQueries()
+                    } else {
+                        LiveProcessor.setArgumentsFromMenu(readerFile)
+                    }
+                }
             } else {
-                console.log("Live file")
-                GeneralParamsModel.setFromLiveFile(true)
-                DSParamsModel.setDsType(Constants.liveDS)
-
-                if(selectMissingDS){
-                    WorkbookProcessor.processAfterSelectingDS(readerFile)
-                    LiveProcessor.processLiveQueries()
-                } else {
-                    LiveProcessor.setArgumentsFromMenu(readerFile)
-                }
+                zeroBytesPopup.open()
             }
 
         }
@@ -476,6 +482,10 @@ ApplicationWindow {
         id: updateApplicationPopup
     }
 
+    ErrorPopup{
+        id: zeroBytesPopup
+    }
+
 
 
     // SubComponents Ends
@@ -533,16 +543,16 @@ ApplicationWindow {
         id: loginLogoutAction
         shortcut: "Ctrl+L"
         onTriggered: {
-             if(typeof settings.value("user/sessionToken") !== "undefined"){
+            if(typeof settings.value("user/sessionToken") !== "undefined"){
 
-                 // Call logout
-                 logout.visible = true
-             } else{
+                // Call logout
+                logout.visible = true
+            } else{
 
-                 // Call login
-                 connectGrafieks1.visible = true
-             }
-         }
+                // Call login
+                connectGrafieks1.visible = true
+            }
+        }
     }
 
     Action {

@@ -43,6 +43,7 @@ public:
     Q_INVOKABLE void openNewGrafieksInstance();
 
     Q_INVOKABLE QVariantMap getAppInfo();
+    Q_INVOKABLE int getFileSize(QString filePath);
 
     Q_INVOKABLE int getOnlineStorageType();
 
