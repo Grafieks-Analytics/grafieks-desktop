@@ -49,7 +49,7 @@ Popup {
                 action_signin.text  = Messages.signOutText
 
                 // Load datasources in GRS for first time
-                DatasourceDS.fetchDatsources(0,true, false)
+                DatasourceDS.fetchDatsources(0,false, false)
 
                 error_connection_text.text = ""
                 password_field.text = ""
