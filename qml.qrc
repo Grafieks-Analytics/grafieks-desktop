@@ -239,5 +239,6 @@
         <file>Source/Charts/build/lib/tabulator.min.js</file>
         <file>Source/Charts/build/styles.css</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeDate.qml</file>
+        <file>Source/MainSubComponents/ErrorPopup.qml</file>
     </qresource>
 </RCC>

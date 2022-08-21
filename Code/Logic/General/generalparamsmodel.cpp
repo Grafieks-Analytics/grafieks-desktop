@@ -62,6 +62,12 @@ QVariantMap GeneralParamsModel::getAppInfo()
     return appInfo;
 }
 
+int GeneralParamsModel::getFileSize(QString filePath)
+{
+    QFileInfo fi(filePath);
+    return fi.size();
+}
+
 int GeneralParamsModel::getOnlineStorageType()
 {
     return Statics::onlineStorageType;
