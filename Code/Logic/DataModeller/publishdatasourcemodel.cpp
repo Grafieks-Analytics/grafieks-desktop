@@ -9,7 +9,7 @@ PublishDatasourceModel::PublishDatasourceModel(QObject *parent) : QObject(parent
 
 }
 
-void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId,  bool isFullExtract, QString extractColumnName)
+void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId,  bool isFullExtract, QString extractColumnName, int dsSize)
 {
 
     // Fetch value from settings
@@ -59,6 +59,7 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     obj.insert("columnName", extractColumnName);
     obj.insert("isFullExtract", isFullExtract);
     obj.insert("inMemory", true);
+    obj.insert("dsSize", dsSize);
 
 
     QJsonDocument doc(obj);

@@ -206,7 +206,8 @@ Popup {
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)
 
-        PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName)
+        var dsFileMb = GeneralParamsModel.getDsSize()
+        PublishDatasourceModel.publishDatasource(dsName, description, readerFile, sourceType, schedulerId, isFullExtract, extractColumnName, dsFileMb)
     }
 
     function saveExtractLimit(freeLimit, ifPublish){
