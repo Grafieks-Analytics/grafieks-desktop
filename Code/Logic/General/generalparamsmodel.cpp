@@ -6,6 +6,19 @@ GeneralParamsModel::GeneralParamsModel(QObject *parent) : QObject(parent)
     this->setForLiveQuery = false;
 }
 
+int GeneralParamsModel::getDsSize()
+{
+    int fileSize;
+
+    if((Statics::livePath).length() > 0) {
+        fileSize = getFileSize(Statics::livePath);
+    } else {
+        fileSize = getFileSize(Statics::extractPath);
+    }
+
+    return fileSize / (1024 * 1024);
+}
+
 QString GeneralParamsModel::getFileToken()
 {
     QSettings settings;
