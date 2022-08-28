@@ -35,6 +35,8 @@ class GeneralParamsModel : public QObject
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
 
+    Q_INVOKABLE int getDsSize();
+
     Q_INVOKABLE QString getFileToken();
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();

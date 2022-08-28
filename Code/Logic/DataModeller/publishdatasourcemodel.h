@@ -22,7 +22,7 @@ class PublishDatasourceModel : public QObject
     Q_OBJECT
 public:
     explicit PublishDatasourceModel(QObject *parent = nullptr);
-    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId = 0, bool isFullExtract = false, QString extractColumnName = "");
+    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId = 0, bool isFullExtract = false, QString extractColumnName = "", int dsSize = 0);
     Q_INVOKABLE void checkIfDSExists(QString dsName);
     Q_INVOKABLE void publishNowAfterDSCheck();
 
