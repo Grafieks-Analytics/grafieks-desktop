@@ -240,5 +240,6 @@
         <file>Source/Charts/build/styles.css</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeDate.qml</file>
         <file>Source/MainSubComponents/ErrorPopup.qml</file>
+        <file>Source/MainSubComponents/CloseApp.qml</file>
     </qresource>
 </RCC>
