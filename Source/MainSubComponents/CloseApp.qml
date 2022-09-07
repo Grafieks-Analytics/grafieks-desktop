@@ -74,18 +74,19 @@ Popup {
 
         id: datasourceCloseMsg
         anchors.top: header_popup.bottom
-        anchors.topMargin: 30
+        anchors.topMargin: 50
+         anchors.right: parent.right
         // anchors.left: parent.left
         // anchors.leftMargin: 30
-        // anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
 
         Rectangle{
 
             id: label1
-            width:ePopup.width
+            width:parent.width
             height: 40
             // anchors.leftMargin: 30
-            anchors.horizontalCenter: closePopupId.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
 
 
             Text{
@@ -107,16 +108,18 @@ Popup {
     Row{
 
         id: closePopupHandlingButtons
-        anchors.top: datasourceCloseMsg.bottom
-        anchors.topMargin: 30
-        // anchors.left: parent.left
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.leftMargin: 30
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
+        anchors.right: parent.right
+        // anchors.horizontalCenter: parent.horizontalCenter
+        anchors.rightMargin: 10
+        spacing:10
 
         Button{
             id: confirm
             text: Messages.closeBtnTxt
             onClicked: closeApp()
+            anchors.rightMargin:20
         }
 
         Button{
