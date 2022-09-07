@@ -43,6 +43,7 @@ ApplicationWindow {
 
     title: Messages.applicationName
     property var selectMissingDS : false
+    property bool closeAppParam : false
 
     // Handle splash screen
     Timer {
@@ -71,6 +72,19 @@ ApplicationWindow {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+
+    onClosing: {
+        if(!closeAppParam){
+            close.accepted = false
+            closeApp.open()
+        }
+    }
+
+    function closeApp(){
+        closeAppParam = true
+        mainwindow.close()
+
+    }
 
 
     // SIGNALS ENDS
@@ -484,6 +498,10 @@ ApplicationWindow {
 
     ErrorPopup{
         id: zeroBytesPopup
+    }
+
+    CloseApp{
+        id: closeApp
     }
 
 

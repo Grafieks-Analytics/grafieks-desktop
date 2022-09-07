@@ -141,6 +141,10 @@ QtObject {
     property string msc_epp_header : qsTr("Error opening file")
     property string msc_epp_mainText : qsTr("Error opening file. 0 bytes")
 
+    // CloseApp
+    property string msc_cap_header : qsTr("Confirm exit")
+    property string msc_cap_mainText : qsTr("Are you sure you want to exit the application?")
+
     // UpdateApplication
     property string msc_uan_header : qsTr("Update Application")
     property string msc_uan_pleaseWait : qsTr("Please wait..")
