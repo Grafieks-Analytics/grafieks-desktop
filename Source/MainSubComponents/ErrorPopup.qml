@@ -77,7 +77,7 @@ Popup {
             id: label1
             width:errorPopup.width
             height: 40
-            // anchors.leftMargin: 30
+            // anchors.leftMargin: 30  
             anchors.horizontalCenter: errorPopup.horizontalCenter
 
 
