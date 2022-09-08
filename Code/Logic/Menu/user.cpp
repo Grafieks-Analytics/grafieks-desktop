@@ -20,6 +20,7 @@ void User::login()
     QJsonObject obj;
     obj.insert("username", this->username);
     obj.insert("password", this->password);
+    obj.insert("accountId", this->accountId);
     obj.insert("source", Constants::source);
 
     QJsonDocument doc(obj);
@@ -172,6 +173,7 @@ void User::siteLookupReadComplete()
         if(statusObj["code"].toInt() == 200){
 
             this->host = resultObj["data"].toString();
+            this->accountId = resultObj["account_id"].toInt();
 
             // Settings: set baseUrl
             // Settings: set hostname
