@@ -45,6 +45,7 @@ private:
     QString username;
     QString password;
     QString host;
+    int accountId;
 
 };
 
