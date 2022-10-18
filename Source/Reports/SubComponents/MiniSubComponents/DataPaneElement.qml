@@ -5,6 +5,7 @@ import com.grafieks.singleton.constants 1.0
 
 import "../../dataPanesDropHandlers.js" as DataPanesDropHandler
 
+
 Rectangle{
     id:rightDataDrag
     height: 24
@@ -87,7 +88,10 @@ Rectangle{
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
-
+    function openMenuCalc(){
+        console.log("openMenuCalc")
+        popupcalc.open()
+    }
 
 
 
@@ -105,6 +109,8 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // Page Design Starts
+
+
 
 
     DataPaneMenu{
@@ -138,12 +144,110 @@ Rectangle{
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        //        z:100
+               z:100
         MouseArea{
             anchors.fill: parent
-            onClicked: openMenu()
+            // onClicked: openMenu()
+            onClicked: menuOptionscalc.open()
         }
     }
+        Row{
+
+                anchors.right: tableImg.right
+                anchors.top: toggleMenuIcon.bottom
+                anchors.rightMargin: -70
+                width: parent.width-30
+                height: 80
+
+                Item {
+                    id: name
+
+                    anchors.right:parent.right
+
+                    x: -menuOptions.width
+
+                    Menu{
+                        id: menuOptionscalc
+                        background: Rectangle{
+                            implicitWidth: 200
+                            border.color: Constants.darkThemeColor
+                        }
+
+
+                        // Menu{
+                        //     id: menuOptionsdsd
+                        //     title: qsTr("Rename")
+
+                        //     background: Rectangle{
+                        //         implicitWidth: 180
+
+                        //         border.color: Constants.darkThemeColor
+                        //     }
+                        //      MouseArea{
+                        // anchors.fill: parent
+                        // // onClicked: openMenu()
+                        // onClicked:openMenuCalc()
+                        // }  
+
+                        // }
+                        Menu{
+                            id: menuOptionsdsdl
+                            title: qsTr("Create")
+                            
+                            background: Rectangle{
+                                implicitWidth: 180
+
+                                border.color: Constants.darkThemeColor
+                            }
+                              MenuItem {
+                                id:menuItemcreate1
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: "custom field"
+
+                                onClicked: openMenuCalc()
+
+                            }
+                        // MouseArea{
+                        // anchors.fill: parent
+                        // // onClicked: openMenu()
+                        // onClicked:openMenuCalc()
+                        // }  
+                        }
+                        // Menu{
+                        //     id: menuOptionsdsdu
+                        //     title: qsTr("Convert To")
+
+                        //     background: Rectangle{
+                        //         implicitWidth: 180
+
+                        //         border.color: Constants.darkThemeColor
+                        //     }
+                        //     MenuItem {
+                        //         id:menuItem13
+                        //         implicitHeight: 30
+                        //         leftPadding: 15
+                        //         text: Messages.filterCategorical
+
+                        //         onClicked: changeDataType(colName, colType, tableName, Constants.categoricalTab)
+
+                        //     }
+                        //     MenuSeparator{}
+                        //     MenuItem {
+                        //         id:menuItem23
+                        //         implicitHeight: 30
+                        //         leftPadding: 15
+                        //         text: Messages.filterNumerical
+
+                        //         onClicked: changeDataType(colName, colType, tableName, Constants.numericalTab)
+                        //     }
+
+                        // }
+                    }
+                }
+
+
+            }
 
     MouseArea {
         id: mouseArea
