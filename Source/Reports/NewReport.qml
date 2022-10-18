@@ -30,14 +30,14 @@ import "./drawChartUtils.js" as DrawChartUtils
     How a chart is drawn:
     - Load /build/index.html in webengine view and wait for it to load
     - onGrafieksChartPageLoaded => Redraw chart function is called
-    = onElementDrop: 
+    = onElementDrop:
         1. Check if the chart has horizontal orientation functionality -> horizontal bar chart | horitaontal line charts
             - Condition to check isHorizontal is based on data panes dropped on the x-y axis
-            - onIsHorizontalGraphChanged => 
+            - onIsHorizontalGraphChanged =>
                 - Change allowedXAxisDataPanes to 1
                 - Change allowedYAxisDataPanes to 2
                 - switch chart title as per the loaded current chart. Eg: If line chart was loaded and horizotal grapsh is switched -> then load horizontal line chart
-        2 . 
+        2 .
 */
 
 Page {
@@ -51,23 +51,23 @@ Page {
     // property int colorBoxHeight: 20
     // property int colorListTopMargin: 5
 
-    property int editImageSize: 16      // Edit icon size 
+    property int editImageSize: 16      // Edit icon size
 
     property bool addReportClicked: false    // This toggle is used to check if add report is clicked or not. This prevents in calling reDrawChart on title Changed
 
-    property bool xaxisActive: false    // X axis is active => Green color the data pane droppable zone 
+    property bool xaxisActive: false    // X axis is active => Green color the data pane droppable zone
     property bool yaxisActive: false    // Y axis is active => Green color the data pane droppable zone
-    property bool row3Active: null      // Row 3 is active => Green color the data pane droppable zone 
+    property bool row3Active: null      // Row 3 is active => Green color the data pane droppable zone
     property bool row4Active: null      // Row 4 is active => Green color the data pane droppable zone
 
     property bool xAxisVisible: true    // X axis is visible ==> Hide the axis row
-    property bool yAxisVisible: true    // Y axis is visible ==> Hide the axis row    
+    property bool yAxisVisible: true    // Y axis is visible ==> Hide the axis row
     property bool row3Visible: false    // Row 3 is visible  ==> Hide the row
     property bool row4Visible: false    // Row 4 is visible ==> Hide the row
 
     property string xAxisLabelName: Constants.xAxisName     // X axis label name
     property string yAxisLabelName: Constants.yAxisName     // Y axis label name
-    property string valuesLabelName: 'Values'               // Label for row3/row4 
+    property string valuesLabelName: 'Values'               // Label for row3/row4
 
     property var maxDropOnXAxis: 1      // How many data panes are allowed to be dropped on X axis
     property var maxDropOnYAxis: 1      // How many data panes are allowed to be dropped on Y axis
@@ -75,8 +75,8 @@ Page {
     property bool lineTypeChartVisible: false       // Line type chart is visible || line chart is selected
     property bool pivotThemeVisible: false          // Pivot theme is visible || pivot chart is selected
 
-    property string reportChart:ReportParamsModel.chartType;        // TODO: Check what is Chart type 
-    property int reportIdMain:ReportParamsModel.reportId;           
+    property string reportChart:ReportParamsModel.chartType;        // TODO: Check what is Chart type
+    property int reportIdMain:ReportParamsModel.reportId;
 
     // Initial Chart Config
     property string chartUrl: '';                               // TODO: Remove chartUrl ==> Because this will be same everywhere
@@ -91,7 +91,7 @@ Page {
     property var d3PropertyConfig: ({});
     property var qmlChartConfig: ({}); // TODO: Check if qml charts config can be removed
 
-    // todo: move these tables config to tables qml file     
+    // todo: move these tables config to tables qml file
     // Table Customization values
     property bool alternateRowsCheckStatus: true
     property bool searchCheckStatus: true
@@ -130,7 +130,7 @@ Page {
             chartName: { param1: value1, param2: value2 }
         }
     */
-    property var optionalParams: ({});                          
+    property var optionalParams: ({});
 
     property var lastPickedDataPaneElementProperties: ({});     //  Store the last picked data pane element properties
     property var reportDataPanes: ({});                         //  Report Data Panes Object
@@ -283,8 +283,8 @@ Page {
         target: ChartsModel
 
         // TODO: Emit a single signal for all the charts
-        // If single signal is not emitted, we will have to append each function here. again and again 
-        // Also same this is there in dropped report.qml => we can elimate this 
+        // If single signal is not emitted, we will have to append each function here. again and again
+        // Also same this is there in dropped report.qml => we can elimate this
         function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
             if(reportId === report_desiner_page.reportIdMain)
                 DrawChartUtils.drawChartAfterReceivingSignal(output);
@@ -422,7 +422,7 @@ Page {
             return;
         }
         ChartsWebViewHandler.updateChart(d3PropertyConfig)
-    }    
+    }
 
     function exportPivotChart() {
         webEngineView.runJavaScript("exportToExcel()");
@@ -432,32 +432,32 @@ Page {
     function clearColorByList() {
         var clearFlag = true;
         var lastColorByValueItemType =
-            (colorByData.length && colorByData[0].itemType) || "";
+                (colorByData.length && colorByData[0].itemType) || "";
         switch (chartTitle) {
-            case Constants.barChartTitle:
-            case Constants.lineChartTitle:
-            case Constants.areaChartTitle:
-            case Constants.multiLineChartTitle:
-            case Constants.multipleAreaChartTitle:
-            case Constants.groupBarChartTitle:
-            case Constants.stackedBarChartTitle:
-            case Constants.horizontalBarChartTitle:
-            case Constants.horizontalLineChartTitle:
-            case Constants.horizontalAreaChartTitle:
-            case Constants.horizontalBarGroupedChartTitle:
-            case Constants.multipleHorizontalAreaChartTitle:
-            case Constants.horizontalMultiLineChartTitle:
-            case Constants.horizontalStackedBarChartTitle:
-            case Constants.scatterChartTitle:
-                if (lastColorByValueItemType.toLowerCase() == "categorical") {
-                    clearFlag = false;
-                }
-                break;
-            case Constants.heatMapChartTitle:
-                if (lastColorByValueItemType.toLowerCase() == "numerical") {
-                    clearFlag = false;
-                }
-                break;
+        case Constants.barChartTitle:
+        case Constants.lineChartTitle:
+        case Constants.areaChartTitle:
+        case Constants.multiLineChartTitle:
+        case Constants.multipleAreaChartTitle:
+        case Constants.groupBarChartTitle:
+        case Constants.stackedBarChartTitle:
+        case Constants.horizontalBarChartTitle:
+        case Constants.horizontalLineChartTitle:
+        case Constants.horizontalAreaChartTitle:
+        case Constants.horizontalBarGroupedChartTitle:
+        case Constants.multipleHorizontalAreaChartTitle:
+        case Constants.horizontalMultiLineChartTitle:
+        case Constants.horizontalStackedBarChartTitle:
+        case Constants.scatterChartTitle:
+            if (lastColorByValueItemType.toLowerCase() == "categorical") {
+                clearFlag = false;
+            }
+            break;
+        case Constants.heatMapChartTitle:
+            if (lastColorByValueItemType.toLowerCase() == "numerical") {
+                clearFlag = false;
+            }
+            break;
         }
 
         if (clearFlag) {
@@ -512,16 +512,16 @@ Page {
     function getAxisModelAsJson(axisName) {
         var model = null;
         switch (axisName) {
-            case Constants.xAxisName:
-                model = xAxisListModel;
-                break;
-            case Constants.yAxisName:
-                model = yAxisListModel;
-                break;
-            case Constants.gaugePointerLabel:
-            case Constants.row3Name:
-                model = valuesListModel;
-                break;
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break;
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.gaugePointerLabel:
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
         }
         if (!model) {
             return [];
@@ -529,11 +529,11 @@ Page {
         var columnsData = [];
         for (var i = 0; i < model.count; i++) {
             columnsData.push({
-                itemName: model.get(i).itemName,
-                tableValue: model.get(i).tableValue,
-                droppedItemType: model.get(i).droppedItemType,
-                dateFormat: model.get(i).dateFormat,
-            });
+                                 itemName: model.get(i).itemName,
+                                 tableValue: model.get(i).tableValue,
+                                 droppedItemType: model.get(i).droppedItemType,
+                                 dateFormat: model.get(i).dateFormat,
+                             });
         }
         return columnsData;
     }
@@ -542,16 +542,16 @@ Page {
     function getAxisColumnNames(axisName) {
         var model = null;
         switch (axisName) {
-            case Constants.xAxisName:
-                model = xAxisListModel;
-                break;
-            case Constants.yAxisName:
-                model = yAxisListModel;
-                break;
-            case Constants.row4Name:
-            case Constants.row3Name:
-                model = valuesListModel;
-                break;
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break;
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.row4Name:
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
         }
         if (!model) {
             return [];
@@ -566,16 +566,16 @@ Page {
     function getDataPaneAllDetails(axisName) {
         var model = null;
         switch (axisName) {
-            case Constants.xAxisName:
-                model = xAxisListModel;
-                break;
-            case Constants.yAxisName:
-                model = yAxisListModel;
-                break;
-            case Constants.row3Name:
-            case Constants.row4Name:
-                model = valuesListModel;
-                break;
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break;
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+        case Constants.row4Name:
+            model = valuesListModel;
+            break;
         }
         if (!model) {
             return [];
@@ -583,11 +583,11 @@ Page {
         var columnsAllDetails = [];
         for (var i = 0; i < model.count; i++) {
             columnsAllDetails.push({
-                itemName: model.get(i).itemName,
-                tableValue: model.get(i).tableValue,
-                itemType: model.get(i).droppedItemType,
-                dateFormat: model.get(i).dateFormat,
-            });
+                                       itemName: model.get(i).itemName,
+                                       tableValue: model.get(i).tableValue,
+                                       itemType: model.get(i).droppedItemType,
+                                       dateFormat: model.get(i).dateFormat,
+                                   });
         }
         return columnsAllDetails;
     }
@@ -669,10 +669,10 @@ Page {
 
     function isNumber(number) {
         return !!(
-            number &&
-            number.trim() &&
-            !isNaN(number.trim().replace(/,/g, ""))
-        );
+                    number &&
+                    number.trim() &&
+                    !isNaN(number.trim().replace(/,/g, ""))
+                    );
     }
 
     function openAxisSettings() {
@@ -682,6 +682,15 @@ Page {
     function updateReportTitle(title) {
         reportTitleName = title;
     }
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS popup
+
+
+    function onCancelClickedCalc(){
+        popupcalc.visible = false
+    }
+
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -695,6 +704,280 @@ Page {
 
     AxisSettingPopup{
         id: axisSettingsPopup
+    }
+    Popup {
+        id: popupcalc
+        width: parent.width * 0.8
+        height: 800
+        anchors.centerIn: parent
+
+        visible: false
+        modal: true
+        padding: 0
+        closePolicy: Popup.NoAutoClose
+
+        background: Rectangle{
+            color: Constants.whiteColor
+        }
+
+        // Popup Header Starts
+
+        Rectangle{
+
+            id: header
+            color: Constants.themeColor
+            height: 40
+            width: parent.width - 2
+
+            anchors.top: parent.top
+            anchors.left: parent.left
+
+            anchors.topMargin: 1
+            anchors.leftMargin: 1
+
+            Text{
+                text: "Create Custom Field"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left : parent.left
+                font.pixelSize: Constants.fontCategoryHeader
+                anchors.leftMargin: 10
+            }
+            Image {
+                id: close_icn
+                source: "/Images/icons/outline_close_black_18dp2x.png"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right:  parent.right
+                height: 25
+                width: 25
+                anchors.rightMargin: 5
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: onCancelClickedCalc()
+                }
+            }
+
+        }
+
+        // Popup Header Ends
+        Rectangle{
+
+            id: name
+            anchors.top: header.bottom
+            height: 70
+            width: parent.width - 2
+
+            Text{
+                id:nameText
+                text: "Name"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left : parent.left
+                font.pixelSize: Constants.fontCategoryHeader
+                anchors.leftMargin: 30
+            }
+
+            Rectangle{
+                anchors.left : nameText.right
+                width: 210
+                height: 30
+                // radius: 15
+                anchors.leftMargin:30
+                border.color: Constants.borderBlueColor
+
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                TextEdit {
+                    // Green Input
+                    // id: input1Field
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    height:  parent.height
+                    anchors.centerIn: parent
+                    // onTextChanged: updateChart()
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+
+        }
+
+        Rectangle{
+
+            id: calculation
+            //            color: "yellow"
+            anchors.top: name.bottom
+            height: parent.height-100
+            width: parent.width - 300
+            Rectangle{
+
+                id: calculationName
+                //                color: "pink"
+                anchors.top: parent.top
+                height: 40
+                width: parent.width - 2
+
+                Text{
+                    id:calculationText
+                    text: "Calculation"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 30
+                }
+            }
+            Rectangle{
+                id: calculationEditor
+                anchors.left : parent.left
+                anchors.top : calculationName.bottom
+                width: parent.width-50
+                height: parent.height-200
+                // radius: 15
+                anchors.leftMargin:30
+                anchors.topMargin:30
+                border.color: Constants.borderBlueColor
+                //    color:"blue"
+
+                // anchors.centerIn: parent
+
+                TextEdit {
+                    // Green Input
+                    // id: input1Field
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    height:  parent.height
+                    anchors.centerIn: parent
+                    // onTextChanged: updateChart()
+                    //    verticalAlignment: Text.AlignVCenter
+                }
+            }
+            Rectangle{
+                anchors.left : parent.left
+                anchors.top : calculationEditor.bottom
+                anchors.topMargin: 20
+                anchors.leftMargin:30
+                width: parent.width-50
+                height: 70
+                // radius: 15
+                //               anchors.leftMargin:20
+                border.color: Constants.borderBlueColor
+                //    color:"blue"
+
+                //               anchors.centerIn: parent
+
+                TextEdit {
+                    // Green Input
+                    // id: input1Field
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    height:  parent.height
+                    anchors.centerIn: parent
+                    // onTextChanged: updateChart()
+                    //    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+        }
+        Rectangle{
+
+            id: functionid
+            //            color: "green"
+            anchors.top: name.bottom
+            anchors.right: parent.right
+            height: parent.height-100
+            width: 300
+            Rectangle{
+
+                id: functionName
+                //                color: "pink"
+                anchors.top: parent.top
+                height: 40
+                width: parent.width - 2
+
+                Text{
+                    id:functionText
+                    text: "Function"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                }
+            }
+            Rectangle{
+                id: functionEditor
+                anchors.left : parent.left
+                anchors.top : functionName.bottom
+                width: parent.width-40
+                height: 280
+                // radius: 15
+                anchors.leftMargin:20
+                anchors.topMargin:30
+                border.color: Constants.borderBlueColor
+                //    color:"blue"
+
+                // anchors.centerIn: parent
+
+            }
+            Rectangle{
+
+                id: syntaxName
+                //                color: "pink"
+                anchors.top: functionEditor.bottom
+                anchors.topMargin:30
+                height: 40
+                width: parent.width - 2
+
+                Text{
+                    id:syntaxText
+                    text: "Syntax"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                    anchors.topMargin:30
+                }
+            }
+            Rectangle{
+                id: syntaxEditor
+                anchors.left : parent.left
+                anchors.top : syntaxName.bottom
+                width: parent.width-50
+                height: 125
+                // radius: 15
+                anchors.leftMargin:20
+                anchors.topMargin:20
+                //               anchors.leftMargin:20
+                border.color: Constants.borderBlueColor
+                //    color:"blue"
+
+                // anchors.centerIn: parent
+
+            }
+            Row{
+                anchors.top:syntaxEditor.bottom
+                anchors.left: parent.left
+                anchors.topMargin: 20
+                anchors.leftMargin: 20
+                spacing: 20
+
+                Button{
+                    id: cancel_btn1
+                    text: "Cancel"
+                    //                    textValue: Messages.cancelBtnTxt
+                    onClicked: onCancelClicked()
+                }
+
+
+                Button{
+                    id: apply_btn1
+                    text: "Apply"
+                    //                    textValue: Messages.applyBtnTxt
+                    onClicked: onApplyClicked()
+                }
+            }
+        }
     }
 
     EditColorPopup{
@@ -1287,7 +1570,7 @@ Page {
                 width: 130
                 height: parent.height
                 anchors.left: row4Valueseparator.right
-                
+
                 // anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: input1Label
