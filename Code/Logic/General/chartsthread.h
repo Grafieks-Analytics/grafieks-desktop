@@ -58,6 +58,8 @@ class ChartsThread : public QObject
     QString yellowValue;
     QString redValue;
     QJsonArray dateConversionOptions;
+    QJsonArray xAxisObject;
+    QJsonArray yAxisObject;
 
     QHash<int, QString> dashboardReportDataCached;
     QHash<int, QString> liveDashboardFilterParamsCached;
@@ -72,7 +74,7 @@ public:
 
     Q_INVOKABLE void clearCache();
 
-    void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0, QString datasourceType = Constants::liveType);
+    void methodSelector(QString functionName = "", QString reportWhereConditions = "", QString dashboardWhereConditions = "", int chartSource = Constants::reportScreen, int reportId = 0, int dashboardId = 0, QString datasourceType = Constants::liveType, QJsonArray xAxisObject = {}, QJsonArray yAxisObject = {});
     void queryParams(QString masterTable = "", QString masterWhereParams = "", QString masterJoinParams = "");
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList, QVariantList &row3ColumnList);
@@ -83,6 +85,8 @@ public:
 public slots:
 
     void start();
+
+    QString getAggregateType();
 
     void getBarChartValues();
     void getStackedBarChartValues(); // getStackedBarAreaValues
@@ -112,9 +116,9 @@ public slots:
     void getStackedAreaChartValues(); // getStackedBarAreaValues
     void getMultiLineChartValues();
 
-    void getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn, QString identifier = "");
+    void getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn, QJsonArray &xAxisObject, QString identifier = "");
     void getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn, QString identifier = "");
-    void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier = "");
+    void getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QJsonArray &xAxisObject, QString identifier = "");
 
 private:
     duckdb::unique_ptr<duckdb::MaterializedQueryResult> queryExtractFunction(QString mainQuery);
