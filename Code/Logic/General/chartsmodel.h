@@ -45,24 +45,22 @@ public:
     explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr, ChartsAPIThread *chartsAPIThread = nullptr);
     ~ChartsModel();
 
-    Q_INVOKABLE void getChartWiseData(int reportId, int dashboardId, int chartSource, QString chartName, QJsonObject chartsDataObject);
-
-    Q_INVOKABLE void getBarChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
-    Q_INVOKABLE void getStackedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey, QJsonArray xAxisObject);
+    Q_INVOKABLE void getBarChartValues(int reportId, int dashboardId, int chartSource, QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getStackedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE void getGroupedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE void getNewGroupedBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
-    Q_INVOKABLE void getLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
+    Q_INVOKABLE void getAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getLineBarChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE void getPieChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
-    Q_INVOKABLE void getFunnelChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
-    Q_INVOKABLE void getRadarChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
+    Q_INVOKABLE void getPieChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getFunnelChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE void getRadarChartValues( int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getScatterChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE void getScatterChartNumericalValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getHeatMapChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey, QJsonArray xAxisObject, QJsonArray yAxisObject);
+    Q_INVOKABLE void getHeatMapChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
     Q_INVOKABLE void getSunburstChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE void getWaterfallChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn, QJsonArray xAxisObject);
+    Q_INVOKABLE void getWaterfallChartValues(int reportId, int dashboardId, int chartSource,   QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getGaugeChartValues(int reportId, int dashboardId, int chartSource,  QString calculateColumn, QString greenValue, QString yellowValue, QString redValue);
     Q_INVOKABLE void getSankeyChartValues(int reportId, int dashboardId, int chartSource,  QString sourceColumn, QString destinationColumn, QString measureColumn);
 
@@ -71,8 +69,8 @@ public:
     Q_INVOKABLE void getKPIChartValues(int reportId, int dashboardId, int chartSource,   QString calculateColumn);
     Q_INVOKABLE void getTableChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters);
     Q_INVOKABLE void getPivotChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QVariantList row3Columns);
-    Q_INVOKABLE void getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey, QJsonArray xAxisObject);
-    Q_INVOKABLE void getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey, QJsonArray xAxisObject);
+    Q_INVOKABLE void getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE void getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
     Q_INVOKABLE void saveChartsModel();
 
