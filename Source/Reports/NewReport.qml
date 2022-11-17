@@ -12,6 +12,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtWebEngine 1.7
+import QtQml.Models 2.15
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -225,6 +226,31 @@ Page {
         id: allCharts
     }
 
+    ListModel {
+        id: functionModel
+        ListElement {
+            name: "IF"
+            syntax:"if(5> 10,100,3) = 3"
+        }
+        ListElement {
+            name: "If Case"
+            syntax:"Returns the 'returnValue' if the given column satisfied with 'matchExpr'."
+        }
+        ListElement {
+            name: "Ifnull"
+            syntax:"ifnull(null,10) = 10"
+        }
+        ListElement {
+            name: "Is Empty"
+            syntax:"isempty(null) = 1"
+        }
+        ListElement {
+            name: "isnul"
+            syntax:"isnull(null)- 1"
+        }
+
+
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -691,6 +717,11 @@ Page {
         popupcalc.visible = false
     }
 
+    function insertSyntax(i){
+        //    syntaxEditorText.text = functionListElemText.text
+        syntaxEditorText.text = functionModel.get(i).syntax
+    }
+
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -736,7 +767,7 @@ Page {
             anchors.leftMargin: 1
 
             Text{
-                text: "Create Custom Field"
+                text: Constants.createCustomField
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left : parent.left
                 font.pixelSize: Constants.fontCategoryHeader
@@ -768,7 +799,7 @@ Page {
 
             Text{
                 id:nameText
-                text: "Name"
+                text: Constants.name
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left : parent.left
                 font.pixelSize: Constants.fontCategoryHeader
@@ -819,7 +850,7 @@ Page {
 
                 Text{
                     id:calculationText
-                    text: "Calculation"
+                    text: Constants.calculation
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
@@ -840,16 +871,25 @@ Page {
 
                 // anchors.centerIn: parent
 
-                TextEdit {
-                    // Green Input
-                    // id: input1Field
-                    leftPadding: 10
-                    rightPadding: 10
+                // TextEdit {
+                //     // Green Input
+                //     // id: input1Field
+                //     leftPadding: 10
+                //     rightPadding: 10
+                //     width: parent.width
+                //     height:  parent.height
+                //     anchors.centerIn: parent
+                //     // onTextChanged: updateChart()
+                //     //    verticalAlignment: Text.AlignVCenter
+                // }
+                // TODO: editor
+                WebEngineView {
+                    id: webEngineViewEditor
+                    height:parent.height
                     width: parent.width
-                    height:  parent.height
-                    anchors.centerIn: parent
-                    // onTextChanged: updateChart()
-                    //    verticalAlignment: Text.AlignVCenter
+                    url: Constants.calculatedFieldEditorUrl
+                    anchors.left: tool_sep_chartFilters.right
+                    anchors.top: axis.bottom
                 }
             }
             Rectangle{
@@ -898,24 +938,80 @@ Page {
 
                 Text{
                     id:functionText
-                    text: "Function"
+                    text: Constants.functionName
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
                     anchors.leftMargin: 20
                 }
             }
+            ComboBox {
+                id:dropDownFunction
+                currentIndex: 2
+                anchors.top: functionName.bottom
+                anchors.topMargin:27
+                anchors.left : parent.left
+                anchors.leftMargin:20
+                model: [ "Logical Functions", "Aggregate Functions", "Numeric Functions" ]
+                width: parent.width-40
+                onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
+            }
             Rectangle{
                 id: functionEditor
                 anchors.left : parent.left
-                anchors.top : functionName.bottom
+                anchors.top : dropDownFunction.bottom
                 width: parent.width-40
                 height: 280
                 // radius: 15
                 anchors.leftMargin:20
-                anchors.topMargin:30
+                anchors.topMargin:5
                 border.color: Constants.borderBlueColor
-                //    color:"blue"
+                clip: true
+                Component {
+                    id: contactDelegate
+                    Rectangle {
+                        // Rectangle{
+                        id:functionListElem
+                        width: parent.width-10;
+                        height: 30;
+                        anchors.left:parent.left
+                        anchors.leftMargin:5
+                        //  color:"red"
+                        Column {
+                            id:functionListElemText
+                            Text { text: model.name }
+                            // Text { text: 'Number: ' + model.number }
+                        }
+                        // }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: insertSyntax(index)
+                            hoverEnabled: true
+                            onEntered: {
+                                functionListElem.color = "#F3F3F4"
+                                overlay
+                            }
+                            onExited: {
+                                console.log("Exiting: ")
+                                functionListElem.color = "white"
+                            }
+
+                        }
+
+                    }
+                }
+                ListView {
+                    anchors.fill: parent
+                    clip: true
+                    anchors.topMargin:10
+
+                    ScrollBar.vertical: ScrollBar {}
+
+
+                    model: functionModel
+
+                    delegate: contactDelegate
+                }
 
                 // anchors.centerIn: parent
 
@@ -925,13 +1021,13 @@ Page {
                 id: syntaxName
                 //                color: "pink"
                 anchors.top: functionEditor.bottom
-                anchors.topMargin:30
+                anchors.topMargin:20
                 height: 40
                 width: parent.width - 2
 
                 Text{
                     id:syntaxText
-                    text: "Syntax"
+                    text: Constants.syntax
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
@@ -944,21 +1040,32 @@ Page {
                 anchors.left : parent.left
                 anchors.top : syntaxName.bottom
                 width: parent.width-50
-                height: 125
+                height: 105
                 // radius: 15
                 anchors.leftMargin:20
                 anchors.topMargin:20
                 //               anchors.leftMargin:20
                 border.color: Constants.borderBlueColor
-                //    color:"blue"
+                color:"lightgrey"
 
                 // anchors.centerIn: parent
+                Text{
+                    id:syntaxEditorText
+                    text: "Syntax"
+                    wrapMode: "WordWrap"
+                    width:parent.width-20
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                    anchors.topMargin:30
+                }
 
             }
             Row{
                 anchors.top:syntaxEditor.bottom
                 anchors.left: parent.left
-                anchors.topMargin: 20
+                anchors.topMargin: 40
                 anchors.leftMargin: 20
                 spacing: 20
 

@@ -396,4 +396,12 @@ QtObject {
 
     property var dashboardScreenName: "Dashboard"
     property var reportScreenName: "Report"
+    // Calculated Fileld Editor
+    property string calculatedFieldEditorUrl: "qrc:/Source/Reports/calculatedFieldEditor.html"
+    property string createCustomField: "Create Custom Field"
+    property string name: "Name"
+    property string calculation: "Calculation"
+    property string functionName: "Function"
+    property string syntax: "Syntax"
+    
 }
