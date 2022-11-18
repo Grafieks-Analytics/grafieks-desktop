@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Editor</title>
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+        />
+        <!-- <link rel="stylesheet" href="./style.css" /> -->
+        <style>
+            body {
+                background-color: #001628;
+                color: #72e0d1;
+            }
+            small {
+                color: #83ba52 !important;
+            }
+            mark {
+                background-color: #f5d67b;
+            }
+            a {
+                height: fit-content !important;
+                padding: 0 !important;
+            }
+            #autocomplete-textarea {
+                /* min-height: 80px; */
+                color: #000;
+                overflow-y: auto;
+                /* max-height: 400px; */
+                height: 100vh;
+            }
+            #autocomplete-textarea a {
+                text-decoration: none;
+                font-weight: 400;
+                color: #181818;
+            }
+            .dropdown-menu .textcomplete-item a,
+            .dropdown-menu .textcomplete-item a:hover {
+                cursor: pointer;
+                font-weight: 400;
+                color: #000;
+                position: relative;
+                padding: 3px 10px;
+            }
+            .dropdown-menu .textcomplete-item.active a {
+                background: #f0f0f0;
+            }
+            .dropdown-menu .textcomplete-item a em {
+                font-style: normal;
+                font-weight: 700;
+            }
+            .dropdown-menu .textcomplete-footer {
+                border-top: solid 1px #f0f0f0;
+                margin-top: 3px;
+            }
+            .dropdown-menu .textcomplete-item a {
+                box-sizing: border-box;
+                height: 46px;
+            }
+            .dropdown-menu .textcomplete-item .picture {
+                border-radius: 2em;
+                -webkit-border-radius: 2em;
+                -moz-border-radius: 2em;
+                width: 32px;
+                height: 32px;
+                overflow: hidden;
+                float: left;
+                margin-top: 4px;
+                margin-right: 9px;
+            }
+            .dropdown-menu .textcomplete-item .picture img {
+                width: 32px;
+            }
+            .dropdown-menu .textcomplete-item span {
+                display: block;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            .dropdown-menu .textcomplete-item .name {
+                font-size: 14px;
+                color: #333333;
+            }
+            .dropdown-menu .textcomplete-item .bottom {
+                font-size: 11px;
+                line-height: 11px;
+
+                color: #767676;
+            }
+            .dropdown-menu .textcomplete-item .flag {
+                height: 18px;
+                vertical-align: middle;
+            }
+
+            /* Tagged item */
+            .tag-item,
+            .tag-item:visited {
+                font-weight: 400;
+                padding: 0;
+                -webkit-border-radius: 2px;
+                -moz-border-radius: 2px;
+                border-radius: 2px;
+                cursor: default;
+            }
+            .tag-item:hover {
+                text-decoration: none;
+            }
+            .tag-item {
+                color: #0071c2;
+                font-weight: 400;
+                font-size: 100%;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- partial:index.partial.html -->
+        <div class="">
+            <div class="">
+                <div class="">
+
+                    <!-- <h3>Rich HTML text editor + autocomplete<br>
+          <small>jQuery Version: [1.12.4] / Textcomplete: [1.8.5]</small><br />
+          <small>Use the '@' key, for example: <i> <mark>@Louane</mark></i></small>
+        </h3> -->
+                    <div
+                        class="form-control"
+                        id="autocomplete-textarea"
+                        contenteditable="true"
+                    ></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <ul class="dropdown-menu textcomplete-dropdown" id="textcomplete-dropdown-0" style="width: 230px;
+    left: 0;
+    z-index: 100;
+    display: block;
+    top: 250px;
+    margin: 0 auto;
+    right: 0;">
+  </ul> -->
+        <!-- partial -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
+        <script>
+            $(document).ready(() => {
+                // Search configuration
+                const AUTOCOMPLETE_ITEMS_DISPLAYED = 10;
+                const SEARCH_CACHE = true;
+                const SEARCH_MS_DEBOUNCE = 0;
+                const SEARCH_TRIGGER_CHAR = "#";
+                const SEARCH_TRIGGER_MIN_CHARS = 0;
+                const SEARCH_MATCH_REGEX = new RegExp(
+                    `(^|\\s)${SEARCH_TRIGGER_CHAR}(\\w${
+                        SEARCH_TRIGGER_MIN_CHARS >= 0
+                            ? `{${SEARCH_TRIGGER_MIN_CHARS},}`
+                            : "*"
+                    }(?:\\s*\\w*)*)$`
+                );
+
+          
+                itemsTest = [
+                    {
+                        name: "Andhra Pradesh",
+                    },
+                    {
+                        name: "Arunachal Pradesh",
+                    },
+                    {
+                        name: "Assam",
+                    },
+                    {
+                        name: "Bihar",
+                    },
+                    {
+                        name: "Goa",
+                    },
+                    {
+                        name: "Gujarat",
+                    },
+                    {
+                        name: "Haryana",
+                    },
+                    {
+                        name: "Himachal Pradesh",
+                    },
+                    {
+                        name: "Chhattisgarh",
+                    },
+                    {
+                        name: "Jharkhand",
+                    },
+                    {
+                        name: "Karnataka",
+                    },
+                    {
+                        name: "Kerala",
+                    },
+                ];
+
+                // Client Initialization
+                const apiClient = new ApiClient({
+                    itemsPerSearch: AUTOCOMPLETE_ITEMS_DISPLAYED,
+                });
+                const selectorId = "#autocomplete-textarea";
+                const selectorElement = $(selectorId);
+                let lastQuery = "";
+
+                // Disable formatting on paste
+                const onPastePlainText = (e) => {
+                    e.preventDefault();
+                    var pastedText;
+                    if (window.clipboardData && window.clipboardData.getData) {
+                        // IE
+                        pastedText = window.clipboardData.getData("Text");
+                    } else if (e.clipboardData && e.clipboardData.getData) {
+                        pastedText = e.clipboardData.getData("text/plain");
+                    }
+                    document.execCommand("insertHTML", false, pastedText);
+                };
+                selectorElement[0].addEventListener("paste", onPastePlainText);
+
+                const mentionStrategy = {
+                    // If enabled, it will memoize by term argument. This is useful to prevent excessive API access
+                    cache: SEARCH_CACHE,
+                    // Regular experession used to trigger search
+                    match: SEARCH_MATCH_REGEX,
+
+                    // Function called at every new keystroke
+
+                    search: (query, callback) => {
+                        lastQuery = query;
+                        console.log("query", lastQuery);
+                        apiClient
+                            .search(lastQuery)
+                            .done((data) => {
+                                data.results = templates.dataMapper(
+                                    query,
+                                    itemsTest
+                                );
+                                callback(data.results);
+                            })
+                            .fail((err) => console.error(err));
+                        // console.log("result", this.search);
+                    },
+
+                    // Template used to display each result obtained by the API
+                    template: (hit) =>
+                        templates.resultDisplay(hit)
+                            ? templates.resultDisplay(hit)
+                            : "",
+
+                    // Template used to display the selected result in the textarea
+                    replace: (hit) => templates.selectedResult(hit),
+                };
+
+                selectorElement.textcomplete([mentionStrategy], {
+                    debounce: SEARCH_MS_DEBOUNCE,
+                    maxCount: AUTOCOMPLETE_ITEMS_DISPLAYED,
+                    // Special adapter to handle HTMLContentEditable divs
+                    adapter: $.fn.textcomplete.HTMLContentEditable,
+                });
+
+                window.debug = () => {
+                    mentionStrategy.search("lau", function (hits) {
+                        hits = templates.dataMapper("Lou", hits);
+                        const debugContainer = $("#textcomplete-dropdown-0");
+                        debugContainer.html("");
+                        hits.forEach(function (value) {
+                            debugContainer.append(
+                                `<li class="textcomplete-item"><a>${templates.resultDisplay(
+                                    value
+                                )}</a></li>`
+                            );
+                        });
+                    });
+                };
+                window.debug();
+            });
+
+            function ApiClient(options) {
+                this.options = options;
+
+                this.search = () =>
+                    $.ajax({
+                        url: `https://randomuser.me/api/?results=${options.itemsPerSearch}&seed=abc&inc=name,location,dob,id,picture,info,nat`,
+                        dataType: "json",
+                    });
+            }
+
+            const templates = {
+                dataMapper: (query, items) => {
+                    items.forEach(function (value) {
+                        value.searchQuery = query;
+                        // value.name.initials =
+                        //     value.name.first.charAt(0) + value.name.last.charAt(0);
+                        console.log("value", value.name);
+                        value.name = value.name;
+                        // value.location.flag = `https://www.countryflags.io/${value.nat}/shiny/64.png`;
+                        // value.posts = Math.floor(Math.random() * 100) + 1;
+                        // const randomBoolean = Math.random() < 0.5;
+                        // value.picture_thumbnail = randomBoolean
+                        //     ? value.picture.thumbnail
+                        //     : `https://eu.ui-avatars.com/api/?name=${value.name.first}+${value.name.last}&rounded=true`;
+                    });
+                    // console.log("items", items);
+                    return items;
+                },
+                // Template used to display the selected result in the textarea
+                selectedResult: (hit) =>
+                    // console.log("hit",hit)
+                    ` <label contentEditable="false" spellcheck="false" class="tag-item">${hit.name}</label> `,
+
+                // Template used to display each result obtained by the API
+                resultDisplay: (hit) => {
+                    const regex = new RegExp(
+                        "(".concat(hit.searchQuery, ")"),
+                        "i"
+                    );
+                    // console.log("hitFiltered", hit.name);
+                    const fullName = hit.name.replace(regex, "<em>$1</em>");
+                    console.log("finalFilter", fullName, "next", regex);
+                    var name = hit.name;
+                    console.log("test", name.includes(hit.searchQuery));
+                    //    return `<span class="name">${fullName}<span>`;
+                    if (name.includes(hit.searchQuery)) {
+                        return `<span class="name">${fullName}<span>`;
+                    }
+                    // else {
+                    //     return `<span class="name"><span>`;
+                    // }
+                },
+            };
+        </script>
+      
+        <!-- <script src="./script.js"></script> -->
+    </body>
+</html>
