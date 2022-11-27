@@ -118,6 +118,140 @@ function drawChart() {
             chartsObject.optionalParams = optionalParams;
         }
 
+        if (chartTitle == Constants.pivotTitle) {
+            var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
+
+            var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+            var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+            var row3Columns = getAxisColumnNames(Constants.row3Name);
+
+            var xAxisColumnNamesArray = Array.from(xAxisColumns);
+            var yAxisColumnNamesArray = Array.from(yAxisColumns);
+            var row3ColumnsArray = Array.from(row3Columns);
+
+            var categoricalValues = [
+                ...xAxisColumnNamesArray,
+                ...yAxisColumnNamesArray,
+            ];
+
+            var measuresArray = Array.from(row3Columns);
+
+            console.log(tempDataValues);
+
+            var dateConversionOptions = tempDataValues
+                .filter((d) => {
+                    if (d.itemType.toLowerCase() == "date") {
+                        return true;
+                    }
+                    return false;
+                })
+                .map((d) => {
+                    var format = d.dateFormat;
+                    switch (format) {
+                        case "%Y":
+                            format = "Year";
+                            break;
+                        case "%d":
+                            format = "Day";
+                            break;
+                        case "%b":
+                            format = "month";
+                            break;
+                        case "%d %b %Y":
+                            format = "day,month,year";
+                            break;
+                        case "%b %Y":
+                            format = "month,year";
+                            break;
+                        default:
+                            format = "Year";
+                            break;
+                    }
+                    return {
+                        itemName: d.itemName,
+                        itemType: d.itemType,
+                        dateFormat: format,
+                        separator: " ",
+                    };
+                });
+
+            console.log("dateConversionOptions", dateConversionOptions);
+
+            optionalParams[chartTitle] = {
+                dateConversionOptions: JSON.stringify(dateConversionOptions),
+                categoricalValues,
+                measuresArray,
+                row3Columns: [
+                    xAxisColumnNamesArray,
+                    yAxisColumnNamesArray,
+                    row3ColumnsArray,
+                ],
+            };
+            chartsObject.optionalParams = optionalParams;
+        }
+
+        if (chartTitle == Constants.tableTitle) {
+            var nonMeasures = xAxisColumnDetails
+                .filter((d) => {
+                    if (d.itemType.toLowerCase() != "numerical") {
+                        return true;
+                    }
+                    return false;
+                })
+                .map((d) => d.itemName);
+            var measures = xAxisColumnDetails
+                .filter((d) => {
+                    if (d.itemType.toLowerCase() == "numerical") {
+                        return true;
+                    }
+                    return false;
+                })
+                .map((d) => d.itemName);
+            var dateConversionOptions = xAxisColumnDetails
+                .filter((d) => {
+                    if (d.itemType.toLowerCase() == "date") {
+                        return true;
+                    }
+                    return false;
+                })
+                .map((d) => {
+                    var format = d.dateFormat;
+                    switch (format) {
+                        case "%Y":
+                            format = "Year";
+                            break;
+                        case "%d":
+                            format = "Day";
+                            break;
+                        case "%b":
+                            format = "month";
+                            break;
+                        case "%d %b %Y":
+                            format = "day,month,year";
+                            break;
+                        case "%b %Y":
+                            format = "month,year";
+                            break;
+                        default:
+                            format = "Year";
+                            break;
+                    }
+                    return {
+                        itemName: d.itemName,
+                        itemType: d.itemType,
+                        dateFormat: format,
+                        separator: " ",
+                    };
+                });
+
+            optionalParams[chartTitle] = {
+                measures,
+                nonMeasures,
+                dateConversionOptions: JSON.stringify(dateConversionOptions),
+            };
+            chartsObject.optionalParams = optionalParams;
+        }
+
         ChartsModel.getChartWiseData(
             reportIdMain,
             0,
@@ -339,6 +473,5 @@ function drawChartAfterReceivingSignal(dataValues) {
 
     d3PropertyConfig.chartName = chartTitle;
     console.log("Data Received, Sent for drawing");
-    console.log(dataValues);
     ChartsWebViewHandler.startPlottingChart(dataValues, d3PropertyConfig);
 }

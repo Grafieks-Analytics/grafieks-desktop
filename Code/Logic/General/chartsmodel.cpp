@@ -153,6 +153,32 @@ void ChartsModel::getChartWiseData(int reportId, int dashboardId, int chartSourc
         }else if(chartName == Constants::treeChartTitle){
             this->getTreeChartValues(reportId, dashboardId, chartSource, xAxisColumn, yAxisColumn0Name);
         }
+    } else if(chartName == Constants::pivotTitle){
+
+        QJsonObject optionalParamsObject = chartsDataObject.value("optionalParams").toObject();
+        QJsonObject optionalChartObject = optionalParamsObject.value(chartName).toObject();
+
+        QString dateConversionOptions = optionalChartObject.value("dateConversionOptions").toString();
+        qDebug() << dateConversionOptions;
+        QVariantList categoricalValues = optionalChartObject.value("categoricalValues").toArray().toVariantList();
+        QVariantList measuresArray = optionalChartObject.value("measuresArray").toArray().toVariantList();
+        QVariantList row3Columns = optionalChartObject.value("row3Columns").toArray().toVariantList();
+
+       this->getPivotChartValues(reportId, dashboardId, chartSource, categoricalValues, measuresArray, dateConversionOptions, row3Columns);
+    } else if(chartName == Constants::tableTitle){
+
+        QJsonObject optionalParamsObject = chartsDataObject.value("optionalParams").toObject();
+        QJsonObject optionalChartObject = optionalParamsObject.value(chartName).toObject();
+
+        QString dateConversionOptions = optionalChartObject.value("dateConversionOptions").toString();
+        QVariantList nonMeasures = optionalChartObject.value("nonMeasures").toArray().toVariantList();
+        QVariantList measures = optionalChartObject.value("measures").toArray().toVariantList();
+        
+        this->getTableChartValues(reportId, dashboardId, chartSource,
+                    nonMeasures,
+                    measures,
+                    dateConversionOptions
+                );
     }
 }
 

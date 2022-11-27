@@ -706,7 +706,7 @@ void ChartsThread::getPieChartValues()
             QString orderByCondition = xAxisColumnSubString;
 
             xAxisColumnSubString =  " strftime(" + xAxisColumnSubString + ", '"+dateFormatType+"') as  " + xAxisColumnSubString + " ";
-            
+
             if(dateFormatType == "%b"){
                 orderByCondition = " extract(month from "+ orderByCondition +") ";
             }
@@ -847,7 +847,7 @@ void ChartsThread::getFunnelChartValues()
     QJsonObject obj;
     int index;
     int totalRows;
-    
+
     bool isXAxisDateType = false;
     QString dateFormat = "%Y";
 
@@ -879,7 +879,7 @@ void ChartsThread::getFunnelChartValues()
             QString orderByCondition = xAxisColumnSubString;
 
             xAxisColumnSubString =  " strftime(" + xAxisColumnSubString + ", '"+dateFormatType+"') as  " + xAxisColumnSubString + " ";
-            
+
             if(dateFormatType == "%b"){
                 orderByCondition = " extract(month from "+ orderByCondition +") ";
             }
@@ -1055,7 +1055,7 @@ void ChartsThread::getRadarChartValues()
             QString orderByCondition = xAxisColumnSubString;
 
             xAxisColumnSubString =  " strftime(" + xAxisColumnSubString + ", '"+dateFormatType+"') as  " + xAxisColumnSubString + " ";
-            
+
             if(dateFormatType == "%b"){
                 orderByCondition = " extract(month from "+ orderByCondition +") ";
             }
@@ -3081,7 +3081,7 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
             QString orderByCondition = xAxisColumnSubString;
 
             xAxisColumnSubString =  " strftime(" + xAxisColumnSubString + ", '"+dateFormatType+"') as  " + xAxisColumnSubString + " ";
-            
+
             if(dateFormatType == "%b"){
                 orderByCondition = " extract(month from "+ orderByCondition +") ";
             }
@@ -3665,6 +3665,14 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     QJsonArray colData;
 
+//    QJsonObject stackBarJsonObject;
+
+//    QJsonArray xAxisTextValues;
+//    QJsonArray splitDataArrayValues;
+    QHash<QString, QString> xAxisTextValues;
+    QHash<QString, QString> splitDataArrayValues;
+    QHash<QString, QVariant> stackBarJsonObject;
+
     // Fetch data here
 
     int totalRows;
@@ -3703,24 +3711,25 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         QString tableName = this->getTableName();
         QString aggregateType = this->getAggregateType();
 
-        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+        QString queryString = "SELECT \"" + xAxisColumn + "\", " + aggregateType + "(\"" + yAxisColumn + "\") , \"" + xSplitKey + "\" FROM "+tableName + groupByCondition;
 
         if(xAxisData.value("itemType") == "Date"){
 
             QString orderByCondition = xAxisColumnSubString;
             xAxisColumnSubString = "strftime(" + xAxisColumnSubString + ", '"+dateFormatType+"') as  " + xAxisColumnSubString;
-            
-            if(dateFormatType == "%Y"){
-                // xAxisColumnSubString =  " extract(year from " + xAxisColumnSubString + ") as  " + xAxisColumnSubString ;
+
+            if(dateFormatType == "%b"){
+                orderByCondition = " extract(month from "+ orderByCondition +") ";
             }
-            else if(dateFormatType == "%b"){
-                // xAxisColumnSubString =  " extract(month from " + xAxisColumnSubString + ") as  " + xAxisColumnSubString;
+            else if(dateFormatType == "%d %b %Y"){
+                orderByCondition = "extract(year from "+ orderByCondition +"), extract(month from "+ orderByCondition +"), extract(day from "+ orderByCondition +")";
             }
-            else if(dateFormatType == "%d"){
-                // xAxisColumnSubString =  " extract(day from " + xAxisColumnSubString + ") as  " + xAxisColumnSubString ;
+            else if(dateFormatType == "%b %Y"){
+                orderByCondition = " extract(year from "+ orderByCondition +"), extract(month from "+ orderByCondition +") ";
             }
 
-            queryString = "SELECT " + xAxisColumnValue + ", " + aggregateType + "(\"" + yAxisColumn + "\") , " + xAxisColumnSubString  +  " FROM "+tableName + groupByCondition;
+
+            queryString = "SELECT " + xAxisColumnValue + ", " + aggregateType + "(\"" + yAxisColumn + "\") , " + xAxisColumnSubString  +  " FROM "+tableName + groupByCondition + " ORDER BY " + orderByCondition;
         }
 
         qDebug() << "Query String" << queryString;
@@ -3729,13 +3738,42 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         totalRows = dataListExtract->collection.Count();
 
         for(int i = 0; i < totalRows; i++){
-            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
-            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
-            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+            QString xAxisData = dataListExtract->GetValue(2, i).ToString().c_str();
+            QString value = dataListExtract->GetValue(1, i).ToString().c_str();
+            QString splitData = dataListExtract->GetValue(0, i).ToString().c_str();
 
-            // To pre-populate json array
-            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
-            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+            QVariantMap existingData = stackBarJsonObject.value(xAxisData).toMap();
+            /*
+                xAxisData1: {
+                    // existing data
+                    split1: 100,
+                    split2: 200,
+                    split3: 300
+                },
+                xAxisData2: {
+                    split1: 100,
+                    split2: 200,
+                    split3: 300
+                },
+
+
+
+            */
+            if(!xAxisTextValues.contains(xAxisData)){
+                xAxisTextValues.insert(xAxisData,xAxisData);
+            }
+            if(!splitDataArrayValues.contains(splitData)){
+                splitDataArrayValues.insert(splitData, splitData);
+            }
+            if(existingData.isEmpty()){
+                QVariantMap initialData;
+                initialData.insert(splitData, value.toDouble());
+                stackBarJsonObject.insert(xAxisData, initialData);
+            } else {
+//                existingData.insert(splitData, value.toDouble());
+                existingData.insert(splitData, value.toDouble());
+                stackBarJsonObject.insert(xAxisData, existingData);
+            }
         }
 
     } else {
@@ -3788,18 +3826,66 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     }
 
+    int xAxisCounts = xAxisTextValues.keys().count();
+    int splitCounts = splitDataArrayValues.keys().count();
+
+    QVariantList dataValues;
+
+    QList<QString> xAxisKeys = xAxisTextValues.keys();
+    QList<QString> splitDataKeys = splitDataArrayValues.keys();
+
+    QVariantList legends;
+    QVariantList axisTextValues;
+
+    for (int i=0; i < xAxisCounts ; i++) {
+
+           QString xAxisValue = xAxisKeys.at(i);
+           axisTextValues.append(xAxisValue);
+
+           QVariantMap tempObject = stackBarJsonObject.value(xAxisValue).toMap();
+
+           QVariantMap objectValue;
+           QVariantMap componentObj;
+           QVariantList componentsArray;
+
+           double lastValue = 0;
+           for(int j=0;j<splitCounts;j++){
+               QString splitValue = splitDataKeys.at(j);
+               legends.append(splitValue);
+
+               double tempValue = tempObject.value(splitValue).toDouble();
+               objectValue.insert(splitValue, tempValue);
+
+               double y0 = lastValue + tempValue;
+               componentObj.insert("y1", lastValue);
+               componentObj.insert("y0", y0);
+               componentObj.insert("key", splitValue);
+               componentObj.insert("mainKey", xAxisValue);
+
+               lastValue = y0;
+               componentsArray.append(componentObj);
+           }
+
+           objectValue.insert("key", xAxisValue);
+           objectValue.insert("components", componentsArray);
+
+           dataValues.append(objectValue);
+    }
+
+    /*
     // Fetch unique xAxisData & splitter
     // This should not be required when we use GROUP BY in query
+
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
 
    int index;
-//    QJsonArray colData;
+    QJsonArray colData;
 
-//    QJsonArray colDataNew;
+    QJsonArray colDataNew;
 
-//    qDebug() << "X AXis Pointer Pre" <<  xAxisDataPointerPre;
-//    qDebug() << "Split AXis Pointer Pre" <<  splitDataPointerPre;
+    qDebug() << "X AXis Pointer Pre" <<  xAxisDataPointerPre;
+    qDebug() << "Split AXis Pointer Pre" <<  splitDataPointerPre;
 
    // Pre - Populate the json array
    try{
@@ -3826,6 +3912,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
    }
 
 
+
     // Populate the actual data
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -3848,7 +3935,6 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    /*
     Small??
    // Populate the actual data
    try{
@@ -3866,7 +3952,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
        qWarning() << Q_FUNC_INFO << e.what();
    }
 
-   */
+    */
 
     QString xParam;
     QString yParam;
@@ -3891,15 +3977,15 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         splitParam.remove(QRegularExpression("[\"\'`]+"));
     }
 
-    QJsonArray columns;
-    columns.append(splitParam);
-    columns.append(yParam);
-    columns.append(xParam);
+    QJsonObject columns;
+    columns.insert(Constants::xAxisLabelKey,splitParam);
+    columns.insert(Constants::yAxisLabelKey,yParam);
+    columns.insert(Constants::colorByLabelKey,xParam);
 
-    data.insert(Constants::dataValuesKey, colData);
+    data.insert(Constants::dataValuesKey,  QJsonArray::fromVariantList(dataValues));
     data.insert(Constants::dataLabelsKey, columns);
-    data.insert(Constants::legendsKey , QJsonArray::fromStringList(xAxisDataPointerPre));
-    data.insert(Constants::axisTextValuesKey , QJsonArray::fromStringList(splitDataPointerPre));
+    data.insert(Constants::legendsKey , QJsonArray::fromVariantList(legends));
+    data.insert(Constants::axisTextValuesKey , QJsonArray::fromVariantList(axisTextValues));
 
     QJsonDocument doc;
     doc.setObject(data);
@@ -3912,6 +3998,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     // Cache filter params
     if(this->datasourceType != Constants::extractType)
         this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
 
 
     if(identifier == "getStackedBarChartValues"){
