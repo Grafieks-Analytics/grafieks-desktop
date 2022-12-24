@@ -98,6 +98,7 @@
 #include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/updateapplicationmodel.h"
+#include "Code/Logic/General/calculatedfields.h"
 
 #include "Code/OS/odbcdriversmodel.h"
 #include "Code/OS/osentries.h"
@@ -359,6 +360,7 @@ int main(int argc, char *argv[])
 
 
     GeneralParamsModel generalParamsModel;
+    CalculatedFields calculatedFields;
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
@@ -448,6 +450,7 @@ int main(int argc, char *argv[])
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &calculatedFields, &CalculatedFields::dispatchCalculatedField);
 
     QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
@@ -579,6 +582,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("PublishWorkbookModel", &publishWorkbookModel);
     engine.rootContext()->setContextProperty("ProjectsListModel", &projectsListModel);
     engine.rootContext()->setContextProperty("UpdateApplicationModel", &updateApplicationModel);
+    engine.rootContext()->setContextProperty("CalculatedFields", &calculatedFields);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

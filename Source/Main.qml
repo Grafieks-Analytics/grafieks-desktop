@@ -232,10 +232,12 @@ ApplicationWindow {
         } else {
             if(typeof settings.value("user/sessionToken") !== "undefined"){
 
+                console.log("MAIN CALLED")
                 WorkbookProcessor.processAfterSelectinOnlineDS()
                 GeneralParamsModel.setAPISwitch(true)
                 ReportsDataModel.generateColumnsForExtract()
                 TableColumnsModel.generateColumnsFromAPI()
+                CalculatedFields.dispatchCalculatedFieldsWithoutConnection()
                 stacklayout_home.currentIndex = 6
                 DSParamsModel.setDsName(GeneralParamsModel.getDSNameWithoutExtension())
             } else{

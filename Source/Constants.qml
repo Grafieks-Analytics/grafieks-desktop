@@ -275,6 +275,7 @@ QtObject {
     
     property string categoricalItemType: "categorical"
     property string numericalItemType: "numerical"
+    property string dateItemType: "dateformat"
 
     // Report Ends
 
