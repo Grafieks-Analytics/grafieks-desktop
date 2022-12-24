@@ -52,6 +52,9 @@ Page {
     // property int colorBoxHeight: 20
     // property int colorListTopMargin: 5
 
+    property var errMsg: ""
+    property var mode: ""
+
     property int editImageSize: 16      // Edit icon size
 
     property bool addReportClicked: false    // This toggle is used to check if add report is clicked or not. This prevents in calling reDrawChart on title Changed
@@ -231,22 +234,32 @@ Page {
         ListElement {
             name: "IF"
             syntax:"if(5> 10,100,3) = 3"
+            mode: "map"
         }
         ListElement {
             name: "If Case"
             syntax:"Returns the 'returnValue' if the given column satisfied with 'matchExpr'."
+            mode: "map"
         }
         ListElement {
             name: "Ifnull"
             syntax:"ifnull(null,10) = 10"
+            mode: "map"
         }
         ListElement {
             name: "Is Empty"
             syntax:"isempty(null) = 1"
+            mode: "map"
         }
         ListElement {
             name: "isnul"
             syntax:"isnull(null)- 1"
+            mode: "map"
+        }
+        ListElement {
+            name: "SUM (single value)"
+            syntax:"Some dummy syntax"
+            mode: "reduce"
         }
 
 
@@ -406,6 +419,7 @@ Page {
                 DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
     }
+
 
 
     // Connections Ends
@@ -709,9 +723,14 @@ Page {
         reportTitleName = title;
     }
 
+
+
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS popup
 
+    function dataTypeChange(dataType) {
+        console.log(dataType)
+    }
 
     function onCancelClickedCalc(){
         popupcalc.visible = false
@@ -720,6 +739,34 @@ Page {
     function insertSyntax(i){
         //    syntaxEditorText.text = functionListElemText.text
         syntaxEditorText.text = functionModel.get(i).syntax
+        report_desiner_page.mode = functionModel.get(i).mode
+    }
+
+
+    function onApplyClicked() {
+        console.log("Apply clicked")
+        if(nameTextField.text.length <= 0){
+            report_desiner_page.errMsg = "Name column cannot be blank"
+            popupError.text = report_desiner_page.errMsg
+        } else {
+
+            var name = nameTextField.text
+//            var query = queryTextEdit.text
+            var query = `SELECT CASE WHEN "Row ID" < 10 THEN 'yes' ELSE 'no' END FROM orders1500 LIMIT 10`
+            var source = Constants.reportScreen
+
+
+            // name, query, souce, mode
+            console.log("name:", name, "q:", query, "source:", source, "mode:", mode)
+            var status = CalculatedFields.addCalculatedField(name, query, source, report_desiner_page.mode)
+
+            if (!status) {
+                popupError.text = "Could not create calculated field"
+            } else {
+                onCancelClickedCalc()
+            }
+        }
+
     }
 
 
@@ -765,6 +812,15 @@ Page {
 
             anchors.topMargin: 1
             anchors.leftMargin: 1
+
+//            Text{
+//                id: popupError
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.left : parent.left
+//                font.pixelSize: Constants.fontCategoryHeader
+//                anchors.leftMargin: 10
+//                color: Constants.redColor
+//            }
 
             Text{
                 text: Constants.createCustomField
@@ -820,6 +876,7 @@ Page {
                 TextEdit {
                     // Green Input
                     // id: input1Field
+                    id: nameTextField
                     leftPadding: 10
                     rightPadding: 10
                     width: parent.width
@@ -909,6 +966,7 @@ Page {
                 TextEdit {
                     // Green Input
                     // id: input1Field
+                    id: popupError
                     leftPadding: 10
                     rightPadding: 10
                     width: parent.width
@@ -954,7 +1012,7 @@ Page {
                 anchors.leftMargin:20
                 model: [ "Logical Functions", "Aggregate Functions", "Numeric Functions" ]
                 width: parent.width-40
-                onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
+                onCurrentIndexChanged: dataTypeChange(modelData)
             }
             Rectangle{
                 id: functionEditor
@@ -992,7 +1050,7 @@ Page {
                                 overlay
                             }
                             onExited: {
-                                console.log("Exiting: ")
+                                //                                console.log("Exiting: ")
                                 functionListElem.color = "white"
                             }
 
@@ -1073,7 +1131,7 @@ Page {
                     id: cancel_btn1
                     text: "Cancel"
                     //                    textValue: Messages.cancelBtnTxt
-                    onClicked: onCancelClicked()
+                    onClicked: onCancelClickedCalc()
                 }
 
 
