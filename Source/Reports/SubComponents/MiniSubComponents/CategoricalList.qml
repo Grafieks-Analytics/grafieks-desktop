@@ -32,12 +32,25 @@ ListView{
             listmodel.append({"key" : Constants.tempGrafieksValue, "value": ""})
             for(const [key, value] of Object.entries(allCategoricalMap)){
                 console.log("FIELD NAME AND ALIAS", key, value)
-                listmodel.append({"key" : key, "value": value})
+                listmodel.append({"key" : key, "value": value, "calculated": false})
             }
 
             categoricalList.model = listmodel;
         }
     }
+
+    Connections{
+        target: CalculatedFields
+
+        function onSignalCalculatedFields(calculatedFields){
+            for(let [key, value] of Object.entries(calculatedFields)){
+                if(value[2] === Constants.categoricalItemType) {
+                    listmodel.append({"key" : key, "value": key, "calculated": true})
+                }
+            }
+        }
+    }
+
 
     anchors.top: categoricalHeading.bottom
     anchors.topMargin: 5
