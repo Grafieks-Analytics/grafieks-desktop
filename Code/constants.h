@@ -46,6 +46,8 @@ namespace Constants
     const QString masterQueryPartExtractTable = "gahc_query_part_extract_table";
     const QString masterCredentialsTable = "gahc_credentials_table";
     const QString masterHeadersTable = "gahc_headers_table";
+    const QString masterCalculatedFieldsTable = "gahc_calculated_fields";
+    const QString masterCalculatedValuesTable = "gahc_calculated_values";
 
     // File extensions
     const QString extractExt = "gadse";

@@ -30,15 +30,28 @@ ListView{
             listmodel.clear()
             listmodel.append({"key" : Constants.tempGrafieksValue, "value": ""})
             for(const [key, value] of Object.entries(allNumericalMap)){
-                listmodel.append({"key" : key, "value": value})
+                console.log("key", key, "value", value)
+                listmodel.append({"key" : key, "value": value, "calculated": false})
             }
 
             numericalList.model =  listmodel
         }
     }
-    function appendToList(name){
-        numericalModel.append({categoricalName: name});
+
+    Connections{
+        target: CalculatedFields
+
+        function onSignalCalculatedFields(calculatedFields){
+            for(const [key, value] of Object.entries(calculatedFields)){
+                if(value[2] === Constants.numericalItemType) {
+                    listmodel.append({"key" : key, "value": key, "calculated": true})
+                }
+            }
+            numericalList.model =  listmodel
+        }
     }
+
+
 
     function isDropEligible(itemType){
         var lastDropped = ReportParamsModel.lastDropped;
