@@ -5,4 +5,5 @@ secrets.h
 *~
 Debug/
 Release/
+symbols.out
 *.autosave

@@ -241,6 +241,7 @@ HEADERS += \
     Code/secrets.h \
     Code/secrets.h \
     Code/secrets.h \
+    Code/secrets.sample.h \
     Code/simplecrypt.h \
     Code/statics.h
 
