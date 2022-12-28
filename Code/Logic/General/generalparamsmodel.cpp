@@ -386,6 +386,12 @@ void GeneralParamsModel::quitApplication()
     QApplication::quit();
 }
 
+QString GeneralParamsModel::getQueryString(QString body, QVariantMap headers)
+{
+    qDebug() << "GOT QUERY" << body << headers;
+    return "Got your request";
+}
+
 void GeneralParamsModel::setMenuType(int menuType)
 {
     if (m_menuType == menuType)

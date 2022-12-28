@@ -2,20 +2,21 @@
 
 // Crashpad include starts
 #if defined(Q_OS_WIN)
-    #define NOMINMAX
-    #include <windows.h>
+#define NOMINMAX
+#include <windows.h>
 #endif
 
 #if defined(Q_OS_MAC)
-    #include <mach-o/dyld.h>
+#include <mach-o/dyld.h>
 #endif
 
 #if defined(Q_OS_LINUX)
-    #include <unistd.h>
-    #define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#include <unistd.h>
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 // Crashpad include ends
 
+#include <QtHttpServer>
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
@@ -28,6 +29,7 @@
 #include <QtQml>
 #include <QFileInfo>
 #include <QStandardPaths>
+
 
 #include <QtQml/QQmlApplicationEngine>
 
@@ -214,6 +216,7 @@ using namespace crashpad;
 bool initializeCrashpad(QString dbName, QString appName, QString appVersion);
 QString getExecutableDir(void);
 
+
 /*! \mainpage Code Documentation
  *
  * \subsection tools Development tools
@@ -294,6 +297,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
+
     QtWebEngine::initialize();
     QQuickStyle::setStyle("Default");
 
@@ -326,10 +330,10 @@ int main(int argc, char *argv[])
 
     // Registry entries
 #ifdef Q_OS_WIN
-  OsEntries osEntries;
-  osEntries.witeToWindowsRegistry();
+    OsEntries osEntries;
+    osEntries.witeToWindowsRegistry();
 #elif Q_OS_MACX
-  qDebug() <<Q_FUNC_INFO << "Mac & Linux versions not supported yet";
+    qDebug() <<Q_FUNC_INFO << "Mac & Linux versions not supported yet";
 #else
 #error "We don't support that version yet..."
 #endif
@@ -365,7 +369,7 @@ int main(int argc, char *argv[])
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
     ReportsDataModel reportsDataModel;
-    ForwardOnlyDataModel forwardOnlyDataModel;  
+    ForwardOnlyDataModel forwardOnlyDataModel;
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel(&dashboardParamsModel);
     ExcelDataModel excelDataModel;
@@ -417,7 +421,32 @@ int main(int argc, char *argv[])
     ExcelQueryModel excelQueryModel(&generalParamsModel);
     CSVJsonQueryModel csvJsonQueryModel(&generalParamsModel);
 
-//    qDebug() << "HOME" << QStandardPaths::standardLocations(QStandardPaths::HomeLocation)+"/AppData/Local/CrashDumps" << QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation);
+
+    //    qDebug() << "HOME" << QStandardPaths::standardLocations(QStandardPaths::HomeLocation)+"/AppData/Local/CrashDumps" << QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation);
+
+    /***********************************************************************************************************************/
+    // WEBSERVER STARTS
+
+    QHttpServer httpServer;
+    httpServer.route("/post_calculated_field_query", [&generalParamsModel](const QHttpServerRequest &request)  {
+        QString output;
+        QVariantMap headers = request.headers();
+        QString body = request.body();
+
+        output = generalParamsModel.getQueryString(body, headers);
+        return output;
+    });
+
+    const auto port = httpServer.listen(QHostAddress::Any, 5470);
+    if (!port) {
+        qDebug() << QCoreApplication::translate("QHttpServer",
+                                                "Server failed to listen on a port.");
+        return 0;
+    }
+
+    /***********************************************************************************************************************/
+    // WEBSERVER ENDS
+
 
 
     // OBJECT INITIALIZATION ENDS
@@ -617,7 +646,7 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Source/Splash.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/Source/Main.qml")));
 
-//    *(volatile int *)0 = 0;
+    //    *(volatile int *)0 = 0;
 
     // Check for updates
     updateApplicationModel.checkLatestApplication();
@@ -649,7 +678,7 @@ bool initializeCrashpad(QString dbName, QString appName, QString appVersion)
 
     // Configure url with your BugSplat database
     QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
-//    QString url = "http://mailer.grafieks.com/crashpad.php";
+    //    QString url = "http://mailer.grafieks.com/crashpad.php";
 
     // Metadata that will be posted to BugSplat
     QMap<std::string, std::string> annotations;
@@ -729,6 +758,6 @@ QString getExecutableDir() {
 
     return QString::fromStdString(pBuf);
 #else
-    #error getExecutableDir not implemented on this platform
+#error getExecutableDir not implemented on this platform
 #endif
 }
