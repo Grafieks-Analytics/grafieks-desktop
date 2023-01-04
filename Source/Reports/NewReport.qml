@@ -752,7 +752,9 @@ Page {
 
             var name = nameTextField.text
 //            var query = queryTextEdit.text
-            var query = `SELECT CASE WHEN "Row ID" < 10 THEN 'yes' ELSE 'no' END FROM orders1500 LIMIT 10`
+//            var query = `SELECT CASE WHEN "Row ID" < 10 THEN 'yes' ELSE 'no' END FROM orders1500 LIMIT 10`
+//            var query = `SELECT CASE WHEN "id" < 10 THEN 'yes' ELSE 'no' END FROM users LIMIT 10`
+            var query = `if [FIELD] < 6000 THEN "A" elseif [FIELD]  >= 6000 and [FIELD] < 9000 THEN "B" else "C" endif`
             var source = Constants.reportScreen
 
 

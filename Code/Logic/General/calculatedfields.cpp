@@ -8,9 +8,14 @@ CalculatedFields::CalculatedFields(QObject *parent) : QObject(parent)
 bool CalculatedFields::addCalculatedField(QString name, QString query, QString source, QString mode)
 {
     QStringList detailsList;
+    QString masterSqlQuery;
+
     if(!this->calculatedFields.contains(name)){
 
-        QString masterSqlQuery = getSqlQuery(query);
+
+        qDebug() << query;
+        masterSqlQuery = calculatedFieldSyntax.CaseCondition(query, Statics::dsType);
+//        getSqlQuery(query);
 
         detailsList << name << this->columnName << this->columnType << query << source << masterSqlQuery;
         this->calculatedFields.insert(name, detailsList);
@@ -21,23 +26,28 @@ bool CalculatedFields::addCalculatedField(QString name, QString query, QString s
         // Fill values
 
         if(Statics::dsType == Constants::extractType){
-            //            saveCalculatedExtractFields(name, this->columnName, this->columnType, masterSqlQuery, source, mode);
-            bool status = fetchCalculatedExtractValues(masterSqlQuery);
+
+            bool status = fetchExtractCalculatedValues(masterSqlQuery);
             if (!status){
                 return false;
             }
 
-            bool saveStatus = saveCalculatedExtractFields(name, this->columnName, this->columnType, masterSqlQuery, source, mode);
-
-            if (!saveStatus){
-                return false;
-            }
         } else {
 
+            bool status = fetchLiveCalculatedValues(masterSqlQuery);
+            if (!status){
+                return false;
+            }
+        }
+
+
+        bool saveStatus = saveCalculatedFields(name, this->columnName, this->columnType, masterSqlQuery, source, mode, Statics::dsType);
+
+        if (!saveStatus){
+            return false;
         }
     }
 
-    qDebug() << "Calc" << this->calculatedFields;
     emit signalCalculatedFields(this->calculatedFields);
     return true;
 
@@ -85,7 +95,6 @@ void CalculatedFields::dispatchCalculatedField(duckdb::Connection *con)
     }
 
 
-    qDebug() << "CALLED FETCH CALCULATED SLOT";
     emit signalCalculatedFields(this->calculatedFields);
 }
 
@@ -110,12 +119,20 @@ QString CalculatedFields::getSqlQuery(QString stdQuery)
 
 }
 
-bool CalculatedFields::saveCalculatedExtractFields(QString name, QString colName, QString colType, QString masterSqlQuery, QString source, QString mode)
+bool CalculatedFields::saveCalculatedFields(QString name, QString colName, QString colType, QString masterSqlQuery, QString source, QString mode, QString datasourceType)
 {
-    QString extractPath = Statics::extractPath;
+    QString dbPath;
+    if (datasourceType == Constants::extractType) {
+        dbPath = Statics::extractPath;
+    } else {
+        dbPath = Statics::livePath;
+    }
+
+
+    qDebug() << "SAVE EXTRACT/LIVE" << dbPath;
 
     try{
-        duckdb::DuckDB db(extractPath.toStdString());
+        duckdb::DuckDB db(dbPath.toStdString());
         duckdb::Connection con(db);
 
         QString queryCreateTable = "CREATE TABLE IF NOT EXISTS " + Constants::masterCalculatedFieldsTable + " (name VARCHAR, col_name VARCHAR, col_type VARCHAR, query_base64 VARCHAR, source VARCHAR)";
@@ -141,7 +158,7 @@ bool CalculatedFields::saveCalculatedExtractFields(QString name, QString colName
     return true;
 }
 
-bool CalculatedFields::fetchCalculatedExtractValues(QString masterCalculatedFieldsTable)
+bool CalculatedFields::fetchExtractCalculatedValues(QString masterCalculatedFieldsTable)
 {
     QString extractPath = Statics::extractPath;
     try{
@@ -161,6 +178,168 @@ bool CalculatedFields::fetchCalculatedExtractValues(QString masterCalculatedFiel
     }
 
     return true;
+}
+
+bool CalculatedFields::fetchLiveCalculatedValues(QString calculatedFieldQuery)
+{
+    QSqlDatabase connection;
+    QStringList liveParams;
+    QString whereCondition;
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        connection = QSqlDatabase::addDatabase("QMYSQL", "mysqlQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::postgresIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "postgresQ");
+
+        connection.setDatabaseName(Statics::postgresDb);
+        connection.setHostName(Statics::postgresHost);
+        connection.setPort(Statics::postgresPort);
+        connection.setUserName(Statics::postgresUsername);
+        connection.setPassword(Statics::postgresPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mssqlQ");
+
+        connection.setDatabaseName(Statics::msDb);
+        connection.setHostName(Statics::msHost);
+        connection.setPort(Statics::msPort);
+        connection.setUserName(Statics::msUsername);
+        connection.setPassword(Statics::msPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "oracleQ");
+
+        connection.setDatabaseName(Statics::oracleDb);
+        connection.setHostName(Statics::oracleHost);
+        connection.setPort(Statics::oraclePort);
+        connection.setUserName(Statics::oracleUsername);
+        connection.setPassword(Statics::oraclePassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mongoIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mongoQ");
+
+        connection.setDatabaseName(Statics::mongoDb);
+        connection.setHostName(Statics::mongoHost);
+        connection.setPort(Statics::mongoPort);
+        connection.setUserName(Statics::mongoUsername);
+        connection.setPassword(Statics::mongoPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "redshiftQ");
+
+        connection.setDatabaseName(Statics::redshiftDb);
+        connection.setHostName(Statics::redshiftHost);
+        connection.setPort(Statics::redshiftPort);
+        connection.setUserName(Statics::redshiftUsername);
+        connection.setPassword(Statics::redshiftPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::teradataIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "teradataQ");
+
+        connection.setDatabaseName(Statics::teradataDb);
+        connection.setHostName(Statics::teradataHost);
+        connection.setPort(Statics::teradataPort);
+        connection.setUserName(Statics::teradataUsername);
+        connection.setPassword(Statics::teradataPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "snowflakeQ");
+
+        connection.setDatabaseName(Statics::snowflakeDb);
+        connection.setHostName(Statics::snowflakeHost);
+        connection.setPort(Statics::snowflakePort);
+        connection.setUserName(Statics::snowflakeUsername);
+        connection.setPassword(Statics::snowflakePassword);
+
+        connection.open();
+        break;
+    }
+    }
+
+    liveParams = this->fetchLiveWhereJoinConditions();
+
+    if(liveParams.at(0).length() > 0) {
+        whereCondition = " WHERE " + liveParams.at(0);
+    }
+
+    calculatedFieldQuery += " " + liveParams.at(1) + whereCondition + " FROM " + liveParams.at(2);
+    qDebug() << calculatedFieldQuery;
+    QSqlQuery query(calculatedFieldQuery, connection);
+
+    if(query.lastError().NoError){
+        qDebug() << Q_FUNC_INFO << query.lastQuery() << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+QStringList CalculatedFields::fetchLiveWhereJoinConditions()
+{
+    QStringList output;
+    QString livePath = Statics::livePath;
+    QString queryWhereJoinParams = "SELECT * FROM " + Constants::masterQueryPartLiveTable;
+
+    duckdb::DuckDB db(livePath.toStdString());
+    duckdb::Connection con(db);
+
+    auto data = con.Query(queryWhereJoinParams.toStdString());
+
+    QString whereParams = data->GetValue(1, 0).ToString().c_str();
+    QString joinParams = data->GetValue(2, 0).ToString().c_str();
+    QString masterTable = data->GetValue(3, 0).ToString().c_str();
+
+    output << whereParams << joinParams << masterTable;
+
+    return output;
 }
 
 void CalculatedFields::listCalculatedFields()

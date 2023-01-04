@@ -92,6 +92,7 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
     Code/Logic/General/calculatedfields.cpp \
+    Code/Logic/General/calculatedfieldsyntax.cpp \
     Code/Logic/General/chartsapithread.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
@@ -214,6 +215,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/calculatedfields.h \
+    Code/Logic/General/calculatedfieldsyntax.h \
     Code/Logic/General/chartsapithread.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \

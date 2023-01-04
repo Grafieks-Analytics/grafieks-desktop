@@ -8,6 +8,7 @@
 #include "../../constants.h"
 #include "../../statics.h"
 #include "datatype.h"
+#include "calculatedfieldsyntax.h"
 
 #include "../../duckdb.hpp"
 
@@ -21,6 +22,8 @@ class CalculatedFields : public QObject
 
 public:
     explicit CalculatedFields(QObject *parent = nullptr);
+
+    CalculatedFieldSyntax calculatedFieldSyntax;
 
     // Query = actual query for calculated field
     // Source = dashboard/report
@@ -38,8 +41,10 @@ public slots:
 
 private:
     QString getSqlQuery(QString stdQuery);
-    bool saveCalculatedExtractFields(QString name, QString colName, QString colType, QString query, QString source, QString mode);
-    bool fetchCalculatedExtractValues(QString masterCalculatedFieldsTable);
+    bool saveCalculatedFields(QString name, QString colName, QString colType, QString query, QString source, QString mode, QString datasourceType);
+    bool fetchExtractCalculatedValues(QString masterCalculatedFieldsTable);
+    bool fetchLiveCalculatedValues(QString calculatedFieldQuery);
+    QStringList fetchLiveWhereJoinConditions();
     void listCalculatedFields();
 
 signals:

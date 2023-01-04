@@ -49,6 +49,10 @@ QString QueryJoiner::getQueryJoiner(int dbType)
         joiner = "\"";
         break;
 
+    default:
+        joiner = "\"";
+        break;
+
     }
 
     return joiner;
