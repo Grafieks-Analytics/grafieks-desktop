@@ -1488,10 +1488,11 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
     this->setDashboardCount(dashboardIds.length());
 
     foreach(QString dashboardId, dashboardIds){
-
         // dashboardWidgetsMap
         mainObj = dashboardParams.value("dashboardWidgetsMap").toObject();
-        foreach(QVariant widgetId, mainObj.value(dashboardId).toArray())
+//        foreach(QVariant widgetId, mainObj.value(dashboardId).toArray())
+//            this->addReportToDashboard(dashboardId.toInt(), widgetId.toInt());
+        for(auto widgetId: mainObj.value(dashboardId).toArray())
             this->addReportToDashboard(dashboardId.toInt(), widgetId.toInt());
 
         // dashboardWidgetsZorder
@@ -1546,7 +1547,7 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
 
         // dashboardReportMap
         mainObj = dashboardParams.value("dashboardReportMap").toObject();
-        foreach(QVariant reportId, mainObj.value(dashboardId).toArray()){
+        for(auto reportId: mainObj.value(dashboardId).toArray()){
 
             QVector<int> dashboardReportMapList = this->dashboardReportMap.value(dashboardId.toInt());
             dashboardReportMapList.append(reportId.toInt());
@@ -1576,7 +1577,7 @@ void DashboardParamsModel::getExtractDashboardParams(QJsonObject dashboardParams
         // showColumns
         mainObj = dashboardParams.value("showColumns").toObject();
         QStringList tmpList;
-        foreach(QVariant params, mainObj.value(dashboardId).toArray()){
+        for(auto params: mainObj.value(dashboardId).toArray()){
             tmpList.append(params.toString());
         }
         this->showColumns.insert(dashboardId.toInt(), tmpList);

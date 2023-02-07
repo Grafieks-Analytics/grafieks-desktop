@@ -21,7 +21,8 @@
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
-#include <QtWebEngine>
+#include <QtWebEngineCore>
+#include <QtWebEngineQuick/qtwebenginequickglobal.h>
 #include <QSettings>
 #include <QDebug>
 #include <QFile>
@@ -298,7 +299,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
 
-    QtWebEngine::initialize();
+    QtWebEngineQuick::initialize();
     QQuickStyle::setStyle("Default");
 
     // Static initializations Ends
@@ -427,22 +428,22 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     // WEBSERVER STARTS
 
-    QHttpServer httpServer;
-    httpServer.route("/post_calculated_field_query", [&generalParamsModel](const QHttpServerRequest &request)  {
-        QString output;
-        QVariantMap headers = request.headers();
-        QString body = request.body();
+//    QHttpServer httpServer;
+//    httpServer.route("/post_calculated_field_query", [&generalParamsModel](const QHttpServerRequest &request)  {
+//        QString output;
+//        QVariantMap headers = request.headers();
+//        QString body = request.body();
 
-        output = generalParamsModel.getQueryString(body, headers);
-        return output;
-    });
+//        output = generalParamsModel.getQueryString(body, headers);
+//        return output;
+//    });
 
-    const auto port = httpServer.listen(QHostAddress::Any, 5470);
-    if (!port) {
-        qDebug() << QCoreApplication::translate("QHttpServer",
-                                                "Server failed to listen on a port.");
-        return 0;
-    }
+//    const auto port = httpServer.listen(QHostAddress::Any, 5470);
+//    if (!port) {
+//        qDebug() << QCoreApplication::translate("QHttpServer",
+//                                                "Server failed to listen on a port.");
+//        return 0;
+//    }
 
     /***********************************************************************************************************************/
     // WEBSERVER ENDS

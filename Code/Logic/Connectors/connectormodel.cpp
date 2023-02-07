@@ -142,7 +142,7 @@ bool ConnectorModel::setData(const QModelIndex &index, const QVariant &value, in
         break;
     case CategoryRole:
     {
-        if( connector->category()!= value.toInt()){
+        if( connector->category() != value){
             connector->setCategory(value.toString());
             somethingChanged = true;
         }

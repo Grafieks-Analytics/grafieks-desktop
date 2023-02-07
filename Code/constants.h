@@ -258,5 +258,8 @@ namespace Constants
     // Menu User
     const QString sessionExpiredText = "Login incorrect";
 
+    // General messages
+    const QString connectionOpenError = "Could not open";
+
 } // namespace Constants
 #endif // CONSTANTS_H

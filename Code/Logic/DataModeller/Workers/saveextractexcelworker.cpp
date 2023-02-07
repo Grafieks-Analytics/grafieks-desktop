@@ -43,7 +43,7 @@ void SaveExtractExcelWorker::run()
     if(conExcel.open()){
 
         QSqlQuery query(this->query, conExcel);
-        if(query.lastError().text() <= 0){
+        if(query.lastError().text().length() <= 0){
             QSqlRecord record = query.record();
 
             this->internalColCount = record.count();
@@ -123,7 +123,7 @@ void SaveExtractExcelWorker::run()
             errorMsg = query.lastError().text();
         }
     } else {
-        errorMsg = conExcel.isOpenError();
+        errorMsg = Constants::connectionOpenError;
         conExcel.close();
         conExcel.removeDatabase(connectionName);
 

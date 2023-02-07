@@ -196,7 +196,7 @@ void DropboxDS::fetchFileData(QString fileId, QString fileName, QString extensio
 
     QNetworkRequest m_networkRequest;
     m_networkRequest.setUrl(QUrl("https://content.dropboxapi.com/2/files/download"));
-    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+//    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     m_networkRequest.setMaximumRedirectsAllowed(5);
 
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/octet-stream; charset=utf-8");

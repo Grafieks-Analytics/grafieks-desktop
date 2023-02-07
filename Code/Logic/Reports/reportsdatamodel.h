@@ -40,6 +40,7 @@ class ReportsDataModel : public QObject
     QStringList columnData;
     QString whereConditions;
     QString APIOptions;
+    QVariant x;
 
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;

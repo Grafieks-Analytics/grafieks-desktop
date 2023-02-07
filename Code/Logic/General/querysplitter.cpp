@@ -140,7 +140,8 @@ QString QuerySplitter::getJoinConditions()
 QString QuerySplitter::getAliasName(QString columnString)
 {
     QStringList list;
-    QRegExp separator("\\sas\\s", Qt::CaseInsensitive);
+//    QRegularExpression separator("\\sas\\s", QRegularExpression.CaseInsensitiveOption);
+    QRegularExpression separator("\\sas\\s");
 
     if(columnString.contains(separator)){
         list = columnString.split(separator);

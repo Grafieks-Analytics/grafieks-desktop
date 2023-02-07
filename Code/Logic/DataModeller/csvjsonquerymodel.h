@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QString>
 #include <QTimer>
+#include <QRegExp>
 
 #include "../../duckdb.hpp"
 #include "../../constants.h"

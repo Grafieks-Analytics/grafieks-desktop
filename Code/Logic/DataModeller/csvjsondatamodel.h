@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QFileInfo>
 #include <QDebug>
+#include <QRegExp>
 
 #include "../../statics.h"
 #include "../../constants.h"

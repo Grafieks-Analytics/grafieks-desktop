@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QDebug>
 #include <QRegularExpression>
+#include <QVariant>
 
 #include "../../constants.h"
 #include "../../statics.h"

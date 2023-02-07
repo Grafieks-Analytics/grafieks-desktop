@@ -1,4 +1,4 @@
-QT += quick httpserver webengine quickcontrols2 sql networkauth webchannel network axcontainer
+QT += core quick httpserver webenginequick  quickcontrols2 sql networkauth webchannel network axcontainer core5compat
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -239,6 +239,7 @@ HEADERS += \
     Code/messages.h \
     Code/constants.h \
     Code/paths.h \
+    Code/secrets.h \
     Code/secrets.h \
     Code/secrets.h \
     Code/secrets.h \
