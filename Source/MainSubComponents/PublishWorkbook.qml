@@ -203,7 +203,8 @@ Popup {
     FileDialog{
         id: fileDialog1
         title: Messages.msc_pwb_selectImageDialogTxt
-        selectMultiple: false
+//        selectMultiple: false
+        fileMode: FileDialog.OpenFile
     }
 
     SaveWorkbook{

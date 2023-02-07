@@ -257,7 +257,8 @@ Popup {
     FileDialog{
         id: fileDialog1
         title: Messages.msc_pds_selectImageDialogTxt
-        selectMultiple: false
+//        selectMultiple: false
+        fileMode: FileDialog.OpenFile
     }
 
 

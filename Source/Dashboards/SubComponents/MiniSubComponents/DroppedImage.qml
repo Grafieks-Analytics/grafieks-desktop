@@ -225,7 +225,7 @@ Item{
     FileDialog{
         id: fileDialog
         title: Messages.da_sub_di_selectImageDialogTxt
-        selectMultiple: false
+        fileMode: FileDialog.OpenFile
 
         onAccepted: saveImage(fileUrl)
         onRejected: webengine.url = ""
