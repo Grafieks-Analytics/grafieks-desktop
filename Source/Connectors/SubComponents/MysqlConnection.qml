@@ -156,7 +156,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_mysql_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -574,7 +574,7 @@ Popup {
         title: Messages.cn_sub_mysql_missingDriver
         text: Messages.cn_sub_mysql_driverDownload
 
-        standardButtons: StandardButton.Ok
+        buttons: MessageDialog.Ok
 
         onAccepted: {Qt.openUrlExternally(Constants.mysqlDriverUrl)
         }

@@ -147,7 +147,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_hive_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 

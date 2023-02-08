@@ -88,7 +88,7 @@ Popup {
         id: msg_dialog
         title: "Mysql Connection"
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 

@@ -77,8 +77,8 @@ Rectangle{
                     id: widthId
                     // [TODO: set saved value]
                     value: 1280
-                    minimumValue :100
-                    maximumValue:5000
+                    from :100
+                    to:5000
                     onValueChanged: onWidthValueChanged(value)
                 }
             }
@@ -94,8 +94,8 @@ Rectangle{
                     id: heightId
                     // [TODO: set saved value]
                     value: 800
-                    minimumValue :100
-                    maximumValue:5000
+                    from :100
+                    to:5000
                     onValueChanged: onHeightValueChanged(value)
                 }
             }

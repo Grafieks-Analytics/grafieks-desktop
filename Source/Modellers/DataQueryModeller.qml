@@ -11,7 +11,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -894,7 +894,7 @@ Page {
         id: dataRemovalWarningDataModel
         title: Messages.warningTitle
         text: Messages.mo_dqm_warningQueryLoss
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
 
         onAccepted: {
 
@@ -908,14 +908,14 @@ Page {
         id: datasourceNameWarningModal
         title: Messages.warningTitle
         text: Messages.mo_dqm_mandatoryDSName
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: dataRemovalWarningQueryModel
         title: Messages.warningTitle
         text: Messages.mo_dqm_warningModelLoss
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
 
         onAccepted: {
 
@@ -930,14 +930,14 @@ Page {
         id: freeLimitExtractWarning
         title: Messages.warningTitle
         text: Messages.mo_dqm_freeExtractSizeLimit
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
 
     }
 
     MessageDialog{
         id: extractCreationError
         title: Messages.mo_dqm_extractCreateErr
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 

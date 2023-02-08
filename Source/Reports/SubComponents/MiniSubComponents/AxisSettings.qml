@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs
+import Qt.labs.platform
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -434,7 +435,7 @@ Rectangle{
         id: xAxisTickMarkColorDialog
         onColorChanged:{
 
-            //   Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;            
+            //   Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
             d3PropertyConfig.xTickfontColor=xAxisTickMarkColorDialog.color+"";
             xTickFontColor.color = xAxisTickMarkColorDialog.color;
 

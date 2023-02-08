@@ -9,7 +9,7 @@
 ****************************************************************************/
 
 import QtQuick 2.15
-import QtQuick.Controls 1.4
+import QtQuick.Controls
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
@@ -321,14 +321,14 @@ Rectangle{
                     }
                 }
 
-                Calendar{
-                    id: fromDateCalendar
-                    visible: false
-                    onClicked: {
-                        onSelectFromDate();
-                    }
+//                Calendar{
+//                    id: fromDateCalendar
+//                    visible: false
+//                    onClicked: {
+//                        onSelectFromDate();
+//                    }
 
-                }
+//                }
 
             }
 
@@ -380,14 +380,14 @@ Rectangle{
                     }
                 }
 
-                Calendar{
-                    id: toDateCalendar
-                    visible: false
-                    onClicked: {
-                        onSelectToDate();
-                    }
+//                Calendar{
+//                    id: toDateCalendar
+//                    visible: false
+//                    onClicked: {
+//                        onSelectToDate();
+//                    }
 
-                }
+//                }
 
 
             }

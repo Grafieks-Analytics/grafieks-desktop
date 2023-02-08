@@ -284,14 +284,14 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_csv_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
         title: Messages.cn_sub_csv_importErr
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     // Select CSV file

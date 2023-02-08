@@ -364,7 +364,8 @@ Page {
         modality: Qt.ApplicationModal
         title: Messages.cn_sel_processFile
         text: Messages.cn_sel_pleaseWait
-        standardButtons: StandardButton.Ok | StandardButton.Close
+//        standardButtons: StandardButton.Ok | StandardButton.Close
+        buttons: MessageDialog.Ok | MessageDialog.Close
 
         onAccepted: {
 

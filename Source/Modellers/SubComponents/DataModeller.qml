@@ -1392,7 +1392,8 @@ Item {
 
         modality: Qt.ApplicationModal
         title: Messages.mo_sub_dmr_queryErr
-        standardButtons: StandardButton.Close
+//        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
     }
 
     MessageDialog{
@@ -1400,6 +1401,7 @@ Item {
 
         modality: Qt.ApplicationModal
         title: Messages.mo_sub_dmr_selPrimaryTable
-        standardButtons: StandardButton.Close
+//        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
     }
 }

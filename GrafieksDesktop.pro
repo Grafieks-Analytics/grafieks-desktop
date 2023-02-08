@@ -1,4 +1,4 @@
-QT += core quick httpserver webenginequick  quickcontrols2 sql networkauth webchannel network axcontainer core5compat
+QT += core quick httpserver webenginequick  quickcontrols2 sql networkauth webchannel network axcontainer core5compat widgets
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use

@@ -153,7 +153,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_mongodb_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -566,7 +566,8 @@ Popup {
         title: Messages.cn_sub_mongodb_missingDriver
         text: Messages.cn_sub_mongodb_driverDownload
 
-        standardButtons: StandardButton.Ok
+//        standardButtons: StandardButton.Ok
+        buttons: MessageDialog.Ok
 
         onAccepted: {Qt.openUrlExternally(Constants.mongodbDriverUrl)
         }

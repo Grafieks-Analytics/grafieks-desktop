@@ -153,7 +153,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_mssql_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -568,7 +568,8 @@ Popup {
         title:Messages.cn_sub_mssql_missingDriver
         text: Messages.cn_sub_mssql_driverDownload
 
-        standardButtons: StandardButton.Ok
+//        standardButtons: StandardButton.Ok
+        buttons: MessageDialog.Ok
 
         onAccepted: {Qt.openUrlExternally(Constants.mssqlDriverUrl)
         }

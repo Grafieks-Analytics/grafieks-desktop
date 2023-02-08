@@ -264,14 +264,14 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_json_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
         title: Messages.cn_sub_json_importErr
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     // Select JSON file
