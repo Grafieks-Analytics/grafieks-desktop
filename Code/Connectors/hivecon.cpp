@@ -34,11 +34,12 @@ QVariantMap HiveCon::HiveOdbcInstance(const QString &driver, const QString &host
             // For automatic connection for other instances
             // If correct credentials inserted once
 
-            Statics::impalaHost = host;
-            Statics::impalaDb = db;
-            Statics::impalaPort = port;
-            Statics::impalaUsername = username;
-            Statics::impalaPassword = password;
+            Statics::hiveHost = host;
+            Statics::hiveDb = dbString;
+            Statics::hivePort = port;
+            Statics::hiveUsername = username;
+            Statics::hivePassword = password;
+            Statics::hiveRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -85,6 +86,7 @@ void HiveCon::closeConnection()
     Statics::impalaPort = 0;
     Statics::impalaUsername = "";
     Statics::impalaPassword = "";
+    Statics::hiveRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

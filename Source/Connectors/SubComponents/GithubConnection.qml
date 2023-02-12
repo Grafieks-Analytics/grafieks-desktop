@@ -10,9 +10,10 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../SubComponents"
 import "../../MainSubComponents"
@@ -49,7 +50,7 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
-
+    // LIVE CONNECTION not possible
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -108,7 +109,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to drive"
+            text: Messages.cn_sub_github_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -150,7 +151,7 @@ Popup {
                 anchors.top: parent.top
                 anchors.rightMargin: 10
 
-                text: qsTr("Allow Grafieks desktop to access to your Github account...")
+                text: qsTr(GeneralParamsModel.getAppInfo().APP_NAME + Messages.cn_sub_github_allowReqMsg)
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontHeader
             }
@@ -162,7 +163,7 @@ Popup {
             CustomButton{
 
                 id: allowBtn
-                textValue: "Allow"
+                textValue: Messages.cn_sub_common_allow
                 anchors.top: allowMsg.bottom
                 anchors.topMargin: 60
                 width: 100
@@ -182,7 +183,7 @@ Popup {
 
                 anchors.topMargin: 80
 
-                text: qsTr("Click the allow button above to open the Github authorization page on a separate window.");
+                text: Messages.cn_sub_github_allowAuthMsg
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
@@ -191,7 +192,7 @@ Popup {
                 id: infoMsg2
                 anchors.top: infoMsg.bottom
 
-                text: qsTr("Once you authorized, this connection you will be returned to this page.")
+                text: Messages.cn_sub_common_afterAuthMsg
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }

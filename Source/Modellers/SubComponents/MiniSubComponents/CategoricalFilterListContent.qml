@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -62,13 +63,9 @@ Rectangle{
         function onFilterIndexChanged(){
             counter = DSParamsModel.filterIndex
         }
-    }
 
-    Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
+        function onModeChanged(){
+            searchText.text = ""
         }
     }
 
@@ -76,7 +73,14 @@ Rectangle{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -84,7 +88,14 @@ Rectangle{
         target: ExcelDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -92,7 +103,14 @@ Rectangle{
         target: ForwardOnlyDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
+        }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
         }
     }
 
@@ -100,9 +118,17 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(values){
+            idPlesaeWaitText.visible = false
+            idPlesaeWaitThorbber.visible = false
             updateData(values)
         }
+
+        function onFetchingColumnListModel(){
+            idPlesaeWaitText.visible = true
+            idPlesaeWaitThorbber.visible = true
+        }
     }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -119,7 +145,6 @@ Rectangle{
             mainCheckBox.visible = true
         }
     }
-
 
     // SLOT function
     function slotDataCleared(){
@@ -141,14 +166,12 @@ Rectangle{
             } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
                 singleSelectCheckList.model = ExcelDataModel
                 multiSelectCheckList.model  = ExcelDataModel
-            } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType) {
+            } else if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType) {
                 singleSelectCheckList.model = QueryDataModel
                 multiSelectCheckList.model  = QueryDataModel
-            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardOnlyType) {
+            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType) {
                 singleSelectCheckList.model = ForwardOnlyDataModel
                 multiSelectCheckList.model  = ForwardOnlyDataModel
-            } else {
-
             }
 
             var jsonOptions = JSON.parse(options)
@@ -239,7 +262,7 @@ Rectangle{
 
             }
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
                 QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
             } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
                 ForwardOnlyDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
@@ -260,7 +283,7 @@ Rectangle{
     }
 
     function onAllCheckBoxCheckedChanged(checked){
-        if(DSParamsModel.section === Constants.categoricalTab){
+        if(DSParamsModel.section === Constants.categoricalTab && mainCheckBox.visible === true){
             setCheckedAll(checked)
         }
     }
@@ -382,7 +405,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: multiSelectRadio
-                text: qsTr("Multi Select")
+                text: Messages.filterMultiSelect
                 ButtonGroup.group: selectTypeRadioBtnGrp
                 checked: true
                 parent_dimension: 16
@@ -403,7 +426,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: singleSelectRadio
-                text: qsTr("Single Select")
+                text: Messages.filterSingleSelect
                 ButtonGroup.group: selectTypeRadioBtnGrp
                 parent_dimension: 16
                 onCheckedChanged: {
@@ -431,7 +454,7 @@ Rectangle{
 
             TextField{
                 id: searchText
-                placeholderText: "Search"
+                placeholderText: Messages.search
                 selectByMouse: true
                 leftPadding: 20
                 height: 30
@@ -464,6 +487,18 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
 
 
         // Checkbox ListView
@@ -483,7 +518,7 @@ Rectangle{
             CheckBoxTpl {
                 id: mainCheckBox
                 checked: DSParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
-                text: "All"
+                text: Messages.filterAll
                 y:2
                 parent_dimension: Constants.defaultCheckBoxDimension
                 checkState: childGroup.checkState
@@ -632,7 +667,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-                text: qsTr("Include Null")
+                text: Messages.filterIncludeNull
                 parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
@@ -647,14 +682,12 @@ Rectangle{
             anchors.rightMargin: 30
             CheckBoxTpl {
                 checked: DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
-                text: qsTr("Exclude")
+                text: Messages.filterExclude
                 parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
                     onExcludeCheckedClicked(checked)
                 }
-
-
             }
         }
 

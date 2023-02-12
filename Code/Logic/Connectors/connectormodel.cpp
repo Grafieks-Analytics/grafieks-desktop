@@ -10,28 +10,66 @@
 ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
 {
 
-    addConnector(new Connector("Amazon Redshift","/Images/icons/aws-redshift-logo.png","rdbms"));
-    addConnector(new Connector("Apache Hive","/Images/icons/hive.png","rdbms"));
-    addConnector(new Connector("Box","/Images/icons/box.png","cloud"));
-    addConnector(new Connector("Dropbox","/Images/icons/dropbox-2.png","cloud"));
-    addConnector(new Connector("Github","/Images/icons/github-1.png","online"));
-    addConnector(new Connector("Google Drive","/Images/icons/drive.png","cloud"));
-    addConnector(new Connector("Google Sheets","/Images/icons/16_google-sheets_1b1915a4b0.png","online"));
-    addConnector(new Connector("GRS","/Images/icons/GRS.png","grs"));
-    addConnector(new Connector("JSON","/Images/icons/json-icon.png","file"));
-    addConnector(new Connector("Microsoft Access","/Images/icons/microsoft-access-1.png","rdbms"));
-    addConnector(new Connector("Microsoft Excel","/Images/icons/microsoft-excel-2013.png","file"));
-    addConnector(new Connector("Mysql","/Images/icons/mysql-6.png","rdbms"));
-    addConnector(new Connector("Oracle","/Images/icons/oracle-icon.png","rdbms"));
-    addConnector(new Connector("ODBC","/Images/icons/Db - 60.png","rdbms"));
-    addConnector(new Connector("Snowflake","/Images/icons/20_snowflake-icon_a4ed1ae266.png","rdbms"));
-    addConnector(new Connector("Sqlite","/Images/icons/74_sqlite-icon_a6ac860586.png","rdbms"));
-    addConnector(new Connector("Sql Server","/Images/icons/microsoft-sql-server.png","rdbms"));
-    addConnector(new Connector("Teradata","/Images/icons/Db - 60.png","rdbms"));
-    addConnector(new Connector("CSV","/Images/icons/16_csv.png","file"));
-    addConnector(new Connector("Impala","/Images/icons/impala.png","rdbms"));
-    addConnector(new Connector("MongoDB","/Images/icons/mongodb.png","nosql"));
-    addConnector(new Connector("Postgres","/Images/icons/postgres.png","rdbms"));
+    switch (Statics::isFreeTier) {
+
+    // 0 = false
+    // Pro version
+    case 0:{
+        addConnector(new Connector("Amazon Redshift","/Images/icons/aws-redshift-logo.png","rdbms", true));
+        addConnector(new Connector("Apache Hive","/Images/icons/hive.png","rdbms", true));
+        addConnector(new Connector("Box","/Images/icons/box.png","cloud", true));
+        addConnector(new Connector("Dropbox","/Images/icons/dropbox-2.png","cloud", true));
+        addConnector(new Connector("GitHub", "/Images/icons/github-1.png", "online", true));
+        addConnector(new Connector("Google Drive","/Images/icons/drive.png","cloud", true));
+        addConnector(new Connector("Google Sheets","/Images/icons/16_google-sheets_1b1915a4b0.png","online", true));
+        addConnector(new Connector("GRS","/Images/icons/GRS.png","grs", true));
+        addConnector(new Connector("JSON","/Images/icons/json-icon.png","file", true));
+        addConnector(new Connector("Microsoft Access","/Images/icons/microsoft-access-1.png","rdbms", true));
+        addConnector(new Connector("Microsoft Excel","/Images/icons/microsoft-excel-2013.png","file", true));
+        addConnector(new Connector("MySQL", "/Images/icons/mysql-6.png", "rdbms", true));
+        addConnector(new Connector("Oracle","/Images/icons/oracle-icon.png","rdbms", true));
+//        addConnector(new Connector("ODBC","/Images/icons/Db - 60.png","rdbms", true));
+        addConnector(new Connector("Snowflake","/Images/icons/20_snowflake-icon_a4ed1ae266.png","rdbms", true));
+        addConnector(new Connector("SQLite", "/Images/icons/74_sqlite-icon_a6ac860586.png", "rdbms", true));
+        addConnector(new Connector("Sql Server","/Images/icons/microsoft-sql-server.png","rdbms", true));
+        addConnector(new Connector("Teradata","/Images/icons/Db - 60.png","rdbms", true));
+        addConnector(new Connector("CSV","/Images/icons/16_csv.png","file", true));
+        addConnector(new Connector("Impala","/Images/icons/impala.png","rdbms", true));
+        addConnector(new Connector("MongoDB","/Images/icons/mongodb.png","nosql", true));
+        addConnector(new Connector("Postgres","/Images/icons/postgres.png","rdbms", true));
+        break;
+    }
+    // 1 = true
+    // Free Tier version
+    case 1:
+    default:{
+        addConnector(new Connector("Amazon Redshift","/Images/icons/connectors/redshift.png","rdbms", true));
+//        addConnector(new Connector("Apache Hive","/Images/icons/connectors/hive.png","rdbms", false));
+        addConnector(new Connector("Box","/Images/icons/connectors/box.png","cloud", true));
+        addConnector(new Connector("Dropbox","/Images/icons/connectors/dropbox.png","cloud", true));
+        addConnector(new Connector("GitHub","/Images/icons/connectors/github.png","online", true));
+        addConnector(new Connector("Google Drive","/Images/icons/connectors/drive.png","cloud", true));
+        addConnector(new Connector("Google Sheets","/Images/icons/connectors/sheets.png","online", true));
+        addConnector(new Connector("GRS","/Images/icons/connectors/grs.png","grs", true));
+        addConnector(new Connector("JSON","/Images/icons/connectors/json.png","file", true));
+        addConnector(new Connector("Microsoft Access","/Images/icons/connectors/access.png","rdbms", true));
+        addConnector(new Connector("Microsoft Excel","/Images/icons/connectors/excel.png","file", true));
+        addConnector(new Connector("MySQL", "/Images/icons/connectors/mysql.png", "rdbms", true));
+        //        addConnector(new Connector("Oracle","/Images/icons/connectors/oracle.png","rdbms", false));
+        //        addConnector(new Connector("ODBC","/Images/icons/connectors/odbc.png","rdbms", false));
+        addConnector(new Connector("Snowflake","/Images/icons/connectors/snowflake.png","rdbms", true));
+        addConnector(new Connector("SQLite", "/Images/icons/connectors/sqlite.png", "rdbms", true));
+        addConnector(new Connector("Sql Server", "/Images/icons/connectors/sqlserver.png", "rdbms", true));
+        addConnector(new Connector("Teradata", "/Images/icons/connectors/teradata.png", "rdbms", true));
+        addConnector(new Connector("CSV","/Images/icons/connectors/csv.png","file", true));
+//        addConnector(new Connector("Impala","/Images/icons/connectors/impala.png","rdbms", false));
+        addConnector(new Connector("MongoDB","/Images/icons/connectors/mongo.png","nosql", true));
+        addConnector(new Connector("Postgres", "/Images/icons/postgres.png", "rdbms", true));
+    }
+    }
+
+
+
 }
 
 
@@ -67,6 +105,8 @@ QVariant ConnectorModel::data(const QModelIndex &index, int role) const
         return connector->imageLink();
     if( role == CategoryRole)
         return connector->category();
+    if( role == IsEnabledRole)
+        return connector->isEnabled();
     return QVariant();
 }
 
@@ -102,8 +142,16 @@ bool ConnectorModel::setData(const QModelIndex &index, const QVariant &value, in
         break;
     case CategoryRole:
     {
-        if( connector->category()!= value.toInt()){
+        if( connector->category() != value){
             connector->setCategory(value.toString());
+            somethingChanged = true;
+        }
+    }
+        break;
+    case IsEnabledRole:
+    {
+        if( connector->isEnabled()!= value.toInt()){
+            connector->setIsEnabled(value.toInt());
             somethingChanged = true;
         }
     }
@@ -142,6 +190,7 @@ QHash<int, QByteArray> ConnectorModel::roleNames() const
     roles[NameRole] = "name";
     roles[ImageLinkRole] = "imageLink";
     roles[CategoryRole] = "category";
+    roles[IsEnabledRole] = "isEnabled";
     return roles;
 }
 
@@ -159,9 +208,9 @@ void ConnectorModel::addConnector(Connector *connector)
 /*!
  * \brief Add new data to the model
  */
-void ConnectorModel::addConnector(const QString &name, const QString &imageLink, const QString &category)
+void ConnectorModel::addConnector(const QString &name, const QString &imageLink, const QString &category, const bool &isEnabled)
 {
-    Connector *connector=new Connector(name,imageLink,category);
+    Connector *connector = new Connector(name, imageLink, category, isEnabled);
     addConnector(connector);
 }
 

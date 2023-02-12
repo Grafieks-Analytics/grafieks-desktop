@@ -3,12 +3,13 @@
 PublishDatasourceModel::PublishDatasourceModel(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_tempStorage(new QByteArray)
+    m_tempStorage(new QByteArray),
+    dataFile(nullptr)
 {
 
 }
 
-void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId,  bool isFullExtract, QString extractColumnName)
+void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId,  bool isFullExtract, QString extractColumnName, int dsSize)
 {
 
     // Fetch value from settings
@@ -17,24 +18,27 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+    QString base64Image;
+    QString filename;
 
     // Extract the exact file path
-    QString finalImage = uploadImage.right(7);
-    QStringRef subString(&uploadImage, 7, uploadImage.length() - 7);
-
-
     // Open file for reading
-    QFile file(subString.toString());
+    QFile imageFile(uploadImage);
 
-    file.open(QIODevice::ReadOnly);
+    imageFile.open(QIODevice::ReadOnly);
 
-    // Extract the filename
-    QFileInfo fileInfo(file.fileName());
-    QString filename(fileInfo.fileName());
+    if(imageFile.isOpen()){
 
-    // Convert filedata to base64
-    QByteArray imageData = file.readAll();
-    QString base64Image = QString(imageData.toBase64());
+        // Extract the filename
+        QFileInfo fileInfo(imageFile.fileName());
+        filename = fileInfo.fileName();
+
+        // Convert filedata to base64
+        QByteArray imageData = imageFile.readAll();
+        base64Image = QString(imageData.toBase64());
+    } else {
+        qDebug() << Q_FUNC_INFO << __LINE__  << imageFile.errorString();
+    }
 
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
@@ -45,15 +49,17 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
 
 
     QJsonObject obj;
-    obj.insert("ProfileID", profileId);
-    obj.insert("SchedulerID", schedulerId);
-    obj.insert("DatasourceName", dsName);
-    obj.insert("Description", description);
-    obj.insert("Image", base64Image);
-    obj.insert("Filename", filename);
-    obj.insert("SourceType", sourceType);
-    obj.insert("ColumnName", extractColumnName);
-    obj.insert("IsFullExtract", isFullExtract);
+    obj.insert("profileId", profileId);
+    obj.insert("schedulerId", schedulerId);
+    obj.insert("datasourceName", dsName);
+    obj.insert("description", description);
+    obj.insert("image", base64Image);
+    obj.insert("fileName", filename);
+    obj.insert("sourceType", sourceType);
+    obj.insert("columnName", extractColumnName);
+    obj.insert("isFullExtract", isFullExtract);
+    obj.insert("inMemory", true);
+    obj.insert("dsSize", dsSize);
 
 
     QJsonDocument doc(obj);
@@ -61,10 +67,45 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
-
     connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
     connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readComplete, Qt::UniqueConnection);
 
+
+}
+
+void PublishDatasourceModel::checkIfDSExists(QString dsName){
+    // Fetch value from settings
+    QSettings settings;
+    QString baseUrl = settings.value("general/baseUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    int profileId = settings.value("user/profileId").toInt();
+
+
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/checkdatasource");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+
+    QJsonObject obj;
+    obj.insert("profileId", profileId);
+    obj.insert("datasourcename", dsName);
+
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply, &QIODevice::readyRead, this, &PublishDatasourceModel::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &PublishDatasourceModel::readDSComplete, Qt::UniqueConnection);
+}
+
+void PublishDatasourceModel::publishNowAfterDSCheck(){
+    emit publishDSNow();
 }
 
 void PublishDatasourceModel::reading()
@@ -74,6 +115,7 @@ void PublishDatasourceModel::reading()
 
 void PublishDatasourceModel::readComplete()
 {
+    QVariantMap outputStatus;
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
 
@@ -89,9 +131,132 @@ void PublishDatasourceModel::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
+        this->outputFileName = statusObj["datasource"].toString();
 
-        m_tempStorage->clear();
     }
 
-    emit publishDSStatus(outputStatus);
+
+    // If saving to database throws error, emit signal
+    // else start uploading the extract file
+    if(outputStatus.value("code") != 200){
+        emit publishDSStatus(outputStatus);
+    } else {
+        uploadFile();
+    }
+
+    m_tempStorage->clear();
+}
+
+void PublishDatasourceModel::readDSComplete()
+{
+    QVariantMap outputStatus;
+    if(m_networkReply->error()){
+        qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
+
+        // Set the output
+        outputStatus.insert("code", m_networkReply->error());
+        outputStatus.insert("msg", m_networkReply->errorString());
+        outputStatus.insert("statusMsg", "");
+
+    } else{
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
+        QJsonObject resultObj = resultJson.object();
+        QJsonObject statusObj = resultObj["status"].toObject();
+        QString statusMsg = resultJson["data"].toString();
+
+        // Set the output
+        outputStatus.insert("code", statusObj["code"].toInt());
+        outputStatus.insert("msg", statusObj["msg"].toString());
+        outputStatus.insert("statusMsg", statusMsg);
+    }
+
+    m_tempStorage->clear();
+
+    if(outputStatus.value("msg").toString() == Constants::sessionExpiredText){
+        emit sessionExpired();
+    } else {
+        emit dsExists(outputStatus);
+    }
+
+}
+
+void PublishDatasourceModel::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+{
+    int percentageUploaded = 100 * bytesSent/bytesTotal;
+    emit dsUploadPercentage(percentageUploaded);
+}
+
+void PublishDatasourceModel::uploadFinished()
+{
+    // Fetch value from settings
+    QSettings settings;
+    QString baseUrl = settings.value("general/baseUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    int profileId = settings.value("user/profileId").toInt();
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/copyfiles");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+
+    QJsonObject obj;
+    obj.insert("ProfileID", profileId);
+    obj.insert("Extract", this->outputFileName);
+    obj.insert("Live", "");
+    obj.insert("Workbook", "");
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    if(this->dataFile->isOpen()){
+        this->dataFile->close();
+    }
+
+    emit dsUploadFinished();
+}
+
+void PublishDatasourceModel::uploadFile()
+{
+    this->dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
+
+
+    QSettings settings;
+
+    //    QString ftpAddress = settings.value("general/ftpAddress").toString();
+    QString ftpAddress = Constants::defaultFTPEndpoint;
+    QString siteName = settings.value("user/sitename").toString();
+    QString ftpUser = settings.value("user/ftpUser").toString();
+    QString ftpPass = settings.value("user/ftpPass").toString();
+    QString ftpPort = settings.value("user/ftpPort").toString();
+
+    QUrl url("ftp://" + ftpAddress + ":" + ftpPort + "/" + siteName + "/datasources/" + this->outputFileName);
+    url.setUserName(ftpUser);
+    url.setPassword(ftpPass);
+    url.setScheme("ftp");
+
+    if (dataFile->open(QIODevice::ReadOnly))
+    {
+        // Start upload
+        QNetworkReply *reply = m_networkAccessManager->put(QNetworkRequest(url), dataFile);
+
+        if(reply->error()){
+            qDebug() << Q_FUNC_INFO << reply->errorString();
+        }
+        // And connect to the progress upload signal
+        connect(reply, &QNetworkReply::uploadProgress, this, &PublishDatasourceModel::uploadProgress);
+        connect(reply, &QNetworkReply::finished, this, &PublishDatasourceModel::uploadFinished);
+        connect(reply, &QNetworkReply::errorOccurred, this,
+                [reply](QNetworkReply::NetworkError) {
+            qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
+        });
+
+    } else {
+        qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
+    }
+
 }

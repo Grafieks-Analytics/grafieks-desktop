@@ -2,10 +2,17 @@
 #define CREDENTIALS_H
 
 #include <QString>
+#include <QVariantMap>
 
 class Statics
 {
 public:
+
+    static int isFreeTier;
+    static QString tmpIconPath;
+    static bool editMode;
+    static bool apiSwitch;
+    static QString currentDSFile;
 
     static QString currentDbName;
     static int currentDbIntType;
@@ -14,8 +21,11 @@ public:
     static int onlineStorageType;
     static QString driverName;
     static QString extractPath;
+    static QString livePath;
     static QString csvJsonPath;
-    static QVariantMap changedHeaderTypes;
+    static bool freeLimitExtractSizeExceeded;
+    static bool modeProcessReader;
+    static QString dsType;
 
     // Mysql
     static QString myHost;
@@ -23,11 +33,13 @@ public:
     static int myPort;
     static QString myUsername;
     static QString myPassword;
+    static QString myRealDbName;
 
     // Sqlite
     static QString sqliteFile;
     static QString sqliteUsername;
     static QString sqlitePassword;
+    static QString sqliteRealDbName;
 
     // Mssql
     static QString msHost;
@@ -35,11 +47,13 @@ public:
     static int msPort;
     static QString msUsername;
     static QString msPassword;
+    static QString msRealDbName;
 
     // Access
     static QString acDb;
     static QString acUsername;
     static QString acPassword;
+    static QString acRealDbName;
 
     // Postgres
     static QString postgresHost;
@@ -47,6 +61,7 @@ public:
     static int postgresPort;
     static QString postgresUsername;
     static QString postgresPassword;
+    static QString postgresRealDbName;
 
     // Amazon Redshift
     static QString redshiftHost;
@@ -54,6 +69,7 @@ public:
     static int redshiftPort;
     static QString redshiftUsername;
     static QString redshiftPassword;
+    static QString redshiftRealDbName;
 
     // Oracle
     static QString oracleHost;
@@ -61,6 +77,7 @@ public:
     static int oraclePort;
     static QString oracleUsername;
     static QString oraclePassword;
+    static QString oracleRealDbName;
 
     // Mongo
     static QString mongoHost;
@@ -68,6 +85,7 @@ public:
     static int mongoPort;
     static QString mongoUsername;
     static QString mongoPassword;
+    static QString mongoRealDbName;
 
     // Impala
     static QString impalaHost;
@@ -75,6 +93,7 @@ public:
     static int impalaPort;
     static QString impalaUsername;
     static QString impalaPassword;
+    static QString impalaRealDbName;
 
     // Hive
     static QString hiveHost;
@@ -82,6 +101,7 @@ public:
     static int hivePort;
     static QString hiveUsername;
     static QString hivePassword;
+    static QString hiveRealDbName;
 
     // SnowFlake
     static QString snowflakeHost;
@@ -89,6 +109,7 @@ public:
     static int snowflakePort;
     static QString snowflakeUsername;
     static QString snowflakePassword;
+    static QString snowflakeRealDbName;
 
     // Teradata
     static QString teradataHost;
@@ -96,9 +117,13 @@ public:
     static int teradataPort;
     static QString teradataUsername;
     static QString teradataPassword;
+    static QString teradataRealDbName;
 
     // CSV
     static QString separator;
+
+    // Excel
+    static QString excelDb;
 
     // Dropbox
 };

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -16,6 +17,8 @@ Item {
     property alias componentName: filterDataItemRange.objectName
 
     onComponentNameChanged: {
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        conditionText.text = previousCheckValues[0].length > 0 ? previousCheckValues[0] : ""
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -45,11 +48,12 @@ Item {
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
-        labelShapePopup1.visible = true
+//        labelShapePopup1.visible = true
     }
 
     ButtonGroup{
@@ -137,7 +141,7 @@ Item {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
-            text: "Greater Than"
+            text: Messages.da_sub_fcn_greater
             elide: Text.ElideRight
             font.pixelSize: 12
             verticalAlignment: Text.AlignVCenter

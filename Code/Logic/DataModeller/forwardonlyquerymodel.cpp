@@ -1,7 +1,8 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent), setChartDataWorker(nullptr)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent) : QAbstractTableModel(parent)
 {
+    this->generalParamsModel  = gpm;
 }
 
 ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
@@ -10,176 +11,73 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 
 }
 
-void ForwardOnlyQueryModel::setQuery(QString query)
+void ForwardOnlyQueryModel::setQuery(QString query, bool queriedFromDataModeler)
 {
 
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    this->removeTmpChartData();
-
     this->query = query.simplified();
+    this->queriedFromDataModeler = queriedFromDataModeler;
     querySplitter.setQueryForClasses(this->query);
-
-
-    this->generateRoleNames();
-    this->setQueryResult();
+//    this->generateRoleNames();
 
 }
 
 void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 {
-    // Tmp
-    QStringList list;
-    int tmpRowCount = 0;
-    int maxRowCount = 0;
+    emit clearTablePreview();
 
-    QString connectionName = this->returnConnectionName();
-
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-        emit errorSignal(q.lastError().text());
+    if(this->query.contains(" limit ", Qt::CaseInsensitive)){
+        this->finalSql = this->query.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
     } else{
-
-
-        tmpRowCount = this->internalRowCount;
-        if(previewRowCount > tmpRowCount){
-            maxRowCount = tmpRowCount;
-        } else{
-            maxRowCount = previewRowCount;
-        }
-        this->previewRowCount = maxRowCount;
-
-        beginResetModel();
-        this->resultData.clear();
-
-        int totalRowCount = 0;
-        while(q.next() && totalRowCount < maxRowCount){
-
-            try{
-                for(int i = 0; i < this->internalColCount; i++){
-                    list << q.value(i).toString();
-                }
-                this->resultData.append(list);
-            } catch(std::exception &e){
-                qWarning() << Q_FUNC_INFO << e.what();
-            }
-
-            list.clear();
-            totalRowCount++;
-        }
-
-        if(this->internalRowCount > 0){
-            emit forwardOnlyHasData(true);
-
-        } else{
-            emit forwardOnlyHasData(false);
-        }
-
-        emit errorSignal("");
-        endResetModel();
+        this->finalSql = this->query;
     }
 
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        this->finalSql += " WHERE " + this->newWhereConditions;
+
+//    if(Statics::currentDbIntType != Constants::teradataIntType ){
+//        this->finalSql += " limit " + QString::number(previewRowCount);
+//    }
+    this->generateRoleNames();
+
 }
 
 void ForwardOnlyQueryModel::saveExtractData()
 {
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-    QStringList list;
+    QString extractQuery;
+    QString finalWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        finalWhereConditions = " WHERE " + this->newWhereConditions;
 
-    QString connectionName = this->returnConnectionName();
-
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    QSqlQuery q(this->query, dbForward);
-    QSqlRecord record = q.record();
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-    } else{
-
-        QString createTableQuery = "CREATE TABLE " + tableName + "(";
-
-        for(int i = 0; i < record.count(); i++){
-            QVariant fieldType = record.field(i).value();
-            QString type = dataType.qVariantType(fieldType.typeName());
-
-            QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-            if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-                type = Statics::changedHeaderTypes.value(checkFieldName).toString();
-
-                if(type == Constants::categoricalType){
-                    type = "VARCHAR";
-                } else if(type == Constants::numericalType){
-                    type = "INTEGER";
-                } else {
-                    type = "TIMESTAMP";
-                }
-            }
-
-            createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
-            this->columnStringTypes.append(type);
-        }
-
-        createTableQuery.chop(1);
-        createTableQuery += ")";
-        qDebug() << createTableQuery;
-
-        auto createT = con.Query(createTableQuery.toStdString());
-        if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
-
-        duckdb::Appender appender(con, tableName.toStdString());
+    extractQuery = this->query + finalWhereConditions;
 
 
+    SaveExtractForwardOnlyWorker *saveForwardOnlyWorker = new SaveExtractForwardOnlyWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::saveExtractComplete, this, &ForwardOnlyQueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::finished, saveForwardOnlyWorker, &SaveExtractForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
 
-        beginResetModel();
-        this->resultData.clear();
+    saveForwardOnlyWorker->start();
+}
 
-        while(q.next()){
-
-            appender.BeginRow();
-            for(int i = 0; i < this->internalColCount; i++){
-                QString columnType = this->columnStringTypes.at(i);
-
-                if(columnType == "INTEGER"){
-                    appender.Append(q.value(i).toInt());
-                } else if(columnType == "BIGINT"){
-                    appender.Append(q.value(i).toLongLong());
-                }  else if(columnType == "FLOAT") {
-                    appender.Append(q.value(i).toFloat());
-                } else if(columnType == "DOUBLE") {
-                    appender.Append(q.value(i).toDouble());
-                } else if(columnType == "DATE"){
-                    QDate date = q.value(i).toDate();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    //                appender.Append(duckdb::Date::FromDate(year, month, day));
-                    //                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
-                } else if(columnType == "TIMESTAMP"){
-                    QDate date = q.value(i).toDate();
-                    QTime time = q.value(i).toDateTime().time();
-                    int32_t year = date.year();
-                    int32_t month = date.month();
-                    int32_t day = date.day();
-                    //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-                    //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
-                }else {
-                    appender.Append(q.value(i).toString().toUtf8().constData());
-                }
-            }
-
-            appender.EndRow();
-        }
-
-        appender.Close();
+void ForwardOnlyQueryModel::saveLiveData()
+{
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
+        this->liveQuery = this->query +  " WHERE " + this->newWhereConditions;
+    } else {
+        this->liveQuery = this->query;
     }
 
-    emit generateReports(&con);
+    // For .gads, we need to save headers
+    this->ifLive = true;
+
+
+    SaveLiveForwardOnlyWorker *saveLiveQueryWorker = new SaveLiveForwardOnlyWorker(this->liveQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveLiveQueryWorker, &SaveLiveForwardOnlyWorker::saveLiveComplete, this, &ForwardOnlyQueryModel::liveSaved, Qt::QueuedConnection);
+    connect(saveLiveQueryWorker, &SaveLiveForwardOnlyWorker::finished, saveLiveQueryWorker, &SaveLiveForwardOnlyWorker::deleteLater, Qt::QueuedConnection);
+
+    saveLiveQueryWorker->start();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
@@ -218,26 +116,57 @@ QHash<int, QByteArray> ForwardOnlyQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ForwardOnlyQueryModel::getQueryStats()
+bool ForwardOnlyQueryModel::ifPublish() const
 {
-    // TBD
+    return m_ifPublish;
 }
 
-void ForwardOnlyQueryModel::removeTmpChartData()
-{
-    this->forwardOnlyChartHeader.clear();
-    this->forwardOnlyChartData.clear();
-    this->tableHeaders.clear();
 
-    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
-    emit chartDataChanged(this->forwardOnlyChartData);
-    emit forwardOnlyHasData(false);
+void ForwardOnlyQueryModel::receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
+{
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+    this->existingWhereConditions = existingWhereConditions;
+    this->newWhereConditions = newWhereConditions;
+
+}
+
+void ForwardOnlyQueryModel::extractSaved(QString errorMsg)
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    if(errorMsg.length() == 0){
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ForwardOnlyQueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMsg);
+    }
+}
+
+void ForwardOnlyQueryModel::liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    if(errorMessage.length() == 0){
+        liveSizeLimit(selectParams, whereConditions, joinConditions, masterTable);
+    } else {
+        emit liveCreationError(errorMessage);
+    }
+}
+
+void ForwardOnlyQueryModel::setIfPublish(bool ifPublish)
+{
+    if (m_ifPublish == ifPublish)
+        return;
+
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()
 {
-
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
@@ -249,27 +178,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
     // Emit signals for reports
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 
-}
-
-void ForwardOnlyQueryModel::setQueryResult()
-{
-
-    QString connectionName = this->returnConnectionName();
-    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-
-    this->setChartDataWorker = new SetChartDataForwardOnlyWorker(&dbForward, this->query, this->internalColCount);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
-    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
-    setChartDataWorker->start(QThread::InheritPriority);
-}
-
-
-void ForwardOnlyQueryModel::setChartHeader(int index, QStringList colInfo)
-{
-    this->forwardOnlyChartHeader.insert(index, colInfo);
 }
 
 QString ForwardOnlyQueryModel::returnConnectionName()
@@ -296,22 +205,142 @@ QString ForwardOnlyQueryModel::returnConnectionName()
 
 void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &forwardOnlyChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount)
 {
+
+    QStringList list;
+
     this->tableHeaders = tableHeaders;
     this->forwardOnlyChartHeader = forwardOnlyChartHeader;
     this->m_roleNames = roleNames;
     this->internalColCount = internalColCount;
 
+    QString connectionName = this->returnConnectionName();
+    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
+    QSqlQuery q(this->finalSql, dbForward);
+
+    if(q.lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << q.lastError();
+        emit errorSignal(q.lastError().text());
+    } else{
+
+        beginResetModel();
+        this->resultData.clear();
+
+        int totalRowCount = 0;
+        while(q.next()){
+
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
+                    list << q.value(i).toString();
+                    qDebug() << Q_FUNC_INFO << q.value(i);
+                }
+                this->resultData.append(list);
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+            list.clear();
+            totalRowCount++;
+        }
+
+        this->previewRowCount = totalRowCount;
+
+        endResetModel();
+    }
+
+
+    // For .gads file, we need to save headers and data types
+    if(this->ifLive){
+
+        QString livePath = Statics::livePath;
+        duckdb::DuckDB db(livePath.toStdString());
+        duckdb::Connection con(db);
+
+        QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
+        QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
+
+
+        foreach(QStringList values, this->forwardOnlyChartHeader){
+            headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
+        }
+        headersInsertQuery.chop(1);
+
+        auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
+        if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
+        auto queryHeaderInsert = con.Query(headersInsertQuery.toStdString());
+        if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
+
+        if(queryHeadersCreate->success && queryHeaderInsert->success){
+            emit showSaveExtractWaitPopup();
+            emit liveHeaderGenerated(this->forwardOnlyChartHeader);
+        } else {
+            qWarning() << Q_FUNC_INFO << "HEADER WRITING FAILED";
+        }
+    }
+
+    if(this->previewRowCount > 0){
+        emit forwardOnlyHasData(true);
+    } else{
+        emit forwardOnlyHasData(false);
+    }
+
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
+    emit errorSignal("");
 }
 
-void ForwardOnlyQueryModel::slotSetChartData(bool success)
-{
-    if(success){
-        this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
-        this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
 
-        emit chartDataChanged(this->forwardOnlyChartData);
+void ForwardOnlyQueryModel::extractSizeLimit()
+{
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath)){
+            qDebug() << Q_FUNC_INFO << file.errorString();
+        }
+        Statics::freeLimitExtractSizeExceeded = true;
+        emit extractFileExceededLimit(true, m_ifPublish);
+    } else {
+        emit extractFileExceededLimit(false, m_ifPublish);
     }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateExtractReports();
+    }
+}
+
+void ForwardOnlyQueryModel::liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+
+    QString livePath = Statics::livePath;
+    int size = 0;
+
+    QFile fileInfo(livePath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    // Generate headers to be saved for .gads file
+    this->setPreviewQuery(0);
+
+    emit showSaveExtractWaitPopup();
+    emit liveFileSaved(m_ifPublish);
+    emit liveFileExceededLimit(true, m_ifPublish);
+    emit generateLiveReports(this->query);
+    emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
 }
 

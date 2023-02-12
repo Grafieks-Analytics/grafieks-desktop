@@ -5,6 +5,9 @@
 #include <QMap>
 #include <QVariantMap>
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 #include "../../constants.h"
 #include "../../Messages.h"
@@ -17,7 +20,7 @@ class ReportParamsModel: public QObject
     // Customize Report parameters
     QMap<int, QVariantMap> reportsMap;           // <<int reportId, reportObj>>
     QMap<int, QVariant> reportsData;
-    QMap<int, QVariant> dashboardReportInstances; // <[reportId: <reportObject>]>
+    QVariantMap dashboardReportInstances; // <[reportId: <reportObject>]>
 
     int reportIdsCounter = 0;
 
@@ -63,9 +66,12 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
     Q_PROPERTY(QString xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
+    Q_PROPERTY(QString row3Columns READ row3Columns WRITE setRow3Columns NOTIFY row3ColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
+    Q_PROPERTY(QString optionalConfig READ optionalConfig WRITE setOptionalConfig NOTIFY optionalConfigChanged)
     Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
     Q_PROPERTY(QString editReportToggle READ editReportToggle WRITE setEditReportToggle NOTIFY editReportToggleChanged)
+    Q_PROPERTY(QString qmlChartConfig READ qmlChartConfig WRITE setQmlChartConfig NOTIFY qmlChartConfigChanged)
 
 
     // For Filters
@@ -239,11 +245,21 @@ public:
     // Instances of dropped reports in dashboards
     Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,int reportId);
     Q_INVOKABLE QVariant getDashboardReportInstance(int reportId);
-    Q_INVOKABLE QMap<int, QVariant> getAllDashboardReportInstances();
+    Q_INVOKABLE QVariantMap getAllDashboardReportInstances();
 
     Q_INVOKABLE int generateNewReportId();
+    Q_INVOKABLE void resetReportIdsCounter();
+    Q_INVOKABLE void clearReportsScreen();
+    Q_INVOKABLE int reportsCount();
+    QString optionalConfig() const;
+    QString row3Columns() const;
 
     QString editReportToggle() const;
+    Q_INVOKABLE void saveReport();
+
+
+
+    QString qmlChartConfig() const;
 
 public slots:
 
@@ -283,6 +299,13 @@ public slots:
 
 
     void setEditReportToggle(QString editReportToggle);
+    void setOptionalConfig(QString optionalConfig);
+    void setRow3Columns(QString row3Columns);
+
+    // Receive extract workbook data params
+    void getExtractReportParams(QJsonObject reportParams);
+
+    void setQmlChartConfig(QString qmlChartConfig);
 
 signals:
     // General properties
@@ -325,16 +348,32 @@ signals:
 
     // For Dashboard Reports
     void reportListChanged();
+    void reportDeleted(int deletedReportId);
 
     void editReportToggleChanged(QString editReportToggle);
     void categoricalFilterChanged(QVector<int> filterList);
     void dateFilterChanged(QVector<int> filterList);
     void numericalFilterChanged(QVector<int> filterList);
 
+    void clearScreenSignal();
+
+    void optionalConfigChanged(QString optionalConfig);
+    void row3ColumnsChanged(QString row3Columns);
+
+    // Save workbook
+    void sendReportParams(QJsonObject reportParamsObject);
+
+    // Start generating reports after selecting a workbook
+    void generateWorkbookReports();
+
+    void qmlChartConfigChanged(QString qmlChartConfig);
 
 private:
 
     QVariantMap insertMasterFilters(int filterId);
     void restoreMasterFilters(int filterId, QVariantMap filterData);
+    QString m_optionalConfig;
+    QString m_row3Columns;
+    QString m_qmlChartConfig;
 };
 #endif // REPORTPARAMSMODEL_H

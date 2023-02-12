@@ -11,9 +11,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 import "../MainSubComponents"
@@ -39,6 +40,8 @@ Page {
     property int droppedCount: 0
     property var flatFiles: [Constants.excelType, Constants.csvType, Constants.jsonType]
 
+    property int timeElapsed : 0
+
 
     // Dont delete this
     ListModel{
@@ -47,17 +50,6 @@ Page {
 
     /***********************************************************************************************************************/
     // Connection Starts
-
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = ExcelDataModel.getTableList()
-            }
-        }
-    }
 
 
     Connections{
@@ -71,12 +63,16 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onMssqlLoginStatus(status){
@@ -84,12 +80,16 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
+                radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -105,6 +105,8 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = false
+                radio_memory.checked = true
             }
         }
         function onMongoLoginStatus(status){
@@ -112,6 +114,8 @@ Page {
                 // Call functions
                 tableslist.model = NewTableListModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onSnowflakeLoginStatus(status){
@@ -119,6 +123,8 @@ Page {
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onRedshiftLoginStatus(status){
@@ -126,6 +132,8 @@ Page {
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
 
@@ -134,6 +142,8 @@ Page {
                 // Call functions
                 tableslist.model = ForwardOnlyDataModel.getTableList()
                 queryModellerTab.visible = true
+                radio_live.visible = true
+                radio_live.checked = true
             }
         }
         function onExcelLoginStatus(status){
@@ -141,6 +151,18 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
+                radio_memory.checked = true
+            }
+        }
+
+        function onExcelLoginOdbcStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = ExcelDataModel.getTableList()
+                queryModellerTab.visible = false
+                radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -149,6 +171,8 @@ Page {
                 // Call functions
                 tableslist.model = CSVJsonDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
+                radio_memory.checked = true
             }
         }
 
@@ -157,6 +181,8 @@ Page {
                 // Call functions
                 tableslist.model = CSVJsonDataModel.getTableList()
                 queryModellerTab.visible = false
+                radio_live.visible = false
+                radio_memory.checked = true
             }
         }
     }
@@ -182,6 +208,141 @@ Page {
 
         function onRowCountChanged(){
             filterNumber.text = FilterCategoricalListModel.rowCount() + FilterDateListModel.rowCount() + FilterNumericalListModel.rowCount()
+        }
+    }
+
+    Connections{
+        target: QueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+
+        function onLiveFileSaved(ifPublish){
+            saveLiveLimit(ifPublish)
+        }
+
+        function onLiveCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+
+        function onLiveFileSaved(ifPublish){
+            saveLiveLimit(ifPublish)
+        }
+
+        function onLiveCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: ExcelQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+
+        }
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: CSVJsonQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+
+        function onExtractFileExceededLimit(freeLimit, ifPublish){
+            saveExtractLimit(freeLimit, ifPublish)
+        }
+
+        function onExtractCreationError(errorMessage){
+            extractCreationError.text = errorMessage
+            extractCreationError.open()
+            saveExtractPopupFunction(false)
+        }
+    }
+
+    Connections{
+        target: ExtractsLiveQueryModel
+
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(false)
+        }
+    }
+
+
+    Connections{
+        target: GeneralParamsModel
+
+        // Prompt the popup to show the timer and throbber
+        // when extract is saved
+        function onShowSaveExtractWaitPopup(){
+            saveExtractPopupFunction(true)
+        }
+    }
+
+    Connections{
+        target: DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+            searchTextBox.text = ""
+            ds_name.text = ""
+        }
+
+        function onDisconnectAll(){
+            disconnectDS();
+            ReportParamsModel.resetReportIdsCounter();
+            DashboardParamsModel.clearAllMapValuesAfterDisconnect();
+            // Here are all the instances, Let's Remove the charts
+            // console.logo('Removing all the charts');
+            // let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
+            // for (var reportIdValue in allReportInstances) {
+            //     // Redrawing charts one by one;
+            //     var instance = allReportInstances[reportIdValue];
+            //     instance.remove();
+            // }
         }
     }
 
@@ -214,6 +375,9 @@ Page {
 
             // Finally set a parameter in DSParamsModel
             DSParamsModel.setCurrentTab(Constants.dataModellerTab)
+
+            // Enable filter button
+            filter_btn.visible = true
         }
     }
 
@@ -288,6 +452,9 @@ Page {
 
             // Finally set a parameter in DSParamsModel
             DSParamsModel.setCurrentTab(Constants.queryModellerTab)
+
+            // Disable filter options
+            filter_btn.visible = false
         }
 
     }
@@ -312,6 +479,7 @@ Page {
         // extract == in memory
         DSParamsModel.setDsType(Constants.extractDS)
         DSParamsModel.setFileExtension(Constants.extractFileExt)
+        GeneralParamsModel.setFromLiveQuery(false)
     }
 
     function openDataFilters(){
@@ -324,9 +492,15 @@ Page {
         // Also set the C++ class
         DSParamsModel.setDsType(Constants.liveDS)
         DSParamsModel.setFileExtension(Constants.liveFileExt)
+        GeneralParamsModel.setFromLiveQuery(true)
     }
 
     function onCreateDashboardClicked(){
+
+        QueryModel.setIfPublish(false)
+        ForwardOnlyQueryModel.setIfPublish(false)
+        ExcelQueryModel.setIfPublish(false)
+        CSVJsonQueryModel.setIfPublish(false)
 
         if(DSParamsModel.dsName !== ""){
             saveFilePrompt.open()
@@ -342,19 +516,27 @@ Page {
         if (typeof settings.value("user/sessionToken") == "undefined"){
             connectGrafieks1.visible = true
         } else{
-            publishDatasource.visible = true
 
-            QueryStatsModel.setProfiling(false)
-            QueryStatsModel.setProfileStatus(false)
+            // See if the DS Name is not blank
+            if(DSParamsModel.dsName !== ""){
+                publishDatasource.visible = true
+
+                QueryStatsModel.setProfiling(false)
+                QueryStatsModel.setProfileStatus(false)
+
+            } else {
+                datasourceNameWarningModal.open();
+            }
+
         }
     }
 
     function searchTable(text){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             tableslist.model = NewTableListModel.filterTableList(text)
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             tableslist.model = CSVJsonDataModel.filterTableList(text)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
             tableslist.model = ExcelDataModel.filterTableList(text)
         } else{
             tableslist.model = ForwardOnlyDataModel.filterTableList(text)
@@ -399,7 +581,7 @@ Page {
 
     function clearModelQueryData(){
 
-        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
         //            QueryModel.removeTmpChartData()
         //        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
         //            DuckQueryModel.removeTmpChartData()
@@ -437,22 +619,18 @@ Page {
     }
 
     function disconnectDS(){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            QueryModel.removeTmpChartData()
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
             NewTableListModel.clearData()
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckQueryModel.removeTmpChartData()
-            DuckDataModel.clearData()
-        } else{
-            ForwardOnlyQueryModel.removeTmpChartData()
+        } else {
             ForwardOnlyDataModel.clearData()
         }
 
         ConnectorsLoginModel.sqlLogout()
-        ReportsDataModel.removeTmpChartData()
+
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
+        DSParamsModel.setDsName("")
 
         // Clear filters
         FilterCategoricalListModel.clearFilters()
@@ -464,11 +642,20 @@ Page {
 
         // Destroy dashboards
         DashboardParamsModel.destroyDashboard(0, true)
+        DashboardParamsModel.clearFilters();
         TableColumnsModel.deleteDashboard(0, true)
+        TableColumnsModel.clearFilters()
 
         // Destroy reports
         ReportParamsModel.deleteReport(0, true)
         ReportsDataModel.deleteReportData(0, true)
+        ReportsDataModel.removeTmpChartData()
+
+        // GeneralParamsModel
+        GeneralParamsModel.resetGeneralParams();
+
+        // ChartsThread
+        ChartsThread.clearCache();
 
         // Take back to select connection screen
         stacklayout_home.currentIndex = 3
@@ -502,6 +689,54 @@ Page {
         }
     }
 
+
+    function saveExtractPopupFunction(signalType){
+
+        queryModellerPage.timeElapsed = 0
+        waitTimer.start()
+
+        if(signalType === true){
+            saveExtractPopup.visible = true
+            saveExtractPopup.open()
+        } else {
+            saveExtractPopup.visible = false
+            saveExtractPopup.close()
+        }
+    }
+
+    function saveExtractLimit(freeLimit, ifPublish){
+
+        queryModellerPage.timeElapsed = 0
+        waitTimer.stop()
+
+        if(freeLimit){
+            freeLimitExtractWarning.open()
+        } else {
+
+            if(!ifPublish){
+                GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+                let currentDashboard = DashboardParamsModel.currentDashboard
+            }
+
+        }
+    }
+
+    function saveLiveLimit(ifPublish){
+
+        queryModellerPage.timeElapsed = 0
+        waitTimer.stop()
+
+        if(!ifPublish){
+            GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+            stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+            let currentDashboard = DashboardParamsModel.currentDashboard
+        }
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -512,6 +747,8 @@ Page {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+
+
 
     DataFilters{
         id: datafilters
@@ -532,7 +769,7 @@ Page {
 
         Rectangle {
             id: dragRect
-            width: 200
+            width: item_querymodeller.width-10
             height: 30
 
 
@@ -568,11 +805,11 @@ Page {
                 anchors.verticalCenter: tableImg.verticalCenter
                 visible: tableShowToggle
 
-//                MouseArea{
-//                    anchors.fill: parent
-//                    onClicked: menuOptions.open()
+                //                MouseArea{
+                //                    anchors.fill: parent
+                //                    onClicked: menuOptions.open()
 
-//                }
+                //                }
             }
 
 
@@ -655,9 +892,9 @@ Page {
 
     MessageDialog{
         id: dataRemovalWarningDataModel
-        title: "Warning"
-        text: "Your query will be lost. Are you sure you want to proceed?"
-        icon: StandardIcon.Critical
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_warningQueryLoss
+//        icon: StandardIcon.Critical
 
         onAccepted: {
 
@@ -669,16 +906,16 @@ Page {
 
     MessageDialog{
         id: datasourceNameWarningModal
-        title: "Warning"
-        text: "Datasource name is mandatory"
-        icon: StandardIcon.Critical
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_mandatoryDSName
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: dataRemovalWarningQueryModel
-        title: "Warning"
-        text: "Your diagram will be lost. Are you sure you want to proceed?"
-        icon: StandardIcon.Critical
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_warningModelLoss
+//        icon: StandardIcon.Critical
 
         onAccepted: {
 
@@ -687,6 +924,72 @@ Page {
             dataQueryModellerStackview.push("./SubComponents/QueryModeller.qml")
         }
 
+    }
+
+    MessageDialog{
+        id: freeLimitExtractWarning
+        title: Messages.warningTitle
+        text: Messages.mo_dqm_freeExtractSizeLimit
+//        icon: StandardIcon.Critical
+
+    }
+
+    MessageDialog{
+        id: extractCreationError
+        title: Messages.mo_dqm_extractCreateErr
+//        icon: StandardIcon.Critical
+    }
+
+
+    // This is a component because it uses Qt.labs.Platform
+    // and this conflicts with the current file
+    SaveExtract{
+        id: saveFilePrompt
+    }
+
+    Timer {
+        id: waitTimer
+        objectName: "Timer"
+        interval: 1000;
+        repeat: true
+        onTriggered: {
+            queryModellerPage.timeElapsed++
+            saveExtractPopup.timerText = Messages.mo_dqm_timeElapsed + queryModellerPage.timeElapsed + " seconds"
+        }
+    }
+
+    // Throbber or loading
+    // While the extract is being saved to a local file
+    Popup{
+        id: saveExtractPopup
+        width: 600
+        height: 400
+        modal: true
+        visible: false
+        x: parent.width/2 - 300
+        y: parent.height/2 - 300
+        closePolicy: Popup.NoAutoClose
+
+        property alias timerText: timeText.text
+
+        BusyIndicatorTpl{
+            id: busyIndicator
+            anchors.centerIn: parent
+        }
+
+        Text{
+            id: waitText
+            text: Messages.mo_dqm_waitCreateExtract
+            anchors.top: busyIndicator.bottom
+            anchors.horizontalCenter: busyIndicator.horizontalCenter
+        }
+
+        Text{
+            id: timeText
+            text: Messages.mo_dqm_timeElapsed +  "0 seconds"
+            anchors.top: waitText.bottom
+            anchors.horizontalCenter: waitText.horizontalCenter
+        }
     }
 
     ButtonGroup{
@@ -730,7 +1033,7 @@ Page {
 
             TabButton{
                 id: datamodeller_querymodeller
-                text: "Data Modeler"
+                text: Messages.mo_dqm_dataTabName
                 width:100
 
                 onClicked: onDataModellerClicked()
@@ -759,7 +1062,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Use GUI interface to generate dataset from Datasource")
+                ToolTip.text: Messages.mo_dqm_dataTabDesc
 
             }
 
@@ -771,7 +1074,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Modeler"
+                text: Messages.mo_dqm_queryTabName
                 width:100
 
                 onClicked: onQueryModellerClicked()
@@ -794,7 +1097,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Write SQL query to generate dataset")
+                ToolTip.text: Messages.mo_dqm_queryTabDesc
 
             }
 
@@ -857,7 +1160,7 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Configure InMemory parameters")
+                ToolTip.text: Messages.mo_dqm_inmemoryDesc
 
             }
 
@@ -888,7 +1191,7 @@ Page {
 
                 Text{
                     id: filterText
-                    text: "Filter"
+                    text: Messages.mo_dqm_filterName
                     anchors.top: filter_btn.top
                     anchors.left: filter_querymodeller.right
                     anchors.topMargin: 6
@@ -929,40 +1232,16 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Apply filters to the SQL query")
+                ToolTip.text: Messages.mo_dqm_filterDesc
             }
 
             // Filter button ends
-
-
-
-            // Live radio button starts
-
-
-            CustomRadioButton{
-                id: radio_live
-                radio_text: qsTr("Live")
-                radio_checked: true
-                parent_dimension: 16
-                ButtonGroup.group: memoryType
-                onCheckedChanged: onLiveSelected()
-
-                ToolTip.delay:Constants.tooltipShowTime
-                ToolTip.timeout: Constants.tooltipHideTime
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Save datasource for a live connection")
-            }
-
-            // Live radio button ends
-
-
 
             // In memory radio button starts
 
             CustomRadioButton{
                 id: radio_memory
-                radio_text: qsTr("In Memory")
-                radio_checked: false
+                radio_text: Messages.mo_dqm_extractName
                 parent_dimension: 16
 
                 ButtonGroup.group: memoryType
@@ -971,10 +1250,29 @@ Page {
                 ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Save datasource offline and process as an InMemory database")
+                ToolTip.text: Messages.mo_dqm_extractDesc
             }
 
             // In memory radio button ends
+
+            // Live radio button starts
+
+
+            CustomRadioButton{
+                id: radio_live
+                radio_text: Messages.mo_dqm_liveName
+                enabled: true
+                parent_dimension: 16
+                ButtonGroup.group: memoryType
+                onCheckedChanged: onLiveSelected()
+
+                ToolTip.delay:Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: Messages.mo_dqm_liveDesc
+            }
+
+            // Live radio button ends
         }
 
     }
@@ -1178,7 +1476,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Datasource")
+                    ToolTip.text: Messages.mo_dqm_publishDs
 
                 }
 
@@ -1210,7 +1508,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Create Dashboard")
+                    ToolTip.text: Messages.mo_dqm_createDashboard
 
                 }
 
@@ -1237,7 +1535,7 @@ Page {
 
                 TextField{
                     id: ds_name
-                    placeholderText: "Data Source Name"
+                    placeholderText: Messages.mo_dqm_dsNamePlaceholder
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
@@ -1303,7 +1601,7 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To "
+                    text: Messages.mo_dqm_connectedTo
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -1332,7 +1630,7 @@ Page {
 
                     TextField{
                         id:searchTextBox
-                        placeholderText: "Search"
+                        placeholderText: Messages.search
                         selectByMouse: true
                         width: parent.width -8
                         height:30
@@ -1376,6 +1674,7 @@ Page {
 
                     height: column_querymodeller.height - 180
                     width:column_querymodeller.width
+                    
 
                     Rectangle {
                         id: categoryItem
@@ -1388,10 +1687,10 @@ Page {
                         Rectangle{
                             id:dateRect
                             height: 30
-                            width: parent.width
+                            width: parent.width+1
                             color: Constants.themeColor
                             //            anchors.top: parent.top
-                            //            x:-leftMargin
+                            x:-1
 
                             border.color: Constants.darkThemeColor
 
@@ -1418,7 +1717,7 @@ Page {
 
                                 ToolTip.delay:Constants.tooltipShowTime
                                 ToolTip.timeout: Constants.tooltipHideTime
-                                ToolTip.text: qsTr("Current connected database:" + ConnectorsLoginModel.connectedDB + " ")
+                                ToolTip.text: qsTr(Messages.mo_dqm_connectedDb + ConnectorsLoginModel.connectedDB + " ")
                                 ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
 
                                 MouseArea{
@@ -1441,7 +1740,7 @@ Page {
 
                                 ToolTip.delay:Constants.tooltipShowTime
                                 ToolTip.timeout: Constants.tooltipHideTime
-                                ToolTip.text: qsTr("Disconnect")
+                                ToolTip.text: Messages.mo_dqm_disconnect
                                 ToolTip.visible: mousePowerIcon.containsMouse ? true: false
 
                                 MouseArea{
@@ -1468,7 +1767,7 @@ Page {
 
                                 ToolTip.delay:Constants.tooltipShowTime
                                 ToolTip.timeout: Constants.tooltipHideTime
-                                ToolTip.text: qsTr("Hide/Show database tables")
+                                ToolTip.text: Messages.mo_dqm_showHideTables
                                 ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
 
                                 MouseArea {
@@ -1507,13 +1806,6 @@ Page {
     }
 
     // Righthand Panel ends
-
-    // This is a component because it uses Qt.labs.Platform
-    // and this conflicts with the current file
-    SaveExtract{
-        id: saveFilePrompt
-    }
-
 
 
     //Page Design Ends

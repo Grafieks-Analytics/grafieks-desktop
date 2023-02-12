@@ -4,13 +4,14 @@
 #include <QQuickTextDocument>
 
 #include <QtGui/QTextCharFormat>
-#include <QtCore/QTextCodec>
+#include <QTextCodec>
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextCursor>
 #include <QtGui/QFontDatabase>
 #include <QtCore/QFileInfo>
 #include <QDir>
 #include <qqmlfile.h>
+#include <QStandardPaths>
 
 #include <QDebug>
 

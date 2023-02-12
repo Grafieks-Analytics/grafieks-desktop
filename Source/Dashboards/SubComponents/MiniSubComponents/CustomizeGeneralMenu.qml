@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Rectangle{
 
@@ -11,10 +12,21 @@ Rectangle{
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             dashboardName.text = DashboardParamsModel.getDashboardName(dashboardId)
         }
     }
+
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+
+            var dashboardNameFetch = DashboardParamsModel.getDashboardName(DashboardParamsModel.currentDashboard)
+            dashboardName.text = dashboardNameFetch
+        }
+    }
+
 
     Component.onCompleted: {
         dashboardName.text = "Dashboard 1"
@@ -41,7 +53,7 @@ Rectangle{
         spacing: 5
 
         Text {
-            text: qsTr("Dashboard Name")
+            text: Messages.da_sub_cgm_header
         }
 
         TextField{

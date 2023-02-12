@@ -36,13 +36,18 @@ public:
         DSProfileIDRole,
         ConnectionTypeRole,
         DatasourceNameRole,
+        DatabaseNameRole,
         DescriptionsRole,
         SourceTypeRole,
         ImageLinkRole,
         DatasourceLinkRole,
         CreatedDateRole,
         FirstnameRole,
-        LastnameRole
+        LastnameRole,
+        LastRunRole,
+        DownloadAllowedRole,
+        ConnectAllowedRole,
+        PublishAllowedRole
 
     };
 

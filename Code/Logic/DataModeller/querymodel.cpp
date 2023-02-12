@@ -1,8 +1,10 @@
 #include "querymodel.h"
 
 
-QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), resetPreviewCount(false), setChartDataWorker(nullptr)
+QueryModel::QueryModel(GeneralParamsModel *gpm, QObject *parent): QSqlQueryModel(parent), setChartDataWorker(nullptr)
 {
+    this->generalParamsModel = gpm;
+    this->ifLive = false;
 }
 
 QueryModel::~QueryModel()
@@ -14,13 +16,6 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    if(previewRowCount > this->tmpRowCount){
-        this->maxRowCount = this->tmpRowCount;
-    } else{
-        this->maxRowCount = previewRowCount;
-    }
-
-    QString finalSql;
 
     switch (Statics::currentDbIntType) {
 
@@ -29,13 +24,16 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     case Constants::sqliteIntType:
     case Constants::postgresIntType:
     case Constants::mongoIntType:{
-        if(this->tmpSql.toLower().contains(" limit ", Qt::CaseInsensitive)){
-            finalSql = this->tmpSql.toLower().split(" limit ").first();
+        if(this->tmpSql.contains(" limit ", Qt::CaseInsensitive)){
+            this->finalSql = this->tmpSql.split(" limit ", Qt::KeepEmptyParts, Qt::CaseInsensitive).first();
         } else{
-            finalSql = this->tmpSql.toLower();
+            this->finalSql = this->tmpSql;
         }
 
-        finalSql += " limit " + QString::number(maxRowCount);
+        if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+            this->finalSql += " WHERE " + this->newWhereConditions;
+
+        this->finalSql += " limit " + QString::number(previewRowCount);
         break;
     }
 
@@ -46,176 +44,74 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     case Constants::accessIntType:{
 
         QString finalSqlInterPart;
+        QString finalWhereConditions;
 
-        if(this->tmpSql.toLower().contains(" top ", Qt::CaseInsensitive)){
-            finalSqlInterPart = this->tmpSql.toLower().split(" top ").last();
-            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart.section(' ', 1);
+        if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+            finalWhereConditions = " WHERE " + this->newWhereConditions;
+
+        if(this->tmpSql.contains(" top ", Qt::CaseInsensitive)){
+            finalSqlInterPart = this->tmpSql.split(" top ", Qt::KeepEmptyParts, Qt::CaseInsensitive).last();
+            this->finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart.section(' ', 1) + finalWhereConditions;
 
         } else{
-            finalSqlInterPart = this->tmpSql.toLower().section(' ', 1);
-            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart;
+            finalSqlInterPart = this->tmpSql.section(' ', 1);
+            this->finalSql = "select top " + QString::number(previewRowCount) + " " + finalSqlInterPart + finalWhereConditions;
         }
         break;
     }
     }
 
-    // For custom preview count
-    this->resetPreviewCount = true;
-
-    this->executeQuery(finalSql, false);
-
-    qDebug() << "ROW COUNT" <<QSqlQueryModel::rowCount() << maxRowCount;
-
-    if(QSqlQueryModel::rowCount() > 0){
-        emit sqlHasData(true);
-    } else{
-        emit sqlHasData(false);
-    }
+    this->executeQuery(this->finalSql);
 }
 
 void QueryModel::saveExtractData()
 {
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    QStringList colInfo;
-    QVariant fieldType;
-    DataType dataType;
-
-    QStringList tableHeaders;
-    QMap<int, QStringList> sqlChartHeader;
-    QHash<int, QByteArray> roleNames;
-    QSqlDatabase connection;
-
-    switch(Statics::currentDbIntType){
-
-    case Constants::mysqlIntType:{
-        connection = QSqlDatabase::database(Constants::mysqlStrQueryType);
-        break;
+    QString extractQuery;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
+        extractQuery = this->tmpSql +  " WHERE " + this->newWhereConditions;
+    } else {
+        extractQuery = this->tmpSql;
     }
 
-    case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-        break;
+    // For .gadse, we dont need to save headers
+    this->ifLive = false;
+
+    SaveExtractQueryWorker *saveExtractQueryWorker = new SaveExtractQueryWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::saveExtractComplete, this, &QueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveExtractQueryWorker, &SaveExtractQueryWorker::finished, saveExtractQueryWorker, &SaveExtractQueryWorker::deleteLater, Qt::QueuedConnection);
+
+    saveExtractQueryWorker->start();
+
+}
+
+void QueryModel::saveLiveData()
+{
+
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0){
+        this->liveQuery = this->tmpSql +  " WHERE " + this->newWhereConditions;
+    } else {
+        this->liveQuery = this->tmpSql;
     }
 
-    case Constants::sqliteIntType:{
-        connection = QSqlDatabase::database(Constants::sqliteStrQueryType);
-        break;
-    }
-    case Constants::postgresIntType:{
-        connection = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::mssqlIntType:{
-        connection = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::oracleIntType:{
-        connection = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::mongoIntType:{
-        connection = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
-        break;
-    }
-
-    case Constants::accessIntType:{
-        connection = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
-        break;
-    }
-
-    }
-
-    QSqlQuery query(this->tmpSql, connection);
-    QSqlRecord record = query.record();
-
-    QString createTableQuery = "CREATE TABLE " + tableName + "(";
-
-    for(int i = 0; i < record.count(); i++){
-        QVariant fieldType = record.field(i).value();
-        QString type = dataType.qVariantType(fieldType.typeName());
-
-        QString checkFieldName = record.field(i).tableName() + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
-
-            if(type == Constants::categoricalType){
-                type = "VARCHAR";
-            } else if(type == Constants::numericalType){
-                type = "INTEGER";
-            } else {
-                type = "TIMESTAMP";
-            }
-        }
-
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
-        this->columnStringTypes.append(type);
-    }
-
-    createTableQuery.chop(1);
-    createTableQuery += ")";
-    qDebug() << createTableQuery;
-
-    auto createT = con.Query(createTableQuery.toStdString());
-    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
-
-    duckdb::Appender appender(con, tableName.toStdString());
+    // For .gads, we need to save headers
+    this->ifLive = true;
 
 
-    while(query.next()){
-        appender.BeginRow();
-        for(int i = 0; i < record.count(); i++){
-            QString columnType = this->columnStringTypes.at(i);
+    SaveLiveQueryWorker *saveLiveQueryWorker = new SaveLiveQueryWorker(this->liveQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveLiveQueryWorker, &SaveLiveQueryWorker::saveLiveComplete, this, &QueryModel::liveSaved, Qt::QueuedConnection);
+    connect(saveLiveQueryWorker, &SaveExtractQueryWorker::finished, saveLiveQueryWorker, &SaveLiveQueryWorker::deleteLater, Qt::QueuedConnection);
 
-            if(columnType == "INTEGER"){
-                appender.Append(query.value(i).toInt());
-            } else if(columnType == "BIGINT"){
-                appender.Append(query.value(i).toLongLong());
-            }  else if(columnType == "FLOAT") {
-                appender.Append(query.value(i).toFloat());
-            } else if(columnType == "DOUBLE") {
-                appender.Append(query.value(i).toDouble());
-            } else if(columnType == "DATE"){
-                QDate date = query.value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-//                appender.Append(duckdb::Date::FromDate(year, month, day));
-//                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
-            } else if(columnType == "TIMESTAMP"){
-                QDate date = query.value(i).toDate();
-                QTime time = query.value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-//                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
-            }else {
-                appender.Append(query.value(i).toString().toUtf8().constData());
-            }
+    saveLiveQueryWorker->start();
 
+}
 
-        }
-        appender.EndRow();
-    }
-        appender.Close();
-
-//    auto res = con.Query("SELECT * FROM grafieks_my");
-//    res->Print();
-        emit generateReports(&con);
-
+bool QueryModel::ifPublish() const
+{
+    return m_ifPublish;
 }
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
-    this->removeTmpChartData();
-
     QSqlQueryModel::setQuery(query, db);
 
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
@@ -223,10 +119,8 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
-        if(this->resetPreviewCount == false){
-            this->tmpRowCount = QSqlQueryModel::rowCount();
-            this->tmpColCount = QSqlQueryModel::columnCount();
-        }
+        this->tmpRowCount = QSqlQueryModel::rowCount();
+        this->tmpColCount = QSqlQueryModel::columnCount();
 
         generateRoleNames();
         emit errorSignal("");
@@ -236,8 +130,6 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 void QueryModel::setQuery(const QSqlQuery &query)
 {
 
-    this->removeTmpChartData();
-
     QSqlQueryModel::setQuery(query);
 
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
@@ -245,10 +137,8 @@ void QueryModel::setQuery(const QSqlQuery &query)
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
-        if(this->resetPreviewCount == false){
-            this->tmpRowCount = QSqlQueryModel::rowCount();
-            this->tmpColCount = QSqlQueryModel::columnCount();
-        }
+        this->tmpRowCount = QSqlQueryModel::rowCount();
+        this->tmpColCount = QSqlQueryModel::columnCount();
 
         generateRoleNames();
         emit errorSignal("");
@@ -271,79 +161,160 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
-int QueryModel::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return this->maxRowCount;
-}
-
 
 QHash<int, QByteArray> QueryModel::roleNames() const
 {
     return {{Qt::DisplayRole, "display"}};
 }
 
-void QueryModel::callSql(QString tmpSql)
+void QueryModel::callSql(QString tmpSql, bool queriedFromDataModeler)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    // For custom preview count
-    this->resetPreviewCount = false;
-
     this->tmpSql = tmpSql.simplified();
-    this->executeQuery(this->tmpSql, true);
+    this->queriedFromDataModeler = queriedFromDataModeler;
 }
-
-void QueryModel::removeTmpChartData()
-{
-    this->sqlChartData.clear();
-    this->sqlChartHeader.clear();
-    this->tableHeaders.clear();
-
-    emit sqlHasData(false);
-    emit headerDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->sqlChartHeader);
-}
-
-void QueryModel::setChartData()
-{
-    this->setChartDataWorker = new SetChartDataQueryWorker(this, this->tmpRowCount, this->tmpColCount);
-    connect(setChartDataWorker, &SetChartDataQueryWorker::signalSetChartData, this, &QueryModel::slotSetChartData, Qt::QueuedConnection);
-    connect(setChartDataWorker, &SetChartDataQueryWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-    setChartDataWorker->setObjectName("Grafieks Query Chart Data");
-    setChartDataWorker->start(QThread::InheritPriority);
-
-}
-
 
 void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader)
 {
     this->tableHeaders = tableHeaders;
     this->sqlChartHeader = sqlChartHeader;
 
+    if(QSqlQueryModel::rowCount() > 0){
+        emit sqlHasData(true);
+    } else{
+        emit sqlHasData(false);
+    }
+
+    // For .gads file, we need to save headers and data types
+    if(this->ifLive){
+
+        QString livePath = Statics::livePath;
+        duckdb::DuckDB db(livePath.toStdString());
+        duckdb::Connection con(db);
+
+        QString headersCreateQuery = "CREATE TABLE " + Constants::masterHeadersTable + "(column_name VARCHAR, data_type VARCHAR, table_name VARCHAR)";
+        QString headersInsertQuery = "INSERT INTO " + Constants::masterHeadersTable + " VALUES ";
+
+        foreach(QStringList values, this->sqlChartHeader){
+            headersInsertQuery += "('"+ values.at(0) +"', '"+ values.at(1) +"', '"+ values.at(2) +"'),";
+        }
+        headersInsertQuery.chop(1);
+
+        auto queryHeadersCreate = con.Query(headersCreateQuery.toStdString());
+        if(!queryHeadersCreate->success) qDebug() << queryHeadersCreate->error.c_str() << headersCreateQuery;
+        auto queryHeaderInsert = con.Query(headersInsertQuery.toStdString());
+        if(!queryHeaderInsert->success) qDebug() << queryHeaderInsert->error.c_str() << headersInsertQuery;
+
+        if(queryHeadersCreate->success && queryHeaderInsert->success){
+            emit showSaveExtractWaitPopup();
+            emit liveHeaderGenerated(this->sqlChartHeader);
+        } else {
+            qWarning() << Q_FUNC_INFO << "HEADER WRITING FAILED";
+        }
+    }
+
     emit headerDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
-void QueryModel::slotSetChartData(bool success)
+
+void QueryModel::extractSaved(QString errorMessage)
 {
-    if(success){
-        emit chartDataChanged(setChartDataWorker->getSqlChartData());
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    if(errorMessage.length() == 0){
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &QueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMessage);
     }
 }
 
+void QueryModel::liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
 
-void QueryModel::receiveFilterQuery(QString &filteredQuery)
+    if(errorMessage.length() == 0){
+        liveSizeLimit(selectParams, whereConditions, joinConditions, masterTable);
+    } else {
+        emit liveCreationError(errorMessage);
+    }
+}
+
+void QueryModel::setIfPublish(bool ifPublish)
+{
+    if (m_ifPublish == ifPublish)
+        return;
+
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
+}
+
+void QueryModel::extractSizeLimit()
+{
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
+
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath)){
+            qDebug() << Q_FUNC_INFO << file.errorString();
+        }
+
+        Statics::freeLimitExtractSizeExceeded = true;
+
+    }
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+        emit extractFileExceededLimit(true, m_ifPublish);
+    } else {
+        emit generateExtractReports();
+        emit extractFileExceededLimit(false, m_ifPublish);
+    }
+}
+
+void QueryModel::liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable)
+{
+
+    QString livePath = Statics::livePath;
+    int size = 0;
+
+    QFile fileInfo(livePath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    // Generate headers to be saved for .gads file
+    this->setPreviewQuery(0);
+
+    emit liveFileSaved(m_ifPublish);
+    emit generateLiveReports(this->tmpSql);
+    emit liveFileExceededLimit(true, m_ifPublish);
+    emit liveQueryParams(selectParams, whereConditions, joinConditions, masterTable);
+}
+
+
+void QueryModel::receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    // For custom preview count
-    this->resetPreviewCount = false;
-
-    this->tmpSql = filteredQuery;
-    this->executeQuery(this->tmpSql, true);
+    this->existingWhereConditions = existingWhereConditions;
+    this->newWhereConditions = newWhereConditions;
 }
 
 void QueryModel::generateRoleNames()
@@ -356,7 +327,7 @@ void QueryModel::generateRoleNames()
     generateRoleNameWorker->start();
 }
 
-void QueryModel::executeQuery(QString &query, bool updateChartData)
+void QueryModel::executeQuery(QString &query)
 {
 
     // For Databases which only allow Forward Only queries
@@ -370,66 +341,47 @@ void QueryModel::executeQuery(QString &query, bool updateChartData)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
-        if(updateChartData == true){
-            this->setChartData();
-        }
-
         break;
     }
 
     case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         this->setQuery(query, dbMysqlOdbc);
-        if(updateChartData == true){
-            this->setChartData();
-        }
         break;
     }
 
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
         this->setQuery(query, dbSqlite);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
     case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbPostgres);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::mssqlIntType:{
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery(query, dbMssql);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::oracleIntType:{
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
         this->setQuery(query, dbOracle);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::mongoIntType:{
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         this->setQuery(query, dbMongo);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 
     case Constants::accessIntType:{
         QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
         this->setQuery(query, dbAccess);
-        if(updateChartData == true)
-            this->setChartData();
         break;
     }
 

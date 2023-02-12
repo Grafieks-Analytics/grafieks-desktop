@@ -12,9 +12,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebEngine 1.7
-import QtQuick.Layouts 1.15
+import QtQuick.Layouts 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -56,8 +58,12 @@ Page {
     Connections {
         target: DashboardParamsModel
 
-        function onDashboardNameChanged(dashboardId, dashboardName){
-            dashboardModel.get(dashboardId).dashboardName = dashboardName
+        function onDashboardNameChanged(dashboardId, dashboardName){      
+            for(var i = 0; i < dashboardModel.rowCount(); i++){
+                if(dashboardModel.get(i).dashboardId === dashboardId){
+                    dashboardModel.get(i).dashboardName = dashboardName
+                }
+            }
         }
 
         function onHideAllDashboardParams(){
@@ -66,10 +72,18 @@ Page {
             column_filter_newdashboard_add.visible = false
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             column_filter_newdashboard.visible = false
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
+
+            // [TODO: Required]
+            // Update height and width of dashboard area
+            // Get and Set old values
+            // Or Set value by default
+            // dashboard_summary.height = Constants.defaultDashboardHeight
+            // dashboard_summary.width = Constants.defaultDashboardWidth
+            
         }
 
         function onDashboardContentDestroyed(dashboardId){
@@ -80,8 +94,6 @@ Page {
                 is_dashboard_blank = 0
             }
         }
-
-        
     }
 
     Connections{
@@ -95,6 +107,24 @@ Page {
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
         }
+    }
+
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+            var dashboards = DashboardParamsModel.fetchAllDashboards()
+            var dashboardIds = Object.keys(dashboards);
+            var dashboardNames = Object.values(dashboards);
+
+            // We will start from i =1 because component on completed already generated first dashboard
+            for(var i = 1; i < dashboardNames.length; i++){
+                dashboardModel.append({"dashboardName" : dashboardNames[i], 'dashboardId': parseInt(dashboardIds[i])})
+                TableColumnsModel.addNewDashboard(parseInt(dashboardIds[i]))
+            }
+
+        }
+
     }
 
     // Connections Ends
@@ -156,7 +186,7 @@ Page {
     }
 
     function onCustomizeBtnClicked(){
-        
+
         // [Tag: Refactor]
         // Return in if
         // this will reduce id else ladders
@@ -178,44 +208,62 @@ Page {
     function addDashboard(){
 
         let currentCount = DashboardParamsModel.dashboardCount
-        let newCount = currentCount + 1
+        if(currentCount >= Constants.dashboardPerWorkbook){
+            dashboardPerWorkbookLimitAccess.open();
+            return;
+        }
+        let newCount = currentCount + 1;
         DashboardParamsModel.setDashboardCount(newCount)
-        let newDashboardName =  "Dashboard "+ newCount
+
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': currentCount})
 
-        DashboardParamsModel.createNewDashboard(currentCount)
-        DashboardParamsModel.setCurrentDashboard(currentCount)
+        var allDashboardKeys = Object.keys(DashboardParamsModel.fetchAllDashboards());
+        var newDashboardId = parseInt(allDashboardKeys[allDashboardKeys.length - 1]) + 1
+
+        let newDashboardName =  "Dashboard "+ (newDashboardId + 1)
+        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': newDashboardId})
+
+
+        DashboardParamsModel.createNewDashboard(newDashboardId)
+        DashboardParamsModel.setCurrentDashboard(newDashboardId)
 
         dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
-        DashboardParamsModel.setDashboardName(currentCount, newDashboardName)
+        DashboardParamsModel.setDashboardName(newDashboardId, newDashboardName)
 
-        TableColumnsModel.addNewDashboard(currentCount)
+        TableColumnsModel.addNewDashboard(newDashboardId)
     }
 
     function setCurrentDashboard(dashboardId,index){
         var listContent = dashboardList.contentItem.children
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        console.log(dashboardId, "DASH ID");
 
-        dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+        if(dashboardModel.get(previousDashboardIndex))
+            dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+
         dashboardModel.setProperty(index,"backgroundColorTest","white");
         DashboardParamsModel.setCurrentDashboard(dashboardId)
 
     }
 
     function createNewReport(){
-        ReportParamsModel.setReportId(null);
+        var reportId = ReportParamsModel.generateNewReportId();
+        ReportParamsModel.setReportId(reportId);
+        const allReportsData = ReportParamsModel.getReportsList();
+        const numberOfReports = Object.keys(allReportsData).length;
+        if(numberOfReports>=Constants.reportsPerWorkbook){
+            workbookReportsLimitAccess.open();
+            return;
+        }
+
+        ReportParamsModel.clearReportsScreen();
         // Setting Edit toggle to false
         // Signal event is added
         // If Edit Report is false =>  We clear the chart value
         ReportParamsModel.setEditReportToggle(false);
         GeneralParamsModel.setCurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
-        console.log("REP ID", ReportParamsModel.reportId)
-        ChartsThread.setChartSource("report", ReportParamsModel.reportId)
 
     }
 
@@ -232,11 +280,9 @@ Page {
     }
 
     function deleteDashboard(index){
-        dashboardModel.remove(index);
+        dashboardModel.remove(index, 1);
         DashboardParamsModel.destroyDashboard(index)
         TableColumnsModel.deleteDashboard(index)
-
-        console.log(dashboardModel.get(index).dashboardName, "NEW INDEX", index)
     }
 
     function getEndPos(){
@@ -253,6 +299,18 @@ Page {
         dashboardList.contentX = 0;
     }
 
+    function onPublishWorkbookClicked(){
+        // If already logged in, dont prompt
+        if (typeof settings.value("user/sessionToken") == "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+            ProjectsListModel.fetchProjectList()
+            publishWorkbookPopup.open()
+        }
+    }
+
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -261,8 +319,24 @@ Page {
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+    MessageDialog {
+        id: dashboardPerWorkbookLimitAccess
+        visible: false
+        title: Messages.warningTitle
+        text: qsTr(Messages.da_nd_addKey + Constants.dashboardPerWorkbook +" Dashboards. To add more Dashboard in same workbook, please upgrade plan.")
+    }
 
+    
+    MessageDialog {
+        id: workbookReportsLimitAccess
+        visible: false
+        title: Messages.warningTitle
+        text: qsTr(Messages.da_nd_addKey + Constants.reportsPerWorkbook +" reports. To add more reports in same workbook, please upgrade plan.")
+    }
 
+    SaveWorkbookPopup{
+        id: publishWorkbookPopup
+    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -371,7 +445,7 @@ Page {
                         id: options
                         y: dashboardNameButton.height
                         MenuItem {
-                            text: qsTr("Delete")
+                            text: Messages.da_nd_deleteDashboard
                             onClicked: deleteDashboard(index)
                         }
                     }
@@ -569,7 +643,7 @@ Page {
 
                     Text{
                         id: filterText
-                        text: "Filter"
+                        text: Messages.da_nd_addFilter
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
@@ -665,18 +739,13 @@ Page {
 
                 Row{
                     spacing: 5
-                    //                    anchors.centerIn: parent
-
 
                     Text{
-                        text: "Customize"
+                        text: Messages.da_nd_dashboardCustomize
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
-                        //                        id: filterLeftSquareBracket
                         text: qsTr(":")
-                        //                        color: Constants.grafieksGreen
-
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -740,7 +809,7 @@ Page {
                         anchors.centerIn: parent
                     }
 
-                    onClicked: onPublishDataSourceClicked()
+                    onClicked: onPublishWorkbookClicked()
 
                     background: Rectangle{
                         color: Constants.grafieksLightGreenColor
@@ -750,7 +819,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Publish Datasource")
+                    ToolTip.text: Messages.da_nd_publishDashboard
 
                 }
 
@@ -782,7 +851,7 @@ Page {
                     ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Create Report")
+                    ToolTip.text: Messages.da_nd_createReport
 
                 }
 
@@ -827,35 +896,68 @@ Page {
         height: parent.height
         width:parent.width
 
-        DashboardSummary{
-            id: dashboard_summary
-            //        height: parent.height
-            //        width: parent.width
+        Flickable {
+            id: dashboardMain
 
-            // [Tag: Refector]
-            // Move this to constants
-            // Initial Chart Dimension
-            height: 800
-            width: 1280
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.topMargin: 0
+            height: parent.height
+            width:parent.width
 
-            Text{
-                id:hintText
-                text:  !is_dashboard_blank ? "Add Reports and Widgets Here" : ""
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: Constants.grayColor
+            contentHeight: dashboard_summary.height
+            contentWidth: dashboard_summary.width
+            
+            clip: true
+
+            ScrollBar.horizontal: ScrollBar {
+                policy: ScrollBar.AlwaysOn
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                implicitHeight: dashboard_summary.width > parent.width ? 10 : 0
+                implicitWidth: dashboard_summary.width
             }
 
-            // [Tag: Refactor]
-            // Remove Commented Code
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AlwaysOn
+                anchors.right: parent.right
+                anchors.rightMargin: 50
+                implicitHeight: dashboard_summary.height
+                implicitWidth: dashboard_summary.height > parent.height ? 10 : 0
+            }
 
-            //        anchors.left: left_menubar.right
-            //        anchors.top: toolsep1.bottom
-            //        anchors.topMargin: -6
+            boundsMovement: Flickable.StopAtBounds
 
-            //        width: parent.width  - left_menubar.width
+            DashboardSummary{
+                id: dashboard_summary
+                //        height: parent.height
+                //        width: parent.width
+
+                // [Tag: Refector]
+                // Move this to constants
+                // Initial Chart Dimension
+                height: Constants.defaultDashboardHeight
+                width: Constants.defaultDashboardWidth
+
+
+                Text{
+                    id:hintText
+                    text:  !is_dashboard_blank ? Messages.da_nd_stagePlaceholder : Messages.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: Constants.grayColor
+                }
+
+                // [Tag: Refactor]
+                // Remove Commented Code
+
+                //        anchors.left: left_menubar.right
+                //        anchors.top: toolsep1.bottom
+                //        anchors.topMargin: -6
+
+                //        width: parent.width  - left_menubar.width
+            }
         }
-
     }
     // Center Panel Ends
 
@@ -909,7 +1011,7 @@ Page {
                 width: rectangle_newdashboard_right_col.width
 
                 Text{
-                    text: "Customize Dashboard"
+                    text: Messages.da_nd_dashboardCustomizeLabel
                     anchors.verticalCenter: rectangle_newdashboard_right_col1.verticalCenter
                     anchors.left: rectangle_newdashboard_right_col1.left
                     anchors.leftMargin: 10

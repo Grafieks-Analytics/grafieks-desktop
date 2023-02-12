@@ -6,6 +6,7 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QSqlDatabase>
+#include <QTimer>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -14,19 +15,24 @@
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
-#include "./Workers/setchartdataforwardonlyworker.h"
+#include "./Workers/saveextractforwardonlyworker.h"
+#include "./Workers/saveliveforwardonlyworker.h"
+#include "../General/generalparamsmodel.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit ForwardOnlyQueryModel(QObject *parent = nullptr);
+    explicit ForwardOnlyQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
     ~ForwardOnlyQueryModel();
 
-    Q_INVOKABLE void setQuery(QString query);
+    Q_PROPERTY(bool ifPublish READ ifPublish WRITE setIfPublish NOTIFY ifPublishChanged)
+
+    Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
     Q_INVOKABLE void saveExtractData();
+    Q_INVOKABLE void saveLiveData();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;
@@ -34,16 +40,22 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void getQueryStats();
-    Q_INVOKABLE void removeTmpChartData();
+    bool ifPublish() const;
+
+public slots:
+    void receiveFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
+    void extractSaved(QString errorMsg);
+    void liveSaved(QString errorMessage, QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
+
+    void setIfPublish(bool ifPublish);
 
 private:
     void generateRoleNames();
-    void setQueryResult();
-    void setChartHeader(int index, QStringList colInfo);
     QString returnConnectionName();
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
-    void slotSetChartData(bool success);
+    void extractSizeLimit();
+
+    void liveSizeLimit(QString selectParams, QString whereConditions, QString joinConditions, QString masterTable);
 
 
     QHash<int, QByteArray> m_roleNames;
@@ -53,28 +65,47 @@ private:
     int previewRowCount;
 
     QString query;
+    QString finalSql;
     QuerySplitter querySplitter;
+    GeneralParamsModel *generalParamsModel;
 
     // Data variables for Charts
     QMap<int, QStringList*> forwardOnlyChartData;
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
-    SetChartDataForwardOnlyWorker *setChartDataWorker;
+    QString tmpSql;
 
     DataType dataType;
     QStringList columnStringTypes;
 
+    QString existingWhereConditions;
+    QString newWhereConditions;
+    bool queriedFromDataModeler;
+
+    QString liveQuery;
+    bool m_ifPublish;
+    bool ifLive;
+
 signals:
-        void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
+
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
-    void generateReports(duckdb::Connection *con);
+    void generateExtractReports();
+    void generateLiveReports(QString query);
+    void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit, bool ifPublish);
+    void liveFileExceededLimit(bool freeLimit, bool ifPublish);
+    void extractCreationError(QString errorMessage);
+    void liveFileSaved(bool ifPublish);
+    void liveCreationError(QString errorMessage);
+    void liveHeaderGenerated(QMap<int, QStringList> sqlHeaders);
+    void liveQueryParams(QString selectParams, QString whereParams, QString joinParams, QString masterTable);
 
 
 
+    void ifPublishChanged(bool ifPublish);
 };
 
 #endif // FORWARDONLYQUERYMODEL_H

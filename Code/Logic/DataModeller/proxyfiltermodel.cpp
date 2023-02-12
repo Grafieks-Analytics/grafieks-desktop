@@ -1,8 +1,7 @@
 #include "proxyfiltermodel.h"
 
-ProxyFilterModel::ProxyFilterModel(QObject *parent) : QObject(parent)
+ProxyFilterModel::ProxyFilterModel( QObject *parent) : QObject(parent)
 {
-
 }
 
 void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel, FilterDateListModel *dateModel, FilterNumericalListModel *numericalModel)
@@ -21,8 +20,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     case Constants::jsonIntType:
     case Constants::csvIntType:{
 
-
-        CSVJsonQueryModel csvJsonQueryModel;
         emit sendModels(categoryModel, numericalModel, dateModel);
         break;
     }
@@ -61,7 +58,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
             newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
         }
 
-        emit sendExcelFilterQuery(newQuery);
+        emit sendExcelFilterQuery(existingWhereString, newWhereConditions);
 
         break;
     }
@@ -101,8 +98,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         }
 
 
-
-        emit sendFilterQuery(newQuery);
+        emit sendFilterQuery(existingWhereString, newWhereConditions);
         break;
     }
 
@@ -123,7 +119,7 @@ QString ProxyFilterModel::getQueryJoiner()
         break;
 
     case Constants::postgresIntType:
-        joiner = "`";
+        joiner = "\"";
         break;
 
     case Constants::oracleIntType:

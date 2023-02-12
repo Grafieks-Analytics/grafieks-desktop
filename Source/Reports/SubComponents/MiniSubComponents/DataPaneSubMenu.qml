@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -43,7 +44,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Calculated Field")
+                    text: Messages.re_mini_dpsm_calculatedField
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -66,7 +67,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Group")
+                    text: Messages.re_mini_dpsm_group
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -80,7 +81,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Date")
+                    text: Messages.re_mini_dpsm_date
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -102,7 +103,7 @@ Popup {
                 color: Constants.themeColor
 
                 Text {
-                    text: qsTr("Number")
+                    text: Messages.re_mini_dpsm_number
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }

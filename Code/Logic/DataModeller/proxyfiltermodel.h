@@ -10,7 +10,6 @@
 #include "filtercategoricallistmodel.h"
 #include "filterdatelistmodel.h"
 #include "filternumericallistmodel.h"
-#include "csvjsonquerymodel.h"
 
 #include "../General/querysplitter.h"
 #include "../../statics.h"
@@ -31,9 +30,8 @@ private:
     QString getQueryJoiner();
 
 signals:
-    void sendFilterQuery(QString &filteredQuery);
-    void sendCsvFilterQuery(QString &filteredQuery);
-    void sendExcelFilterQuery(QString &filteredQuery);
+    void sendFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
+    void sendExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
     void sendModels(FilterCategoricalListModel *categoryModel, FilterNumericalListModel * numericalModel, FilterDateListModel *dateModel);
 
 };

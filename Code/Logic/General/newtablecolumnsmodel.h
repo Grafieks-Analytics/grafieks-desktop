@@ -16,19 +16,16 @@
 #include "../../constants.h"
 
 #include "datatype.h"
-#include "../Connectors/duckcon.h"
 
 class NewTableColumnsModel : public QObject
 {
     Q_OBJECT
-    DuckCon *duckCon;
     DataType dataType;
     int csvHeaderLength;
     QList<QByteArray> csvHeaderDataFinal;
 
 public:
     explicit NewTableColumnsModel(QObject *parent = nullptr);
-    explicit NewTableColumnsModel(DuckCon *duckCon, QObject *parent = nullptr);
 
     Q_INVOKABLE void getColumnsForTable(QString tableName = "", QString moduleName = "");
     Q_INVOKABLE void clearColumns();

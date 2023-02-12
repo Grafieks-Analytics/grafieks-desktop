@@ -43,7 +43,6 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
     connect(this->box, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::boxIntType;
 
         // api link - https://developer.box.com/reference/get-folders-id-items/
 
@@ -223,6 +222,7 @@ void BoxDS::dataReadFinished()
         qDebug() <<"There was some error : "<< m_networkReply->errorString();
     }
     else{
+        Statics::onlineStorageType = Constants::boxIntType;
 
         QStringList requiredExtensions;
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
@@ -256,12 +256,11 @@ void BoxDS::dataReadFinished()
                 this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
             }
         }
-        m_dataBuffer->clear();
+
 
         // Get user email
 
         if(!emailSet){
-             qDebug() << "EMAIL SER" << emailSet;
             m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/users/me/"));
             connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
             emailSet = true;
@@ -269,6 +268,7 @@ void BoxDS::dataReadFinished()
 
     }
 
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 
@@ -358,7 +358,7 @@ void BoxDS::fileDownloadFinished()
         QString fileName = QDir::temp().tempPath() +"/" + this->boxFileId + this->boxExtension;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(bytes.data(), bytes.size());
+        file.write(bytes.data());
         file.close();
 
         if(this->boxExtension.contains("xls") || this->boxExtension.contains("xlsx")){

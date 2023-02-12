@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -15,6 +16,12 @@ Column{
     property int editImageSize: 16
 
     spacing: 4
+
+    
+    property var grandTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('grand total');
+    property var rowTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('row total');
+    property var subTotalVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('sub total');
+    property var exportVisible:  !!report_desiner_page.subMenuCustomizationsAvailable.includes('export report');
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -49,6 +56,27 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function showRowTotal(checkedStatus){
+        report_desiner_page.d3PropertyConfig['columnWiseGrandTotal'] = checkedStatus;
+        qmlChartConfig.columnGrandTotalStatus = checkedStatus;
+        report_desiner_page.updateChart();
+        totalRowTotalCheckStatus = checkedStatus;
+    }
+    function showColumnTotal(checkedStatus){
+        report_desiner_page.d3PropertyConfig['rowWiseGrandTotal'] = checkedStatus;
+        // report_desiner_page.d3PropertyConfig['totalStatus'] = checkedStatus;
+        tableGrandTotalCheckStatus = checkedStatus;
+        report_desiner_page.updateChart();
+        qmlChartConfig.grandTotalStatus = checkedStatus;
+        //        report_desiner_page.d3PropertyConfig['searchStatus'] = checkedStatus;
+        // report_desiner_page.updateChart();
+    }
+    function showSubTotal(checkedStatus){
+        report_desiner_page.d3PropertyConfig['subTotalVisible'] = checkedStatus;
+        qmlChartConfig.subTotalStatus = checkedStatus;
+        totalSubTotalCheckStatus = checkedStatus;
+        report_desiner_page.updateChart();
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -88,12 +116,13 @@ Column{
 
         height: 35
         width: 150
+        visible: rowTotalVisible
 
         Rectangle{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Row Total")
+                text: Messages.re_mini_ct_rowTotal
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -102,30 +131,23 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: totalRowTotalCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showRowTotal(checked);
 
             }
-
-//            HorizontalLineTpl{
-//                id: linebar1
-//                line_color: Constants.darkThemeColor
-//                line_width: parent.width
-//                anchors.top: parent.bottom
-//                width: parent.width
-//                height: 4
-
-//            }
 
         }
 
     }
 
-
+    /*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 35
@@ -210,7 +232,7 @@ Column{
 
 
     }
-
+*/
 
     // Row Total Ends
 
@@ -222,13 +244,14 @@ Column{
 
         height: 35
         width: 150
+        visible: grandTotalVisible
 
         Rectangle{
             anchors.fill: parent
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
-                text: qsTr("Grand Total")
+                text: Messages.re_mini_ct_grandTotal
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -237,31 +260,34 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: tableGrandTotalCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showColumnTotal(checked);
 
             }
 
-//            HorizontalLineTpl{
-//                id: linebar2
-//                line_color: Constants.darkThemeColor
-//                line_width: parent.width-25
-//                anchors.horizontalCenter: parent.horizontalCenter
-//                anchors.top: parent.bottom
-//                width: parent.width-20
-//                height: 4
+            //            HorizontalLineTpl{
+            //                id: linebar2
+            //                line_color: Constants.darkThemeColor
+            //                line_width: parent.width-25
+            //                anchors.horizontalCenter: parent.horizontalCenter
+            //                anchors.top: parent.bottom
+            //                width: parent.width-20
+            //                height: 4
 
-//            }
+            //            }
 
         }
 
     }
 
-
+    /*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 35
@@ -349,6 +375,7 @@ Column{
 
     }
 
+*/
 
     // Row Total Ends
 
@@ -361,12 +388,13 @@ Column{
 
         height: 35
         width: 150
+        visible: subTotalVisible
 
         Rectangle{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Sub Total")
+                text: Messages.re_mini_ct_subTotal
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -375,12 +403,13 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: totalSubTotalCheckStatus
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showSubTotal(checked);
 
             }
 
@@ -390,6 +419,9 @@ Column{
 
     // Grand Total
 
+    /*
+    Tag: Future Release
+    
     Rectangle{
 
         height: 50
@@ -475,11 +507,28 @@ Column{
 
     }
 
+    */
 
     // Row Total Ends
 
 
 
+    Rectangle{
+
+        height: 35
+        width: 150
+        visible: exportVisible
+
+        CustomButton {
+            textValue: Messages.re_mini_ct_exportReport
+            anchors.left: parent.left
+            anchors.leftMargin: leftMargin
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: Constants.fontCategoryHeaderSmall
+            onClicked : report_desiner_page.exportPivotChart()
+        }
+
+    }
 
 
 

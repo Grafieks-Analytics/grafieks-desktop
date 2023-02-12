@@ -56,11 +56,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     connect(this->dropbox, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::dropboxIntType;
-
         const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
         QJsonObject obj;
-        obj.insert("limit", 100);
+        obj.insert("limit", 1000);
         obj.insert("path","");
         obj.insert("recursive",true);
         obj.insert("include_media_info",false);
@@ -132,7 +130,7 @@ void DropboxDS::folderNav(QString path)
     emit showBusyIndicator(true);
 
     QJsonObject obj;
-    obj.insert("limit", 100);
+    obj.insert("limit", 1000);
     obj.insert("path",path);
     obj.insert("recursive",false);
     obj.insert("include_media_info",false);
@@ -198,7 +196,7 @@ void DropboxDS::fetchFileData(QString fileId, QString fileName, QString extensio
 
     QNetworkRequest m_networkRequest;
     m_networkRequest.setUrl(QUrl("https://content.dropboxapi.com/2/files/download"));
-    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+//    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     m_networkRequest.setMaximumRedirectsAllowed(5);
 
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/octet-stream; charset=utf-8");
@@ -279,6 +277,8 @@ void DropboxDS::dataReadFinished()
     }
     else{
 
+        Statics::onlineStorageType = Constants::dropboxIntType;
+
         QStringList requiredExtensions;
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
@@ -315,8 +315,6 @@ void DropboxDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
-
         //        Get user email
         QByteArray blankPostReq;
 
@@ -328,6 +326,7 @@ void DropboxDS::dataReadFinished()
         connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
 
     }
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 
@@ -378,9 +377,9 @@ void DropboxDS::dataSearchedFinished()
             }
 
         }
-        m_dataBuffer->clear();
-    }
 
+    }
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

@@ -4,6 +4,7 @@
 #include <QRegularExpression>
 #include <QObject>
 #include <QDebug>
+#include <QRegExp>
 
 /*!
  * \brief This class splits an Sql query into components
@@ -22,6 +23,7 @@ public:
     QString getWhereCondition();
     QString getMainTable();
     QStringList getJoinTables();
+    QString getJoinConditions();
     QString getAliasName(QString columnString);
 
     QString query() const;
@@ -39,7 +41,7 @@ private:
 
 signals:
 
-void queryChanged(QString query);
+    void queryChanged(QString query);
 };
 
 #endif // QUERYSPLITTER_H

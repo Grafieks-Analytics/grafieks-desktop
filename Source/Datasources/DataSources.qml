@@ -11,9 +11,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 1.4 as OldControls
+//import QtQuick.Controls 1.4 as OldControls
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -23,9 +24,12 @@ Page {
 
     id: datasourcelist_page
     property int menu_width: 60
+    property var clickedItemConnectionType: ""
+    property bool connectAllowed: true
+
 
     Component.onCompleted: {
-        DatasourceDS.fetchDatsources(0, true, true)
+        DatasourceDS.fetchDatsources(0, false, true)
 
         // Connect signal and slot
         data_source_grid.updateDSName.connect(datasourcelist_page.updateDSNameTitle)
@@ -34,14 +38,42 @@ Page {
     }
 
     // Slots
-    function updateDSNameTitle(signalDSName){
+    function updateDSNameTitle(signalDSName, updateDSName, connectAllowed){
         ds_name_header.text = signalDSName
+        datasourcelist_page.clickedItemConnectionType = updateDSName
+        datasourcelist_page.connectAllowed = connectAllowed
+
+        console.log(datasourcelist_page.connectAllowed, connectAllowed)
+    }
+
+
+    function processDS(){
+
+        if(datasourcelist_page.connectAllowed === true){
+            GeneralParamsModel.setAPISwitch(true)
+            if(datasourcelist_page.clickedItemConnectionType === "live"){
+                GeneralParamsModel.setForAPI(ds_name_header.text, Constants.sqlType)
+            } else {
+                GeneralParamsModel.setForAPI(ds_name_header.text, Constants.duckType)
+            }
+
+            ReportsDataModel.generateColumnsForExtract()
+            TableColumnsModel.generateColumnsFromAPI() // Statics::currentDBClassification, Statics::currentDSFile
+            stacklayout_home.currentIndex = 6
+            DSParamsModel.setDsName(ds_name_header.text)
+        } else {
+            connectionError.open()
+        }
     }
 
 
 
     LeftMenuBar{
         id: left_menubar
+    }
+
+    ConnectionError{
+        id: connectionError
     }
 
 
@@ -55,23 +87,31 @@ Page {
 
         Button{
             id: next_btn
-            text: "Next"
             anchors.right: parent.right
             anchors.top: submenu.top
             anchors.topMargin: 0
             height: 30
+            width:100
 
-            onClicked: stacklayout_home.currentIndex = 5
+            onClicked: processDS()
+            Image {
+                id: dashboardIcon
+                source: "/Images/icons/create_dashboard_20.png"
+                height: 20
+                width: 20
+                anchors.centerIn: parent
+            }
 
             background: Rectangle{
                 id: next_btn_background
-                color: next_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+                color: Constants.grafieksLightGreenColor
+                opacity: tabCreateDashboard.hovered ? 0.42 : 1
             }
 
-            ToolTip.delay: Constants.tooltipShowTime
-            ToolTip.timeout: Constants.tooltipShowTime
+            ToolTip.delay:Constants.tooltipShowTime
+            ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
-            ToolTip.text: qsTr("Edit Datasource")
+            ToolTip.text: Messages.ds_ds_create
 
 
         }
@@ -109,7 +149,7 @@ Page {
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipShowTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Grid view")
+                ToolTip.text: Messages.ds_ds_grid
 
 
             }
@@ -134,7 +174,7 @@ Page {
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipShowTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("List view")
+                ToolTip.text: Messages.ds_ds_list
 
             }
         }
@@ -186,19 +226,19 @@ Page {
 
                 Text{
                     id: ds_server_label_header
-                    text: "Server Address"
+                    text: Messages.ds_ds_server
                 }
                 Text{
                     id: ds_server_header
-                    text: settings.value("general/baseUrl")
+                    text: settings.value("general/sitelookup").includes("http:") || settings.value("general/sitelookup").includes("https:") ? settings.value("general/sitelookup") : "https://" + settings.value("general/sitelookup")
                 }
                 Text{
                     id: ds_name_label_header
-                    text: "Data Source Name"
+                    text: Messages.ds_ds_name
                 }
                 Text{
                     id: ds_name_header
-                    text: "Not Selected"
+                    text: Messages.ds_ds_notSelected
                 }
             }
 
@@ -213,23 +253,23 @@ Page {
                 border.color: Constants.darkThemeColor
                 width: 300
                 height: 40
-                radius: 10
 
-                TextEdit {
+                TextField {
                     id: search_text
-                    text: "Search"
-                    cursorVisible: true
-                    width:250
+                    placeholderText: Messages.search
+                    width:300
                     height: 40
                     anchors.left: search_rect.left
-                    anchors.leftMargin: 10
                     verticalAlignment:TextEdit.AlignVCenter
 
-                    onTextChanged: DatasourceDS.fetchDatsources(0, true, true, search_text.text)
+                    onTextChanged: DatasourceDS.fetchDatsources(0, false, true, search_text.text)
                 }
+
+
             }
         }
     }
+
 
     ToolSeparator{
         id: toolsep2

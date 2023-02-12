@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // This is the rectangle dynamically called in DataModeller
 // when a column is dropped from right side listview
@@ -90,7 +91,6 @@ Item{
     function changedTypes(){
         var changedVariableTypes = GeneralParamsModel.getChangedColumnTypes()
         for (const [key, value] of Object.entries(changedVariableTypes)) {
-          console.log(key, value);
             var prefix = newItem.name + "."
 
             if(key.includes(prefix)){
@@ -115,23 +115,31 @@ Item{
 
     function displayColumns(allColumns, tableName){
 
-        const searchKey = tableName + "."
-        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
+        let searchKey = ""
+        if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+            searchKey = "[" + tableName + "$]."
+        } else {
+            searchKey = tableName + "."
+        }
 
+        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
         displayColList.clear()
 
         allColumns.forEach(function(item){
+            var searchEntity = ""
+            if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                searchEntity = "[" + tableName + "$].["+item[0]+"]"
+            } else {
+                searchEntity = tableName + "." + item[0]
+            }
 
-            var regex = new RegExp("[.]" + item[0] + "$");
-
-            if(!toHideCols.find(value => regex.test(value))){
+            if(!toHideCols.includes(searchEntity)){
                 var columnType = ""
                 if(typeof newItem.changeColumnTypes.get(item[0]) !== "undefined"){
                     columnType = newItem.changeColumnTypes.get(item[0])
                 } else {
                     columnType = item[1]
                 }
-                console.log(columnType)
 
                 displayColList.append({colName: item[0], colType: columnType})
             }
@@ -179,7 +187,6 @@ Item{
 
     function hideColumnSelection(colName, tableName){
 
-        console.log("remove column")
         var key = tableName + "." + colName
 
         // If key already exists, remove
@@ -277,18 +284,18 @@ Item{
 
 
                         MenuItem {
-                            text: qsTr("Rename")
+                            text: Messages.mo_mini_drect_rename
                             onTriggered: destroyElement()
                             visible: false
                         }
                         MenuItem {
-                            text: qsTr("Convert To")
+                            text: Messages.mo_mini_drect_convertTo
                             onTriggered: destroyElement()
                             visible: false
                         }
 
                         MenuItem {
-                            text: qsTr("Remove")
+                            text: Messages.mo_mini_drect_remove
                             onClicked: hideColumnSelection(colName, tableName)
                             visible: false
                         }

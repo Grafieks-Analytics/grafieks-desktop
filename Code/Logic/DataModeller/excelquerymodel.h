@@ -7,19 +7,17 @@
 #include <QSqlField>
 #include <QSqlRecord>
 #include <QSqlQueryModel>
+#include <QTimer>
 
 #include "../../statics.h"
 #include "../../constants.h"
-#include "../Connectors/duckcon.h"
 
 #include "../General/datatype.h"
 #include "../../duckdb.hpp"
 #include "../General/querysplitter.h"
-#include "./Workers/setchartdataduckworker.h"
+#include "../General/generalparamsmodel.h"
 
-#include "./filtercategoricallistmodel.h"
-#include "./filterdatelistmodel.h"
-#include "./filternumericallistmodel.h"
+#include "./Workers/saveextractexcelworker.h"
 
 class ExcelQueryModel : public QAbstractTableModel
 {
@@ -28,8 +26,10 @@ class ExcelQueryModel : public QAbstractTableModel
     int previewRowCount;
     QList<QStringList> resultData;
     QString query;
+    QString finalSql;
     int internalColCount;
     QuerySplitter querySplitter;
+    GeneralParamsModel *generalParamsModel;
 
     QHash<int, QByteArray> m_roleNames;
 
@@ -37,20 +37,15 @@ class ExcelQueryModel : public QAbstractTableModel
     QStringList tableParams;
     QStringList whereParams;
 
-    FilterCategoricalListModel *categoricalFilter;
-    FilterNumericalListModel *numericalFilter;
-    FilterDateListModel *dateFilter;
-    int totalFiltersCount;
-
-    DataType dataType;
-    QStringList hideParams;
-    QStringList columnStringTypes;
-    QVector<int> rejectIds;
+    QString exisitingWhereConditions;
+    QString newWhereConditions;
+    bool queriedFromDataModeler;
 
 public:
-    explicit ExcelQueryModel(QObject *parent = nullptr);
+    explicit ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent = nullptr);
+    Q_PROPERTY(bool ifPublish READ ifPublish WRITE setIfPublish NOTIFY ifPublishChanged)
 
-    Q_INVOKABLE void setQuery(QString query);
+    Q_INVOKABLE void setQuery(QString query, bool queriedFromDataModeler);
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
 
     Q_INVOKABLE void saveExtractData();
@@ -61,31 +56,32 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void getQueryStats();
-    Q_INVOKABLE void removeTmpChartData();
+    bool ifPublish() const;
 
 public slots:
-    void receiveExcelFilterQuery(QString query);
-    void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
-    void slotSetChartData(bool success);
+    void receiveExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions);
+    void extractSaved(QString errorMsg);
 
+    void setIfPublish(bool ifPublish);
 
 private:
     void generateRoleNames();
-    void setQueryResult();
-    QMap<QString, QString> returnColumnList(QString tableName);
-    void setChartHeader(int index, QStringList colInfo);
+    void extractSizeLimit();
+
+    bool m_ifPublish;
 
 signals:
-    void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void excelHeaderDataChanged(QStringList tableHeaders);
     void excelHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
-    void generateReports(duckdb::Connection *con);
+    void generateExtractReports();
+    void showSaveExtractWaitPopup();
+    void extractFileExceededLimit(bool freeLimit, bool ifPublish);
+    void extractCreationError(QString errorMessage);
 
+    void ifPublishChanged(bool ifPublish);
 };
 
 #endif // EXCELQUERYMODEL_H

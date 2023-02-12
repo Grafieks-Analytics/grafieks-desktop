@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>Grafieks Desktop</Name>
-    <Version>1.0.0</Version>
+    <Version>Free Edition 1.0.2 (x64)</Version>
     <Title>Grafieks Desktop</Title>
     <Publisher>Grafieks Analytics Ltd</Publisher>
     
@@ -19,7 +19,8 @@
 
     <RemoteRepositories>
         <Repository>
-            <Url>http://13.232.48.100/grafieks/</Url>
+            <Url>https://grafieks.com/application/</Url>
+            <DisplayName>Grafieks Desktop Repository</DisplayName>
         </Repository>
     </RemoteRepositories>
 </Installer>

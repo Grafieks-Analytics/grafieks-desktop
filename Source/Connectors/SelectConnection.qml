@@ -11,9 +11,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
@@ -35,6 +36,15 @@ Page {
 
     signal update_host_query_modeller(string new_host);
     signal update_data_sources_list();
+
+    Connections{
+        target: LiveProcessor
+
+        function onOpenConnection(dbType){
+            selectAuthorization(dbType)
+        }
+    }
+
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -79,7 +89,6 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-        console.log(param)
         switch(param.toLowerCase()){
 
         case "grs":
@@ -88,6 +97,7 @@ Page {
             if (typeof settings.value("user/sessionToken") == "undefined"){
                 connectGrafieks1.visible = true
             } else{
+                GeneralParamsModel.setCurrentScreen(Constants.grsScreen)
                 stacklayout_home.currentIndex = 4
             }
 
@@ -171,19 +181,36 @@ Page {
             break;
 
         case "dropbox":
-            dropboxModal.visible = true
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.dropBoxType){
+                dropboxModal.visible = true
+            } else {
+                fileListPopup.visible = true
+            }
+
             break;
 
         case "google drive":
-            driveModal.visible = true;
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.driveType){
+                driveModal.visible = true
+            } else {
+                driveListPopup.visible = true
+            }
             break;
 
         case "box":
-            boxModal.visible = true;
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.boxType){
+                boxModal.visible = true
+            } else {
+                boxListPopup.visible = true
+            }
             break;
 
         case "google sheets":
-            sheetModal.visible = true;
+            if(GeneralParamsModel.getOnlineStorageType() !== Constants.sheetType){
+                sheetModal.visible = true
+            } else {
+                sheetListPopup.visible = true
+            }
             break;
 
         default:
@@ -231,9 +258,9 @@ Page {
         id: postgresModal
     }
 
-//    ExcelConnection{
-//        id: excelModal
-//    }
+    //    ExcelConnection{
+    //        id: excelModal
+    //    }
 
     ExcelOdbcConnection{
         id: excelModal
@@ -323,10 +350,9 @@ Page {
     FileDialog{
         id: fileDialog1
 
-        title: "Select a file"
+        title: Messages.selectFile
 
         onAccepted: {
-            console.log("file chosen")
             messageDialog1.open()
         }
         onRejected: console.log("file rejected")
@@ -336,9 +362,10 @@ Page {
         id: messageDialog1
 
         modality: Qt.ApplicationModal
-        title: "Processing file"
-        text: "Please wait. We are processing your input file. Hit Ok to continue"
-        standardButtons: StandardButton.Ok | StandardButton.Close
+        title: Messages.cn_sel_processFile
+        text: Messages.cn_sel_pleaseWait
+//        standardButtons: StandardButton.Ok | StandardButton.Close
+        buttons: MessageDialog.Ok | MessageDialog.Close
 
         onAccepted: {
 
@@ -373,7 +400,7 @@ Page {
     Text{
         id: mainLabel
         scale : 0.8
-        text: qsTr("Data Connectors")
+        text: Messages.cn_sel_headers
         font.pointSize: Constants.fontHeader
         color:"gray"
         anchors.top:parent.top
@@ -400,7 +427,7 @@ Page {
             id: search_text
             width: 400
             height: 50
-            placeholderText: "Search"
+            placeholderText: Messages.search
             cursorVisible: true
             anchors.left: searchRectangle.left
             leftPadding: 15
@@ -557,7 +584,6 @@ Page {
         id: grid1
 
         anchors.top: tabbar.bottom
-//        anchors.topMargin: 60
         anchors.left: left_menubar.right
         width: selectconn_page.width-50
         height: parent.height-300
@@ -566,7 +592,7 @@ Page {
         cellHeight: 130
         clip: true
         interactive: true
-         ScrollBar.vertical: ScrollBar{}
+        ScrollBar.vertical: ScrollBar{}
 
 
         delegate : Rectangle{
@@ -581,27 +607,36 @@ Page {
                 height:60
                 width:height
                 anchors.centerIn: parent
-
+                enabled: isEnabled
 
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: selectAuthorization(name)
+                    onClicked: {
+                        GeneralParamsModel.setFromLiveFile(false)
+                        selectAuthorization(name)
+                    }
+                    enabled: isEnabled
 
                 }
             }
 
             Text{
-                text:name
+                text:(name == "Postgres"?"PostgresSQL":(name == "Sql Server"?"Microsoft Sql Server":name))
                 font.pointSize: Constants.fontReading
                 color:"gray"
                 anchors.top: imageId.bottom
                 anchors.topMargin: 10
                 anchors.horizontalCenter: imageId.horizontalCenter
+                enabled: isEnabled
 
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: selectAuthorization(name)
+                    onClicked: {
+                        GeneralParamsModel.setFromLiveFile(false)
+                        selectAuthorization(name)
+                    }
+                    enabled: isEnabled
                 }
             }
         }

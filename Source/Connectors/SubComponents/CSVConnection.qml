@@ -10,9 +10,10 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -20,17 +21,21 @@ import "../../MainSubComponents"
 Popup {
     id: popup
     width: 600
-    height: 500
+    height: 300
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 150
     padding: 0
     property int label_col : 135
 
     property var selectedFile: ""
     property var startTime: 0
     property var separator: ","
+
+    Component.onCompleted: {
+        promptCSV.nameFilters = Messages.cn_sub_csv_namedFilter
+    }
 
     onClosed: {
         mainTimer.stop()
@@ -40,13 +45,16 @@ Popup {
         displayTime.text = ""
     }
 
+    // LIVE CONNECTION not possible
+
     Connections{
         target: ConnectorsLoginModel
 
         function onLogout(){
             selectedFile = ""
-            separator.text = ""
+            separator.text = ","
             csvFileName.text = ""
+            idSeparatorText.text = ""
         }
 
         function onCsvLoginStatus(status, directLogin){
@@ -70,18 +78,6 @@ Popup {
         }
     }
 
-    Connections{
-        target: DuckCon
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "csv"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
-    }
-
     function handleCsv(csvFileName, separatorText){
 
         if(csvFileName !== ""){
@@ -93,7 +89,7 @@ Popup {
 
             ConnectorsLoginModel.csvLogin(csvFileName, true, separatorText)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -114,7 +110,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to CSV"
+            text: Messages.cn_sub_csv_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -159,7 +155,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_csv_csvName
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -169,7 +165,7 @@ Popup {
 
         Button{
             id : file_btn
-            text: "Select CSV file"
+            text: Messages.cn_sub_csv_header
             onClicked: promptCSV.open();
         }
 
@@ -195,7 +191,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Separator"
+                text: Messages.cn_sub_csv_separator
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -206,7 +202,7 @@ Popup {
 
         TextField{
             id: idSeparatorText
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 200
@@ -229,10 +225,13 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row4.bottom
-        anchors.topMargin: 15
+        // anchors.top: row4.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: 65
+
         anchors.right: parent.right
-        anchors.rightMargin: label_col
+        anchors.rightMargin: label_col+30
         spacing: 10
 
         Text{
@@ -268,7 +267,7 @@ Popup {
                 height: 40
 
                 Text{
-                    text: Constants.openFileText
+                    text: Messages.openFileText
                     anchors.centerIn: parent
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
@@ -283,27 +282,26 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "CSV Connection"
+        title: Messages.cn_sub_csv_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
-        title: "CSV Import Error"
+        title: Messages.cn_sub_csv_importErr
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
-    // Select SQLITE file
+    // Select CSV file
     FileDialog{
         id: promptCSV
-        title: "Select a CSV file"
-        nameFilters: ["CSV files (*.csv)"];
+        title: Messages.cn_sub_csv_header
 
         onAccepted: {
 
-            selectedFile = ConnectorsLoginModel.urlToFilePath(promptCSV.fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(promptCSV.fileUrl)
             csvFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

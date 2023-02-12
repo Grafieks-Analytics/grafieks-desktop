@@ -8,7 +8,6 @@ RedshiftCon::RedshiftCon(QObject *parent) : QObject(parent)
 QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
 
-    qDebug() << driver << host << db << port << username << password;
 
     QVariantMap outputStatus;
 
@@ -39,10 +38,11 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
             // If correct credentials inserted once
 
             Statics::redshiftHost = host;
-            Statics::redshiftDb = db;
+            Statics::redshiftDb = dbString;
             Statics::redshiftPort = port;
             Statics::redshiftUsername = username;
             Statics::redshiftPassword = password;
+            Statics::redshiftRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -89,6 +89,7 @@ void RedshiftCon::closeConnection()
     Statics::redshiftPort = 0;
     Statics::redshiftUsername = "";
     Statics::redshiftPassword = "";
+    Statics::redshiftRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

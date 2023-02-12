@@ -84,12 +84,14 @@ void DocumentHandlerModel::saveTmpFile(const QString filename)
 
     QLatin1String ext(".html");
 
-    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QStringList tmpPaths =  QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+
+    QString tmpFilePath = tmpPaths[0] + "/" + "tmp/";
     QDir tmpDir(tmpFilePath);
 
     // Check if tmp directory exists
     if(!tmpDir.exists()){
-        QDir().mkdir(tmpFilePath);
+        QDir().mkpath(tmpFilePath);
     }
 
     // Save the file
@@ -97,7 +99,7 @@ void DocumentHandlerModel::saveTmpFile(const QString filename)
 
         QUrl filePath = tmpFilePath + filename;
 
-        QString localPath = filePath.toEncoded();
+        QString localPath = filePath.toString();
         if (!localPath.endsWith(ext))
             localPath += ext;
         QFile f(localPath);

@@ -11,7 +11,8 @@ User::User(QObject *parent) : QObject(parent),
 void User::login()
 {
     QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(this->host);
+    QString loginUrl = this->host + "/login";
+    m_NetworkRequest.setUrl(loginUrl);
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
@@ -19,15 +20,13 @@ void User::login()
     QJsonObject obj;
     obj.insert("username", this->username);
     obj.insert("password", this->password);
+    obj.insert("accountId", this->accountId);
+    obj.insert("source", Constants::source);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
-
-    // Settings: set baseUrl
-    QSettings settings;
-    settings.setValue("general/baseUrl", host);
 
     connect(m_networkReply, &QIODevice::readyRead, this, &User::reading, Qt::UniqueConnection);
     connect(m_networkReply, &QNetworkReply::finished, this, &User::loginReadComplete, Qt::UniqueConnection);
@@ -61,14 +60,15 @@ void User::logout()
 
     m_networkReply = m_networkAccessManager->post(m_networkRequest, strJson.toUtf8());
 
-    connect(m_networkReply, &QIODevice::readyRead, this, &User::reading);
-    connect(m_networkReply, &QNetworkReply::finished, this, &User::logoutReadComplete);
+    // We wont wait for the logout read status
+    // Just clear the settings and we are good for a logout
+    outputStatus.insert("code", 200);
+    outputStatus.insert("msg", "Success");
+
+    emit logoutStatus(outputStatus);
+
 }
 
-void User::setHost(const QString &value)
-{
-    host = value;
-}
 
 void User::setPassword(const QString &value)
 {
@@ -78,6 +78,29 @@ void User::setPassword(const QString &value)
 void User::setUsername(const QString &value)
 {
     username = value;
+}
+
+void User::siteLookup(const QString &value)
+{
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(Constants::defaultAPIEndpoint + "/sitelookup");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+
+    QJsonObject obj;
+    obj.insert("sitename", value);
+
+    QSettings settings;
+    settings.setValue("general/sitelookup", value);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply, &QIODevice::readyRead, this, &User::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &User::siteLookupReadComplete, Qt::UniqueConnection);
 }
 
 void User::reading()
@@ -117,20 +140,19 @@ void User::loginReadComplete()
             settings.setValue("user/lastname", dataObj["lastname"].toString());
             settings.setValue("user/photoLink", dataObj["photoLink"].toString());
             settings.setValue("user/sessionToken", dataObj["sessionToken"].toString());
-
-
+            settings.setValue("user/sitename", dataObj["sitename"].toString());
+            settings.setValue("user/ftpUser", dataObj["ftpuser"].toString());
+            settings.setValue("user/ftpPass", dataObj["ftppassword"].toString());
+            settings.setValue("user/ftpPort", dataObj["ftpport"].toInt());
         }
 
-        emit loginStatus(outputStatus);
-        m_tempStorage->clear();
-
     }
+    emit loginStatus(outputStatus);
+    m_tempStorage->clear();
 }
 
-void User::logoutReadComplete()
+void User::siteLookupReadComplete()
 {
-
-
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
 
@@ -147,15 +169,26 @@ void User::logoutReadComplete()
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
 
-        // If successful, remove the user variables in settings
+        // If successful, set the variables in settings
         if(statusObj["code"].toInt() == 200){
 
-            //            QSettings settings;
-            //            settings.remove("user");
+            this->host = resultObj["data"].toString();
+            this->accountId = resultObj["account_id"].toInt();
+
+            // Settings: set baseUrl
+            // Settings: set hostname
+            QSettings settings;
+            settings.setValue("general/baseUrl", this->host);
+            settings.setValue("general/ftpAddress", Constants::defaultFTPEndpoint);
+
+            QUrl url(this->host);
+            settings.setValue("general/hostname", url.host());
         }
 
-        emit logoutStatus(outputStatus);
+        emit sitelookupStatus(outputStatus);
         m_tempStorage->clear();
-    }
 
+    }
 }
+
+

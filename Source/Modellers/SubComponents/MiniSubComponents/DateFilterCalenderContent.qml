@@ -9,10 +9,11 @@
 ****************************************************************************/
 
 import QtQuick 2.15
-import QtQuick.Controls 1.4
+import QtQuick.Controls
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -22,7 +23,7 @@ Rectangle{
 
     property var locale: Qt.locale()
 
-    property string selectOption: "Select Wildcard"
+    property string selectOption: Messages.mo_mini_cfwc_header
 
     height: parent.height - 80 - 40
     width: parent.width - 40
@@ -74,14 +75,6 @@ Rectangle{
 
         function onFilterIndexChanged(){
             counter = DSParamsModel.filterIndex
-        }
-    }
-
-    Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
         }
     }
 
@@ -264,7 +257,7 @@ Rectangle{
             leftPadding: 20
 
             Text {
-                text: qsTr("Date Range")
+                text: Messages.filterDateRange
             }
 
         }
@@ -290,7 +283,7 @@ Rectangle{
 
             Text {
                 id: fromDateText
-                text: qsTr("From")
+                text: Messages.filterFrom
             }
 
             Rectangle{
@@ -302,7 +295,7 @@ Rectangle{
 
                 TextField {
                     id:fromDateInput
-                    placeholderText: "dd/mm/yyyy"
+                    placeholderText: Messages.filterDefaultDateFormat
 
                     height: parent.height
                     onTextChanged: {
@@ -328,14 +321,14 @@ Rectangle{
                     }
                 }
 
-                Calendar{
-                    id: fromDateCalendar
-                    visible: false
-                    onClicked: {
-                        onSelectFromDate();
-                    }
+//                Calendar{
+//                    id: fromDateCalendar
+//                    visible: false
+//                    onClicked: {
+//                        onSelectFromDate();
+//                    }
 
-                }
+//                }
 
             }
 
@@ -351,7 +344,7 @@ Rectangle{
 
             Text {
                 id: toDateText
-                text: qsTr("To")
+                text: Messages.filterTo
             }
 
             Rectangle{
@@ -361,7 +354,7 @@ Rectangle{
 
                 TextField {
                     id: toDateInput
-                    placeholderText: "dd/mm/yyyy"
+                    placeholderText: Messages.filterDefaultDateFormat
 
                     height: parent.height
                     onTextChanged: {
@@ -387,14 +380,14 @@ Rectangle{
                     }
                 }
 
-                Calendar{
-                    id: toDateCalendar
-                    visible: false
-                    onClicked: {
-                        onSelectToDate();
-                    }
+//                Calendar{
+//                    id: toDateCalendar
+//                    visible: false
+//                    onClicked: {
+//                        onSelectToDate();
+//                    }
 
-                }
+//                }
 
 
             }
@@ -412,7 +405,7 @@ Rectangle{
 
         CheckBoxTpl {
             checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-            text: qsTr("Include Null")
+            text: Messages.filterIncludeNull
             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckStateChanged: {
@@ -430,7 +423,7 @@ Rectangle{
 
         CheckBoxTpl {
             checked: DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
-            text: qsTr("Exclude")
+            text: Messages.filterExclude
             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckedChanged: {

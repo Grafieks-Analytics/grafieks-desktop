@@ -5,11 +5,6 @@ NewTableColumnsModel::NewTableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
-NewTableColumnsModel::NewTableColumnsModel(DuckCon *duckCon, QObject *parent)
-{
-    Q_UNUSED(parent);
-    this->duckCon = duckCon;
-}
 
 /*!
  * \brief Accepts a tableName and displays all the columns
@@ -24,6 +19,7 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
 
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
+    allColumns.clear();
 
     switch(Statics::currentDbIntType){
 
@@ -350,7 +346,7 @@ QList<QStringList> NewTableColumnsModel::detectHeaderTypes(const QByteArray line
     for(int i = 0; i < this->csvHeaderLength; i++){
 
         fieldName = this->csvHeaderDataFinal.at(i);
-        fieldType = dataType.variableType(QString(lineData.at(i)));
+        fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
 
         outputDataList << fieldName << fieldType;
 

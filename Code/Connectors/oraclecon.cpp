@@ -35,10 +35,11 @@ QVariantMap OracleCon::OracleOdbcInstance(const QString &driver, const QString &
             // If correct credentials inserted once
 
             Statics::oracleHost = host;
-            Statics::oracleDb = db;
+            Statics::oracleDb = dbString;
             Statics::oraclePort = port;
             Statics::oracleUsername = username;
             Statics::oraclePassword = password;
+            Statics::oracleRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -85,6 +86,7 @@ void OracleCon::closeConnection()
     Statics::oraclePort = 0;
     Statics::oracleUsername = "";
     Statics::oraclePassword = "";
+    Statics::oracleRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

@@ -26,7 +26,6 @@ MysqlCon::MysqlCon(QObject *parent) : QObject(parent)
 
 QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
-    qDebug() << QSqlDatabase::drivers() << "Available drives";
 
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
@@ -37,7 +36,6 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
         dbMysql.setUserName(username);
         dbMysql.setPassword(password);
         dbMysql.open();
-
 
         if(!dbMysql.isOpen()){
             outputStatus.insert("status", false);
@@ -54,6 +52,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;
+            Statics::myRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -109,10 +108,11 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
             // If correct credentials inserted once
 
             Statics::myHost = host;
-            Statics::myDb = db;
+            Statics::myDb = dbString;
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;
+            Statics::myRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -171,6 +171,7 @@ void MysqlCon::closeConnection()
     Statics::myPort = 0;
     Statics::myUsername = "";
     Statics::myPassword = "";
+    Statics::myRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

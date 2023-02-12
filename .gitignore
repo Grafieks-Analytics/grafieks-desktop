@@ -1,7 +1,9 @@
 .DS_Store
 GrafieksDesktop.pro.user
 GrafieksDesktop.pro.user*
+secrets.h
 *~
 Debug/
 Release/
+symbols.out
 *.autosave

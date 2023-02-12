@@ -50,10 +50,11 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
             // If correct credentials inserted once
 
             Statics::mongoHost = host;
-            Statics::mongoDb = db;
+            Statics::mongoDb = dbString;
             Statics::mongoPort = port;
             Statics::mongoUsername = username;
             Statics::mongoPassword = password;
+            Statics::mongoRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -100,6 +101,7 @@ void MongoCon::closeConnection()
     Statics::mongoPort = 0;
     Statics::mongoUsername = "";
     Statics::mongoPassword = "";
+    Statics::mongoRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

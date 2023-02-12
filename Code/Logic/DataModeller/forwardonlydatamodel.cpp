@@ -55,11 +55,11 @@ QHash<int, QByteArray> ForwardOnlyDataModel::roleNames() const
 
 void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString options)
 {
-    QStringList output;
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
+    this->modelOutput = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
 
     this->m_roleNames.insert(0, col.toUtf8());
     emit columnListModelDataChanged(options);
@@ -67,78 +67,12 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString op
 
 void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
-    QStringList output;
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
-//    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
+//    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE UPPER(" + col + ") LIKE UPPER('%"+searchString+"%')");
+    this->modelOutput = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE UPPER(" + joiner + col + joiner + ") LIKE UPPER('%"+searchString+"%')");
     emit columnListModelDataChanged(options);
-}
-
-QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString moduleName, QString searchString)
-{
-
-    QString conType;
-    QString queryString;
-    QString fieldName;
-    QString fieldType;
-    QStringList output;
-
-    QString joiner = this->getQueryJoiner();
-
-    switch (Statics::currentDbIntType) {
-
-    case Constants::redshiftIntType:
-        conType = Constants::redshiftOdbcStrType;
-//        queryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
-        queryString = "select \"column\", type from pg_table_def where tablename = " + joiner + tableName  + joiner;
-        break;
-
-    case Constants::snowflakeIntType:
-        conType = Constants::snowflakeOdbcStrType;
-//        queryString = "DESC TABLE " + tableName;
-        queryString = "DESC TABLE " + joiner + tableName + joiner;
-        break;
-
-    case Constants::teradataIntType:
-        conType = Constants::teradataOdbcStrType;
-        tableName.remove("\"" + Statics::currentDbName + "\".");
-        tableName.remove(Statics::currentDbName + ".");
-        tableName.remove("\"");
-//        queryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
-        queryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = " + joiner + Statics::currentDbName + joiner + " AND TableName = " + joiner + tableName + joiner;
-        break;
-    }
-    QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
-    QSqlQuery describeQuery(queryString, forwardOnlyDb);
-
-    if(describeQuery.lastError().type() == QSqlError::NoError){
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString().trimmed();
-            fieldType = describeQuery.value(1).toString().trimmed();
-
-
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-            qDebug() << "fieldTypeTrimmed" <<fieldTypeTrimmed << fieldName << fieldType;
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-            if(filterDataType == Constants::categoricalType){
-                this->category.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::numericalType){
-                this->numerical.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::dateType){
-                this->date.insert(tableName + "." + fieldName);
-            }
-        }
-    } else{
-        qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-    }
-
-    return output;
 }
 
 QStringList ForwardOnlyDataModel::getTableList()
@@ -199,7 +133,6 @@ QStringList ForwardOnlyDataModel::filterTableList(QString keyword)
 QStringList ForwardOnlyDataModel::getDbList()
 {
     QStringList output;
-
     QString conType;
     QString queryString;
 
@@ -233,6 +166,11 @@ QStringList ForwardOnlyDataModel::getDbList()
     }
 
     return output;
+}
+
+QStringList ForwardOnlyDataModel::getDateColumnData()
+{
+    return this->modelOutput;
 }
 
 QString ForwardOnlyDataModel::getQueryJoiner()
@@ -292,6 +230,5 @@ QStringList ForwardOnlyDataModel::getData(QString queryString)
 
     out = this->resultData;
     this->totalRowCount = this->resultData.count();
-    emit forwardColData(this->resultData);
     return out;
 }

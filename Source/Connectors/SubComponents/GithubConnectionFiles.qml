@@ -10,10 +10,11 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -82,12 +83,13 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    // LIVE CONNECTION not possible
 
     Connections{
         target: GithubDS
 
         function onGetGithubUsername(username){
-            connectedById.text = "Connected to: "+ username
+            connectedById.text = Messages.cn_sub_common_connectedTo + username
         }
 
         function onShowBusyIndicator(status){
@@ -113,47 +115,23 @@ Popup {
         function onFileDownloaded(filePath, fileType){
 
             if(fileType === "csv"){
-                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+                ConnectorsLoginModel.csvLogin(filePath, true, ",")
             } else if(fileType === "excel"){
-                ConnectorsLoginModel.excelLogin(filePath, false)
+                var drivers = ODBCDriversModel.fetchOdbcDrivers(Constants.excelType)
+                ConnectorsLoginModel.excelLogin(drivers, filePath)
             } else if(fileType === "json"){
-                ConnectorsLoginModel.jsonLogin(filePath, false)
+                ConnectorsLoginModel.jsonLogin(filePath, true)
             }
         }
     }
 
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === false){
-                if(status.status === true){
-                    popup.visible = false
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-
-                mainTimer.stop()
-                mainTimer.running = false
-                busyindicator.running = false
-                displayTime.text = ""
-            }
-        }
-
-
-    }
 
     Connections{
         target: ConnectorsLoginModel
 
         function onExcelLoginStatus(status, directLogin){
 
-            if(directLogin === false){
+            if(directLogin === true){
                 if(status.status === true){
                     popup.visible = false
                     stacklayout_home.currentIndex = 5
@@ -173,7 +151,7 @@ Popup {
 
         function onCsvLoginStatus(status, directLogin){
 
-            if(directLogin === false){
+            if(directLogin === true){
                 if(status.status === true){
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
@@ -194,7 +172,7 @@ Popup {
 
         function onJsonLoginStatus(status, directLogin){
 
-            if(directLogin === false){
+            if(directLogin === true){
                 if(status.status === true){
                     popup.visible = false
                     stacklayout_home.currentIndex = 5
@@ -599,7 +577,7 @@ Popup {
                         interval: 1000;
                         running: false;
                         repeat: true
-                        onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
+//                        onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
                     }
                 }
 

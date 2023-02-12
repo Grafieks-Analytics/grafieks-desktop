@@ -175,5 +175,48 @@
         <file>Images/icons/Right_20.png</file>
         <file>Images/icons/charts/123.png</file>
         <file>Images/icons/PowerOff.png</file>
+        <file>Images/icons/reports/Blues.png</file>
+        <file>Images/icons/reports/Greens.png</file>
+        <file>Images/icons/reports/Greys.png</file>
+        <file>Images/icons/reports/Oranges.png</file>
+        <file>Images/icons/reports/Purples.png</file>
+        <file>Images/icons/reports/Reds.png</file>
+        <file>Images/icons/box-free.png</file>
+        <file>Images/icons/github-free.png</file>
+        <file>Images/icons/grs-free.png</file>
+        <file>Images/icons/hive-free.png</file>
+        <file>Images/icons/impala-free.png</file>
+        <file>Images/icons/json-free.png</file>
+        <file>Images/icons/mongodb-free.png</file>
+        <file>Images/icons/oracle-free.png</file>
+        <file>Images/icons/snowflake-free.png</file>
+        <file>Images/icons/teradata-free.png</file>
+        <file>Images/icons/charts/combination_grey.png</file>
+        <file>Images/icons/charts/geo_grey.png</file>
+        <file>Images/icons/charts/sankey_grey.png</file>
+        <file>Images/icons/charts/treemap_grey.png</file>
+        <file>Images/icons/charts/kpi.png</file>
+        <file>Images/icons/connectors/access.png</file>
+        <file>Images/icons/connectors/box.png</file>
+        <file>Images/icons/connectors/csv.png</file>
+        <file>Images/icons/connectors/drive.png</file>
+        <file>Images/icons/connectors/dropbox.png</file>
+        <file>Images/icons/connectors/github.png</file>
+        <file>Images/icons/connectors/grs.png</file>
+        <file>Images/icons/connectors/impala.png</file>
+        <file>Images/icons/connectors/mongo.png</file>
+        <file>Images/icons/connectors/mysql.png</file>
+        <file>Images/icons/connectors/oracle.png</file>
+        <file>Images/icons/connectors/postgresql.png</file>
+        <file>Images/icons/connectors/redshift.png</file>
+        <file>Images/icons/connectors/sheets.png</file>
+        <file>Images/icons/connectors/snowflake.png</file>
+        <file>Images/icons/connectors/sqlite.png</file>
+        <file>Images/icons/connectors/sqlserver.png</file>
+        <file>Images/icons/connectors/teradata.png</file>
+        <file>Images/icons/connectors/excel.png</file>
+        <file>Images/logos/logo_large.png</file>
+        <file>Images/icons/Data Sourse.png</file>
+        <file>Images/icons/connectors/json.png</file>
     </qresource>
 </RCC>

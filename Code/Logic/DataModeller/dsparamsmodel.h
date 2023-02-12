@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QElapsedTimer>
 #include <QFileInfo>
+#include <QDataStream>
 
 #include "../../constants.h"
 #include "../../Messages.h"
@@ -125,9 +126,9 @@ public:
     ~DSParamsModel();
 
     Q_INVOKABLE void executeModelerQuery();
+    Q_INVOKABLE void disconnectDS();
 
     Q_INVOKABLE void resetDataModel();
-    Q_INVOKABLE bool saveDatasource(QString filename);
     Q_INVOKABLE QVariantList readDatasource(QString filename);
 
     Q_INVOKABLE void addToHideColumns(QString colName);
@@ -146,7 +147,6 @@ public:
     Q_INVOKABLE void addToJoinIconMap(int refObjId, QString iconLink = "");
     Q_INVOKABLE void updateJoinIconMap(int refObjId, QString iconLink = "");
     Q_INVOKABLE void removeJoinIconMap(int refObjId = 0, bool removeAll = false);
-    Q_INVOKABLE QString fetchJoinIconMap(int refObjId = 0);
 
     Q_INVOKABLE void addToJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
     Q_INVOKABLE void removeJoinMapList(int refObjId = 0, int internalCounter = 0, bool deleteMainMap = false);
@@ -161,8 +161,6 @@ public:
     Q_INVOKABLE QStringList fetchQuerySelectParamsList();
 
     Q_INVOKABLE void addToJoinOrder(int joinOrderId);
-    Q_INVOKABLE void removeJoinOrder(int joinOrderId);
-    Q_INVOKABLE QVariantList fetchJoinOrder();
 
     Q_INVOKABLE void addToExistingTables(int refObjId, QString tableName);
     Q_INVOKABLE void removeExistingTables(int refObjId = 0);
@@ -202,6 +200,7 @@ public:
     Q_INVOKABLE void addToNewJoinBox(int refObjId, const QVariant &joinBoxObject);
     Q_INVOKABLE void removeNewJoinBox(int refObjId = 0);
     Q_INVOKABLE QVariant fetchNewJoinBox(int refObjId = 0);
+    Q_INVOKABLE int fetchTotalJoins();
 
     // Filters
 
@@ -250,10 +249,6 @@ public:
     Q_INVOKABLE QVector<int> getTmpFilterIndex(int refObjId = 0, bool fetchAll = false);
 
     // Datasource Read/Write
-    Q_INVOKABLE void parseCsv(QUrl pathToCsv);
-    Q_INVOKABLE void parseParquet(QUrl pathToParquet);
-    Q_INVOKABLE void exportExtractData(QString pathToExtract);
-    Q_INVOKABLE void importExtractData(QString pathToExtract);
     Q_INVOKABLE void resetInputFields();
 
     int currentTab() const;
@@ -324,6 +319,7 @@ signals:
 
     // General
     void processQuery();
+    void disconnectAll();
     void currentTabChanged(int currentTab);
     void fileExtensionChanged(QString fileExtension);
     void runCalledChanged(bool runCalled);
@@ -363,7 +359,6 @@ signals:
     // For Datasource Read/Write
     void dataReadComplete(uint time, bool status, QString msg);
     void csvReadComplete(uint time, bool status, QString msg);
-    void parquetReadComplete(uint time, bool status, QString msg);
     void exportDataComplete(uint time, bool status, QString msg);
     void importDataComplete(uint time, bool status, QString msg);
 

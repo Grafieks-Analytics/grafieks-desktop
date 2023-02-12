@@ -13,6 +13,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
+
 import "../../../MainSubComponents"
 
 Rectangle{
@@ -125,55 +127,32 @@ Rectangle{
         function onFilterIndexChanged(){
 
             if(ReportParamsModel.section === Constants.dateTab){
-                counter = ReportParamsModel.filterIndex
+
+                idPlesaeWaitText.visible = true
+                idPlesaeWaitThorbber.visible = true
+
                 var colName = ReportParamsModel.colName
-                var colData = ReportsDataModel.fetchColumnData(colName)
-                var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+                var colData
                 ReportParamsModel.removeTmpSelectedValues(0, true)
 
-                // Just to reset the data if the previous `colData` and the new `colData` are same
-                singleSelectCheckList.model = []
-                multiSelectCheckList.model = []
-
-                columnDataModel = colData
-
-                singleSelectCheckList.model = columnDataModel
-                multiSelectCheckList.model  = columnDataModel
-
-                // Date format
-                selectedFormat = ReportParamsModel.getDateFormatMap(counter)
-                customBox.currentIndex = selectedFormat
-
-                convertDate(columnDataModel)
-
-                if(ReportParamsModel.subCategory === Constants.categorySubMulti){
-                    multiSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = true
-                    singleSelectCheckList.visible = false
-
-                    if(values[0] === "%"){
-                        masterColData.forEach((item) => {
-                                                  ReportParamsModel.setTmpSelectedValues(item[selectedFormat])
-                                              })
-
-                    } else{
-                        var checkedValues = values[0].split(",")
-                        checkedValues.forEach((item) => {
-                                                  ReportParamsModel.setTmpSelectedValues(item)
-                                              })
-                    }
-                } else{
-                    singleSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = false
-                    singleSelectCheckList.visible = true
-
-                    if(ReportParamsModel.searchTmpSelectedValues(values) < 0){
-                        ReportParamsModel.setTmpSelectedValues(values)
-                    }
+                if(GeneralParamsModel.getAPISwitch()) {
+                    ReportsDataModel.fetchColumnDataAPI(colName)
+                } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+                    colData = ReportsDataModel.fetchColumnDataLive(colName)
+                    processDataList(colData)
+                } else {
+                    colData = ReportsDataModel.fetchColumnData(colName)
+                    processDataList(colData)
                 }
             }
+        }
+    }
+
+    Connections{
+        target: ReportsDataModel
+
+        function onColumnDataChanged(columnData, options){
+            processDataList(columnData)
         }
     }
 
@@ -192,6 +171,61 @@ Rectangle{
         if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             mainCheckBox.visible = true
         }
+    }
+
+    function processDataList(colData){
+        counter = ReportParamsModel.filterIndex
+        var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+
+        // Just to reset the data if the previous `colData` and the new `colData` are same
+        singleSelectCheckList.model = []
+        multiSelectCheckList.model = []
+
+        columnDataModel = colData
+
+        singleSelectCheckList.model = columnDataModel
+        multiSelectCheckList.model  = columnDataModel
+
+        // Date format
+        selectedFormat = ReportParamsModel.getDateFormatMap(counter)
+        customBox.currentIndex = selectedFormat
+
+        convertDate(columnDataModel)
+
+        if(ReportParamsModel.subCategory === Constants.categorySubMulti){
+            multiSelectRadio.checked = true
+
+            multiSelectCheckList.visible = true
+            singleSelectCheckList.visible = false
+
+            if(values[0] === "%"){
+                masterColData.forEach((item) => {
+                                          ReportParamsModel.setTmpSelectedValues(item[selectedFormat])
+                                      })
+
+            } else{
+                if (values.length > 0) {
+                    var checkedValues = values[0].split(",")
+                    checkedValues.forEach((item) => {
+                                              ReportParamsModel.setTmpSelectedValues(item)
+                                          })
+                }
+
+
+            }
+        } else{
+            singleSelectRadio.checked = true
+
+            multiSelectCheckList.visible = false
+            singleSelectCheckList.visible = true
+
+            if(ReportParamsModel.searchTmpSelectedValues(values) < 0){
+                ReportParamsModel.setTmpSelectedValues(values)
+            }
+        }
+
+        idPlesaeWaitText.visible = false
+        idPlesaeWaitThorbber.visible = false
     }
 
     function slotDataCleared(){
@@ -542,7 +576,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: multiSelectRadio
-                radio_text: qsTr("Multi Select")
+                radio_text: Messages.filterMultiSelect
                 radio_checked: true
                 parent_dimension: 16
                 ButtonGroup.group: selectTypeRadioGroup
@@ -562,7 +596,7 @@ Rectangle{
 
             CustomRadioButton{
                 id: singleSelectRadio
-                radio_text: qsTr("Single Select")
+                radio_text: Messages.filterSingleSelect
                 radio_checked: false
                 parent_dimension: 16
                 ButtonGroup.group: selectTypeRadioGroup
@@ -592,7 +626,7 @@ Rectangle{
 
             TextField{
                 id: searchText
-                placeholderText: "Search"
+                placeholderText: Messages.search
                 leftPadding: 20
                 selectByMouse: true
                 height: 35
@@ -626,6 +660,18 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
 
         // Checklist Button ListView
         // List Filters starts
@@ -639,7 +685,7 @@ Rectangle{
         CheckBoxTpl {
             id: mainCheckBox
             checked: ReportParamsModel.fetchSelectAllMap(counter)[0] === true ? true : false
-            text: "All"
+            text: Messages.filterAll
             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckedChanged: {
@@ -806,7 +852,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: ReportParamsModel.fetchIncludeNullMap(counter)[0]
-                text: qsTr("Include Null")
+                text: Messages.filterIncludeNull
 
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -825,7 +871,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[0]
-                text: qsTr("Exclude")
+                text: Messages.filterExclude
                 parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {

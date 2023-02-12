@@ -2,6 +2,8 @@
 #define DATATYPE_H
 
 #include <QObject>
+#include <QDate>
+#include <QDateTime>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
@@ -17,21 +19,21 @@ public:
     //! for classification only
     QString dataType(QString parameter);
 
-    //! Numeric data type
-    //! for extract data type
-    QString duckNumericType(QString parameter);
 
     //! Get variable type classification from value
     //! for extract data type
-    QString variableType(QString inputVariable);
+    QStringList variableType(QString inputVariable);
 
     //! Get variable type classification from QSqlRecord field type (QVariant)
     //! for extract data type
     QString qVariantType(QString inputVariable);
 
-private:
+    // TO CHANGE - MAKE PRIVATE
     bool checkNumberType(QString inputVariable);
-    bool checkDateTimeType(QString inputVariable);
+    QVariantList checkDateTimeType(QString inputVariable);
+
+private:
+
 
 
 signals:

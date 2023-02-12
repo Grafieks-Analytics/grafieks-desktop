@@ -6,6 +6,7 @@ import "../../SubComponents"
 import "../../../MainSubComponents"
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Rectangle{
     id: joinPopupItem
@@ -75,22 +76,6 @@ Rectangle{
 
     }
 
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                availableJoins = 4
-
-                leftJoinCol.visible = true
-                rightJoinCol.visible = true
-                innerJoinCol.visible = true
-                fullJoinCol.visible = true
-            }
-        }
-
-
-    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -174,7 +159,7 @@ Rectangle{
                 leftJoinCol.visible = true
                 rightJoinCol.visible = true
                 innerJoinCol.visible = true
-                fullJoinCol.visible = true
+                fullJoinCol.visible = false
             }
         }
 
@@ -437,7 +422,7 @@ Rectangle{
 
         Text{
             id : title
-            text: "Relationship"
+            text: Messages.mo_mini_jpopup_relationship
             anchors.centerIn: parent
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -497,7 +482,7 @@ Rectangle{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Inner Join")
+                ToolTip.text: Messages.mo_mini_jpopup_innerJoin
             }
         }
 
@@ -531,7 +516,7 @@ Rectangle{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Left Join")
+                ToolTip.text: Messages.mo_mini_jpopup_leftJoin
             }
 
         }
@@ -563,7 +548,7 @@ Rectangle{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Right Join")
+                ToolTip.text: Messages.mo_mini_jpopup_rightJoin
             }
 
         }
@@ -595,7 +580,7 @@ Rectangle{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Full Outer Join")
+                ToolTip.text: Messages.mo_mini_jpopup_fullOuterJoin
             }
 
         }
@@ -629,7 +614,7 @@ Rectangle{
         CustomButton{
 
             id: addKey
-            textValue: "Add key"
+            textValue: Messages.mo_mini_jpopup_addKey
             onClicked: addKeyToList()
 
         }
@@ -752,7 +737,7 @@ Rectangle{
 
             anchors.right: parent.right
 
-            textValue: "Done"
+            textValue: Messages.applyBtnTxt
             onClicked: onDoneClicked()
 
         }

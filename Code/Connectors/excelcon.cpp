@@ -48,6 +48,8 @@ QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &fi
 
         } else{
 
+            Statics::excelDb = dbString;
+
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
         }
@@ -120,8 +122,6 @@ void ExcelCon::convertExcelToCsv()
     /* Close the workbook*/
     workbook->dynamicCall("Close()");
     excel->dynamicCall("Quit()");
-
-    qDebug() << outputList << "CONV PATHS";
 
     emit convertedExcelPaths(outputList);
 }

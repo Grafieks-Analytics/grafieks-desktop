@@ -10,25 +10,27 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 
 Popup {
     id: popup
     width: 600
-    height: 500
+    height: 250
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 130
     padding: 0
     property int label_col : 135
 
     property var selectedFile: ""
 
+    // LIVE CONNECTION not possible
 
     Connections{
         target: ConnectorsLoginModel
@@ -54,6 +56,14 @@ Popup {
         }
     }
 
+    Component.onCompleted: {
+        promptSqlitenameFilters = Messages.cn_sub_sqlite_namedFilter
+    }
+
+    function connectToSqlite(selectedFile){
+        ConnectorsLoginModel.sqliteLogin(selectedFile)
+    }
+
 
     // Popup Header starts
 
@@ -70,7 +80,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Sqlite"
+            text: Messages.cn_sub_sqlite_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -120,7 +130,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -130,7 +140,7 @@ Popup {
 
         Button{
             id : file_btn
-            text: "Select Sqlite file"
+            text: Messages.cn_sub_sqlite_selFile
             onClicked: promptSqlite.open();
         }
 
@@ -152,10 +162,12 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row3.bottom
-        anchors.topMargin: 15
+        // anchors.top: row3.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin:15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col - 100
         spacing: 10
 
         Button{
@@ -170,13 +182,13 @@ Popup {
                 height: 40
 
                 Text{
-                    text: Constants.openFileText
+                    text: Messages.openFileText
                     anchors.centerIn: parent
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.sqliteLogin(selectedFile)
+            onClicked: connectToSqlite(selectedFile)
 
         }
     }
@@ -185,19 +197,18 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Sqlite Connection"
+        title: Messages.cn_sub_sqlite_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     // Select SQLITE file
     FileDialog{
         id: promptSqlite
-        title: "Select a file"
-        nameFilters: ["Sqlite files (*.sqlite *.db)"];
+        title: Messages.cn_sub_sqlite_selFile
 
         onAccepted: {
-            sqliteFileName.text = ConnectorsLoginModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')
+            sqliteFileName.text = GeneralParamsModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')
             selectedFile = fileUrl
         }
         onRejected: {

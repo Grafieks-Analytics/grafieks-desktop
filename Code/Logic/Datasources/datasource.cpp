@@ -1,8 +1,8 @@
 #include "datasource.h"
 
-Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent) :
+Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString &databaseName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, const QString &lastRun, const bool &downloadAllowed, const bool &connectAllowed, const bool &publishAllowed, QObject *parent) :
 
-    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName)
+    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_databaseName(databaseName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName), m_lastRun(lastRun), m_downloadAllowed(downloadAllowed), m_connectAllowed(connectAllowed), m_publishAllowed(publishAllowed)
 {
 
 }
@@ -16,6 +16,11 @@ QString Datasource::connectionType() const
 QString Datasource::datasourceName() const
 {
     return m_datasourceName;
+}
+
+QString Datasource::databaseName() const
+{
+    return m_databaseName;
 }
 
 QString Datasource::descriptions() const
@@ -68,6 +73,26 @@ QString Datasource::lastName() const
     return m_lastName;
 }
 
+QString Datasource::lastRun() const
+{
+    return m_lastRun;
+}
+
+bool Datasource::downloadAllowed() const
+{
+    return m_downloadAllowed;
+}
+
+bool Datasource::connectAllowed() const
+{
+    return m_connectAllowed;
+}
+
+bool Datasource::publishAllowed() const
+{
+    return m_publishAllowed;
+}
+
 void Datasource::setConnectionType(QString connectionType)
 {
     if (m_connectionType == connectionType)
@@ -84,6 +109,15 @@ void Datasource::setDatasourceName(QString datasourceName)
 
     m_datasourceName = datasourceName;
     emit datasourceNameChanged(m_datasourceName);
+}
+
+void Datasource::setDatabaseName(QString databaseName)
+{
+    if (m_databaseName == databaseName)
+        return;
+
+    m_databaseName = databaseName;
+    emit databaseNameChanged(m_databaseName);
 }
 
 void Datasource::setDescriptions(QString descriptions)
@@ -174,5 +208,41 @@ void Datasource::setLastName(QString lastName)
 
     m_lastName = lastName;
     emit lastNameChanged(m_lastName);
+}
+
+void Datasource::setLastRun(QString lastRun)
+{
+    if (m_lastRun == lastRun)
+        return;
+
+    m_lastRun = lastRun;
+    emit lastRunChanged(m_lastRun);
+}
+
+void Datasource::setDownloadAllowed(bool downloadAllowed)
+{
+    if (m_downloadAllowed == downloadAllowed)
+        return;
+
+    m_downloadAllowed = downloadAllowed;
+    emit downloadAllowedChanged(m_downloadAllowed);
+}
+
+void Datasource::setConnectAllowed(bool connectAllowed)
+{
+    if (m_connectAllowed == connectAllowed)
+        return;
+
+    m_connectAllowed = connectAllowed;
+    emit connectAllowedChanged(m_connectAllowed);
+}
+
+void Datasource::setPublishAllowed(bool publishAllowed)
+{
+    if (m_publishAllowed == publishAllowed)
+        return;
+
+    m_publishAllowed = publishAllowed;
+    emit publishAllowedChanged(m_publishAllowed);
 }
 

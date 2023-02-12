@@ -1,13 +1,38 @@
 #include "reportsdatamodel.h"
 
-ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent)
+ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent),
+    m_networkAccessManager(new QNetworkAccessManager(this)),
+    m_networkReply(nullptr),
+    m_dataBuffer(new QByteArray)
 {
 
 }
 
 void ReportsDataModel::searchColumnNames(QString keyword)
 {
-    emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+    QVariantMap tmpCategorical, tmpNumerical, tmpDate;
+    QList<QString> categoricalKeys, numericalKeys, dateKeys;
+
+    categoricalKeys = this->categoricalMap.keys();
+    numericalKeys = this->numericalMap.keys();
+    dateKeys = this->dateMap.keys();
+
+    foreach(QString tmpCategoricalKey, categoricalKeys){
+        if(tmpCategoricalKey.contains(keyword))
+            tmpCategorical.insert(tmpCategoricalKey, this->categoricalMap.value(tmpCategoricalKey));
+    }
+
+    foreach(QString tmpNumericalKey, numericalKeys){
+        if(tmpNumericalKey.contains(keyword))
+            tmpNumerical.insert(tmpNumericalKey, this->numericalMap.value(tmpNumericalKey));
+    }
+
+    foreach(QString tmpDateKey, dateKeys){
+        if(tmpDateKey.contains(keyword))
+            tmpDate.insert(tmpDateKey, this->dateMap.value(tmpDateKey));
+    }
+
+    emit sendFilteredColumn(tmpCategorical, tmpNumerical, tmpDate);
 }
 
 QStringList ReportsDataModel::fetchColumnData(QString columnName, QString options)
@@ -18,10 +43,10 @@ QStringList ReportsDataModel::fetchColumnData(QString columnName, QString option
     duckdb::DuckDB db(extractPath.toStdString());
     duckdb::Connection con(db);
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
 
     QString joiner = "\"";
     QString query = "SELECT DISTINCT " + joiner + columnName + joiner + " FROM " + joiner + tableName + joiner;
@@ -42,6 +67,7 @@ QStringList ReportsDataModel::fetchColumnData(QString columnName, QString option
         qDebug() << Q_FUNC_INFO << data->error.c_str();
     }
 
+
     emit columnDataChanged(this->columnData, options);
 
     return this->columnData;
@@ -52,6 +78,147 @@ QStringList ReportsDataModel::searchColumnData(QString keyword)
     QStringList searchResults;
     searchResults = this->columnData.filter(keyword, Qt::CaseInsensitive);
     return searchResults;
+}
+
+QStringList ReportsDataModel::fetchColumnDataLive(QString columnName, QString options)
+{
+    QString dbString;
+
+    this->columnData.clear();
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::oracleIntType:
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:
+    case Constants::mongoIntType:{
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::mysqlIntType:
+            dbString = Constants::mysqlStrQueryType;
+            break;
+        case Constants::mysqlOdbcIntType:
+            dbString = Constants::mysqlOdbcStrQueryType;
+            break;
+        case Constants::sqliteIntType:
+            dbString = Constants::sqliteStrQueryType;
+            break;
+        case Constants::postgresIntType:
+            dbString = Constants::postgresOdbcStrQueryType;
+            break;
+        case Constants::oracleIntType:
+            dbString = Constants::oracleOdbcStrQueryType;
+            break;
+        case Constants::mssqlIntType:
+            dbString = Constants::mssqlOdbcStrQueryType;
+            break;
+        case Constants::accessIntType:
+            dbString = Constants::accessOdbcStrQueryType;
+            break;
+        case Constants::mongoIntType:
+            dbString = Constants::mongoOdbcStrQueryType;
+            break;
+
+        }
+
+        if(this->liveWhereParams.contains(R"('')")){
+            this->liveWhereParams.replace(R"('')", R"(')");
+        }
+
+        QString whereString = this->liveWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + whereString + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnData.append(query.value(0).toString());
+        }
+
+    }
+        break;
+
+    case Constants::teradataIntType:
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
+
+        QString dbString;
+
+        switch (Statics::currentDbIntType) {
+
+        case Constants::redshiftIntType:
+            dbString = Constants::redshiftOdbcStrQueryType;
+            break;
+        case Constants::snowflakeIntType:
+            dbString = Constants::snowflakeOdbcStrQueryType;
+            break;
+        case Constants::teradataIntType:
+            dbString = Constants::teradataOdbcStrQueryType;
+            break;
+        }
+
+        if(this->liveWhereParams.contains(R"('')")){
+            this->liveWhereParams.replace(R"('')", R"(')");
+        }
+
+        QString whereString = this->liveWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QString queryString = "SELECT DISTINCT " + columnName + " FROM " + this->liveMasterTable + " " + this->liveJoinParams + whereString + this->liveWhereParams;
+        QSqlQuery query(queryString, dbCon);
+
+        while(query.next()){
+            this->columnData.append(query.value(0).toString());
+        }
+
+    }
+        break;
+    }
+
+
+    emit columnDataChanged(this->columnData, options);
+    return this->columnData;
+}
+
+void ReportsDataModel::fetchColumnDataAPI(QString columnName, QString options)
+{
+    // Fetch value from settings
+    QSettings settings;
+    // GCS Bugfixes -- Fix Keyword
+    // charts url to be replaced with actual base url
+    QString chartsUrl = settings.value("general/chartsUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    QString sitename = settings.value("user/sitename").toString();
+
+    this->APIOptions = options;
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(chartsUrl+"/fetch_column_data");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    QJsonObject obj;
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
+    obj.insert("columnNames", columnName);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ReportsDataModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::columnDataReadFinished);
 }
 
 void ReportsDataModel::clearData()
@@ -74,49 +241,13 @@ void ReportsDataModel::deleteReportData(int reportId, bool deleteAll)
         this->reportChartData.clear();
         this->newChartHeader.clear();
 
-        this->numericalList.clear();
-        this->categoryList.clear();
-        this->dateList.clear();
+        this->numericalMap.clear();
+        this->categoricalMap.clear();
+        this->dateMap.clear();
     }
 }
 
-void ReportsDataModel::getChartData(QMap<int, QStringList *> chartData)
-{
-    this->newChartData = chartData;
-}
 
-void ReportsDataModel::getChartHeader(QMap<int, QStringList> chartHeader)
-{
-
-    // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
-    this->newChartHeader.clear();
-
-    // Update new data
-    foreach(auto key, chartHeader.keys()){
-
-        QString fullColumnName = chartHeader.value(key).at(0);
-
-        if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(fullColumnName);
-        } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(fullColumnName);
-        } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(fullColumnName);
-        } else{
-            qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
-        }
-
-        this->newChartHeader.insert(key, fullColumnName);
-    }
-
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
-}
 
 void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, int reportId)
 {
@@ -132,6 +263,10 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
     this->reportChartData.insert(this->reportId, copiedChartData);
 
     QList<int> keys = masterReportFilters.keys();
+
+    // Where conditions
+    QString joiner = Statics::extractPath.length() > 0 ? "\"" : "";
+    this->whereConditions = "";
 
     int i = 0;
     foreach(QVariantMap filters, masterReportFilters){
@@ -170,187 +305,80 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // For date and categorical only
         if(filterSlug == Constants::slugLikeRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "LIKE REL 1";
-
             QStringList tmpValues;
 
             if(section == Constants::dateType){
 
                 tmpValues = actualDateValues;
+
                 if(subCategory == Constants::dateSubYear){
-
-                    tmpList = columnData.filter(tmpValues.at(0));
-
-                    // Keys of the filtered values
-                    // To be later used to fetch parallel column data
-                    int i = 0;
-                    foreach(QString val, tmpList){
-                        indexes.append(columnData.indexOf(val, i));
-                        i++;
-                    }
-
+                    this->whereConditions.append( joiner).append( columnName).append( joiner).append(" LIKE '%").append(tmpValues.at(0)).append( "%' AND ");
                 } else if(subCategory == Constants::dateSubDay){
-
                     QDate dt1 = QDate::fromString(tmpValues.at(0), "yyyy-MM-dd");
-
-                    int i = 0;
-                    foreach(QString tmpVal, columnData){
-
-                        QDate dt = this->convertToDateFormatTimeFromString(tmpVal).toDate();
-                        if(dt == dt1){
-                            tmpList = columnData.filter(tmpVal);
-
-                            // insert keys
-                            indexes.append(i);
-                        }
-                        i++;
-                    }
+                    this->whereConditions.append("strftime(DATE, ").append(joiner).append(columnName).append(joiner).append(", %Y-%m-%d) = ").append(dt1.toString()).append( " AND ");
                 } else {
-                    tmpList = columnData;
-
-                    // for keys
-                    for(int i = 0; i < columnData.length(); i++){
-                        indexes.append(i);
-                    }
+                    this->whereConditions.append(" AND ");
                 }
 
             } else{
 
                 if(filterValueList.at(0) == "%"){
-
-                    tmpList = columnData;
-
-                    // for keys
-                    for(int i = 0; i < columnData.length(); i++){
-                        indexes.append(i);
-                    }
+                    this->whereConditions.append(" AND ");
                 }
             }
-
-            columnData = tmpList;
         }
 
         // 2. Not like relation
         // Categorical & Date only
         else if(filterSlug == Constants::slugNotLikeRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug<< "NOT LIKE REL 2";
-
-            if(filterValueList.at(0) == "%"){
-                columnData.clear();
-                indexes.clear();
-            }
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" NOT LIKE % AND ");
         }
 
         // 3. In array relation
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugInRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "IN REL 3" << includeExclude;
-            bool firstInteration = true;
+            QString values;
 
             if(section == Constants::dateType){
 
                 foreach(QString tmpVal, actualDateValues.at(0).split(",")){
 
-                    // If exclude is false
-                    // else
-                    if(includeExclude == false){
-                        if(tmpList.indexOf(tmpVal) < 0) {
-                            tmpList.append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
 
-                            // insert keys
-                            indexes.append(columnData.indexOf(tmpVal));
-                        }
-                    } else{
-                        if(firstInteration == true){
-                            tmpList = columnData;
-
-                            int i = 0;
-                            foreach(QString val, tmpList){
-                                indexes.append(columnData.indexOf(val, i));
-                                i++;
-                            }
-
-                            firstInteration = false;
-                        }
-
-                        indexes.remove(columnData.indexOf(tmpVal));
-                        columnData.removeAt(columnData.indexOf(tmpVal));
+                        // insert keys
+                        values += "'" + tmpVal + "',";
                     }
                 }
             } else{
                 foreach(QString tmpVal, filterValueList){
 
-                    // If exclude is false
-                    // else
-                    if(includeExclude == false){
-                        if(tmpList.indexOf(tmpVal) < 0) {
-                            tmpList.append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
 
-                            // insert keys
-                            indexes.append(columnData.indexOf(tmpVal));
-                        }
-                    }
-                    else{
-                        if(firstInteration == true){
-                            tmpList = columnData;
-
-                            int i = 0;
-                            foreach(QString val, tmpList){
-                                indexes.append(columnData.indexOf(val, i));
-                                i++;
-                            }
-
-                            firstInteration = false;
-                        }
-
-                        indexes.remove(columnData.indexOf(tmpVal));
-                        columnData.removeAt(columnData.indexOf(tmpVal));
-                        tmpList = columnData;
+                        // insert keys
+                        values += "'" + tmpVal.replace("'", "''") + "',";
                     }
                 }
             }
-            columnData = tmpList;
+            values.chop(1);
+            qDebug() << "IN VALUES" << values;
 
+            QString notRelationString = includeExclude == true ? " NOT " : "";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(notRelationString).append(" IN (").append(values).append(") AND ");
         }
 
         // 4. Equal to comparison
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "EQUAL REL 4";
-
-            QString tmp = filterValueList.at(0);
-
             if(section == Constants::dateType){
-                tmp = actualDateValues.at(0);
-
-                int i = 0;
-                foreach(QString tmpVal, columnData){
-                    if(tmpVal == tmp) {
-                        tmpList.append(tmp);
-
-                        // insert keys
-                        indexes.append(columnData.indexOf(tmp, i));
-                    }
-                    i++;
-                }
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" = '").append(actualDateValues.at(0)).append("' AND ");
             } else{
-                tmp = filterValueList.at(0);
-                int i = 0;
-                foreach(QString tmpVal, columnData){
-                    if(tmpVal == tmp) {
-                        tmpList.append(tmp);
-
-                        // insert keys
-                        indexes.append(columnData.indexOf(tmp, i));
-                    }
-                    i++;
-                }
+                QString param = filterValueList.at(0);
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" = '").append(param.replace("'", "''")).append("' AND ");
             }
-            columnData = tmpList;
-
 
         }
 
@@ -358,15 +386,9 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugNotEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "NOT EQUAL REL 5";
+            QString param = filterValueList.at(0);
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" != '" + param.replace("'", "''")).append("' AND ");
 
-            // for keys
-            for(int i = 0; i < columnData.length(); i++){
-                if(columnData.value(i) != filterValueList.at(0))
-                    indexes.append(i);
-            }
-
-            columnData.removeAll(filterValueList.at(0));
         }
 
         // 6. Between relation
@@ -374,8 +396,6 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugBetweenRelation){
 
             QStringList tmpValues;
-
-            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6";
 
             if(section == Constants::dateType){
 
@@ -393,130 +413,40 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
                     dt2 = QDateTime::fromString(tmpValues.at(1), "yyyy-MM-dd");
                 }
 
-                int i = 0;
-                foreach(QString tmpVal, columnData){
-
-                    QDateTime dt = this->convertToDateFormatTimeFromString(tmpVal).toDateTime();
-
-                    if(dt > dt1 && dt < dt2){
-                        tmpList.append(tmpVal);
-
-                        // insert keys
-                        indexes.append(i);
-                    }
-
-                    i++;
-                }
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" BETWEEN '").append(dt1.toString()).append("' AND '").append(dt1.toString()).append("' AND ");
 
             } else{
 
                 tmpValues = filterValueList.at(0).split(" And ");
-
-                int i = 0;
-                foreach(QString tmpVal, columnData){
-                    if(tmpVal.toDouble() > tmpValues.at(0).toDouble() && tmpVal.toDouble() < tmpValues.at(1).toDouble()){
-                        if(tmpList.indexOf(columnData.filter(tmpVal)[0]) < 0) {
-                            tmpList.append(tmpVal);
-
-                            // insert keys
-                            indexes.append(i);
-                        }
-                    }
-                    i++;
-                }
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" BETWEEN ").append(QString::number(tmpValues.at(0).toDouble())).append(" AND ").append(QString::number(tmpValues.at(1).toDouble())).append(" AND ");
             }
-
-            columnData = tmpList;
 
         }
 
         // 7. For smaller than relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN REL 7";
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-                if(tmpVal.toFloat() < filterValueList.at(0).toFloat()){
-                    if(tmpList.indexOf(columnData.filter(tmpVal)[0]) < 0) {
-                        tmpList.append(tmpVal);
-
-                        // insert keys
-                        indexes.append(i);
-                    }
-                }
-                i++;
-            }
-
-            columnData = tmpList;
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" < ").append(QString::fromStdString(filterValueList.at(0).toStdString()) + " AND ");
         }
 
         // 8. For greater than relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanRelation){
-
-            qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN REL 8";
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-                if(tmpVal.toFloat() > filterValueList.at(0).toFloat()){
-                    if(tmpList.indexOf(tmpVal) < 0) {
-                        tmpList.append(tmpVal);
-
-                        // insert keys
-                        indexes.append(i);
-                    }
-                }
-                i++;
-            }
-
-            columnData = tmpList;
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" > ").append(QString::fromStdString(filterValueList.at(0).toStdString().c_str()) + " AND ");
         }
 
         // 9. For smaller than and equal to relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN EQUAL REL 9";
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-                if(tmpVal.toFloat() <= filterValueList.at(0).toFloat()){
-                    if(tmpList.indexOf(tmpVal) < 0) {
-                        tmpList.append(tmpVal);
-
-                        //insert keys
-                        indexes.append(i);
-                    }
-                }
-
-                i++;
-            }
-
-            columnData = tmpList;
+            this->whereConditions.append(joiner).append( columnName).append(joiner).append(" <= ").append(QString::fromStdString(filterValueList.at(0).toStdString().c_str()) + " AND ");
         }
 
         // 10. For greater than and equal to relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanEqualRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN EQUAL REL 10";
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-                if(tmpVal.toFloat() >= filterValueList.at(0).toFloat()){
-                    if(tmpList.indexOf(tmpVal) < 0) {
-                        tmpList.append(tmpVal);
-
-                        // insert keys
-                        indexes.append(i);
-                    }
-                }
-                i++;
-            }
-
-            columnData = tmpList;
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" >= ").append(QString::fromStdString(filterValueList.at(0).toStdString().c_str()) + " AND ");
 
         }
 
@@ -524,131 +454,47 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Categorical
         else if(filterSlug == Constants::slugContainingRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "CONTAINING REL 11";
 
             QString tmpVal = filterValueList.at(0);
-            tmpVal.remove(0,1); // remove first "%"
-            tmpVal.chop(1); // remove last "%"
-
-            tmpList = columnData.filter(tmpVal, Qt::CaseInsensitive);
-
-            // Keys of the filtered values
-            // To be later used to fetch parallel column data
-            int i = 0;
-            foreach(QString val, tmpList){
-                indexes.append(columnData.indexOf(val, i));
-                i++;
-            }
-
-
-            columnData = tmpList;
-
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 12. For Ends With relation
         // Categorical
         else if(filterSlug == Constants::slugEndsWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "ENDS With REL 12";
-
-            QString tmp = filterValueList.at(0);
-            tmp.remove(0,1); // remove first "%"
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-
-                if(tmpVal.endsWith(tmp, Qt::CaseInsensitive)){
-                    tmpList.append(tmpVal);
-
-                    // insert keys
-                    indexes.append(i);
-                }
-                i++;
-            }
-            columnData = tmpList;
+            QString tmpVal = filterValueList.at(0);
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 13. For Doesnt Start With relation
         // Categorical
         else if(filterSlug == Constants::slugDoesntStartWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "Doenst start with REL 13";
-
-            QString tmp = filterValueList.at(0);
-            tmp.chop(1); // remove last "%"
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-
-                if(tmpVal.startsWith(tmp, Qt::CaseInsensitive) == false){
-                    tmpList.append(tmpVal);
-
-                    // insert keys
-                    indexes.append(i);
-                }
-                i++;
-            }
-            columnData = tmpList;
+            QString tmpVal = filterValueList.at(0);
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" NOT LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 14. For Doesnt End With relation
         // Categorical
         else if(filterSlug == Constants::slugDoesntEndWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "Doenst end with REL 14";
-
-            QString tmp = filterValueList.at(0);
-            tmp.remove(0,1); // remove first "%"
-
-            int i = 0;
-            foreach(QString tmpVal, columnData){
-
-                if(tmpVal.endsWith(tmp, Qt::CaseInsensitive) == false){
-                    tmpList.append(tmpVal);
-
-                    // insert keys
-                    indexes.append(i);
-                }
-                i++;
-            }
-            columnData = tmpList;
+            QString tmpVal = filterValueList.at(0);
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" NOT LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 15. Filter
         else{
 
-            qDebug() << "FILTER HERE" << filterSlug << "UNKNOWN REL";
-
             qDebug() << "Else Filter values obtained"
                         <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
                        << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
         }
-
-
-        QMap<int, QStringList> tmpColData;
-        QStringList tmp;
-
-        foreach(int internalKey, chartKeys){
-            if(internalKey == newKey){
-                tmpColData.insert(newKey, columnData);
-            } else{
-
-                // for each selected key values
-                foreach(int internalIndex, indexes){
-                    if(internalIndex >= 0){
-                        tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
-                        tmpColData.insert(internalKey, tmp);
-                    }
-                }
-                tmp.clear();
-            }
-        }
-
-        reportChartData.insert(reportId, tmpColData);
-        //        qDebug() << "TMP COL DATA" << tmpColData;
-
-        emit reportDataChanged(this->reportChartData, reportId);
     }
+
+    // Remove trailing ' AND '
+    this->whereConditions.chop(5);
+    emit reportWhereConditions(this->whereConditions, reportId);
 }
 
 void ReportsDataModel::currentScreenChanged(int currentScreen)
@@ -676,64 +522,170 @@ void ReportsDataModel::getReportId(int reportId)
     }
     this->reportChartData.insert(this->reportId, copiedChartData);
 
-    emit reportDataChanged(this->reportChartData, this->reportId);
+}
+
+void ReportsDataModel::generateColumnsForExtract()
+{
+    // Fetch data from duckdb
+    QString extractPath = Statics::extractPath;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    // GCS Bugfixes -- Fix Keyword
+    // if condition is fictitious and needs fixing
+    if(Statics::apiSwitch == true){
+        this->generateColumnsFromAPI();
+    } else {
+        this->generateColumns(&con);
+    }
 
 }
 
-void ReportsDataModel::generateColumns(duckdb::Connection *con)
+void ReportsDataModel::generateColumnsForLive(QMap<int, QStringList> sqlHeaders)
 {
 
-    QMap<int, QStringList> chartHeader;
-    QMap<QString, QString> colTypeMap;
-
-    // Fetch data from duckdb
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-
     // Clear existing chart headers data
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
+    this->numericalMap.clear();
+    this->categoricalMap.clear();
+    this->dateMap.clear();
     this->newChartHeader.clear();
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    int i = 0;
+    foreach(QStringList headers, sqlHeaders){
 
-    if(data->error.empty()){
-        int rows = data->collection.Count();
+        int dbIntType = Statics::currentDbIntType;
+        QString tableColumnName = qj.getQueryJoiner(dbIntType) + headers.at(2) + qj.getQueryJoiner(dbIntType) + "." + qj.getQueryJoiner(dbIntType) + headers.at(0) + qj.getQueryJoiner(dbIntType);
 
-        for(int i = 0; i < rows; i++){
-            QString fieldName =  data->GetValue(1, i).ToString().c_str();
-            fieldName = fieldName.trimmed();
-            QString fieldType = data->GetValue(2, i).ToString().c_str();
-            colTypeMap.insert(fieldName, fieldType);
-
-
-            if(dataType.dataType(fieldType).contains(Constants::categoricalType)){
-                this->categoryList.append(fieldName);
-            } else if(dataType.dataType(fieldType).contains(Constants::numericalType)){
-                this->numericalList.append(fieldName);
-            } else if(dataType.dataType(fieldType).contains(Constants::dateType)){
-                this->dateList.append(fieldName);
-            } else{
-                qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   fieldName;
-            }
-
-            this->newChartHeader.insert(i, fieldName);
+        if(headers.at(1).contains(Constants::categoricalType)){
+            this->categoricalMap.insert(headers.at(0), tableColumnName);
+        } else if(headers.at(1).contains(Constants::numericalType)){
+            this->numericalMap.insert(headers.at(0), tableColumnName);
+        } else if(headers.at(1).contains(Constants::dateType)){
+            this->dateMap.insert(headers.at(0), tableColumnName);
+        } else{
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" << headers.at(0);
         }
-    } else{
-        qWarning() << Q_FUNC_INFO << data->error.c_str();
+
+        this->newChartHeader.insert(i, headers.at(0));
+        i++;
     }
 
     // Update new data
+    emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
+}
 
-    this->categoryList.sort(Qt::CaseInsensitive);
-    this->numericalList.sort(Qt::CaseInsensitive);
-    this->dateList.sort(Qt::CaseInsensitive);
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+void ReportsDataModel::generateColumnsForReader(duckdb::Connection *con)
+{
+    // GCS Bugfixes -- Fix Keyword
+    // if condition is fictitious and needs fixing
+    if(Statics::apiSwitch == true){
+        this->generateColumnsFromAPI();
+    } else {
+        this->generateColumns(con);
+    }
+}
+
+void ReportsDataModel::receiveOriginalConditions(QString selectParams, QString whereParams, QString joinParams, QString masterTable)
+{
+    this->liveSelectParams = selectParams;
+    this->liveMasterTable = masterTable;
+    this->liveWhereParams = whereParams;
+    this->liveJoinParams = joinParams;
+}
+
+void ReportsDataModel::dataReadyRead()
+{
+    m_dataBuffer->append(m_networkReply->readAll());
+}
+
+void ReportsDataModel::columnReadFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+
+        // Clear existing chart headers data
+        this->numericalMap.clear();
+        this->categoricalMap.clear();
+        this->dateMap.clear();
+        this->newChartHeader.clear();
+
+        QJsonObject json = dataDoc.object();
+        int i = 0;
+        QJsonArray value = json.value("all").toArray();
+
+        foreach(QJsonValue data, value){
+            QJsonArray finalValue = data.toArray();
+
+            int dbIntType = Statics::currentDbIntType;QString tableColumnName;
+
+            if(Statics::dsType == Constants::extractType){
+                tableColumnName = finalValue.at(1).toString();
+            } else {
+                tableColumnName = finalValue.at(4).toString();
+            }
+
+            if(finalValue.at(3).toString() == "categorical"){
+                this->categoricalMap.insert(finalValue.at(1).toString(), tableColumnName);
+            } else if(finalValue.at(3).toString() == "numerical"){
+                this->numericalMap.insert(finalValue.at(1).toString(), tableColumnName);
+            } else if(finalValue.at(3).toString() == "dateformat"){
+                this->dateMap.insert(finalValue.at(1).toString(), tableColumnName);
+            }
+
+            this->newChartHeader.insert(i, finalValue.at(1).toString());
+            i++;
+        }
+
+        m_dataBuffer->clear();
+        emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
+    }
+}
+
+
+void ReportsDataModel::columnDataReadFinished()
+{
+    QString msg;
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        msg = resultObj["msg"].toString();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+        // Clear existing chart headers data
+        this->columnData.clear();
+
+        QJsonObject json = dataDoc.object();
+        QJsonArray value = json.value("colData").toArray();
+
+        foreach(QJsonValue data, value){
+            this->columnData.append(data.toString());
+        }
+
+    }
+
+    m_dataBuffer->clear();
+
+    if(msg == Constants::sessionExpiredText){
+        emit sessionExpired();
+    } else {
+        emit columnDataChanged(this->columnData, this->APIOptions);
+    }
 
 }
 
@@ -778,4 +730,91 @@ QVariant ReportsDataModel::convertToDateFormatTimeFromString(QString stringDateF
     }
 
     return out;
+}
+
+void ReportsDataModel::generateColumns(duckdb::Connection *con)
+{
+    QMap<int, QStringList> chartHeader;
+    QMap<QString, QString> colTypeMap;
+
+    // Fetch data from duckdb
+    QString tableName = Statics::currentDbName;
+
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
+
+    // Clear existing chart headers data
+    this->numericalMap.clear();
+    this->categoricalMap.clear();
+    this->dateMap.clear();
+    this->newChartHeader.clear();
+
+
+    auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+
+    if(data->error.empty()){
+        int rows = data->collection.Count();
+
+        for(int i = 0; i < rows; i++){
+            QString fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldName = fieldName.trimmed();
+            QString fieldType = data->GetValue(2, i).ToString().c_str();
+            colTypeMap.insert(fieldName, fieldType);
+
+
+            if(dataType.dataType(fieldType).contains(Constants::categoricalType)){
+                this->categoricalMap.insert(fieldName, fieldName);
+            } else if(dataType.dataType(fieldType).contains(Constants::numericalType)){
+                this->numericalMap.insert(fieldName, fieldName);
+            } else if(dataType.dataType(fieldType).contains(Constants::dateType)){
+                this->dateMap.insert(fieldName, fieldName);
+            } else{
+                qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   fieldName;
+            }
+
+            this->newChartHeader.insert(i, fieldName);
+        }
+    } else{
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+    }
+
+    // Update new data
+    emit sendFilteredColumn(this->categoricalMap, this->numericalMap, this->dateMap);
+}
+
+void ReportsDataModel::generateColumnsFromAPI()
+{
+    // Fetch value from settings
+    QSettings settings;
+    // GCS Bugfixes -- Fix Keyword
+    // charts url to be replaced with actual base url
+    QString chartsUrl = settings.value("general/chartsUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    QString sitename = settings.value("user/sitename").toString();
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(chartsUrl+"/fetch_table_columns");
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    QJsonObject obj;
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&ReportsDataModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&ReportsDataModel::columnReadFinished);
+
+    emit generateFiltersForAPI();
+
 }

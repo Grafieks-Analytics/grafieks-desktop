@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql networkauth webchannel network axcontainer
+QT += core quick httpserver webenginequick  quickcontrols2 sql networkauth webchannel network axcontainer core5compat widgets
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -19,6 +19,7 @@ SOURCES += \
     Code/Connectors/hivecon.cpp \
     Code/Connectors/impalacon.cpp \
     Code/Connectors/jsoncon.cpp \
+    Code/Connectors/jsonnewcon.cpp \
     Code/Connectors/mongocon.cpp \
     Code/Connectors/mssqlcon.cpp \
     Code/Connectors/mysqlcon.cpp \
@@ -29,7 +30,6 @@ SOURCES += \
     Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Connectors/teradatacon.cpp \
-    Code/Logic/Connectors/Workers/duckworker.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -43,37 +43,36 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
-    Code/Logic/Connectors/duckcon.cpp \
-    Code/Logic/Connectors/duckthread.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
-    Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
+    Code/Logic/Dashboards/projectslistmodel.cpp \
+    Code/Logic/Dashboards/publishworkbookmodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
-    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setchartdataduckworker.cpp \
-    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractexcelworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/saveextractqueryworker.cpp \
+    Code/Logic/DataModeller/Workers/saveliveforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/savelivequeryworker.cpp \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
-    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
     Code/Logic/DataModeller/csvjsondatamodel.cpp \
     Code/Logic/DataModeller/csvjsonquerymodel.cpp \
-    Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
-    Code/Logic/DataModeller/duckdatamodel.cpp \
-    Code/Logic/DataModeller/duckquerymodel.cpp \
     Code/Logic/DataModeller/exceldatamodel.cpp \
     Code/Logic/DataModeller/excelquerymodel.cpp \
+    Code/Logic/DataModeller/extractslivequerymodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
+    Code/Logic/DataModeller/filtercsvjson.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
     Code/Logic/DataModeller/filterdatelistmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
@@ -91,20 +90,29 @@ SOURCES += \
     Code/Logic/DataModeller/schedulermodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
-    Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
-    Code/Logic/General/Workers/chartsworker.cpp \
+    Code/Logic/General/calculatedfields.cpp \
+    Code/Logic/General/calculatedfieldsyntax.cpp \
+    Code/Logic/General/chartsapithread.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/newtablecolumnsmodel.cpp \
+    Code/Logic/General/queryjoiner.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
+    Code/Logic/General/updateapplicationmodel.cpp \
     Code/Logic/Menu/user.cpp \
-    Code/Logic/Reports/Workers/updatefilterdataworker.cpp \
+    Code/Logic/Readers/extractprocessor.cpp \
+    Code/Logic/Readers/liveprocessor.cpp \
+    Code/Logic/Readers/workbookprocessor.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
+    Code/OS/odbcdriversmodel.cpp \
+    Code/OS/osentries.cpp \
+    Code/paths.cpp \
+    Code/simplecrypt.cpp \
     main.cpp
 
 RESOURCES += \
@@ -134,6 +142,7 @@ HEADERS += \
     Code/Connectors/hivecon.h \
     Code/Connectors/impalacon.h \
     Code/Connectors/jsoncon.h \
+    Code/Connectors/jsonnewcon.h \
     Code/Connectors/mongocon.h \
     Code/Connectors/mssqlcon.h \
     Code/Connectors/mysqlcon.h \
@@ -144,7 +153,6 @@ HEADERS += \
     Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
     Code/Connectors/teradatacon.h \
-    Code/Logic/Connectors/Workers/duckworker.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
@@ -158,37 +166,36 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
-    Code/Logic/Connectors/duckcon.h \
-    Code/Logic/Connectors/duckthread.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \
-    Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
+    Code/Logic/Dashboards/projectslistmodel.h \
+    Code/Logic/Dashboards/publishworkbookmodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
-    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
-    Code/Logic/DataModeller/Workers/setchartdataduckworker.h \
-    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/saveextractcsvjsonworker.h \
+    Code/Logic/DataModeller/Workers/saveextractexcelworker.h \
+    Code/Logic/DataModeller/Workers/saveextractforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/saveextractqueryworker.h \
+    Code/Logic/DataModeller/Workers/saveliveforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/savelivequeryworker.h \
     Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
-    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
     Code/Logic/DataModeller/csvjsondatamodel.h \
     Code/Logic/DataModeller/csvjsonquerymodel.h \
-    Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
-    Code/Logic/DataModeller/duckdatamodel.h \
-    Code/Logic/DataModeller/duckquerymodel.h \
     Code/Logic/DataModeller/exceldatamodel.h \
     Code/Logic/DataModeller/excelquerymodel.h \
+    Code/Logic/DataModeller/extractslivequerymodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
+    Code/Logic/DataModeller/filtercsvjson.h \
     Code/Logic/DataModeller/filterdatelist.h \
     Code/Logic/DataModeller/filterdatelistmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
@@ -206,39 +213,125 @@ HEADERS += \
     Code/Logic/DataModeller/schedulermodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
-    Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/General/Workers/chartsworker.h \
+    Code/Logic/General/calculatedfields.h \
+    Code/Logic/General/calculatedfieldsyntax.h \
+    Code/Logic/General/chartsapithread.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/newtablecolumnsmodel.h \
+    Code/Logic/General/queryjoiner.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
+    Code/Logic/General/updateapplicationmodel.h \
     Code/Logic/Menu/user.h \
-    Code/Logic/Reports/Workers/updatefilterdataworker.h \
+    Code/Logic/Readers/extractprocessor.h \
+    Code/Logic/Readers/liveprocessor.h \
+    Code/Logic/Readers/workbookprocessor.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
+    Code/OS/odbcdriversmodel.h \
+    Code/OS/osentries.h \
     Code/duckdb.hpp \
-    Code/jsoncons/include/jsoncons/json.hpp \
-    Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \
+    Code/json.hpp \
     Code/messages.h \
     Code/constants.h \
-    Code/parquet-extension.hpp \
+    Code/paths.h \
     Code/secrets.h \
+    Code/secrets.h \
+    Code/secrets.h \
+    Code/secrets.h \
+    Code/secrets.h \
+    Code/secrets.sample.h \
+    Code/simplecrypt.h \
     Code/statics.h
 
 
 INCLUDEPATH += $$PWD/Libraries
 INCLUDEPATH += $$PWD/Libraries/jsoncons
 INCLUDEPATH += $$PWD/Libraries/jsoncons_ext
-INCLUDEPATH += $$PWD/Libraries/ParquetDuckDb
 
 DEPENDPATH += $$PWD/Libraries
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 win32: LIBS += $$PWD/Libraries/duckdb.lib
 
-macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
-macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a
+
+# Crashpad integration
+# Create a dSYM file for dump_syms
+CONFIG += force_debug_info
+CONFIG += separate_debug_info
+
+# Include directories for Crashpad libraries
+INCLUDEPATH += $$PWD/Libraries/Crashpad/Include/crashpad
+INCLUDEPATH += $$PWD/Libraries/Crashpad/Include/crashpad/third_party/mini_chromium/mini_chromium
+INCLUDEPATH += $$PWD/Libraries/Crashpad/Include/crashpad/out/Default/gen
+
+# Crashpad rules for MacOS
+macx {
+    # Choose either x86_64 or arm64
+    #ARCH = x86_64
+    ARCH = arm64
+
+    # Crashpad libraries
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lcommon
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lclient
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lbase
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lutil
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/MacOS/$$ARCH -lmig_output
+
+    # System libraries
+    LIBS += -L/usr/lib/ -lbsm
+    LIBS += -framework AppKit
+    LIBS += -framework Security
+
+    # Copy crashpad_handler to build directory and run dump_syms and symupload
+    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
+    QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/Bin/MacOS/$$ARCH/crashpad_handler $$OUT_PWD/crashpad"
+    QMAKE_POST_LINK += "&& bash $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.4 > $$PWD/Libraries/Crashpad/Tools/MacOS/symbols.out 2>&1"
+}
+
+# Crashpad rules for Windows
+win32 {
+    # Build variables
+    CONFIG(debug, debug|release) {
+        LIBDIR = $$PWD\Libraries\Crashpad\Libraries\Windows\MDd
+        EXEDIR = $$OUT_PWD\debug
+    }
+    CONFIG(release, debug|release) {
+        LIBDIR = $$PWD\Libraries\Crashpad\Libraries\Windows\MD
+        EXEDIR = $$OUT_PWD\release
+    }
+
+    # Crashpad libraries
+    LIBS += -L$$LIBDIR -lbase
+    LIBS += -L$$LIBDIR -lcommon
+    LIBS += -L$$LIBDIR -lclient
+    LIBS += -L$$LIBDIR -lutil
+
+    # System libraries
+    LIBS += -lAdvapi32
+
+    # Copy crashpad_handler to output directory and upload symbols
+    QMAKE_POST_LINK += "if not exist $$shell_path($$OUT_PWD)\crashpad mkdir $$shell_path($$OUT_PWD)\crashpad"
+    QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Libraries\Crashpad\Bin\Windows\crashpad_handler.exe $$shell_path($$OUT_PWD)\crashpad\crashpad_handler.exe"
+    QMAKE_POST_LINK += "&& $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.bat $$shell_path($$PWD) $$shell_path($$EXEDIR) support_grafieks_com grafieks.desktop 1.0.4 > $$shell_path($$PWD)\Libraries\Crashpad\Tools\Windows\symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& copy /y $$shell_path($$PWD)\Libraries\Crashpad\attachment.txt $$shell_path($$OUT_PWD)\attachment.txt"
+}
+
+# Crashpad rules for Linux
+linux {
+    # Crashpad libraries
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lcommon
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lclient
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lutil
+    LIBS += -L$$PWD/Libraries/Crashpad/Libraries/Linux/ -lbase
+
+    # Copy crashpad_handler to build directory and run dump_syms and symupload
+    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad && cp $$PWD/Libraries/Crashpad/Bin/Linux/crashpad_handler $$OUT_PWD/crashpad/crashpad_handler"
+    QMAKE_POST_LINK += "&& $$PWD/Libraries/Crashpad/Tools/Linux/symbols.sh $$PWD $$OUT_PWD support_grafieks_com grafieks.desktop 1.0.4 > $$PWD/Libraries/Crashpad/Tools/Linux/symbols.out 2>&1"
+    QMAKE_POST_LINK += "&& cp $$PWD/Libraries/Crashpad/attachment.txt $$OUT_PWD/attachment.txt"
+}
+

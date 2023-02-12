@@ -35,10 +35,11 @@ QVariantMap ImpalaCon::ImpalaOdbcInstance(const QString &driver, const QString &
             // If correct credentials inserted once
 
             Statics::impalaHost = host;
-            Statics::impalaDb = db;
+            Statics::impalaDb = dbString;
             Statics::impalaPort = port;
             Statics::impalaUsername = username;
             Statics::impalaPassword = password;
+            Statics::impalaRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -85,6 +86,7 @@ void ImpalaCon::closeConnection()
     Statics::impalaPort = 0;
     Statics::impalaUsername = "";
     Statics::impalaPassword = "";
+    Statics::impalaRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

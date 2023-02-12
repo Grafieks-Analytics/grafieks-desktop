@@ -3,13 +3,16 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../dataPanesDropHandlers.js" as DataPanesDropHandler
+
+
 Rectangle{
     id:rightDataDrag
     height: 24
     width: parent.width
     anchors.leftMargin: 5
 
-    //    z: 999
+    z: 200000
 
 
 
@@ -50,7 +53,6 @@ Rectangle{
 
         if(report_desiner_page.chartTitle==Constants.groupBarChartTitle || report_desiner_page.chartTitle==Constants.horizontalBarGroupedChartTitle){
             var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
-            console.log(xAxisValidNames);
             if(xAxisValidNames.includes(itemName)){
                 return true;
             }
@@ -83,10 +85,21 @@ Rectangle{
         return "";
     }
 
+    function openMenuCalc(colName, colType){
+        CalculatedFields.setCalculatedFieldName(colName)
+        CalculatedFields.setCalculatedFieldType(colType)
+
+
+        console.log("HERE AGAIN", colName)
+        console.log("HERE AGAIN2", colType)
+
+        popupcalc.open()
+    }
+
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
-
 
 
 
@@ -106,6 +119,8 @@ Rectangle{
     // Page Design Starts
 
 
+
+
     DataPaneMenu{
         id: dataPaneMenu
         y: parent.height
@@ -120,7 +135,7 @@ Rectangle{
     }
 
     Text {
-        text: modelData
+        text: key
         width: parent.width - categoricalImage.width - menuButton.width - 30
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: categoricalImage.right
@@ -137,12 +152,110 @@ Rectangle{
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        //        z:100
+               z:100
         MouseArea{
             anchors.fill: parent
-            onClicked: openMenu()
+            // onClicked: openMenu()
+            onClicked: menuOptionscalc.open()
         }
     }
+        Row{
+
+                anchors.right: tableImg.right
+                anchors.top: toggleMenuIcon.bottom
+                anchors.rightMargin: -70
+                width: parent.width-30
+                height: 80
+
+                Item {
+                    id: name
+
+                    anchors.right:parent.right
+
+                    x: -menuOptions.width
+
+                    Menu{
+                        id: menuOptionscalc
+                        background: Rectangle{
+                            implicitWidth: 200
+                            border.color: Constants.darkThemeColor
+                        }
+
+
+                        // Menu{
+                        //     id: menuOptionsdsd
+                        //     title: qsTr("Rename")
+
+                        //     background: Rectangle{
+                        //         implicitWidth: 180
+
+                        //         border.color: Constants.darkThemeColor
+                        //     }
+                        //      MouseArea{
+                        // anchors.fill: parent
+                        // // onClicked: openMenu()
+                        // onClicked:openMenuCalc()
+                        // }  
+
+                        // }
+                        Menu{
+                            id: menuOptionsdsdl
+                            title: qsTr("Create")
+                            
+                            background: Rectangle{
+                                implicitWidth: 180
+
+                                border.color: Constants.darkThemeColor
+                            }
+                              MenuItem {
+                                id:menuItemcreate1
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: "custom field"
+
+                                onClicked: openMenuCalc(key, itemType.toLowerCase())
+
+                            }
+                        // MouseArea{
+                        // anchors.fill: parent
+                        // // onClicked: openMenu()
+                        // onClicked:openMenuCalc()
+                        // }  
+                        }
+                        // Menu{
+                        //     id: menuOptionsdsdu
+                        //     title: qsTr("Convert To")
+
+                        //     background: Rectangle{
+                        //         implicitWidth: 180
+
+                        //         border.color: Constants.darkThemeColor
+                        //     }
+                        //     MenuItem {
+                        //         id:menuItem13
+                        //         implicitHeight: 30
+                        //         leftPadding: 15
+                        //         text: Messages.filterCategorical
+
+                        //         onClicked: changeDataType(colName, colType, tableName, Constants.categoricalTab)
+
+                        //     }
+                        //     MenuSeparator{}
+                        //     MenuItem {
+                        //         id:menuItem23
+                        //         implicitHeight: 30
+                        //         leftPadding: 15
+                        //         text: Messages.filterNumerical
+
+                        //         onClicked: changeDataType(colName, colType, tableName, Constants.numericalTab)
+                        //     }
+
+                        // }
+                    }
+                }
+
+
+            }
 
     MouseArea {
         id: mouseArea
@@ -150,23 +263,19 @@ Rectangle{
         drag.target: dataPaneListElement
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
-                console.log("dragdrag")
                 if(itemType == "Numerical"){
-                    console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= Constants.defaultNumericalColor
                     rightDataDrag.radius=15
 //                    rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Categorical"){
-                    console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= Constants.defaultCategoricalColor
                     rightDataDrag.radius=15
 //                    rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Date"){
-                    console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= "yellow"
                     rightDataDrag.radius=15
 //                    rightDataDrag.width=parent.width+5
@@ -175,15 +284,18 @@ Rectangle{
 
 
 
-                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType, dateFormat: Constants.yearFormat };
-                console.log(modelData);
+                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: key, tableValue: value , itemType: itemType, dateFormat: Constants.yearFormat };
 
-                ReportParamsModel.itemName = modelData;
+                ReportParamsModel.itemName = key;
                 ReportParamsModel.itemType = itemType;
-                ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));
-                ReportParamsModel.setYAxisActive(yAxisDropEligible(modelData));
+                
+                report_desiner_page.xaxisActive = DataPanesDropHandler.xAxisDropEligible(itemType);
+                report_desiner_page.yaxisActive = DataPanesDropHandler.yAxisDropEligible(itemType);
 
-                if(isDropEligible(itemType, modelData)){
+                report_desiner_page.row3Active = DataPanesDropHandler.row3AxisDropEligible(itemType);
+                report_desiner_page.row4Active = DataPanesDropHandler.row4AxisDropEligible(itemType);
+
+                if(isDropEligible(itemType, key)){
                     ReportParamsModel.setColorByActive(true);
                 }else{
                     ReportParamsModel.setColorByActive(false);
@@ -191,9 +303,14 @@ Rectangle{
             }else{
                 rightDataDrag.color= "white"
                 rightDataDrag.radius=0
-                ReportParamsModel.setXAxisActive(false);
-                ReportParamsModel.setYAxisActive(false);
+
+                report_desiner_page.xaxisActive = false;
+                report_desiner_page.yaxisActive = false;
+
                 ReportParamsModel.setColorByActive(false);
+                report_desiner_page.row3Active = false;
+                report_desiner_page.row4Active = false;
+                
             }
 
             dataPaneListElement.Drag.drop();

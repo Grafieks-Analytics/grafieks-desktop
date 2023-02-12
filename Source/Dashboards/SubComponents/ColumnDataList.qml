@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.qmlmodels 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -37,12 +38,21 @@ Rectangle {
 
                 switch(visibleColumnsTypeMap[key]){
                 case Constants.categoricalTab:
-                case Constants.dateTab:
                     columnType = Constants.filterCategoricalTypes[0]
                     break;
 
                 case Constants.numericalTab:
                     columnType = Constants.filterNumericalTypes[0]
+                    break;
+
+                case Constants.dateTab:
+                    let currentMode = GeneralParamsModel.isWorkbookInEditMode()
+                    if(!currentMode){
+                        columnType = Constants.filterDateTypes[0]
+                    } else {
+                        columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, key)
+                    }
+
                     break;
                 }
 
@@ -55,7 +65,7 @@ Rectangle {
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             listModel.clear()
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
             showColumns.forEach((item) => {
@@ -64,16 +74,19 @@ Rectangle {
                                 })
         }
 
-        function onColumnFilterTypeChanged(){
-            listModel.clear()
+        function onColumnFilterTypeChanged(filterType){
+            const excludeList = [Constants.filterDateTypes[5], Constants.filterDateTypes[6], Constants.filterDateTypes[7]]
 
             var dashboardId = DashboardParamsModel.currentDashboard
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
 
-            showColumns.forEach((item) => {
-                                    var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
-                                    listModel.append({type: columnType, name: item})
-                                })
+            if((!excludeList.includes(filterType))) {
+                listModel.clear()
+                showColumns.forEach((item) => {
+                                        var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
+                                        listModel.append({type: columnType, name: item})
+                                    })
+            }
         }
     }
 
@@ -86,14 +99,12 @@ Rectangle {
         interactive: true
         spacing: 10
 
-
         ScrollBar.vertical: ScrollBar {}
-
 
 
         // filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
         // filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
-
+        // property var filterDateTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti","dataDateRange", "dataDateBefore", "dataDateAfter", "dataDateRelative"]
         DelegateChooser {
             id: chooser
             role: "type"
@@ -109,6 +120,14 @@ Rectangle {
             DelegateChoice { roleValue: Constants.filterNumericalTypes[5]; FilterDataEqualOrSmaller { componentName: name } }
             DelegateChoice { roleValue: Constants.filterNumericalTypes[6]; FilterDataEqualorGreater { componentName: name } }
             DelegateChoice { roleValue: Constants.filterNumericalTypes[7]; FilterDataBetween { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[0]; FilterDataListMultiple { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[1]; FilterDataListSingle { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[2]; FilterDataSingleDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[3]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[4]; FilterDataDateRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[5]; FilterDataDateRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[6]; FilterDataDateRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterDateTypes[7]; FilterDataDateRange { componentName: name } }
         }
 
         delegate: chooser

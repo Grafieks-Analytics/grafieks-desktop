@@ -14,6 +14,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 Popup {
     id: popupLoginServer
@@ -26,6 +27,24 @@ Popup {
     padding: 0
 
     property int label_col : 150
+
+    Connections{
+        target: User
+
+        function onSitelookupStatus(status){
+
+            if(status.code === 200){
+                popupLoginServer.visible = false
+                connectGrafieks2.visible = true
+
+                errorMsg.text = ""
+                server_address.text = ""
+
+            } else {
+                errorMsg.text = status.msg +  Messages.msc_lsr_hostNotFound
+            }
+        }
+    }
 
     // Header starts
 
@@ -42,7 +61,7 @@ Popup {
 
         Text{
             id: text2
-            text: "Signin to Grafieks server"
+            text: Messages.msc_lsr_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
@@ -85,7 +104,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Server URL"
+                text: Messages.msc_lsr_serverUrl
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -97,7 +116,7 @@ Popup {
             id: server_address
             placeholderText: "http://"
             selectByMouse: true
-            maximumLength: 45
+            maximumLength: 250
             font.pixelSize: Constants.fontCategoryHeader
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -143,19 +162,13 @@ Popup {
 
                 }
                 Text{
-                    text: "Connect"
+                    text: Messages.msc_lsr_connectBtn
                     anchors.centerIn: parent
                     color: btn_con.hovered ? "white" : "black"
                     font.pixelSize: Constants.fontCategoryHeader
                 }
             }
-            onClicked: {
-
-//                User.setHost(server_address.text)
-                User.setHost(server_address.text)
-                popupLoginServer.visible = false
-                connectGrafieks2.visible = true
-            }
+            onClicked: User.siteLookup(server_address.text)
         }
 
         Button{
@@ -178,7 +191,7 @@ Popup {
                 }
 
                 Text{
-                    text: "Cancel"
+                    text: Messages.cancelBtnTxt
                     anchors.centerIn: parent
                     color: btn_cancel.hovered ? "white" : "black"
                     font.pixelSize: Constants.fontCategoryHeader
@@ -191,5 +204,19 @@ Popup {
         }
     }
     // Row 2: Action Button ends
+
+
+    // Row 3: Error Msg
+    Row{
+        anchors.top: row2.bottom
+        anchors.leftMargin: 10
+
+        Text{
+            id: errorMsg
+            color: Constants.redColor
+            font.pointSize:  Constants.fontReading
+
+        }
+    }
 
 }

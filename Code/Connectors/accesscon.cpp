@@ -32,9 +32,10 @@ QVariantMap AccessCon::AccessOdbcInstance(const QString &driver, const QString &
             // For automatic connection for other instances
             // If correct credentials inserted once
 
-            Statics::acDb = QUrl(db).toLocalFile();
+            Statics::acDb = dbString;
             Statics::acUsername = username;
             Statics::acPassword = password;
+            Statics::acRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -78,6 +79,7 @@ void AccessCon::closeConnection()
     Statics::acDb = "";
     Statics::acUsername = "";
     Statics::acPassword = "";
+    Statics::acRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

@@ -43,11 +43,16 @@ QHash<int, QByteArray> QueryDataModel::roleNames() const
 
 void QueryDataModel::columnData(QString col, QString tableName, QString options)
 {
-    QStringList output;
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName);
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
+    if(Statics::currentDbIntType == Constants::accessIntType){
+        this->modelOutput = this->getData("SELECT DISTINCT [" + col + "] FROM [" + tableName + "]");
+    } else {
+        this->modelOutput = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
+    }
+
 
     this->m_roleNames.insert(0, col.toUtf8());
     emit columnListModelDataChanged(options, false);
@@ -56,12 +61,22 @@ void QueryDataModel::columnData(QString col, QString tableName, QString options)
 void QueryDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
-    QStringList output;
+    emit fetchingColumnListModel();
     QString joiner = this->getQueryJoiner();
 
 //    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName + " WHERE '" + col + "' LIKE '%"+searchString+"%'");
-    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
+    if(Statics::currentDbIntType == Constants::accessIntType){
+        this->modelOutput = this->getData("SELECT DISTINCT ["  + col  + "] FROM [" + tableName + "] WHERE [" + col + "] LIKE '%"+searchString+"%'");
+    } else {
+        this->modelOutput = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
+    }
+
     emit columnListModelDataChanged(options, true);
+}
+
+QStringList QueryDataModel::getDateColumnData()
+{
+    return this->modelOutput;
 }
 
 QString QueryDataModel::getQueryJoiner()
@@ -78,7 +93,7 @@ QString QueryDataModel::getQueryJoiner()
         break;
 
     case Constants::postgresIntType:
-        joiner = "`";
+        joiner = "\"";
         break;
 
     case Constants::oracleIntType:
@@ -102,7 +117,6 @@ QString QueryDataModel::getQueryJoiner()
 
 QStringList QueryDataModel::getData(QString queryString)
 {
-
     QStringList output;
     QString conType;
 

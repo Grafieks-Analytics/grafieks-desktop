@@ -1,9 +1,7 @@
 #include "chartsthread.h"
 
-ChartsThread::ChartsThread(QObject *parent) : QObject(parent), dashboardId(0), reportId(0), dashboardFilterApplied(false)
+ChartsThread::ChartsThread(QObject *parent) : QObject(parent)
 {
-    chartSources.append("dashboard");
-    chartSources.append("report");
 
     this->xAxisColumn = "";
     this->yAxisColumn = "";
@@ -20,8 +18,37 @@ ChartsThread::~ChartsThread()
 {
 }
 
-void ChartsThread::methodSelector(QString functionName)
+void ChartsThread::clearCache()
 {
+    this->dashboardReportDataCached.clear();
+    this->liveDashboardFilterParamsCached.clear();
+    this->dashboardWhereConditionsCached.clear();
+    this->cachedDashboardConditions.clear();
+}
+
+void ChartsThread::methodSelector(QString functionName, QString reportWhereConditions, QString dashboardWhereConditions, int chartSource, int reportId, int dashboardId, QString datasourceType)
+{
+
+    this->reportWhereConditions = reportWhereConditions;
+    this->dashboardWhereConditions = dashboardWhereConditions;
+    this->currentChartSource = chartSource;
+    this->currentDashboardId = dashboardId;
+    this->currentReportId = reportId;
+    this->datasourceType = datasourceType;
+
+    if (!this->cachedDashboardConditions.contains(reportId)){
+        this->cachedDashboardConditions.insert(reportId, true);
+    }
+
+    if(this->dashboardWhereConditionsCached.value(this->currentDashboardId) != this->dashboardWhereConditions){
+        this->dashboardWhereConditionsCached.insert(this->currentDashboardId, this->dashboardWhereConditions);
+
+        foreach(int key, this->cachedDashboardConditions.keys()){
+            this->cachedDashboardConditions[key] = true;
+        }
+    }
+
+
     if(functionName == "getBarChartValues"){
         this->getBarChartValues();
     } else if(functionName == "getStackedBarChartValues"){
@@ -44,6 +71,8 @@ void ChartsThread::methodSelector(QString functionName)
         this->getRadarChartValues();
     } else if(functionName == "getScatterChartValues"){
         this->getScatterChartValues();
+    } else if(functionName == "getScatterChartNumericalValues"){
+        this->getScatterChartNumericalValues();
     } else if(functionName == "getHeatMapChartValues"){
         this->getHeatMapChartValues();
     } else if(functionName == "getSunburstChartValues"){
@@ -71,6 +100,13 @@ void ChartsThread::methodSelector(QString functionName)
     } else {}
 }
 
+void ChartsThread::queryParams(QString masterTable, QString masterWhereParams, QString masterJoinParams)
+{
+    this->masterTable = masterTable;
+    this->masterWhereParams = masterWhereParams;
+    this->masterJoinParams = masterJoinParams;
+}
+
 
 void ChartsThread::setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey)
 {
@@ -84,13 +120,15 @@ void ChartsThread::setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &
     this->xSplitKey = xSplitKey;
 }
 
-void ChartsThread::setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList)
+void ChartsThread::setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList, QVariantList &row3ColumnList)
 {
     this->xAxisColumnList.clear();
     this->yAxisColumnList.clear();
+    this->row3ColumnList.clear();
 
     this->xAxisColumnList = xAxisColumnList;
     this->yAxisColumnList = yAxisColumnList;
+    this->row3ColumnList = row3ColumnList;
 }
 
 void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn)
@@ -104,9 +142,17 @@ void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationC
     this->measureColumn = measureColumn;
 }
 
-void ChartsThread::setGaugeKpiDetails(QString &calculateColumn)
+void ChartsThread::setGaugeKpiDetails(QString &calculateColumn, QString greenValue, QString yellowValue, QString redValue)
 {
     this->calculateColumn = calculateColumn;
+    this->greenValue = greenValue;
+    this->yellowValue = yellowValue;
+    this->redValue = redValue;
+}
+
+void ChartsThread::setTablePivotDateConversionOptions(QString dateConversionOptions)
+{
+    this->dateConversionOptions = QJsonDocument::fromJson(dateConversionOptions.toUtf8()).array();
 }
 
 void ChartsThread::start()
@@ -118,48 +164,89 @@ void ChartsThread::getBarChartValues()
 {
 
     QJsonArray data;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
-
-    qDebug() << queryString;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
 
     int index;
-    int totalRows = dataList->collection.Count();
+    int totalRows = 0;
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+
+                counter++;
 
                 xAxisData.append(xAxisDataPointer->at(i));
                 yAxisData.append(yAxisDataPointer->at(i).toFloat());
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 yAxisData[index] = yAxisData[index].toFloat() + yAxisDataPointer->at(i).toFloat();
 
             }
@@ -172,10 +259,26 @@ void ChartsThread::getBarChartValues()
     colData.append(QJsonArray::fromStringList(xAxisData));
     colData.append(QJsonArray::fromVariantList(yAxisData));
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
 
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(colData);
     data.append(columns);
@@ -183,8 +286,16 @@ void ChartsThread::getBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
-    emit signalBarChartValues(strData);
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+    emit signalBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getStackedBarChartValues()
@@ -200,6 +311,9 @@ void ChartsThread::getGroupedBarChartValues()
     QVariantList tmpData;
     QVariantList tmpStringList;
 
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
     // Order of QMap - xAxisCol, SplitKey, Value
     QStringList masterKeywordXList;
     QStringList masterKeywordSplitList;
@@ -213,37 +327,77 @@ void ChartsThread::getGroupedBarChartValues()
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
-
     QStringList xAxisData;
     QVariantList yAxisData;
     int splitIndex;
     QJsonArray colData;
     int xIndex;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::extractType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
     }
 
 
@@ -295,9 +449,17 @@ void ChartsThread::getGroupedBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalGroupedBarChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getNewGroupedBarChartValues()
@@ -308,55 +470,101 @@ void ChartsThread::getNewGroupedBarChartValues()
     QList<QString> uniqueSplitKeyData;
     QStringList reportChartDataVar;
 
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitKeyDataPointer(new QStringList);
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     QJsonObject obj;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::extractType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitKeyDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
 
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalNewGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
 
-        reportChartDataVar.append(dataList->GetValue(2, i).ToString().c_str());
-        reportChartDataVar.removeDuplicates();
-        uniqueSplitKeyData = reportChartDataVar;
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitKeyDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            reportChartDataVar.append(dataListExtract->GetValue(2, i).ToString().c_str());
+            reportChartDataVar.removeDuplicates();
+            uniqueSplitKeyData = reportChartDataVar;
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalNewGroupedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitKeyDataPointer->append(dataListLive.value(2).toString());
+
+            reportChartDataVar.append(dataListLive.value(2).toString());
+            reportChartDataVar.removeDuplicates();
+            uniqueSplitKeyData = reportChartDataVar;
+        }
     }
+
 
     try{
         qint64 nanoSec;
         myTimer2.start();
 
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj = QJsonObject();
 
             QString uniqueHash = xAxisDataPointer->at(i);
             if(!uniqueHashKeywords->contains(uniqueHash)){
-                uniqueHashKeywords->append(uniqueHash);
+                uniqueHashKeywords->insert(uniqueHash, counter);
+                counter++;
 
                 obj.insert("mainCategory", xAxisDataPointer->at(i));
 
@@ -365,7 +573,7 @@ void ChartsThread::getNewGroupedBarChartValues()
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(uniqueHash);
+                index = uniqueHashKeywords->value(uniqueHash);
                 obj = axisDataArray[index].toObject();
                 obj[splitKeyDataPointer->at(i)] = obj.value(splitKeyDataPointer->at(i)).toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -391,19 +599,27 @@ void ChartsThread::getNewGroupedBarChartValues()
     //    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
 
     QJsonArray categories;
-    xAxisDataPointer->removeDuplicates();
-    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
+    categories.append(xAxisColumn);
+    categories.append(xSplitKey);
+    categories.append(yAxisColumn);
 
     data.append(columns);
-    //    data.append(categories);
+    data.append(categories);
 
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
-    qDebug() << doc;
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalNewGroupedBarChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalNewGroupedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getAreaChartValues()
@@ -420,47 +636,89 @@ void ChartsThread::getLineBarChartValues()
 {
 
     QJsonArray data;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yBarAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yLineAxisDataPointer(new QStringList);
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QVariantList tmpData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yBarAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        yLineAxisDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+    if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalLineBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+ tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yBarAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            yLineAxisDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalLineBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yBarAxisDataPointer->append(dataListLive.value(1).toString());
+            yLineAxisDataPointer->append(dataListLive.value(2).toString());
+        }
     }
 
     // Add data
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
             tmpData.clear();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 tmpData.append(xAxisDataPointer->at(i));
                 tmpData.append(yLineAxisDataPointer->at(i).toFloat());
@@ -469,7 +727,7 @@ void ChartsThread::getLineBarChartValues()
                 colData.append(QJsonArray::fromVariantList(tmpData));
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 tmpData.append(colData.at(index).toArray().toVariantList());
 
                 tmpData[1] = tmpData[1].toFloat() + yLineAxisDataPointer->at(i).toFloat();
@@ -483,10 +741,33 @@ void ChartsThread::getLineBarChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-    columns.append(xSplitKey);
+    columns.append(xParam);
+    columns.append(yParam);
+    columns.append(splitParam);
 
     data.append(colData);
     data.append(columns);
@@ -494,9 +775,17 @@ void ChartsThread::getLineBarChartValues()
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalLineBarChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalLineBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getPieChartValues()
@@ -507,40 +796,83 @@ void ChartsThread::getPieChartValues()
 
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QVariantList tmpData;
     QJsonArray colData;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+    if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalPieChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else{
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalPieChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
     }
 
+
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 obj.insert(xAxisDataPointer->at(i), yAxisDataPointer->at(i).toFloat());
             } else{
@@ -552,18 +884,44 @@ void ChartsThread::getPieChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(obj);
     data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalPieChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalPieChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getFunnelChartValues()
@@ -571,23 +929,13 @@ void ChartsThread::getFunnelChartValues()
 
     QJsonArray data;
     QJsonArray axisDataArray;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
+    //    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -595,22 +943,75 @@ void ChartsThread::getFunnelChartValues()
     QJsonArray colData;
     QJsonObject obj;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+    if(this->datasourceType == Constants::extractType){
 
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalFunnelChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalFunnelChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj.empty();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 obj.insert("key", xAxisDataPointer->at(i));
                 obj.insert("value", yAxisDataPointer->at(i).toDouble());
@@ -618,7 +1019,7 @@ void ChartsThread::getFunnelChartValues()
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 obj = axisDataArray[index].toObject();
                 obj["value"] = obj.value("value").toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -631,44 +1032,55 @@ void ChartsThread::getFunnelChartValues()
 
     data.append(axisDataArray);
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalFunnelChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalFunnelChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getRadarChartValues()
 {
-
-
     QJsonArray data;
     QJsonArray axisDataArray;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -676,22 +1088,74 @@ void ChartsThread::getRadarChartValues()
     QJsonArray colData;
     QJsonObject obj;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::extractType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
 
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalRadarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalRadarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
     }
 
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj.empty();
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
 
                 obj.insert("axis", xAxisDataPointer->at(i));
                 obj.insert("value", yAxisDataPointer->at(i).toDouble());
@@ -699,7 +1163,7 @@ void ChartsThread::getRadarChartValues()
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
                 obj = axisDataArray[index].toObject();
                 obj["value"] = obj.value("value").toDouble() + yAxisDataPointer->at(i).toDouble();
 
@@ -712,18 +1176,43 @@ void ChartsThread::getRadarChartValues()
 
     data.append(axisDataArray);
 
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
 
     data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalRadarChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalRadarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getScatterChartValues()
@@ -731,52 +1220,93 @@ void ChartsThread::getScatterChartValues()
 
     QJsonArray data;
     QVariantList tmpData;
+    float xAxisTmpData;
     float yAxisTmpData;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    qDebug() << xAxisColumn << yAxisColumn << xSplitKey << "Scatter";
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::extractType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalScatterChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalScatterChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
     }
-
-
-
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
     splitDataPointerPre.removeDuplicates();
@@ -784,28 +1314,32 @@ void ChartsThread::getScatterChartValues()
 
     // Populate the actual data
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
-            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+            masterKeyword = splitDataPointer->at(i);
             tmpData.clear();
+            xAxisTmpData = 0.0;
             yAxisTmpData = 0.0;
 
             if(!uniqueHashKeywords->contains(masterKeyword)){
-                uniqueHashKeywords->append(masterKeyword);
+                uniqueHashKeywords->insert(masterKeyword, counter);
+                counter++;
 
+                tmpData.append(xAxisDataPointer->at(i).toFloat());
                 tmpData.append(yAxisDataPointer->at(i).toFloat());
                 tmpData.append(splitDataPointer->at(i));
-                tmpData.append(xAxisDataPointer->at(i));
 
                 colData.append(QJsonArray::fromVariantList(tmpData));
             } else{
 
-                index = uniqueHashKeywords->indexOf(masterKeyword);
-                yAxisTmpData =  colData.at(index).toArray().at(0).toDouble() + yAxisDataPointer->at(i).toDouble();
+                index = uniqueHashKeywords->value(masterKeyword);
+                xAxisTmpData =  colData.at(index).toArray().at(0).toDouble() + xAxisDataPointer->at(i).toDouble();
+                yAxisTmpData =  colData.at(index).toArray().at(1).toDouble() + yAxisDataPointer->at(i).toDouble();
 
+                tmpData.append(xAxisTmpData);
                 tmpData.append(yAxisTmpData);
                 tmpData.append(splitDataPointer->at(i));
-                tmpData.append(xAxisDataPointer->at(i));
 
                 colData.replace(index, QJsonArray::fromVariantList(tmpData));
             }
@@ -814,29 +1348,170 @@ void ChartsThread::getScatterChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
+
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
     QJsonArray columns;
-    columns.append(yAxisColumn);
-    columns.append(xSplitKey);
-    columns.append(xAxisColumn);
+    columns.append(xParam);
+    columns.append(yParam);
+    columns.append(splitParam);
+
 
 
     data.append(colData);
     data.append(columns);
-    data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+    data.append(QJsonArray::fromStringList(splitDataPointerPre));
 
 
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalScatterChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalScatterChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+}
+
+void ChartsThread::getScatterChartNumericalValues()
+{
+    QJsonArray data;
+    QJsonArray colData;
+    QVariantList tmpData;
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
+    QString xAxisValue;
+    QString yAxisValue;
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalScatterChartNumericalValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT SUM(\"" + xAxisColumn + "\"), SUM(\"" + yAxisColumn + "\") FROM "+tableName;
+        dataListExtract = this->queryExtractFunction(queryString);
+
+        xAxisValue = dataListExtract->GetValue(0, 0).ToString().c_str();
+        yAxisValue = dataListExtract->GetValue(1, 0).ToString().c_str();
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalScatterChartNumericalValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT SUM(" + xAxisColumn + "), SUM(" + yAxisColumn + ") FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+        dataListLive = this->queryLiveFunction(queryString);
+
+        xAxisValue = dataListLive.value(0).toString();
+        yAxisValue = dataListLive.value(1).toString();
+
+    }
+
+    tmpData.append(0);
+    tmpData.append(0);
+    colData.append(QJsonArray::fromVariantList(tmpData));
+
+    tmpData.clear();
+    tmpData.append(xAxisValue);
+    tmpData.append(yAxisValue);
+
+    colData.append(QJsonArray::fromVariantList(tmpData));
+
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QStringList colNames;
+    colNames.append(xParam);
+    colNames.append(yParam);
+
+    data.append(colData);
+    data.append(QJsonArray::fromStringList(colNames));
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalScatterChartNumericalValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getHeatMapChartValues()
 {
-
-    qDebug() << "HEATMAP" << xAxisColumn << yAxisColumn << xSplitKey;
 
     QJsonArray data;
     QVariantList tmpData;
@@ -847,40 +1522,85 @@ void ChartsThread::getHeatMapChartValues()
     QScopedPointer<QStringList> splitDataPointer(new QStringList);
 
     // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
+    QHash<QString, int> masterKeywordList;
     QString masterKeyword;
     QStringList xAxisDataPointerPre;
     QStringList splitDataPointerPre;
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::extractType){
 
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
 
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalHeatMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalHeatMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
     }
 
     // Fetch unique xAxisData & splitter
@@ -890,6 +1610,7 @@ void ChartsThread::getHeatMapChartValues()
 
     // Populate the actual data
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
@@ -897,7 +1618,8 @@ void ChartsThread::getHeatMapChartValues()
             yAxisTmpData = 0.0;
 
             if(!masterKeywordList.contains(masterKeyword)){
-                masterKeywordList.append(masterKeyword);
+                masterKeywordList.insert(masterKeyword, counter);
+                counter++;
 
                 try{
                     tmpData.append(xAxisDataPointer->at(i));
@@ -911,7 +1633,7 @@ void ChartsThread::getHeatMapChartValues()
 
             } else{
 
-                index = masterKeywordList.indexOf(masterKeyword);
+                index = masterKeywordList.value(masterKeyword);
                 yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
                 tmpData.append(xAxisDataPointer->at(i));
@@ -930,15 +1652,55 @@ void ChartsThread::getHeatMapChartValues()
     columns.append(QJsonArray::fromStringList(xAxisDataPointerPre));
     columns.append(QJsonArray::fromStringList(splitDataPointerPre));
 
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QStringList inputKeys;
+    inputKeys.append(xParam);
+    inputKeys.append(yParam);
+    inputKeys.append(splitParam);
+
+    QJsonArray input = QJsonArray::fromStringList(inputKeys);
+
+
     data.append(colData);
     data.append(columns);
+    data.append(input);
 
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    emit signalHeatMapChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalHeatMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSunburstChartValues()
@@ -957,28 +1719,66 @@ void ChartsThread::getGaugeChartValues()
 
     QStringList calculateColumnPointer;
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + calculateColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
-
     QStringList xAxisData;
     QVariantList yAxisData;
 
-    float output = 0.0;
-    int totalRows = dataList->collection.Count();
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
-    for(int i = 0; i < totalRows; i++){
-        calculateColumnPointer.append(dataList->GetValue(0, i).ToString().c_str());
+    float output = 0.0;
+    int totalRows;
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalGaugeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            calculateColumnPointer.append(dataListExtract->GetValue(0, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalGaugeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            calculateColumnPointer.append(dataListLive.value(0).toString());
+        }
     }
 
     try{
@@ -990,7 +1790,41 @@ void ChartsThread::getGaugeChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalGaugeChartValues(output);
+    QString calculateParam;
+
+    if(this->datasourceType == Constants::extractType){
+        calculateParam = calculateColumn;
+
+    } else {
+        QStringList calculatePieces = calculateColumn.split( "." );
+        calculateParam = calculatePieces.at(1);
+        calculateParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QJsonArray finalResult;
+    finalResult.append(this->greenValue.toFloat());
+    finalResult.append(this->yellowValue.toFloat());
+    finalResult.append(this->redValue.toFloat());
+    finalResult.append(output);
+
+    QJsonArray cols;
+    cols.append(finalResult);
+    cols.append(calculateParam);
+
+
+    QJsonDocument doc;
+    doc.setArray(cols);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+    emit signalGaugeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getSankeyChartValues()
@@ -1008,33 +1842,70 @@ void ChartsThread::getSankeyChartValues()
     QScopedPointer<QStringList> measureDataPointer(new QStringList);
     QString keyword;
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    qDebug() << "Sankey" << sourceColumn << destinationColumn << measureColumn << "3 values expected";
-    QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
     QJsonArray colData;
     int index;
+    int totalRows;
 
-    int totalRows = dataList->collection.Count();
+    if(this->datasourceType == Constants::extractType){
 
-    for(int i = 0; i < totalRows; i++){
-        sourceDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        destinationDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        measureDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
 
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalSankeyChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + sourceColumn + "\", \"" + destinationColumn + "\", \"" + measureColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            sourceDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            destinationDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            measureDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalSankeyChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + sourceColumn + ", " + destinationColumn + ", " + measureColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            sourceDataPointer->append(dataListLive.value(0).toString());
+            destinationDataPointer->append(dataListLive.value(1).toString());
+            measureDataPointer->append(dataListLive.value(2).toString());
+        }
     }
 
     QStringList combinedList;
@@ -1094,9 +1965,17 @@ void ChartsThread::getSankeyChartValues()
 
 
     QJsonDocument doc(output);
-    QString strJson(doc.toJson(QJsonDocument::Compact));
+    QString strData(doc.toJson(QJsonDocument::Compact));
 
-    emit signalSankeyChartValues(strJson);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalSankeyChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 
 }
 
@@ -1115,29 +1994,68 @@ void ChartsThread::getKPIChartValues()
 
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + calculateColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
 
     QStringList xAxisData;
     QVariantList yAxisData;
 
     float output = 0.0;
-    int totalRows = dataList->collection.Count();
+    int totalRows;
 
-    for(int i = 0; i < totalRows; i++){
-        calculateColumnPointer->append(dataList->GetValue(0, i).ToString().c_str());
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalKPIChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            calculateColumnPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalKPIChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + calculateColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            calculateColumnPointer->append(dataListLive.value(0).toString());
+        }
     }
+
 
     try{
         for(int i = 0; i < calculateColumnPointer->length(); i++){
@@ -1148,580 +2066,61 @@ void ChartsThread::getKPIChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    emit signalKPIChartValues(output);
+    QString calculateParam;
+
+    if(this->datasourceType == Constants::extractType){
+        calculateParam = calculateColumn;
+
+    } else {
+        QStringList calculatePieces = calculateColumn.split( "." );
+        calculateParam = calculatePieces.at(1);
+        calculateParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QVariantList cols;
+    cols.append(output);
+    cols.append(calculateParam);
+
+    QJsonArray data;
+    data.append(QJsonArray::fromVariantList(cols));
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalKPIChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
 void ChartsThread::getTableChartValues()
 {
-    this->getTablePivotValues(xAxisColumnList, yAxisColumnList, "getTableChartValues");
-}
-
-void ChartsThread::getPivotChartValues()
-{
-    this->getTablePivotValues(xAxisColumnList, yAxisColumnList, "getPivotChartValues");
-}
-
-void ChartsThread::getStackedAreaChartValues()
-{
-    this->getStackedBarAreaValues(xAxisColumn, yAxisColumn, xSplitKey, "getStackedAreaChartValues");
-}
-
-void ChartsThread::getMultiLineChartValues()
-{
-
-
-    QJsonArray data;
-    QVariantList tmpData;
-    float yAxisTmpData;
-
-    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> splitDataPointer(new QStringList);
-
-    // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
-    QString masterKeyword;
-    QStringList xAxisDataPointerPre;
-    QStringList splitDataPointerPre;
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
-
-    QStringList xAxisData;
-    QVariantList yAxisData;
-    QJsonArray colData;
-    int index;
-
-    int totalRows = dataList->collection.Count();
-
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
-
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
-    }
-
-
-    // Fetch unique xAxisData & splitter
-    xAxisDataPointerPre.removeDuplicates();
-    splitDataPointerPre.removeDuplicates();
-
-    // Pre - Populate the json array
-    try{
-        for(int i = 0; i < xAxisDataPointerPre.length(); i++){
-
-            for(int j = 0; j < splitDataPointerPre.length(); j++){
-
-                masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
-
-                masterKeywordList.append(masterKeyword);
-
-                tmpData.clear();
-                tmpData.append(xAxisDataPointerPre.at(i));
-                tmpData.append(splitDataPointerPre.at(j));
-                tmpData.append(0);
-
-                colData.append(QJsonArray::fromVariantList(tmpData));
-            }
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-
-    // Populate the actual data
-    try{
-        for(int i = 0; i < xAxisDataPointer->length(); i++){
-
-            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
-            tmpData.clear();
-            yAxisTmpData = 0.0;
-
-            index = masterKeywordList.indexOf(masterKeyword);
-            yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
-
-            tmpData.append(xAxisDataPointer->at(i));
-            tmpData.append(splitDataPointer->at(i));
-            tmpData.append(yAxisTmpData);
-
-            colData.replace(index, QJsonArray::fromVariantList(tmpData));
-
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(xSplitKey);
-    columns.append(yAxisColumn);
-
-
-    data.append(colData);
-    data.append(QJsonArray::fromStringList(splitDataPointerPre));
-    data.append(columns);
-
-    QJsonDocument doc;
-    doc.setArray(data);
-
-    QString strData = doc.toJson();
-
-    emit signalMultiLineChartValues(strData);
-}
-
-void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QString identifier)
-{
-
-    QJsonArray data;
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
-    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
-
-    QStringList xAxisData;
-    QVariantList yAxisData;
-    QJsonArray colData;
-    QJsonObject obj;
-    QVariantList tmpData;
-    int index;
-
-    int totalRows = dataList->collection.Count();
-
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-    }
-
-
-    try{
-        for(int i = 0; i < xAxisDataPointer->length(); i++){
-            tmpData.clear();
-
-            if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
-
-                tmpData.append(xAxisDataPointer->at(i));
-                tmpData.append(yAxisDataPointer->at(i).toFloat());
-
-                colData.append(QJsonArray::fromVariantList(tmpData));
-            } else{
-
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
-                tmpData.append(colData.at(index).toArray().toVariantList());
-
-                tmpData[1] = tmpData[1].toFloat() + yAxisDataPointer->at(i).toFloat();
-                colData.replace(index, QJsonArray::fromVariantList(tmpData));
-
-            }
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-
-    data.append(colData);
-    data.append(columns);
-
-    QJsonDocument doc;
-    doc.setArray(data);
-
-    QString strData = doc.toJson();
-
-    if(identifier == "getAreaChartValues"){
-        emit signalAreaChartValues(strData);
-    } else if(identifier == "getLineChartValues"){
-        emit signalLineChartValues(strData);
-    } else if(identifier == "getWaterfallChartValues"){
-        emit signalWaterfallChartValues(strData);
-    } else {
-        emit signalLineAreaWaterfallValues(strData);
-    }
-
-
-}
-
-void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn, QString identifier)
-{
-
-
-    int pointerSize;
-
-    QJsonArray data;
-    QJsonArray axisArray;
-    json output(json_array_arg);
-    json emptyJsonArray(json_array_arg);
-    QMap<QString, int> positions;
-    QMap<int, QString> pastHashKeyword;
-    long measure = 0;
-    int total = 0;
-
-    json *jsonPointer = new json;
-    json *jsonPointerMeasure = new json;
-    QScopedPointer<QMap<QString, long>> totalCount(new QMap<QString, long>);
-
-    // masterHash will be used to compare if any map has been generated earlier
-    // if there is an exact match with the hash, then it exists. Else create a new hash
-    QScopedPointer<QStringList> masterHash(new QStringList);
-
-
-    QString paramName = "";
-    QString hashKeyword = "";
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString xQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumn){
-        xQueryString += xCols.toString() + ", ";
-    }
-
-    xQueryString.chop(2);
-    xQueryString += " FROM " + tableName;
-
-    QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + tableName;;
-
-
-    auto xDataList = con.Query(xQueryString.toStdString());
-    auto yDataList = con.Query(yQueryString.toStdString());
-
-    QStringList xAxisData;
-    QVariantList yAxisData;
-
-    int totalRows = xDataList->collection.Count();
-    int totalXCols = xDataList->ColumnCount();
-
-
-
-    // Considering the measure as string here to avoid unwanted errors in wrong casting
-    // The front in javascript can easily handle this
-
-    try{
-        for(int i = 0; i < totalRows; i++){
-
-            measure = yDataList->GetValue<float>(0, i);
-
-            json tmpOutput;
-            pastHashKeyword.clear();
-
-            for(int j = 0; j < totalXCols; j++){
-
-                paramName = xDataList->GetValue(j, i).ToString().c_str();
-
-                // Generate unique hash to strings to be stored in master hash
-                if( j == 0){
-                    hashKeyword.clear();
-                    hashKeyword = paramName;
-                } else{
-                    hashKeyword.append(paramName);
-                }
-
-
-                // If the hash doesnt exist, add to hash
-                if(!masterHash->contains(hashKeyword, Qt::CaseSensitive)){
-                    masterHash->append(hashKeyword);
-                    totalCount->insert(hashKeyword, measure);
-
-                    tmpOutput["name"] = paramName.toStdString();
-                    tmpOutput["size"] = measure;
-                    tmpOutput["children"] = emptyJsonArray;
-
-                    // Check if first element of json is already there
-                    // If not, then add it according to the graph data
-                    if(j == 0){
-                        output.push_back(tmpOutput);
-                        positions.insert(hashKeyword, output.size() - 1);
-                        pastHashKeyword[0] = hashKeyword;
-                        total += measure;
-
-                    } else{
-
-                        jsonPointer = &output;
-                        for(int k =0; k < j; k++){
-
-                            if(j - k == 1){
-                                try{
-
-                                    jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
-                                    pastHashKeyword.insert(j, hashKeyword);
-
-                                    pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
-                                    positions.insert(hashKeyword, pointerSize);
-                                }catch (std::exception &e) {
-                                    qDebug() << "C2" << e.what();
-                                }
-
-                            } else{
-                                try{
-                                    jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
-
-                                }catch (std::exception &e) {
-                                    qDebug() << "C3" << e.what();
-                                }
-                            }
-                        }
-                    }
-
-                } else{
-
-                    long newValue = totalCount->value(hashKeyword) + measure;
-                    totalCount->insert(hashKeyword, newValue);
-                    pastHashKeyword.insert(j, hashKeyword);
-
-                    if(j == 0){
-                        total += measure;
-                    }
-
-                    jsonPointerMeasure = &output;
-                    for(int k = 0; k <= j; k++){
-
-
-                        if(k == j){
-                            jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
-
-                        } else{
-                            jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
-                        }
-                    }
-                }
-            }
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    QString s = output.to_string().c_str();
-    QJsonDocument d = QJsonDocument::fromJson(s.toUtf8());
-
-    QJsonObject obj;
-    obj.insert("name", yAxisColumn);
-    obj.insert("size", total);
-    obj.insert("children", d.array());
-
-
-    QJsonDocument doc(obj);
-
-    if(identifier == "getSunburstChartValues"){
-        emit signalSunburstChartValues(s);
-    } else if(identifier == "getTreeChartValues"){
-        emit signalTreeChartValues(s);
-    } else if(identifier == "getTreeMapChartValues"){
-        emit signalTreeMapChartValues(s);
-    } else {
-        emit signalTreeSunburstValues(s);
-    }
-}
-
-void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
-{
-
-
-
-    QJsonArray data;
-    QVariantList tmpData;
-    float yAxisTmpData;
-
-    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
-    QScopedPointer<QStringList> splitDataPointer(new QStringList);
-
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+tableName;
-    auto dataList = con.Query(queryString.toStdString());
-
-    // Order of QMap - xAxisCol, SplitKey, Value
-    QStringList masterKeywordList;
-    QString masterKeyword;
-    QStringList xAxisDataPointerPre;
-    QStringList splitDataPointerPre;
-
-    // Fetch data here
-
-    int totalRows = dataList->collection.Count();
-
-    for(int i = 0; i < totalRows; i++){
-        xAxisDataPointer->append(dataList->GetValue(0, i).ToString().c_str());
-        yAxisDataPointer->append(dataList->GetValue(1, i).ToString().c_str());
-        splitDataPointer->append(dataList->GetValue(2, i).ToString().c_str());
-
-        // To pre-populate json array
-        xAxisDataPointerPre.append(dataList->GetValue(0, i).ToString().c_str());
-        splitDataPointerPre.append(dataList->GetValue(2, i).ToString().c_str());
-    }
-
-    // Fetch unique xAxisData & splitter
-    xAxisDataPointerPre.removeDuplicates();
-    splitDataPointerPre.removeDuplicates();
-
-    int index;
-    QJsonArray colData;
-
-    // Pre - Populate the json array
-    try{
-        for(int i = 0; i < xAxisDataPointerPre.length(); i++){
-
-            for(int j = 0; j < splitDataPointerPre.length(); j++){
-
-                masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
-
-                masterKeywordList.append(masterKeyword);
-
-                tmpData.clear();
-                tmpData.append(xAxisDataPointerPre.at(i));
-                tmpData.append(splitDataPointerPre.at(j));
-                tmpData.append(0);
-
-                colData.append(QJsonArray::fromVariantList(tmpData));
-            }
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-
-    // Populate the actual data
-    try{
-        for(int i = 0; i < xAxisDataPointer->length(); i++){
-
-            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
-            tmpData.clear();
-            yAxisTmpData = 0.0;
-
-            index = masterKeywordList.indexOf(masterKeyword);
-            yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
-
-            tmpData.append(xAxisDataPointer->at(i));
-            tmpData.append(splitDataPointer->at(i));
-            tmpData.append(yAxisTmpData);
-
-            colData.replace(index, QJsonArray::fromVariantList(tmpData));
-
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
-    }
-
-    QJsonArray columns;
-    columns.append(xSplitKey);
-    columns.append(yAxisColumn);
-
-
-    data.append(colData);
-    data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
-    data.append(QJsonArray::fromStringList(splitDataPointerPre));
-    data.append(columns);
-
-    QJsonDocument doc;
-    doc.setArray(data);
-
-    QString strData = doc.toJson();
-    qDebug() << doc;
-
-    if(identifier == "getStackedBarChartValues"){
-        emit signalStackedBarChartValues(strData);
-    } else if(identifier == "getStackedAreaChartValues") {
-        emit signalStackedAreaChartValues(strData);
-    } else{
-        emit signalStackedBarAreaValues(strData);
-    }
-
-}
-
-void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn, QString identifier)
-{
-
     QJsonArray data;
     QString masterKeyword;
     QVariantList masterTotal;
     QVariantList masterOutput;
+    QMap<QString, QMap<QString, QString>> dateConversionParams;
 
-    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
+    QSqlQuery xDataListLive;
+    QSqlQuery yDataListLive;
+
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
     QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
     QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
-
-    // Fetch data here
-
-    // Fetch data here
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
-
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    }
-
-    QString xQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumn){
-        xQueryString += xCols.toString() + ", ";
-    }
-
-    xQueryString.chop(2);
-    xQueryString += " FROM " + tableName;
-
-    QString yQueryString =  "SELECT ";
-    foreach(QVariant xCols, xAxisColumn){
-        yQueryString += xCols.toString() + ", ";
-    }
-
-    yQueryString.chop(2);
-    yQueryString += " FROM " + tableName;
-
-    auto xDataList = con.Query(xQueryString.toStdString());
-    auto yDataList = con.Query(yQueryString.toStdString());
-
 
     QStringList xAxisData;
     QStringList yAxisData;
 
-    QVariantList tmpData;
+    QVariantMap tmpData;
     QJsonArray colData;
     int index;
 
@@ -1730,45 +2129,262 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QVector<int> yKey;
     int xAxisLength;
     int yAxisLength;
+    int totalRows;
 
-    int totalRows = xDataList->collection.Count();
+    // Process date conversions, if any
+    foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
 
-    xAxisLength = xAxisColumn.length();
-    yAxisLength = yAxisColumn.length();
+        QMap<QString, QString> itemDetails;
+        QJsonObject dateConversionObj = dateConversionValue.toObject();
 
-    try{
-        for(int i = 0; i < xAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++)
-                data.append(xDataList->GetValue(i, j).ToString().c_str());
+        itemDetails.insert("separator", dateConversionObj.value("separator").toString());
+        itemDetails.insert("formats", dateConversionObj.value("dateFormat").toString());
 
-            xAxisDataPointer->insert(i, data);
-
-            // Append to output columns -- all x axis names
-            columns.append(xAxisColumn.at(i).toString());
-        }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
+        QString columnName = dateConversionObj.value("itemName").toString();
+        dateConversionParams.insert(columnName, itemDetails);
     }
 
-    try{
-        for(int i = 0; i < yAxisLength; i++){
-            QStringList data;
-            for(int j = 0; j < totalRows; j++)
-                data.append(yDataList->GetValue(i, j).ToString().c_str());
 
-            yAxisDataPointer->insert(i, data);
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalTableChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumnList){
+            xQueryString += "\"" + xCols.toString() + "\", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + tableName;
+
+        QString yQueryString =  "SELECT ";
+        foreach(QVariant yCols, yAxisColumnList){
+            yQueryString += "\"" + yCols.toString() + "\", ";
+        }
+
+        yQueryString.chop(2);
+        yQueryString += " FROM " + tableName;
+
+        xDataListExtract = this->queryExtractFunction(xQueryString);
+        yDataListExtract = this->queryExtractFunction(yQueryString);
+
+        totalRows = xDataListExtract->collection.Count();
+
+        xAxisLength = xAxisColumnList.length();
+        yAxisLength = yAxisColumnList.length();
+
+        // Fetch data from db
+        try{
+            for(int i = 0; i < xAxisLength; i++){
+                QStringList data;
+                for(int j = 0; j < totalRows; j++){
+
+                    QString columnName = xAxisColumnList.at(i).toString();
+                    QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                    if(dateConversionParams.contains(columnName)){
+
+                        QString convertedDate;
+                        QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                        foreach(QString format, list){
+                            QVariantList dateType = dataType.checkDateTimeType(xDataListExtract->GetValue(i, j).ToString().c_str());
+                            QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), dateType.at(1).toString());
+
+                            if(format.toLower() == "day"){
+                                convertedDate += QString::number(dateTime.date().day()) + separator;
+                            } else if(format.toLower() == "month"){
+                                convertedDate += dateTime.date().toString("MMM")  + separator;
+                            } else {
+                                convertedDate += QString::number(dateTime.date().year())  + separator;
+                            }
+                        }
+
+                        convertedDate.chop(separator.length());
+                        data.append(convertedDate);
+
+                    } else {
+                        data.append(xDataListExtract->GetValue(i, j).ToString().c_str());
+                    }
+                }
+
+                xAxisDataPointer->insert(i, data);
+
+                QString xParam;
+
+                if(this->datasourceType == Constants::extractType){
+                    xParam = xAxisColumnList.at(i).toString();
+                } else {
+                    QStringList xPieces = xAxisColumnList.at(i).toString().split( "." );
+                    xParam = xPieces.at(1);
+                    xParam.remove(QRegularExpression("[\"\'`]+"));
+                }
+                // Append to output columns -- all x axis names
+                columns.append(xParam);
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+        try{
+            for(int i = 0; i < yAxisLength; i++){
+                QStringList data;
+                for(int j = 0; j < totalRows; j++)
+                    data.append(yDataListExtract->GetValue(i, j).ToString().c_str());
+
+                yAxisDataPointer->insert(i, data);
+
+                QString yParam;
+
+                if(this->datasourceType == Constants::extractType){
+                    yParam = yAxisColumnList.at(i).toString();
+                } else {
+                    QStringList xPieces = yAxisColumnList.at(i).toString().split( "." );
+                    yParam = xPieces.at(1);
+                    yParam.remove(QRegularExpression("[\"\'`]+"));
+                }
+                // Append to output columns -- all y axis names
+                columns.append(yParam);
+
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalTableChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumnList){
+            xQueryString += xCols.toString() + ", ";
+        }
+
+        xQueryString.chop(2);
+
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        QString yQueryString =  "SELECT ";
+        foreach(QVariant yCols, yAxisColumnList){
+            yQueryString += yCols.toString() + ", ";
+        }
+
+        yQueryString.chop(2);
+
+        yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        xDataListLive = this->queryLiveFunction(xQueryString);
+        xAxisLength = xAxisColumnList.length();
+
+        // Fetch data from db
+        try{
+
+
+            while(xDataListLive.next()){
+                QStringList data;
+                for(int i = 0; i < xAxisLength; i++){
+
+                    QString columnName = xAxisColumnList.at(i).toString();
+                    QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                    if(dateConversionParams.contains(columnName)){
+
+                        QString convertedDate;
+                        QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+
+                        foreach(QString format, list){
+                            QVariantList dateType = dataType.checkDateTimeType(xDataListLive.value(i).toString());
+                            QDateTime dateTime = QDateTime::fromString(xDataListLive.value(i).toString(), dateType.at(1).toString());
+
+                            if(format.toLower() == "day"){
+                                convertedDate += QString::number(dateTime.date().day()) + separator;
+                            } else if(format.toLower() == "month"){
+                                convertedDate += dateTime.date().toString("MMM")  + separator;
+                            } else {
+                                convertedDate += QString::number(dateTime.date().year())  + separator;
+                            }
+                        }
+
+                        convertedDate.chop(separator.length());
+                        data = xAxisDataPointer->value(i);
+                        data.append(convertedDate);
+
+                    } else {
+                        data = xAxisDataPointer->value(i);
+                        data.append(xDataListLive.value(i).toString());
+                    }
+
+                    xAxisDataPointer->insert(i, data);
+                }
+
+            }
+
+            // Append to output columns -- all x axis names
+            for(int i = 0; i < xAxisLength; i++){
+                columns.append(xAxisColumnList.at(i).toString());
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+        yDataListLive = this->queryLiveFunction(yQueryString);
+        yAxisLength = yAxisColumnList.length();
+
+        try{
+
+            QStringList data;
+            while(yDataListLive.next()){
+                for(int i = 0; i < yAxisLength; i++){
+                    data = yAxisDataPointer->value(i);
+                    data.append(yDataListLive.value(i).toString());
+                    yAxisDataPointer->insert(i, data);
+                }
+            }
 
             // Append to output columns -- all y axis names
-            columns.append(yAxisColumn.at(i).toString());
+            for(int i = 0; i < yAxisLength; i++){
+                columns.append(yAxisColumnList.at(i).toString());
+            }
+
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-    } catch(std::exception &e){
-        qWarning() << Q_FUNC_INFO << e.what();
+
     }
 
 
     // Actual values
     try{
+        int counter = 0;
         for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
 
             tmpData.clear();
@@ -1778,16 +2394,16 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
                 masterKeyword.append(xAxisDataPointer->value(j).at(i));
             }
 
-
             if(!uniqueHashKeywords->contains(masterKeyword)){
-                uniqueHashKeywords->append(masterKeyword);
+                uniqueHashKeywords->insert(masterKeyword, counter);
+                counter++;
 
                 for(int j = 0; j < xAxisLength; j++){
-                    tmpData.append(xAxisDataPointer->value(j).at(i));
+                    tmpData.insert(xAxisColumnList.at(j).toString(), xAxisDataPointer->value(j).at(i));
                 }
 
                 for(int j = 0; j < yAxisLength; j++){
-                    tmpData.append(yAxisDataPointer->value(j).at(i).toFloat());
+                    tmpData.insert(yAxisColumnList.at(j).toString(), yAxisDataPointer->value(j).at(i).toFloat());
                     if(masterTotal.length() < yAxisLength){
                         masterTotal.append(yAxisDataPointer->value(j).at(i).toFloat());
                     } else{
@@ -1795,18 +2411,19 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
                     }
                 }
 
-                colData.append(QJsonArray::fromVariantList(tmpData));
+                colData.append(QJsonObject::fromVariantMap(tmpData));
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(masterKeyword);
-                tmpData.append(colData.at(index).toArray().toVariantList());
+                index = uniqueHashKeywords->value(masterKeyword);
+                tmpData = colData.at(index).toObject().toVariantMap();
 
                 for(int j = 0; j < yAxisLength; j++){
-                    tmpData[xAxisLength + j] = tmpData[xAxisLength + j].toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    float tmpVal = tmpData.value(yAxisColumnList.at(j).toString()).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    tmpData.insert(yAxisColumnList.at(j).toString(), tmpVal);
                     masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
                 }
-                colData.replace(index, QJsonArray::fromVariantList(tmpData));
+                colData.replace(index, QJsonObject::fromVariantMap(tmpData));
             }
 
         }
@@ -1832,59 +2449,1739 @@ void ChartsThread::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &
     QJsonDocument doc;
     doc.setArray(data);
 
-    QString strData = doc.toJson();
+    QString strData = doc.toJson(QJsonDocument::Compact);
 
-    if(identifier == "getTableChartValues"){
-        emit signalTableChartValues(strData);
-    } else if(identifier == "getPivotChartValues"){
-        emit signalPivotChartValues(strData);
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalTableChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+
+}
+
+void ChartsThread::getPivotChartValues()
+{
+    QJsonArray data;
+    QString masterKeyword;
+    QVariantList masterTotal;
+    QVariantList masterOutput;
+    QHash<QString, QHash<QString, QString>> dateConversionParams;
+
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
+    QScopedPointer<QMap<int, QStringList>> xAxisDataPointer(new  QMap<int, QStringList>);
+    QScopedPointer<QMap<int, QStringList>> yAxisDataPointer(new  QMap<int, QStringList>);
+    QScopedPointer<QMap<int, QStringList>> row3DataPointer(new  QMap<int, QStringList>);
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
+    QSqlQuery xDataListLive;
+    QSqlQuery yDataListLive;
+
+    QVariantList xAxisColumnOut = xAxisColumnList;
+    QVariantList yAxisColumnOut = yAxisColumnList;
+    QVariantList row3ColumnOut = row3ColumnList;
+
+
+    // Process date conversions, if any
+    foreach(QJsonValue dateConversionValue, this->dateConversionOptions){
+
+        QHash<QString, QString> itemDetails;
+        QJsonObject dateConversionObj = dateConversionValue.toObject();
+
+        itemDetails.insert("separator", dateConversionObj.value("separator").toString());
+        itemDetails.insert("formats", dateConversionObj.value("dateFormat").toString());
+
+        QString columnName = dateConversionObj.value("itemName").toString();
+        dateConversionParams.insert(columnName, itemDetails);
+
+        qDebug() << "Date conversion" << columnName << itemDetails;
+    }
+
+    QStringList xAxisData;
+    QStringList yAxisData;
+
+    QVariantList tmpData;
+
+    QJsonArray colData;
+    int index;
+
+    QJsonArray columns;
+    QVector<int> xKey;
+    QVector<int> yKey;
+    int xAxisLength = 0;
+    int yAxisLength = 0;
+    int totalRows;
+    QVariantList dateType;
+
+    if(xAxisColumnList.length() > 0 && yAxisColumnList.length() > 0){
+        if(this->datasourceType == Constants::extractType){
+
+            // Check the cache if data exists and the params havent changed
+            // Cache will currently work only on dashboards
+            if(this->currentChartSource == Constants::dashboardScreen){
+
+                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                    emit signalPivotChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                    this->cachedDashboardConditions[this->currentReportId] = false;
+                    return;
+                }
+            }
+
+            // Fetch data from extract
+            QString tableName = this->getTableName();
+            QString xQueryString =  "SELECT ";
+            foreach(QVariant xCols, xAxisColumnList){
+                xQueryString += "\"" + xCols.toString() + "\", ";
+            }
+
+            xQueryString.chop(2);
+            xQueryString += " FROM " + tableName;
+
+            QString yQueryString =  "SELECT ";
+            foreach(QVariant yCols, yAxisColumnList){
+                yQueryString += "\"" + yCols.toString() + "\", ";
+            }
+
+            yQueryString.chop(2);
+            yQueryString += " FROM " + tableName;
+
+            auto xDataListExtract = this->queryExtractFunction(xQueryString);
+            auto yDataListExtract = this->queryExtractFunction(yQueryString);
+
+            totalRows = xDataListExtract->collection.Count();
+
+            xAxisLength = xAxisColumnList.length();
+            yAxisLength = yAxisColumnList.length();
+
+            // Fetch data from db
+            try{
+                for(int i = 0; i < xAxisLength; i++){
+                    QStringList data;
+                    for(int j = 0; j < totalRows; j++){
+
+                        QString columnName = xAxisColumnList.at(i).toString();
+                        QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+                        if(dateConversionParams.contains(columnName)){
+
+                            QString convertedDate;
+                            QStringList list = dateConversionParams.value(columnName).value("formats").split(",");
+                            foreach(QString format, list){
+                                if(dateType.isEmpty())
+                                    dateType = dataType.checkDateTimeType(xDataListExtract->GetValue(i, j).ToString().c_str());
+
+                                QDateTime dateTime = QDateTime::fromString(xDataListExtract->GetValue(i, j).ToString().c_str(), dateType.at(1).toString());
+                                if(format.toLower() == "day"){
+                                    convertedDate += QString::number(dateTime.date().day()) + separator;
+                                } else if(format.toLower() == "month"){
+                                    convertedDate += dateTime.date().toString("MMM")  + separator;
+                                } else {
+                                    convertedDate += QString::number(dateTime.date().year())  + separator;
+                                }
+                            }
+
+                            convertedDate.chop(separator.length());
+                            data.append(convertedDate);
+
+                        } else {
+                            data.append(xDataListExtract->GetValue(i, j).ToString().c_str());
+                        }
+                    }
+
+                    xAxisDataPointer->insert(i, data);
+
+                    // Append to output columns -- all x axis names
+                    columns.append(xAxisColumnList.at(i).toString());
+                }
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+            try{
+                for(int i = 0; i < yAxisLength; i++){
+                    QStringList data;
+                    for(int j = 0; j < totalRows; j++)
+                        data.append(yDataListExtract->GetValue(i, j).ToString().c_str());
+
+                    yAxisDataPointer->insert(i, data);
+
+                    // Append to output columns -- all y axis names
+                    columns.append(yAxisColumnList.at(i).toString());
+                }
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+        } else {
+
+            // Check the cache if data exists and the params havent changed
+            // Cache will currently work only on dashboards
+            if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+                if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                    emit signalPivotChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                    this->cachedDashboardConditions[this->currentReportId] = false;
+                    return;
+                }
+            }
+
+            // Fetch data from live
+            if(Statics::currentDbIntType != Constants::postgresIntType)
+                this->masterWhereParams.replace(R"('')", R"(')");
+
+            QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+            QString xQueryString =  "SELECT ";
+            foreach(QVariant xCols, xAxisColumnList){
+                xQueryString += xCols.toString() + ", ";
+            }
+
+            xQueryString.chop(2);
+            xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+            QString yQueryString =  "SELECT ";
+            foreach(QVariant yCols, yAxisColumnList){
+                yQueryString += yCols.toString() + ", ";
+            }
+
+            yQueryString.chop(2);
+            yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+            xDataListLive = this->queryLiveFunction(xQueryString);
+            xAxisLength = xAxisColumnList.length();
+
+            // Fetch data from db
+            try{
+
+                while(xDataListLive.next()){
+                    for(int i = 0; i < xAxisLength; i++){
+                        QStringList data;
+
+                        QString columnName = xAxisColumnList.at(i).toString();
+                        QString separator = dateConversionParams.value(columnName).value("separator");
+
+
+
+                        QStringList originalNameList = columnName.split( "." );
+                        QString originalColName = originalNameList.at(1);
+                        originalColName.remove(QRegularExpression("[\"\'`]+"));
+
+                        if(dateConversionParams.contains(originalColName)){
+
+                            QString convertedDate;
+                            QStringList list = dateConversionParams.value(originalColName).value("formats").split(",");
+
+                            foreach(QString format, list){
+                                if(dateType.isEmpty())
+                                    dateType = dataType.checkDateTimeType(xDataListLive.value(i).toString());
+
+                                QDateTime dateTime = QDateTime::fromString(xDataListLive.value(i).toString(), dateType.at(1).toString());
+
+                                if(format.toLower() == "day"){
+                                    convertedDate += QString::number(dateTime.date().day()) + separator;
+                                } else if(format.toLower() == "month"){
+                                    convertedDate += dateTime.date().toString("MMM")  + separator;
+                                } else {
+                                    convertedDate += QString::number(dateTime.date().year())  + separator;
+                                }
+                            }
+
+                            convertedDate.chop(separator.length());
+                            data = xAxisDataPointer->value(i);
+                            data.append(convertedDate);
+
+                        } else {
+                            data = xAxisDataPointer->value(i);
+                            data.append(xDataListLive.value(i).toString());
+                        }
+
+                        xAxisDataPointer->insert(i, data);
+                    }
+
+                }
+
+                for(int i = 0; i < xAxisLength; i++){
+                    // Append to output columns -- all x axis names
+                    columns.append(xAxisColumnList.at(i).toString());
+                }
+
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+
+            yDataListLive = this->queryLiveFunction(yQueryString);
+            yAxisLength = yAxisColumnList.length();
+
+            try{
+
+                while(yDataListLive.next()){
+                    QStringList data;
+                    for(int i = 0; i < yAxisLength; i++){
+
+                        data = yAxisDataPointer->value(i);
+                        data.append(yDataListLive.value(i).toString());
+
+                        yAxisDataPointer->insert(i, data);
+                    }
+
+                }
+
+                for(int i = 0; i < yAxisLength; i++){
+                    // Append to output columns -- all x axis names
+                    columns.append(yAxisColumnList.at(i).toString());
+                }
+
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+        }
+
+
+
+        // Actual values
+        try{
+            int counter = 0;
+            for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
+
+                tmpData.clear();
+                masterKeyword.clear();
+
+                for(int j = 0; j < xAxisLength; j++){
+                    masterKeyword.append(xAxisDataPointer->value(j).at(i));
+                }
+
+
+                if(!uniqueHashKeywords->contains(masterKeyword)){
+                    uniqueHashKeywords->insert(masterKeyword, counter);
+                    counter++;
+
+                    for(int j = 0; j < xAxisLength; j++){
+                        tmpData.append(xAxisDataPointer->value(j).at(i));
+                    }
+
+                    for(int j = 0; j < yAxisLength; j++){
+                        tmpData.append(yAxisDataPointer->value(j).at(i).toFloat());
+                        if(masterTotal.length() < yAxisLength){
+                            masterTotal.append(yAxisDataPointer->value(j).at(i).toFloat());
+                        } else{
+                            masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                        }
+                    }
+
+                    colData.append(QJsonArray::fromVariantList(tmpData));
+
+                } else{
+
+                    index = uniqueHashKeywords->value(masterKeyword);
+                    tmpData.append(colData.at(index).toArray().toVariantList());
+
+                    for(int j = 0; j < yAxisLength; j++){
+                        tmpData[xAxisLength + j] = tmpData[xAxisLength + j].toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                        masterTotal[j] = masterTotal.at(j).toFloat() + yAxisDataPointer->value(j).at(i).toFloat();
+                    }
+                    colData.replace(index, QJsonArray::fromVariantList(tmpData));
+                }
+
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+
+        // Master total
+        for(int i = 0; i < xAxisLength; i++){
+            masterOutput.append("");
+        }
+
+        for(int i = 0; i < yAxisLength; i++){
+            masterOutput.append(masterTotal.at(i).toFloat());
+        }
+
+        QJsonArray finalColumns;
+        QVariantList finalRow3ColumnOut;
+
+        if(this->datasourceType == Constants::extractType){
+            finalColumns = columns;
+            finalRow3ColumnOut = row3ColumnOut;
+
+        } else{
+
+            QString colName;
+            for(auto column: columns){
+                QStringList xPieces = column.toString().split( "." );
+                colName = xPieces.at(1);
+                colName.remove(QRegularExpression("[\"\'`]+"));
+                finalColumns.append(colName);
+            }
+
+
+            QString row3ColName;
+            foreach(QVariant column, row3ColumnOut){
+                QStringList tmpInnerCol;
+                for(auto innerColumn: column.toJsonArray()){
+                    QStringList xPieces = innerColumn.toString().split( "." );
+                    row3ColName = xPieces.at(1);
+                    row3ColName.remove(QRegularExpression("[\"\'`]+"));
+                    tmpInnerCol.append(row3ColName);
+                }
+                finalRow3ColumnOut.append(tmpInnerCol);
+            }
+        }
+
+        data.append(colData);
+        data.append(QJsonArray::fromVariantList(masterOutput));
+        data.append(finalColumns);
+        data.append(QJsonValue::fromVariant(finalRow3ColumnOut));
+
+        QJsonDocument doc;
+        doc.setArray(data);
+
+        QString strData = doc.toJson(QJsonDocument::Compact);
+
+        // Cache report results
+        this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+        // Cache filter params
+        if(this->datasourceType != Constants::extractType)
+            this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+        qDebug() << "EMITTED";
+        emit signalPivotChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    }
+}
+
+void ChartsThread::getStackedAreaChartValues()
+{
+    this->getStackedBarAreaValues(xAxisColumn, yAxisColumn, xSplitKey, "getStackedAreaChartValues");
+}
+
+void ChartsThread::getMultiLineChartValues()
+{
+    QJsonArray data;
+    QVariantList tmpData;
+    float yAxisTmpData;
+
+    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> splitDataPointer(new QStringList);
+
+    // Order of QMap - xAxisCol, SplitKey, Value
+    QHash<QString, int> masterKeywordList;
+    QString masterKeyword;
+    QStringList xAxisDataPointerPre;
+    QStringList splitDataPointerPre;
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    int index;
+    int totalRows;
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalMultiLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
     } else {
-        emit signalTablePivotValues(strData);
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                emit signalMultiLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
     }
 
+    // Fetch unique xAxisData & splitter
+    xAxisDataPointerPre.removeDuplicates();
+    splitDataPointerPre.removeDuplicates();
+
+    // Pre - Populate the json array
+    try{
+        int counter = 0;
+        for(int i = 0; i < xAxisDataPointerPre.length(); i++){
+
+            for(int j = 0; j < splitDataPointerPre.length(); j++){
+
+                masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
+
+                masterKeywordList.insert(masterKeyword, counter);
+                counter++;
+
+                tmpData.clear();
+                tmpData.append(xAxisDataPointerPre.at(i));
+                tmpData.append(splitDataPointerPre.at(j));
+                tmpData.append(0);
+
+                colData.append(QJsonArray::fromVariantList(tmpData));
+            }
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+
+    // Populate the actual data
+    try{
+        for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+            tmpData.clear();
+            yAxisTmpData = 0.0;
+
+            index = masterKeywordList.value(masterKeyword);
+            yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
+
+            tmpData.append(xAxisDataPointer->at(i));
+            tmpData.append(splitDataPointer->at(i));
+            tmpData.append(yAxisTmpData);
+
+            colData.replace(index, QJsonArray::fromVariantList(tmpData));
+
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QJsonArray columns;
+    columns.append(xParam);
+    columns.append(yParam);
+    columns.append(splitParam);
+
+
+    data.append(colData);
+    data.append(QJsonArray::fromStringList(splitDataPointerPre));
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    emit signalMultiLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
 }
 
-void ChartsThread::setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied)
+void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QString identifier)
 {
-    if(sourceType == this->chartSources.at(0)){
 
-        this->currentChartSource = this->chartSources.at(0);
-        this->dashboardId = currentSelectedTypeId.toInt();
-        this->dashboardFilterApplied = dashboardFilterApplied;
+    QJsonArray data;
+    QScopedPointer<QHash<QString, int>> uniqueHashKeywords(new QHash<QString, int>);
+    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
+    QStringList xAxisData;
+    QVariantList yAxisData;
+    QJsonArray colData;
+    QJsonObject obj;
+    QVariantList tmpData;
+    int index;
+    int totalRows;
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                if(identifier == "getAreaChartValues"){
+                    emit signalAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getLineChartValues"){
+                    emit signalLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getWaterfallChartValues"){
+                    emit signalWaterfallChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalLineAreaWaterfallValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+        }
+
     } else {
 
-        this->currentChartSource = this->chartSources.at(1);
-        this->reportId = currentSelectedTypeId.toInt();
-        this->dashboardFilterApplied = false;
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+
+                if(identifier == "getAreaChartValues"){
+                    emit signalAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getLineChartValues"){
+                    emit signalLineChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getWaterfallChartValues"){
+                    emit signalWaterfallChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalLineAreaWaterfallValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+        }
+
     }
 
-    qDebug() << "Typer CURR INFO" << this->currentChartSource << currentSelectedTypeId << this->dashboardFilterApplied;
+
+    try{
+        int counter = 0;
+        for(int i = 0; i < xAxisDataPointer->length(); i++){
+            tmpData.clear();
+
+            if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
+                uniqueHashKeywords->insert(xAxisDataPointer->at(i), counter);
+                counter++;
+
+                tmpData.append(xAxisDataPointer->at(i));
+                tmpData.append(yAxisDataPointer->at(i).toFloat());
+
+                colData.append(QJsonArray::fromVariantList(tmpData));
+            } else{
+
+                index = uniqueHashKeywords->value(xAxisDataPointer->at(i));
+                tmpData.append(colData.at(index).toArray().toVariantList());
+
+                tmpData[1] = tmpData[1].toFloat() + yAxisDataPointer->at(i).toFloat();
+                colData.replace(index, QJsonArray::fromVariantList(tmpData));
+
+            }
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    QString xParam;
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QJsonArray columns;
+    columns.append(xParam);
+    columns.append(yParam);
+
+    data.append(colData);
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    if(identifier == "getAreaChartValues"){
+        emit signalAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else if(identifier == "getLineChartValues"){
+        emit signalLineChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else if(identifier == "getWaterfallChartValues"){
+        emit signalWaterfallChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else {
+        emit signalLineAreaWaterfallValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    }
+
+
 }
 
-void ChartsThread::receiveHeaders(QMap<int, QStringList> newChartHeader)
+void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn, QString identifier)
 {
-    //    qDebug() << "HEADERS" << newChartHeader;
-    this->newChartHeader = newChartHeader;
+    int pointerSize;
 
-    QList<int> keyList = this->newChartHeader.keys();
+    QJsonArray data;
+    QJsonArray axisArray;
+    json output(json_array_arg);
+    json emptyJsonArray(json_array_arg);
+    QMap<QString, int> positions;
+    QMap<int, QString> pastHashKeyword;
+    float measure = 0;
+    float total = 0;
 
-    foreach(int key, keyList){
-        headerMap.insert(key, this->newChartHeader.value(key).at(0));
+    QString paramName = "";
+    QString hashKeyword = "";
+    QStringList xAxisData;
+    QVariantList yAxisData;
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> xDataListExtract;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> yDataListExtract;
+    QSqlQuery xDataListLive;
+    QMap<int, QHash<int, QString>> yDataListLive;
+
+    json *jsonPointer = new json;
+    json *jsonPointerMeasure = new json;
+    QScopedPointer<QMap<QString, float>> totalCount(new QMap<QString, float>);
+
+    // masterHash will be used to compare if any map has been generated earlier
+    // if there is an exact match with the hash, then it exists. Else create a new hash
+    QScopedPointer<QHash<QString, int>> masterHash(new QHash<QString, int>);
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                if(identifier == "getSunburstChartValues"){
+                    emit signalSunburstChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeChartValues"){
+                    emit signalTreeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeMapChartValues"){
+                    emit signalTreeMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalTreeSunburstValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
+
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumn){
+            xQueryString += "\"" + xCols.toString() + "\", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + tableName;
+
+        QString yQueryString =  "SELECT \"" + yAxisColumn + "\" FROM " + tableName;;
+
+        xDataListExtract = this->queryExtractFunction(xQueryString);
+        yDataListExtract = this->queryExtractFunction(yQueryString);
+
+        int totalRows = xDataListExtract->collection.Count();
+        int totalXCols = xDataListExtract->ColumnCount();
+
+
+        // Considering the measure as string here to avoid unwanted errors in wrong casting
+        // The front in javascript can easily handle this
+
+        try{
+            float x = 0;
+            for(int i = 0; i < totalRows; i++){
+
+                QString measureString = yDataListExtract->GetValue(0, i).ToString().c_str();
+                measure = measureString.toFloat();
+                x += measure;
+
+
+                json tmpOutput;
+                pastHashKeyword.clear();
+
+                int counter = 0;
+                for(int j = 0; j < totalXCols; j++){
+
+                    paramName = xDataListExtract->GetValue(j, i).ToString().c_str();
+
+                    // Generate unique hash to strings to be stored in master hash
+                    if( j == 0){
+                        hashKeyword.clear();
+                        hashKeyword = paramName;
+                    } else{
+                        hashKeyword.append(paramName);
+                    }
+
+
+                    // If the hash doesnt exist, add to hash
+                    if(!masterHash->contains(hashKeyword)){
+                        masterHash->insert(hashKeyword, counter);
+                        counter++;
+                        totalCount->insert(hashKeyword, measure);
+
+                        tmpOutput["name"] = paramName.toStdString();
+                        tmpOutput["size"] = measure;
+                        tmpOutput["children"] = emptyJsonArray;
+                        tmpOutput["label"] = xAxisColumn.at(j).toString().toStdString();
+
+                        // Check if first element of json is already there
+                        // If not, then add it according to the graph data
+                        if(j == 0){
+                            output.push_back(tmpOutput);
+                            positions.insert(hashKeyword, output.size() - 1);
+                            pastHashKeyword[0] = hashKeyword;
+                            total += measure;
+
+                        } else{
+
+                            jsonPointer = &output;
+                            for(int k =0; k < j; k++){
+
+                                if(j - k == 1){
+                                    try{
+
+                                        jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
+                                        pastHashKeyword.insert(j, hashKeyword);
+
+                                        pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
+                                        positions.insert(hashKeyword, pointerSize);
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C2" << e.what();
+                                    }
+
+                                } else{
+                                    try{
+                                        jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
+
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C3" << e.what();
+                                    }
+                                }
+                            }
+                        }
+
+                    } else{
+
+                        float newValue = totalCount->value(hashKeyword) + measure;
+                        totalCount->insert(hashKeyword, newValue);
+                        pastHashKeyword.insert(j, hashKeyword);
+
+                        if(j == 0){
+                            total += measure;
+                        }
+
+                        jsonPointerMeasure = &output;
+                        for(int k = 0; k <= j; k++){
+
+
+                            if(k == j){
+                                jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
+
+                            } else{
+                                jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                if(identifier == "getSunburstChartValues"){
+                    emit signalSunburstChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeChartValues"){
+                    emit signalTreeChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getTreeMapChartValues"){
+                    emit signalTreeMapChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else {
+                    emit signalTreeSunburstValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
+
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString xQueryString =  "SELECT ";
+        foreach(QVariant xCols, xAxisColumn){
+            xQueryString += xCols.toString() + ", ";
+        }
+
+        xQueryString.chop(2);
+        xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        int totalXCols = xAxisColumn.length();
+        //        int totalYCols = yAxisColumn.length();
+
+        yDataListLive = this->queryLiveValues(yQueryString, 1);
+        xDataListLive = this->queryLiveFunction(xQueryString);
+
+
+
+        // Considering the measure as string here to avoid unwanted errors in wrong casting
+        // The front in javascript can easily handle this
+
+        try{
+            float x = 0;
+            int i = -1;
+            while(xDataListLive.next()){
+                i++;
+
+                QString measureString = yDataListLive.value(0).value(i);
+                measure = measureString.toFloat();
+                x += measure;
+
+
+                json tmpOutput;
+                pastHashKeyword.clear();
+
+                int counter = 0;
+                for(int j = 0; j < totalXCols; j++){
+
+                    paramName = xDataListLive.value(j).toString();
+
+                    // Generate unique hash to strings to be stored in master hash
+                    if( j == 0){
+                        hashKeyword.clear();
+                        hashKeyword = paramName;
+                    } else{
+                        hashKeyword.append(paramName);
+                    }
+
+
+                    // If the hash doesnt exist, add to hash
+                    if(!masterHash->contains(hashKeyword)){
+                        masterHash->insert(hashKeyword, counter);
+                        counter++;
+                        totalCount->insert(hashKeyword, measure);
+
+                        QString tmpLabel =  xAxisColumn.at(j).toString();
+                        QStringList tmpYPieces =  tmpLabel.split( "." );
+                        QString tmpYParam = tmpYPieces.at(1);
+                        tmpYParam.remove(QRegularExpression("[\"\'`]+"));
+
+                        tmpOutput["name"] = paramName.toStdString();
+                        tmpOutput["size"] = measure;
+                        tmpOutput["children"] = emptyJsonArray;
+                        tmpOutput["label"] = tmpYParam.toStdString();
+
+                        // Check if first element of json is already there
+                        // If not, then add it according to the graph data
+                        if(j == 0){
+                            output.push_back(tmpOutput);
+                            positions.insert(hashKeyword, output.size() - 1);
+                            pastHashKeyword[0] = hashKeyword;
+                            total += measure;
+
+                        } else{
+
+                            jsonPointer = &output;
+                            for(int k =0; k < j; k++){
+
+                                if(j - k == 1){
+                                    try{
+
+                                        jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
+                                        pastHashKeyword.insert(j, hashKeyword);
+
+                                        pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
+                                        positions.insert(hashKeyword, pointerSize);
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C2" << e.what();
+                                    }
+
+                                } else{
+                                    try{
+                                        jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
+
+                                    }catch (std::exception &e) {
+                                        qDebug() << "C3" << e.what();
+                                    }
+                                }
+                            }
+                        }
+
+                    } else{
+
+                        float newValue = totalCount->value(hashKeyword) + measure;
+                        totalCount->insert(hashKeyword, newValue);
+                        pastHashKeyword.insert(j, hashKeyword);
+
+                        if(j == 0){
+                            total += measure;
+                        }
+
+                        jsonPointerMeasure = &output;
+                        for(int k = 0; k <= j; k++){
+
+
+                            if(k == j){
+                                jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
+
+                            } else{
+                                jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
+                            }
+                        }
+                    }
+                }
+
+            }
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
+        }
+
+    }
+
+
+
+    QString s = output.to_string().c_str();
+    QJsonDocument d = QJsonDocument::fromJson(s.toUtf8());
+
+    QString yParam;
+
+    if(this->datasourceType == Constants::extractType){
+        yParam = yAxisColumn;
+
+    } else {
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QJsonObject obj;
+    obj.insert("name", yParam);
+    obj.insert("size", total);
+    obj.insert("children", d.array());
+
+
+    QStringList colStringList;
+    foreach(QVariant xCol, xAxisColumn){
+        QString xParam;
+
+        if(this->datasourceType == Constants::extractType){
+            xParam = xCol.toString();
+
+        } else {
+            QStringList xPieces = xCol.toString().split( "." );
+            xParam = xPieces.at(1);
+            xParam.remove(QRegularExpression("[\"\'`]+"));
+        }
+
+        colStringList.append(xParam);
+    }
+    colStringList.append(yParam);
+
+    QJsonArray cols;
+    cols.append(obj);
+    cols.append(QJsonArray::fromStringList(colStringList));
+
+
+    QJsonDocument doc;
+    doc.setArray(cols);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    if(identifier == "getSunburstChartValues"){
+        emit signalSunburstChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else if(identifier == "getTreeChartValues"){
+        emit signalTreeChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else if(identifier == "getTreeMapChartValues"){
+        emit signalTreeMapChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else {
+        emit signalTreeSunburstValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
     }
 }
 
-void ChartsThread::receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId)
+void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey, QString identifier)
 {
-    //    qDebug() << "REPORT DATA" << newChartData;
-//    this->reportChartData = newChartData;
-    this->reportId = currentReportId;
-    this->currentChartSource = this->chartSources.at(1); // report
+
+    QJsonArray data;
+    QVariantList tmpData;
+    float yAxisTmpData;
+
+    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> splitDataPointer(new QStringList);
+
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataListExtract;
+    QSqlQuery dataListLive;
+
+    // Order of QMap - xAxisCol, SplitKey, Value
+    QHash<QString, int> masterKeywordList;
+    QString masterKeyword;
+    QStringList xAxisDataPointerPre;
+    QStringList splitDataPointerPre;
+
+
+    // Fetch data here
+
+    int totalRows;
+
+    if(this->datasourceType == Constants::extractType){
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                if(identifier == "getStackedBarChartValues"){
+                    emit signalStackedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getStackedAreaChartValues") {
+                    emit signalStackedAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else{
+                    emit signalStackedBarAreaValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
+
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from extract
+        QString tableName = this->getTableName();
+        QString queryString = "SELECT \"" + xAxisColumn + "\", \"" + yAxisColumn + "\", \"" + xSplitKey + "\" FROM "+tableName;
+
+        dataListExtract = this->queryExtractFunction(queryString);
+        totalRows = dataListExtract->collection.Count();
+
+        for(int i = 0; i < totalRows; i++){
+            xAxisDataPointer->append(dataListExtract->GetValue(0, i).ToString().c_str());
+            yAxisDataPointer->append(dataListExtract->GetValue(1, i).ToString().c_str());
+            splitDataPointer->append(dataListExtract->GetValue(2, i).ToString().c_str());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListExtract->GetValue(0, i).ToString().c_str());
+            splitDataPointerPre.append(dataListExtract->GetValue(2, i).ToString().c_str());
+        }
+
+    } else {
+
+        // Check the cache if data exists and the params havent changed
+        // Cache will currently work only on dashboards
+        if(this->currentChartSource == Constants::dashboardScreen && this->liveDashboardFilterParamsCached.value(this->currentDashboardId) == this->masterWhereParams){
+
+            if(this->dashboardReportDataCached.contains(this->currentReportId) && this->dashboardReportDataCached.value(this->currentReportId).length() > 0 && !this->cachedDashboardConditions.value(this->currentReportId)){
+                if(identifier == "getStackedBarChartValues"){
+                    emit signalStackedBarChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else if(identifier == "getStackedAreaChartValues") {
+                    emit signalStackedAreaChartValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                } else{
+                    emit signalStackedBarAreaValues(this->dashboardReportDataCached.value(this->currentReportId), this->currentReportId, this->currentDashboardId, this->currentChartSource);
+                }
+
+                this->cachedDashboardConditions[this->currentReportId] = false;
+                return;
+            }
+        }
+
+        // Fetch data from live
+        if(Statics::currentDbIntType != Constants::postgresIntType)
+            this->masterWhereParams.replace(R"('')", R"(')");
+
+        QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
+
+        QString queryString = "SELECT " + xAxisColumn + ", " + yAxisColumn + ", " + xSplitKey + " FROM "+ this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
+        dataListLive = this->queryLiveFunction(queryString);
+        totalRows = dataListLive.size();
+
+        while(dataListLive.next()){
+            xAxisDataPointer->append(dataListLive.value(0).toString());
+            yAxisDataPointer->append(dataListLive.value(1).toString());
+            splitDataPointer->append(dataListLive.value(2).toString());
+
+            // To pre-populate json array
+            xAxisDataPointerPre.append(dataListLive.value(0).toString());
+            splitDataPointerPre.append(dataListLive.value(2).toString());
+        }
+
+    }
+
+    // Fetch unique xAxisData & splitter
+    xAxisDataPointerPre.removeDuplicates();
+    splitDataPointerPre.removeDuplicates();
+
+    int index;
+    QJsonArray colData;
+
+    // Pre - Populate the json array
+    try{
+        int counter = 0;
+        for(int i = 0; i < xAxisDataPointerPre.length(); i++){
+
+            for(int j = 0; j < splitDataPointerPre.length(); j++){
+
+                masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
+
+                masterKeywordList.insert(masterKeyword, counter);
+                counter++;
+
+                tmpData.clear();
+                tmpData.append(xAxisDataPointerPre.at(i));
+                tmpData.append(splitDataPointerPre.at(j));
+                tmpData.append(0);
+
+                colData.append(QJsonArray::fromVariantList(tmpData));
+            }
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+
+    // Populate the actual data
+    try{
+        for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+            masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+            tmpData.clear();
+            yAxisTmpData = 0.0;
+
+            index = masterKeywordList.value(masterKeyword);
+            yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
+
+            tmpData.append(xAxisDataPointer->at(i));
+            tmpData.append(splitDataPointer->at(i));
+            tmpData.append(yAxisTmpData);
+
+            colData.replace(index, QJsonArray::fromVariantList(tmpData));
+
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    QString xParam;
+    QString yParam;
+    QString splitParam;
+
+    if(this->datasourceType == Constants::extractType){
+        xParam = xAxisColumn;
+        yParam = yAxisColumn;
+        splitParam = xSplitKey;
+
+    } else {
+        QStringList xPieces = xAxisColumn.split( "." );
+        xParam = xPieces.at(1);
+        xParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList yPieces = yAxisColumn.split( "." );
+        yParam = yPieces.at(1);
+        yParam.remove(QRegularExpression("[\"\'`]+"));
+
+        QStringList splitPieces = xSplitKey.split( "." );
+        splitParam = splitPieces.at(1);
+        splitParam.remove(QRegularExpression("[\"\'`]+"));
+    }
+
+    QJsonArray columns;
+    columns.append(splitParam);
+    columns.append(yParam);
+    columns.append(xParam);
+
+
+    data.append(colData);
+    data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+    data.append(QJsonArray::fromStringList(splitDataPointerPre));
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson(QJsonDocument::Compact);
+
+    // Cache report results
+    this->dashboardReportDataCached.insert(this->currentReportId, strData);
+
+    // Cache filter params
+    if(this->datasourceType != Constants::extractType)
+        this->liveDashboardFilterParamsCached.insert(this->currentDashboardId, this->masterWhereParams);
+
+
+    if(identifier == "getStackedBarChartValues"){
+        emit signalStackedBarChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else if(identifier == "getStackedAreaChartValues") {
+        emit signalStackedAreaChartValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    } else{
+        emit signalStackedBarAreaValues(strData, this->currentReportId, this->currentDashboardId, this->currentChartSource);
+    }
+
 }
 
-void ChartsThread::receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId)
+duckdb::unique_ptr<duckdb::MaterializedQueryResult> ChartsThread::queryExtractFunction(QString mainQuery)
 {
-    //    qDebug() << "DASHBOARD DATA" << newChartData;
-//    this->dashboardChartData = newChartData;
-    this->dashboardId = currentDashboardId;
-    this->currentChartSource = this->chartSources.at(0); // dashboard
+    // Fetch data here
+    QString queryString;
+    duckdb::unique_ptr<duckdb::MaterializedQueryResult> dataList;
+    QString extractPath = Statics::extractPath;
+
+    try{
+        duckdb::DuckDB db(extractPath.toStdString());
+        duckdb::Connection con(db);
+
+        QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+
+        // IF Reports
+        // Else Dashboards
+        if(this->currentChartSource == Constants::reportScreen){
+            if(this->reportWhereConditions.trimmed().length() > 0){
+                queryString = mainQuery + connector + this->reportWhereConditions;
+            } else {
+                queryString = mainQuery;
+            }
+        } else {
+            if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+                queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+            } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
+                queryString = mainQuery + connector + this->reportWhereConditions;
+            } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+                queryString = mainQuery + connector + this->dashboardWhereConditions;
+            } else {
+                queryString = mainQuery;
+            }
+        }
+
+
+        dataList = con.Query(queryString.toStdString());
+        if(!dataList->error.empty())
+            qDebug() << Q_FUNC_INFO << dataList->success << queryString << dataList->error.c_str();
+
+    } catch(std::exception &e){
+        qDebug() << e.what();
+    }
+
+    return dataList;
+
+}
+
+QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
+{
+
+    QString queryString;
+    QSqlDatabase connection;
+
+    QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+
+    // IF Reports
+    // Else Dashboards
+    if(this->currentChartSource == Constants::reportScreen){
+        if(this->reportWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + connector + this->reportWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
+    } else {
+        if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
+            queryString = mainQuery + connector + this->reportWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + connector + this->dashboardWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
+    }
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        connection = QSqlDatabase::addDatabase("QMYSQL", "mysqlQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::postgresIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "postgresQ");
+
+        connection.setDatabaseName(Statics::postgresDb);
+        connection.setHostName(Statics::postgresHost);
+        connection.setPort(Statics::postgresPort);
+        connection.setUserName(Statics::postgresUsername);
+        connection.setPassword(Statics::postgresPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mssqlQ");
+
+        connection.setDatabaseName(Statics::msDb);
+        connection.setHostName(Statics::msHost);
+        connection.setPort(Statics::msPort);
+        connection.setUserName(Statics::msUsername);
+        connection.setPassword(Statics::msPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "oracleQ");
+
+        connection.setDatabaseName(Statics::oracleDb);
+        connection.setHostName(Statics::oracleHost);
+        connection.setPort(Statics::oraclePort);
+        connection.setUserName(Statics::oracleUsername);
+        connection.setPassword(Statics::oraclePassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mongoIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mongoQ");
+
+        connection.setDatabaseName(Statics::mongoDb);
+        connection.setHostName(Statics::mongoHost);
+        connection.setPort(Statics::mongoPort);
+        connection.setUserName(Statics::mongoUsername);
+        connection.setPassword(Statics::mongoPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "redshiftQ");
+
+        connection.setDatabaseName(Statics::redshiftDb);
+        connection.setHostName(Statics::redshiftHost);
+        connection.setPort(Statics::redshiftPort);
+        connection.setUserName(Statics::redshiftUsername);
+        connection.setPassword(Statics::redshiftPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::teradataIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "teradataQ");
+
+        connection.setDatabaseName(Statics::teradataDb);
+        connection.setHostName(Statics::teradataHost);
+        connection.setPort(Statics::teradataPort);
+        connection.setUserName(Statics::teradataUsername);
+        connection.setPassword(Statics::teradataPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "snowflakeQ");
+
+        connection.setDatabaseName(Statics::snowflakeDb);
+        connection.setHostName(Statics::snowflakeHost);
+        connection.setPort(Statics::snowflakePort);
+        connection.setUserName(Statics::snowflakeUsername);
+        connection.setPassword(Statics::snowflakePassword);
+
+        connection.open();
+        break;
+    }
+    }
+
+    QSqlQuery query(queryString, connection);
+    if(!query.lastError().NoError){
+        qDebug() << Q_FUNC_INFO << query.lastQuery() << query.lastError();
+    }
+
+    return query;
+
+}
+
+QMap<int, QHash<int, QString> > ChartsThread::queryLiveValues(QString mainQuery, int totalCols)
+{
+
+    QString queryString;
+    QSqlDatabase connection;
+    QMap<int, QHash<int, QString>> output;
+    QHash<int, QString> tmpOut;
+
+    QString connector = this->masterWhereParams.length() > 0 ? " AND " : " WHERE ";
+
+    // IF Reports
+    // Else Dashboards
+    if(this->currentChartSource == Constants::reportScreen){
+        if(this->reportWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + connector + this->reportWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
+    } else {
+        if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString =mainQuery + connector + this->reportWhereConditions + " AND " + this->dashboardWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() > 0 && this->dashboardWhereConditions.trimmed().length() == 0){
+            queryString = mainQuery + connector + this->reportWhereConditions;
+        } else if(this->reportWhereConditions.trimmed().length() == 0 && this->dashboardWhereConditions.trimmed().length() > 0){
+            queryString = mainQuery + connector + this->dashboardWhereConditions;
+        } else {
+            queryString = mainQuery;
+        }
+    }
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        connection = QSqlDatabase::addDatabase("QMYSQL", "mysqlQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection.setHostName(Statics::myHost);
+        connection.setPort(Statics::myPort);
+        connection.setDatabaseName(Statics::myDb);
+        connection.setUserName(Statics::myUsername);
+        connection.setPassword(Statics::myPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::postgresIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "postgresQ");
+
+        connection.setDatabaseName(Statics::postgresDb);
+        connection.setHostName(Statics::postgresHost);
+        connection.setPort(Statics::postgresPort);
+        connection.setUserName(Statics::postgresUsername);
+        connection.setPassword(Statics::postgresPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mssqlQ");
+
+        connection.setDatabaseName(Statics::msDb);
+        connection.setHostName(Statics::msHost);
+        connection.setPort(Statics::msPort);
+        connection.setUserName(Statics::msUsername);
+        connection.setPassword(Statics::msPassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "oracleQ");
+
+        connection.setDatabaseName(Statics::oracleDb);
+        connection.setHostName(Statics::oracleHost);
+        connection.setPort(Statics::oraclePort);
+        connection.setUserName(Statics::oracleUsername);
+        connection.setPassword(Statics::oraclePassword);
+
+        connection.open();
+        break;
+    }
+
+    case Constants::mongoIntType:{
+        connection = QSqlDatabase::addDatabase("QODBC", "mongoQ");
+
+        connection.setDatabaseName(Statics::mongoDb);
+        connection.setHostName(Statics::mongoHost);
+        connection.setPort(Statics::mongoPort);
+        connection.setUserName(Statics::mongoUsername);
+        connection.setPassword(Statics::mongoPassword);
+
+        connection.open();
+        break;
+    }
+    }
+
+    QSqlQuery query(queryString, connection);
+    if(!query.lastError().NoError){
+        qDebug() << Q_FUNC_INFO << query.lastQuery() << query.lastError();
+    }
+
+    int x = 0;
+    while(query.next()){
+
+        for(int i = 0; i < totalCols; i++){
+            tmpOut = output.value(i);
+            tmpOut.insert(x, query.value(i).toString());
+            output.insert(i, tmpOut);
+        }
+        x++;
+    }
+
+    return output;
+}
+
+QString ChartsThread::getTableName()
+{
+    QString tableName = Statics::currentDbName;
+
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
+
+    return tableName;
 }

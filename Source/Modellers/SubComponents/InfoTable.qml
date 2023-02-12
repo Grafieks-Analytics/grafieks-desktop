@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 import "../../MainSubComponents"
@@ -21,7 +22,7 @@ Item{
     property bool profilingStatus: false
     property bool infoTableResizingFixed: true
     property var errorMsg: ""
-    property string defaultMsg: "SQL query succesfully executed"
+    property string defaultMsg: Messages.mo_sub_inft_sqlSuccesMsg
 
 
     /***********************************************************************************************************************/
@@ -74,20 +75,6 @@ Item{
     }
 
     Connections{
-        target: DuckQueryModel
-
-        function onErrorSignal(errMsg){
-            if(errMsg !== ""){
-                errorMsg = errMsg
-                queryUpdate.icon = StandardIcon.Critical
-            } else{
-                errorMsg = defaultMsg
-                queryUpdate.icon = StandardIcon.NoIcon
-            }
-        }
-    }
-
-    Connections{
         target: ExcelQueryModel
 
         function onErrorSignal(errMsg){
@@ -109,7 +96,7 @@ Item{
                 errorMsg = errMsg
                 queryUpdate.icon = StandardIcon.Critical
             } else{
-                errorMsg = "Data fetched successfully"
+                errorMsg = Messages.mo_sub_inft_dataFetchSuccess
                 queryUpdate.icon = StandardIcon.NoIcon
             }
         }
@@ -192,7 +179,7 @@ Item{
 
     function onDisplayLimitSelected(value){
         // Change display limit of query results here
-        displayLimit.text = "Display limited to top "+ value
+        displayLimit.text = Messages.mo_sub_inft_displayLimitText + value
         DSParamsModel.setDisplayRowsCount(value)
         selectLimitOptions.close()
     }
@@ -214,7 +201,7 @@ Item{
         if(isSqlSelect){
             console.log(GeneralParamsModel.getDbClassification(), "Classification");
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
 
                 dataPreviewResult.visible = true
                 queryUpdate.visible = true
@@ -305,8 +292,8 @@ Item{
 
     MessageDialog{
         id: sqlQueryNotAllowedDialog
-        title: "Warning"
-        text: "Only SELECT (without Common Table Expressions) query allowed"
+        title: Messages.warningTitle
+        text: Messages.mo_sub_inft_selectQueriesOnly
         //icon: StandardIcon.Critical
 
         onAccepted: {
@@ -318,9 +305,9 @@ Item{
     MessageDialog{
         id: queryUpdate
         visible: false
-        title: "Message"
+        title: Messages.mo_sub_inft_messageHead
         text: errorMsg
-        icon: StandardIcon.NoIcon
+//        icon: StandardIcon.NoIcon
 
     }
 
@@ -389,7 +376,7 @@ Item{
                 //                leftPadding: 10
 
                 Text{
-                    text: "Action Output"
+                    text: Messages.mo_sub_inft_actionOut
                     anchors.centerIn: parent
                 }
 
@@ -404,7 +391,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("SQL query performance result")
+                ToolTip.text: Messages.mo_sub_inft_queryPerformance
             }
 
 
@@ -443,7 +430,7 @@ Item{
                 leftPadding: 10
 
                 Text{
-                    text: "Data Preview"
+                    text: Messages.mo_sub_inft_dataPreview
                     anchors.centerIn: parent
                 }
 
@@ -500,7 +487,7 @@ Item{
 
                 Text{
                     id : displayLimit
-                    text: "Display limited to top 100"
+                    text: Messages.mo_sub_inft_displayLimitText + "100"
                     anchors.centerIn: parent
                 }
 
@@ -516,7 +503,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Limit SQL result data preview")
+                ToolTip.text: Messages.mo_sub_inft_queryLimit
 
             }
 
@@ -527,11 +514,11 @@ Item{
                 id:selectLimitList
                 ListElement{
                     value : 100
-                    menuItem: "Display Top 100"
+                    menuItem: "Display top 100" // Cannot replace with variable
                 }
                 ListElement{
                     value : 200
-                    menuItem: "Display Top 200"
+                    menuItem: "Display top 200" // Cannot replace with variable
                 }
             }
 
@@ -619,7 +606,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Run SQL")
+                ToolTip.text: Messages.mo_sub_inft_runsql
 
             }
 
@@ -668,7 +655,7 @@ Item{
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Minimize panel")
+                ToolTip.text: Messages.mo_sub_inft_minimize
 
 
             }

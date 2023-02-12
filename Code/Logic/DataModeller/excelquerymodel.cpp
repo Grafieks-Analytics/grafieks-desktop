@@ -1,22 +1,16 @@
 #include "excelquerymodel.h"
 
-ExcelQueryModel::ExcelQueryModel(QObject *parent) : QAbstractTableModel(parent)
+ExcelQueryModel::ExcelQueryModel(GeneralParamsModel *gpm, QObject *parent) : QAbstractTableModel(parent)
 {
-
+    this->generalParamsModel = gpm;
 }
 
-void ExcelQueryModel::setQuery(QString query)
+void ExcelQueryModel::setQuery(QString query, bool queriedFromDataModeler)
 {
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
-    this->removeTmpChartData();
     this->query = query;
-    querySplitter.setQueryForClasses(this->query);
-
-    this->selectParams = querySplitter.getSelectParams();
-
-    this->generateRoleNames();
-    this->setQueryResult();
+    this->queriedFromDataModeler = queriedFromDataModeler;
 }
 
 void ExcelQueryModel::setPreviewQuery(int previewRowCount)
@@ -26,16 +20,28 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     int maxRowCount = 0;
     QString finalSqlInterPart;
 
+    querySplitter.setQueryForClasses(this->query);
+    this->selectParams = querySplitter.getSelectParams();
+    this->generateRoleNames();
+
     QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
 
     finalSqlInterPart = this->query.section(' ', 1);
-    QString newLimitQuery = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart;
-    QSqlQuery query(newLimitQuery, conExcel);
+
+    QString finalWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        finalWhereConditions = " WHERE " + this->newWhereConditions;
+
+    this->finalSql = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart + finalWhereConditions;
+
+
+    QSqlQuery query(this->finalSql, conExcel);
     QSqlRecord record = query.record();
 
     this->internalColCount = record.count();
 
     beginResetModel();
+    emit clearTablePreview();
     this->resultData.clear();
 
     int j = 0;
@@ -81,107 +87,18 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
 void ExcelQueryModel::saveExtractData()
 {
+    QString extractQuery;
+    QString finalWhereConditions;
+    if(this->queriedFromDataModeler && this->newWhereConditions.trimmed().length() > 0)
+        finalWhereConditions = " WHERE " + this->newWhereConditions;
 
-    QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
-    duckdb::DuckDB db(extractPath.toStdString());
-    duckdb::Connection con(db);
+    extractQuery = this->query + finalWhereConditions;
 
-    QString fileName = QFileInfo(tableName).baseName().toLower();
-    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    SaveExtractExcelWorker *saveExtractExcelWorker = new SaveExtractExcelWorker(extractQuery, this->generalParamsModel->getChangedColumnTypes());
+    connect(saveExtractExcelWorker, &SaveExtractExcelWorker::saveExtractComplete, this, &ExcelQueryModel::extractSaved, Qt::QueuedConnection);
+    connect(saveExtractExcelWorker, &SaveExtractExcelWorker::finished, saveExtractExcelWorker, &SaveExtractExcelWorker::deleteLater, Qt::QueuedConnection);
 
-    QStringList list;
-    QString finalSqlInterPart;
-
-    QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-
-    QSqlQuery query(this->query, conExcel);
-    QSqlRecord record = query.record();
-    qDebug() << record;
-
-    this->internalColCount = record.count();
-
-    QString createTableQuery = "CREATE TABLE " + fileName + "(";
-
-    for(int i = 0; i < this->internalColCount; i++){
-        QVariant fieldType = record.field(i).value();
-        QString type = dataType.qVariantType(fieldType.typeName());
-
-        // lastIndexOf used here because the sheet name may itself contain `$` along with the $ used to name the excel sheet in sql query
-        QString checkFieldName = record.field(i).tableName().left(record.field(i).tableName().lastIndexOf("$")) + "." + record.fieldName(i);
-        if(Statics::changedHeaderTypes.value(checkFieldName).toString() != ""){
-            type = Statics::changedHeaderTypes.value(checkFieldName).toString();
-
-            if(type == Constants::categoricalType){
-                type = "VARCHAR";
-            } else if(type == Constants::numericalType){
-                type = "INTEGER";
-            } else {
-                type = "TIMESTAMP";
-            }
-        }
-
-        createTableQuery += "\"" + record.fieldName(i) + "\" " + type + ",";
-        this->columnStringTypes.append(type);
-    }
-
-    createTableQuery.chop(1);
-    createTableQuery += ")";
-
-    auto createT = con.Query(createTableQuery.toStdString());
-    if(!createT->success) qDebug() <<Q_FUNC_INFO << "ERROR CREATE EXTRACT";
-
-    duckdb::Appender appender(con, fileName.toStdString());
-
-    beginResetModel();
-    this->resultData.clear();
-
-    int j = 0;
-    while(query.next()){
-        appender.BeginRow();
-        for(int i = 0; i < this->internalColCount; i++){
-
-            QString columnType = this->columnStringTypes.at(i);
-            if(columnType == "INTEGER"){
-                appender.Append(query.value(i).toInt());
-            } else if(columnType == "BIGINT"){
-                appender.Append(query.value(i).toLongLong());
-            }  else if(columnType == "FLOAT") {
-                appender.Append(query.value(i).toFloat());
-            } else if(columnType == "DOUBLE") {
-                appender.Append(query.value(i).toDouble());
-            } else if(columnType == "DATE"){
-                QDate date = query.value(i).toDate();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                //                appender.Append(duckdb::Date::FromDate(year, month, day));
-                //                appender.Append(duckdb::Date::FromDate(1992, 1, 1));
-            } else if(columnType == "TIMESTAMP"){
-                QDate date = query.value(i).toDate();
-                QTime time = query.value(i).toDateTime().time();
-                int32_t year = date.year();
-                int32_t month = date.month();
-                int32_t day = date.day();
-                //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Date::FromDate(year, month, day), duckdb::Time::FromTime(time.hour(), time.minute(), time.second(), 0)));
-                //                appender.Append(duckdb::Timestamp::FromDatetime(duckdb::Value::DATE("1992-11-11"), duckdb::Time::FromTime(1, 1, 1, 0)));
-            }else {
-                appender.Append(query.value(i).toString().toUtf8().constData());
-            }
-
-        }
-        appender.EndRow();
-        list.clear();
-
-        j++;
-    }
-
-    appender.Close();
-
-    auto res = con.Query("SELECT * FROM "+ fileName.toStdString());
-    res->Print();
-
-    emit generateReports(&con);
+    saveExtractExcelWorker->start();
 
 }
 
@@ -221,29 +138,72 @@ QHash<int, QByteArray> ExcelQueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void ExcelQueryModel::getQueryStats()
+bool ExcelQueryModel::ifPublish() const
 {
-
+    return m_ifPublish;
 }
 
-void ExcelQueryModel::removeTmpChartData()
+void ExcelQueryModel::receiveExcelFilterQuery(QString &existingWhereConditions, QString &newWhereConditions)
 {
 
+    emit clearTablePreview();
+    this->exisitingWhereConditions = exisitingWhereConditions;
+    this->newWhereConditions = newWhereConditions;
 }
 
-void ExcelQueryModel::receiveExcelFilterQuery(QString query)
+
+void ExcelQueryModel::extractSaved(QString errorMsg)
 {
-    this->query = query;
+    // Delete if the extract size is larger than the permissible limit
+    // This goes using QTimer because, syncing files cannot be directly deleted
+
+    if(errorMsg.length() == 0){
+        QTimer::singleShot(Constants::timeDelayCheckExtractSize, this, &ExcelQueryModel::extractSizeLimit);
+    } else {
+        emit extractCreationError(errorMsg);
+    }
 }
 
-void ExcelQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount)
+void ExcelQueryModel::setIfPublish(bool ifPublish)
 {
+    if (m_ifPublish == ifPublish)
+        return;
 
+    m_ifPublish = ifPublish;
+    emit ifPublishChanged(m_ifPublish);
 }
 
-void ExcelQueryModel::slotSetChartData(bool success)
+void ExcelQueryModel::extractSizeLimit()
 {
+    QString extractPath = Statics::extractPath;
+    int size = 0;
+    int maxFreeExtractSize = Constants::freeTierExtractLimit; // This many bytes in a GB
 
+    QFile fileInfo(extractPath);
+    fileInfo.open(QFile::ReadWrite);
+    fileInfo.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
+
+    size = fileInfo.size();
+    fileInfo.close();
+
+    QFile file(extractPath);
+    if(size > maxFreeExtractSize){
+        if(!file.remove(extractPath))
+            qDebug() << Q_FUNC_INFO << file.errorString();
+
+        Statics::freeLimitExtractSizeExceeded = true;
+        emit extractFileExceededLimit(true, m_ifPublish);
+    } else {
+        emit extractFileExceededLimit(false, m_ifPublish);
+    }
+
+    emit showSaveExtractWaitPopup();
+
+    if(Statics::freeLimitExtractSizeExceeded == true){
+        Statics::freeLimitExtractSizeExceeded = false;
+    } else {
+        emit generateExtractReports();
+    }
 }
 
 void ExcelQueryModel::generateRoleNames()
@@ -274,19 +234,3 @@ void ExcelQueryModel::generateRoleNames()
     emit signalGenerateRoleNames(tableHeaders, sqlChartHeader);
 }
 
-
-void ExcelQueryModel::setQueryResult()
-{
-
-}
-
-QMap<QString, QString> ExcelQueryModel::returnColumnList(QString tableName)
-{
-    QMap<QString, QString> output;
-    return output;
-}
-
-void ExcelQueryModel::setChartHeader(int index, QStringList colInfo)
-{
-
-}

@@ -33,10 +33,11 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
             // If correct credentials inserted once
 
             Statics::teradataHost = host;
-            Statics::teradataDb = db;
+            Statics::teradataDb = dbString;
             Statics::teradataPort = port;
             Statics::teradataUsername = username;
             Statics::teradataPassword = password;
+            Statics::teradataRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -83,6 +84,7 @@ void TeradataCon::closeConnection()
     Statics::teradataPort = 0;
     Statics::teradataUsername = "";
     Statics::teradataPassword = "";
+    Statics::teradataRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

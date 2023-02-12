@@ -10,20 +10,21 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 300
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 150
     padding: 0
     property int label_col : 135
 
@@ -42,31 +43,12 @@ Popup {
     /***********************************************************************************************************************/
     // Connection  Starts
 
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-        }
-    }
+    // LIVE CONNECTION not possible
 
     Connections{
         target: ConnectorsLoginModel
 
-        function onExcelLoginStatus(status, directLogin){
+        function onExcelLoginOdbcStatus(status, directLogin){
 
             if(directLogin === true){
                 if(status.status === true){
@@ -84,11 +66,8 @@ Popup {
         }
 
         function onLogout(){
-            server.text = ""
-            database.text = ""
-            port.text = ""
-            username.text = ""
-            password.text = ""
+            excelFileName.text = ""
+            selectedFile = ""
         }
     }
 
@@ -120,13 +99,15 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        promptExcel.nameFilters = Messages.cn_sub_excodbc_namedFilter
+        file_btn.text = Messages.cn_sub_excodbc_header
+    }
+
     function hidePopup(){
         popup.visible = false
     }
 
-    function connectToExcel(){
-        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-    }
 
     function handleExcel(excelFileName){
 
@@ -139,7 +120,7 @@ Popup {
 
             ConnectorsLoginModel.excelOdbcLogin(control.currentText, excelFileName)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -157,9 +138,9 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Excel Connection"
+        title: Messages.cn_sub_excodbc_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -184,12 +165,12 @@ Popup {
         width: parent.width - 2
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 10
+        // anchors.topMargin: 10
         anchors.leftMargin: 1
 
         Text{
             id : text1
-            text: "Select Excel File"
+            text: Messages.cn_sub_excodbc_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -232,7 +213,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -336,7 +317,7 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 55
         anchors.left: parent.left
-        anchors.leftMargin: 100
+        anchors.leftMargin: 130
 
         Rectangle{
 
@@ -350,7 +331,6 @@ Popup {
 
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: "Select Excel file"
                 onClicked: promptExcel.open();
             }
         }
@@ -380,10 +360,11 @@ Popup {
     Row{
 
         id: row3
-        anchors.top: row2.bottom
-        anchors.topMargin: 15
+        // anchors.top: row2.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
         anchors.right: parent.right
-        anchors.rightMargin: label_col
+        anchors.rightMargin: 65
         //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
@@ -411,7 +392,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Constants.signInText
+            textValue: Messages.openFileText
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: handleExcel(selectedFile)
         }
@@ -426,20 +407,19 @@ Popup {
     MessageDialog {
         id: excelOdbcModalError
         visible: false
-        title: "Excel Driver missing"
-        text: qsTr("You don't have Excel driver. Download Microsoft Excel to enable this")
+        title: Messages.cn_sub_excodbc_missingDriver
+        text: Messages.cn_sub_excodbc_driverDownload
 
     }
 
     // Select Excel file
     FileDialog{
         id: promptExcel
-        title: "Select a file"
-        nameFilters: ["Excel files (*.xls *.xlsx)"];
+        title: Messages.selectFile
 
 
         onAccepted: {
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

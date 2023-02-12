@@ -23,18 +23,20 @@ Item {
     }
 
     onComponentNameChanged: {
-        modelContent = TableColumnsModel.fetchColumnData(componentName)
-        modelContent.unshift("Select All")
 
-        var i = 0;
-        modelContent.forEach(item => {
-                             listModel.append({"name": item, "checked": true, "index": i})
-                                 i++
-                             })
-        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        idPlesaeWaitThorbber.visible = true
+        idPlesaeWaitText.visible = true
 
-        // for the first time, select all values
-       master = true
+        if(GeneralParamsModel.getAPISwitch()) {
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelContent)
+        } else {
+            modelContent = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelContent)
+        }
+
 
     }
 
@@ -46,6 +48,45 @@ Item {
                 componentTitle.text = newAlias
             }
         }
+    }
+
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+    function processDataList(modelContent){
+        modelContent.unshift("Select All")
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        var i = 0;
+        listModel.clear()
+
+        if(previousCheckValues.length > 0){
+            modelContent.forEach(item => {
+                                     var checkedStatus = previousCheckValues.includes(item) ? true : false;
+                                     listModel.append({"name": item, "checked": checkedStatus, "index": i})
+                                     i++
+                                 })
+        } else {
+            modelContent.forEach(item => {
+                                     listModel.append({"name": item, "checked": true, "index": i})
+                                     i++
+                                 })
+        }
+
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        master = true
+
+        idPlesaeWaitThorbber.visible = false
+        idPlesaeWaitText.visible = false
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked, index){
@@ -64,7 +105,8 @@ Item {
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
@@ -140,6 +182,17 @@ Item {
             }
         }
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
         ComboBox {
             id: comboBox

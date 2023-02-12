@@ -11,21 +11,22 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 
 Popup {
     id: popupLogout
     width: 600
-    height: 400
+    height: 200
     modal: true
     visible: false
     x: parent.width / 2 - 300
-    y: parent.width / 2 - 700
+    y: parent.height / 2 - 200
     padding: 0
 
     property int label_col : 150
@@ -34,11 +35,15 @@ Popup {
         target: User
         function onLogoutStatus(status){
 
+             error_connection_text.text = ""
+
             if(status.code === 200){
                 popupLogout.visible = false
-                action_signin.text = Constants.signInText
-                menu_signIn.title = Constants.signInText
-                stacklayout_home.currentIndex = 2
+                action_signin.text = Messages.signInText
+
+                if(GeneralParamsModel.currentScreen === Constants.grsScreen){
+                    stacklayout_home.currentIndex = 3
+                }
             }
             else{
                 error_connection_text.text = status.msg
@@ -65,7 +70,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Logout"
+            text: Messages.msc_logt_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -98,8 +103,8 @@ Popup {
     Row{
 
         id: row1
-        anchors.top: headerPopup.bottom
-        anchors.topMargin: 30
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin:  60
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
@@ -123,14 +128,14 @@ Popup {
                 }
 
                 Text{
-                    text: Constants.signOutText
+                    text: Messages.signOutText
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }
             }
             onClicked: {
-                error_connection_text.text = "Logging out. Please wait.."
+                error_connection_text.text = Messages.msc_logt_pleaseWait
                 User.logout()
             }
         }

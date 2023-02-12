@@ -6,8 +6,16 @@
 #include <QSettings>
 #include <QTextDocument>
 #include <QDebug>
+#include <QUrl>
+#include <QRandomGenerator>
+#include <QProcess>
+#include <QJsonDocument>
+#include <QDir>
+#include <QApplication>
+#include <QStandardPaths>
 
 #include "../../statics.h"
+#include "../../constants.h"
 
 class GeneralParamsModel : public QObject
 {
@@ -19,13 +27,25 @@ class GeneralParamsModel : public QObject
     int m_currentScreen;
     QVariantMap changedHeaderTypes; // QMap<tableName.columnName, newColumnType>
 
+    bool setForLiveFile;
+    bool setForLiveQuery;
+    QJsonDocument jsonDoc;
+    QString currentWorkbookName;
+
 public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
+
+    Q_INVOKABLE int getDsSize();
 
     Q_INVOKABLE QString getFileToken();
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
+    Q_INVOKABLE bool isWorkbookInEditMode();
+    Q_INVOKABLE void openNewGrafieksInstance();
+
+    Q_INVOKABLE QVariantMap getAppInfo();
+    Q_INVOKABLE int getFileSize(QString filePath);
 
     Q_INVOKABLE int getOnlineStorageType();
 
@@ -44,9 +64,53 @@ public:
     //! Set Static Extracts Path
     Q_INVOKABLE void setExtractPath(QString extractsPath);
 
+    //! Get Live Path
+    Q_INVOKABLE QString getLivePath();
+
+    //! Set Static Live Path
+    Q_INVOKABLE void setLivePath(QString livePath);
+
+    //! Get Extract Path
+    Q_INVOKABLE QString getExtractPath();
+
+    //! Set ExtractLive Path without signal
+    Q_INVOKABLE void setPath(QString path, QString type);
+
     //! Change column types
     Q_INVOKABLE void changeColumnTypes(QString columnName, QString tableName, QString newColumnType);
     Q_INVOKABLE QVariantMap getChangedColumnTypes();
+
+    Q_INVOKABLE QString urlToFilePath(QUrl url);
+
+    Q_INVOKABLE void setFromLiveFile(bool setForLiveFile);
+    Q_INVOKABLE bool getFromLiveFile();
+
+    Q_INVOKABLE void setForAPI(QString dsFileName, QString fileType);
+
+    Q_INVOKABLE void setJsonFromWorkbook(QJsonDocument jsonDoc);
+    Q_INVOKABLE QJsonDocument getJsonFromWorkbook();
+    Q_INVOKABLE bool ifJsonFromWorkbookSet();
+
+    Q_INVOKABLE void setFromLiveQuery(bool setForLiveQuery);
+    Q_INVOKABLE bool getFromLiveQuery();
+
+    Q_INVOKABLE QVariantList getCredentials();
+
+    Q_INVOKABLE void setAPISwitch(bool apiSwitch);
+    Q_INVOKABLE bool getAPISwitch();
+
+    QString randomStringGenerator();
+    Q_INVOKABLE bool ifFreeRelease();
+
+    Q_INVOKABLE void setCurrentWorkbookName(QString workbookName);
+
+    Q_INVOKABLE void resetGeneralParams();
+
+    Q_INVOKABLE QString getDSNameWithoutExtension();
+
+    Q_INVOKABLE void quitApplication();
+
+    Q_INVOKABLE QString getQueryString(QString body, QVariantMap headers);
 
 public slots:
 
@@ -62,6 +126,8 @@ signals:
     void currentScreenChanged(int currentScreen);
     void hideSplash();
     void colTypeChanged();
+    void showSaveExtractWaitPopup();
+    void savedWorkbookChanged(QString workbookName);
 };
 
 #endif // GENERALPARAMSMODEL_H

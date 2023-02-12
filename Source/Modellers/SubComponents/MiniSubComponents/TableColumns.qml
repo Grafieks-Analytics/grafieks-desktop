@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -56,6 +57,8 @@ Item {
         var key = ""
         if(GeneralParamsModel.getDbClassification() === Constants.excelType){
             key = "[" + tableName + "$]" + "." + "[" + colName + "]"
+        } else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+            key = "[" + tableName + "]" + "." + "[" + colName + "]"
         } else {
             key = tableName + "." + colName
         }
@@ -90,7 +93,8 @@ Item {
         delegate: Rectangle{
             id: innerListView
             height: 25
-            width: 100
+            width: item_querymodeller.width-80
+
 
 
             CheckBoxTpl{
@@ -101,7 +105,7 @@ Item {
                 parent_dimension: 12
 
                 onClicked: hideColumnSelection(checked, colName, tableName)
-            }
+            }       
 
             Image {
                 id: toggleMenuIcon
@@ -158,7 +162,7 @@ Item {
                                 id:menuItem1
                                 implicitHeight: 30
                                 leftPadding: 15
-                                text: qsTr("Categorical")
+                                text: Messages.filterCategorical
 
                                 onClicked: changeDataType(colName, colType, tableName, Constants.categoricalTab)
 
@@ -168,7 +172,7 @@ Item {
                                 id:menuItem2
                                 implicitHeight: 30
                                 leftPadding: 15
-                                text: qsTr("Numerical")
+                                text: Messages.filterNumerical
 
                                 onClicked: changeDataType(colName, colType, tableName, Constants.numericalTab)
                             }

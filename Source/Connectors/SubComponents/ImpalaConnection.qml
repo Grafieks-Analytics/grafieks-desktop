@@ -10,9 +10,10 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -32,21 +33,55 @@ Popup {
     // Connection  Starts
 
     Connections{
+        target: LiveProcessor
+
+        function onOpenConnection(dbType){
+            if(dbType === "impala"){
+                LiveProcessor.processLiveQueries()
+
+                let credentials = GeneralParamsModel.getCredentials();
+
+                server.text = credentials[0]
+                port.text = credentials[1]
+                database.text = credentials[5]
+                username.text = credentials[3]
+                password.text = credentials[4]
+            }
+        }
+    }
+
+
+    Connections{
         target: ConnectorsLoginModel
 
         function onImpalaLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                let setFromLiveFile = GeneralParamsModel.getFromLiveFile()
+                if(setFromLiveFile){
+                    LiveProcessor.processLiveQueries()
+
+                    var ifJsonFromWorkbookSet = GeneralParamsModel.ifJsonFromWorkbookSet()
+                    if(ifJsonFromWorkbookSet)
+                        WorkbookProcessor.processJsonAfterLoginCredentials()
+
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+                    GeneralParamsModel.setFromLiveFile(false)
+                    stacklayout_home.currentIndex = 6
+
+                } else {
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){
@@ -117,9 +152,9 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Impala Connection"
+        title: Messages.cn_sub_impala_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -149,7 +184,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Impala"
+            text: Messages.cn_sub_impala_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -192,7 +227,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -304,7 +339,7 @@ Popup {
             width:label_col
             height: 40
             Text{
-                text: "Server"
+                text: Messages.cn_sub_common_server
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -314,7 +349,7 @@ Popup {
 
         TextField{
             id: server
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             height: 40
@@ -333,7 +368,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Port"
+                text: Messages.cn_sub_common_port
                 leftPadding: 10
                 anchors.left: server.right
                 anchors.rightMargin: 20
@@ -343,7 +378,7 @@ Popup {
         }
         TextField{
             id: port
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             //width: 130
@@ -378,7 +413,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -388,7 +423,7 @@ Popup {
 
         TextField{
             id: database
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -424,7 +459,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.cn_sub_common_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -434,7 +469,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -469,7 +504,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.cn_sub_common_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -479,7 +514,7 @@ Popup {
 
         TextField{
             id: password
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
@@ -513,7 +548,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Constants.signInText
+            textValue: Messages.signInText
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: connectToMsSQL()
         }
@@ -529,9 +564,14 @@ Popup {
     MessageDialog {
         id: impalaOdbcModalError
         visible: false
-        title: "Impala Driver missing"
-        text: qsTr("You don't have Impala driver. Download it here <a href=\"https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html\">https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html</a>")
+        title: Messages.cn_sub_hive_missingDriver
+        text: Messages.cn_sub_hive_driverDownload
 
+//        standardButtons: StandardButton.Ok
+        buttons: MessageDialog.Ok
+
+        onAccepted: {Qt.openUrlExternally(Constants.impalaDriverUrl)
+        }
     }
 
 }

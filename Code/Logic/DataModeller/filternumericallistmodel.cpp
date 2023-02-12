@@ -286,6 +286,11 @@ void FilterNumericalListModel::clearFilters()
     emit rowCountChanged();
 }
 
+int FilterNumericalListModel::getFilterNumericalListId(int FilterIndex)
+{
+    return mFilter.at(FilterIndex)->filterId();
+}
+
 QList<FilterNumericalList *> FilterNumericalListModel::getFilters()
 {
     return mFilter;
@@ -386,8 +391,13 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
 
-                tmpWhereConditions = QString("%1.%2 %3 %4")
-                        .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
+                if(Statics::currentDbIntType == Constants::accessIntType){
+                    tmpWhereConditions = QString("%1.%2 %3 %4")
+                            .arg("[" + tableName + "]").arg("[" + columnName + "]").arg(excludeCase).arg(newCondition);
+                } else {
+                    tmpWhereConditions = QString("%1.%2 %3 %4")
+                            .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
+                }
 
                 localCounter++;
             }
@@ -408,8 +418,13 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
-            tmpWhereConditions = QString("%1.%2 %3 %4")
-                    .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
+            if(Statics::currentDbIntType == Constants::accessIntType){
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg("[" + tableName + "]").arg("[" + columnName + "]").arg(excludeCase).arg(newCondition);
+            } else {
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
+            }
         }
         break;
     }
@@ -432,7 +447,7 @@ QString FilterNumericalListModel::getQueryJoiner()
         break;
 
     case Constants::postgresIntType:
-        joiner = "`";
+        joiner = "\"";
         break;
 
     case Constants::oracleIntType:

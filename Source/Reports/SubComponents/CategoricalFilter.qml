@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -63,7 +64,7 @@ Popup {
 
         function onColumnDataChanged(columnData, options){
 
-            if(options !== ""){
+            if(options.length > 0){
 
                 var jsonOptions = JSON.parse(options)
                 if(jsonOptions.section === Constants.categoricalTab){
@@ -189,10 +190,8 @@ Popup {
         categoricalFilterPopup.clearData()
 
         // Call the function to apply all the filters in reports
-        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
+        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ReportsDataModel.updateFilterData
         ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId)
-
-
 
     }
 
@@ -291,7 +290,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Data Source Filter heading"
+            text: Messages.re_sub_common_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -340,7 +339,7 @@ Popup {
             CustomRadioButton{
                 id: listRadio
                 x:21
-                text: qsTr("List")
+                text: Messages.filterList
                 ButtonGroup.group: filterType
                 checked: true
                 parent_dimension: 16
@@ -360,7 +359,7 @@ Popup {
 
             CustomRadioButton{
                 id: wildcardRadio
-                text: qsTr("Wildcard")
+                text: Messages.filterWildcard
 
                 //                anchors.left: listRadioColumn.left
                 anchors.right: parent.right
@@ -429,7 +428,7 @@ Popup {
 
         CustomButton{
             id: resetBtn
-            textValue: "Reset"
+            textValue: Messages.resetBtnTxt
 
             anchors.left: parent.left
             anchors.leftMargin: 20
@@ -440,7 +439,7 @@ Popup {
 
         CustomButton{
             id: apply_btn1
-            textValue: "Apply"
+            textValue: Messages.applyBtnTxt
 
             anchors.right: parent.right
             anchors.rightMargin: 20
@@ -453,7 +452,7 @@ Popup {
 
             anchors.right: apply_btn1.left
             anchors.rightMargin: 20
-            textValue: "Cancel"
+            textValue: Messages.cancelBtnTxt
             onClicked: closeCategoricalFilterPopup()
 
         }

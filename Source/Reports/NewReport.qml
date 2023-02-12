@@ -12,57 +12,134 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtWebEngine 1.7
+import QtQml.Models 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
+import "./reports.js" as Reports
+import "./reportUtils.js" as ReportUtils
+import "./dataPanesDropHandlers.js" as DataPanesDropHandler
+import "./chartsConfig.js" as ChartsConfig
+import "./colorPalleteHandler.js" as ColorPalleteHandler
+import "./chartsWebViewHandlers.js" as ChartsWebViewHandler
+import "./drawChartUtils.js" as DrawChartUtils
+
+/*
+    How a chart is drawn:
+    - Load /build/index.html in webengine view and wait for it to load
+    - onGrafieksChartPageLoaded => Redraw chart function is called
+    = onElementDrop:
+        1. Check if the chart has horizontal orientation functionality -> horizontal bar chart | horitaontal line charts
+            - Condition to check isHorizontal is based on data panes dropped on the x-y axis
+            - onIsHorizontalGraphChanged =>
+                - Change allowedXAxisDataPanes to 1
+                - Change allowedYAxisDataPanes to 2
+                - switch chart title as per the loaded current chart. Eg: If line chart was loaded and horizotal grapsh is switched -> then load horizontal line chart
+        2 .
+*/
 
 Page {
 
     id: report_desiner_page
     width: parent.width
-    property int menu_width: 60
+    
+    // property int menu_width: 60
 
-    property int spacingColorList: 5
-    property int colorBoxHeight: 20
-    property int colorListTopMargin: 5
-    property int editImageSize: 16
-    property bool xaxisActive: ReportParamsModel.xAxisActive
-    property bool yaxisActive: ReportParamsModel.yAxisActive
+    property int dataPanesSpacing: 5    // spacing between data panes dropped on x axis, y axis, values and other droppable areas
+    // property int colorBoxHeight: 20
+    // property int colorListTopMargin: 5
 
-    property var maxDropOnXAxis: 1;
-    property var maxDropOnYAxis: 1;
+    property var errMsg: ""
+    property var mode: ""
 
-    property bool yAxisVisible: true
-    property bool xAxisVisible: true
-    property bool row4Visible: false
-    property bool lineTypeChartVisible: false
+    property int editImageSize: 16      // Edit icon size
 
-    property bool row3Visible: false
-    property bool pivotThemeVisible: false
+    property bool addReportClicked: false    // This toggle is used to check if add report is clicked or not. This prevents in calling reDrawChart on title Changed
 
+    property bool xaxisActive: false    // X axis is active => Green color the data pane droppable zone
+    property bool yaxisActive: false    // Y axis is active => Green color the data pane droppable zone
+    property bool row3Active: null      // Row 3 is active => Green color the data pane droppable zone
+    property bool row4Active: null      // Row 4 is active => Green color the data pane droppable zone
 
-    property string yAxisLabelName: Constants.yAxisName
-    property string xAxisLabelName: Constants.xAxisName
-    property string valuesLabelName: 'Values'
+    property bool xAxisVisible: true    // X axis is visible ==> Hide the axis row
+    property bool yAxisVisible: true    // Y axis is visible ==> Hide the axis row
+    property bool row3Visible: false    // Row 3 is visible  ==> Hide the row
+    property bool row4Visible: false    // Row 4 is visible ==> Hide the row
 
-    property string reportChart:ReportParamsModel.chartType;
-    property string reportIdMain:ReportParamsModel.reportId;
+    property string xAxisLabelName: Constants.xAxisName     // X axis label name
+    property string yAxisLabelName: Constants.yAxisName     // Y axis label name
+    property string valuesLabelName: 'Values'               // Label for row3/row4
+
+    property var maxDropOnXAxis: 1      // How many data panes are allowed to be dropped on X axis
+    property var maxDropOnYAxis: 1      // How many data panes are allowed to be dropped on Y axis
+
+    property bool lineTypeChartVisible: false       // Line type chart is visible || line chart is selected
+    property bool pivotThemeVisible: false          // Pivot theme is visible || pivot chart is selected
+
+    property string reportChart:ReportParamsModel.chartType;        // TODO: Check what is Chart type
+    property int reportIdMain:ReportParamsModel.reportId;
 
     // Initial Chart Config
-    property string chartUrl: 'BarChartArrayInput.html';
-    property string chartTitle: Constants.barChartTitle;
-    property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
+    property string chartUrl: '';                               // TODO: Remove chartUrl ==> Because this will be same everywhere
+    property string chartTitle: Constants.barChartTitle;        // Initial chart will be bar chart
+    property string previousChartTitle: "";                     // Previous chart title is used to clear values of data panes
+
+    property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";                 // Customizations Menu shown as per charts => Handled on chart change by list model
+    property var subMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";         // Sub menu in Customizations Menu shown as per charts => Handled on chart change by list model
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
     property var d3PropertyConfig: ({});
+    property var qmlChartConfig: ({}); // TODO: Check if qml charts config can be removed
 
-    property var lastPickedDataPaneElementProperties: ({});
-    property var reportDataPanes: ({});  // Report Data Panes Object
+    // todo: move these tables config to tables qml file
+    // Table Customization values
+    property bool alternateRowsCheckStatus: true
+    property bool searchCheckStatus: true
+    property bool compactStatusCheckStatus: false
 
-    property var dragActiveObject: ({});
+    // table total customization
+    property bool tableGrandTotalCheckStatus: false
+    property bool totalSubTotalCheckStatus: false
+    property bool totalRowTotalCheckStatus: false
+
+    // axis settings value
+    property bool xAxisLabelStatus: true
+    property bool yAxisLabelStatus: true
+
+    // KPI Values!!
+    property bool boldCheckKPILabelStatus: false
+    property bool italicCheckKPILabelStatus: false
+    property bool underlineCheckKPILabelStatus:false
+
+    property var dataLabelDialogKpiColor: '#000000'
+    property var dataLabelKpiColorBoxColor: '#000000'
+
+    property bool boldCheckKPIValueStatus: false
+    property bool italicCheckKPIValueStatus: false
+    property bool underlineCheckKPIValueStatus:false
+
+    property var dataValueDialogKpiColor: '#000000'
+    property var dataValueKpiColorBoxColor: '#000000'
+
+    property var lastDataValues: ([])
+
+    // This object will contain all the extra param models
+    // TODO: Check if this is an additional dependancy and can be removed
+    /*
+        {
+            chartName: { param1: value1, param2: value2 }
+        }
+    */
+    property var optionalParams: ({});
+
+    property var lastPickedDataPaneElementProperties: ({});     //  Store the last picked data pane element properties
+    property var reportDataPanes: ({});                         //  Report Data Panes Object
+
+    property var dragActiveObject: ({});                        // Store the last picked data pane element properties
 
     property var allChartsMapping: ({});
     // An array having item type and name of the spilt by value
@@ -73,8 +150,9 @@ Page {
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
+    property var allowedRow3AxisDataPanes: 0;
 
-    property var reportTitleName: null;
+    property var reportTitleName: "";
 
     // Flag for horizontal graph
     // Changes when numerical value is added on X axis
@@ -87,9 +165,25 @@ Page {
     // Edit Report Flag
     property bool editReportFlag: false;
     property var dataValues : null;
+    property int activeChartIndex: 0;
 
     // Array List -> This will contain all the charts which can be converted to horizontal
-    property var horizontalChartList: [];
+    property var horizontalChartList: [
+        Constants.barChartTitle,
+        Constants.stackedBarChartTitle,
+        Constants.groupBarChartTitle,
+        Constants.horizontalBarChartTitle,
+        Constants.horizontalStackedBarChartTitle,
+        Constants.horizontalBarGroupedChartTitle,
+        Constants.lineChartTitle,
+        Constants.horizontalLineChartTitle,
+        Constants.multiLineChartTitle,
+        Constants.horizontalMultiLineChartTitle,
+        Constants.areaChartTitle,
+        Constants.horizontalAreaChartTitle,
+        Constants.multipleAreaChartTitle,
+        Constants.multipleHorizontalAreaChartTitle
+    ];
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -114,11 +208,62 @@ Page {
         id: valuesListModel
     }
 
-    // Colur By Data Item List
+    // Colour By Data Item List => d3colorPallete
     ListModel{
         id: dataItemList
     }
 
+    // *** Temp Models to be refactored
+    // *** Models used in tooltips
+    ListModel{
+        id: tempXModel
+    }
+    ListModel{
+        id: tempYModel
+    }
+    ListModel{
+        id: tempColorByModel
+    }
+
+    ListModel{
+        id: allCharts
+    }
+
+    ListModel {
+        id: functionModel
+        ListElement {
+            name: "IF"
+            syntax:"if(5> 10,100,3) = 3"
+            mode: "map"
+        }
+        ListElement {
+            name: "If Case"
+            syntax:"Returns the 'returnValue' if the given column satisfied with 'matchExpr'."
+            mode: "map"
+        }
+        ListElement {
+            name: "Ifnull"
+            syntax:"ifnull(null,10) = 10"
+            mode: "map"
+        }
+        ListElement {
+            name: "Is Empty"
+            syntax:"isempty(null) = 1"
+            mode: "map"
+        }
+        ListElement {
+            name: "isnul"
+            syntax:"isnull(null)- 1"
+            mode: "map"
+        }
+        ListElement {
+            name: "SUM (single value)"
+            syntax:"Some dummy syntax"
+            mode: "reduce"
+        }
+
+
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -142,30 +287,33 @@ Page {
 
         function onEditReportToggleChanged(reportId){
             if(reportId=="-1"){
+                DashboardParamsModel.setReportBackgroundColor(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, DashboardParamsModel.getReportBackgroundColor(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport))
                 return;
             }
             if(reportId != "false"){
-                addReportButton.text = "Update";
+                addReportButton.text = Messages.updateBtnTxt;
                 editReportFlag = true;
-                setValuesOnEditReport(reportId);
+                Reports.setValuesOnEditReport(reportId);
             }else{
-                addReportButton.text = "Add";
-                var reportIdMain = generateReportId();
-                ReportParamsModel.setReportId(reportIdMain);
-                ReportParamsModel.addReport(reportIdMain);
-                
+                addReportButton.text = Messages.addBtnTxt;
                 ReportParamsModel.setChartType(Constants.barChartTitle);
                 ReportParamsModel.setChartTitle(Constants.barChartTitle);
             }
         }
 
         function onReportIdChanged(reportIdValue){
+            // Todo
+            // Tag: Check
+            console.log('DEBUG::: Report id value',reportIdValue);
             if(!reportIdValue){
-                clearValuesOnAddNewReport();
+                Reports.clearValuesOnAddNewReport();
             }
             report_desiner_page.reportIdMain = reportIdValue;
-            console.log(reportIdValue, "UPDATED REPORT ID")
             ReportParamsModel.restoreMasterReportFilters(reportIdValue)
+        }
+
+        function onClearScreenSignal(){
+            Reports.clearValuesOnAddNewReport();
         }
 
     }
@@ -173,77 +321,105 @@ Page {
     Connections{
         target: ChartsModel
 
-        function onSignalBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        // TODO: Emit a single signal for all the charts
+        // If single signal is not emitted, we will have to append each function here. again and again
+        // Also same this is there in dropped report.qml => we can elimate this
+        function onSignalBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
 
-        function onSignalStackedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalStackedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalGroupedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalGroupedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalNewGroupedBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalNewGroupedBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalAreaChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalAreaChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalLineChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalLineChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalLineBarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalLineBarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalPieChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalPieChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalFunnelChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalFunnelChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalRadarChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalRadarChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalScatterChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalScatterChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalHeatMapChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalHeatMapChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalSunburstChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalSunburstChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalWaterfallChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalWaterfallChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalGaugeChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalGaugeChartValues(output, reportId, dashboardId, chartSource){
+            console.log('DEBUG::: Gauge chart values',output);
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalSankeyChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalSankeyChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalTreeChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTreeChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalTreeMapChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTreeMapChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalKPIChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalKPIChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalTableChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalTableChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalPivotChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalPivotChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalStackedAreaChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalStackedAreaChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
-        function onSignalMultiLineChartValues(output){
-            drawChartAfterReceivingSignal(output);
+        function onSignalMultiLineChartValues(output, reportId, dashboardId, chartSource){
+            if(reportId === report_desiner_page.reportIdMain)
+                DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
     }
+
 
 
     // Connections Ends
@@ -256,624 +432,218 @@ Page {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function drawChartAfterReceivingSignal(dataValues){
-        if(webEngineView.loading){
+    Component.onCompleted: ReportUtils.onNewReportComponentLoad()
+
+    // TODO: Add comments what happens here
+    onIsHorizontalGraphChanged: ReportUtils.onIsHorizontalGraphChanged();
+
+    // TODO: Add comments what happens here
+    onChartTitleChanged: ReportUtils.onChartTitleChanged();
+
+    // Signal fired when drop is hovered on X Axis
+    onXaxisActiveChanged: ReportUtils.checkAndMakeElementDropEligible(xaxisActive, xAxisRectangle);
+
+    // Signal fired when drop is hovered on Y Axis
+    onYaxisActiveChanged: ReportUtils.checkAndMakeElementDropEligible(yaxisActive, yAxisRectangle);
+    
+    // Signal fired when drop is hovered on Y Axis
+    onRow3ActiveChanged: ReportUtils.checkAndMakeElementDropEligible(row3Active, row3DropAreaRectangle);
+
+    // Signal fired when drop is hovered on Y Axis
+    onRow4ActiveChanged: ReportUtils.checkAndMakeElementDropEligible(row4Active, row4DropAreaRectangle);
+
+    function getLastDataValues(){
+        return lastDataValues;
+    }
+
+    function updateChart() {
+        if (chartTitle == Constants.gaugeChartTitle){
+            reDrawChart();
             return;
         }
-        
-        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
-        var colorByColumnName = colorByData[0] && colorByData[0].columnName;
+        ChartsWebViewHandler.updateChart(d3PropertyConfig)
+    }
 
-        console.log(xAxisColumns, yAxisColumns)
-        colorData = [];
-        switch(chartTitle){
-        case Constants.horizontalBarChartTitle:
-            console.log(chartTitle,"CLICKED")
-            // datavalues is a global property and set using connections
-            // due to multi threading
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
-            break;
+    function exportPivotChart() {
+        webEngineView.runJavaScript("exportToExcel()");
+    }
+
+    //
+    function clearColorByList() {
+        var clearFlag = true;
+        var lastColorByValueItemType =
+                (colorByData.length && colorByData[0].itemType) || "";
+        switch (chartTitle) {
         case Constants.barChartTitle:
-            console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
-            break;
-        case Constants.horizontalStackedBarChartTitle:
-            console.log(chartTitle,"CLICKED")
-
-            dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
-            colorData = dataValues[1] || [];
-            console.log(dataValues);
-            dataValues = JSON.stringify(dataValues);
-            break;
-        case Constants.stackedBarChartTitle:
-            console.log(chartTitle,"CLICKED")
-            
-            dataValues = dataValues && JSON.parse(dataValues);
-            dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
-            colorData = dataValues[1] || [];
-            dataValues = JSON.stringify(dataValues);
-            break;
-        case Constants.horizontalBarGroupedChartTitle:
-            var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
-            if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
-                d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
-            }else{
-                delete d3PropertyConfig['options'];
-                colorListModel.clear();
-                colorByData = [];
-            }
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
-            dataValues = JSON.stringify(dataValues);
-            
-            break;
-        case Constants.groupBarChartTitle:
-            var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
-            if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
-                d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
-            }else{
-                delete d3PropertyConfig['options'];
-                colorListModel.clear();
-                colorByData = [];
-                ReportParamsModel.setItemType(null);
-                ReportParamsModel.setLastDropped(null);
-            }
-            
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            dataValues = JSON.stringify(dataValues);
-
-            console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-            break;
-        case Constants.areaChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.horizontalAreaChartTitle:
-            console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
-            break;
         case Constants.lineChartTitle:
-            console.log(chartTitle,"CLICKED");
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
-            break;
-        case Constants.horizontalLineChartTitle:
-            console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
-            break;
-        case Constants.stackedAreaChartTitle:
+        case Constants.areaChartTitle:
         case Constants.multiLineChartTitle:
-            console.log(Constants.multiLineChartTitle,"CLICKED");
-            dataValues = JSON.parse(dataValues);
-            dataValues[1].splice(1,0,colorByColumnName); 
-            colorData = (dataValues && dataValues[1]) || [];
-            dataValues = JSON.stringify(dataValues);
-            break;
+        case Constants.multipleAreaChartTitle:
+        case Constants.groupBarChartTitle:
+        case Constants.stackedBarChartTitle:
+        case Constants.horizontalBarChartTitle:
+        case Constants.horizontalLineChartTitle:
+        case Constants.horizontalAreaChartTitle:
+        case Constants.horizontalBarGroupedChartTitle:
         case Constants.multipleHorizontalAreaChartTitle:
         case Constants.horizontalMultiLineChartTitle:
-            dataValues = JSON.parse(dataValues);
-            dataValues[1].splice(1,0,colorByColumnName); 
-            colorData = (dataValues && dataValues[1]) || [];
-            dataValues = JSON.stringify(dataValues);
-            break;
-        case Constants.pieChartTitle:
-        case Constants.donutChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.funnelChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.radarChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
+        case Constants.horizontalStackedBarChartTitle:
         case Constants.scatterChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.treeChartTitle:
-            console.log(chartTitle,"CLICKED")
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
-            dataValues = JSON.stringify(dataValues);
-            break;
-        case Constants.treeMapChartTitle:
-            console.log(chartTitle,"CLICKED")
+            if (lastColorByValueItemType.toLowerCase() == "categorical") {
+                clearFlag = false;
+            }
             break;
         case Constants.heatMapChartTitle:
-            console.log('Debug:: datavalues',dataValues);
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.sunburstChartTitle:
-            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
-            dataValues = JSON.stringify(dataValues);
-            console.log('Data values sunburst', dataValues);
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.waterfallChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.sankeyChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.kpiTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.tableTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.pivotTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        default:
-            console.log(chartTitle,"Clicked, but is a missed case")
-        }
-        if(!dataValues){
-            return;
-        }
-
-        console.log('Debug: Colour Data',colorData);
-        console.log('data values',dataValues);
-
-        // Appending list to select color
-        dataItemList.clear();
-        console.log('Color Data',colorData);
-        if(colorData && colorData.length){
-            colorData.forEach(function (element,index) {
-                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-            });
-        }
-
-        var scriptValue = 'window.addEventListener("resize", function () {
-                   window.clearChart && clearChart();
-                    drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-           });';
-
-        clearChartValue();
-        var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
-        webEngineView.runJavaScript(runScriptString);
-    }
-
-    Component.onCompleted: {
-
-        // Connect signal and slots
-        ReportParamsModel.xAxisActive = false;
-        ReportParamsModel.yAxisActive = false;
-        ReportParamsModel.colorByActive = false;
-
-        // Clearing xAxisListModel and yAxisListModel if any
-        // Might be possible that this is getting called once
-        // Check if can be removed [TAG: Optimization]
-        xAxisListModel.clear();
-        yAxisListModel.clear();
-
-        // Pushing all the horiontal type chart
-        horizontalChartList.push(Constants.barChartTitle);
-        horizontalChartList.push(Constants.stackedBarChartTitle);
-        horizontalChartList.push(Constants.groupBarChartTitle);
-
-        horizontalChartList.push(Constants.horizontalBarChartTitle);
-        horizontalChartList.push(Constants.horizontalStackedBarChartTitle);
-        horizontalChartList.push(Constants.horizontalBarGroupedChartTitle);
-
-        horizontalChartList.push(Constants.lineChartTitle);
-        horizontalChartList.push(Constants.horizontalLineChartTitle);
-        horizontalChartList.push(Constants.multiLineChartTitle);
-        horizontalChartList.push(Constants.horizontalMultiLineChartTitle);
-        
-        horizontalChartList.push(Constants.areaChartTitle);
-        horizontalChartList.push(Constants.horizontalAreaChartTitle);
-        horizontalChartList.push(Constants.multipleAreaChartTitle);
-        horizontalChartList.push(Constants.multipleHorizontalAreaChartTitle);
-
-    }
-
-
-    onIsHorizontalGraphChanged: {
-
-        console.log('Horizontal Bar Flag Change', chartTitle);
-
-        if(isHorizontalGraph){
-
-            allowedXAxisDataPanes = 1;
-            allowedYAxisDataPanes = 2;
-
-            switch(chartTitle){
-                case Constants.stackedBarChartTitle:
-                    console.log('Switching to horizontal stacked bar chart')
-                    switchChart(Constants.horizontalStackedBarChartTitle);
-                    break;
-                case Constants.barChartTitle:
-                    allowedYAxisDataPanes = 2;
-                    console.log('Switching to horizontal bar chart')
-                    switchChart(Constants.horizontalBarChartTitle);
-                    break;
-                case Constants.multiLineChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to multiple horizontal line chart')
-                    switchChart(Constants.horizontalMultiLineChartTitle);
-                    break;
-                case Constants.lineChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to horizontal line chart')
-                    switchChart(Constants.horizontalLineChartTitle);
-                    break;
-                case Constants.multipleAreaChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to multiple horizontal area chart')
-                    switchChart(Constants.multipleHorizontalAreaChartTitle);
-                    break;
-                case Constants.areaChartTitle:
-                    allowedYAxisDataPanes = 1;
-                    console.log('Switching to horizontal area chart')
-                    switchChart(Constants.horizontalAreaChartTitle);
-                    break;
-                default:
-                    console.log('Missed condition in isHorizontalGraph change horizontal')
+            if (lastColorByValueItemType.toLowerCase() == "numerical") {
+                clearFlag = false;
             }
-        }else{
-
-            // Changing the maximum values allowed (This will be the only case bar graphs )
-            allowedXAxisDataPanes = 2;
-            allowedYAxisDataPanes = 1;
-
-            switch(chartTitle){
-                case Constants.horizontalBarChartTitle:
-                    console.log('Switching to bar chart')
-                    switchChart(Constants.barChartTitle);
-                    break;
-                case Constants.horizontalStackedBarChartTitle:
-                    console.log('Switching to stacked bar chart')
-                    switchChart(Constants.stackedBarChartTitle);
-                    break;
-                case Constants.horizontalLineChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to line chart')
-                    switchChart(Constants.lineChartTitle);
-                    break;
-                case Constants.horizontalMultiLineChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to multiple line chart')
-                    switchChart(Constants.multiLineChartTitle);
-                    break;
-                case Constants.horizontalAreaChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to line chart')
-                    switchChart(Constants.areaChartTitle);
-                    break;
-                case Constants.multipleHorizontalAreaChartTitle:
-                    allowedXAxisDataPanes = 1;
-                    console.log('Switching to multiple line chart')
-                    switchChart(Constants.multipleAreaChartTitle);
-                    break;
-                default:
-                    console.log('Missed condition in isHorizontalGraph change veritcal')
-
-            }
-
-        }
-    }
-
-
-    onChartTitleChanged: {
-
-        console.log('Chart Title Changed',chartTitle);
-
-        // Charts Mapping
-        // Basically these are the basic configs
-        // Having Max Allowed Values for now
-        const chartDetailsConfig = allChartsMapping[chartTitle];
-        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
-
-        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
-
-        // check if maximum drop is less than in config?
-        // if less then remove all the extra values
-        // else no change -> Plot the graph
-
-        var dataValuesRemoved = false;
-        if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
-            xAxisColumns = xAxisColumns.splice(0,maxDropOnXAxis);
-            ReportParamsModel.setXAxisColumns(xAxisColumns);
-            xAxisListModel.remove(maxDropOnXAxis,xAxisListModel.count - maxDropOnXAxis);
-            dataValuesRemoved = true;
-        }
-
-        if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
-            yAxisColumns = yAxisColumns.splice(0,maxDropOnYAxis);
-            ReportParamsModel.setYAxisColumns(yAxisColumns);
-            yAxisListModel.remove(maxDropOnYAxis,yAxisListModel.count - maxDropOnYAxis);
-            dataValuesRemoved = true;
-        }
-
-        allowedXAxisDataPanes = maxDropOnXAxis;
-        allowedYAxisDataPanes = maxDropOnYAxis;
-
-        // change axis on the basis of chart title
-        // Updating the Row visible here => Sanky charts can have 3 rows
-        // where we can drop the columns
-
-        // Optimization Can be done => call switch function here to change the graph
-        switch(chartTitle){
-        case Constants.horizontalStackedBarChartTitle:
-            console.log('Make Horizontal stacked bar chart');
-            chartUrl=Constants.horizontalStackedBarChartUrl
-            webEngineView.url = Constants.chartsBaseUrl+chartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
             break;
-        case Constants.stackedBarChartTitle:
-            chartUrl=Constants.stackedBarChartUrl
-            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.stackedAreaChartTitle:
-            chartUrl=Constants.stackedAreaChartUrl;
-            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.sankeyTitle:
-            row3Visible =  true;
-            xAxisVisible = true
-            yAxisVisible = true
-            row4Visible = false
-            break;
-        case Constants.pivotTitle:
-            row3Visible =  true;
-            xAxisVisible = true
-            yAxisVisible = true
-            row4Visible = false
-            pivotThemeVisible=true
-            break;
-        case Constants.tableTitle:
-            yAxisVisible = false
-            xAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.gaugeChartTitle:
-            row4Visible = true
-            xAxisVisible =  false
-            yAxisVisible =  false
-            row3Visible =  false
-            break;
-        default:
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
         }
 
-        // If any column is removed on changing the chart name
-        // redraw the chart
-        if(dataValuesRemoved){
-            redrawChart();
+        if (clearFlag) {
+            colorListModel.clear();
+            colorByData = [];
+            ReportParamsModel.setLastDropped(null);
         }
-
-    }
-
-    // Variable when drop is hovered on X Axis
-    onXaxisActiveChanged: {
-        if(xaxisActive){
-            xAxisRectangle.border.color = Constants.grafieksLightGreenColor;
-            xAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
-        }else{
-            xAxisRectangle.border.color = "transparent";
-            xAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
-        }
-    }
-
-    // Variable when drop is hovered on Y Axis
-    onYaxisActiveChanged: {
-        if(yaxisActive){
-            yAxisRectangle.border.color = Constants.grafieksLightGreenColor;
-            yAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
-        }else{
-            yAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
-        }
-    }
-
-    function clearValuesOnAddNewReport(){
-        clearAllChartValues();
-        switchChart(Constants.barChartTitle);
-    }
-
-    function setValuesOnEditReport(reportId){
-
-        ReportParamsModel.setLastDropped(null);
-
-        // Setting the report title value to empty
-        report_title_text.text = "";
-        report_desiner_page.reportIdMain = reportId;
-
-        // Clear all the list models
-        xAxisListModel.clear();
-        yAxisListModel.clear();
-        colorListModel.clear();
-        valuesListModel.clear();
-        dataItemList.clear();
-        
-        var reportProperties = ReportParamsModel.getReport(reportIdMain);
-
-        var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
-        var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
-        var colorListModelData = JSON.parse(reportProperties.colorByDataColoumns);
-
-        // Update List Models
-        for(var i=0; i<xAxisColumnsReportData.length; i++){
-            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType, dateFormat: xAxisColumnsReportData[i].dateFormat })
-        }
-        for(var i=0; i< yAxisColumnsReportData.length; i++){
-            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType, dateFormat: yAxisColumnsReportData[i].dateFormat })
-        }
-        for(var i=0; i<colorListModelData.length; i++){
-            colorListModel.append({ textValue: colorListModelData[i].columnName })
-        }
-
-        // Update Property Variables
-        report_title_text.text = reportProperties.reportTitle
-        report_desiner_page.chartTitle = reportProperties.chartTitle;
-        report_desiner_page.chartUrl = reportProperties.chartUrl
-        report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
-        report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
-
-        reDrawChart();
     }
 
     // On Edit Redraw the updated chart
-    function reDrawDashboardChart(reportId){
-        let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
+    // TODO: Remove if not in use
+    function reDrawDashboardChart(reportId) {
+        let reportInstance =
+            ReportParamsModel.getDashboardReportInstance(reportIdMain);
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
-        var reportUrl = reportInstance.getChartUrl();
-
-        // Check if on updating the graph chart url was changed.
-        // If changed update the url in report instance
-        // Else just redraw the chart.
-        if(reportUrl !== reportProperties.chartUrl){
-            reportInstance.setChartUrl(reportProperties.chartUrl);
-            return;
-        }
-
         reportInstance.reDrawChart();
     }
 
     // Redraw all the charts in Dashboard
-    function reDrawAllDashboardCharts(){
+    function reDrawAllDashboardCharts() {
         // Here are all the instances, Let's Redraw the charts
         let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
-        for(var reportIdValue in allReportInstances){
+        for (var reportIdValue in allReportInstances) {
             // Redrawing charts one by one;
             var instance = allReportInstances[reportIdValue];
             instance.reDrawChart();
         }
     }
 
+    // Switch Chart
+    // Change title
+    // onTitleChanged => Signal is fired
 
-    // Switch Chart Urls
-    // Whenever Chart is changed
-    // Perform these things
-    // 1. Change the title
-    // 2. Change the URL
-    // 3. Update the webEngine URL
-
-    function switchChart(chartTitleValue){
+    function switchChart(chartTitleValue) {
+        console.log("Switching to ", chartTitleValue, " chart");
+        
+        previousChartTitle = chartTitle;
         chartTitle = chartTitleValue;
-        var chartUrl = '';
-        switch(chartTitle){
-        case Constants.barChartTitle:
-            chartUrl = Constants.barChartUrl;
-            break;
-        case Constants.horizontalBarChartTitle:
-            chartUrl = Constants.horizontalBarChartUrl;
-            break;
-        case Constants.horizontalStackedBarChartTitle:
-            chartUrl = Constants.horizontalStackedBarChartUrl;
-            break;
-        case Constants.stackedBarChartTitle:
-            chartUrl = Constants.stackedBarChartUrl
-            break;
-        case Constants.groupBarChartTitle:
-            chartUrl = Constants.barGroupedChartUrl
-            break;
-        case Constants.horizontalLineChartTitle:
-            chartUrl = Constants.horizontalLineChartUrl
-            break;
-        case Constants.multiLineChartTitle:
-            chartUrl = Constants.multiLineChartUrl;
-            break;
-        case Constants.lineChartTitle:
-            chartUrl  = Constants.lineChartUrl;
-            break;
-        case Constants.horizontalMultiLineChartTitle:
-            chartUrl = Constants.horizontalMultiLineChartUrl;
-            break;
-        case Constants.areaChartTitle:
-            chartUrl = Constants.areaChartUrl;
-            break;
-        case Constants.multipleAreaChartTitle:
-            chartUrl = Constants.multipleAreaChartUrl;
-            break;
-        case Constants.horizontalAreaChartTitle:
-            chartUrl = Constants.horizontalAreaChartUrl;
-            break;
-        case Constants.multipleHorizontalAreaChartTitle:
-            chartUrl = Constants.multipleHorizontalAreaChartUrl;
-            break;
+        if (d3PropertyConfig.toolTip) {
+            // Deleiing tooltips on changing chart
+            delete d3PropertyConfig.toolTip;
+            tempXModel.clear();
+            tempYModel.clear();
+            tempColorByModel.clear();
         }
-
-        webEngineView.url = Constants.baseChartUrl+chartUrl;
-        report_desiner_page.chartUrl = chartUrl;
     }
 
-    function searchColumnNames(searchText){
-        ReportsDataModel.searchColumnNames(searchText)
+    function searchColumnNames(searchText) {
+        ReportsDataModel.searchColumnNames(searchText);
     }
 
-    function getAxisModelAsJson(axisName){
+    function getAxisModelAsJson(axisName) {
         var model = null;
-        switch(axisName){
+        switch (axisName) {
         case Constants.xAxisName:
             model = xAxisListModel;
-            break
+            break;
         case Constants.yAxisName:
             model = yAxisListModel;
             break;
+        case Constants.gaugePointerLabel:
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
         }
-        if(!model){
+        if (!model) {
             return [];
         }
         var columnsData = [];
-        for(var i=0; i< model.count; i++){
-            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType, dateFormat: model.get(i).dateFormat });
+        for (var i = 0; i < model.count; i++) {
+            columnsData.push({
+                                 itemName: model.get(i).itemName,
+                                 tableValue: model.get(i).tableValue,
+                                 droppedItemType: model.get(i).droppedItemType,
+                                 dateFormat: model.get(i).dateFormat,
+                             });
         }
         return columnsData;
     }
 
-
     // function to get the columnName from model
-    function getAxisColumnNames(axisName){
+    function getAxisColumnNames(axisName) {
         var model = null;
-        switch(axisName){
+        switch (axisName) {
         case Constants.xAxisName:
             model = xAxisListModel;
-            break
+            break;
         case Constants.yAxisName:
             model = yAxisListModel;
             break;
+        case Constants.row4Name:
+        case Constants.row3Name:
+            model = valuesListModel;
+            break;
         }
-        if(!model){
+        if (!model) {
             return [];
         }
         var columnsName = [];
-        for(var i=0; i< model.count; i++){
-            columnsName.push(model.get(i).itemName);
+        for (var i = 0; i < model.count; i++) {
+            columnsName.push(model.get(i).tableValue);
         }
         return columnsName;
     }
 
-    function clearAllChartValues(){
+    function getDataPaneAllDetails(axisName) {
+        var model = null;
+        switch (axisName) {
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break;
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        case Constants.row3Name:
+        case Constants.row4Name:
+            model = valuesListModel;
+            break;
+        }
+        if (!model) {
+            return [];
+        }
+        var columnsAllDetails = [];
+        for (var i = 0; i < model.count; i++) {
+            columnsAllDetails.push({
+                                       itemName: model.get(i).itemName,
+                                       tableValue: model.get(i).tableValue,
+                                       itemType: model.get(i).droppedItemType,
+                                       dateFormat: model.get(i).dateFormat,
+                                   });
+        }
+        return columnsAllDetails;
+    }
 
+    function clearAllChartValues() {
         // Not Setting ReportId to null
         // Because editReport signal is getting emitted to make it blank
 
         // Clear title
         // Clear Model
         // Set id to empty
-        ReportParamsModel.setReportTitle(null);
+        reportTitleName = "";
+        ReportParamsModel.setReportTitle(reportTitleName);
         ReportParamsModel.setLastDropped(null);
 
         report_title_text.text = "";
-        reportIdMain = "";
 
         // Clear all the list models
         xAxisListModel.clear();
@@ -886,614 +656,122 @@ Page {
         d3PropertyConfig = {};
 
         // Clear general params
-        lastPickedDataPaneElementProperties= {};
-        reportDataPanes= {};  // Report Data Panes Object
-        dragActiveObject= {};
+        lastPickedDataPaneElementProperties = {};
+        reportDataPanes = {}; // Report Data Panes Object
+        dragActiveObject = {};
         colorByData = [];
 
-        // Calling this redraw will clear the chart because no x and y columns will be available
-        // [Tag: Optimization]
-        // Check instead of reDraw if we can call only one function to clear the chart
-        // May be webengineview.runJs("call clearValues");
-        reDrawChart();
+        // Clearing all the properties values
+        alternateRowsCheckStatus = true;
+        searchCheckStatus = true;
+        compactStatusCheckStatus = false;
 
+        // table total customization
+        tableGrandTotalCheckStatus = false;
+        totalSubTotalCheckStatus = false;
+        totalRowTotalCheckStatus = false;
+
+        // KPI Values!!
+        boldCheckKPILabelStatus = false;
+        italicCheckKPILabelStatus = false;
+        underlineCheckKPILabelStatus = false;
+
+        dataLabelDialogKpiColor = "#000000";
+        dataLabelKpiColorBoxColor = "#000000";
+
+        xAxisLabelStatus = true;
+        yAxisLabelStatus = true;
+
+        tempXModel.clear();
+        tempYModel.clear();
+        tempColorByModel.clear();
+
+        reDrawChart();
     }
 
     // generate Report Id
-    function generateReportId(){
+    function generateReportId() {
         return ReportParamsModel.generateNewReportId();
-        // return new Date().getTime();
     }
 
     // Slot Function
     // For changing the chart on clicking chart icons
 
-    // Clear the chart defaults
-    function clearChartValue(){
-        webEngineView.runJavaScript('clearChart()');
-    }
-
-    function checkHorizontalGraph(){
-        
-        if(!horizontalChartList.includes(chartTitle)){
-            console.log('Debug:: Chart does not have horizontal title... returning')
-            return;
-        }
-        var xAxisType = xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase();
-        var yAxisType = yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase();
-
-        console.log('Debug::',xAxisType, yAxisType);
-
-        if(xAxisType == "numerical" || yAxisType == "date" || yAxisType == "categorical"){
-            console.log('Debug:: Graph is horizontal');
-            isHorizontalGraph = true;
-        }else if(yAxisType == "numerical" || xAxisType == "date" || xAxisType == "categorical"){
-            console.log('Debug:: Graph is not horizontal');
-            isHorizontalGraph = false;
-        }
-
-    }
-
     function reDrawChart(){
-
-        checkHorizontalGraph();
-        console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
-        
-        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
-
-        // Check graph type for redrawing
-        // If length = 1 and type of chart is
-        // 1. Grouped Bar Chart and no Colour By is there => Bar chart
-        // 2. Grouped Bar Chart and Colour By Present => Stacked Bar Chart
-
-        if(xAxisColumns.length === 1 && yAxisColumns.length === 1){
-
-            // Condition for horizontal bar graph;
-            if(isHorizontalGraph){
-                allowedXAxisDataPanes = 1;
-                allowedYAxisDataPanes = 2;
-                
-                switch(chartTitle){
-
-                case Constants.barChartTitle:
-                    if(colorByData.length)  {
-                        switchChart(Constants.horizontalStackedBarChartTitle)
-                        break;
-                    }
-                    chartUrl = Constants.horizontalBarChartUrl;
-                    webEngineView.url = Constants.baseChartUrl+chartUrl;
-                    chartTitle = Constants.horizontalBarChartTitle;
-                    break;
-                case Constants.lineChartTitle:
-                    console.log(Constants.lineChartTitle);
-                    if(colorByData.length)  {
-                        console.log('Changeing to Horizontal Multi Line');
-                        switchChart(Constants.horizontalMultiLineChartTitle)
-                        break;
-                    }
-                    switchChart(Constants.horizontalLineChartTitle)
-                    break;
-                case Constants.areaChartTitle:
-                    console.log(Constants.areaChartTitle);
-                    if(colorByData.length)  {
-                        console.log('Changeing to Horizontal Stack Area');
-                        switchChart(Constants.multipleHorizontalAreaChartTitle)
-                        break;
-                    }
-                    switchChart(Constants.horizontalAreaChartTitle)
-                    break;
-                case Constants.horizontalBarGroupedChartTitle:
-                    if(colorByData.length){
-                        switchChart(Constants.horizontalStackedBarChartTitle)
-                        break;
-                    }
-                    switchChart(Constants.horizontalBarChartTitle);
-                    break;
-                case Constants.horizontalMultiLineChartTitle:
-                    if(colorByData.length){
-                        break;
-                    }
-                    switchChart(Constants.horizontalLineChartTitle);
-                    break;
-                case Constants.horizontalAreaChartTitle:
-                    if(colorByData.length){
-                        switchChart(Constants.multipleHorizontalAreaChartTitle);
-                        break;
-                    }
-                    break;
-                case Constants.multipleHorizontalAreaChartTitle:
-                    if(colorByData.length){
-                        break;
-                    }
-                    switchChart(Constants.horizontalAreaChartTitle);
-                    break;
-                default:
-                    console.log('Debug:','Horizontal Graph Missed condition',chartTitle);
-
-                }
-            }else{
-
-                if(chartTitle === Constants.barChartTitle && colorByData.length){
-                    console.log('Change to stacked bar chart')
-                    switchChart(Constants.stackedBarChartTitle);
-                }else if(chartTitle === Constants.groupBarChartTitle && !colorByData.length){
-                    console.log('Redraw Function - Check which graph to be plotted here')
-                    chartUrl = Constants.barChartUrl;
-                    webEngineView.url = Constants.baseChartUrl+chartUrl;
-                    chartTitle = Constants.barChartTitle;
-                }else if(chartTitle === Constants.groupBarChartTitle && colorByData.length){
-                    switchChart(Constants.stackedBarChartTitle);
-                }else if(chartTitle === Constants.areaChartTitle && colorByData.length){
-                    switchChart(Constants.multipleAreaChartTitle);
-                }else if(chartTitle === Constants.lineChartTitle && colorByData.length){
-                    switchChart(Constants.multiLineChartTitle);
-                }else if(chartTitle === Constants.multipleAreaChartTitle && !colorByData.length){
-                    switchChart(Constants.areaChartTitle);
-                }
-            }
-
-        }
-
-        drawChart();
+        DrawChartUtils.reDrawChart();
     }
 
-    // Load New Chart
-    function changeChart(chartname){
-        webEngineView.url = chartname;
-    }
-
-    function addReport(){
-
-        // Add report to dashboard
-        if(!reportIdMain){
-            reportIdMain = generateReportId();
-            ReportParamsModel.setReportId(reportIdMain);
-        }
-        
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
-
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
-
-        // [Tag: Optimization]
-        // We can create the object here and pass to cpp
-        // to store in reportsMap
-
-        // Save add the data in cpp
-        // get the data in cpp and create an object
-
-        // Check if report name exists or not
-        // If name is not given add the name as Report "NUMBER"
-        // Else is  not required (Case to set the value, because it is getting saved on key presses)
-        var reportList = ReportParamsModel.getReportsList();
-        if(!report_title_text.text || report_title_text.text == ""){
-            var numberOfReports = Object.keys(reportList).length;
-            numberOfReports = !numberOfReports ? 1 : numberOfReports;
-            ReportParamsModel.setReportTitle('Report '+ (numberOfReports));
-        }
-
-        ReportParamsModel.setChartType(chartTitle);
-        ReportParamsModel.setChartTitle(chartTitle);
-        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
-        ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
-        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
-        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
-        ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
-
-        ReportParamsModel.addReport(reportIdMain);
-
-        chartTitle = Constants.barChartTitle;
-        chartUrl = Constants.barChartUrl;
-
-
-        console.log('Editing Flag?',editReportFlag)
-        // On Edit => Redraw Only Updated chart in Dashboard
-        if(editReportFlag){
-            reDrawDashboardChart(reportIdMain);
-        }
-        editReportFlag = false;
-
-        // Setting it to -1 so that editReportToggle signal is called
-        // After this editReportToggle is set to false
-        // Gets called again which creates a new id and add it to map
-        ReportParamsModel.setEditReportToggle("-1");
-
-        DashboardParamsModel.setDashboardReportMap(reportIdMain);
-        // switchChart(Constants.barChartTitle);
-    }
-
-    function cancelReport(){
-        // Back to dashboard
-        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-        // ReportsDataModel.removeTmpChartData()
-
-        if(addReportButton.text == "Add"){
-            console.log('Deleting Report',reportIdMain)
-            ReportParamsModel.deleteReport(reportIdMain,false);
-        }
-
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
-    }
-
-    function focusReportTitle(){
-        report_title_text.readOnly= false
+    function focusReportTitle() {
+        report_title_text.readOnly = false;
         report_title_text.focus = true;
     }
 
-    function onDropAreaEntered(element,elementName){
-        element.border.width = Constants.dropActiveBorderWidth
+
+    function isNumber(number) {
+        return !!(
+                    number &&
+                    number.trim() &&
+                    !isNaN(number.trim().replace(/,/g, ""))
+                    );
     }
 
-    function onDropAreaExited(element){
-        element.border.width = Constants.dropEligibleBorderWidth
+    function openAxisSettings() {
+        axisSettingsPopup.visible = true;
     }
 
-    function alreadyExists(elementsList,element){
-        if(elementsList.includes(element)){
-            return true;
-        }
-        return false;
+    function updateReportTitle(title) {
+        reportTitleName = title;
     }
 
-    function xAxisDropEligible(itemName){
-        var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
-        // Check if condition more data pills can be added or not';
-        if(xAxisColumns.length === allowedXAxisDataPanes){
-            return false;
-        }
-        const multiChart = true;
-        if(multiChart){
-            return true;
-        }
-        return false;
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS popup
+
+    function dataTypeChange(dataType) {
+        console.log(dataType)
     }
 
-    function yAxisDropEligible(itemName){
-        var yAxisColumns  = getAxisColumnNames(Constants.yAxisName);
-        const multiChart = true;
-        // Check if condition more data pills can be added or not';
-        if(yAxisColumns.length === allowedYAxisDataPanes){
-            return false;
-        }
-        if(multiChart){
-            return true;
-        }
-        return false;
+    function onCancelClickedCalc(){
+        popupcalc.visible = false
     }
 
-    function onDropAreaDropped(element,axis){
+    function insertSyntax(i){
+        //    syntaxEditorText.text = functionListElemText.text
+        syntaxEditorText.text = functionModel.get(i).syntax
+        report_desiner_page.mode = functionModel.get(i).mode
+    }
 
-        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
-        var itemType = lastPickedDataPaneElementProperties.itemType;
+    function onApplyClicked() {
+        console.log("Apply clicked")
+        if(nameTextField.text.length <= 0){
+            report_desiner_page.errMsg = "Name column cannot be blank"
+            popupError.text = report_desiner_page.errMsg
+        } else {
 
-        element.border.width = Constants.dropEligibleBorderWidth
-        element.border.color = Constants.themeColor
+            var name = nameTextField.text
+//            var query = queryTextEdit.text
+//            var query = `SELECT CASE WHEN "Row ID" < 10 THEN 'yes' ELSE 'no' END FROM orders1500 LIMIT 10`
+//            var query = `SELECT CASE WHEN "id" < 10 THEN 'yes' ELSE 'no' END FROM users LIMIT 10`
+            var query = `if [FIELD] < 6000 THEN "A" elseif [FIELD]  >= 6000 and [FIELD] < 9000 THEN "B" else "C" endif`
+            var source = Constants.reportScreen
 
-        var itemName = ReportParamsModel.itemName;
 
-        var valuesColumns = [];
+            // name, query, souce, mode
+            console.log("name:", name, "q:", query, "source:", source, "mode:", mode)
+            var status = CalculatedFields.addCalculatedField(name, query, source, report_desiner_page.mode)
 
-        if(axis === Constants.xAxisName){
-
-            if(!xAxisDropEligible(itemName)){
-                return;
+            if (!status) {
+                popupError.text = "Could not create calculated field"
+            } else {
+                onCancelClickedCalc()
             }
-
-            xAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
-            xAxisColumns.push(itemName);
-
-        }else if(axis === Constants.yAxisName){
-            if(!yAxisDropEligible(itemName)){
-                return;
-            }
-
-            console.log('Y Axis itemType',itemType, itemName);
-            yAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
-            yAxisColumns.push(itemName);
-
-        }else{
-            if(!yAxisDropEligible(itemName)){
-                return;
-            }
-            valuesListModel.append({itemName: itemName});
-            valuesColumns.push(itemName);
         }
-
-
-        // To Make group chart: Make sure to have 2 xAxisValueColumn and 1 yAxisColumn
-
-        if( getAxisColumnNames(Constants.xAxisName).length > 1
-                && getAxisColumnNames(Constants.yAxisName).length
-                && (chartTitle === Constants.barChartTitle  || chartTitle === Constants.stackedBarChartTitle)){
-            console.log('Make Grouped Bar Chart');
-            webEngineView.url = Constants.baseChartUrl+Constants.barGroupedChartUrl;
-            chartTitle = Constants.groupBarChartTitle;
-            chartUrl = Constants.barGroupedChartUrl;
-            return;
-
-        }
-
-        if( getAxisColumnNames(Constants.yAxisName).length > 1
-                && getAxisColumnNames(Constants.xAxisName).length
-                && (chartTitle === Constants.horizontalBarChartTitle  || chartTitle === Constants.horizontalStackedBarChartTitle)){
-
-            console.log('Make Horizontal Grouped Bar Chart')
-            chartUrl = Constants.horizontalBarGroupedChartUrl;
-            webEngineView.url = Constants.baseChartUrl+chartUrl;
-            chartTitle = Constants.horizontalBarGroupedChartTitle;
-
-            return;
-        }
-
-        reDrawChart();
 
     }
 
-    function onChartLoaded(loadRequest){
 
-        if(loadRequest.status === WebEngineLoadRequest.LoadFailedStatus){
-            console.log('Page Loading Failed')
-            console.log('Error',JSON.stringify(loadRequest))
-            return;
-        }
-        reDrawChart();
-    }
-
-    function drawChart(){
-
-        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
-
-        if(webEngineView.loading){
-            return;
-        }
-
-        console.log(JSON.stringify(d3PropertyConfig));
-
-        /*
-        if(xAxisColumns.length===0 && yAxisColumns.length === 0){
-            // set everything to default
-            // Can add any default case here
-            isHorizontalGraph = false;
-        }
-        */
-
-        if(xAxisColumns.length && yAxisColumns.length){
-
-            var xAxisColumnNamesArray = [];
-            var i = 0; // itereator => By passing warning
-            for(i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(xAxisColumns[i]);
-            }
-            var yAxisColumnNamesArray = [];
-            for(i=0;i<yAxisColumns.length;i++){
-                yAxisColumnNamesArray.push(yAxisColumns[i]);
-            }
-
-
-            console.log('Chart Title - Draw Chart Function - ',chartTitle)
-            var colorByColumnName = colorByData[0] && colorByData[0].columnName;
-            dataItemList.clear();
-            var colorData = [];
-            switch(chartTitle){
-            case Constants.horizontalBarChartTitle:
-                console.log("Horizontal BAR");
-                ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
-
-                // datavalues is a global property and set using connections
-                // due to multi threading
-                colorData = [JSON.parse(dataValues)[1][0]] || [];
-                colorData.forEach(function (element,index) {
-                    dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                });
-                break;
-            case Constants.barChartTitle:
-                console.log("BAR CLICKED", xAxisColumns[0])
-                ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-                break;
-            case Constants.horizontalStackedBarChartTitle:
-                ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
-                break;
-            case Constants.stackedBarChartTitle:
-                console.log('Stacked bar chart!');
-                ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
-                break;
-            case Constants.horizontalBarGroupedChartTitle:
-                console.log('horizontalBarGroupedChart chart!', yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
-                var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
-                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
-                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
-                }else{
-                    delete d3PropertyConfig['options'];
-                    colorListModel.clear();
-                    colorByData = [];
-                }
-                ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
-                break;
-            case Constants.groupBarChartTitle:
-                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
-                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
-                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
-                }else{
-                    delete d3PropertyConfig['options'];
-                    colorListModel.clear();
-                    colorByData = [];
-
-                    ReportParamsModel.setItemType(null);
-                    ReportParamsModel.setLastDropped(null);
-                }
-                console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-                ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-
-                ReportParamsModel.setItemType(null);
-                ReportParamsModel.setLastDropped(null);
-                break;
-            case Constants.areaChartTitle:
-                console.log("AREA CLICKED")
-                // Area - xAxis(String), yAxis(String)
-                ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
-                break;
-            case Constants.horizontalAreaChartTitle:
-                ChartsModel.getAreaChartValues(yAxisColumns[0],xAxisColumns[0]);
-                break;
-            case Constants.stackedAreaChartTitle:
-            case Constants.multipleAreaChartTitle:
-                console.log('Stacked Area Chart')
-                console.log('Colour By columnName',colorByColumnName)
-                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.multipleHorizontalAreaChartTitle:
-                console.log('Stacked Area Chart')
-                console.log('Colour By columnName',colorByColumnName)
-                ChartsModel.getMultiLineChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.lineChartTitle:
-                console.log("LINE CLICKED")
-                // Line - xAxis(String), yAxis(String)
-                ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                // Line Bar - xAxis(String), yAxis(String)
-                //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
-                break;
-            case Constants.horizontalLineChartTitle:
-                console.log(Constants.horizontalLineChartTitle,"CLICKED")
-                ChartsModel.getLineChartValues(yAxisColumns[0],xAxisColumns[0],'Sum');
-                break;
-            case Constants.multiLineChartTitle:
-                console.log(Constants.multiLineChartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.horizontalMultiLineChartTitle:
-                console.log(chartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.pieChartTitle:
-            case Constants.donutChartTitle:
-                console.log("DONUT/PIE CLICKED")
-                ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                break;
-            case Constants.funnelChartTitle:
-                console.log("FUNNEL CLICKED")
-                ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                break;
-            case Constants.radarChartTitle:
-                console.log("RADAR CLICKED")
-                ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
-                break;
-            case Constants.scatterChartTitle:
-                console.log("SCATTER CLICKED");
-                if(!colorByColumnName){
-                    break;
-                }
-                ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.treeChartTitle:
-                console.log("TREECHART CLICKED")
-                ChartsModel.getTreeChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                break;
-            case Constants.treeMapChartTitle:
-                ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                break;
-            case Constants.heatMapChartTitle:
-                console.log("HEATMAP CLICKED")
-                if(!colorByColumnName){
-                    break;
-                }
-                console.log(xAxisColumns[0],yAxisColumns[0], colorByColumnName);
-                ChartsModel.getHeatMapChartValues(xAxisColumns[0],colorByColumnName, yAxisColumns[0]);
-                break;
-            case Constants.sunburstChartTitle:
-                console.log("SUNBURST CLICKED");
-                ChartsModel.getSunburstChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                break;
-            case Constants.waterfallChartTitle:
-                console.log("WATERFALL CLICKED")
-                ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                console.log('Waterfall Data values',dataValues);
-                break;
-            case Constants.gaugeChartTitle:
-                console.log("GAUGE CLICKED")
-                ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                break;
-            case Constants.sankeyChartTitle:
-                console.log("SANKEY CLICKED")
-                ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
-                break;
-            case Constants.kpiTitle:
-                console.log("KPI CLICKED")
-                ChartsModel.getKPIChartValues(xAxisColumns[0]);
-                break;
-            case Constants.tableTitle:
-                console.log("TABLE CLICKED")
-                ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
-                break;
-            case Constants.pivotTitle:
-                console.log("PIVOT CLICKED")
-                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
-                ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
-                break;
-            }
-            if(!dataValues){
-                return;
-            }
-
-            /*
-            console.log('Webengine View Loading Status:',webEngineView.loading);
-            console.log('Data Values:',JSON.stringify(dataValues));
-            //            colorData = [];
-            //            console.log("colorData5",colorData)
-            //            colorData = JSON.parse(dataValues)[1] || [];
-            //            console.log("colorData2" ,colorData)
-            //            console.log("dataValues" ,JSON.parse(dataValues))
-
-            //           dataItemList.clear();
-            //           colorData.forEach(function (element,index) {
-            //               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-            //               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-            //           });
-
-            console.log('Selected Chart Title:',report_desiner_page.chartTitle)
-            console.log('Selected Chart URL:',report_desiner_page.chartUrl)
-            console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
-
-            //    need to initialise only once
-            console.log('Starting to plot');
-            // console.log('Data Values',dataValues);
-            console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
-
-            var scriptValue = 'window.addEventListener("resize", function () {
-                    window.clearChart && clearChart();
-                    drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-           });';
-
-            clearChartValue();
-            var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
-            webEngineView.runJavaScript(runScriptString);
-
-            // Clear Chart Data
-            // ReportsDataModel.clearData();
-
-            */
-
-            return;
-
-        }
-
-        webEngineView.runJavaScript('clearChart()');
-    }
-
-    function openYAxisSettings(){
-        yAxisSettingsPopup.visible = true
-    }
-
-
-    function updateReportTitle(){
-        ReportParamsModel.setReportTitle(report_title_text.text);
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -1504,8 +782,369 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
-    YAxisSettingPopup{
-        id: yAxisSettingsPopup
+    AxisSettingPopup{
+        id: axisSettingsPopup
+    }
+    Popup {
+        id: popupcalc
+        width: parent.width * 0.8
+        height: 800
+        anchors.centerIn: parent
+
+        visible: false
+        modal: true
+        padding: 0
+        closePolicy: Popup.NoAutoClose
+
+        background: Rectangle{
+            color: Constants.whiteColor
+        }
+
+        // Popup Header Starts
+
+        Rectangle{
+
+            id: header
+            color: Constants.themeColor
+            height: 40
+            width: parent.width - 2
+
+            anchors.top: parent.top
+            anchors.left: parent.left
+
+            anchors.topMargin: 1
+            anchors.leftMargin: 1
+
+//            Text{
+//                id: popupError
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.left : parent.left
+//                font.pixelSize: Constants.fontCategoryHeader
+//                anchors.leftMargin: 10
+//                color: Constants.redColor
+//            }
+
+            Text{
+                text: Constants.createCustomField
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left : parent.left
+                font.pixelSize: Constants.fontCategoryHeader
+                anchors.leftMargin: 10
+            }
+            Image {
+                id: close_icn
+                source: "/Images/icons/outline_close_black_18dp2x.png"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right:  parent.right
+                height: 25
+                width: 25
+                anchors.rightMargin: 5
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: onCancelClickedCalc()
+                }
+            }
+
+        }
+
+        // Popup Header Ends
+        Rectangle{
+
+            id: name
+            anchors.top: header.bottom
+            height: 70
+            width: parent.width - 2
+
+            Text{
+                id:nameText
+                text: Constants.name
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left : parent.left
+                font.pixelSize: Constants.fontCategoryHeader
+                anchors.leftMargin: 30
+            }
+
+            Rectangle{
+                anchors.left : nameText.right
+                width: 210
+                height: 30
+                // radius: 15
+                anchors.leftMargin:30
+                border.color: Constants.borderBlueColor
+
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                TextEdit {
+                    // Green Input
+                    // id: input1Field
+                    id: nameTextField
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    height:  parent.height
+                    anchors.centerIn: parent
+                    // onTextChanged: updateChart()
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+
+        }
+
+        Rectangle{
+
+            id: calculation
+            //            color: "yellow"
+            anchors.top: name.bottom
+            height: parent.height-100
+            width: parent.width - 300
+            Rectangle{
+
+                id: calculationName
+                //                color: "pink"
+                anchors.top: parent.top
+                height: 40
+                width: parent.width - 2
+
+                Text{
+                    id:calculationText
+                    text: Constants.calculation
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 30
+                }
+            }
+            Rectangle{
+                id: calculationEditor
+                anchors.left : parent.left
+                anchors.top : calculationName.bottom
+                width: parent.width-50
+                height: parent.height-200
+                // radius: 15
+                anchors.leftMargin:30
+                anchors.topMargin:30
+                border.color: Constants.borderBlueColor
+                //    color:"blue"
+
+                // anchors.centerIn: parent
+
+                // TextEdit {
+                //     // Green Input
+                //     // id: input1Field
+                //     leftPadding: 10
+                //     rightPadding: 10
+                //     width: parent.width
+                //     height:  parent.height
+                //     anchors.centerIn: parent
+                //     // onTextChanged: updateChart()
+                //     //    verticalAlignment: Text.AlignVCenter
+                // }
+                // TODO: editor
+                WebEngineView {
+                    id: webEngineViewEditor
+                    height:parent.height
+                    width: parent.width
+                    url: Constants.calculatedFieldEditorUrl
+                    anchors.left: tool_sep_chartFilters.right
+                    anchors.top: axis.bottom
+                }
+            }
+            Rectangle{
+                anchors.left : parent.left
+                anchors.top : calculationEditor.bottom
+                anchors.topMargin: 20
+                anchors.leftMargin:30
+                width: parent.width-50
+                height: 70
+                // radius: 15
+                //               anchors.leftMargin:20
+                border.color: Constants.borderBlueColor
+                //    color:"blue"
+
+                //               anchors.centerIn: parent
+
+                TextEdit {
+                    // Green Input
+                    // id: input1Field
+                    id: popupError
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    height:  parent.height
+                    anchors.centerIn: parent
+                    // onTextChanged: updateChart()
+                    //    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+        }
+        Rectangle{
+
+            id: functionid
+            //            color: "green"
+            anchors.top: name.bottom
+            anchors.right: parent.right
+            height: parent.height-100
+            width: 300
+            Rectangle{
+
+                id: functionName
+                //                color: "pink"
+                anchors.top: parent.top
+                height: 40
+                width: parent.width - 2
+
+                Text{
+                    id:functionText
+                    text: Constants.functionName
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                }
+            }
+            ComboBox {
+                id:dropDownFunction
+                currentIndex: 2
+                anchors.top: functionName.bottom
+                anchors.topMargin:27
+                anchors.left : parent.left
+                anchors.leftMargin:20
+                model: [ "Logical Functions", "Aggregate Functions", "Numeric Functions" ]
+                width: parent.width-40
+                onCurrentIndexChanged: dataTypeChange(modelData)
+            }
+            Rectangle{
+                id: functionEditor
+                anchors.left : parent.left
+                anchors.top : dropDownFunction.bottom
+                width: parent.width-40
+                height: 280
+                // radius: 15
+                anchors.leftMargin:20
+                anchors.topMargin:5
+                border.color: Constants.borderBlueColor
+                clip: true
+                Component {
+                    id: contactDelegate
+                    Rectangle {
+                        // Rectangle{
+                        id:functionListElem
+                        width: parent.width-10;
+                        height: 30;
+                        anchors.left:parent.left
+                        anchors.leftMargin:5
+                        //  color:"red"
+                        Column {
+                            id:functionListElemText
+                            Text { text: model.name }
+                            // Text { text: 'Number: ' + model.number }
+                        }
+                        // }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: insertSyntax(index)
+                            hoverEnabled: true
+                            onEntered: {
+                                functionListElem.color = "#F3F3F4"
+                                overlay
+                            }
+                            onExited: {
+                                //                                console.log("Exiting: ")
+                                functionListElem.color = "white"
+                            }
+
+                        }
+
+                    }
+                }
+                ListView {
+                    anchors.fill: parent
+                    clip: true
+                    anchors.topMargin:10
+
+                    ScrollBar.vertical: ScrollBar {}
+
+
+                    model: functionModel
+
+                    delegate: contactDelegate
+                }
+
+                // anchors.centerIn: parent
+
+            }
+            Rectangle{
+
+                id: syntaxName
+                //                color: "pink"
+                anchors.top: functionEditor.bottom
+                anchors.topMargin:20
+                height: 40
+                width: parent.width - 2
+
+                Text{
+                    id:syntaxText
+                    text: Constants.syntax
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                    anchors.topMargin:30
+                }
+            }
+            Rectangle{
+                id: syntaxEditor
+                anchors.left : parent.left
+                anchors.top : syntaxName.bottom
+                width: parent.width-50
+                height: 105
+                // radius: 15
+                anchors.leftMargin:20
+                anchors.topMargin:20
+                //               anchors.leftMargin:20
+                border.color: Constants.borderBlueColor
+                color:"lightgrey"
+
+                // anchors.centerIn: parent
+                Text{
+                    id:syntaxEditorText
+                    text: "Syntax"
+                    wrapMode: "WordWrap"
+                    width:parent.width-20
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                    anchors.topMargin:30
+                }
+
+            }
+            Row{
+                anchors.top:syntaxEditor.bottom
+                anchors.left: parent.left
+                anchors.topMargin: 40
+                anchors.leftMargin: 20
+                spacing: 20
+
+                Button{
+                    id: cancel_btn1
+                    text: "Cancel"
+                    //                    textValue: Messages.cancelBtnTxt
+                    onClicked: onCancelClickedCalc()
+                }
+
+
+                Button{
+                    id: apply_btn1
+                    text: "Apply"
+                    //                    textValue: Messages.applyBtnTxt
+                    onClicked: onApplyClicked()
+                }
+            }
+        }
     }
 
     EditColorPopup{
@@ -1522,8 +1161,6 @@ Page {
 
     // SubComponents Ends
     /***********************************************************************************************************************/
-
-
 
 
 
@@ -1545,7 +1182,7 @@ Page {
             color: Constants.themeColor
 
             Text{
-                text: "Customize"
+                text: Messages.re_nr_customize
                 anchors.horizontalCenter:parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 14
@@ -1560,7 +1197,7 @@ Page {
 
             TextField{
                 id: report_title_text
-                placeholderText: "Add Report Title"
+                placeholderText: Messages.re_nr_header
                 selectByMouse: true
                 width:250
                 height: 40
@@ -1569,7 +1206,6 @@ Page {
                 font.pixelSize: 14
                 verticalAlignment:TextEdit.AlignVCenter
                 Keys.onReturnPressed: report_title_text.focus = false
-                onTextChanged: updateReportTitle()
                 background: Rectangle{
                     color: "transparent"
                     border.color: "transparent"
@@ -1623,11 +1259,7 @@ Page {
     LeftMenuBarReports{
         id: left_menubar_reports
         anchors.top: seperator_title_bar.bottom
-        Component.onCompleted: {
-
-            loadchart.connect(report_desiner_page.changeChart)
-        }
-
+        z:-12000
     }
     // Left Menu Chart Icons Ends
 
@@ -1654,7 +1286,7 @@ Page {
         anchors.left: tool_sep_leftmenubarreports.right
         anchors.top: seperator_title_bar.bottom
         anchors.leftMargin: 0
-        z:1
+        z:-12000
     }
 
     ToolSeparator{
@@ -1738,9 +1370,9 @@ Page {
                 DropArea{
                     id: xaxisDropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,Constants.xAxisName)
-                    onExited:  onDropAreaExited(parent,Constants.xAxisName)
-                    onDropped: onDropAreaDropped(parent,Constants.xAxisName)
+                    onEntered:  DataPanesDropHandler.onDropAreaEntered(parent,Constants.xAxisName)
+                    onExited:  DataPanesDropHandler.onDropAreaExited(parent,Constants.xAxisName)
+                    onDropped: DataPanesDropHandler.onDropAreaDropped(parent,Constants.xAxisName)
 
                 }
                 ListView{
@@ -1752,7 +1384,7 @@ Page {
                     anchors.topMargin: 3
                     model: xAxisListModel
                     orientation: Qt.Horizontal
-                    spacing: spacingColorList
+                    spacing: dataPanesSpacing
                     interactive: false
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
@@ -1774,6 +1406,8 @@ Page {
                     width: 50
                     anchors.verticalCenter: parent.verticalCenter
 
+                    visible: !allChartsMapping[chartTitle].axisSettingsDisabled
+
                     Image {
                         source: "/Images/icons/customize.png"
                         anchors.verticalCenter: parent.verticalCenter
@@ -1783,7 +1417,7 @@ Page {
                         width: 20
                         MouseArea{
                             anchors.fill: parent
-                            onClicked: openYAxisSettings()
+                            onClicked: openAxisSettings()
                         }
                     }
 
@@ -1844,9 +1478,9 @@ Page {
                 DropArea{
                     id: yaxisDropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,Constants.yAxisName)
-                    onExited:  onDropAreaExited(parent,Constants.yAxisName)
-                    onDropped: onDropAreaDropped(parent,Constants.yAxisName)
+                    onEntered:  DataPanesDropHandler.onDropAreaEntered(parent,Constants.yAxisName)
+                    onExited:  DataPanesDropHandler.onDropAreaExited(parent,Constants.yAxisName)
+                    onDropped: DataPanesDropHandler.onDropAreaDropped(parent,Constants.yAxisName)
                 }
 
                 ListView{
@@ -1858,7 +1492,7 @@ Page {
                     anchors.topMargin: 3
                     model: yAxisListModel
                     orientation: Qt.Horizontal
-                    spacing: spacingColorList
+                    spacing: dataPanesSpacing
                     interactive: false
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
@@ -1879,6 +1513,8 @@ Page {
                     anchors.rightMargin: 1
                     width: 50
                     anchors.verticalCenter: parent.verticalCenter
+                    visible: !allChartsMapping[chartTitle].axisSettingsDisabled
+
 
                     Image {
                         source: "/Images/icons/customize.png"
@@ -1889,7 +1525,7 @@ Page {
                         width: 20
                         MouseArea{
                             anchors.fill: parent
-                            onClicked: openYAxisSettings()
+                            onClicked: openAxisSettings()
                         }
                     }
 
@@ -1946,13 +1582,14 @@ Page {
                 width: parent.width - row3Text.width - 4
                 anchors.left: row3Text.right
                 anchors.leftMargin: 1
+                border.color: "transparent"
 
                 DropArea{
                     id: row3DropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,Constants.row3Name)
-                    onExited:  onDropAreaExited(parent,Constants.row3Name)
-                    onDropped: onDropAreaDropped(parent,Constants.row3Name)
+                    onEntered:  DataPanesDropHandler.onDropAreaEntered(parent,Constants.row3Name)
+                    onExited:  DataPanesDropHandler.onDropAreaExited(parent,Constants.row3Name)
+                    onDropped: DataPanesDropHandler.onDropAreaDropped(parent,Constants.row3Name)
                 }
 
                 ListView{
@@ -1964,9 +1601,13 @@ Page {
                     anchors.topMargin: 3
                     model: valuesListModel
                     orientation: Qt.Horizontal
-                    spacing: spacingColorList
+                    spacing: dataPanesSpacing
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
+                        itemType: droppedItemType
+                        itemIndexId: index
+                        axisType: Constants.row3Name
+                        dateFormatValue: dateFormat
                     }
                 }
 
@@ -1990,7 +1631,7 @@ Page {
                         width: 20
                         MouseArea{
                             anchors.fill: parent
-                            onClicked: openYAxisSettings()
+                            onClicked: openAxisSettings()
                         }
                     }
 
@@ -2055,9 +1696,9 @@ Page {
                 DropArea{
                     id: row4DropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,Constants.gaugePointerLabel)
-                    onExited:  onDropAreaExited(parent,Constants.gaugePointerLabel)
-                    onDropped: onDropAreaDropped(parent,Constants.gaugePointerLabel)
+                    onEntered:  DataPanesDropHandler.onDropAreaEntered(parent,Constants.gaugePointerLabel)
+                    onExited:  DataPanesDropHandler.onDropAreaExited(parent,Constants.gaugePointerLabel)
+                    onDropped: DataPanesDropHandler.onDropAreaDropped(parent,Constants.gaugePointerLabel)
                 }
 
                 ListView{
@@ -2069,9 +1710,12 @@ Page {
                     anchors.topMargin: 3
                     model: valuesListModel
                     orientation: Qt.Horizontal
-                    spacing: spacingColorList
+                    spacing: dataPanesSpacing
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
+                        itemType: droppedItemType
+                        itemIndexId: index
+                        axisType: Constants.row3Name
                     }
                 }
 
@@ -2090,50 +1734,58 @@ Page {
 
             Rectangle{
                 id: row4TextInput1Label
-                width: 100
+                width: 130
                 height: parent.height
                 anchors.left: row4Valueseparator.right
+
+                // anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: input1Label
                     text: 'Max/Green'
                     anchors.centerIn: parent
+                    // verticalalignment:parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.right:parent.right
+                    anchors.rightMargin:10
                 }
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator2
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput1Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator2
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput1Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput1
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator2.right
-                border.color: Constants.borderBlueColor
+                anchors.left: row4TextInput1Label.right
+                // border.color: Constants.borderBlueColor
 
                 Rectangle{
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
 
                     TextEdit {
+                        // Green Input
+                        id: input1Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: updateChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2168,22 +1820,22 @@ Page {
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator4
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput2Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator4
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput2Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput2
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator4.right
+                anchors.left: row4TextInput2Label.right
 
                 Rectangle{
                     width: 160
@@ -2193,11 +1845,13 @@ Page {
                     anchors.centerIn: parent
 
                     TextEdit {
+                        id: input2Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: updateChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2235,23 +1889,23 @@ Page {
                 z:1
             }
 
-            ToolSeparator{
-                id: row4Valueseparator6
-                orientation: Qt.Vertical
-                anchors.left: row4TextInput3Label.right
-                width: 1
-                height: parent.height
-                background: Rectangle{
-                    color: Constants.darkThemeColor
-                }
-            }
+            // ToolSeparator{
+            //     id: row4Valueseparator6
+            //     orientation: Qt.Vertical
+            //     anchors.left: row4TextInput3Label.right
+            //     width: 1
+            //     height: parent.height
+            //     background: Rectangle{
+            //         color: Constants.darkThemeColor
+            //     }
+            // }
 
             Rectangle{
                 id: row4TextInput3
                 width: 200
                 height: parent.height
-                anchors.left: row4Valueseparator6.right
-                border.color: Constants.borderBlueColor
+                anchors.left: row4TextInput3Label.right
+                // border.color: Constants.borderBlueColor
                 Rectangle{
                     width: 160
                     height: 30
@@ -2261,11 +1915,13 @@ Page {
                     anchors.centerIn: parent
 
                     TextEdit {
+                        id: input3Field
                         leftPadding: 10
                         rightPadding: 10
                         width: parent.width
                         height:  parent.height
                         anchors.centerIn: parent
+                        onTextChanged: updateChart()
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
@@ -2294,12 +1950,9 @@ Page {
         id: webEngineView
         height:parent.height - axis.height -50
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width-5
-        // [Tag: Refector]
-        // Move to constants
-        url: "../Charts/BarChartArrayInput.html"
-        onLoadingChanged: onChartLoaded(loadRequest)
+        url: Constants.baseChartUrl
+        onLoadingChanged: ChartsWebViewHandler.onGrafieksChartPageLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
-        //        anchors.leftMargin: 50
         anchors.top: axis.bottom
     }
 
@@ -2339,7 +1992,7 @@ Page {
                 Button{
                     anchors.left: parent.left
                     width: parent.width/2-0.5
-                    text:"Cancel"
+                    text: Messages.cancelBtnTxt
                     height: parent.height
                     background: Rectangle{
                         color: Constants.grafieksLightGreenColor
@@ -2352,16 +2005,15 @@ Page {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
-                    onClicked: cancelReport()
+                    onClicked: Reports.cancelReport()
                 }
 
                 Button{
                     id: addReportButton
-                    text:"Add"
+                    text: Messages.addBtnTxt
                     height: parent.height
                     anchors.right: parent.right
                     width: parent.width/2-0.5
-                    onClicked: addReport()
                     background: Rectangle {
                         color: Constants.grafieksLightGreenColor
                         opacity: parent.hovered ? 0.42 : 1
@@ -2375,7 +2027,7 @@ Page {
                     }
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: addReport()
+                        onClicked: Reports.addReport(report_title_text.text)
                     }
                 }
             }

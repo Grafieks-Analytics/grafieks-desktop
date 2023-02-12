@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
 
@@ -13,12 +14,29 @@ Item{
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataSingleItem.objectName
     property var modelContent: []
+    property bool master: false
+
+    ListModel{
+        id: listModel
+        dynamicRoles: true
+    }
+
 
     onComponentNameChanged: {
-        modelContent = TableColumnsModel.fetchColumnData(componentName)
-        modelContent.unshift("Select All")
-        control.model = modelContent
-        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        idPlesaeWaitThorbber.visible = true
+        idPlesaeWaitText.visible = true
+
+        if(GeneralParamsModel.getAPISwitch()) {
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelContent)
+        } else {
+            modelContent = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelContent)
+        }
+
     }
 
     Connections{
@@ -29,6 +47,37 @@ Item{
                 componentTitle.text = newAlias
             }
         }
+    }
+
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+
+    function processDataList(modelContent){
+        modelContent.unshift("Select All")
+        control.model = modelContent
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        var i = 0;
+        listModel.clear()
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 if(previousCheckValues.length > 0 && item === previousCheckValues[0]){
+                                     control.currentIndex = i
+                                 }
+                                 i++
+                             })
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        idPlesaeWaitThorbber.visible = false
+        idPlesaeWaitText.visible = false
     }
 
     function onRadioSelect(modelData){
@@ -44,7 +93,8 @@ Item{
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
@@ -105,12 +155,23 @@ Item{
 
         }
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
         ComboBox {
             id:control
+            model: listModel
             width: parent.width
             anchors.top : columnName.bottom
-
-
 
             indicator: Canvas {
                 id: canvas

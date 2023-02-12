@@ -11,10 +11,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../SubComponents"
 import "../SubComponents/MiniSubComponents"
@@ -77,19 +78,6 @@ Item {
 
     /***********************************************************************************************************************/
     // Connections Starts
-
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "excel"
-            }
-        }
-
-
-    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -196,6 +184,8 @@ Item {
                         param = "[" + tableName + "$]" + "." + "[" + item[0] + "]"
                     } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
+                    } else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                        param = "[" + tableName + "]" + "." + "[" + item[0] + "]"
                     } else {
                         param = DSParamsModel.queryJoiner + tableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + item[0] + DSParamsModel.queryJoiner
                     }
@@ -282,7 +272,16 @@ Item {
             if(DSParamsModel.fetchRectangles(refObject) !== ""){
 
                 // Ensure that deleted tables are not reflected in generated query later
-                let dynamicObjectName =  DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                let dynamicObjectName;
+
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                    dynamicObjectName = "[" + DSParamsModel.fetchRectangles(refObject).name  + "$]."
+                } else if(GeneralParamsModel.getDbClassification() === Constants.accessType){
+                    dynamicObjectName = "[" + DSParamsModel.fetchRectangles(refObject).name  + "]."
+                } else {
+                    dynamicObjectName = DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                }
+
                 DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
 
                 DSParamsModel.removeRectangles(refObject);
@@ -471,7 +470,7 @@ Item {
 
         } else{
             // Throw an error here
-            queryErrorModal.text = "JOIN is not complete"
+            queryErrorModal.text = Messages.mo_sub_dmr_joinIncomplete
             queryErrorModal.open();
 
             DSParamsModel.setTmpSql("")
@@ -520,6 +519,7 @@ Item {
     // Form the sql join statement
     function joinOrder(objId, recursion = false){
 
+
         var objArray = []
         var tmpArray = []
         var tmpJoinString = ""
@@ -533,6 +533,7 @@ Item {
 
 
         objArray.forEach(function(item){
+
 
             if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 
@@ -550,6 +551,7 @@ Item {
                     let joinPrimaryJoinTable = DSParamsModel.fetchPrimaryJoinTable(innerItem)
                     let joinConditionsList = ""
 
+
                     tmpJoinString += "("
 
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
@@ -557,6 +559,9 @@ Item {
                         let key = Object.keys(joinConditions)[i]
                         if(GeneralParamsModel.getDbClassification() === Constants.excelType){
                             tmpJoinString += " [" + joinCurrentTableName  + "$].[" +  joinConditions[key][1] + "] = [" + joinCompareTableName + "$].[" + joinConditions[key][0] + "] AND"
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                            tmpJoinString += " [" + joinCurrentTableName  + "].[" +  joinConditions[key][1] + "] = [" + joinCompareTableName + "].[" + joinConditions[key][0] + "] AND"
+
                         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
                         }  else {
@@ -569,15 +574,19 @@ Item {
                     tmpJoinString += ")"
 
                     if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString
+                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable +  "$] ON " + tmpJoinString + ")"
                     } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
-                    }  else {
+                    }  else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                        joinString += " " + joinType + " ["  + joinPrimaryJoinTable  + "] ON " + tmpJoinString + ")"
+
+                    } else {
                         joinString += " " + joinType + " " + DSParamsModel.queryJoiner + joinPrimaryJoinTable + DSParamsModel.queryJoiner + " ON " + tmpJoinString
                     }
 
                     tmpJoinString = ""
                 })
+
             }
         })
 
@@ -595,10 +604,11 @@ Item {
             let selectColumns = ""
             let finalQuery = ""
             let hideColumns = DSParamsModel.fetchHideColumns()
+
             DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
 
                 // Check if the column is unselected by a user
-                if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                if(GeneralParamsModel.getDbClassification() === Constants.excelType || GeneralParamsModel.getDbClassification() === Constants.accessType){
                     if(hideColumns.indexOf(item) === -1)
                         selectColumns += " " + item + ","
                 } else {
@@ -607,9 +617,9 @@ Item {
                 }
             })
 
-
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
+
 
             let forParams
             if(databaseType.match(/teradata/gi)){
@@ -618,13 +628,28 @@ Item {
             } else if(GeneralParamsModel.getDbClassification() === Constants.excelType) {
                 forParams = "[" + DSParamsModel.fetchExistingTables(firstRectId) + "$]"
 
+            }  else if(GeneralParamsModel.getDbClassification() === Constants.accessType) {
+                forParams = "[" + DSParamsModel.fetchExistingTables(firstRectId) + "]"
+
             } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType) {
 
             }  else{
                 forParams = DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
             }
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
+
+            if(GeneralParamsModel.getDbClassification() === Constants.accessType || GeneralParamsModel.getDbClassification() === Constants.excelType ) {
+                let braces = "";
+                 for(var i = 0; i <  DSParamsModel.fetchTotalJoins() - 1; i++){
+                    braces += "(";
+                }
+
+
+                finalQuery = "SELECT " + selectColumns + " FROM " + braces + forParams + " " + joinString.slice(0, -1)
+            } else {
+                finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
+            }
+
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
@@ -954,12 +979,12 @@ Item {
         // If set false, header wont generate in Preview
         DSParamsModel.setRunCalled(false);
 
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            QueryModel.callSql(DSParamsModel.tmpSql)
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType ){
+            QueryModel.callSql(DSParamsModel.tmpSql, true)
         } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
-            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql, true)
         } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-            ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
+            ExcelQueryModel.setQuery(DSParamsModel.tmpSql, true)
         }
     }
 
@@ -1366,15 +1391,17 @@ Item {
         id: queryErrorModal
 
         modality: Qt.ApplicationModal
-        title: "Query Error"
-        standardButtons: StandardButton.Close
+        title: Messages.mo_sub_dmr_queryErr
+//        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
     }
 
     MessageDialog{
         id: promptPrimaryTableModal
 
         modality: Qt.ApplicationModal
-        title: "Select Primary table"
-        standardButtons: StandardButton.Close
+        title: Messages.mo_sub_dmr_selPrimaryTable
+//        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
     }
 }

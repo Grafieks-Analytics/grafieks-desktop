@@ -3,8 +3,6 @@
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
 {
 
-    //    db.LoadExtension<duckdb::ParquetExtension>();
-
     m_section = Constants::defaultTabSection;
     m_category = Constants::defaultCategory;
     m_subCategory = Constants::defaultSubCategory;
@@ -40,6 +38,11 @@ void DSParamsModel::executeModelerQuery()
     emit processQuery();
 }
 
+void DSParamsModel::disconnectDS()
+{
+    emit disconnectAll();
+}
+
 void DSParamsModel::resetDataModel()
 {
 
@@ -65,152 +68,7 @@ void DSParamsModel::resetDataModel()
 
 }
 
-bool DSParamsModel::saveDatasource(QString filename)
-{
-    QJsonObject jsonObject;
-    QJsonDocument jsonDocument;
 
-    // Filename resource uri to filepath
-    QFile file(QUrl(filename).toLocalFile());
-
-    // Check if file writable
-    if (!file.open(QFile::WriteOnly))
-    {
-        qDebug() << " Could not open file for writing" << file.errorString();
-        return false;
-    }
-
-    // Order of components to be written in the binary file
-
-    // 1. DB Driver
-    // 2. Type of connection - live/extract (.gads for live/ .gadse for extract)
-    // 3. Type of Modeller - Query / Data Modeller
-    // 4. For Query modeller -
-
-    // Tmp sql
-    // joinRelation
-    // joinValue
-    // joinRelationSlug
-    // internalCounter
-    // section
-    // category
-    // subCategory
-    // tableName
-    // colName
-    // exclude
-    // includeNull
-    // selectAll
-    // filterIndex
-    // mode
-
-    // 5. For Data modeller
-
-    // hideColumns
-    // joinBoxTableMap
-    // joinTypeMap
-    // joinIconMap
-    // joinMapList
-    // primaryJoinTable
-    // querySelectParamsList
-    // joinOrder
-    // joinId
-
-    // 6. Datasource publish information
-
-    // dsName
-    // dsType
-    // displayRowsCount
-
-    // 7. InMemory config parameters
-
-    // schedulerId
-    // isFullExtract
-    // extractColName
-
-    // 8. For Live - Login credentials (sans password). For Extract - Data
-
-    QDataStream out(&file);
-
-    // Write a header with a "magic number" and a version
-    out << (quint32)0x785AA164;
-    out << (qint32)101;
-
-    out.setVersion(QDataStream::Qt_5_15);
-
-    out << QString(Statics::currentDbStrType); // 1. DB Driver
-    out << QString(this->dsType());            // 2. Type of connection
-    out << this->currentTab();                 // 3. Type of Modeller
-
-    // If query modeller
-    // else data modeller
-    if (this->currentTab() == 1)
-    {
-
-        // 4. For Query Modeller
-        out << this->tmpSql(); // TmpSql
-        out << this->joinRelation;
-        out << this->joinValue;
-        out << this->joinRelationSlug;
-        out << this->internalCounter();
-        out << this->section();
-        out << this->category();
-        out << this->subCategory();
-        out << this->tableName();
-        out << this->colName();
-        //        out << this->exclude();
-        //        out << this->includeNull();
-        //        out << this->selectAll();
-        out << this->filterIndex();
-        out << this->mode();
-    }
-    else
-    {
-
-        // 4. For Data Modeller
-        out << this->hideColumns;
-        out << this->joinBoxTableMap;
-        out << this->joinTypeMap;
-        out << this->joinIconMap;
-        out << this->joinMapList;
-        out << this->primaryJoinTable;
-        out << this->querySelectParamsList;
-        out << this->joinOrder;
-        out << this->joinId();
-    }
-
-    // 6. Datasource publish information
-
-    out << this->dsName();
-    out << this->dsType();
-    out << this->displayRowsCount();
-
-    // 7. InMemory config parameters
-    out << this->schedulerId();
-    out << this->isFullExtract();
-    out << this->extractColName();
-
-    // 8. For Live - Login credentials (sans password). For Extract - Data
-
-    if (this->dsType() == "live")
-    {
-
-        QMap<QString, QString> credentials = this->datasourceCredentials();
-
-        out << credentials.value("type");
-        out << credentials.value("host");
-        out << credentials.value("fileDB");
-        out << credentials.value("port");
-        out << credentials.value("username");
-    }
-    else
-    {
-    }
-
-    file.flush();
-    file.close();
-
-    return true;
-}
 
 QVariantList DSParamsModel::readDatasource(QString filename)
 {
@@ -263,7 +121,6 @@ QVariantList DSParamsModel::readDatasource(QString filename)
     // Check if file readable
     if (!file.open(QFile::ReadOnly))
     {
-        qDebug() << " Could not open file for writing" << file.errorString();
         return fileReadStatus << Messages::FILE_READ_ERROR << Messages::fileReadError;
     }
 
@@ -347,11 +204,6 @@ QVariantList DSParamsModel::readDatasource(QString filename)
     {
     }
 
-    qDebug() << dbDriver << typeOfConnection << modellerType << "GENERAL PARAM";
-    qDebug() << joinRelation << joinValue << joinRelationSlug << internalCounter << section << category << subCategory << tableName << colName << exclude << includeNull << selectAll << filterIndex << mode << "QUERY MODELLER PARAM";
-    qDebug() << hideColumns << joinBoxTableMap << joinTypeMap << joinIconMap << joinMapList << querySelectParamsList << joinOrder << joinId << "DATA MODELLER PARAM";
-    qDebug() << dsName << dsType << displayRowsCount << schedulerId << isFullExtract << extractColName << "OTHER PARAMS";
-    qDebug() << dbDriverCredential << dbHostCredential << dbPortCredential << dbUsernameCredential << "CREDENTIAL PARAMS";
 
     return fileReadStatus << Messages::FILE_READ_SUCCESS << Messages::fileReadSuccess;
 }
@@ -511,11 +363,6 @@ void DSParamsModel::removeJoinIconMap(int refObjId, bool removeAll)
     }
 }
 
-QString DSParamsModel::fetchJoinIconMap(int refObjId)
-{
-    return this->joinIconMap.value(refObjId);
-}
-
 void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString leftParam, QString rightParam)
 {
     QMap<int, QStringList> joinParamMap;
@@ -627,16 +474,6 @@ QStringList DSParamsModel::fetchQuerySelectParamsList()
 void DSParamsModel::addToJoinOrder(int joinOrderId)
 {
     this->joinOrder.append(joinOrderId);
-}
-
-void DSParamsModel::removeJoinOrder(int joinOrderId)
-{
-    this->joinOrder.removeOne(joinOrderId);
-}
-
-QVariantList DSParamsModel::fetchJoinOrder()
-{
-    return this->joinOrder;
 }
 
 void DSParamsModel::addToExistingTables(int refObjId, QString tableName)
@@ -822,6 +659,11 @@ QVariant DSParamsModel::fetchNewJoinBox(int refObjId)
     return this->newJoinBox.value(refObjId);
 }
 
+int DSParamsModel::fetchTotalJoins()
+{
+    return this->newJoinBox.count();
+}
+
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
 {
     this->joinRelation.insert(QString::number(refObjId), relation);
@@ -863,7 +705,6 @@ QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
 void DSParamsModel::addToJoinValue(int refObjId, QString value)
 {
     this->joinValue.insert(QString::number(refObjId), value);
-    qDebug() << this->joinValue << "VALUES";
 }
 
 void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
@@ -1147,87 +988,6 @@ QVector<int> DSParamsModel::getTmpFilterIndex(int refObjId, bool fetchAll)
     return output;
 }
 
-void DSParamsModel::parseCsv(QUrl pathToCsv)
-{
-
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QFileInfo fileInfo(pathToCsv.toString());
-    //    QString fileName = fileInfo.fileName();
-    //    QString fileNameWithoutExt = fileName.section(".", 0, 0);
-
-    //    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM read_csv_auto('" + pathToCsv.toLocalFile() + "')";
-    //    auto result = con.Query(queryString.toStdString());
-    //    result->Print();
-
-    //    if (!result->success)
-    //    {
-    //        msg = QString::fromStdString(result->error);
-    //    }
-    //    else
-    //    {
-    //        msg = "Success";
-    //    }
-    //    qDebug() << msg << "CSV Reading";
-
-    //    emit csvReadComplete(timer.elapsed(), result->success, msg);
-}
-
-void DSParamsModel::parseParquet(QUrl pathToParquet)
-{
-
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QFileInfo fileInfo(pathToParquet.toString());
-    //    QString fileName = fileInfo.fileName();
-    //    QString fileNameWithoutExt = fileName.section(".", 0, 0);
-
-    //    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM PARQUET_SCAN('" + pathToParquet.toLocalFile() + "')";
-    //    qDebug() << queryString << "QSTRING";
-    //    auto result = con.Query(queryString.toStdString());
-    //    result->Print();
-
-    //    if (!result->success)
-    //    {
-    //        msg = QString::fromStdString(result->error);
-    //    }
-    //    else
-    //    {
-    //        msg = "Success";
-    //    }
-
-    //    emit parquetReadComplete(timer.elapsed(), result->success, msg);
-}
-
-void DSParamsModel::exportExtractData(QString pathToExtract)
-{
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QString queryString = "EXPORT DATABASE '" + pathToExtract + "' (FORMAT PARQUET)";
-    //    auto result = con.Query(queryString.toStdString());
-
-    //    emit exportDataComplete(timer.elapsed(), result->success, msg);
-}
-
-void DSParamsModel::importExtractData(QString pathToExtract)
-{
-
-    //    QString msg;
-    //    QElapsedTimer timer;
-    //    timer.start();
-
-    //    QString queryString = "IMPORT DATABASE '" + pathToExtract + "'";
-    //    auto result = con.Query(queryString.toStdString());
-
-    //    emit importDataComplete(timer.elapsed(), result->success, msg);
-}
-
 void DSParamsModel::resetInputFields()
 {
     emit resetInput();
@@ -1380,6 +1140,7 @@ void DSParamsModel::setDsType(QString dsType)
     if (m_dsType == dsType)
         return;
 
+    Statics::dsType = dsType;
     m_dsType = dsType;
     emit dsTypeChanged(m_dsType);
 }

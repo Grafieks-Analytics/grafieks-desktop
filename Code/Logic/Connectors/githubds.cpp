@@ -36,8 +36,6 @@ GithubDS::GithubDS(QObject *parent) : QObject(parent),
     connect(this->github, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::githubIntType;
-
         // api link - https://docs.github.com/en/rest/reference
 
         QNetworkRequest m_networkRequest;
@@ -131,6 +129,9 @@ void GithubDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+
+        Statics::onlineStorageType = Constants::githubIntType;
+
         QStringList requiredExtensions;
         requiredExtensions << "text/csv" << "application/json";
 
@@ -176,14 +177,14 @@ void GithubDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
+
 
         // Get user email
         m_networkReply = this->github->get(QUrl("https://api.github.com/user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 
@@ -213,7 +214,7 @@ void GithubDS::fileDownloadFinished()
         QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +"." + this->extension;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.write(m_networkReply->readAll());
         file.close();
 
         if(this->extension.contains("xls")){

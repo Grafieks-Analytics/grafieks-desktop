@@ -53,10 +53,11 @@ QVariantMap MSSqlCon::MSSqlOdbcInstance(const QString &driver, const QString &ho
             // If correct credentials inserted once
 
             Statics::msHost = host;
-            Statics::msDb = db;
+            Statics::msDb = dbString;
             Statics::msPort = port;
             Statics::msUsername = username;
             Statics::msPassword = password;
+            Statics::msRealDbName = db;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
@@ -103,6 +104,7 @@ void MSSqlCon::closeConnection()
     Statics::msPort = 0;
     Statics::msUsername = "";
     Statics::msPassword = "";
+    Statics::msRealDbName = "";
 
     Statics::currentDbName = "";
     Statics::currentDbClassification = "";

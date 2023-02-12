@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtWebEngine 1.7
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "../SubComponents"
@@ -27,19 +28,19 @@ Column{
         target: DashboardParamsModel
 
         function onCurrentReportChanged(reportId){
-            console.log("RECEIVED in customize report general")
             let dashboardId = DashboardParamsModel.currentDashboard
+            hideGeneral = true
 
             //Show/Hide Report customize
-            let reportType = DashboardParamsModel.getDashboardReportTypeMap(dashboardId, reportId)
+//            let reportType = DashboardParamsModel.getDashboardReportTypeMap(dashboardId, reportId)
 
-            if(reportType === Constants.reportTypeChart){
-                hideGeneral = true
-//                nestedModel.setProperty(0, "collapsed", false)
-            } else{
-                hideGeneral = false
-//                nestedModel.setProperty(0, "collapsed", true)
-            }
+//            if(reportType === Constants.reportTypeChart){
+//                hideGeneral = true
+////                nestedModel.setProperty(0, "collapsed", false)
+//            } else{
+//                hideGeneral = false
+////                nestedModel.setProperty(0, "collapsed", true)
+//            }
         }
 
     }
@@ -242,7 +243,7 @@ Column{
         id: styleComponent
 
         CustomizeReportStyleMenu{
-            height: 120
+            height: 70
             width: listViewElem.width
         }
 

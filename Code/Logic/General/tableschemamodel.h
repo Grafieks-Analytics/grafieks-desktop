@@ -10,7 +10,13 @@
 #include <QJsonArray>
 #include <QObject>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QSettings>
+
 #include "datatype.h"
+#include "queryjoiner.h"
 #include "querysplitter.h"
 
 #include "../../Connectors/allconnectors.h"
@@ -18,7 +24,6 @@
 #include "../../constants.h"
 
 #include "datatype.h"
-#include "../Connectors/duckcon.h"
 #include "../../duckdb.hpp"
 
 /*!
@@ -30,7 +35,21 @@ class TableSchemaModel : public QObject
 {
     Q_OBJECT
     DataType dataType;
+    QueryJoiner qj;
     QuerySplitter querySplitter;
+
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_dataBuffer;
+    QNetworkRequest m_NetworkRequest;
+
+    QString baseUrl;
+    QByteArray sessionToken;
+    int profileId;
+
+    QString reportWhereConditions;
+    QString dashboardWhereConditions;
+    QString joinConditions;
 
     int csvHeaderLength;
     QList<QByteArray> csvHeaderDataFinal;
@@ -41,31 +60,43 @@ public:
     Q_INVOKABLE void clearSchema();
 
 signals:
-    void tableSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers, QStringList queriedColumnNames);
-    void extractSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers);
+    void tableSchemaObtained(QList<QVariantList> allList, QList<QVariantList> allCategorical, QList<QVariantList> allNumerical, QList<QVariantList> allDates, QList<QVariantList> allOthers, QStringList queriedColumnNames);
+    void extractSchemaObtained(QList<QVariantList> allList, QList<QVariantList> allCategorical, QList<QVariantList> allNumerical, QList<QVariantList> allDates, QList<QVariantList> allOthers);
+    void apiSchemaObtained(QList<QVariantList> allList, QList<QVariantList> allCategorical, QList<QVariantList> allNumerical, QList<QVariantList> allDates, QList<QVariantList> allOthers);
     void tableSchemaCleared();
 
+    void sessionExpired();
+
 public slots:
-    void generateSchemaForExtract(duckdb::Connection *con);
+    void generateSchemaForExtract();
+    void generateSchemaForLive(QString query);
+    void generateSchemaForReader(duckdb::Connection *con);
+    void generateSchemaForApi();
+
+    void dataReadyRead();
+    void dataReadFinished();
+
 
 private:
 
-    QList<QStringList> allList;
-    QList<QStringList> allCategorical;
-    QList<QStringList> allNumerical;
-    QList<QStringList> allDates;
-    QList<QStringList> allOthers;
+    QList<QVariantList> allList;
+    QList<QVariantList> allCategorical;
+    QList<QVariantList> allNumerical;
+    QList<QVariantList> allDates;
+    QList<QVariantList> allOthers;
 
-    QList<QStringList> extractAllList;
-    QList<QStringList> extractAllCategorical;
-    QList<QStringList> extractAllNumerical;
-    QList<QStringList> extractAllDates;
-    QList<QStringList> extractAllOthers;
+    QList<QVariantList> extractAllList;
+    QList<QVariantList> extractAllCategorical;
+    QList<QVariantList> extractAllNumerical;
+    QList<QVariantList> extractAllDates;
+    QList<QVariantList> extractAllOthers;
 
     QStringList queriedColumnNames;
 
     void setHeaders(const QByteArray line, QString delimiter);
-    QMap<QString, QList<QStringList>> detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName);
+    QMap<QString, QList<QVariantList> > detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName);
+    void extractSchema(duckdb::Connection *con);
+    void fetchSettings();
 };
 
 #endif // TABLESCHEMAMODEL_H

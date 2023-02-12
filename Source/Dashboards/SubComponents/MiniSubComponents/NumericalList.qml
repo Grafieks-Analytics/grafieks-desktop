@@ -17,12 +17,22 @@ ListView {
     property var currentDashboardId: 0
 
 
+    ListModel{
+        id: listmodel
+    }
+
     Connections{
         target : TableColumnsModel
 
-        function onSendFilteredColumn(currentDashboard, allCategorical, allNumerical, allDates){
+        function onSendFilteredColumn(currentDashboard, allCategoricalMap, allNumericalMap, allDatesMap){
+
             if(currentDashboard === DashboardParamsModel.currentDashboard){
-                numericalChecksItem.model =  allNumerical
+                listmodel.clear()
+                for(const [key, value] of Object.entries(allNumericalMap)){
+                    listmodel.append({"key" : key, "value": value})
+                }
+
+                numericalChecksItem.model =  listmodel
                 currentDashboardId = currentDashboard
             }
         }
@@ -31,16 +41,16 @@ ListView {
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
             currentDashboardId = dashboardId
         }
     }
 
-    function handleCheckChange(colName, status){
+    function handleCheckChange(colName, colValue, status){
         if(currentDashboardId === DashboardParamsModel.currentDashboard){
             if(colName !== ""){
-                TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colName, Constants.numericalTab, status)
-                DashboardParamsModel.addToShowColumns(DashboardParamsModel.currentDashboard, colName, status)
+                TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colValue, Constants.numericalTab, status)
+                DashboardParamsModel.addToShowColumns(DashboardParamsModel.currentDashboard, colValue, status)
             }
         }
     }
@@ -48,10 +58,10 @@ ListView {
     delegate: CheckBoxTpl{
         id: checkBox1
          height: 30
-        checkbox_checked: DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard).indexOf(modelData) < 0 ? false: true
-        checkbox_text: modelData
+        checkbox_checked: DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard).indexOf(key) < 0 ? false: true
+        checkbox_text: key
         parent_dimension: 16
-        onCheckedChanged: handleCheckChange(checkBox1.checkbox_text, checked)
+        onCheckedChanged: handleCheckChange(key, value, checked)
     }
 
 }

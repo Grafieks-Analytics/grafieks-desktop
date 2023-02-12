@@ -12,9 +12,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
-import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -66,14 +67,14 @@ Item{
             ]
         }
 
-        ListElement {
-            categoryName: "Axis Size"
-            collapsed: false
-            display: false
-            subItems: [
-                ListElement { itemName: "ChartSize" }
-            ]
-        }
+        // ListElement {
+        //     categoryName: "Axis Size"
+        //     collapsed: false
+        //     display: false
+        //     subItems: [
+        //         ListElement { itemName: "ChartSize" }
+        //     ]
+        // }
 
 //        ListElement {
 //            categoryName: "Reference Line"
@@ -84,12 +85,30 @@ Item{
 //            ]
 //        }
 
+
+        ListElement {
+            categoryName: "Table Customization"
+            display: false
+            collapsed: false
+            subItems: []
+        }
+
         ListElement {
             categoryName: "Total"
             display: false
             collapsed: false
             subItems: []
         }
+
+        
+        ListElement {
+        categoryName: "KPI Properties"
+            display: false
+            collapsed: false
+            subItems: []
+        }
+
+        
 
     }
 
@@ -189,7 +208,7 @@ Item{
 
     ColorDialog {
         id: colorDialog
-        title: "Please choose a color"
+        title: Messages.re_sub_rc_chooseColor
         onAccepted: {
             console.log("You chose: " + colorDialog.color)
         }
@@ -222,6 +241,17 @@ Item{
     Component{
         id: totalComponent
         CustomizeTotal{}
+    }
+    
+
+    Component{
+        id: tableCustomizationComponent
+        TableCustomization{}
+    }
+    
+    Component{
+        id: kpiCustomizationComponent
+        KPICustomization{}
     }
 
     Component {
@@ -269,7 +299,7 @@ Item{
     CustomButton{
         id:reportFilterButton
         width: parent.width
-        textValue: "Report Filter [0]"
+        textValue: Messages.re_sub_rc_filter
         onClicked: openReportFilters()
     }
 
@@ -344,15 +374,17 @@ Item{
                         if(collapsed)
                             return null
 
-                        console.log('Debug',categoryName.toLowerCase());
+                        console.log('Debug:: Addidng left side menus',categoryName.toLowerCase());
                         switch(categoryName.toLowerCase()){
                             case "properties": return propertiesComponent
                             case "reference line": return referenceLineComponent
                             case "axis size": return chartsSizing
                             case "legend": return legendComponent
                             case "total": return totalComponent
+                            case "table customization": return tableCustomizationComponent
+                            case "kpi properties": return kpiCustomizationComponent
                             default:
-                                console.log('Debug',categoryName.toLowerCase())
+                                console.log('Debug:: Report Customization:',categoryName.toLowerCase())
                         }
 
                   

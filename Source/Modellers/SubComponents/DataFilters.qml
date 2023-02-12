@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "../SubComponents/MiniSubComponents"
@@ -149,14 +150,6 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
-        }
-    }
-
-    Connections{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){
@@ -266,8 +259,7 @@ Popup {
             "values" : ""
         }
 
-        console.log(colName, tableName, section, category)
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType  || GeneralParamsModel.getDbClassification() === Constants.accessType ){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             CSVJsonDataModel.columnData(colName, tableName, JSON.stringify(options))
@@ -508,7 +500,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Data Source Filter"
+            text: Messages.mo_sub_common_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -550,7 +542,7 @@ Popup {
 
         TabButton{
             id: character_btn
-            text: "Categorical"
+            text: Messages.filterCategorical
             width:popupMain.width/3 - 1
 
             background: Rectangle {
@@ -576,7 +568,7 @@ Popup {
 
         TabButton{
             id: date_btn
-            text: "Date"
+            text: Messages.filterDate
             width:popupMain.width/3 - 1
 
             background: Rectangle {
@@ -602,7 +594,7 @@ Popup {
 
         TabButton{
             id: numbers_btn
-            text: "Numerical"
+            text: Messages.filterNumerical
             width:popupMain.width/3 - 1
 
             background: Rectangle {
@@ -732,14 +724,14 @@ Popup {
 
         CustomButton{
             id: cancel_btn1
-            textValue: "Cancel"
+            textValue: Messages.cancelBtnTxt
             onClicked: onCancelClicked()
         }
 
 
         CustomButton{
             id: apply_btn1
-            textValue: "Apply"
+            textValue: Messages.applyBtnTxt
             onClicked: onApplyClicked()
         }
     }

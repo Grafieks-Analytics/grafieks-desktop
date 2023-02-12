@@ -58,20 +58,20 @@ Item{
         event.accepted = false
 
         // Save the plain query for execution
-        DSParamsModel.setTmpSql(newText)
+        DSParamsModel.setTmpSql(newText.replace(';', ''))
 
         // This is for Data Preview Table (Important. Else while tying query GUI thread is blocked)
         // If set false, header wont generate in Preview
         DSParamsModel.setRunCalled(false);
 
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            QueryModel.callSql(DSParamsModel.tmpSql)
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType ){
+            QueryModel.callSql(DSParamsModel.tmpSql, false)
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
-            CSVJsonQueryModel.setQuery(DSParamsModel.tmpSql)
+            CSVJsonQueryModel.setQuery(DSParamsModel.tmpSql, false)
         }  else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-            ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
+            ExcelQueryModel.setQuery(DSParamsModel.tmpSql, false)
         } else{
-            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql, false)
         }
 
     }
@@ -103,6 +103,7 @@ Item{
     Rectangle{
         height: queryModellerItem.height
         width: queryModellerItem.width
+        y:-5
 
         Flickable {
             id: flickText

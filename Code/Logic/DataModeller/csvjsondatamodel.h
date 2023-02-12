@@ -4,33 +4,35 @@
 #include <QObject>
 #include <QAbstractTableModel>
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFileInfo>
 #include <QDebug>
+#include <QRegExp>
 
 #include "../../statics.h"
 #include "../../constants.h"
-#include "../Connectors/duckcon.h"
 
-#include "../General/datatype.h"
 #include "../General/querysplitter.h"
+#include "../General/datatype.h"
 
 class CSVJsonDataModel : public QAbstractTableModel
 {
     Q_OBJECT
-    int headerLength;
     QStringList masterResultData;
-    QList<QByteArray> headerDataFinal;
-
-    DataType dataType;
+    QStringList headerDataFinal;
     QString fileName;
 
-    QHash<int, QByteArray> m_roleNames;
-    QStringList resultData;
+    QHash<int, QString> m_roleNames;
+    QStringList modelOutput;
     int totalRowCount;
     int totalColCount;
+    QString dateFormat;
+
+    QStringList output;
 
 public:
     explicit CSVJsonDataModel(QObject *parent = nullptr);
-    Q_INVOKABLE void clearData();
     ~CSVJsonDataModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -43,11 +45,15 @@ public:
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
+    Q_INVOKABLE QString getDateFormat();
+
+    // We are doing date separately than other models because we have to convert the format in the UI
+    Q_INVOKABLE QStringList getDateColumnData();
 
 private:
 
 signals:
-    void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
+    void fetchingColumnListModel();
     void columnListModelDataChanged(QString options = "");
 
 };

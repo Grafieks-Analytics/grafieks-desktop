@@ -14,6 +14,7 @@ import QtQuick.Layouts 1.3
 //import QtQuick.Controls 1.4 as OldControls
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -36,7 +37,7 @@ Page {
     // SIGNALS STARTS
 
 
-    signal updateDSName(string signalDSName);
+    signal updateDSName(string signalDSName, string connectionType, bool connectAllowed);
 
 
 
@@ -73,6 +74,15 @@ Page {
         }
     }
 
+    function onDataSourceNameClicked(datasourceName, connectionType, connectAllowed){
+        if(connectionType === Constants.extractDS){
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.extractFileExt, Constants.extractDS)
+        } else {
+            GeneralParamsModel.setPath(datasourceName + "." + Constants.liveFileExt, Constants.liveDS)
+        }
+        updateDSName(datasourceName, connectionType, connectAllowed)
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -98,23 +108,45 @@ Page {
 
 
     GridView {
+        id:gridGrs
         width: datasources_grid.width
         height: datasources_grid.height
-        cellWidth: width/3
+        cellWidth: gridGrs.width/3
         cellHeight: 300
+        clip: true
+                interactive: true
+                ScrollBar.vertical: ScrollBar{
+                     policy: ScrollBar.AlwaysOn
+                }
+               
+
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
         model: DatasourceModel
 
 
-        delegate: Rectangle{
+        delegate:
+            Rectangle{
+            width: gridGrs.width/3
+            height: 280
+
+
+            Rectangle{
             id:data_source_main
             border.color: Constants.darkThemeColor
+            anchors.horizontalCenter: parent.horizontalCenter
+
             width: 340
-            height: 240
+            height: 280
             radius: 10
+            scale: 1
+
+
 
             MouseArea{
                 anchors.fill:parent
-                onClicked: updateDSName(datasourceName)
+                onClicked: onDataSourceNameClicked(datasourceName, connectionType, connectAllowed)
             }
 
             Rectangle{
@@ -129,9 +161,10 @@ Page {
                 radius: 10
 
 
+
                 Text{
                     id: title
-                    text:  datasourceName
+                    text: datasourceName
                     font.pointSize: Constants.fontCategoryHeaderSmall
                     anchors.centerIn: parent
                     opacity: enabled ? 1.0 : 0.3
@@ -140,48 +173,48 @@ Page {
 
 
 
-                ToolButton {
-                    id:data_source_edit
+//                ToolButton {
+//                    id:data_source_edit
 
-                    anchors.right:data_source_head.right
-                    anchors.rightMargin: 10
-                    anchors.top:data_source_head.top
-                    anchors.topMargin: 10
-                    z:10
+//                    anchors.right:data_source_head.right
+//                    anchors.rightMargin: 10
+//                    anchors.top:data_source_head.top
+//                    anchors.topMargin: 10
+//                    z:10
 
-                    background: Rectangle {
-                        implicitWidth: 20
-                        implicitHeight: 20
-                        opacity: enabled ? 1 : 0.3
-                        color: "transparent"
-                    }
+//                    background: Rectangle {
+//                        implicitWidth: 20
+//                        implicitHeight: 20
+//                        opacity: enabled ? 1 : 0.3
+//                        color: "transparent"
+//                    }
 
 
-                    Image {
-                        source: "/Images/icons/Edit_20.png"
-                        width:20
-                        height:width
+//                    Image {
+//                        source: "/Images/icons/Edit_20.png"
+//                        width:20
+//                        height:width
 
-                    }
-                    onClicked: optionsMenu.open()
+//                    }
+//                    onClicked: optionsMenu.open()
 
-                    Menu {
-                        id: optionsMenu
-                        x: parent.width - width
-                        transformOrigin: Menu.TopRight
+//                    Menu {
+//                        id: optionsMenu
+//                        x: parent.width - width
+//                        transformOrigin: Menu.TopRight
 
-                        MenuItem {
-                            text: "Edit Connection"
-                            onTriggered: {
-                                onEditClicked()
-                            }
-                        }
-                        MenuItem {
-                            text: "Remove"
-                            onTriggered: onRemoveClicked(id,index)
-                        }
-                    }
-                }
+//                        MenuItem {
+//                            text: "Edit Connection"
+//                            onTriggered: {
+//                                onEditClicked()
+//                            }
+//                        }
+//                        MenuItem {
+//                            text: "Remove"
+//                            onTriggered: onRemoveClicked(id,index)
+//                        }
+//                    }
+//                }
 
 
             }
@@ -190,11 +223,11 @@ Page {
 
             Image{
                 id: image_datasource
-                source: "/Images/icons/sample_graph.png"
+                source: "/Images/icons/Data Sourse.png"
                 anchors.top: data_source_head.bottom
                 anchors.topMargin:10
                 anchors.horizontalCenter: data_source_main.horizontalCenter
-                width: 250
+                width: 150
                 height:76
 
 
@@ -211,7 +244,7 @@ Page {
                 anchors.rightMargin: 10
 
                 Text{
-                    text: "Description"
+                    text: Messages.ds_sub_dsg_description
                 }
                 Text{
                     id: description_id
@@ -224,17 +257,18 @@ Page {
 
             RowLayout{
                 id: info_datasource
-                anchors.top: description_datasource.bottom
+                anchors.bottom: parent.bottom
                 anchors.left: data_source_main.left
                 anchors.right: data_source_main.right
-                anchors.topMargin: 15
+                anchors.bottomMargin: 15
                 anchors.leftMargin: 10
                 anchors.rightMargin: 10
 
 
                 Column{
+
                     Text{
-                        text: "Published by"
+                        text: Messages.ds_sub_dsg_publishedBy
                     }
                     Text{
                         id: owner_name_id
@@ -245,9 +279,9 @@ Page {
                 }
 
                 Column{
-
+                    anchors.right: parent.right
                     Text{
-                        text: "Live / In Memory"
+                        text: Messages.ds_sub_dsg_liveExtract
 
                     }
                     Text{
@@ -260,6 +294,7 @@ Page {
 
             }
         }
+    }
     }
 
 

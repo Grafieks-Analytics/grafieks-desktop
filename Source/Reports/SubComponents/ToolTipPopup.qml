@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents";
 import "./MiniSubComponents";
@@ -11,7 +12,7 @@ import "./MiniSubComponents";
 Popup {
 
     id: toolTipPopup
-    width: parent.width * 0.5
+    width: 600
     height: 400
     anchors.centerIn: parent
 
@@ -23,7 +24,7 @@ Popup {
     background: Rectangle{
         color: Constants.whiteColor
     }
-
+    property int editingFlag:0;
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
@@ -82,6 +83,12 @@ Popup {
         }
     }
 
+    function generateLabel(currentIndexTooltip){
+        // currentIndexTooltip=currentIndexTooltip+1
+        console.log(currentIndexTooltip)
+        return "textColumn"+(currentIndexTooltip+1);
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -125,6 +132,17 @@ Popup {
 
 
 
+    function getDataValue(index, model){
+
+        switch(model){
+            case 'xAxis':
+                return tempXModel.get(index) && tempXModel.get(index).dataValue;
+            case 'yAxis':
+                return tempYModel.get(index) && tempYModel.get(index).dataValue;
+            case 'colorBy':
+                return tempColorByModel.get(index) && tempColorByModel.get(index).dataValue;
+        }
+    }
 
 
     // Popup Header Starts
@@ -178,143 +196,50 @@ Popup {
         spacing: 300
 
 
-            Column{
-                id:firstCol
-                spacing: 100
-
-                width: parent.width/2
-
-                Text {
-                    id: label2
-                    text: qsTr("Column")
-                }
-
-
-
-
-                Rectangle{
-                    id:xAxisToolTip
-                    height:30
-                    width:parent.width
-
-                    anchors.top: label2.bottom
-                    anchors.topMargin: 15
-
-
-
-                    ListView{
-
-                        height: parent.height
-                        width: parent.width
-
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                        model: xAxisListModel
-                        orientation: Qt.Vertical
-                        spacing: 5
-                        interactive: false
-                        delegate:  Text {
-
-                            text: qsTr(itemName)
-                        }
-
-                    }
-                }
-                Rectangle{
-                    id:yAxisToolTip
-                    height:30
-                    width:parent.width
-
-                    anchors.top: xAxisToolTip.bottom
-                        anchors.topMargin: 15
-
-
-
-                    ListView{
-
-                        height: parent.height
-                        width: parent.width
-
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                        model: yAxisListModel
-                        orientation: Qt.Vertical
-                        spacing: 5
-                        interactive: false
-                        delegate:  Text {
-
-                            text: qsTr(itemName)
-                        }
-
-                    }
-                }
-
-
-
-            }
-
         Column{
-            spacing: 100
-            width: parent.width/2
-            anchors.right: parent.right
-            Text {
-                id: label3
-                text: qsTr("Tooltip Label")
-            }
-
-            Rectangle{
-                id:toolTipEdit1
-                height:25
+            
+            ListView{
+                id:xAxisListModelList
+                model:xAxisListModel
+                height:xAxisListModel.count*50
                 width:parent.width
-
-                anchors.top: label3.bottom
-                    anchors.topMargin: 15
-
-                TextField{
-                     id:toolTipText1
-                    width: parent.width-150
-                    selectByMouse: true
-                    height:25
-                    cursorVisible: true
-                    anchors.top: parent.top
-                    anchors.topMargin: 5
-                    placeholderText: "column1"
-
-
-
-                    background: Rectangle{
-                        border.width: 1
-
-                    }
+                delegate:
+                    TooltipInputControl{
+                    textValue:itemName
+                    dataValue:getDataValue(index,'xAxis')||""
+                    textLabel:generateLabel( report_desiner_page.isHorizontalGraph ? (yAxisListModel.count + index) : index)
                 }
             }
-            Rectangle{
-                id:toolTipEdit2
-                height:25
+            ListView{
+                id:yAxisListModelList
+                anchors.top:xAxisListModelList.bottom
+                model:yAxisListModel
+                height:yAxisListModel.count*50
                 width:parent.width
+                delegate:
+                    TooltipInputControl{
+                    textValue:itemName
+                    dataValue:getDataValue(index,'yAxis') || ""
+                    textLabel:generateLabel(report_desiner_page.isHorizontalGraph ? index : xAxisListModel.count+index)
 
-                anchors.top: toolTipEdit1.bottom
-                    anchors.topMargin: 15
+                }
+            }
+            ListView{
+                anchors.top:yAxisListModelList.bottom
 
-                TextField{
-                    id:toolTipText2
-                    width: parent.width-150
-                    selectByMouse: true
-                    height:25
-                    cursorVisible: true
-                    anchors.top: parent.top
-                    anchors.topMargin: 5
-                    placeholderText: "column2"
-                    background: Rectangle{
-                        border.width: 1
-
-                    }
+                model:colorListModel
+                height:colorListModel.count*50
+                width:parent.width
+                delegate:
+                    TooltipInputControl{
+                    textValue:itemName
+                    dataValue:getDataValue(index,'colorBy')||""
+                    textLabel:"colorData"
                 }
             }
         }
 
     }
-
 
 
 
@@ -329,10 +254,11 @@ Popup {
             anchors.topMargin: 20
             anchors.right: parent.right
             anchors.rightMargin: 20
-            textValue: "Apply"
+            textValue: Messages.applyBtnTxt
             onClicked: {
-               d3PropertyConfig.toolTip={textColumn1:toolTipText1.text,textColumn2:toolTipText2.text}
-                reDrawChart();
+                
+                updateChart();
+                toolTipPopup.visible = false
             }
         }
     }

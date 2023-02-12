@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -38,6 +39,78 @@ Column{
     // Connections Starts
 
 
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+
+        legendStatusCheckbox.checked = false;
+        
+        right_radio.radio_checked = false;
+        left_radio.radio_checked = false;
+        top_radio.radio_checked = false;
+        bottom_radio.radio_checked = false;
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var {  legendConfig = {}  } = d3PropertiesConfig || {};
+        var { legendStatus, legendPosition } = legendConfig;
+
+        legendStatusCheckbox.checked = legendStatus ? true : false 
+        if(legendPosition){
+            switch(legendPosition){
+                case "right":
+                    right_radio.radio_checked = true;
+                    left_radio.radio_checked = false;
+                    top_radio.radio_checked = false;
+                    bottom_radio.radio_checked = false;
+                    break;
+                case "left":
+                    right_radio.radio_checked = false;
+                    left_radio.radio_checked = true;
+                    top_radio.radio_checked = false;
+                    bottom_radio.radio_checked = false;
+                    break;
+                case "bottom":
+                    right_radio.radio_checked = false;
+                    left_radio.radio_checked = false;
+                    top_radio.radio_checked = false;
+                    bottom_radio.radio_checked = true;
+                    break;
+                case "top":
+                    right_radio.radio_checked = false;
+                    left_radio.radio_checked = false;
+                    top_radio.radio_checked = true;
+                    bottom_radio.radio_checked = false;
+                    break;
+            }
+            // legendStatusCheckbox.checked = legendStatusCheckbox.checked ? true : false 
+        }else{
+            right_radio.radio_checked = false;
+            left_radio.radio_checked = false;
+            top_radio.radio_checked = false;
+            bottom_radio.radio_checked = false;
+        }
+
+    }
+    
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -53,9 +126,17 @@ Column{
         var legendConfig = d3PropertyConfig.legendConfig || {};
         legendConfig['legendStatus'] = checked;
         legendConfig['legendPosition'] = "right";
-        right_radio.radio_checked = true;
+        if(checked){
+            right_radio.radio_checked = true;
+        }else{
+            right_radio.radio_checked = false;
+            left_radio.radio_checked = false;
+            top_radio.radio_checked = false;
+            bottom_radio.radio_checked = false;
+        }
         d3PropertyConfig.legendConfig = legendConfig;
-        reDrawChart();
+        qmlChartConfig.legendStatus = checked;
+        updateChart();
     }
 
     function changeLegendPosition(checked,position){
@@ -65,7 +146,13 @@ Column{
         var legendConfig = d3PropertyConfig.legendConfig || {};
         legendConfig['legendPosition'] = position;
         d3PropertyConfig.legendConfig = legendConfig;
-        reDrawChart();
+        qmlChartConfig.legendConfig = { 
+            right_radio: right_radio.radio_checked, 
+            left_radio: left_radio.radio_checked, 
+            top_radio: top_radio.radio_checked, 
+            bottom_radio: bottom_radio.radio_checked
+        } ;
+        updateChart();
     }
 
 
@@ -112,7 +199,7 @@ Column{
 
 
             Text {
-                text: qsTr("Show Legend")
+                text: Messages.re_mini_cl_showLegend
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -120,7 +207,7 @@ Column{
             }
 
             CheckBoxTpl{
-
+                id: legendStatusCheckbox
                 checked: false
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
@@ -164,7 +251,7 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Right")
+                        text: Messages.re_mini_cl_showLegendRight
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
@@ -194,12 +281,13 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Left")
+                        text: Messages.re_mini_cl_showLegendLeft
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
 
                     CustomRadioButton{
+                        id: left_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width
@@ -234,12 +322,13 @@ Column{
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Bottom")
+                        text: Messages.re_mini_cl_showLegendBottom
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
 
                     CustomRadioButton{
+                        id: bottom_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width
@@ -263,12 +352,13 @@ Column{
                 Column{
                     anchors.fill: parent
                     Text {
-                        text: qsTr("Top")
+                        text: Messages.re_mini_cl_showLegendTop
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
 
                     CustomRadioButton{
+                        id: top_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width
@@ -291,41 +381,41 @@ Column{
     }
 
     // Text Format starts
-    Rectangle{
+    // Rectangle{
 
-        height: 20
-        width: parent.width
-
-
-
-        Rectangle{
-            anchors.fill: parent
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.bottom:  parent.bottom
-            anchors.bottomMargin:  20
+    //     height: 20
+    //     width: parent.width
 
 
-            Text {
-                text: qsTr("Text Format")
-                anchors.left: parent.left
-                anchors.leftMargin: leftMargin
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: Constants.fontCategoryHeaderSmall
-            }
 
-            Image {
-                height: editImageSize
-                width: editImageSize
-                source: "/Images/icons/Edit_20.png"
-                anchors.right: parent.right
-                anchors.rightMargin: leftMargin
-                anchors.verticalCenter: parent.verticalCenter
-            }
+    //     Rectangle{
+    //         anchors.fill: parent
+    //         anchors.top: parent.top
+    //         anchors.topMargin: 5
+    //         anchors.bottom:  parent.bottom
+    //         anchors.bottomMargin:  20
 
-        }
 
-    }
+    //         Text {
+    //             text: qsTr("Text Format")
+    //             anchors.left: parent.left
+    //             anchors.leftMargin: leftMargin
+    //             anchors.verticalCenter: parent.verticalCenter
+    //             font.pixelSize: Constants.fontCategoryHeaderSmall
+    //         }
+
+    //         Image {
+    //             height: editImageSize
+    //             width: editImageSize
+    //             source: "/Images/icons/Edit_20.png"
+    //             anchors.right: parent.right
+    //             anchors.rightMargin: leftMargin
+    //             anchors.verticalCenter: parent.verticalCenter
+    //         }
+
+    //     }
+
+    // }
     // Text Format Ends
 
 }

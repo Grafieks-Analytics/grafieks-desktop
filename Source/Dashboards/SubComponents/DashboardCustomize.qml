@@ -10,7 +10,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
+
 import "./MiniSubComponents"
 Item{
 
@@ -88,6 +91,7 @@ Item{
             allReportsModel.clear();
             const reportListData = ReportParamsModel.getReportsList();
             for(let reportId in reportListData){
+                console.log("Reports Id", reportId)
                 allReportsModel.append({ reportName: reportListData[reportId], reportId: reportId })
             }
         }
@@ -115,6 +119,20 @@ Item{
         editIconVisible = false
 
     }
+
+    function deleteReport(reportId){
+        let curr = reportId
+
+        ReportParamsModel.deleteReport(curr, false)
+        DashboardParamsModel.deleteReport(curr)
+    }
+
+    function editReport(reportId){
+        stacklayout_home.currentIndex = Constants.newReportIndex;
+        ReportParamsModel.setReportId(reportId);
+        ReportParamsModel.setEditReportToggle(reportId);
+    }
+    
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -295,6 +313,7 @@ Item{
                         anchors.left: parent.left
                         anchors.fill: parent
                         height: parent.height
+                        z:100
 
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
@@ -306,28 +325,90 @@ Item{
                             height: parent.height
                             width: 50
                             anchors.right: parent.right
-                            anchors.rightMargin:  20
+                            anchors.rightMargin:  5
                             Image{
                                 id: resizeReport
-                                height: 16
-                                width: 16
+                                height: 20
+                                width: 20
+                                z:50
                                 anchors.right: parent.right
                                 anchors.rightMargin:  20
                                 visible: editIconVisible
-                                source: "/Images/icons/edit gray.png"
+                                source: "/Images/icons/menu-button.png"
                                 anchors.verticalCenter: parent.verticalCenter
                                 MouseArea{
                                     anchors.fill: parent
-                                    onClicked: editSelectedReport()
+                                    onClicked: menuOptions.open()
                                 }
                             }
                         }
+                         Row{
+
+                // anchors.right: tableImg.right
+                anchors.top: toggleMenuIcon.bottom
+                anchors.rightMargin: -70
+                width: parent.width-30
+                height: 80
+
+                Item {
+                    id: name
+
+                    anchors.right:parent.right
+
+                    x: -menuOptions.width
+
+                    // Menu{
+                    //     id: menuOptions
+                    //     background: Rectangle{
+                    //         implicitWidth: 200
+                    //         border.color: Constants.darkThemeColor
+                    //     }
+
+
+                        Menu{
+                            id: menuOptions
+
+                            background: Rectangle{
+                                implicitWidth: 180
+
+                                border.color: Constants.darkThemeColor
+                            }
+                            MenuItem {
+                                id:menuItem1
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: Messages.da_sub_dc_edit
+                                onTriggered: editReport(reportId)
+
+                            //   TODO:edit report
+
+                            }
+                            MenuSeparator{}
+                            MenuItem {
+                                id:menuItem2
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: Messages.da_sub_dc_delete
+                                onTriggered: deleteReport(reportId)
+                                // TODO:Delete report
+
+                               
+                            }
+
+                        }
+                    }
+                // }
+
+
+            }
 
                     }
 
                     MouseArea {
                         id: mouseArea
-                        anchors.fill: parent
+                        // anchors.fill: parent
+                        height:parent.height
+                        width:parent.width
                         drag.target:  dragRect
                         drag.minimumX: -( new_dashboard_page.width - parent.width)
                         drag.maximumX: 0
@@ -476,7 +557,7 @@ Item{
     Component{
         id: styleComponent
         CustomizeStyleMenu{
-            height: 120
+            height: 40
             width: listViewElem.width
         }
     }

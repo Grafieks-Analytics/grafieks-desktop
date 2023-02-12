@@ -1,0 +1,4158 @@
+{
+	"info": {
+		"_postman_id": "1d63b544-8316-4661-b3f7-d4e9efc6d6fb",
+		"name": "Grafieks 1.1 API",
+		"description": "Grafieks 1.1 API - Golang",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"hirak.kocharee@gmail.com\",\n\t\"password\" : \"111111\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Username",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"hirak\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/checkusername",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"checkusername"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "f3i3WeaueMsY2XB3yBiHR96HaWe9uqu8fgXw6",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"chilly5476@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/forgotpassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"forgotpassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch credentials",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sessionhash\" : \"2a14XQVqYZuXZUbJruwig7gsOU3Y3msBZdBXODWNJlmXKAtmKb4HWz2W\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchcredentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchcredentials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"resethash\" : \"ifle2hvyvaNzCyEFDL8KH35S6Lhk45ee\",\n\t\"newpassword\" : \"112233\",\n\t\"confirmpassword\" : \"112233\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/resetpassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"resetpassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"resethash\" : \"vOIMceEyLI9T9TXiJN6ypPWR4bafJLSYsW\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/activate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"os\" : \"Windows\",\n\t\"location\" :\"Delhi\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/loginlog",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"loginlog"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Site Lookup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sitename\" : \"https://qa.grafieks.net\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/sitelookup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"sitelookup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Settings",
+			"item": [
+				{
+					"name": "Name Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"firstname\" : \"Hirak\",\n\t\"lastname\" : \"Kocharee\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/namechange",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"namechange"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"email\" : \"chilly5476@gmail12.com\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/emailchange",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"emailchange"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"newPassword\" : \"1111\",\n\t\"confirmPassword\" : \"1111\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/passwordchange",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"passwordchange"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Login Logs",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchloginlogs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchloginlogs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Photo Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "2a14XQVqYZuXZUbJruwig7gsOU3Y3msBZdBXODWNJlmXKAtmKb4HWz2W",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"image\" : \"TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\",\n\t\"filename\" : \"a.jpg\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/photochange",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"photochange"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchemail",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchemail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "New Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "nA9lre018ZvJcJmGlxpRLRbYFzNCynZOlPEy",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectName\" : \"first project\",\n\t\"description\" : \"dummy description of first project\",\n\t\"image\" : \"TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\",\n\t\"filename\" : \"renee.text\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/newproject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"newproject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Projects",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "q3CG9WbqzAWWkB5XCRdVF2lO0McpBKjVkuVS",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 4,\n\t\"page\" : 0,\n\t\"fulllist\" : false,\n\t\"listview\" : false\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listprojects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listprojects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectId\" : 7,\n\t\"projectName\" : \"miniscule\",\n\t\"description\" : \"corona description2\",\n\t\"image\" : \"TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24sIGJ1dCBieSB0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGludWVkIGFuZCBpbmRlZmF0aWdhYmxlIGdlbmVyYXRpb24gb2Yga25vd2xlZGdlLCBleGNlZWRzIHRoZSBzaG9ydCB2ZWhlbWVuY2Ugb2YgYW55IGNhcm5hbCBwbGVhc3VyZS4=\",\n\t\"filename\" : \"renee.text\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/editproject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"editproject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Project Leader",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectid\" : 4,\n\t\"leaderprofileid\" : 4\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/projectleader",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"projectleader"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectId\" : 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deleteproject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deleteproject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Project Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectId\" : 1,\n\t\"groupId\": 18\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/editprojectgroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"editprojectgroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "q3CG9WbqzAWWkB5XCRdVF2lO0McpBKjVkuVS",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 4,\n\t\"keyword\" : \"22\",\n\t\"page\" : 0,\n\t\"fulllist\" : true,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchproject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchproject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Project Leaders",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "nA9lre018ZvJcJmGlxpRLRbYFzNCynZOlPEy",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listprojectleaders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listprojectleaders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Project Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listprojectgroups",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listprojectgroups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0,\n\t\"fulllist\" : true,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listdashboard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listdashboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Workbooks in Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"projectId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/workbooksinproject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"workbooksinproject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test",
+			"item": [
+				{
+					"name": "Test1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/test1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"test1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "New User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "dbcGyIvKAdnP5WG78Rw28Nj8zEIHeHNHx79",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"firstname\" : \"c1\",\n\t\"lastname\" : \"m1\",\n\t\"email\" : \"7chilly5476@yahoo.co.uk\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/newuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"newuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "WSmU3KiJk1FWbS6DbtNgpITcywd5SWNEHO",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"listview\" : true,\n\t\"page\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listusers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"editProfileId\" : 4,\n\t\"firstname\" : \"Chilarai\",\n\t\"lastname\" : \"M\",\n\t\"email\" : \"chilly5476@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/edituser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"edituser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "2a14XQVqYZuXZUbJruwig7gsOU3Y3msBZdBXODWNJlmXKAtmKb4HWz2W",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" :1,\n\t\"delprofileId\" : 8\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deleteuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deleteuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"c\",\n\t\"page\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Before Delete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "2a14XQVqYZuXZUbJruwig7gsOU3Y3msBZdBXODWNJlmXKAtmKb4HWz2W",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"delprofileId\" : 6\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/transfer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload CSV",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "2a14XQVqYZuXZUbJruwig7gsOU3Y3msBZdBXODWNJlmXKAtmKb4HWz2W",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"filedata\" : \"dmlzaGFsLCBzYWhhcmFuLCBjaGlsbHk1NDc2QGhvdG1haWwuY29tCnZpc2hhbCwgc2FoYXJhbiwgY2hpbGx5NTQ3NkB5YWhvby5jby51aw==\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/uploadcsv",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"uploadcsv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Make Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "PgUUaVQbSg20qiBCJHIwGZATfml83gIdju",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"userProfileId\" : 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/makeadmin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"makeadmin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Group",
+			"item": [
+				{
+					"name": "New Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "aW6W6uowlOxMrBaLm8eYYAfqSP3fILtSxcv2",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"groupName\" : \"Group 3\",\n\t\"isActive\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/newgroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"newgroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" :1,\n\t\"groupId\" : 2,\n\t\"groupName\" : \"Edit 2 group\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/editgroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"editgroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listgroups",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listgroups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"delgroupId\" : 4\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deletegroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deletegroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"d\",\n\t\"page\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchgroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchgroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Profile Groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "PgUUaVQbSg20qiBCJHIwGZATfml83gIdju",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"userProfileid\" : 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchprofilegroups",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchprofilegroups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "mlJO9e0IvlXeuD1GpCZINMZQ0jH1lCdGmw9e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"groupid\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listpermissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listpermissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Permission",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "mlJO9e0IvlXeuD1GpCZINMZQ0jH1lCdGmw9e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"permissionId\" : 7,\n\t\"groupId\" : 1,\n\t\"isActive\" : false,\n\t\"permissionType\" : \"workbook\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/editpermission",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"editpermission"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Delete Profile Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"userprofileId\" :4,\n\t\"groupId\" : 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/profilegroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"profilegroup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Resources",
+			"item": [
+				{
+					"name": "Resource Image",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5476/resourceimage?image=1575699687.jpg&class=profiles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"resourceimage"
+							],
+							"query": [
+								{
+									"key": "image",
+									"value": "1575699687.jpg"
+								},
+								{
+									"key": "class",
+									"value": "profiles"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workbooks",
+			"item": [
+				{
+					"name": "List Workbooks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "vOmUSu4OAqAZ2N2ONdaKwUeOEacvehNsTzTTi",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0,\n\t\"projectId\" : 0,\n\t\"fulllist\" : true,\n\t\"listview\" : false\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listworkbook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Workbooks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "vOmUSu4OAqAZ2N2ONdaKwUeOEacvehNsTzTTi",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"2\",\n\t\"page\" : 0,\n\t\"fulllist\" : true,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchworkbook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rename Workbook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"workbookId\" : 24,\n\t\"workbookname\" : \"Zom\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/renameworkbook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"renameworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Workbook Groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "nA9lre018ZvJcJmGlxpRLRbYFzNCynZOlPEy",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"workbookId\" : 24\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listworkbookgroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listworkbookgroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"workbookId\" : 24,\n\t\"groupId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managegroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managegroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Workbook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"workbookId\" : 25\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deleteworkbook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deleteworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Workbook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "4wXPeuXbmJ8BllmfSzVxJ2LLXvanJFScexS32",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"workbookId\" : 3\n}"
+						},
+						"url": {
+							"raw": "https://apit.grafieks.net/downloadworkbook",
+							"protocol": "https",
+							"host": [
+								"apit",
+								"grafieks",
+								"net"
+							],
+							"path": [
+								"downloadworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Parse Workbook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "4p2GreesALwHeen8LkpFsbJZwQgHpcbr2W7K",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profileId\" : 1,\r\n\t\"workbookID\" : 2\r\n}"
+						},
+						"url": {
+							"raw": "https://apit.grafieks.net/parseworkbook",
+							"protocol": "https",
+							"host": [
+								"apit",
+								"grafieks",
+								"net"
+							],
+							"path": [
+								"parseworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Workbook Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "fUU4eHKoi659oCGPrmNqEUTnMmtqHLx6DDdy",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"profileId\":1,\"workbookId\":18,\"dashboardId\":0,\"dbType\":\"SQL\",\"webWhereConditions\":\"\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/workbookdata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"workbookdata"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboards",
+			"item": [
+				{
+					"name": "List Dashboards",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "vOmUSu4OAqAZ2N2ONdaKwUeOEacvehNsTzTTi",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0,\n\t\"workbookId\" : 0,\n\t\"fulllist\" : false,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listdashboard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listdashboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Dashboards",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"d\",\n\t\"page\" : 0,\n\t\"fulllist\" : true,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchdashboard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchdashboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"dashboardId\" : 12,\n\t\"workbookId\" : 24\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listreport",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listreport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dashboards in Workbook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "vOmUSu4OAqAZ2N2ONdaKwUeOEacvehNsTzTTi",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n    \"dashboardId\": 2,\n    \"workbookId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/dashboardsinworkbook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"dashboardsinworkbook"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "New Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "mntE4OmV2xWDj7S9RaiNMe14N0dJdtAVh4CO"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"reportId\" : 1,\n    \"workbookId\" : 3,\n    \"dashboardId\" : 0,\n\t\"comment\" : \"Reply from API\",\n\t\"replythreadId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/newcomment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"newcomment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Comments By Dashboard",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "fUU4eHKoi659oCGPrmNqEUTnMmtqHLx6DDdy"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"dashboardId\" : 0,\n    \"workbookId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchcommentsbydashboard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchcommentsbydashboard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Comments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "mntE4OmV2xWDj7S9RaiNMe14N0dJdtAVh4CO"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"reportId\" : 1,\n    \"workbookId\" : 3,\n    \"dashboardId\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchcomments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchcomments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Datasources",
+			"item": [
+				{
+					"name": "List Datasources",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "CKkjeSDmoBCQe25aMFiWdxdbvDu9hogiEbiG",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0,\n\t\"fulllist\" : false,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listdatasources",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listdatasources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Datasources",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"kocharee\",\n\t\"page\" : 0,\n\t\"fulllist\" : false,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchdatasource",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchdatasource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rename Datasource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 2,\n\t\"datasourceName\" : \"Contra2\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/renamedatasource",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"renamedatasource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Datasource Groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listdatasourcegroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listdatasourcegroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Datasource Groups",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 2,\n\t\"groupId\" : 25\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managedsgroup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managedsgroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Datasource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "4wXPeuXbmJ8BllmfSzVxJ2LLXvanJFScexS32",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 2\n}"
+						},
+						"url": {
+							"raw": "https://apit.grafieks.net/downloaddatasource",
+							"protocol": "https",
+							"host": [
+								"apit",
+								"grafieks",
+								"net"
+							],
+							"path": [
+								"downloaddatasource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Datasource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deletedatasource",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deletedatasource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run DS Extract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/rundsextract",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"rundsextract"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Datasource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "FUTk2unAecNhbj738GllTcnnWocgw3sB4enq",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"profileId\" : 44,\r\n\t\"datasourcename\" : \"Sales Data Source 2 visibility testing \"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/checkdatasource",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"checkdatasource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List DS Permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "FUTk2unAecNhbj738GllTcnnWocgw3sB4enq",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"profileId\" : 44,\r\n\t\"datasourceId\" : 1\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listdspermissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listdspermissions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Account Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "jYBzuHASyKeIolHaB0iIozq6xYaxVEu0IEa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uniquehash\" : \"asd2\",\n\t\"isactive\" : true,\n\t\"sitename\" : \"testsite2\",\n\t\"password\" : \"1111\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check admin user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "PgUUaVQbSg20qiBCJHIwGZATfml83gIdju",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/checkadminuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"checkadminuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Admin Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "PgUUaVQbSg20qiBCJHIwGZATfml83gIdju",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/newaccount?firstname=chil2&lastname=1232&email=chilly54766@gmail.com&phone=123&company=company&department=hello&title=mr&hash=asd4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"newaccount"
+							],
+							"query": [
+								{
+									"key": "firstname",
+									"value": "chil2"
+								},
+								{
+									"key": "lastname",
+									"value": "1232"
+								},
+								{
+									"key": "email",
+									"value": "chilly54766@gmail.com"
+								},
+								{
+									"key": "phone",
+									"value": "123"
+								},
+								{
+									"key": "company",
+									"value": "company"
+								},
+								{
+									"key": "department",
+									"value": "hello"
+								},
+								{
+									"key": "title",
+									"value": "mr"
+								},
+								{
+									"key": "hash",
+									"value": "asd4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schedulers",
+			"item": [
+				{
+					"name": "List Schedulers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Vdz3se4rBxV5VcTPNeNZLqgRn0Y6ZIQwdJLHa",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"page\" : 0,\n\t\"listview\" : false\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listschedulers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listschedulers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Schedulers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"a\",\n\t\"page\" : 0,\n\t\"listview\" : true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchschedulers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchschedulers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Schedule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"scheduleId\" : 29\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchschedule",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchschedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Schedule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"scheduleId\" : 30\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deleteschedule",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deleteschedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Scheduler",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "K4dH8utmE6FP639297h0PSYufmg8G3oaPbua"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"profileId\": 3,\n    \"schedulerId\": 6,\n    \"name\": \"Test\",\n    \"type\": \"data_extract\",\n    \"timezone\": \"Asia/Kolkata\",\n    \"twelveHourTime\": 1,\n    \"timeUnit\": \"am\",\n    \"frequency\": \"monthly\",\n    \"timesInWeek\": 0,\n    \"weekDays\": \"[\\\"4\\\",\\\"12\\\",\\\"18\\\"]\",\n    \"monthDays\": \"[\\\"4\\\",\\\"12\\\",\\\"18\\\",\\\"9\\\",\\\"16\\\"]\"\n}"
+						},
+						"url": {
+							"raw": "https://apit.grafieks.net/editscheduler",
+							"protocol": "https",
+							"host": [
+								"apit",
+								"grafieks",
+								"net"
+							],
+							"path": [
+								"editscheduler"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Scheduler names",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "akCnAuOGYIUNZal9fGAlUVbO56zc2xqOKuum",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"datasourceId\" : 1,\n\t\"type\" :\"alert\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listschedulernames",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listschedulernames"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run Schedulers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"schedulerId\" : 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/runscheduler",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"runscheduler"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Scheduler",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "aW6W6uowlOxMrBaLm8eYYAfqSP3fILtSxcv2",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"name\" : \"Monthly scheduler alert\",\n\t\"type\" : \"alert\",\n\t\"timezone\" : \"Asia/Kolkata\",\n\t\"twelveHourTime\" : 1,\n\t\"timeUnit\" : \"pm\",\n\t\"frequency\" : \"daily\",\n\t\"timesInWeek\" : 2,\n\t\"weekDays\" : \"[\\\"1\\\",\\\"2\\\"]\",\n\t\"monthDays\" : \"[\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"4\\\"]\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/newscheduler",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"newscheduler"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Manage DS Tasks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"taskId\" : 1,\n\t\"schedulerId\" :2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managedstasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managedstasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Alert Tasks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1,\n\t\"schedulerId\" :3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managealerttasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managealerttasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Tasks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"type\" : \"alert\",\n\t\"page\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listtasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listtasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Tasks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"ss\",\n\t\"type\" : \"alert\",\n\t\"page\" : 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchtasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchtasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tasks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"taskId\" : 1,\n\t\"type\" :\"alert\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deletetask",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deletetask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Email Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/emailrecipients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"emailrecipients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Email Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1,\n\t\"recipientId\" :2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managerecipients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managerecipients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Push Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managepushaccount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managepushaccount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Push Recipient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listpushaccount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listpushaccount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List DS Schedules",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"taskId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listdsschedule",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listdsschedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Alert Schedules",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"taskId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listalertschedule",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listalertschedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Schedules",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"taskId\" : 1,\n\t\"keyword\" : \"1\",\n\t\"type\" : \"data_extract\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/searchschedules",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"searchschedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Alert Conditions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"taskId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listconditions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listconditions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Alerts",
+			"item": [
+				{
+					"name": "Add Alert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"reportId\" : 2,\n\t\"condition\" : \"profile = 21 AND profit = 22\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/addalert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"addalert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Alert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "U9vY2Gboo4VDydwohENSRCnydCQnw5FGgcZm"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1,\n\t\"condition\" : \"[{\\\"val\\\": \\\"21\\\", \\\"var\\\": \\\"profit\\\", \\\"cond\\\": \\\"!=\\\"}]\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/editalert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"editalert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Alert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/deletealert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"deletealert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Alerts",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "mlJO9e0IvlXeuD1GpCZINMZQ0jH1lCdGmw9e"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"reportId\" : 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listalerts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listalerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Email Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listemailrecipients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listemailrecipients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Email Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 3,\n\t\"recipientId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/manageemailrecipients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"manageemailrecipients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Push Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/managepushrecipient",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"managepushrecipient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Push Recipients",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "waWbuB7VStYB2Hi3pmwiW2GlLx77yukE1SC"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"alertId\" : 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/listpushrecipient",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"listpushrecipient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Reset Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "yqYXNtBkHa8N6mYzAJwAYfIwiQipPZ9O66"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 3,\n\t\"notificationType\" : \"alert\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/resetnotification",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"resetnotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Notification count",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "nA9lre018ZvJcJmGlxpRLRbYFzNCynZOlPEy"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchcount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchcount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch comments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "mlJO9e0IvlXeuD1GpCZINMZQ0jH1lCdGmw9e"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchnotificationcomments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchnotificationcomments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch alerts",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "mlJO9e0IvlXeuD1GpCZINMZQ0jH1lCdGmw9e"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchnotificationalerts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchnotificationalerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Related Comments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "mlJO9e0IvlXeuD1GpCZINMZQ0jH1lCdGmw9e"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"reportId\" : 1,\n\t\"currentCommentId\" : 61\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchrelatedcomments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchrelatedcomments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Master Search",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "XUI5OjDuQUNXI8rXr2QQTPvOQXMbpsWjdSa"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"keyword\" : \"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Desktop",
+			"item": [
+				{
+					"name": "New Datasource",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "X4lZwu0CxXKLLhRVYjbGccUCU7EmOLQP6IYH6",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"profileId\" : 1,\n    \"datasourceName\" : \"New sssssssssssssssdws2\",\n    \"description\" : \"\",\n    \"image\" : \"\",\n    \"fileName\" : \"\",\n    \"sourceType\": \"extract\",\n    \"inMemory\" : true,\n    \"isFullExtract\": false,\n    \"columnName\" : \"random\",\n    \"schedulerId\" : 1\n}"
+						},
+						"url": {
+							"raw": "https://apit.grafieks.net/desk_newdatasource",
+							"protocol": "https",
+							"host": [
+								"apit",
+								"grafieks",
+								"net"
+							],
+							"path": [
+								"desk_newdatasource"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Scheduler names",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "akCnAuOGYIUNZal9fGAlUVbO56zc2xqOKuum",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 1,\n\t\"type\" :\"data_extract\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/desk_listschedules",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"desk_listschedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Workbook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "lqMXQayIBFqBo7gk5jl8S12JJAMPbQLimj6",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"profileId\" : 1,\n    \"projectId\" : 1,\n    \"workbookFile\" : \"workbook file2\",\n    \"workbookName\" : \"New dws22\",\n    \"description\" : \"\",\n    \"image\" : \"\",\n    \"fileName\" : \"\",\n    \"dashboardCount\": 1,\n    \"dashboardDetails\" : \"[{\\\"dashboardId\\\":0, \\\"name\\\":\\\"d1\\\",\\\"count\\\":1,\\\"image\\\":\\\"a.jpg\\\",\\\"imageData\\\":\\\"\\\"},{\\\"dashboardId\\\":1,\\\"name\\\":\\\"d2\\\",\\\"count\\\":2,\\\"image\\\":\\\"b.jpg\\\",\\\"imageData\\\":\\\"\\\"}]\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/desk_newworkbook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"desk_newworkbook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Projects",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "ZcH6Ce9cP9dKVxufc6BOyAU70RaDBSR3ziY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"profileId\" : 31\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/desk_listprojects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"desk_listprojects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desktop Fetch Credentials",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "ZcH6Ce9cP9dKVxufc6BOyAU70RaDBSR3ziY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"profileID\" : 31,\r\n\t\"datasourceName\" : \"userss\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/desk_fetchcredentials",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"desk_fetchcredentials"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "General",
+			"item": [
+				{
+					"name": "Copy Files",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "BmIuI0kP2theW9w8zDb00SjZPEaSQUECwu",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"profileId\" : 2,\n\t\"live\" : \"b.gads\",\n\t\"extract\" : \"a.gadse\",\n\t\"workbook\" : \"c.gawb\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/copyfiles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"copyfiles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Queries",
+			"item": [
+				{
+					"name": "Fetch Column Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "WSmU3KiJk1FWbS6DbtNgpITcywd5SWNEHO",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"profileId\" : 1,\r\n\t\"dbType\": \"extract\",\r\n\t\"uniqueHash\": \"pUfn9jRI2k2K\",\r\n    \"columnName\": \"id\",\r\n    \"dbPath\":\"C:/Users/chill/Desktop/inmem-users.gadse\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5476/fetchcolumndata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5476",
+							"path": [
+								"fetchcolumndata"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

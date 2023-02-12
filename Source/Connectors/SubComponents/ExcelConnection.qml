@@ -10,9 +10,10 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -38,39 +39,7 @@ Popup {
         displayTime.text = ""
     }
 
-    Connections{
-        target: DuckCon
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-
-            mainTimer.stop()
-            mainTimer.running = false
-            busyindicator.running = false
-            displayTime.text = ""
-        }
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "excel"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
-    }
+    // LIVE CONNECTION not possible
 
     Connections{
         target: ConnectorsLoginModel
@@ -108,6 +77,9 @@ Popup {
         busyindicator.running = false
         mainTimer.running = false
         displayTime.text = ""
+
+        promptExcel.nameFilters = Messages.cn_sub_excodbc_namedFilter
+        file_btn.text = Messages.cn_sub_excodbc_header
     }
 
 
@@ -122,7 +94,7 @@ Popup {
 
             ConnectorsLoginModel.excelLogin(excelFileName, true)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -144,7 +116,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Choose an Excel file"
+            text: Messages.cn_sub_excodbc_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -190,12 +162,11 @@ Popup {
 
             Button{
                 id : file_btn
-
                 anchors.left: parent.left
                 anchors.leftMargin:  10
-                text: "Select Excel file"
                 onClicked: promptExcel.open();
             }
+
         }
 
 
@@ -266,7 +237,7 @@ Popup {
                 height: 40
 
                 Text{
-                    text: Constants.openFileText
+                    text: Messages.openFileText
                     anchors.centerIn: parent
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
@@ -281,28 +252,28 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Excel Connection"
+        title: Messages.cn_sub_excodbc_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
-        title: "Excel Import Error"
+        title: Messages.cn_sub_excodbc_importErr
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     // Select Excel file
     FileDialog{
         id: promptExcel
-        title: "Select a file"
-        nameFilters: ["Excel files (*.xls *.xlsx)"];
+        title: Messages.selectFile
+        nameFilters: [Messages.cn_sub_excodbc_namedFilter];
 
 
         onAccepted: {
             console.log(fileUrl)
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

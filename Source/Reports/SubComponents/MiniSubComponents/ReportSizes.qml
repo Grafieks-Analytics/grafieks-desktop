@@ -60,6 +60,46 @@ Column{
     // Connections Starts
 
 
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+        chartSizeSelectBox.currentIndex = chartSizeSelectBox.find('Fit Width');
+    }
+
+    function setOldValues(reportProperties){
+        
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var { chartType } = d3PropertiesConfig;
+
+        if(chartType){
+            switch(chartType){
+                case "FitWidth":
+                    chartType = "Fit Width";
+                    break;
+                case "FitHeight":
+                    chartType = "Fit Height";
+                    break;
+            }
+            chartSizeSelectBox.currentIndex = chartSizeSelectBox.find(chartType);
+        }
+
+    }
+    
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -75,18 +115,15 @@ Column{
     function onChartSizeChanged(value){
         switch(value){
         case "FitWidth":
-            d3PropertyConfig['chartType'] = value;
-            break;
         case "FitHeight":
-            d3PropertyConfig['chartType'] = value;
-            break;
         case "Standard":
-            d3PropertyConfig['chartType'] = value;
+            d3PropertyConfig.chartType = value;
+            qmlChartConfig.chartType = value;
             break;
         }
 
         clearChartValue();
-        reDrawChart();
+        updateChart();
     }
 
 

@@ -2,13 +2,17 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../SubComponents"
 import "../../../MainSubComponents"
 
+import "../../colorPalleteHandler.js" as ColorPalleteHandler
+
 Column{
 
     id: propertiesFilter
+    width:150
 
     property int leftMargin: 15
 
@@ -20,6 +24,21 @@ Column{
 
     spacing: 4
     z: 10
+
+    property var tooltipVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('tool tip');
+    property var colorByComponentVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('color by');
+    property var sizeVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('size');
+    property var markerShapeVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('marker shape');
+    property var dataLabelVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('data label');
+    property var gridLineVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('grid line');
+    property var dynamicheightVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('dynamic height');
+    property var bottomPinchVisible: !!report_desiner_page.subMenuCustomizationsAvailable.includes('bottom pinch');
+
+    // Needs to be updated
+    property var pivotThemeVisible2: !!report_desiner_page.subMenuCustomizationsAvailable.includes('pivot theme');
+    property var lineTypeVisible2: !!report_desiner_page.subMenuCustomizationsAvailable.includes('line type');
+
+    property var droppedColorType: null;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -51,6 +70,45 @@ Column{
     // Connections Starts
 
 
+   Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                 return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+
+        bottomPinchValue.text = "1";
+        dynamicHeightCheckbox.checked = false;
+        gridLineStatus.checked = true
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var qmlChartConfigProperties = JSON.parse(reportProperties.qmlChartConfig);
+        var { bottomPinch, dynamicHeight, gridLineStatus :gridLineStatusValue  } = qmlChartConfigProperties || {};
+
+        if(bottomPinch){
+            bottomPinchValue.text = bottomPinch;
+        }
+
+        dynamicHeightCheckbox.checked = !!dynamicHeight;
+        gridLineStatus.checked = gridLineStatusValue == false ?  false: true;
+        
+
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -105,43 +163,47 @@ Column{
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
+        droppedColorType = itemType.toLowerCase();
+ 
 
         if(!isDropEligible()){
             element.border.color = Constants.themeColor
             return;
         }
 
-        colorByData.push({ columnName: itemName, itemType: itemType });
-        colorListModel.append({textValue: itemName})
+        var tableValue = lastPickedDataPaneElementProperties.tableValue;
+
+        colorByData.push({ tableValue: tableValue, columnName: tableValue, itemType: itemType });
+        colorListModel.append({textValue: itemName, itemName:itemName})
 
         ReportParamsModel.setLastDropped(itemType);
 
         switch(report_desiner_page.chartTitle){
-            case Constants.barChartTitle:
-                switchChart(Constants.stackedBarChartTitle)
-                break;
-            case Constants.horizontalBarChartTitle:
-                switchChart(Constants.horizontalStackedBarChartTitle)
-                break;
-            case Constants.areaChartTitle:
-                switchChart(Constants.multipleAreaChartTitle)
-                break;
-            case Constants.horizontalAreaChartTitle:
-                switchChart(Constants.multipleHorizontalAreaChartTitle)
-                break;
-            case Constants.lineChartTitle:
-                switchChart(Constants.multiLineChartTitle)
-                break;
-            case Constants.horizontalLineChartTitle:
-                switchChart(Constants.horizontalMultiLineChartTitle)
-            case Constants.horizontalBarGroupedChartTitle:
-            case Constants.groupBarChartTitle:
-                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
-                d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
-                reDrawChart();
-                break;
-            default:
-                reDrawChart();
+        case Constants.barChartTitle:
+            switchChart(Constants.stackedBarChartTitle)
+            break;
+        case Constants.horizontalBarChartTitle:
+            switchChart(Constants.horizontalStackedBarChartTitle)
+            break;
+        case Constants.areaChartTitle:
+            switchChart(Constants.multipleAreaChartTitle)
+            break;
+        case Constants.horizontalAreaChartTitle:
+            switchChart(Constants.multipleHorizontalAreaChartTitle)
+            break;
+        case Constants.lineChartTitle:
+            switchChart(Constants.multiLineChartTitle)
+            break;
+        case Constants.horizontalLineChartTitle:
+            switchChart(Constants.horizontalMultiLineChartTitle)
+        case Constants.horizontalBarGroupedChartTitle:
+        case Constants.groupBarChartTitle:
+            var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
+            d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
+            reDrawChart();
+            break;
+        default:
+            reDrawChart();
         }
 
         return;
@@ -152,6 +214,24 @@ Column{
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
+        const chartDetailsConfig = allChartsMapping[chartTitle];
+        let { colorByDropEligible = "" } = chartDetailsConfig || "";
+
+        // Add Color by eligibble for dynamic changing graphs
+        switch(report_desiner_page.chartTitle){
+            case Constants.horizontalBarChartTitle:
+            case Constants.groupBarChartTitle:
+            case Constants.horizontalBarGroupedChartTitle:
+            case Constants.horizontalAreaChartTitle:
+            case Constants.horizontalLineChartTitle:
+                colorByDropEligible = "categorical";    
+
+        }
+        
+        colorByDropEligible = colorByDropEligible.split(',');
+        if(!colorByDropEligible.includes(itemType.toLowerCase())){
+            return false;
+        }
         
         if(report_desiner_page.chartTitle==Constants.groupBarChartTitle){
             var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
@@ -180,23 +260,43 @@ Column{
 
     function openEditColorPopup(){
         editColorPopup.visible = true
+        ColorPalleteHandler.setD3ColorPallete(getLastDataValues());
     }
 
 
-    function resizePaddingInner(value){
+    function resizePaddingInner(value, actualValue){
         d3PropertyConfig.paddingInner = value;
-        d3PropertyConfig.innerRadius = (1-value)*200;
-//        console.log("value"+value);
-        reDrawChart();
+        d3PropertyConfig.innerRadius = (1-value);        
+        //        console.log("value"+value);
+        qmlChartConfig.sizePopupValue = actualValue;
+        updateChart();
     }
 
 
     function showGrid(checked){
-           var gridConfig = d3PropertyConfig.gridConfig || {};
-           gridConfig['gridStatus'] = checked;
-           d3PropertyConfig.gridConfig = gridConfig;
-           reDrawChart();
-       }
+        var gridConfig = d3PropertyConfig.gridConfig || {};
+        gridConfig['gridStatus'] = checked;
+        d3PropertyConfig.gridConfig = gridConfig;
+        qmlChartConfig.gridLineStatus = checked;
+        updateChart();
+    }
+
+    function toggleDynamicheight(checked){
+        d3PropertyConfig.dynamicHeight = checked;
+        qmlChartConfig.dynamicHeight = checked;
+        updateChart();
+    }
+
+    function updateBottomPinchValue(){
+        if(bottomPinchValue.text){
+            if(+bottomPinchValue.text < 0){
+                return;
+            }
+            d3PropertyConfig.bottomPinch = +bottomPinchValue.text;
+        }
+        qmlChartConfig.bottomPinch = bottomPinchValue.text;
+        updateChart();
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -219,19 +319,21 @@ Column{
     // Page Design Starts
 
 
-
     // Color By Component Starts
+    
     Rectangle {
-        id: colorByComponent
+        id: colorByComponents
         height: allParameter.height + colorByText.height + 2*colorListTopMargin
-        width: 150
+        visible: colorByComponentVisible
+        // visible: false
+        width: parent.width
         Text {
             id: colorByText
             x: leftMargin
             anchors.top: parent.top
             anchors.topMargin: 5
             font.pixelSize: Constants.fontCategoryHeaderSmall
-            text: "Color By"
+            text: Messages.re_mini_ptp_colorBy
         }
         Image {
             height: editImageSize
@@ -283,7 +385,7 @@ Column{
                 delegate: Rectangle{
                     height: colorBoxHeight
                     width: parent.width
-                    color: "#BADCFF"
+                    color: droppedColorType != "numerical" ? Constants.defaultCategoricalColor : Constants.defaultNumericalColor; 
                     border.width: 1
                     border.color: "#CDE6FF"
 
@@ -300,13 +402,13 @@ Column{
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
                     MouseArea{
-                        anchors.fill: parent                        
+                        anchors.fill: parent
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         onClicked: (mouse.button & Qt.RightButton) ? colorByOptions.visible = true : null
                     }
                 }
             }
-             // list view ends!
+            // list view ends!
 
 
         }
@@ -322,12 +424,14 @@ Column{
 
         height: 20
         width: parent.width
+        
+        visible: tooltipVisible
 
         Rectangle{
             anchors.fill: parent
 
             Text {
-                text: qsTr("Tool Tip")
+                text: Messages.re_mini_ptp_toolTip
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -358,6 +462,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: sizeVisible
 
 
         Rectangle{
@@ -368,7 +473,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Size")
+                text: Messages.re_mini_ptp_size
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -399,6 +504,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: markerShapeVisible
 
         Rectangle{
             anchors.fill: parent
@@ -409,7 +515,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Marker Shape")
+                text: Messages.re_mini_ptp_markerShape
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -441,6 +547,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: dataLabelVisible
 
         Rectangle{
             anchors.fill: parent
@@ -451,7 +558,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Data Label")
+                text: Messages.re_mini_ptp_dataLabel
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -481,7 +588,7 @@ Column{
 
         height: 20
         width: parent.width
-        visible: report_desiner_page.lineTypeChartVisible
+        visible: lineTypeVisible2
 
         Rectangle{
             anchors.fill: parent
@@ -492,7 +599,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Line Type")
+                text: Messages.re_mini_ptp_lineType
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -522,7 +629,7 @@ Column{
 
         height: 20
         width: parent.width
-        visible: pivotThemeVisible
+        visible: pivotThemeVisible2
 
         Rectangle{
             anchors.fill: parent
@@ -534,7 +641,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Themes")
+                text: Messages.re_mini_ptp_themes
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -565,6 +672,8 @@ Column{
 
         height: 30
         width: parent.width
+        
+        visible: gridLineVisible
 
         Rectangle{
 
@@ -572,7 +681,7 @@ Column{
             width: parent.width
 
             Text {
-                text: qsTr("Grid Line")
+                text: Messages.re_mini_ptp_gridLine
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -581,7 +690,8 @@ Column{
 
             CheckBoxTpl{
 
-                checked: true
+                id: gridLineStatus
+                checked: qmlChartConfig.gridLineStatus != undefined ? qmlChartConfig.gridLineStatus : true
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
@@ -598,40 +708,120 @@ Column{
     // Gride Line Ends
 
 
+    // Dynamic height starts
+    Rectangle{
+
+        height: 30
+        width: parent.width
+        visible: dynamicheightVisible
+
+        Rectangle{
+
+            height: 20
+            width: parent.width
+
+            Text {
+                text: Messages.re_mini_ptp_dynamicHeight
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+                id: dynamicHeightCheckbox
+                checked: false
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: toggleDynamicheight(checked);
+
+
+            }
+
+        }
+
+    }
+    // Dynamic height Ends
+
+
+    // Bottom Pinch
+    Rectangle{
+
+        height: 40
+        width: parent.width
+        visible: bottomPinchVisible
+
+        Rectangle{
+
+            height: 30
+            width: parent.width
+
+            Text {
+                text: Messages.re_mini_ptp_bottomPinch
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            TextField{
+                id: bottomPinchValue
+                height: 30
+                width: 30
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 10
+                anchors.top: parent.top
+                text: "1"
+                onTextChanged: updateBottomPinchValue()
+
+            }
+
+        }
+
+    }
+
+    
+
+
+
 
     // Merge Axis starts
-//    Rectangle{
+    //    Rectangle{
 
-//        height: 30
-//        width: parent.width
+    //        height: 30
+    //        width: parent.width
 
-//        Rectangle{
+    //        Rectangle{
 
-//            height: 20
-//            width: parent.width
+    //            height: 20
+    //            width: parent.width
 
-//            Text {
-//                text: qsTr("Merge Axis")
-//                anchors.left: parent.left
-//                anchors.leftMargin: leftMargin
-//                anchors.verticalCenter: parent.verticalCenter
-//                font.pixelSize: Constants.fontCategoryHeaderSmall
-//            }
+    //            Text {
+    //                text: qsTr("Merge Axis")
+    //                anchors.left: parent.left
+    //                anchors.leftMargin: leftMargin
+    //                anchors.verticalCenter: parent.verticalCenter
+    //                font.pixelSize: Constants.fontCategoryHeaderSmall
+    //            }
 
-//            CheckBoxTpl{
+    //            CheckBoxTpl{
 
-//                checked: false
-//                parent_dimension: editImageSize - 2
-//                anchors.right: parent.right
-//                anchors.verticalCenter: parent.verticalCenter
-//                anchors.rightMargin: 5
-//                anchors.top: parent.top
+    //                checked: false
+    //                parent_dimension: editImageSize - 2
+    //                anchors.right: parent.right
+    //                anchors.verticalCenter: parent.verticalCenter
+    //                anchors.rightMargin: 5
+    //                anchors.top: parent.top
 
-//            }
+    //            }
 
-//        }
+    //        }
 
-//    }
+    //    }
     // Merge Axis Ends
 
 

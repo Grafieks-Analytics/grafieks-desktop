@@ -1,8 +1,11 @@
 #include "tableschemamodel.h"
 
-TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
+TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent),
+    m_networkAccessManager(new QNetworkAccessManager(this)),
+    m_networkReply(nullptr),
+    m_dataBuffer(new QByteArray)
 {
-
+    this->fetchSettings();
 }
 
 
@@ -18,7 +21,11 @@ void TableSchemaModel::showSchema(QString query)
 {
 
     QString explainQueryString, describeQueryString;
-    QStringList tableList, outputDataList;
+    QStringList tableList;
+    QVariantList outputDataList;
+
+    int currentDbIntType = Statics::currentDbIntType;
+    QString joiner = qj.getQueryJoiner(currentDbIntType);
 
     switch(Statics::currentDbIntType){
 
@@ -69,8 +76,7 @@ void TableSchemaModel::showSchema(QString query)
         QSqlDatabase dbCon = QSqlDatabase::database(dbString);
 
         for(QString tableName: tablesList){
-
-            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
+            tableName = tableName.replace(QRegularExpression("[\"`'\\[\\]]"), "");
 
             QSqlRecord record = dbCon.record(tableName);
 
@@ -83,7 +89,8 @@ void TableSchemaModel::showSchema(QString query)
 
                     // Get filter data type for QML
                     QString filterDataType = dataType.dataType(fieldType);
-                    outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                    outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                     // Output data according to Filter type
 
@@ -136,7 +143,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -191,7 +199,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -245,7 +254,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -299,7 +309,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -356,7 +367,8 @@ void TableSchemaModel::showSchema(QString query)
                 // Get filter data type for QML
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                 // Output data according to Filter type
 
@@ -406,7 +418,8 @@ void TableSchemaModel::showSchema(QString query)
                     // Get filter data type for QML
                     QString filterDataType = dataType.dataType(fieldType);
 
-                    outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    QString tableColumnName = joiner + tableName + joiner + "." + joiner + fieldName + joiner;
+                    outputDataList << tableName << fieldName << fieldType << filterDataType << tableColumnName;
 
                     // Output data according to Filter type
 
@@ -445,7 +458,7 @@ void TableSchemaModel::showSchema(QString query)
                 if(lineCounter == 0){
                     setHeaders(line, Statics::separator);
                 } else {
-                    QMap<QString, QList<QStringList>> allColumns = detectHeaderTypes(line, Statics::separator, Statics::currentDbName);
+                    QMap<QString, QList<QVariantList>> allColumns = detectHeaderTypes(line, Statics::separator, Statics::currentDbName);
                 }
                 lineCounter++;
             }
@@ -476,23 +489,216 @@ void TableSchemaModel::showSchema(QString query)
 
 }
 
-void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
+void TableSchemaModel::generateSchemaForExtract()
 {
-    QStringList outputDataList;
-
     QString extractPath = Statics::extractPath;
-    QString tableName = Statics::currentDbName;
+    duckdb::DuckDB db(extractPath.toStdString());
+    duckdb::Connection con(db);
+
+    if(Statics::apiSwitch == true){
+        qDebug() << "Extract schema should be called for API 2";
+    } else {
+        this->extractSchema(&con);
+    }
+}
+
+void TableSchemaModel::generateSchemaForLive(QString query)
+{
+    this->showSchema(query);
+}
+
+void TableSchemaModel::generateSchemaForReader(duckdb::Connection *con)
+{
+    if(Statics::apiSwitch == true){
+        qDebug() << "Extract schema should be called for API";
+    } else {
+        this->extractSchema(con);
+    }
+}
+
+void TableSchemaModel::generateSchemaForApi()
+{
+
+    // Fetch value from settings
+    QSettings settings;
+    QString sitename = settings.value("user/sitename").toString();
+
+    this->m_NetworkRequest.setUrl(this->baseUrl +"/fetch_table_columns");
+
+    this->m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                     "application/x-www-form-urlencoded");
+    this->m_NetworkRequest.setRawHeader("Authorization", this->sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", this->profileId);
+    obj.insert("uniqueHash", sessionToken.toStdString().c_str());
+    obj.insert("dbType", Statics::currentDbClassification);
+    obj.insert("dsName", Statics::currentDSFile);
+    obj.insert("sitename", sitename);
+    obj.insert("reportWhereConditions", this->reportWhereConditions);
+    obj.insert("dashboardWhereConditions", this->dashboardWhereConditions);
+    obj.insert("joinConditions", this->joinConditions);
 
 
-    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType) {
-        tableName = QFileInfo(tableName).baseName().toLower();
-        tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(this->m_NetworkRequest, strJson.toUtf8());
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&TableSchemaModel::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&TableSchemaModel::dataReadFinished);
+}
+
+void TableSchemaModel::dataReadyRead()
+{
+    m_dataBuffer->append(m_networkReply->readAll());
+}
+
+void TableSchemaModel::dataReadFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(*m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonDocument dataDoc =  QJsonDocument::fromJson(resultObj["data"].toString().toUtf8());
+        QString msg = resultObj["msg"].toString();
+        int code = resultObj["code"].toInt();
+
+        QJsonObject dataDocObj = dataDoc.object();
+
+        if(code != 200){
+            qDebug() << "Error code" << code << ": " << msg;
+
+            if(msg == Constants::sessionExpiredText){
+                emit sessionExpired();
+            }
+        } else {
+
+            QJsonArray value = dataDocObj.value("all").toArray();
+
+            foreach(QJsonValue data, value){
+                QJsonArray finalValue = data.toArray();
+
+                QVariantList valueList = finalValue.toVariantList();
+                if(Statics::dsType == Constants::extractType){
+                    valueList.replace(4, valueList.at(1));
+                }
+
+                if(finalValue.at(3).toString() == "categorical"){
+                    this->allCategorical.append(valueList);
+                } else if(finalValue.at(3).toString() == "numerical"){
+                    this->allNumerical.append(valueList);
+                } else if(finalValue.at(3).toString() == "dateformat"){
+                    this->allDates.append(valueList);
+                } else {
+                    this->allOthers.append(valueList);
+                }
+
+                this->allList.append(valueList);
+            }
+            emit apiSchemaObtained(this->allList, this->allCategorical, this->allNumerical, this->allDates, this->allOthers);
+        }
     }
 
+    m_dataBuffer->clear();
+}
+
+void TableSchemaModel::clearSchema()
+{
+    // Clear all stringlist for new values
+    queriedColumnNames.clear();
+    allCategorical.clear();
+    allNumerical.clear();
+    allDates.clear();
+    allOthers.clear();
+    allList.clear();
+
+
+    emit tableSchemaCleared();
+
+}
+
+void TableSchemaModel::setHeaders(const QByteArray line, QString delimiter)
+{
+
+    this->csvHeaderDataFinal = line.split(*delimiter.toStdString().c_str());
+    this->csvHeaderLength = this->csvHeaderDataFinal.length();
+
+    if (this->csvHeaderDataFinal.at(0).contains("\xEF\xBB\xBF")){
+        this->csvHeaderDataFinal[0] =  this->csvHeaderDataFinal.at(0).right(this->csvHeaderDataFinal.at(0).length() - 3);
+    }
+}
+
+QMap<QString, QList<QVariantList>> TableSchemaModel::detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName)
+{
+    QList<QByteArray> lineData = line.split(*delimiter.toStdString().c_str());
+
+    QStringList output;
+    QString fieldName;
+    QString fieldType;
+    QVariantList outputDataList;
+    QMap<QString, QList<QVariantList>> allColumns;
+
+    QString fileName = QFileInfo(tableName).baseName().toLower();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+    for(int i = 0; i < this->csvHeaderLength; i++){
+
+        fieldName = this->csvHeaderDataFinal.at(i);
+        fieldType = dataType.variableType(QString(lineData.at(i))).at(0);
+
+        // Output data according to Filter type
+        outputDataList << fileName << fieldName << fieldType << fieldType;
+
+        if(fieldType == Constants::categoricalType){
+            allCategorical.append(outputDataList);
+        } else if(fieldType == Constants::numericalType){
+            allNumerical.append(outputDataList);
+        } else if(fieldType == Constants::dateType){
+            allDates.append(outputDataList);
+        } else{
+            allOthers.append(outputDataList);
+        }
+
+        // Append all data type to allList as well
+        allList.append(outputDataList);
+
+        // Clear Stringlist for future
+        outputDataList.clear();
+
+    }
+
+    allColumns.insert("categorical", allCategorical);
+    allColumns.insert("numerical", allNumerical);
+    allColumns.insert("dates", allDates);
+    allColumns.insert("others", allOthers);
+    allColumns.insert("allList", allList);
+
+    return allColumns;
+}
+
+void TableSchemaModel::extractSchema(duckdb::Connection *con)
+{
+    QVariantList outputDataList;
+    QString tableName = Statics::currentDbName;
+    int currentDbIntType = Statics::currentDbIntType;
+    QString joiner = qj.getQueryJoiner(currentDbIntType);
+
+    //    if(Statics::currentDbIntType == Constants::excelIntType || Statics::currentDbIntType == Constants::csvIntType || Statics::currentDbIntType == Constants::jsonIntType || Statics::currentDbIntType == Constants::accessIntType) {
+    tableName = QFileInfo(tableName).baseName().toLower();
+    tableName = tableName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    //    }
+
     auto data = con->Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-    qDebug() << "CRASHED HERE" << data->success;
+
     if(data->error.empty()){
         int totalRows = data->collection.Count();
+
 
         for(int i = 0; i < totalRows; i++){
             QString fieldName =  data->GetValue(1, i).ToString().c_str();
@@ -503,7 +709,7 @@ void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldType);
 
-            outputDataList << tableName << fieldName << fieldType << filterDataType;
+            outputDataList << tableName << fieldName << fieldType << filterDataType << fieldName;
 
             // Output data according to Filter type
 
@@ -538,77 +744,12 @@ void TableSchemaModel::generateSchemaForExtract(duckdb::Connection *con)
     extractAllList.clear();
 }
 
-void TableSchemaModel::clearSchema()
+
+void TableSchemaModel::fetchSettings()
 {
-    // Clear all stringlist for new values
-    queriedColumnNames.clear();
-    allCategorical.clear();
-    allNumerical.clear();
-    allDates.clear();
-    allOthers.clear();
-    allList.clear();
-
-
-    emit tableSchemaCleared();
-
-}
-
-void TableSchemaModel::setHeaders(const QByteArray line, QString delimiter)
-{
-
-    this->csvHeaderDataFinal = line.split(*delimiter.toStdString().c_str());
-    this->csvHeaderLength = this->csvHeaderDataFinal.length();
-
-    if (this->csvHeaderDataFinal.at(0).contains("\xEF\xBB\xBF")){
-        this->csvHeaderDataFinal[0] =  this->csvHeaderDataFinal.at(0).right(this->csvHeaderDataFinal.at(0).length() - 3);
-    }
-}
-
-QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName)
-{
-    QList<QByteArray> lineData = line.split(*delimiter.toStdString().c_str());
-
-    QStringList output;
-    QString fieldName;
-    QString fieldType;
-    QStringList outputDataList;
-    QMap<QString, QList<QStringList>> allColumns;
-
-    for(int i = 0; i < this->csvHeaderLength; i++){
-
-        fieldName = this->csvHeaderDataFinal.at(i);
-        fieldType = dataType.variableType(QString(lineData.at(i)));
-
-        // Get filter data type for QML
-        QString filterDataType = dataType.dataType(fieldType);
-
-        outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-        // Output data according to Filter type
-
-        if(filterDataType == Constants::categoricalType){
-            allCategorical.append(outputDataList);
-        } else if(filterDataType == Constants::numericalType){
-            allNumerical.append(outputDataList);
-        } else if(filterDataType == Constants::dateType){
-            allDates.append(outputDataList);
-        } else{
-            allOthers.append(outputDataList);
-        }
-
-        // Append all data type to allList as well
-        allList.append(outputDataList);
-
-        // Clear Stringlist for future
-        outputDataList.clear();
-
-    }
-
-    allColumns.insert("categorical", allCategorical);
-    allColumns.insert("numerical", allNumerical);
-    allColumns.insert("dates", allDates);
-    allColumns.insert("others", allOthers);
-    allColumns.insert("allList", allList);
-
-    return allColumns;
+    // Fetch value from settings
+    QSettings settings;
+    this->baseUrl = settings.value("general/chartsUrl").toString();
+    this->sessionToken = settings.value("user/sessionToken").toByteArray();
+    this->profileId = settings.value("user/profileId").toInt();
 }

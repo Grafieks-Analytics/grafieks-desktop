@@ -13,6 +13,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import "../chartsConfig.js" as ChartsConfig
 
 Rectangle{
     id: rectangle_left
@@ -29,275 +30,11 @@ Rectangle{
     property int imageWidth: 32;
 
     property string selectedChart: "bar"
-    property int activeChartIndex: 0;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
-    ListModel{
-        id: allCharts
-        ListElement{
-            icon: "bar_chart.png"
-            chartHtml:"BarChartArrayInput.html"
-            name: "bar"
-            activeChart: true
-            title: "Bar Chart"
-            yAxisVisible: true
-            lineTypeChartVisible: false
-            maxDropOnXAxis: 2
-            maxDropOnYAxis: 1
-            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-        }
-        ListElement{
-            icon: "area.png"
-            chartHtml:"AreaChart.html"
-            name:"area"
-            activeChart: false
-            title: "Area Chart"
-            yAxisVisible: true
-            lineTypeChartVisible: false
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-        }
-        ListElement{
-            icon: "line_chart.png"
-            chartHtml:"LineChart.html"
-            activeChart: false
-            title: "Line Chart"
-            yAxisVisible: true
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            lineTypeChartVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-        }
-        ListElement{
-            icon: "combination_chart.png"
-            activeChart: false
-            chartHtml:"bar.html"
-            title:"Combination - Coming Soon"
-            yAxisVisible: true
-            maxDropOnXAxis: 1
-            lineTypeChartVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
-            nonClickable: true
-        }
-        ListElement{
-            icon: "heatmap.png"
-            chartHtml:"HeatmapChart.html"
-            activeChart: false
-            title: "Heat Map"
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            yAxisVisible: true
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "scatter_plot.png"
-            chartHtml:"ScatterChart.html"
-            activeChart: false
-            title:"Scatter Plot"
-            yAxisVisible: true
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "waterfall.png"
-            chartHtml:"WaterfallChart.html"
-            activeChart: false
-            title:"Waterfall"
-            yAxisVisible: true
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "pie_chart.png"
-            chartHtml:"PieChart.html"
-            activeChart: false
-            title: "Pie Chart"
-            xAxisLabelName: "Categorical"
-            yAxisLabelName: "Numerical"
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            yAxisVisible: false
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "donut.png"
-            chartHtml:"DoughnutChart.html"
-            activeChart: false
-            title:"Donut Chart"
-            xAxisLabelName: "Categorical"
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            yAxisLabelName: "Numerical"
-            yAxisVisible: false
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "radar.png"
-            chartHtml:"RadarChart.html"
-            activeChart: false
-            xAxisLabelName: "Categorical"
-            yAxisLabelName: "Numerical"
-            title:"Radar"
-            yAxisVisible: false
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "sunburst.png"
-            chartHtml:"SunburstChart.html"
-            activeChart: false
-            title:"Sunburst"
-            xAxisLabelName: "Categorical"
-            yAxisLabelName: "Numerical"
-            maxDropOnYAxis: 1
-            maxDropOnXAxis: 5
-            yAxisVisible: false
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-//        ListElement{
-//            icon: "nightingales_rose.png"
-//            activeChart: false
-//            chartHtml:"bar.html"
-//            title:"Nightingale Rose"
-//            yAxisVisible: false
-//            lineTypeChartVisible: false
-//        }
-//        ListElement{
-//            icon: "chord_diagram.png"
-//            chartHtml:"ChordChart.html"
-//            activeChart: false
-//            title:"Chord Diagram"
-//            xAxisLabelName: "Source"
-//            yAxisLabelName: "Numerical"
-//            yAxisVisible: false
-//            lineTypeChartVisible: false
-//        }
-        ListElement{
-            icon: "funnel.png"
-            chartHtml:"FunnelChart.html"
-            activeChart: false
-            title: "Funnel Chart"
-            yAxisVisible: false
-            maxDropOnXAxis: 1
-            maxDropOnYAxis: 1
-            xAxisLabelName: "Categorical"
-            yAxisLabelName: "Numerical"
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "tree_chart.png"
-            chartHtml:"TreeChart.html"
-            activeChart: false
-            title:"Tree Chart"
-            maxDropOnYAxis: 1
-            xAxisLabelName: "Categorical"
-            yAxisLabelName: "Numerical"
-            yAxisVisible: false
-            lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        // ListElement{
-        //     icon: "force_directed.png"
-        //     chartHtml:"bar.html"
-        //     activeChart: false
-        //     title:"Force Directed"
-        //     mainCustomizations: "Properties,Legend,Reference Line"
-        // }
-        ListElement{
-            icon: "sankey.png"
-            chartHtml:"SankeyChart.html"
-            elementHeight: 24
-            activeChart: false
-            title:"Sankey"
-            xAxisLabelName: "Source"
-            yAxisLabelName: "Target"
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "tree_map.png"
-            chartHtml:"TreeMapChart.html"
-            elementHeight: 24
-            activeChart: false
-            xAxisLabelName: "Categorical"
-            yAxisLabelName: "Numerical"
-            title: "Tree Map"
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-//        ListElement{
-//            icon: "condegram.png"
-//            chartHtml:"bar.html"
-//            activeChart: false
-//            title:"Condegram"
-//        }
-        ListElement{
-            icon: "map.png"
-            chartHtml:"GeoChart.html"
-            elementHeight: 22
-            elementWidth:40
-            activeChart: false
-            xAxisLabelName: "Location"
-            yAxisLabelName: "Numerical"
-            title:"Map - Coming Soon"
-            mainCustomizations: "Properties,Legend"
-            nonClickable: true
-        }
-        ListElement{
-            icon: "gauge_chart.png"
-            chartHtml:"GaugeChart.html"
-            elementHeight: 22
-            elementWidth:30
-            activeChart: false
-            title:"Gauge Chart"
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "pivot.png"
-            chartHtml:"PivotTable.html"
-            activeChart: false
-            title:"Pivot"
-            xAxisLabelName: "Rows"
-            yAxisLabelName: "Columns"
-            themeVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
-        }
-        ListElement{
-            icon: "table.png"
-            chartHtml:"TableChart.html"
-            xAxisLabelName: "Columns"
-            yAxisLabelName: "Columns"
-            elementWidth: 30
-            activeChart: false
-            title:"Table"
-            mainCustomizations: "Properties,Legend,Reference Line,Total"
-        }
-        ListElement{
-            icon: "123.png"
-            chartHtml:"bar.html"
-            elementWidth: 30
-            elementHeight: 20
-            activeChart: false
-            title:"KPI"
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
-        ListElement{
-            icon: "123.png"
-            chartHtml:"bar.html"
-            elementWidth: 30
-            elementHeight: 20
-            activeChart: false
-            title:"Line Bar"
-        }
-    }
+    
 
 
     // LIST MODEL ENDS
@@ -335,6 +72,8 @@ Rectangle{
         // If any mapping is added please update 
         // New Reports.qml File in onChartTitleChanged function
 
+        ChartsConfig.setAllChartsModel();
+
         for(var i=0; i< allCharts.count; i++){
             var chartTitle = allCharts.get(i).title;
 
@@ -342,10 +81,24 @@ Rectangle{
 
             var maxDropOnXAxis = allCharts.get(i).maxDropOnXAxis;
             var maxDropOnYAxis = allCharts.get(i).maxDropOnYAxis;
+            var maxDropOnRow3Axis = allCharts.get(i).maxDropOnRow3Axis;
 
+            var colorByDropEligible = allCharts.get(i).colorByDropEligible;
+            var axisSettingsDisabled = !!allCharts.get(i).axisSettingsDisabled;
+
+            var mainCustomizations = !!allCharts.get(i).mainCustomizations;
+            var subMenuCustomizations = !!allCharts.get(i).subMenuCustomizations;
+
+           var disabled = !!allCharts.get(i).disabled;
             allChartsMapping[chartTitle] = {
                 'maxDropOnXAxis': maxDropOnXAxis || -1,
                 'maxDropOnYAxis': maxDropOnYAxis || -1,
+                'maxDropOnRow3Axis': maxDropOnRow3Axis || -1,
+                disabled,
+                colorByDropEligible,
+                axisSettingsDisabled,
+                mainCustomizations,
+                subMenuCustomizations
             };
 
         }
@@ -355,11 +108,15 @@ Rectangle{
         allowedYAxisDataPanes = 1;
     }
 
-    function getChart(chartHtml,index,chartTitle,mainCustomizations){
-        report_desiner_page.chartUrl = chartHtml;
+   function getChart(chartHtml,index,chartTitle,mainCustomizations, subMenuCustomizations=""){
+        if(allChartsMapping[chartTitle].disabled){
+            return
+        }
+        report_desiner_page.previousChartTitle = report_desiner_page.chartTitle;
         report_desiner_page.chartTitle = chartTitle;
 
         report_desiner_page.customizationsAvailable = mainCustomizations;
+        report_desiner_page.subMenuCustomizationsAvailable = subMenuCustomizations;
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
@@ -367,36 +124,34 @@ Rectangle{
         if(chartTitle === Constants.barChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
-                    chartHtml = Constants.horizontalBarChartUrl;
-//                    switchChart(Constants.horizontalBarChartTitle);
+                    chartTitle = Constants.horizontalBarChartTitle;
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
-                    chartHtml = Constants.horizontalStackedBarChartUrl;
+                    chartTitle = Constants.horizontalStackedBarChartTitle;
                 }else if(xAxisColumns.length === 1 && yAxisColumns.length === 2){
-                    chartHtml = Constants.horizontalBarGroupedChartUrl;
+                    chartTitle = Constants.horizontalBarGroupedChartTitle;
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
-                    chartHtml = Constants.stackedBarChartUrl;
+                    chartTitle = Constants.stackedBarChartTitle;
                 }else if(xAxisColumns.length === 1 && yAxisColumns.length === 2){
-                    chartHtml = Constants.barGroupedChartUrl;
+                    chartTitle = Constants.barGroupedChartTitle;
                 }
             }
         }
         else if(chartTitle === Constants.areaChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
-                    chartHtml = Constants.horizontalAreaChartUrl;
-//                    switchChart(Constants.horizontalBarChartTitle);
+                   chartTitle = Constants.horizontalBarChartTitle;
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
-                    chartHtml = Constants.multipleHorizontalAreaChartUrl;
+                    chartTitle = Constants.multipleAreaChartTitle;
                 }else{
                     console.log('missed horizontal area case');
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
-                    chartHtml = Constants.multipleAreaChartUrl;
+                    chartTitle = Constants.multipleAreaChartTitle
                 }else{
                     console.log('missed area case',chartHtml);
                 }
@@ -405,56 +160,37 @@ Rectangle{
         else if(chartTitle === Constants.lineChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
-                    chartHtml = Constants.horizontalLineChartUrl;
+                    chartTitle = Constants.horizontalLineChartTitle;
                 }else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
-                    chartHtml = Constants.horizontalMultiLineChartUrl;
                     console.log('Horizontal Chart Load');
                 }else{
-                    console.log('Missed Horizontal Condition')
+                    console.log('Missed Horizontal Condition ---> Making it horizontal line chart!')
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
                     console.log('Debug: Loading multiline chart');
-                    chartHtml = Constants.multiLineChartUrl;
-                    // switchChart(Constants.multiLineChartTitle);
+                    chartTitle = Constants.multiLineChartTitle;
                 }
             }
         }
         
-
-        console.log(chartTitle);
-        console.log('Loading Chart from LeftMenuBarReports.qml',chartHtml)
-        loadchart("../Charts/"+chartHtml);
-
-//        add toggle left menu
-
-
-//        yAxisVisible  = allCharts.get(index).yAxisVisible;
-
         const yAxisLabelNameData = allCharts.get(index).yAxisLabelName;
-        if(yAxisLabelNameData){
-            yAxisLabelName = yAxisLabelNameData;
-        }else{
-            yAxisLabelName = Constants.yAxisName
-        }
+        yAxisLabelName = yAxisLabelNameData ? yAxisLabelNameData: Constants.yAxisName; 
 
         const xAxisLabelNameData = allCharts.get(index).xAxisLabelName;
-        if(xAxisLabelNameData){
-            xAxisLabelName = xAxisLabelNameData;
-        }else{
-            xAxisLabelName = Constants.xAxisName
-        }
-
-
-        var chartObject = allCharts.get(index);
-
+        xAxisLabelName = xAxisLabelNameData ? xAxisLabelNameData: Constants.xAxisName;
+        
+        // Setting line chart visibilities at global level
         lineTypeChartVisible = allCharts.get(index).lineTypeChartVisible;
         pivotThemeVisible = !!allCharts.get(index).themeVisible;
 
+        makeChartActive(index)
+    }
+
+    function makeChartActive(index){
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;
         allCharts.set(index,{activeChart: true})
-
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -497,7 +233,7 @@ Rectangle{
             delegate: Rectangle{
                 width: parent.width
                 height: imageRectangleHeight
-                color: activeChart ? Constants.darkThemeColor :Constants.themeColor
+                color: activeChart ? Constants.darkThemeColor : Constants.themeColor
                 property bool displayToolTipVisible: false
                 Image{
                     source:"/Images/icons/charts/"+icon
@@ -508,7 +244,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  getChart(chartHtml,index,title,mainCustomizations)
+                    onClicked:  getChart(chartHtml,index,title,mainCustomizations,subMenuCustomizations) // When chart is clicked from the right side, Chart is switched 
                     onEntered: displayToolTipVisible=true
                     onExited: displayToolTipVisible=false
                 }
@@ -516,6 +252,7 @@ Rectangle{
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: displayToolTipVisible
                 ToolTip.text: qsTr(title)
+
             }
 
         }

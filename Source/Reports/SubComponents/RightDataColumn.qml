@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "./MiniSubComponents";
 
@@ -60,6 +62,7 @@ Column{
 //        border.color: Constants.darkThemeColor
 //         anchors.horizontalCenter: parent.horizontalCenter
 
+            z: -12000
 
         Rectangle{
             id:categoricalHeadingRect
@@ -77,7 +80,7 @@ Column{
                 border.color: Constants.darkThemeColor
             Text {
                 id: categoricalHeading
-                text: qsTr("Categorical")
+                text: Messages.filterCategorical
                 anchors.left: parent.left
 
                 anchors.leftMargin: 10
@@ -88,14 +91,20 @@ Column{
             }
         }
 
-
-        CategoricalList{
-            id: categoricalList
+        Rectangle{
+            height: parent.height- 45
+            width: parent.width
             anchors.top: categoricalHeadingRect.bottom
-            height: parent.height - 40
+            
+            CategoricalList{
+            id: categoricalList
+            height: parent.height - 10
+            anchors.top: parent.top
+            
             width: parent.width-10
              anchors.horizontalCenter: parent.horizontalCenter
 
+            }
         }
 
     }
@@ -115,7 +124,11 @@ Column{
     Rectangle{
         height: parent.height/3 - 6
         width: parent.width
+     
         color: "white"
+
+            z: -120000
+
 //        x:-leftMargin
 //        border.color: Constants.darkThemeColor
 //         anchors.horizontalCenter: parent.horizontalCenter
@@ -123,6 +136,7 @@ Column{
         Rectangle{
             id:numericalRect
             height: 25
+            z:20
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
@@ -130,23 +144,33 @@ Column{
 
             border.color: Constants.darkThemeColor
 
-        Text {
-            id: numericalHeading
-            text: qsTr("Numerical")
-            anchors.left: parent.left
+                Text {
+                    id: numericalHeading
+                    text: Messages.filterNumerical
+                    anchors.left: parent.left
 
-            anchors.leftMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.fontCategoryHeader
+                    
+                }
         }
-}
 
-        NumericalList{
-            id: numericalList
+        
+        Rectangle{
+            height: parent.height- 45
+            width: parent.width
             anchors.top: numericalRect.bottom
-             height: parent.height - 40
-            width: parent.width-10
-             anchors.horizontalCenter: parent.horizontalCenter
+            
+            NumericalList{
+                id: numericalList
+                anchors.top: parent.top
+                height: parent.height - 10
+                width: parent.width-10
+        
+                anchors.horizontalCenter: parent.horizontalCenter
+                z: 20000    
+            }
         }
 
     }
@@ -166,12 +190,15 @@ Column{
         height: parent.height/3 - 6
          width: parent.width
         color: "white"
+            z: -120000
+
 //        border.color: Constants.darkThemeColor
 //          anchors.horizontalCenter: parent.horizontalCenter
 
         Rectangle{
             id:dateRect
             height: 25
+            z:10
             width: parent.width
             color: Constants.themeColor
 //            anchors.top: parent.top
@@ -180,7 +207,7 @@ Column{
             border.color: Constants.darkThemeColor
         Text {
             id: dateHeading
-            text: qsTr("Date")
+            text: Messages.filterDate
             anchors.left: parent.left
 
             anchors.leftMargin: 10
@@ -195,6 +222,7 @@ Column{
              height: parent.height - 40
              width: parent.width-10
              anchors.horizontalCenter:  parent.horizontalCenter
+             z: 20000    
         }
 
     }

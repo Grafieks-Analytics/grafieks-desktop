@@ -12,10 +12,11 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 
 
@@ -37,7 +38,7 @@ Popup {
 
             if(status.code === 200){
                 popupLoginCredentials.visible = false
-                stacklayout_home.currentIndex = 4
+//                stacklayout_home.currentIndex = 4
 
                 var firstname = settings.value("user/firstname")
                 var lastname = settings.value("user/lastname")
@@ -45,8 +46,15 @@ Popup {
                 var capitalizeLastName = lastname.charAt(0).toUpperCase() + lastname.slice(1)
                 var name = capitalizeFirstName + " "+ capitalizeLastName
 
-                action_signin.text  = Constants.signOutText
-                menu_signIn.title = qsTr(name)
+                action_signin.text  = Messages.signOutText
+
+                // Load datasources in GRS for first time
+                DatasourceDS.fetchDatsources(0,false, false)
+
+                error_connection_text.text = ""
+                password_field.text = ""
+                username_field.text = ""
+
             }
             else{
                 error_connection_text.text = status.msg
@@ -73,7 +81,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Signin to Grafieks server"
+            text: Messages.msc_lcr_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -116,7 +124,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.msc_lcr_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -126,7 +134,7 @@ Popup {
 
         TextField{
             id: username_field
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -160,7 +168,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.msc_lcr_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -170,7 +178,7 @@ Popup {
 
         TextField{
             id: password_field
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
@@ -219,7 +227,7 @@ Popup {
                 }
 
                 Text{
-                    text:Constants.signInText
+                    text:Messages.signInText
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent
@@ -227,7 +235,7 @@ Popup {
             }
             onClicked: {
 
-                error_connection_text.text = "Signing in. Please wait.."
+                error_connection_text.text = Messages.msc_lcr_pleaseWait
                 User.setUsername(username_field.text);
                 User.setPassword(password_field.text);
 

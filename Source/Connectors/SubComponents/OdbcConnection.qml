@@ -10,9 +10,10 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -87,7 +88,7 @@ Popup {
         id: msg_dialog
         title: "Mysql Connection"
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -117,7 +118,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Mysql"
+            text: "Sign In to MySQL"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -272,7 +273,7 @@ Popup {
             width:label_col
             height: 40
             Text{
-                text: "Server"
+                text: "Serversss"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -282,7 +283,7 @@ Popup {
 
         TextField{
             id: server
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             height: 40
@@ -311,7 +312,7 @@ Popup {
         }
         TextField{
             id: port
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             //width: 130
@@ -356,7 +357,7 @@ Popup {
 
         TextField{
             id: database
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -402,7 +403,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -447,7 +448,7 @@ Popup {
 
         TextField{
             id: password
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
@@ -471,8 +472,10 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row5.bottom
-        anchors.topMargin: 15
+        // anchors.top: row5.bottom
+        // anchors.topMargin: 15
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin:15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         //        anchors.rightMargin: label_col*2 + 47
@@ -481,7 +484,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Constants.signInText
+            textValue: Messages.signInText
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: connectToMySQL()
         }

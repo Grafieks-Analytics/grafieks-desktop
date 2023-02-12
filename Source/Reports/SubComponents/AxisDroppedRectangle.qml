@@ -6,7 +6,7 @@ import "./MiniSubComponents"
 
 // TODO
 // Add the custom values used in model
-// axisType: To update the dateFormat -> This get the axis name
+// axisTypeAlias: To update the dateFormat -> This get the axis name
 
 Rectangle{
 
@@ -17,23 +17,23 @@ Rectangle{
     property var dateFormatValue: null;
 
     property alias textValue: textbox.text
-    property alias itemType: axisRectangle.itemType
-    property alias itemIndexId: axisRectangle.itemIndexId
-    property alias axisType: axisRectangle.axisType
-    property alias dateFormatValue: axisRectangle.dateFormatValue
+    property alias itemTypeAlias: axisRectangle.itemType
+    property alias itemIndexIdAlias: axisRectangle.itemIndexId
+    property alias axisTypeAlias: axisRectangle.axisType
+    property alias dateFormatValueAlias: axisRectangle.dateFormatValue
     
 
     height: ((parent && parent.height) - 10) || 0
-    width: 200
+    width: (itemTypeAlias && itemTypeAlias.toLowerCase()) === 'date' ? 250 : 200
     border.width: 1
     border.color: this.color
     radius: this.width/2
     z: 1000000
 
     Component.onCompleted: {
-        console.log('Item Type',itemType, typeof(itemType));
-        axisRectangle.color = itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
-        console.log('Index and Axis Name', itemIndexId, axisType, dateFormatValue);
+        console.log('Item Type',itemTypeAlias, typeof(itemTypeAlias));
+        axisRectangle.color = itemTypeAlias && itemTypeAlias.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
+        console.log('Index and Axis Name', itemIndexIdAlias, axisTypeAlias, dateFormatValueAlias);
 
         
         
@@ -42,16 +42,15 @@ Rectangle{
     function onDateFormatSelected(index){
         var dateFormat = dateCalculations.get(index).dateFormat;
         report_desiner_page.d3PropertyConfig['dateFormat'] = dateFormat;
-        report_desiner_page.reDrawChart();
-
-        switch(axisType){
+        switch(axisTypeAlias){
             case Constants.xAxisName:
-                xAxisListModel.setProperty(itemIndexId,'dateFormat',dateFormat);
+                xAxisListModel.setProperty(itemIndexIdAlias,'dateFormat',dateFormat);
                 break;
             case Constants.yAxisName:
-                yAxisListModel.setProperty(itemIndexId,'dateFormat',dateFormat);
+                yAxisListModel.setProperty(itemIndexIdAlias,'dateFormat',dateFormat);
                 break;
         }
+        report_desiner_page.reDrawChart();
     }
 
     function getIndexValue(dateFormat){
@@ -61,11 +60,10 @@ Rectangle{
             var dateFormatModelValue = dateCalculations.get(i).dateFormat; 
             if(dateFormatModelValue === dateFormat){
                 return i;
-                break;
             }
         }
 
-        console.log('Error');
+        console.log('Error in Axis DroppedRectangle, Getting Index');
         return 0;
     }
 
@@ -192,10 +190,10 @@ Rectangle{
         height: parent.height - 10
         anchors.top: parent.top
         anchors.topMargin: 5
-        width: 80
+        width: (itemTypeAlias && itemTypeAlias.toLowerCase()) === 'date' ? 130 : 80
         color: Constants.whiteColor
         radius: 10
-        visible: (itemType && itemType.toLowerCase()) === 'date' ? true : false
+        visible: (itemTypeAlias && itemTypeAlias.toLowerCase()) === 'date' ? true : false
 
         CustomComboBox{
             id: dateDropdown
@@ -204,7 +202,7 @@ Rectangle{
             textRole: "calculationName"
             width: parent.width
             height: parent.height
-            Component.onCompleted: currentIndex = getIndexValue(dateFormatValue)
+            Component.onCompleted: currentIndex = getIndexValue(dateFormatValueAlias)
             font.pixelSize: Constants.fontReading
             anchors.centerIn: parent
             onCurrentIndexChanged: onDateFormatSelected(currentIndex)

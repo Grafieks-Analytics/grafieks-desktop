@@ -5,10 +5,6 @@ CSVJsonDataModel::CSVJsonDataModel(QObject *parent) : QAbstractTableModel(parent
     this->totalColCount = 1;
 }
 
-void CSVJsonDataModel::clearData()
-{
-
-}
 
 CSVJsonDataModel::~CSVJsonDataModel()
 {
@@ -38,7 +34,7 @@ QVariant CSVJsonDataModel::data(const QModelIndex &index, int role) const
 {
     switch (role) {
     case Qt::DisplayRole:
-        return this->resultData[index.row()];
+        return this->modelOutput[index.row()];
     default:
         break;
     }
@@ -53,10 +49,18 @@ QHash<int, QByteArray> CSVJsonDataModel::roleNames() const
 
 void CSVJsonDataModel::columnData(QString col, QString tableName, QString options)
 {
+
+    emit fetchingColumnListModel();
+
     bool firstLine = true;
     QString delimiter = Statics::separator;
 
     int columnNumber = 0;
+    this->masterResultData.clear();
+
+    QJsonDocument optionsObj = QJsonDocument::fromJson(options.toUtf8());
+    QJsonObject obj = optionsObj.object();
+
 
     QFile file(Statics::csvJsonPath);
     file.open(QFile::ReadOnly | QFile::Text);
@@ -65,16 +69,20 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
         qDebug() << "Cannot open file" << file.errorString();
     } else{
 
+        int dataTypeCounter = 0;
         while(!file.atEnd()){
-            const QByteArray line = file.readLine().simplified();
+            QByteArray line = file.readLine().simplified();
+            QString lineAsString = QString(line);
+
             if(firstLine){
 
                 firstLine = false;
-                this->headerDataFinal = line.split(*delimiter.toStdString().c_str());
+                QRegularExpression rx( delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                this->headerDataFinal = lineAsString.split(rx);
 
-                if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){
-                    this->headerDataFinal[0] =  this->headerDataFinal.at(0).right(this->headerDataFinal.at(0).length() - 3);
-                }
+//                if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){
+//                    this->headerDataFinal[0] =  this->headerDataFinal.at(0).right(this->headerDataFinal.at(0).length() - 3);
+//                }
 
                 for(int i = 0; i < this->headerDataFinal.length(); i++){
                     this->m_roleNames.insert(i, this->headerDataFinal.at(i));
@@ -85,13 +93,21 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
             } else {
                 QString colData = line.split(*delimiter.toStdString().c_str()).at(columnNumber);
 
+
+                if(dataTypeCounter == 0 && obj.value("section").toString() == Constants::dateType){
+                    DataType datatype;
+                    this->dateFormat = datatype.variableType(colData).at(1);
+                    dataTypeCounter++;
+                }
+
                 if(!this->masterResultData.contains(colData)){
                     this->masterResultData.append(colData);
                 }
             }
         }
     }
-    this->resultData = this->masterResultData;
+    this->modelOutput.clear();
+    this->modelOutput = this->masterResultData;
     this->totalRowCount = this->masterResultData.length();
 
     emit columnListModelDataChanged(options);
@@ -100,28 +116,40 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
 void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
+    this->modelOutput.clear();
+    emit fetchingColumnListModel();
+
     QStringList output = this->masterResultData.filter(searchString, Qt::CaseInsensitive);
-    this->resultData = output;
+    this->modelOutput = output;
     this->totalRowCount = output.length();
+
     emit columnListModelDataChanged(options);
 }
 
 QStringList CSVJsonDataModel::getTableList()
 {
-    QStringList output;
+
+    this->output.clear();
     QString db = Statics::currentDbName;
     this->fileName       = QFileInfo(db).baseName().toLower();
     this->fileName = this->fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
-    output.append(this->fileName);
-    return output;
+    this->output.append(this->fileName);
+    return this->output;
 }
 
 QStringList CSVJsonDataModel::filterTableList(QString keyword)
 {
-    QStringList output;
-    output << this->fileName;
 
-    output.filter(keyword, Qt::CaseInsensitive);
-    return output;
+    return this->output.filter(keyword, Qt::CaseInsensitive);
+}
+
+QString CSVJsonDataModel::getDateFormat()
+{
+    return this->dateFormat;
+}
+
+QStringList CSVJsonDataModel::getDateColumnData()
+{
+    return this->modelOutput;
 }
 

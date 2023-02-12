@@ -49,7 +49,6 @@ QString DataType::dataType(QString parameter)
     } else if(dateformat.contains(parameter, Qt::CaseInsensitive)){
         output =  Constants::dateType;
     } else{
-        qDebug() << "INPUT PARAM OTHER TYPE" << parameter;
         output =  Constants::otherType;
     }
 
@@ -57,39 +56,7 @@ QString DataType::dataType(QString parameter)
 
 }
 
-QString DataType::duckNumericType(QString parameter)
-{
-    QString output;
-    QStringList bigintType, hugeintType, integerType, realType, doubleType, tinyintType, smallintType;
 
-    tinyintType << "I1" << "tinyint" << "int1";
-    smallintType << "smallint" << "short" << "ushort" << "I2" << "smallserial" << "int2";
-    integerType << "int" << "integer" << "numeric" << "I4" << "autonumber" << "int4" << "smallmoney" << "uint" << "I" << "signed" << "mediumint" << "serial" << "number";
-    bigintType << "bigint" << "I8" << "unsigned big int" << "int8" << "large number" << "qulonglong" << "ulong" << "bigserial" << "long" << "money";
-    doubleType << "double" << "double precision" << "decimal" << "float8" << "binary_double" << "D";
-    realType << "float" << "float4" << "F" << "bianry_float" ;
-
-
-    // Match the incoming parameter and determine filter type
-
-    if(smallintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "SMALLINT";
-    } else if(doubleType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "DOUBLE";
-    } else if(realType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "REAL";
-    } else if(bigintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "BIGINT";
-    } else if(hugeintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "HUGEINT";
-    } else if(tinyintType.contains(parameter, Qt::CaseInsensitive)){
-        output =  "TINYINT";
-    } else{
-        output = "INTEGER";
-    }
-
-    return output;
-}
 
 bool DataType::checkNumberType(QString inputVariable)
 {
@@ -98,41 +65,50 @@ bool DataType::checkNumberType(QString inputVariable)
     return isNumber;
 }
 
-bool DataType::checkDateTimeType(QString inputVariable)
+QVariantList DataType::checkDateTimeType(QString inputVariable)
 {
+    QVariantList output;
     QStringList validDateFormats;
     bool isDate = false;
+    QString matchedFormat;
     // Formats refered from https://help.talend.com/r/6K8Ti_j8LkR03kjthAW6fg/~wDyssNBFPIG2jgx3fux3Q
 
     validDateFormats << "d.M.yy" << "d.M.yy H.mm" << "d.M.yyyy H.mm.ss"
                     << "d.M.yyyy H:mm:ss"
-                    << "dd-MM-yy" << "dd-MM-yy HH:mm" << "dd-MM-yyyy HH:mm:ss"
+                    << "dd-MM-yy" << "dd-MM-yy HH:mm" << "dd-MM-yyyy HH:mm:ss" << "dd-MM-yyyy"
                     << "dd.MM.yy" << "d. MMMM yyyy" << "ddd, d. MMMM yyyy" << "dd.MM.yyyy" << "dd.MM.yy HH:mm" << "d. MMMM yyyy HH:mm:ss z" << "dd.MM.yyyy HH:mm:ss" << "dd.MM.yy HH:mm:ss" << "dd.MM.yyyy HH:mm"
                     << "d-MMM-yyyy" << "dd/MM/yy h:mm A" << "d-MMM-yyyy h:mm:ss A"
                     << "dd MMMM yyyy" << "dddd, d MMMM yyyy" << "dd-MMM-yyyy" << "dd MMMM yyyy HH:mm:ss z" << "dd-MMM-yyyy HH:mm:ss"
-                    << "M/d/yy" << "MM/dd/yy" << "MM-dd-yy" << "M-d-yy" << "MMM d, yyyy" << "MMMM d, yyyy" << "dddd, MMMM d, yyyy" << "MMM d yyyy" << "MMMM d yyyy" << "MM-dd-yyyy" << "M-d-yyyy" << "dd/MM/yyyy" << "d/M/yyyy" << "MM/dd/yyyy" << "M/d/yyyy" << "yyyy/M/d" << "M/d/yy h:mm A" << "MM/dd/yy h:mm A" << "MM-dd-yy h:mm A" << "M-d-yy h:mm A" << "MMM d, yyyy h:mm:ss A" << "M-d-yyyy h:mm:ss A" << "yyyy-MM-dd h:mm:ss A" << "yyyy-M-d h:mm:ss a" << "dd/MM/yyyy h:mm:ss a" << "d/M/yyyy h:mm:ss a" << "MM/dd/yyyy h:mm:ss a" << "M/d/yyyy h:mm:ss a" << "MM/dd/yy h:mm:ss a" << "MM/dd/yy H:mm:ss" << "M/d/yy H:mm:ss" << "dd/MM/yyyy h:mm a" << "d/M/yyyy h:mm a" << "MM/dd/yyyy h:mm a" << "M/d/yyyy h:mm a" << "MM-dd-yy h:mm:ss a" << "M-d-yy h:mm:ss a" << "MM-dd-yyyy h:mm a" << "M-d-yyyy h:mm a" <<  "yyyy-MM-dd h:mm a" << "yyyy-M-d h:mm a" << "MMM.dd.yyyy" << "d/MMM/yyyy H:mm:ss zzz" << "dd/MMM/yy h:mm a"
+                    << "M/d/yy" << "MM/dd/yy" << "MM-dd-yy" << "M-d-yy" << "MMM d, yyyy" << "MMMM d, yyyy" << "dddd, MMMM d, yyyy" << "MMM d yyyy" << "MMMM d yyyy" << "MM-dd-yyyy" << "M-d-yyyy" << "dd/MM/yyyy" << "d/M/yyyy" << "MM/dd/yyyy" << "M/d/yyyy" << "yyyy/M/d" << "M/d/yy h:mm A" << "MM/dd/yy h:mm A" << "MM-dd-yy h:mm A" << "M-d-yy h:mm A" << "MMM d, yyyy h:mm:ss A" << "M-d-yyyy h:mm:ss A" << "yyyy-MM-dd h:mm:ss A" << "yyyy-MM-dd h:mm:ss" << "yyyy-M-d h:mm:ss a" << "dd/MM/yyyy h:mm:ss a" << "d/M/yyyy h:mm:ss a" << "MM/dd/yyyy h:mm:ss a" << "M/d/yyyy h:mm:ss a" << "MM/dd/yy h:mm:ss a" << "MM/dd/yy H:mm:ss" << "M/d/yy H:mm:ss" << "dd/MM/yyyy h:mm a" << "d/M/yyyy h:mm a" << "MM/dd/yyyy h:mm a" << "M/d/yyyy h:mm a" << "MM-dd-yy h:mm:ss a" << "M-d-yy h:mm:ss a" << "MM-dd-yyyy h:mm a" << "M-d-yyyy h:mm a" <<  "yyyy-MM-dd h:mm a" << "yyyy-M-d h:mm a" << "MMM.dd.yyyy" << "d/MMM/yyyy H:mm:ss zzz" << "dd/MMM/yy h:mm a"
                     << "d/MM/yy" << "d/MM/yy H:mm" << "d.M.yy H:mm"
                     << "yy/MM/dd HH:mm"
                     << "yyyy.MM.dd" << "yyyy.MM.dd HH:mm:ss" << "yyyy.MM.dd HH:mm"
                     << "yyyy.MM.dd." << "yyyy.MM.dd. H:mm:ss" << "yyyy.MM.dd. H:mm"
                     << "d.M.yyyy HH:mm:ss" << "d.M.yyyy HH:mm"
-                    << "yy/MM/dd" << "yyyy/MM/dd" << "yy/MM/dd H:mm" << "MM/dd/yy H:mm";
+                    << "yy/MM/dd" << "yyyy/MM/dd" << "yy/MM/dd H:mm" << "MM/dd/yy H:mm"
+                    << "yyyy-MM-dd";
 
     validDateFormats.removeDuplicates();
     foreach(QString format, validDateFormats){
         QDateTime convertedDateTime = QDateTime::fromString(inputVariable, format);
         if(convertedDateTime.isValid()){
             isDate = true;
+            matchedFormat = format;
             break;
         }
     }
-    return isDate;
+
+    output.append(isDate);
+    output.append(matchedFormat);
+    return output;
 }
 
-QString DataType::variableType(QString inputVariable)
+QStringList DataType::variableType(QString inputVariable)
 {
     QString variableType = Constants::categoricalType;
     bool containsDigit = false;
+    QString matchedFormat;
+    QStringList output;
 
     // Check if the string has a digit
     foreach(QChar stringChar, inputVariable){
@@ -146,14 +122,20 @@ QString DataType::variableType(QString inputVariable)
     if(containsDigit){
         if(checkNumberType(inputVariable) == true){
             variableType = Constants::numericalType;
-        } else if(checkDateTimeType(inputVariable) == true){
+            matchedFormat = "";
+        } else if(checkDateTimeType(inputVariable).at(0).toBool() == true){
             variableType = Constants::dateType;
+            matchedFormat = checkDateTimeType(inputVariable).at(1).toString();
         } else {
             variableType = Constants::categoricalType;
+            matchedFormat = "";
         }
     }
 
-    return variableType;
+    output.append(variableType);
+    output.append(matchedFormat);
+
+    return output;
 }
 
 QString DataType::qVariantType(QString inputVariable)

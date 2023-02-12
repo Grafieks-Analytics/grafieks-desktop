@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "../SubComponents"
@@ -117,25 +118,17 @@ Popup {
 
         // Set the model of the `Add Button` in each tab
         function onExtractSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+            console.log("CALLED Extract")
+        }
 
-            categoricalModel.clear()
-            numericalModel.clear()
-            datesModel.clear()
+        function onApiSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers){
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+        }
 
-            allCategorical.forEach(function (element) {
-                categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
-            });
-
-            allNumerical.forEach(function (element) {
-                numericalModel.append({"tableName" : element[0], "colName" : element[1]});
-            });
-
-            allDates.forEach(function (element) {
-                datesModel.append({"tableName" : element[0], "colName" : element[1]});
-            });
-
-            add_btn_1.model =  categoricalModel
-
+        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
+            filterColumns(allList, allCategorical, allNumerical, allDates, allOthers)
+            console.log("CALLED")
         }
 
         function onTableSchemaCleared(){
@@ -220,7 +213,30 @@ Popup {
     }
 
 
-    function onAddMenuItemTriggered(colName,tableName, section, category, subCategory){
+    function filterColumns(allList, allCategorical, allNumerical, allDates, allOthers){
+
+        categoricalModel.clear()
+        numericalModel.clear()
+        datesModel.clear()
+
+        allCategorical.forEach(function (element) {
+            categoricalModel.append({"tableColName" : element[4], "colName" : element[1]});
+            console.log("CATEORICAL MODEL", element[4], element[1])
+        });
+
+        allNumerical.forEach(function (element) {
+            numericalModel.append({"tableColName" : element[4], "colName" : element[1]});
+        });
+
+        allDates.forEach(function (element) {
+            datesModel.append({"tableColName" : element[4], "colName" : element[1]});
+            console.log("DATES MODEL", element[4], element[1])
+        });
+
+        add_btn_1.model =  categoricalModel
+    }
+
+    function onAddMenuItemTriggered(colName,tableColName, section, category, subCategory){
 
         var options = {
             "section" : section,
@@ -229,10 +245,17 @@ Popup {
             "values" : ""
         }
 
-        ReportsDataModel.fetchColumnData(colName, options)
+        if(GeneralParamsModel.getAPISwitch()) {
+            ReportsDataModel.fetchColumnDataAPI(tableColName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            ReportsDataModel.fetchColumnDataLive(tableColName, JSON.stringify(options))
+        } else {
+            ReportsDataModel.fetchColumnData(tableColName, JSON.stringify(options))
+        }
 
-        ReportParamsModel.setColName(colName)
-        ReportParamsModel.setTableName(tableName)
+
+        ReportParamsModel.setColName(tableColName)
+//        ReportParamsModel.setTableName(tableName)
 
     }
 
@@ -465,7 +488,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Data Source Filter"
+            text: Messages.re_sub_common_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -507,7 +530,7 @@ Popup {
 
         TabButton{
             id: character_btn
-            text: "Categorical"
+            text: Messages.filterCategorical
             width:popupMain.width/3 - 1
 
             background: Rectangle {
@@ -533,7 +556,7 @@ Popup {
 
         TabButton{
             id: date_btn
-            text: "Date"
+            text: Messages.filterDate
             width:popupMain.width/3 - 1
 
             background: Rectangle {
@@ -559,7 +582,7 @@ Popup {
 
         TabButton{
             id: numbers_btn
-            text: "Numerical"
+            text: Messages.filterNumerical
             width:popupMain.width/3 - 1
 
             background: Rectangle {
@@ -622,10 +645,11 @@ Popup {
         anchors.leftMargin: 20
 
         textRole: "colName"
-        valueRole: "tableName"
+        valueRole: "tableColName"
 
         onActivated: {
-            onAddMenuItemTriggered(currentText, currentValue, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
+            console.log("TABLE COL NAME ORIG", currentText, add_btn_1.model.get(currentIndex).tableColName, displayText, currentIndex)
+            onAddMenuItemTriggered(currentText, add_btn_1.model.get(currentIndex).tableColName, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
             onAddMenuItemClicked()
 
         }
@@ -689,14 +713,14 @@ Popup {
 
         CustomButton{
             id: cancel_btn1
-            textValue: "Cancel"
+            textValue: Messages.cancelBtnTxt
             onClicked: onCancelClicked()
         }
 
 
         CustomButton{
             id: apply_btn1
-            textValue: "Apply"
+            textValue: Messages.applyBtnTxt
             onClicked: onApplyClicked()
         }
     }

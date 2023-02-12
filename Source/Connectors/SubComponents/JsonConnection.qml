@@ -10,9 +10,10 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
@@ -38,6 +39,7 @@ Popup {
         displayTime.text = ""
     }
 
+    // LIVE CONNECTION not possible
 
     Connections{
         target: ConnectorsLoginModel
@@ -70,18 +72,10 @@ Popup {
         }
     }
 
-    Connections{
-        target: DuckCon
 
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "json"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
-
-
+    Component.onCompleted: {
+        promptJson.nameFilters = Messages.cn_sub_json_namedFilter
+        file_btn.text = Messages.selectFile
     }
 
     function handleJson(jsonFileName){
@@ -95,7 +89,7 @@ Popup {
 
             ConnectorsLoginModel.jsonLogin(selectedFile, true)
         } else {
-            msg_dialog.text = "No file selected"
+            msg_dialog.text = Messages.noSelectedFile
             msg_dialog.visible = true
         }
     }
@@ -116,7 +110,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Choose a Json file"
+            text: Messages.cn_sub_json_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -158,47 +152,46 @@ Popup {
 
 
 
-//        Rectangle{
+        //        Rectangle{
 
-//            id: name1
-//            width:label_col
-//            height: 40
+        //            id: name1
+        //            width:label_col
+        //            height: 40
 
-//            Text{
-//                text: "Json"
-//                anchors.left: parent.left
-//                anchors.leftMargin: 10
-//                font.pixelSize: Constants.fontCategoryHeader
-//                anchors.verticalCenter: parent.verticalCenter
-//            }
-//        }
+        //            Text{
+        //                text: "Json"
+        //                anchors.left: parent.left
+        //                anchors.leftMargin: 10
+        //                font.pixelSize: Constants.fontCategoryHeader
+        //                anchors.verticalCenter: parent.verticalCenter
+        //            }
+        //        }
         Rectangle{
 
-                  id: name2
-                  width:label_col
-                  height: 40
+            id: name2
+            width:label_col
+            height: 40
 
-        Button{
-            id : file_btn
-            anchors.left: parent.left
-                       anchors.leftMargin:  10
-            text: "Select JSON file"
-            onClicked: promptJson.open();
-        }
+            Button{
+                id : file_btn
+                anchors.left: parent.left
+                anchors.leftMargin:  10
+                onClicked: promptJson.open();
+            }
         }
 
         Rectangle{
 
-                   id: name3
-                   width:label_col
-                   height: 40
-        Text{
-            id: jsonFileName
-            anchors.left: parent.left
-                        anchors.leftMargin:  10
-                        anchors.verticalCenter: parent.verticalCenter
-            text:""
-        }
+            id: name3
+            width:label_col
+            height: 40
+            Text{
+                id: jsonFileName
+                anchors.left: parent.left
+                anchors.leftMargin:  10
+                anchors.verticalCenter: parent.verticalCenter
+                text:""
+            }
         }
 
     }
@@ -213,8 +206,8 @@ Popup {
     Row{
 
         id: row6
-//        anchors.top: row3.bottom
-//        anchors.topMargin: 15
+        //        anchors.top: row3.bottom
+        //        anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col
         anchors.bottom: parent.bottom
@@ -254,7 +247,7 @@ Popup {
                 height: 40
 
                 Text{
-                    text: Constants.openFileText
+                    text: Messages.openFileText
                     anchors.centerIn: parent
                     font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
@@ -269,28 +262,27 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Json Connection"
+        title: Messages.cn_sub_json_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: error_dialog
-        title: "JSON import Error"
+        title: Messages.cn_sub_json_importErr
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     // Select JSON file
     FileDialog{
         id: promptJson
-        title: "Select a file"
-        nameFilters: ["Json files (*.json)"];
+        title: Messages.selectFile
 
 
         onAccepted: {
             console.log(fileUrl)
-            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
             jsonFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {

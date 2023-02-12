@@ -1,12 +1,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
+
+import "../../chartsWebViewHandlers.js" as ChartsWebViewHandler
 
 Popup {
 
@@ -52,7 +55,7 @@ Popup {
     function onThemeChanged(curve){
         const themeValue = pivotSelectBox.currentValue;
         d3PropertyConfig.pivotTheme = pivotSelectBox.currentValue;
-        webEngineView.runJavaScript('window.changeThemeColour && changeThemeColour("'+themeValue+'")');
+        ChartsWebViewHandler.updateChart(d3PropertyConfig)
     }
 
     Rectangle{
@@ -67,7 +70,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Select Theme")
+                    text: Messages.re_mini_ptp_header
                 }
             }
 

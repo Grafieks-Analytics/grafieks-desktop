@@ -1,9 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
+import Qt.labs.platform
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents";
 import "../MiniSubComponents";
@@ -14,7 +16,7 @@ Popup {
     property int shapeHeight: 20
 
     width: 160
-    height: 200
+    height: 220
     x: 10
     modal: false
     visible: false
@@ -90,11 +92,84 @@ Popup {
     }
 
 
+    
+    Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                return;
+            }
+            if(reportId != "false"){
+                var reportProperties = ReportParamsModel.getReport(reportIdMain);
+                setOldValues(reportProperties)
+            }
+            else{
+                resetAllValues();
+            }
+        }
+    }
+    
+    function resetAllValues(){
+        dataLabeleDialog.color = Constants.defaultDataLabelColor;
+        dataLabelFontColorBox.color = Constants.defaultDataLabelColor;
+
+        fontFamily.currentIndex = fontFamily.find("Arial");
+        fontSizescombo.currentIndex = fontSizescombo.find("12");
+
+        dataLabelStatus.checked = false;
+
+    }
+
+    function setOldValues(reportProperties){
+        
+        var d3PropertiesConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        var { dataLabelColor, labelConfig = {}, dataLabelfontFamily, dataLabelfontSize  } = d3PropertiesConfig || {};
+        var { labelStatus, labelFormat } = labelConfig;
+
+        dataLabelStatus.checked = !!labelStatus;
+        
+        if(dataLabelColor){
+            dataLabeleDialog.color = dataLabelColor;
+            dataLabelFontColorBox.color = dataLabelColor;
+        }
+
+        if(dataLabelfontFamily){
+            fontFamily.currentIndex = fontFamily.find(dataLabelfontFamily);
+        }
+
+        if(dataLabelfontSize){
+            fontSizescombo.currentIndex = fontSizescombo.find(dataLabelfontSize);
+        }
+
+    }
+
+
     function showLabel(checked){
         var labelConfig = d3PropertyConfig.labelConfig || {};
-        labelConfig['labelStatus'] = checked;
+        labelConfig.labelStatus = checked;
+        labelConfig.labelFormat = "symbol";
         d3PropertyConfig.labelConfig = labelConfig;
-        reDrawChart();
+        updateChart();
+    }
+    function openColorDialog(dialogName){
+        switch(dialogName){
+        case "dataLabel": dataLabeleDialog.open();
+            break;
+        }
+    }
+
+    ColorDialog{
+        id: dataLabeleDialog
+
+        onColorChanged:{
+
+            d3PropertyConfig.dataLabelColor = dataLabeleDialog.color+"";
+            dataLabelFontColorBox.color = dataLabeleDialog.color;
+
+            updateChart();
+        }
+
     }
 
 
@@ -121,7 +196,7 @@ Popup {
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Data Label")
+                        text: Messages.re_mini_lp_dataLabel
                         anchors.left: parent.left
                         anchors.leftMargin: leftMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -130,11 +205,12 @@ Popup {
 
                     CheckBoxTpl{
 
+                        id: dataLabelStatus
                         checked: false
                         parent_dimension: editImageSize - 2
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.rightMargin: 5
+                        anchors.rightMargin: -8
                         anchors.top: parent.top
 
                         onCheckedChanged: showLabel(checked);
@@ -145,13 +221,33 @@ Popup {
                 }
 
             }
+            Row{
+                width: parent.width
+                Text {
+                    text: Messages.re_mini_common_fontColor
+                    width: 118
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Rectangle {
+                    id: dataLabelFontColorBox
+                    color: Constants.defaultDataLabelColor
+                    border.color: Constants.borderBlueColor
+                    width: 15
+                    height: 15
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: openColorDialog("dataLabel");
+                    }
+
+                }
+            }
 
             Rectangle{
                 height: 20
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font Family")
+                    text: Messages.re_mini_common_fontFamily
                 }
             }
 
@@ -165,7 +261,8 @@ Popup {
 
 
                     Component.onCompleted: {
-                        let fontFamilies = Qt.fontFamilies();
+                        let fontFamilies = ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"];
+                        // let fontFamilies =["Arial","Arial Black",""];
                         for(let i=0; i<fontFamilies.length;i++){
                             fonts.append({"fontName": fontFamilies[i]});
                         }
@@ -176,7 +273,7 @@ Popup {
                     onCurrentValueChanged: {
                         console.log("labelfont"+fontFamily.currentValue)
                         d3PropertyConfig.dataLabelfontFamily=fontFamily.currentValue;
-                        reDrawChart();
+                        updateChart();
                     }
                     //                    popup: Popup {
                     //                //                            y: control.height - 1
@@ -221,7 +318,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font Size")
+                    text: Messages.re_mini_common_fontsize
                 }
             }
 
@@ -232,21 +329,11 @@ Popup {
                 CustomComboBox{
                     id: fontSizescombo
                     height: 500
-//                    model: fontSizes
 
-//                    Component.onCompleted: {
-//                        //                                                let fontFamilies = Qt.fontFamilies();
-//                        //                                                for(let i=0; i<fontFamilies.length;i++){
-//                        //                                                    fonts.append({"fontName": fontFamilies[i]});
-//                        //                                                }
-//                        fontSizescombo.model = fontSizes;
-
-//                        fontSizescombo.currentIndex = 4;
-//                    }
                     onCurrentValueChanged: {
-                        //                           console.log("labelfont"+fontSizes.currentValue)
+
                         d3PropertyConfig.dataLabelfontSize=fontSizescombo.currentValue;
-                        reDrawChart();
+                        updateChart();
                     }
 
                     model: fontSizes
@@ -262,6 +349,7 @@ Popup {
                 }
 
             }
+
 
         }
 

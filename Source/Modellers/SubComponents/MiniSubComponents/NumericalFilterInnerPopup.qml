@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -104,14 +105,6 @@ Rectangle{
     }
 
     Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
-        }
-    }
-
-    Connections{
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(values){
@@ -181,7 +174,6 @@ Rectangle{
             if(jsonOptions.slug === Constants.slugBetweenRelation){
 
                 var splitValues = jsonOptions.values.split(" And ")
-                console.log(splitValues, "SPLIT VALUES")
                 textField.text = splitValues[0]
                 textField2nd.text = splitValues[1]
             } else{
@@ -349,7 +341,7 @@ Rectangle{
 
         Text {
             id: name
-            text: qsTr("Condition")
+            text: Messages.filterConditionText
             leftPadding: 20
         }
 
@@ -403,7 +395,7 @@ Rectangle{
                     selectByMouse: true
                     height : parent.height
                     width : parent.width
-                    placeholderText: "Enter Text"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     onActiveFocusChanged: {
                         numericalTextBox.border.color = "blue"
                     }
@@ -428,7 +420,7 @@ Rectangle{
                     selectByMouse: true
                     height : parent.height
                     width : parent.width
-                    placeholderText: "Enter Text"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     onActiveFocusChanged: {
                         numericalTextBox.border.color = "blue"
                     }

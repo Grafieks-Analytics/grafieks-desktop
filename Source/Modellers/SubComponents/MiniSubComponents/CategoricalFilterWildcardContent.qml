@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -20,7 +21,7 @@ import "../../../MainSubComponents"
 Rectangle{
     id: wildcardContent
     property bool listOpened: false
-    property string selectOption: "Select Wildcard"
+    property string selectOption: Messages.mo_mini_cfwc_header
     property var acceptedValues:["Containing", "Ends With", "Equal", "Doesnt Start With", "Doesnt End With", "Not Equal"]
 
     property string editRelation : ""
@@ -109,14 +110,6 @@ Rectangle{
                 DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
                 DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, false)
             }
-        }
-    }
-
-    Connections{
-        target: DuckDataModel
-
-        function onColumnListModelDataChanged(colData, values){
-            updateData(colData, values)
         }
     }
 
@@ -379,7 +372,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CustomButton {
-                textValue: qsTr("Add Wildcard")
+                textValue: Messages.mo_mini_cfwc_addWildcard
 
                 onClicked: onAddWildcard();
             }
@@ -395,7 +388,7 @@ Rectangle{
             CheckBoxTpl {
 
                 id: excludeCheck
-                text: qsTr("Exclude")
+                text: Messages.filterExclude
                 parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: onExcludeCheckedClicked(checked)
@@ -449,7 +442,7 @@ Rectangle{
 
                 CustomTextBox{
                     id: valueText
-                    placeholderText: "Enter Text"
+                    placeholderText: Messages.mo_mini_cfwc_enterValue
                     boxWidth: parent.width * 2 / 3
                     boxHeight: 30
 

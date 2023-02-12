@@ -50,10 +50,9 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::driveIntType;
 
         // Get files list
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 
     });
@@ -76,7 +75,7 @@ void DriveDS::fetchDatasources()
 void DriveDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"'"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"' and (mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataSearchFinished);
 }
 
@@ -87,7 +86,7 @@ void DriveDS::homeBut()
 {
     emit showBusyIndicator(true);
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=(mimeType = 'application/vnd.ms-excel' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'text/csv')&pageSize=1000"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
@@ -169,14 +168,15 @@ void DriveDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+
+        Statics::onlineStorageType = Constants::driveIntType;
+
         QStringList requiredExtensions;
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
-
-        qDebug() << "FILES" << resultJson;
 
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
@@ -205,14 +205,14 @@ void DriveDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
+
 
         // Get user email
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 
 }
@@ -230,7 +230,6 @@ void DriveDS::dataSearchFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "FILES" << resultJson;
 
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
@@ -259,14 +258,12 @@ void DriveDS::dataSearchFinished()
             }
         }
 
-        m_dataBuffer->clear();
-
         // Get user email
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 
 }
@@ -298,12 +295,11 @@ void DriveDS::fileDownloadFinished()
     }else{
 
         QFileInfo f(this->newFileName);
-        qDebug() << this->newFileName << "FILENAME" << f.baseName().toUtf8();
 
         QString fileName = QDir::temp().tempPath() +"/" + this->newFileName;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.write(m_networkReply->readAll());
         file.close();
 
         if(this->extension.contains("xls") || this->extension.contains("xlsx")){

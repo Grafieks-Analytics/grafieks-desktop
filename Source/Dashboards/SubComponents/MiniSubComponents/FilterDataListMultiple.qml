@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -22,18 +23,19 @@ Item {
     }
 
     onComponentNameChanged: {
-        modelContent = TableColumnsModel.fetchColumnData(componentName)
-        modelContent.unshift("Select All")
 
-        var i = 0;
-        modelContent.forEach(item => {
-                                 listModel.append({"name": item, "checked": true, "index": i})
-                                 i++
-                             })
-        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        idPlesaeWaitThorbber.visible = true
+        idPlesaeWaitText.visible = true
 
-        // for the first time, select all values
-        master = true
+        if(GeneralParamsModel.getAPISwitch()) {
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelContent)
+        } else {
+            modelContent = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelContent)
+        }
     }
 
 
@@ -47,10 +49,19 @@ Item {
         }
     }
 
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+
+        }
+    }
+
     function onMultiSelectCheckboxSelected(modelData,checked, index){
 
         if(checked === true){
-
             // Start pushing the individual checked item in the array
             DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
 
@@ -59,6 +70,35 @@ Item {
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
         }
 
+    }
+
+    function processDataList(modelContent){
+        modelContent.unshift(Messages.filterAll)
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        var i = 0;
+        listModel.clear()
+
+        if(previousCheckValues.length > 0){
+            modelContent.forEach(item => {
+                                     var checkedStatus = previousCheckValues.includes(item) ? true : false;
+                                     listModel.append({"name": item, "checked": checkedStatus, "index": i})
+                                     i++
+                                 })
+        } else {
+            modelContent.forEach(item => {
+                                     listModel.append({"name": item, "checked": true, "index": i})
+                                     i++
+                                 })
+        }
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        master = true
+
+        idPlesaeWaitThorbber.visible = false
+        idPlesaeWaitText.visible = false
     }
 
     function toggleSearch(){
@@ -75,15 +115,22 @@ Item {
     }
 
     function searchData(searchText){
-        console.log(searchText, componentName)
         modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
-        modelContent.unshift("Select All")
-        dataListView.model = modelContent
+        modelContent.unshift(Messages.filterAll)
+        console.log(modelContent)
+
+        listModel.clear()
+        var i = 0;
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
+
     }
 
     function filterClicked(){
-
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
@@ -185,7 +232,7 @@ Item {
                     id: componentTitle
                     width:110
                     elide: Text.ElideRight
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text: DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
 
@@ -239,7 +286,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
 
-                placeholderText: qsTr("Search")
+                placeholderText: Messages.search
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     width: parent.width
@@ -249,6 +296,18 @@ Item {
 
             }
 
+        }
+
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
         }
 
 

@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.2
+//import QtQuick.Controls 1.4 as Old
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -14,12 +17,35 @@ Item {
 
     property alias componentName: filterDataItemSingle.objectName
     property var modelContent: []
+    property bool master: false
+
+
+
+    ListModel{
+        id: listModel
+        dynamicRoles: true
+    }
+//     Calendar {
+//     minimumDate: new Date(2017, 0, 1)
+//     maximumDate: new Date(2018, 0, 1)
+// }
+
 
     onComponentNameChanged: {
-        modelContent = TableColumnsModel.fetchColumnData(componentName)
-        modelContent.unshift("Select All")
-        dataListView.model = modelContent
-        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        idPlesaeWaitThorbber.visible = true
+        idPlesaeWaitText.visible = true
+
+        if(GeneralParamsModel.getAPISwitch()) {
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelContent = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelContent)
+        } else {
+            modelContent = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelContent)
+        }
+
     }
 
 
@@ -31,7 +57,40 @@ Item {
                 componentTitle.text = newAlias
             }
         }
+    }
 
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+    function processDataList(modelContent){
+        modelContent.unshift("Select All")
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        listModel.clear()
+        var i = 0;
+        if(previousCheckValues.length > 0){
+            modelContent.forEach(item => {
+                                     var checkedStatus = previousCheckValues.includes(item) ? true : false;
+                                     listModel.append({"name": item, "checked": checkedStatus, "index": i})
+                                     i++
+                                 })
+        } else {
+            modelContent.forEach(item => {
+                                     listModel.append({"name": item, "checked": true, "index": i})
+                                     i++
+                                 })
+        }
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        idPlesaeWaitThorbber.visible = false
+        idPlesaeWaitText.visible = false
     }
 
     function onRadioSelect(modelData,checked){
@@ -62,15 +121,21 @@ Item {
     }
 
     function searchData(searchText){
-        console.log(searchText, componentName)
         modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
         modelContent.unshift("Select All")
-        dataListView.model = modelContent
+
+        listModel.clear()
+        var i = 0;
+        modelContent.forEach(item => {
+                                 listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
     }
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
@@ -87,11 +152,11 @@ Item {
         Row{
             CustomRadioButton{
                 ButtonGroup.group: buttonGroupSingleList
-                radio_text: modelData
-                radio_checked: index === 0 ? true : false
+                radio_text: model.name
+                radio_checked: model.checked
                 parent_dimension: 16
 
-                onCheckedChanged: onRadioSelect(modelData, checked)
+                onCheckedChanged: onRadioSelect(model.name, checked)
             }
         }
     }
@@ -184,7 +249,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
 
-                placeholderText: qsTr("Search")
+                placeholderText: Messages.search
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     width: parent.width
@@ -196,10 +261,22 @@ Item {
 
         }
 
+        BusyIndicatorTpl{
+            id: idPlesaeWaitThorbber
+            anchors.centerIn: parent
+        }
+
+        Text {
+            id: idPlesaeWaitText
+            text: Messages.loadingPleaseWait
+            anchors.top: idPlesaeWaitThorbber.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
         ListView{
             id: dataListView
             topMargin: 10
-
+            model: listModel
             leftMargin: 10
             height:150
             flickableDirection: Flickable.VerticalFlick

@@ -1,9 +1,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import com.grafieks.singleton.constants 1.0
+import Qt.labs.platform
 
-import QtQuick.Dialogs 1.3
+import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
+
+import QtQuick.Dialogs
 
 import "../../../MainSubComponents"
 
@@ -36,9 +39,9 @@ Rectangle{
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
+//            opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
 //            gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
         }
     }
@@ -48,6 +51,16 @@ Rectangle{
 
         function onChartValuesChanged(dashboardId){
             startReDrawingCharts()
+        }
+    }
+
+    Connections{
+        target: ReportParamsModel
+
+        function onGenerateWorkbookReports(){
+
+            // var dashboardOpacityFetch = DashboardParamsModel.getDashboardOpacity(DashboardParamsModel.currentDashboard)
+            // opacitySpinBox.value = dashboardOpacityFetch
         }
     }
 
@@ -85,7 +98,7 @@ Rectangle{
         for(var reportIdValue in allReportInstances){
             // Redrawing charts one by one;
             var instance = allReportInstances[reportIdValue]; 
-            instance && instance.reDrawChart();
+            instance && instance.updateChart();
         }
     }
 
@@ -103,7 +116,7 @@ Rectangle{
 
     ColorDialog{
         id: backgroundColorSelector
-        color: Constants.greenThemeColor
+//        color: Constants.greenThemeColor
         onAccepted: setBackgroundColor(backgroundColorSelector.color)
     }
 
@@ -142,7 +155,7 @@ Rectangle{
 
             Text {
                 id: backgroundColor
-                text: qsTr("Background Color")
+                text: Messages.da_sub_csm_bgcolor
             }
 
             Image {
@@ -161,30 +174,30 @@ Rectangle{
 
 
 
-        Rectangle{
-            id: opacityBox
-            width: parent.width
-            height: 30
-            anchors.top: backgroundColorBox.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.right: parent.right
-            anchors.rightMargin: 15
+        // Rectangle{
+        //     id: opacityBox
+        //     width: parent.width
+        //     height: 30
+        //     anchors.top: backgroundColorBox.bottom
+        //     anchors.left: parent.left
+        //     anchors.leftMargin: 15
+        //     anchors.right: parent.right
+        //     anchors.rightMargin: 15
 
-            Text {
-                id: opacity
-                text: qsTr("Opacity")
-                anchors.verticalCenter: parent.verticalCenter
-            }
+        //     Text {
+        //         id: opacity
+        //         text: qsTr("Opacity")
+        //         anchors.verticalCenter: parent.verticalCenter
+        //     }
 
-            CustomSpinBox {
-                id: opacitySpinBox
-                value: 0
-                anchors.right: parent.right
-                onValueChanged: onOpacityValueChanged(value)
-            }
+        //     CustomSpinBox {
+        //         id: opacitySpinBox
+        //         value: 0
+        //         anchors.right: parent.right
+        //         onValueChanged: onOpacityValueChanged(value)
+        //     }
 
-        }
+        // }
 
 
         // [Tag: Future Release]

@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 import "./MiniSubComponents"
@@ -16,13 +17,40 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: 3
 
+    Connections{
+        target : TableColumnsModel
+
+        function onSendFilteredColumn(currentDashboard, allCategoricalMap, allNumericalMap, allDatesMap){
+
+            idPlesaeWaitThorbberCategorical.visible = false
+            idPlesaeWaitTextCategorical.visible = false
+            idPlesaeWaitThorbberDate.visible = false
+            idPlesaeWaitTextDate.visible = false
+            idPlesaeWaitThorbberNumerical.visible = false
+            idPlesaeWaitTextNumerical.visible = false
+        }
+
+        function onFetchingFilteredColumn(){
+            idPlesaeWaitThorbberCategorical.visible = true
+            idPlesaeWaitTextCategorical.visible = true
+            idPlesaeWaitThorbberDate.visible = true
+            idPlesaeWaitTextDate.visible = true
+            idPlesaeWaitThorbberNumerical.visible = true
+            idPlesaeWaitTextNumerical.visible = true
+        }
+    }
+
 
     function searchTableColumns(searchText){
         TableColumnsModel.searchColumnNames(DashboardParamsModel.currentDashboard, searchText)
     }
 
     function addNewFilterColumns(){
-        TableColumnsModel.applyColumnVisibility(DashboardParamsModel.currentDashboard)
+        var currentDashboardId = DashboardParamsModel.currentDashboard
+        TableColumnsModel.applyColumnVisibility(currentDashboardId)
+
+        if(GeneralParamsModel.getAPISwitch())
+            TableColumnsModel.fetchColumnDataAPI(DashboardParamsModel.fetchShowColumns(currentDashboardId), currentDashboardId)
     }
 
     function hideColumn(){
@@ -32,13 +60,13 @@ Item {
     Rectangle{
         id: add_filter
         height:28
-        width:parent.width-5
+        width:500
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
         anchors.leftMargin: 5
         Text{
-            text: "Add Filter"
+            text: Messages.da_sub_dfa_header
 
             anchors.topMargin: 5
 
@@ -69,7 +97,7 @@ Item {
 
         TabButton{
             id: filter_cancel_btn
-            text: "Cancel"
+            text: Messages.cancelBtnTxt
             onClicked: hideColumn()
 
 
@@ -91,7 +119,7 @@ Item {
 
         TabButton{
             id: filter_apply_btn
-            text: "Add"
+            text: Messages.applyBtnTxt
             onClicked: addNewFilterColumns()
 
             background: Rectangle {
@@ -132,7 +160,7 @@ Item {
 
             TextField{
                 id:searchTextBox
-                placeholderText: "Search"
+                placeholderText: Messages.search
                 selectByMouse: true
                 width: parent.width - search_icon.width
                 height:30
@@ -167,15 +195,15 @@ Item {
         width: parent.width - 15
         anchors.top: filterSearch.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-//        anchors.margins: 5
+        //        anchors.margins: 5
     }
 
 
     Column {
-//        spacing: 5
+        //        spacing: 5
         anchors.top: toolsep4.top
         width: parent.width
-//        anchors.topMargin: 4
+        //        anchors.topMargin: 4
         height: parent.height-add_filter.height-filterSearch.height-20
 
         Rectangle {
@@ -186,7 +214,7 @@ Item {
             anchors.leftMargin: 4
             height:  parent.height/3-10
             color: "white"
-//            border.color: Constants.darkThemeColor
+            //            border.color: Constants.darkThemeColor
 
             Rectangle{
                 id:categoricalCheckboxesRect
@@ -196,17 +224,29 @@ Item {
                 anchors.top: parent.top
                 border.color: Constants.darkThemeColor
 
-            Text {
-                id: text4
+                Text {
+                    id: text4
 
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                   anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
 
-                text: qsTr("Categorical")
-                font.pixelSize: 15
+                    text: Messages.filterCategorical
+                    font.pixelSize: 15
 
+                }
             }
+
+            BusyIndicatorTpl{
+                id: idPlesaeWaitThorbberCategorical
+                anchors.centerIn: parent
+            }
+
+            Text {
+                id: idPlesaeWaitTextCategorical
+                text: Messages.loadingPleaseWait
+                anchors.top: idPlesaeWaitThorbberCategorical.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             CategoricalList{
@@ -229,7 +269,7 @@ Item {
             anchors.leftMargin: 4
             height:  parent.height/3-10
             color: "white"
-//            border.color: Constants.darkThemeColor
+            //            border.color: Constants.darkThemeColor
 
             Rectangle{
                 id:dataTypeNumericalRect
@@ -247,13 +287,26 @@ Item {
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
 
-                    text: qsTr("Numerical")
+                    text: Messages.filterNumerical
                     font.pixelSize: 15
 
 
                 }
 
             }
+
+            BusyIndicatorTpl{
+                id: idPlesaeWaitThorbberNumerical
+                anchors.centerIn: parent
+            }
+
+            Text {
+                id: idPlesaeWaitTextNumerical
+                text: Messages.loadingPleaseWait
+                anchors.top: idPlesaeWaitThorbberNumerical.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
             NumericalList{
                 id: numericalCheckboxes
                 anchors.top: dataTypeNumericalRect.bottom
@@ -272,7 +325,7 @@ Item {
             anchors.leftMargin: 4
             height:  parent.height/3-10
             color: "white"
-//            border.color: Constants.darkThemeColor
+            //            border.color: Constants.darkThemeColor
             Rectangle{
                 id:dataTypeDateRect
                 height: 25
@@ -292,11 +345,23 @@ Item {
                     //                anchors.bottom: parent.bottom
                     //                anchors.bottomMargin: 0
 
-                    text: qsTr("Date")
+                    text: Messages.filterDate
                     font.pixelSize: 15
 
 
                 }
+            }
+
+            BusyIndicatorTpl{
+                id: idPlesaeWaitThorbberDate
+                anchors.centerIn: parent
+            }
+
+            Text {
+                id: idPlesaeWaitTextDate
+                text: Messages.loadingPleaseWait
+                anchors.top: idPlesaeWaitThorbberDate.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             DateList{

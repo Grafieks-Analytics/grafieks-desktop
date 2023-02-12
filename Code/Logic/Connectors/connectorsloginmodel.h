@@ -36,6 +36,7 @@ class ConnectorsLoginModel : public QObject
     QScopedPointer<ExcelCon> excelcon;
     QScopedPointer<CSVCon> csvcon;
     QScopedPointer<JsonCon> jsoncon;
+    QScopedPointer<JsonNewCon> jsonnewcon;
 
     QString m_connectedDB;
     GeneralParamsModel generalParamsModel;
@@ -49,8 +50,10 @@ public:
     Q_INVOKABLE void sqliteLogin(QString filename);
     Q_INVOKABLE void csvLogin(QString filename, bool directLogin, QString separator = ",");
     Q_INVOKABLE void jsonLogin(QString filename, bool directLogin);
-    Q_INVOKABLE void excelLogin(QString filename, bool directLogin);
-    Q_INVOKABLE QString urlToFilePath(const QUrl &url);
+
+    // ODBC connection with list of drivers as stringlist
+    // For downloaded excel files from online services to directly process
+    Q_INVOKABLE void excelLogin(QStringList drivers, QString filename);
 
     // ODBC
     Q_INVOKABLE void mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
@@ -85,6 +88,7 @@ signals:
     void snowflakeLoginStatus(QVariantMap status);
     void teradataLoginStatus(QVariantMap status);
     void excelLoginStatus(QVariantMap status, bool directLogin);
+    void excelLoginOdbcStatus(QVariantMap status, bool directLogin);
     void jsonLoginStatus(QVariantMap status, bool directLogin);
     void csvLoginStatus(QVariantMap status, bool directLogin);
     void accessLoginStatus(QVariantMap status);

@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebView 1.1
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -26,6 +27,7 @@ Item{
 
     property var hoverStatus: false
     property var originalPoint: Object()
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -70,9 +72,9 @@ Item{
                 droppedImageId.border.color = refColor
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 newItem.visible = true
             } else{
                 newItem.visible = false
@@ -109,8 +111,7 @@ Item{
 
     Component.onCompleted: {
 
-        selectFile()
-        webengine.url = ""
+        fileDialog.nameFilters = Messages.da_sub_di_selectImageNamedFiltersTxt
     }
 
     function selectFile(){
@@ -123,6 +124,8 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
     }
 
     function showCustomizeReport(){
@@ -173,15 +176,40 @@ Item{
 
 
     function saveImage(selectedFile){
-        let currentDashboard = DashboardParamsModel.currentDashboard
-        let currentReport = DashboardParamsModel.currentReport
-        let fileToken = GeneralParamsModel.getFileToken();
+        var fileName
+        var currentDashboard = DashboardParamsModel.currentDashboard
+        var currentReport = DashboardParamsModel.currentReport
+        if(GeneralParamsModel.isWorkbookInEditMode() === false){
 
-        const newFileName = currentDashboard + "_" + currentReport + "_" + fileToken
+            let fileToken = GeneralParamsModel.getFileToken()
+            fileName = currentDashboard + "_" + currentReport + "_" + fileToken
+        } else {
+            fileName = DashboardParamsModel.getDashboardWidgetUrl(currentDashboard, currentReport)
+            // Get filename sans extension
+        }
 
-        DashboardParamsModel.saveImage(selectedFile, newFileName)
+        DashboardParamsModel.saveImage(selectedFile, fileName)
     }
 
+    function loadingChangedImageWidget(loadRequest){
+        
+        var defaultScript = "var styleTag = document.createElement('style'); styleTag.innerHTML = '*{ pointer-events:none; background: transparent !important; }'; document.head.appendChild(styleTag);";
+
+        switch(loadRequest.status){
+            case ( WebView.LoadFailedStatus):
+                webengine.visible = false
+                chooseImage.visible = true
+                break
+
+            case ( WebView.LoadSucceededStatus):
+                webengine.visible = true
+                chooseImage.visible = false
+
+                webengine.runJavaScript(defaultScript);
+                
+                break
+            }
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -196,9 +224,8 @@ Item{
 
     FileDialog{
         id: fileDialog
-        title: "Select a file (*.jpg *.jpeg *.png  only)"
-        selectMultiple: false
-        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+        title: Messages.da_sub_di_selectImageDialogTxt
+        fileMode: FileDialog.OpenFile
 
         onAccepted: saveImage(fileUrl)
         onRejected: webengine.url = ""
@@ -312,6 +339,7 @@ Item{
                 maximumX: dashboard_summary.width- mainContainer.width
                 smoothed: true
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
 
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
@@ -330,22 +358,7 @@ Item{
             width:newItem.width - 10
             height:newItem.height  - imageMenu.height
 
-            onLoadingChanged: {
-
-                switch(loadRequest.status){
-
-                case ( WebView.LoadFailedStatus):
-                    webengine.visible = false
-                    chooseImage.visible = true
-                    break
-
-                case ( WebView.LoadSucceededStatus):
-                    webengine.visible = true
-                    chooseImage.visible = false
-                    break
-                }
-
-            }
+            onLoadingChanged: loadingChangedImageWidget(loadRequest)
 
         }
 
@@ -355,7 +368,7 @@ Item{
 
     CustomButton{
         id: chooseImage
-        textValue: "Choose Image"
+        textValue: Messages.selectImage
         anchors.centerIn: parent
         visible: true
         onClicked: selectFile()

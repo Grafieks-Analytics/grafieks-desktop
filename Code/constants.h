@@ -5,12 +5,65 @@
 
 namespace Constants
 {
+    // General Constants
+    const QString appName = "Grafieks Desktop";
+//    const QString appVersion = "Free";
+    const QString appVersion = "Pro";
+    const QString appVersionCode = "1.0.4";
+    const QString source = "desktop";
+
+    // Duckdb version 0.2.9
+    const QString extractVersion = "1.0.4";
+    const QString liveVersion = "1.0.4";
+    const QString workbookVersion = "1.0.4";
+//    const QString currentMode = "DEBUG";
+    const QString currentMode = "RELEASE";
+
 
     // Application level constants
-    const QString defaultAPIEndpoint = "http://localhost:5476";
+    // Server level APIs
+   const QString defaultAPIEndpoint = "https://apit.grafieks.net";
+   const QString defaultFTPEndpoint = "95.217.117.126";
+   const QString defaultChartEndpoint = "http://95.217.117.126:5473";
+
+    // For local testing
+//     const QString defaultAPIEndpoint = "http://localhost:5476";
+//     const QString defaultFTPEndpoint = "172.17.80.68";
+//     const QString defaultChartEndpoint = "http://localhost:5473";
+
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
+    const QString DefaultReportLineColor = "#CCCCCC";
+    const int flushExtractCount = 100000;
+    const QString extractType = "extract";
+    const QString liveType = "live";
+
+    // Master Extract Table
+    const QString masterExtractTable = "gahc_master_table";
+    const QString masterLiveTable = "gahc_master_table";
+    const QString masterQueryPartLiveTable = "gahc_query_part_live_table";
+    const QString masterQueryPartExtractTable = "gahc_query_part_extract_table";
+    const QString masterCredentialsTable = "gahc_credentials_table";
+    const QString masterHeadersTable = "gahc_headers_table";
+    const QString masterCalculatedFieldsTable = "gahc_calculated_fields";
+    const QString masterCalculatedValuesTable = "gahc_calculated_values";
+
+    // File extensions
+    const QString extractExt = "gadse";
+    const QString liveExt = "gads";
+    const QString workbookExt = "gawb";
+
+    const int reportTypeBlank = 0;
+    const int reportTypeText = 1;
+    const int reportTypeImage = 2;
+    const int reportTypeChart = 3;
+
+    // Free Tier Limits
+    const int freeTierExtractLimit = 1024 * 1024 * 1024; // 1GB limit
+//    const int freeTierExtractLimit = 1024 * 1024 * 2;
+    const int timeDelayCheckExtractSize = 2000; // 2 seconds
+    const int freeTierExtractGrsLimit = 100 * 1024 * 1024; // 100 MB limit
 
     // EXTRACTS (DuckDb) Data Type integer for switching
     const int varcharIntType = 0;
@@ -71,49 +124,63 @@ namespace Constants
     const QString excelType = "EXCEL";
     const QString csvType = "CSV";
     const QString jsonType = "JSON";
+    const QString accessType = "ACCESS";
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";
+    const QString mysqlQml = "mysql";
     const QString mysqlStrQueryType = "mysql_query";
     const QString mysqlOdbcStrType = "mysql_odbc";
     const QString mysqlOdbcStrQueryType = "mysql_odbc_query";
 
     const QString sqliteStrType = "sqlite";
+    const QString sqliteQml = "sqlite";
     const QString sqliteStrQueryType = "sqlite_query";
 
     const QString mssqlOdbcStrType = "mssql_odbc";
+    const QString mssqlQml = "sql server";
     const QString mssqlOdbcStrQueryType = "mssql_odbc_query";
 
     const QString excelStrType = "excel";
+    const QString excelQml = "microsoft excel";
     const QString excelStrQueryType = "excel_query";
     const QString excelOdbcStrType = "excel_odbc";
     const QString excelOdbcStrQueryType = "excel_odbc_query";
 
     const QString postgresOdbcStrType = "postgres_odbc";
+    const QString postgresQml = "postgres";
     const QString postgresOdbcStrQueryType = "postgres_odbc_query";
 
     const QString oracleOdbcStrType = "oracle_odbc";
+    const QString oracleQml = "oracle";
     const QString oracleOdbcStrQueryType = "oracle_odbc_query";
 
     const QString mongoOdbcStrType = "mongo_odbc";
+    const QString mongoQml = "mongodb";
     const QString mongoOdbcStrQueryType = "mongo_odbc_query";
 
     const QString redshiftOdbcStrType = "redshift_odbc";
+    const QString redshiftQml = "amazon redshift";
     const QString redshiftOdbcStrQueryType = "redshift_odbc_query";
 
     const QString impalaOdbcStrType = "impala_odbc";
+    const QString impalaQml = "impala";
     const QString impalaOdbcStrQueryType = "impala_odbc_query";
 
     const QString hiveOdbcStrType = "hive_odbc";
+    const QString hiveQml = "apache hive";
     const QString hiveOdbcStrQueryType = "hive_odbc_query";
 
     const QString snowflakeOdbcStrType = "snowflake_odbc";
+    const QString snowflakeQml = "snowflake";
     const QString snowflakeOdbcStrQueryType = "snowflake_odbc_query";
 
     const QString teradataOdbcStrType = "teradata_odbc";
+    const QString teradataQml = "teradata";
     const QString teradataOdbcStrQueryType = "teradata_odbc_query";
 
     const QString accessOdbcStrType = "access_odbc";
+    const QString accessQml = "microsoft access";
     const QString accessOdbcStrQueryType = "access_odbc_query";
 
     // Filter Sections
@@ -184,8 +251,15 @@ namespace Constants
     const int dashboardScreen = 4;
     const int reportScreen = 5;
 
+    const QString reportScreenString = "reports";
+    const QString dashboardScreenString = "dashboards";
+
 
     // Menu User
+    const QString sessionExpiredText = "Login incorrect";
+
+    // General messages
+    const QString connectionOpenError = "Could not open";
 
 } // namespace Constants
 #endif // CONSTANTS_H

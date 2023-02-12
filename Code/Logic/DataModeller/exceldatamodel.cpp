@@ -5,10 +5,6 @@ ExcelDataModel::ExcelDataModel(QObject *parent) : QAbstractTableModel(parent)
     this->totalColCount = 1;
 }
 
-void ExcelDataModel::clearData()
-{
-    this->sheetNamesMap.clear();
-}
 
 ExcelDataModel::~ExcelDataModel()
 {
@@ -38,7 +34,7 @@ QVariant ExcelDataModel::data(const QModelIndex &index, int role) const
 {
     switch (role) {
     case Qt::DisplayRole:
-        return this->resultData[index.row()];
+        return this->modelOutput[index.row()];
     default:
         break;
     }
@@ -53,17 +49,19 @@ QHash<int, QByteArray> ExcelDataModel::roleNames() const
 
 void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 {
-    this->resultData.clear();
+    this->modelOutput.clear();
+    emit fetchingColumnListModel();
+
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+tableName;
 
     QSqlQuery query(dbQueryString, dbExcel);
 
     while(query.next()){
-        this->resultData.append(query.value(0).toString());
+        this->modelOutput.append(query.value(0).toString());
     }
 
-    this->totalRowCount = this->resultData.length();
+    this->totalRowCount = this->modelOutput.length();
     this->m_roleNames.insert(0, col.toUtf8());
 
     emit columnListModelDataChanged(options);
@@ -72,18 +70,19 @@ void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 void ExcelDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
-    this->resultData.clear();
+    this->modelOutput.clear();
+    emit fetchingColumnListModel();
+
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
     QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+ tableName + " WHERE [" + col + "] LIKE '%" + searchString + "%'";
-    qDebug() << dbQueryString;
 
     QSqlQuery query(dbQueryString, dbExcel);
 
     while(query.next()){
-        this->resultData.append(query.value(0).toString());
+        this->modelOutput.append(query.value(0).toString());
     }
 
-    this->totalRowCount = this->resultData.length();
+    this->totalRowCount = this->modelOutput.length();
     this->m_roleNames.insert(0, col.toUtf8());
 
     emit columnListModelDataChanged(options);
@@ -91,36 +90,26 @@ void ExcelDataModel::columnSearchData(QString col, QString tableName, QString se
 
 QStringList ExcelDataModel::getTableList()
 {
-    QStringList output;
-    output = this->getTableListQAXObject();
-
-    return output;
+    this->getTableListQAXObject();
+    return this->output;
 }
 
 QStringList ExcelDataModel::filterTableList(QString keyword)
 {
-    QStringList output;
-    qDebug() << this->sheetNamesMap;
-    foreach(QString word, this->sheetNamesMap){
-        if(word.contains(keyword, Qt::CaseInsensitive)){
-            output.append(word);
-        }
-    }
-    return output;
+    return this->output.filter(keyword, Qt::CaseInsensitive);
 }
 
-QString ExcelDataModel::getQueryJoiner()
+QStringList ExcelDataModel::getDateColumnData()
 {
-    QString output;
-    output = "\"";
-    return output;
+    return this->modelOutput;
 }
+
 
 QStringList ExcelDataModel::getTableListQAXObject()
 {
-    QStringList output;
     QString excelPath = Statics::currentDbName;
     this->sheetNamesMap.clear();
+    this->output.clear();
 
     /* When pApplication is destructed, all its related child objects will be cleaned up, a kind of scope pointer */
     QScopedPointer<QAxObject> excel(new QAxObject());
@@ -149,7 +138,7 @@ QStringList ExcelDataModel::getTableListQAXObject()
 
     for(int i = 1; i <= count; i++){
         QAxObject *worksheet = worksheets->querySubObject("Item(int)", i);
-        output.append(worksheet->dynamicCall("Name()").toString());
+        this->output.append(worksheet->dynamicCall("Name()").toString());
         this->sheetNamesMap.insert(i, worksheet->dynamicCall("Name()").toString());
     }
 

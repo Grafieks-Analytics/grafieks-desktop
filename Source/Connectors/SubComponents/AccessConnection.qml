@@ -10,20 +10,21 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../MainSubComponents"
 
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 360
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 200
     padding: 0
     property int label_col : 135
     property var fileName: ""
@@ -32,22 +33,24 @@ Popup {
     /***********************************************************************************************************************/
     // Connection  Starts
 
+    // LIVE CONNECTION not possible
+
     Connections{
         target: ConnectorsLoginModel
 
         function onAccessLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
 
         function onLogout(){
@@ -91,12 +94,16 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        promptAccess.nameFilters = Messages.cn_sub_access_namedFilter
+    }
+
     function hidePopup(){
         popup.visible = false
     }
 
     function connectToAccess(){
-          ConnectorsLoginModel.accessOdbcLogin(control.currentText, fileName, username.text, password.text)
+        ConnectorsLoginModel.accessOdbcLogin(control.currentText, fileName, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -112,9 +119,9 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Microsoft Access Connection"
+        title: Messages.cn_sub_access_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -144,7 +151,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Sign In to Microsoft Access"
+            text: Messages.cn_sub_access_header
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -187,7 +194,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Driver"
+                text: Messages.cn_sub_common_driver
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -302,7 +309,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Database"
+                text: Messages.cn_sub_common_db
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -310,7 +317,7 @@ Popup {
             }
         }
         Button{
-            text: "Choose file"
+            text: Messages.selectFile
             onClicked: promptAccess.open();
         }
 
@@ -341,7 +348,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: Messages.cn_sub_common_username
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -351,7 +358,7 @@ Popup {
 
         TextField{
             id: username
-            maximumLength: 45
+            maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -386,7 +393,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Password"
+                text: Messages.cn_sub_common_password
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
@@ -420,8 +427,10 @@ Popup {
     Row{
 
         id: row5
-        anchors.top: row4.bottom
-        anchors.topMargin: 15
+        // anchors.top: row4.bottom
+        // anchors.topMargin: 15
+        anchors.bottom:parent.bottom
+        anchors.bottomMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         //        anchors.rightMargin: label_col*2 + 47
@@ -430,7 +439,7 @@ Popup {
         CustomButton{
 
             id: btn_signin
-            textValue: Constants.signInText
+            textValue: Messages.signInText
             fontPixelSize: Constants.fontCategoryHeader
             onClicked: connectToAccess()
         }
@@ -446,20 +455,19 @@ Popup {
     MessageDialog {
         id: accessOdbcModalError
         visible: false
-        title: "Microsft Access Driver missing"
-        text: qsTr("You don't have Microsoft Access driver. Download Microsoft Access to enable it")
+        title: Messages.cn_sub_access_missingDriver
+        text: Messages.cn_sub_access_driverDownload
 
     }
 
     // Select Access file
     FileDialog{
         id: promptAccess
-        title: "Select an Access db file"
-        nameFilters: ["Access files (*.mdb *.accdb )"];
+        title: Messages.cn_sub_access_selFile
 
         onAccepted: {
 
-            fileName = ConnectorsLoginModel.urlToFilePath(promptAccess.fileUrl)
+            fileName = GeneralParamsModel.urlToFilePath(promptAccess.fileUrl)
             accessFileName.text = fileName.replace(/^.*[\\\/]/, '')
             console.log(fileUrl)
         }

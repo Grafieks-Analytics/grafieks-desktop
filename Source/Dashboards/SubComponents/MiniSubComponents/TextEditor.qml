@@ -7,12 +7,36 @@ import io.qt.examples.texteditor 1.0
 import com.grafieks.singleton.constants 1.0
 
 Rectangle{
+    id: textEditor
     width: parent.width
     height: parent.height
 
     color: Constants.themeColor
 
+    property alias widgetReportId: textEditor.reportId
+    property alias widgetDashboardId : textEditor.dashboardId
 
+    property var reportId;
+    property var dashboardId
+
+    onDashboardIdChanged: {
+        if(GeneralParamsModel.isWorkbookInEditMode()){
+            let dashboardId = textEditor.dashboardId
+            let reportId = textEditor.reportId
+
+            const textDocumentParams = DashboardParamsModel.getTextReportParametersMap(dashboardId, reportId)
+            document.setText(textDocumentParams.text)
+            document.setBold(textDocumentParams.bold)
+            document.setTextColor(textDocumentParams.color)
+            document.setBackgroundColor(textDocumentParams.backgroundColor)
+            document.setFontFamily(textDocumentParams.fontFamily)
+            document.setFontSize(textDocumentParams.fontSize)
+            document.setItalic(textDocumentParams.italic)
+            document.setUnderline(textDocumentParams.underline)
+
+            containerTextArea.color = textDocumentParams.backgroundColor
+        }
+    }
 
 
     /***********************************************************************************************************************/
@@ -98,10 +122,16 @@ Rectangle{
 
         function onReportBackgroundColorChanged(dashboardId, reportId, color){
 
-            let currentDashboard = DashboardParamsModel.currentDashboard
-            let currentReport = DashboardParamsModel.currentReport
-            let fileToken = GeneralParamsModel.getFileToken()
-            let fileName = dashboardId + "_" + reportId + "_" + fileToken
+            var fileName
+            var currentDashboard = DashboardParamsModel.currentDashboard
+            var currentReport = DashboardParamsModel.currentReport
+            if(GeneralParamsModel.isWorkbookInEditMode() === false){
+
+                let fileToken = GeneralParamsModel.getFileToken()
+                fileName = dashboardId + "_" + reportId + "_" + fileToken
+            } else {
+                fileName = DashboardParamsModel.getDashboardWidgetUrl(dashboardId, reportId)
+            }
 
             if(currentDashboard === dashboardId && currentReport === reportId){
                 document.backgroundColor = color
@@ -122,6 +152,9 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+
+    }
 
     function copyText(){
         textArea.copy()
@@ -129,13 +162,37 @@ Rectangle{
 
     function slotSaveDocToHtml(){
 
-        let dashboardId = DashboardParamsModel.currentDashboard
-        let reportId = DashboardParamsModel.currentReport
-        let fileToken = GeneralParamsModel.getFileToken()
-        let fileName = dashboardId + "_" + reportId + "_" + fileToken
+        var fileName
+        var dashboardId = DashboardParamsModel.currentDashboard
+        var reportId = DashboardParamsModel.currentReport
+
+        if(GeneralParamsModel.isWorkbookInEditMode() === false){
+
+            let fileToken = GeneralParamsModel.getFileToken()
+            fileName = dashboardId + "_" + reportId + "_" + fileToken
+        } else {
+            fileName = DashboardParamsModel.getDashboardWidgetUrl(dashboardId, reportId)
+        }
 
         document.saveTmpFile(fileName)
         DashboardParamsModel.setDashboardReportUrl(dashboardId, reportId, fileName)
+
+
+        // Save other params
+        const textDocumentParams = {
+            "text" : textArea.getText(0, document.text.length),
+            "bold" : document.bold,
+            "alignment" : document.alignment,
+            "italic" : document.italic,
+            "underline" : document.underline,
+            "color" : colorDialog.color,
+            "backgroundColor" : document.backgroundColor,
+            "fontFamily" : document.fontFamily,
+            "fontSize" : document.fontSize
+        }
+
+        DashboardParamsModel.setTextReportParametersMap(dashboardId, reportId, textDocumentParams)
+
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -239,7 +296,7 @@ Rectangle{
             ComboBox {
                 id: fontFamilyComboBox
                 implicitWidth: 150
-                model: Qt.fontFamilies()
+                model: ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"]
                 property bool special : false
                 anchors.verticalCenter: parent.verticalCenter
                 onActivated: {
@@ -405,6 +462,7 @@ Rectangle{
             textFormat: Qt.RichText
             Component.onCompleted: forceActiveFocus()
             backgroundVisible: false
+
         }
 
         MessageDialog {
@@ -419,7 +477,7 @@ Rectangle{
             selectionEnd: textArea.selectionEnd
             textColor: colorDialog.color
             onFontFamilyChanged: {
-                var index = Qt.fontFamilies().indexOf(document.fontFamily)
+                var index = ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"].indexOf(document.fontFamily)
                 if (index === -1) {
                     fontFamilyComboBox.currentIndex = 0
                     fontFamilyComboBox.special = true

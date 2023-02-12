@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -18,6 +19,12 @@ Item {
     property var value2: 0
 
     onComponentNameChanged: {
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            condition1Text.text = previousCheckValues[0]
+            condition2Text.text = previousCheckValues[1]
+        }
+
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -48,7 +55,8 @@ Item {
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
@@ -136,7 +144,7 @@ Item {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
-            text: "Between"
+            text: Messages.da_sub_fcn_between
             elide: Text.ElideRight
             font.pixelSize: 12
             verticalAlignment: Text.AlignVCenter
@@ -181,7 +189,7 @@ Item {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
-            text: "And"
+            text: Messages.da_sub_fcn_and
             elide: Text.ElideRight
             font.pixelSize: 12
             verticalAlignment: Text.AlignVCenter

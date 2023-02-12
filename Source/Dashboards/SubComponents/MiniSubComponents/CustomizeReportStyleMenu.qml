@@ -1,9 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
+import Qt.labs.platform
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -37,7 +39,7 @@ Rectangle{
         function onCurrentReportChanged(reportId){
 
             let dashboardId = DashboardParamsModel.currentDashboard
-            opacitySpinBox.value = DashboardParamsModel.getReportOpacity(dashboardId, reportId)
+//              opacitySpinBox.value = DashboardParamsModel.getReportOpacity(dashboardId, reportId)
         }
     }
 
@@ -131,7 +133,7 @@ Rectangle{
 
             Text {
                 id: backgroundColor
-                text: qsTr("Background Color")
+                text: Messages.da_sub_crsm_bgcolor
             }
 
             Image {
@@ -159,7 +161,7 @@ Rectangle{
 
             Text {
                 id: lineColor
-                text: qsTr("Line Color")
+                text: Messages.da_sub_crsm_linecolor
             }
 
             Image {
@@ -176,29 +178,29 @@ Rectangle{
 
         }
 
-        Row{
+        // Row{
 
-            width: parent.width
-            height: 30
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.right: parent.right
-            anchors.rightMargin: 15
+        //     width: parent.width
+        //     height: 30
+        //     anchors.left: parent.left
+        //     anchors.leftMargin: 15
+        //     anchors.right: parent.right
+        //     anchors.rightMargin: 15
 
-            Text {
-                id: opacity
-                text: qsTr("Opacity")
-                anchors.verticalCenter: parent.verticalCenter
-            }
+        //     Text {
+        //         id: opacity
+        //         text: qsTr("Opacity")
+        //         anchors.verticalCenter: parent.verticalCenter
+        //     }
 
-            CustomSpinBox {
-                id: opacitySpinBox
-                value: 0
-                anchors.right: parent.right
-                onValueChanged: onOpacityValueChanged(value)
-            }
+        //     CustomSpinBox {
+        //         id: opacitySpinBox
+        //         value: 0
+        //         anchors.right: parent.right
+        //         onValueChanged: onOpacityValueChanged(value)
+        //     }
 
-        }
+        // }
 
 
     }

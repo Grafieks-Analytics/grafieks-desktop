@@ -50,8 +50,6 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
-        Statics::onlineStorageType = Constants::sheetIntType;
-
         // Get Files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
@@ -90,10 +88,11 @@ void SheetDS::homeBut()
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
 
-void SheetDS::fetchFileData(QString gFileId)
+void SheetDS::fetchFileData(QString gFileId, QString gFileName)
 {
     emit showBusyIndicator(true);
     this->gFileId = gFileId;
+    this->gFileName = gFileName;
 
     QUrl sheetDownloadUrl("https://www.googleapis.com/drive/v3/files/" + gFileId +"/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key="+Secret::sheetClient);
     m_networkReply = this->google->get(sheetDownloadUrl);
@@ -154,10 +153,14 @@ void SheetDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +".xlsx";
+
+        QString fileNameTmp = this->gFileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+
+        QString fileName = QDir::temp().tempPath() +"/" + fileNameTmp +".xlsx";
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.write(m_networkReply->readAll());
         file.close();
 
         emit fileDownloaded(fileName, "excel");
@@ -178,6 +181,9 @@ void SheetDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+
+        Statics::onlineStorageType = Constants::sheetIntType;
+
         QStringList requiredExtensions;
         requiredExtensions << ".gsheet";
 
@@ -207,14 +213,13 @@ void SheetDS::dataReadFinished()
             }
         }
 
-        m_dataBuffer->clear();
 
         // Get user email
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::userReadFinished);
 
     }
-
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 
 }
@@ -255,9 +260,9 @@ void SheetDS::dataSearchFinished()
             }
         }
 
-        m_dataBuffer->clear();
-    }
 
+    }
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

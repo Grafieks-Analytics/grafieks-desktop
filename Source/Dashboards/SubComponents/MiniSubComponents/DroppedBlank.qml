@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 // This is the Blank Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
@@ -20,6 +21,7 @@ Item{
 
 
     property var hoverStatus: false
+    property var uniqueHash: "" // Important to identify unique reports with same report and dashboard id
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -63,9 +65,9 @@ Item{
                 droppedRectangle.border.color = refColor
         }
 
-        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard, dashboardUniqueWidgets){
 
-            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName)) && dashboardUniqueWidgets.hasOwnProperty(uniqueHash)){
                 newItem.visible = true
             } else{
                 newItem.visible = false
@@ -95,11 +97,12 @@ Item{
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
+        DashboardParamsModel.deleteReport(DashboardParamsModel.currentReport, DashboardParamsModel.currentDashboard)
+        DashboardParamsModel.deleteDashboardUniqueWidget(DashboardParamsModel.currentDashboard, uniqueHash)
     }
 
     function showCustomizeReport(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-        console.log(newItem.objectName, DashboardParamsModel.currentReport)
         customizeReport.visible = true;
 
     }
@@ -218,13 +221,13 @@ Item{
                             id: editOptions
 
                             MenuItem {
-                                text: qsTr("Edit")
+                                text: Messages.da_sub_dc_edit
                                 onTriggered: showTextEditor()
                                 onHoveredChanged: showMenus()
                             }
 
                             MenuItem {
-                                text: qsTr("Delete")
+                                text: Messgaes.da_sub_dc_delete
                                 onTriggered: destroyElement()
                                 onHoveredChanged: showMenus()
                             }
@@ -256,6 +259,7 @@ Item{
                 maximumX: dashboard_summary.width- mainContainer.width
                 smoothed: true
             }
+            onPositionChanged: DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentReport, newItem.x, newItem.y, newItem.x + mainContainer.width, newItem.y + mainContainer.height)
 
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()

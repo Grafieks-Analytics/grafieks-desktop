@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
+import com.grafieks.singleton.messages 1.0
 
 import "../../../MainSubComponents"
 
@@ -18,17 +19,18 @@ Item {
     property var value2: 0
 
     onComponentNameChanged: {
-        var modelData = TableColumnsModel.fetchColumnData(componentName)
-        modelData.sort()
+        var modelData
 
-        rangeSlider.from = Math.min(...modelData)
-        rangeSlider.to = Math.max(...modelData)
-        rangeSlider.first.value = Math.min(...modelData)
-        rangeSlider.second.value = Math.max(...modelData)
-        value1 = Math.min(...modelData)
-        value2 = Math.max(...modelData)
+        if(GeneralParamsModel.getAPISwitch()) {
+            // This part is taken care in DashboardFiltersAdd addNewFilterColumns()
+        } else if(GeneralParamsModel.getFromLiveFile() || GeneralParamsModel.getFromLiveQuery()){
+            modelData = TableColumnsModel.fetchColumnDataLive(componentName)
+            processDataList(modelData)
+        } else {
+            modelData = TableColumnsModel.fetchColumnData(componentName)
+            processDataList(modelData)
+        }
 
-        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
 
@@ -40,7 +42,37 @@ Item {
                 componentTitle.text = newAlias
             }
         }
+    }
 
+    Connections {
+        target: TableColumnsModel
+
+        function onColumnDataChanged(columnData, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard)
+                processDataList(columnData)
+        }
+    }
+
+    function processDataList(modelData){
+        modelData.sort()
+
+        rangeSlider.from = Math.min(...modelData)
+        rangeSlider.to = Math.max(...modelData)
+
+        value1 = Math.min(...modelData)
+        value2 = Math.max(...modelData)
+
+        var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
+        if(previousCheckValues.length > 0){
+            rangeSlider.first.value = previousCheckValues[0]
+            rangeSlider.second.value = previousCheckValues[1]
+        } else {
+            rangeSlider.first.value = Math.min(...modelData)
+            rangeSlider.second.value = Math.max(...modelData)
+        }
+
+
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
     function updateValue(){
@@ -58,7 +90,8 @@ Item {
 
     function filterClicked(){
 
-        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        var columnAlias = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+        var currentColumnType = TableColumnsModel.findColumnType(columnAlias)
         DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
