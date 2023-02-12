@@ -1,0 +1,6 @@
+.env
+node_modules
+build/grafieks-charts*.js*
+local
+package-lock.json
+testCharts
