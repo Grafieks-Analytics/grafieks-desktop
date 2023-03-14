@@ -137,7 +137,7 @@ Rectangle {
 
     function clearTable(){
         for(var i=0; i<roleNames.length; i++){
-            view.removeColumn(newObject[i])
+//            view.removeColumn(newObject[i])
             delete newObject[i]
 
         }
