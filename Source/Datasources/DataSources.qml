@@ -24,7 +24,7 @@ Page {
 
     id: datasourcelist_page
     property int menu_width: 60
-    property var clickedItemConnectionType: ""
+    property string clickedItemConnectionType: ""
     property bool connectAllowed: true
 
 

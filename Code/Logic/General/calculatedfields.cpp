@@ -201,7 +201,7 @@ bool CalculatedFields::fetchLiveCalculatedValues(QString calculatedFieldQuery)
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);

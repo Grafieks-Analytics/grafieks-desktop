@@ -34,7 +34,7 @@ Page {
     property bool collapsed: false
     property bool open: true
     property int dataPreviewNo: 6
-    property var tableShowToggle: true
+    property bool tableShowToggle: true
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
@@ -496,6 +496,8 @@ Page {
     }
 
     function onCreateDashboardClicked(){
+
+        console.log("QQQ", DSParamsModel.tmpSql);
 
         QueryModel.setIfPublish(false)
         ForwardOnlyQueryModel.setIfPublish(false)
