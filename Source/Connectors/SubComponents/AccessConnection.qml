@@ -467,9 +467,8 @@ Popup {
 
         onAccepted: {
 
-            fileName = GeneralParamsModel.urlToFilePath(promptAccess.fileUrl)
-            accessFileName.text = fileName.replace(/^.*[\\\/]/, '')
-            console.log(fileUrl)
+            popup.fileName = GeneralParamsModel.urlToFilePath(promptAccess.selectedFile)
+            accessFileName.text = popup.fileName.replace(/^.*[\\\/]/, '')
         }
         onRejected: {
             console.log("file rejected")
