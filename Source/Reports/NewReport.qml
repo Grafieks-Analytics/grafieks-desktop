@@ -45,6 +45,11 @@ Page {
 
     id: report_desiner_page
     width: parent.width
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     
     // property int menu_width: 60
 
@@ -2041,7 +2046,7 @@ Page {
                 anchors.top: tabbarQuerymodeller.bottom
                 anchors.topMargin: 2
 
-                height:50
+                height:40
                 width: parent.width
 
                 Text{
@@ -2069,7 +2074,7 @@ Page {
                     id: searchBarRow
                     TextField{
                         id: searchText
-                        width: parent.parent.width - search_icon.width - 5
+                        width: parent.parent.width
                         selectByMouse: true
                         height:30
                         cursorVisible: true
@@ -2078,6 +2083,7 @@ Page {
                         placeholderText: "Search"
                         background: Rectangle{
                             border.width: 0
+                            height:parent.height
                         }
                         onTextChanged: searchColumnNames(searchText.text)
                     }
@@ -2090,7 +2096,7 @@ Page {
                     width: parent.width - 10
                     anchors.top: searchBarRow.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.topMargin: 5
+                    anchors.topMargin: 2
                 }
 
             }

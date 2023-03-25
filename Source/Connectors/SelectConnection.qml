@@ -8,9 +8,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls 
+import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
@@ -25,6 +25,11 @@ Page {
 
     id: selectconn_page
     width: parent.width - left_menubar.width
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
     // For search, filter, sort
     property var categoriesList : ["all", "file", "grs", "rdbms", "nosql", "cloud", "online"]
@@ -404,7 +409,7 @@ Page {
         font.pointSize: Constants.fontHeader
         color:"gray"
         anchors.top:parent.top
-        anchors.topMargin: 100
+        anchors.topMargin: 70
         anchors.horizontalCenter: parent.horizontalCenter
         x: selectconn_page.width/2 - 70
     }
@@ -414,10 +419,10 @@ Page {
     Rectangle{
         id:searchRectangle
         border.color: Constants.borderBlueColor
-        width: 400
-        height: 50
+        width: 300
+        height: 40
         radius: 5
-        x: selectconn_page.width/2 - 195
+        x: selectconn_page.width/2 - 150
 
         anchors.top : mainLabel.bottom
         anchors.topMargin: 20
@@ -425,8 +430,8 @@ Page {
 
         TextField {
             id: search_text
-            width: 400
-            height: 50
+            width: parent.width
+            height: 40
             placeholderText: Messages.search
             cursorVisible: true
             anchors.left: searchRectangle.left
@@ -454,6 +459,9 @@ Page {
         width: parent.width
         x : selectconn_page.width/2 - 440
         z: 6
+         background: TabBackgroundComponent{
+                colorOuter : "transparent"
+            }
 
         TabButton{
             id: tab_all
@@ -598,13 +606,12 @@ Page {
         delegate : Rectangle{
             scale: 1
             width: 230
-            height: 130
-
+            height: 80
 
             Image{
                 id: imageId
                 source:imageLink
-                height:60
+                height:50
                 width:height
                 anchors.centerIn: parent
                 enabled: isEnabled

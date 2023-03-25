@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick 
+import QtQuick.Controls 
+import QtQuick.Layouts 
 import Qt.labs.platform
 
 import com.grafieks.singleton.constants 1.0
@@ -114,11 +114,23 @@ Rectangle{
     // SubComponents Starts
 
 
-    ColorDialog{
-        id: backgroundColorSelector
-//        color: Constants.greenThemeColor
-        onAccepted: setBackgroundColor(backgroundColorSelector.color)
-    }
+//     ColorDialog{
+//         id: backgroundColorSelector
+// //        color: Constants.greenThemeColor
+//         onAccepted: setBackgroundColor(backgroundColorSelector.color)
+//     }
+    ColorDialog {
+          id: backgroundColorSelector
+        //   visible: colorDialogVisible.checked
+          modality: Qt.WindowModal 
+          title: "Choose a color"
+          
+        // onAccepted: setBackgroundColor(color)
+        //   color: "green"
+        //   showAlphaChannel: true
+          onAccepted: { console.log("Accepted: " + backgroundColorSelector.color) }
+        //   onRejected: { console.log("Rejected") }
+      }
 
 
 

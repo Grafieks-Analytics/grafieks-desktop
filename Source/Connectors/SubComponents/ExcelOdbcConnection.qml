@@ -26,6 +26,11 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 150
     padding: 0
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     property int label_col : 135
 
     property var selectedFile: ""
@@ -111,7 +116,7 @@ Popup {
 
     function handleExcel(excelFileName){
 
-        if(excelFileName !== ""){
+        if(true){
             startTime = new Date().getTime().toString()
 //            busyindicator.running = true
             mainTimer.running = true
@@ -419,8 +424,9 @@ Popup {
 
 
         onAccepted: {
-            selectedFile = GeneralParamsModel.urlToFilePath(fileUrl)
-            excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
+//            selectedFile = GeneralParamsModel.urlToFilePath(selectedFile)
+            console.log("selectedFile",selectedFile)
+            excelFileName.text = "file:///C:/Users/Ravi Prakash/Desktop/SampleSuperstore.xlsx".replace(/^.*[\\\/]/, '')
         }
         onRejected: {
             console.log("file rejected")

@@ -142,11 +142,10 @@ Item {
     //search
     Rectangle{
         id: filterSearch
-        //        color: "red"
 
         anchors.top: apply_btn.bottom
-        anchors.topMargin: 10
-        height:50
+        anchors.topMargin: 1
+        height:40
         width:parent.width-5
         anchors.left: parent.left
         anchors.leftMargin: 5
@@ -155,6 +154,7 @@ Item {
 
             id: searchBox
             width: parent.width-20
+            height:parent.height
             anchors.verticalCenter: parent.verticalCenter
 
 
@@ -162,7 +162,7 @@ Item {
                 id:searchTextBox
                 placeholderText: Messages.search
                 selectByMouse: true
-                width: parent.width - search_icon.width
+                width: parent.width
                 height:30
                 cursorVisible: true
                 anchors.top: row_querymodeller_right_col.top
@@ -171,6 +171,9 @@ Item {
 
                 background: Rectangle{
                     border.width: 0
+                    height:parent.height
+                    width:parent.width
+
                 }
 
                 onTextChanged: searchTableColumns(searchTextBox.text)
@@ -184,8 +187,8 @@ Item {
             orientation: Qt.Horizontal
             width: parent.width - 20
             anchors.top: searchBox.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: -5
+            // anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: -15
         }
     }
 

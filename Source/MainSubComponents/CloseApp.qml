@@ -14,6 +14,11 @@ Popup {
     modal: true
     visible: false
     padding: 0
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
     closePolicy: Popup.NoAutoClose
 

@@ -75,8 +75,9 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: widthId
+                    width: parent.width-10
                     // [TODO: set saved value]
-                    value: 1280
+                    value: 980
                     from :100
                     to:5000
                     onValueChanged: onWidthValueChanged(value)
@@ -92,8 +93,9 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: heightId
+                    width: parent.width-10
                     // [TODO: set saved value]
-                    value: 800
+                    value: 600
                     from :100
                     to:5000
                     onValueChanged: onHeightValueChanged(value)

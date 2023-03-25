@@ -7,12 +7,12 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick 
+import QtQuick.Controls 
+import QtQuick.Layouts
 //import QtQuick.Controls.Styles 1.4
-import Qt.labs.settings 1.1
-import Qt.labs.platform 1.1
+import Qt.labs.settings 
+import Qt.labs.platform
 
 
 import com.grafieks.singleton.constants 1.0
@@ -36,10 +36,10 @@ ApplicationWindow {
 
     id: mainwindow
     visible: false
-    width: 1800
-    height: 900
+    width: 1450
+    height: 740
     minimumWidth: 1300
-    minimumHeight: 700
+    minimumHeight: 600
 
     title: Messages.applicationName
     property var selectMissingDS : false

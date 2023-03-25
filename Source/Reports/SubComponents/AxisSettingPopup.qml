@@ -13,7 +13,7 @@ Popup {
 
     id: popup
     width: parent.width * 0.5
-    height: 800
+    height: 600
     anchors.centerIn: parent
 
     visible: false

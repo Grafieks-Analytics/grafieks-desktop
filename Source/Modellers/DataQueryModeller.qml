@@ -26,6 +26,12 @@ Page {
 
     id: queryModellerPage
     height: parent.height
+        background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
+
 
 
     property int menu_width: 60

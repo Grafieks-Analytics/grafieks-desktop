@@ -26,7 +26,11 @@ Page {
     property int menu_width: 60
     property var clickedItemConnectionType: ""
     property bool connectAllowed: true
-
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
     Component.onCompleted: {
         DatasourceDS.fetchDatsources(0, false, true)
@@ -91,7 +95,7 @@ Page {
             anchors.top: submenu.top
             anchors.topMargin: 0
             height: 30
-            width:100
+            width:70
 
             onClicked: processDS()
             Image {
@@ -121,7 +125,7 @@ Page {
             anchors.right: next_btn.left
             anchors.rightMargin: 1
             anchors.top: submenu.top
-            anchors.topMargin: -3
+            anchors.topMargin: 0
             currentIndex: stacklayout_ds.currentIndex
             z: 5
 
@@ -135,10 +139,13 @@ Page {
                 icon.source: "/Images/icons/Grid.png"
                 icon.color: "black"
                 height: 30
+                
 
                 background: Rectangle {
                     id: grid_btn_background
                     color:"white"
+                    implicitHeight: 30
+                    implicitWidth: 30
                 }
 
                 onClicked: {
@@ -163,6 +170,8 @@ Page {
                 background: Rectangle {
                     id: list_btn_background
                     color:"white"
+                    implicitHeight: 30
+                    implicitWidth: 30
                 }
 
 
@@ -251,16 +260,23 @@ Page {
                 anchors.verticalCenter: grid1.verticalCenter
                 anchors.rightMargin: 50
                 border.color: Constants.darkThemeColor
-                width: 300
-                height: 40
+                width: 250
+                height: 35
+                radius:5
 
                 TextField {
                     id: search_text
                     placeholderText: Messages.search
-                    width:300
-                    height: 40
+                    width:250
+                    height: 30
                     anchors.left: search_rect.left
                     verticalAlignment:TextEdit.AlignVCenter
+                    background:Rectangle{
+                        width:250
+                        height: 35
+                        radius:5
+                        border.color: Constants.darkThemeColor
+                    }
 
                     onTextChanged: DatasourceDS.fetchDatsources(0, false, true, search_text.text)
                 }
@@ -298,7 +314,6 @@ Page {
         height: parent.height
         anchors.top: toolsep2.bottom
         anchors.left: left_menubar.right
-
 
         StackLayout{
             id: stacklayout_ds

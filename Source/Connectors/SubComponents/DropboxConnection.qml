@@ -24,6 +24,11 @@ Popup {
     height: 500
     modal: true
     visible: false
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     x: parent.width/2 - 300
     y: parent.height/2 - 300
     padding: 0

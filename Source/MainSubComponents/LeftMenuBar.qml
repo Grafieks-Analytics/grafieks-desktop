@@ -8,13 +8,14 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.15
+import QtQuick 
+import QtQuick.Layouts 
+import QtQuick.Controls 
 import QtQuick.Dialogs
 
-import com.grafieks.singleton.constants 1.0
-import com.grafieks.singleton.messages 1.0
+import com.grafieks.singleton.constants 
+import com.grafieks.singleton.messages 
+import "../MainSubComponents";
 
 
 Rectangle{
@@ -225,11 +226,45 @@ Rectangle{
         anchors.topMargin: -4
     }
 
-    MessageDialog{
-        id: errorDialog
-        title: "Dashboard Disabled"
-        text: "Create or Select a Datasource before creating a dashboard"
+    // Dialog{
+    //     id: errorDialog
+    //     title: "Dashboard Disabled"
+    //     x:parent.parent.width/2-200
+    //     y:parent.height/2-75
+    //     contentItem: Rectangle {
+    //       color: "white"
+    //       implicitWidth: 400
+    //       implicitHeight: 150
+    //       Text {
+    //           text: "Create or Select a Datasource before creating a dashboard!"
+    //           color: "black"
+    //           anchors.centerIn: parent
+    //       }
+    //   }
+    // }
+    CustomMessageDialog{
+            id: errorDialog
     }
+    // Dialog{
+    //     id: errorDialog
+    //     title: "Dashboard Disabled"
+    //     text: "Create or Select a Datasource before creating a dashboard"
+    // }
+//     Dialog {
+//       visible: true
+//       title: "Blue sky dialog"
+
+//       contentItem: Rectangle {
+//           color: "lightskyblue"
+//           implicitWidth: 400
+//           implicitHeight: 100
+//           Text {
+//               text: "Hello blue sky!"
+//               color: "navy"
+//               anchors.centerIn: parent
+//           }
+//       }
+//   }
 }
 
 

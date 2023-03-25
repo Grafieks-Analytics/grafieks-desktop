@@ -26,6 +26,11 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 300
     padding: 0
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     property int label_col : 135
 
     property var selectedFile: ""
