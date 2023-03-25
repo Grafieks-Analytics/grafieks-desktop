@@ -72,7 +72,7 @@ Rectangle {
         // This one is for table data
         function onExcelHasData(hasData){
             view.model = hasData === true? ExcelQueryModel: ""
-            view.visible = hasData === true ? true: false
+//            view.visible = hasData === true ? true: false
 
         }
 
@@ -130,14 +130,14 @@ Rectangle {
                 var role  = roleNames[i]
                 var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
                 newObject[i] = Qt.createQmlObject(columnString, view)
-                view.addColumn(newObject[i])
+//                view.addColumn(newObject[i])
             }
         }
     }
 
     function clearTable(){
         for(var i=0; i<roleNames.length; i++){
-            view.removeColumn(newObject[i])
+//            view.removeColumn(newObject[i])
             delete newObject[i]
 
         }

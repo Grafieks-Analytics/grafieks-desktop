@@ -386,7 +386,7 @@ void GeneralParamsModel::quitApplication()
     QApplication::quit();
 }
 
-QString GeneralParamsModel::getQueryString(QString body, QVariantMap headers)
+QString GeneralParamsModel::getQueryString(QString body, QList<QPair<QByteArray, QByteArray>> headers)
 {
     qDebug() << "GOT QUERY" << body << headers;
     return "Got your request";

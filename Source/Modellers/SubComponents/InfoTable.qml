@@ -83,7 +83,7 @@ Item{
                 queryUpdate.icon = StandardIcon.Critical
             } else{
                 errorMsg = defaultMsg
-                queryUpdate.icon = StandardIcon.NoIcon
+//                queryUpdate.icon = StandardIcon.NoIcon
             }
         }
     }

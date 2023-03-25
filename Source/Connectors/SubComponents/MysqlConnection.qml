@@ -161,7 +161,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_mysql_subHeader
         text: ""
-//        icon: StandardIcon.Critical
+        //        icon: StandardIcon.Critical
     }
 
 
@@ -560,8 +560,8 @@ Popup {
             id: btn_signin
             textValue: Messages.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            //                        onClicked: connectToOdbcMySQL()
-            onClicked: connectToMySQL()
+            onClicked: connectToOdbcMySQL()
+            //            onClicked: connectToMySQL()
 
         }
 

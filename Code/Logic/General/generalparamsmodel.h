@@ -110,7 +110,7 @@ public:
 
     Q_INVOKABLE void quitApplication();
 
-    Q_INVOKABLE QString getQueryString(QString body, QVariantMap headers);
+    Q_INVOKABLE QString getQueryString(QString body, QList<QPair<QByteArray, QByteArray>> headers);
 
 public slots:
 

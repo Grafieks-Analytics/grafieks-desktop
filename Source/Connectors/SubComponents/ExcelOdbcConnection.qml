@@ -424,9 +424,8 @@ Popup {
 
 
         onAccepted: {
-//            selectedFile = GeneralParamsModel.urlToFilePath(selectedFile)
-            console.log("selectedFile",selectedFile)
-            excelFileName.text = "file:///C:/Users/Ravi Prakash/Desktop/SampleSuperstore.xlsx".replace(/^.*[\\\/]/, '')
+            popup.selectedFile = GeneralParamsModel.urlToFilePath(promptExcel.selectedFile)
+            excelFileName.text = popup.selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {
             console.log("file rejected")

@@ -306,8 +306,9 @@ Popup {
 
         onAccepted: {
 
-            selectedFile = GeneralParamsModel.urlToFilePath(promptCSV.fileUrl)
-            csvFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
+            popup.selectedFile = GeneralParamsModel.urlToFilePath(promptCSV.selectedFile)
+            csvFileName.text = popup.selectedFile.replace(/^.*[\\\/]/, '')
+
         }
         onRejected: {
             console.log("file rejected")

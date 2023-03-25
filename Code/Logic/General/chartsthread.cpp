@@ -3934,7 +3934,7 @@ QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);
@@ -4091,7 +4091,7 @@ QMap<int, QHash<int, QString> > ChartsThread::queryLiveValues(QString mainQuery,
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);
