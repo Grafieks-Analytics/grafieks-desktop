@@ -242,9 +242,36 @@ Rectangle{
     //       }
     //   }
     // }
-    CustomMessageDialog{
-            id: errorDialog
+    // CustomMessageDialog{
+    //         id: errorDialog
+    // }
+    Dialog{
+        id: errorDialog
+        title: "Dashboard Disabled"
+        x:parent.parent.width/2-200
+        y:parent.height/2-70
+        standardButtons: Dialog.Ok
+        // background:Rectangle {
+        //   color: "white"
+        //   height:parent.height-100
+        //   width:parent.width-150
+        //   }
+        Rectangle {
+          color: "white"
+          implicitWidth: 400
+          width: 410
+          implicitHeight: 140
+          height: 140
+          anchors.left:parent.left
+          anchors.leftMargin:-5
+          Text {
+              text: "Create or Select a Datasource before creating a dashboard!"
+              color: "black"
+              anchors.centerIn: parent
+          }
+      }
     }
+
     // Dialog{
     //     id: errorDialog
     //     title: "Dashboard Disabled"

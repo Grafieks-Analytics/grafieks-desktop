@@ -360,7 +360,7 @@ Page {
 
     Rectangle{
         id: submenu
-        height: 22.5
+        height: 25
         width: parent.width - menu_width + 11
         x: menu_width - 11
 
@@ -373,6 +373,7 @@ Page {
             id: new_dashboard_btn
             anchors.left: parent.left
             width: 50
+            height:30
             z:1000
 
             Image{
@@ -386,6 +387,7 @@ Page {
 
             background: Rectangle {
                 id: new_dashboard_btn_background
+                height:parent.height
                 color:  new_dashboard_btn.pressed? Constants.darkThemeColor: Constants.themeColor
 
             }
@@ -431,6 +433,7 @@ Page {
                 delegate: CustomDashboardNameButton{
                     id: dashboardNameButton
                     textValue: dashboardName
+                    height:30
                     bgColor: (backgroundColorTest?backgroundColorTest:"white")
                     Component.onCompleted: {
                         if(dashboardNameButton.width > 100){
@@ -737,7 +740,7 @@ Page {
             Rectangle{
 
                 width: 110
-                height: 28
+                height: 30
                 color:  Constants.whiteColor
                 //                anchors.right: parent.right
                 anchors.rightMargin: 20
@@ -803,80 +806,80 @@ Page {
                 //                    color: "transparent"
                 //                }
                 // Next button starts
-//                TabButton {
-//                     id: tabPublishDashboard
-//                     width:rectangle_querymodeller_right_col.width / 2
-//                    text: qsTr("Home")
-//                }
-//                TabButton {
-//                    text: qsTr("Discover")
-//                }
+                //                TabButton {
+                //                     id: tabPublishDashboard
+                //                     width:rectangle_querymodeller_right_col.width / 2
+                //                    text: qsTr("Home")
+                //                }
+                //                TabButton {
+                //                    text: qsTr("Discover")
+                //                }
 
-                                TabButton{
-                                    id: tabPublishDashboard
-//                                    width:rectangle_querymodeller_right_col.width / 2
-                                    height: parent.height
-                                    z: 20
-                                    anchors.verticalCenter: parent.verticalCenter
+                TabButton{
+                    id: tabPublishDashboard
+                    //                                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+                    z: 20
+                    anchors.verticalCenter: parent.verticalCenter
 
-                                    Image {
-                                        id: publishIcon
-                                        source: "/Images/icons/publish_20.png"
-                                        height: 20
-                                        width: 20
-                                        anchors.centerIn: parent
-                                        anchors.verticalCenter: parent.verticalCenter
-                                    }
+                    Image {
+                        id: publishIcon
+                        source: "/Images/icons/publish_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
-                                    onClicked: onPublishWorkbookClicked()
+                    onClicked: onPublishWorkbookClicked()
 
-                                    background: Rectangle{
-                                        width: parent.width-2
-                                        color: Constants.grafieksLightGreenColor
-                                        opacity: tabPublishDashboard.hovered ? 0.42 : 1
-                                    }
+                    background: Rectangle{
+                        width: parent.width-2
+                        color: Constants.grafieksLightGreenColor
+                        opacity: tabPublishDashboard.hovered ? 0.42 : 1
+                    }
 
-                                    ToolTip.delay:Constants.tooltipShowTime
-                                    ToolTip.timeout: Constants.tooltipHideTime
-                                    ToolTip.visible: hovered
-                                    ToolTip.text: Messages.da_nd_publishDashboard
+                    ToolTip.delay:Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.visible: hovered
+                    ToolTip.text: Messages.da_nd_publishDashboard
 
-                                }
+                }
 
 
-                                TabButton{
-                                    id: tabCreateDashboard
-//                                    width:rectangle_querymodeller_right_col.width / 2
-                                    height: parent.height
-                                    z: 20
-                                    anchors.verticalCenter: parent.verticalCenter
+                TabButton{
+                    id: tabCreateDashboard
+                    //                                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+                    z: 20
+                    anchors.verticalCenter: parent.verticalCenter
 
-                                    Image {
-                                        id: dashboardIcon
-                                        source: "/Images/icons/create_dashboard_20.png"
-                                        height: 20
-                                        width: 20
-                                        anchors.centerIn: parent
-                                        anchors.verticalCenter: parent.verticalCenter
-                                    }
+                    Image {
+                        id: dashboardIcon
+                        source: "/Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
-                                    contentItem: Text{
-                                        id:tabCreateDashboard_text
-                                    }
-                                    background: Rectangle {
-                                        width: parent.width
-                                        color: Constants.grafieksLightGreenColor
-                                        opacity: tabCreateDashboard.hovered ? 0.42 : 1
-                                    }
+                    contentItem: Text{
+                        id:tabCreateDashboard_text
+                    }
+                    background: Rectangle {
+                        width: parent.width
+                        color: Constants.grafieksLightGreenColor
+                        opacity: tabCreateDashboard.hovered ? 0.42 : 1
+                    }
 
-                                    onClicked: createNewReport()
+                    onClicked: createNewReport()
 
-                                    ToolTip.delay:Constants.tooltipShowTime
-                                    ToolTip.timeout: Constants.tooltipHideTime
-                                    ToolTip.visible: hovered
-                                    ToolTip.text: Messages.da_nd_createReport
+                    ToolTip.delay:Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.visible: hovered
+                    ToolTip.text: Messages.da_nd_createReport
 
-                                }
+                }
 
                 // Next button ends
             }
@@ -896,6 +899,7 @@ Page {
         orientation: Qt.Horizontal
         width: parent.width - left_menubar.width
         anchors.top: submenu.bottom
+        anchors.topMargin:-1
         anchors.left: left_menubar.right
         anchors.leftMargin: -2
         anchors.horizontalCenter: submenu.horizontalCenter
@@ -1068,7 +1072,7 @@ Page {
         id: column_filter_newdashboard
 
         height:parent.height - submenu.height
-        width: 200
+        width: 204
         anchors.right:parent.right
         anchors.top: submenu.bottom
         anchors.topMargin: 4
@@ -1080,7 +1084,8 @@ Page {
 
         ToolSeparator{
             anchors.top: parent.top
-            anchors.left: column_newdashboard.left
+            anchors.left: column_filter_newdashboard.left
+            anchors.leftMargin: -4
 
             height:parent.height
 
@@ -1102,7 +1107,7 @@ Page {
         id: column_filter_newdashboard_add
 
         height:parent.height - submenu.height
-        width: 200
+        width: 204
         anchors.right:parent.right
         anchors.top: submenu.bottom
         anchors.topMargin: 4
@@ -1114,7 +1119,8 @@ Page {
 
         ToolSeparator{
             anchors.top: parent.top
-            anchors.left: column_newdashboard.left
+            anchors.left: column_filter_newdashboard_add.left
+            anchors.leftMargin: -4
 
             height:parent.height
 

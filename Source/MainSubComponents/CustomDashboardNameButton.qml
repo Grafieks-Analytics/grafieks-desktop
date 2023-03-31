@@ -20,7 +20,7 @@ Button{
 
     contentItem: Text {
         id: contentItem
-        color: customButton.hovered ? Constants.whiteColor : Constants.blackColor
+        color: customButton.hovered ? Constants.blackColor : Constants.blackColor
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

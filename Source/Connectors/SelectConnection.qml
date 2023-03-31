@@ -369,7 +369,7 @@ Page {
         modality: Qt.ApplicationModal
         title: Messages.cn_sel_processFile
         text: Messages.cn_sel_pleaseWait
-//        standardButtons: StandardButton.Ok | StandardButton.Close
+        //        standardButtons: StandardButton.Ok | StandardButton.Close
         buttons: MessageDialog.Ok | MessageDialog.Close
 
         onAccepted: {
@@ -418,10 +418,11 @@ Page {
     // Search Bar
     Rectangle{
         id:searchRectangle
-        border.color: Constants.borderBlueColor
+        border.color: search_text.focus?Constants.borderLightBlueColor:Constants.borderBlueColor
+        border.width:2
         width: 300
         height: 40
-        radius: 5
+        //        radius: 5
         x: selectconn_page.width/2 - 150
 
         anchors.top : mainLabel.bottom
@@ -459,9 +460,9 @@ Page {
         width: parent.width
         x : selectconn_page.width/2 - 440
         z: 6
-         background: TabBackgroundComponent{
-                colorOuter : "transparent"
-            }
+        background: TabBackgroundComponent{
+            colorOuter : "transparent"
+        }
 
         TabButton{
             id: tab_all
@@ -474,7 +475,7 @@ Page {
             }
 
             background: TabBackgroundComponent{
-                colorOuter : tab_all.activeFocus ? Constants.buttonBorderColor : "transparent"
+                colorOuter : tab_all.focus ? Constants.buttonBorderColor : "transparent"
             }
 
             onClicked: selectedCategory = categoriesList[0]
@@ -499,7 +500,7 @@ Page {
 
         TabButton{
             id: tab_grs
-            width: 220
+            width: 200
             height: parent.height
 
 
@@ -517,7 +518,7 @@ Page {
 
         TabButton{
             id:tab_rd
-            width: 170
+            width: 160
             height: parent.height
 
 
@@ -535,7 +536,7 @@ Page {
 
         TabButton{
             id: tab_nd
-            width: 150
+            width: 140
             height: parent.height
 
 
@@ -553,7 +554,7 @@ Page {
 
         TabButton{
             id: tab_cs
-            width: 150
+            width: 140
             height: parent.height
 
 
@@ -570,7 +571,7 @@ Page {
         }
         TabButton{
             id:tab_os
-            width: 150
+            width: 140
             height: parent.height
 
 

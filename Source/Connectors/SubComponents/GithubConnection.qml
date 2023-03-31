@@ -24,9 +24,14 @@ Popup {
     height: 500
     modal: true
     visible: false
-    x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    x: parent.width/2 - 400
+    y: parent.height/2 - 250
     padding: 0
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     closePolicy: Popup.NoAutoClose
     property int label_col : 135
 
@@ -101,11 +106,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             id : text1

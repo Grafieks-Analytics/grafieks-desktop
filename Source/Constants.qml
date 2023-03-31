@@ -77,6 +77,7 @@ QtObject {
     property color greenThemeColor : "#A1D99B"
     property color redThemeColor : "#FB8072"
     property color borderBlueColor : "#BCE0FD"
+    property color borderLightBlueColor : "#4D98FE"
     //    property color lightThemeColor : "#F5F5F5"
     property color leftDarkColor: "#E2E2E4"
     property color lightThemeColor: "#E2E2E4"
@@ -386,8 +387,8 @@ QtObject {
     property var defaultSubMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
     
     // Dashboard Constasts
-    property var defaultDashboardHeight: 800;
-    property var defaultDashboardWidth: 1280;
+    property var defaultDashboardHeight: 600;
+    property var defaultDashboardWidth: 1080;
 
     property var tempGrafieksValue: "grafieks_false_temp";
 

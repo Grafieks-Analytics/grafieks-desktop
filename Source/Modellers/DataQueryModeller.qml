@@ -1027,14 +1027,17 @@ Page {
 
     Rectangle{
         id: submenu
-        height: 22.5
+        height: 25
         width: parent.width - menu_width - column_querymodeller.width
         x: menu_width - 11
+        // color:"red"
 
 
         TabBar{
 
             id: tabbutton_querymodeller
+            contentHeight :parent.height
+            width:202
 
 
             // Data Modeller Button starts
@@ -1043,6 +1046,8 @@ Page {
                 id: datamodeller_querymodeller
                 text: Messages.mo_dqm_dataTabName
                 width:100
+                height: parent.height
+                
 
                 onClicked: onDataModellerClicked()
                 onHoveredChanged: onDataModellerHovered()
@@ -1084,9 +1089,11 @@ Page {
                 id: queryModellerTab
                 text: Messages.mo_dqm_queryTabName
                 width:100
+                height: parent.height
 
-                onClicked: onQueryModellerClicked()
-                onHoveredChanged: onQueryModellerHovered()
+
+                // onClicked: onQueryModellerClicked()
+                // onHoveredChanged: onQueryModellerHovered()
 
                 background: Rectangle {
                     id: queryModellerTab_background
@@ -1108,6 +1115,14 @@ Page {
                 ToolTip.text: Messages.mo_dqm_queryTabDesc
 
             }
+
+            //    TabButton {
+            //         id: tabPublishDashboarda
+            //        text: qsTr("Home")
+            //    }
+            //    TabButton {
+            //        text: qsTr("Discover")
+            //    }
 
             // Query Modeller button ends
 
@@ -1291,9 +1306,10 @@ Page {
     ToolSeparator{
         id: toolsep1
         orientation: Qt.Horizontal
-        width: parent.width - menu_width - 100
+        width: parent.width - menu_width - 80
         anchors.top: submenu.bottom
         leftPadding: left_menubar.width
+        anchors.topMargin:-5
         anchors.horizontalCenter: submenu.horizontalCenter
 
         contentItem: Rectangle {
@@ -1453,6 +1469,7 @@ Page {
                 id: tabbar_querymodeller
 
                 width:rectangle_querymodeller_right_col.width
+                contentHeight :25
                 z: 20
 
                 background: Rectangle {
@@ -1477,6 +1494,7 @@ Page {
                     onClicked: onPublishDataSourceClicked()
 
                     background: Rectangle{
+                        width: parent.width-2
                         color: Constants.grafieksLightGreenColor
                         opacity: tabPublishDashboard.hovered ? 0.42 : 1
                     }
@@ -1507,6 +1525,7 @@ Page {
                         id:tabCreateDashboard_text
                     }
                     background: Rectangle {
+                        width: parent.width-2
                         color: Constants.grafieksLightGreenColor
                         opacity: tabCreateDashboard.hovered ? 0.42 : 1
                     }

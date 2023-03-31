@@ -240,8 +240,8 @@ namespace Constants
     const QString defaultMode = "create";
 
     // DashboardParams
-    const int defaultCanvasWidth = 1280;
-    const int defaultCanvasHeight = 800;
+    const int defaultCanvasWidth = 1080;
+    const int defaultCanvasHeight = 600;
 
     // Current Screen Types
     const int homeScreen = 0;

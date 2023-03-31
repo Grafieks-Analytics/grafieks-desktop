@@ -107,11 +107,10 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
+
 
         Text{
             id : text1

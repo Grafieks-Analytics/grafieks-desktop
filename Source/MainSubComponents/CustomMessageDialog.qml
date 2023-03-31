@@ -21,6 +21,11 @@ import com.grafieks.singleton.constants
         x:parent.parent.width/2-200
         y:parent.height/2-70
         standardButtons: Dialog.Ok
+        // background:Rectangle {
+        //   color: "white"
+        //   height:parent.height-100
+        //   width:parent.width-150
+        //   }
         Rectangle {
           color: "white"
           implicitWidth: 400

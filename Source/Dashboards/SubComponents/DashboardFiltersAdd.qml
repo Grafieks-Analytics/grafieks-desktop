@@ -15,7 +15,7 @@ Item {
 
 
     anchors.left: parent.left
-    anchors.leftMargin: 3
+    anchors.leftMargin: 0
 
     Connections{
         target : TableColumnsModel
@@ -60,7 +60,7 @@ Item {
     Rectangle{
         id: add_filter
         height:28
-        width:500
+        width:parent.width
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
@@ -93,7 +93,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 5
         width: parent.width
-        height:23
+        height:24
 
         TabButton{
             id: filter_cancel_btn
@@ -103,6 +103,7 @@ Item {
 
             background: Rectangle {
                 id: filter_cancel_btn_background
+                height:24
                 color:  filter_cancel_btn.pressed? Constants.darkThemeColor: Constants.redThemeColor
                 //                color:  filter_cancel_btn.pressed? Constants.darkThemeColor: "#F4F4F4"
 
@@ -124,6 +125,7 @@ Item {
 
             background: Rectangle {
                 id: filter_apply_btn_background
+                height:24
                 color:  filter_apply_btn.pressed? Constants.darkThemeColor: Constants.greenThemeColor
                 //                color:  filter_apply_btn.pressed? Constants.darkThemeColor: "#F4F4F4"
 
@@ -188,7 +190,7 @@ Item {
             width: parent.width - 20
             anchors.top: searchBox.bottom
             // anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: -15
+            anchors.topMargin: -20
         }
     }
 
