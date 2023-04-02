@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- For Table Chart -->
+
+    <link rel="stylesheet" href="../Charts/build/css/tabulator.min.css" />
+    <link rel="stylesheet" href="../Charts/build/css/tabulator_style.css" />
+    <script type="text/javascript" src="../Charts/build/lib/tabulator.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        #example-table {
+            margin: 0 !important;
+        }
+
+        body {
+            margin: 0 !important;
+        }
+    </style>
+    <div id="example-table"></div>
+
+    <script>
+        //custom max min header filter
+        var minMaxFilterEditor = function (cell, onRendered, success, cancel, editorParams) {
+
+            var end;
+
+            var container = document.createElement("span");
+
+            //create and style inputs
+            var start = document.createElement("input");
+            start.setAttribute("type", "number");
+            start.setAttribute("placeholder", "Min");
+            start.setAttribute("min", 0);
+            start.setAttribute("max", 100);
+            start.style.padding = "4px";
+            start.style.width = "50%";
+            start.style.boxSizing = "border-box";
+
+            start.value = cell.getValue();
+
+            function buildValues() {
+                success({
+                    start: start.value,
+                    end: end.value,
+                });
+            }
+
+            function keypress(e) {
+                if (e.keyCode == 13) {
+                    buildValues();
+                }
+
+                if (e.keyCode == 27) {
+                    cancel();
+                }
+            }
+
+            end = start.cloneNode();
+            end.setAttribute("placeholder", "Max");
+
+            start.addEventListener("change", buildValues);
+            start.addEventListener("blur", buildValues);
+            start.addEventListener("keydown", keypress);
+
+            end.addEventListener("change", buildValues);
+            end.addEventListener("blur", buildValues);
+            end.addEventListener("keydown", keypress);
+
+
+            container.appendChild(start);
+            container.appendChild(end);
+
+            return container;
+        }
+
+        //custom max min filter function
+        function minMaxFilterFunction(headerValue, rowValue, rowData, filterParams) {
+            //headerValue - the value of the header filter element
+            //rowValue - the value of the column in this row
+            //rowData - the data for the row being filtered
+            //filterParams - params object passed to the headerFilterFuncParams property
+
+            if (rowValue) {
+                if (headerValue.start != "") {
+                    if (headerValue.end != "") {
+                        return rowValue >= headerValue.start && rowValue <= headerValue.end;
+                    } else {
+                        return rowValue >= headerValue.start;
+                    }
+                } else {
+                    if (headerValue.end != "") {
+                        return rowValue <= headerValue.end;
+                    }
+                }
+            }
+
+            return true; //must return a boolean, true if it passes the filter.
+        }
+        function capitalize(s) {
+            return s && s[0].toUpperCase() + s.slice(1);
+        }
+
+        function drawTable(tableData, tableHeaderData) {
+            // tableData = [
+            //     { id: 1, name: "Billy Bob", progress: "12", gender: "male", rating: 1, col: "red", dob: "45", driver: "drivername" },
+            //     { id: 2, name: "Mary May", progress: "12", gender: "male", rating: 1, col: "red", dob: "45", driver: "drivername" },
+            //     { id: 3, name: "Christine Lobowski", progress: "12", gender: "female", rating: 1, col: "yellow", dob: "45", driver: "drivername" }
+            // ]
+            // tableHeaderData = ["name", "progress", "gender", "rating", "col", "dob", "driver"]
+            tableHeaderDataProcessed = []
+            tableHeaderData.forEach(element => {
+                let rowData = { headerFilter: "input" }
+                rowData.title = capitalize(element)
+                rowData.field = element.toLowerCase();
+                tableHeaderDataProcessed.push(rowData)
+            });
+            console.log({ tableHeaderDataProcessed })
+
+            // tableHeaderData = [
+            //     { title: "Name", field: "name", headerFilter: "input" },
+            //     { title: "Progress", field: "progress", headerFilter: "input" },
+            //     { title: "Gender", field: "gender", headerFilter: "input" },
+            //     { title: "Rating", field: "rating", headerFilter: "input" },
+            //     { title: "Favourite Color", field: "col", headerFilter: "input" },
+            //     { title: "Date Of Birth", field: "dob", headerFilter: "input" },
+            //     { title: "Driver", field: "driver", headerFilter: "input" },
+            // ]
+            var table = new Tabulator("#example-table", {
+                // height: "311px",
+                layout: "fitColumns",
+                columns: tableHeaderDataProcessed,
+                // data: [
+                //     { id: 1, name: "Billy Bob", progress: "12", gender: "male", height: 1, col: "red", dob: "45", driver: 1 }
+                // ]
+                data: tableData
+            });
+        }
+    </script>
+</body>
+
+</html>
+<!-- var table = new Tabulator("#example-table", {
+height: "311px",
+layout: "fitColumns",
+columns: [
+{ title: "Name", field: "name", sorter: "string", width: 200 },
+{ title: "Progress", field: "progress", sorter: "number", formatter: "progress" },
+{ title: "Gender", field: "gender", sorter: "string" },
+{ title: "Rating", field: "rating", formatter: "star", hozAlign: "center", width: 100 },
+{ title: "Favourite Color", field: "col", sorter: "string" },
+{ title: "Date Of Birth", field: "dob", sorter: "date", hozAlign: "center" },
+{ title: "Driver", field: "car", hozAlign: "center", formatter: "tickCross", sorter: "boolean" },
+],
+data: [
+{ id: 1, name: "Billy Bob", progress: "12", gender: "male", height: 1, col: "red", dob: "45", driver: 1 }
+// [id => 2, name => "Mary May", progress => "1", gender => "female", height => 2, col => "blue", dob => "14/05/1982",
+driver => true],
+// [id => 3, name => "Christine Lobowski", progress => "42", height => 0, col => "green", dob => "22/05/1982", driver =>
+"true"],
+// [id => 4, name => "Brendon Philips", progress => "125", gender => "male", height => 1, col => "orange", dob =>
+"01/08/1980"],
+// [id => 5, name => "Margret Marmajuke", progress => "16", gender => "female", height => 5, col => "yellow", dob =>
+"31/01/1999"],
+]
+}); -->

@@ -367,6 +367,7 @@ QtObject {
     property int joinBoxHeight: 30
     property int joinBoxRadius: 25
     property int droppedRectBufferWidth: 250
+    property string webEngineViewTableURL:"qrc:/Source/Modellers/DataPreviewTable.html"
 
     // Current Screen Types
     property var homeScreen : 0;

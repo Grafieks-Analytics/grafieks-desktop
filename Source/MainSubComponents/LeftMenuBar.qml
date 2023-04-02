@@ -22,6 +22,7 @@ Rectangle{
     id: leftMenuBar
     height: parent.height
     width: Constants.leftMenubarWidth
+    // color:"red"
 
     // selectedMenu indicates
     // 0 : Data Designer is selected
@@ -224,6 +225,12 @@ Rectangle{
         anchors.top: parent.top
         padding: 0
         anchors.topMargin: -4
+        contentItem: Rectangle {
+            implicitWidth: parent.vertical ? 1 : 24
+            implicitHeight: parent.vertical ? 25 : 1
+            color: Constants.darkThemeColor
+
+        }
     }
 
     // Dialog{

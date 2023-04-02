@@ -1968,7 +1968,7 @@ Page {
         height:parent.height + 6
         anchors.right:parent.right
         anchors.top: parent.top
-        anchors.rightMargin: 194
+        anchors.rightMargin: 193
         anchors.topMargin: -5
     }
 

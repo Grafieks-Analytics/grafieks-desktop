@@ -1327,7 +1327,7 @@ Rectangle{
 
         id: axisSettingsFooter
         height: 50
-        color: "red"
+
         anchors.top: axisSettingsContent.bottom
         anchors.right: parent.right
 

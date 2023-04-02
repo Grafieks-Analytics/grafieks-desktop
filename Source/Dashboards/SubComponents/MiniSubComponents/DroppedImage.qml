@@ -227,9 +227,11 @@ Item{
         title: Messages.da_sub_di_selectImageDialogTxt
         fileMode: FileDialog.OpenFile
 
-        onAccepted: saveImage(fileUrl)
+        onAccepted: saveImage(fileDialog.selectedFile)
         onRejected: webengine.url = ""
     }
+
+
 
 
 

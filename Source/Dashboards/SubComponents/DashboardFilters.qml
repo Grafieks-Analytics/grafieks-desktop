@@ -45,7 +45,8 @@ Item {
      height:parent.height
      width:204
      color: "white"
-     y:5
+    //  color:"red"
+     y:4
 
     Rectangle{
         id: show_filter
@@ -54,7 +55,8 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 2
+        
         Text{
             text: Messages.da_sub_df_header
 
@@ -76,8 +78,8 @@ Item {
         anchors.top: show_filter.bottom
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
-        width: parent.width-10
+        anchors.leftMargin: 1
+        width: parent.width-4
         height:24
 
         TabButton{

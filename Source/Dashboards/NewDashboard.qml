@@ -1120,7 +1120,7 @@ Page {
         ToolSeparator{
             anchors.top: parent.top
             anchors.left: column_filter_newdashboard_add.left
-            anchors.leftMargin: -4
+            anchors.leftMargin: -3
 
             height:parent.height
 

@@ -13,7 +13,7 @@ Popup {
 
     id: popup
     width: parent.width * 0.5
-    height: 600
+    height: 670
     anchors.centerIn: parent
 
     visible: false
@@ -109,13 +109,11 @@ Popup {
         id: header
         color: Constants.themeColor
         height: 40
-        width: parent.width - 2
+        width: parent.width 
 
         anchors.top: parent.top
         anchors.left: parent.left
 
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             text: Constants.axisSettingText
@@ -146,6 +144,7 @@ Popup {
         anchors.top: header.bottom
         height: parent.height - header.height
         width: parent.width
+
 
         // Left menu starts
         Rectangle{

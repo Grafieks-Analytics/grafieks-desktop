@@ -128,9 +128,14 @@ Rectangle{
         // onAccepted: setBackgroundColor(color)
         //   color: "green"
         //   showAlphaChannel: true
-          onAccepted: { console.log("Accepted: " + backgroundColorSelector.color) }
+           selectedColor: document.color
+//          onAccepted: { console.log("Accepted: " + selectedColor)}
+          onAccepted:setBackgroundColor(selectedColor)
         //   onRejected: { console.log("Rejected") }
       }
+    Rectangle {
+        id: document
+    }
 
 
 

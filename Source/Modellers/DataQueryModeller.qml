@@ -157,6 +157,7 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                
                 radio_live.visible = false
                 radio_memory.checked = true
             }
@@ -167,6 +168,7 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                tabbutton_querymodeller.width=100
                 radio_live.visible = false
                 radio_memory.checked = true
             }
@@ -1036,7 +1038,7 @@ Page {
         TabBar{
 
             id: tabbutton_querymodeller
-            contentHeight :parent.height
+            contentHeight :parent.height+1
             width:202
 
 
@@ -1092,8 +1094,8 @@ Page {
                 height: parent.height
 
 
-                // onClicked: onQueryModellerClicked()
-                // onHoveredChanged: onQueryModellerHovered()
+                onClicked: onQueryModellerClicked()
+                onHoveredChanged: onQueryModellerHovered()
 
                 background: Rectangle {
                     id: queryModellerTab_background
@@ -1419,7 +1421,7 @@ Page {
         id: column_querymodeller
 
         height:parent.height
-        width: 200
+        width: 205
         anchors.right:parent.right
         spacing: 50
 
@@ -1440,7 +1442,7 @@ Page {
                 height:parent.height
                 anchors.left:parent.left
                 anchors.top: parent.top
-                anchors.leftMargin:  -8
+                anchors.leftMargin:  -7
                 anchors.topMargin: -5
 
 
@@ -1509,7 +1511,7 @@ Page {
 
                 TabButton{
                     id: tabCreateDashboard
-                    width:rectangle_querymodeller_right_col.width / 2
+                    width:rectangle_querymodeller_right_col.width / 2+1
                     height: parent.height
                     z: 20
 
@@ -1525,7 +1527,7 @@ Page {
                         id:tabCreateDashboard_text
                     }
                     background: Rectangle {
-                        width: parent.width-2
+                        width: parent.width
                         color: Constants.grafieksLightGreenColor
                         opacity: tabCreateDashboard.hovered ? 0.42 : 1
                     }
@@ -1554,7 +1556,7 @@ Page {
                 anchors.top: tabbar_querymodeller.bottom
                 anchors.topMargin: 2
 
-                height:50
+                height:30
                 width: rectangle_querymodeller_right_col.width
                 z: 20
 
@@ -1566,10 +1568,11 @@ Page {
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
+                    anchors.topMargin: 10
                     readOnly: false
                     selectByMouse: true
                     width:250
-                    height: 40
+                    height: 30
                     anchors.horizontalCenter:parent.horizontalCenter
                     font.pixelSize: 14
                     verticalAlignment:TextEdit.AlignVCente
@@ -1621,7 +1624,7 @@ Page {
 
                 anchors.top: rectangle_querymodeller_right_col1.bottom
                 anchors.topMargin: 2
-                height:50
+                height:30
                 width: rectangle_querymodeller_right_col.width
                 color:Constants.themeColor
                 z: 20
@@ -1645,7 +1648,7 @@ Page {
 
                 anchors.top: rectangle_querymodeller_right_col2.bottom
                 anchors.topMargin: 2
-                height:50
+                height:40
                 width: rectangle_querymodeller_right_col.width
                 z: 20
 
@@ -1664,6 +1667,8 @@ Page {
                         cursorVisible: true
                         anchors.top: row_querymodeller_right_col.top
                         anchors.topMargin: 5
+                        anchors.leftMargin: 5
+                        anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
 
                         background: Rectangle{
                             border.width: 0
@@ -1680,7 +1685,7 @@ Page {
                     width: rectangle_querymodeller_right_col3.width - 20
                     anchors.top: row_querymodeller_right_col.bottom
                     anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
-                    anchors.topMargin: 5
+                    // anchors.topMargin: 1
                 }
             }
 

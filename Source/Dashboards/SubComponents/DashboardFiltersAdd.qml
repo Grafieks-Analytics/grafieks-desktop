@@ -64,7 +64,7 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 4
         Text{
             text: Messages.da_sub_dfa_header
 
@@ -91,7 +91,7 @@ Item {
         anchors.top: add_filter.bottom
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 4
         width: parent.width
         height:24
 
