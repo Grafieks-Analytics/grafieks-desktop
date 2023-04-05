@@ -1,7 +1,7 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.1
+import QtQuick.Controls
+import QtQuick.Layouts 
+import QtQuick.Dialogs 
 //import QtQuick.Window 2.1
 import io.qt.examples.texteditor 1.0
 import com.grafieks.singleton.constants 1.0
@@ -185,7 +185,7 @@ Rectangle{
             "alignment" : document.alignment,
             "italic" : document.italic,
             "underline" : document.underline,
-            "color" : colorDialog.color,
+            "color" : colorDialog.selectedColor,
             "backgroundColor" : document.backgroundColor,
             "fontFamily" : document.fontFamily,
             "fontSize" : document.fontSize
@@ -218,58 +218,65 @@ Rectangle{
 
 
 
-    Action {
-        id: alignLeftAction
-        shortcut: "ctrl+l"
-        onTriggered: document.alignment = Qt.AlignLeft
-        checkable: true
-        checked: document.alignment === Qt.AlignLeft
-    }
-    Action {
-        id: alignCenterAction
-        onTriggered: document.alignment = Qt.AlignHCenter
-        checkable: true
-        checked: document.alignment === Qt.AlignHCenter
-    }
-    Action {
-        id: alignRightAction
-        onTriggered: document.alignment = Qt.AlignRight
-        checkable: true
-        checked: document.alignment === Qt.AlignRight
-    }
-    Action {
-        id: alignJustifyAction
-        onTriggered: document.alignment = Qt.AlignJustify
-        checkable: true
-        checked: document.alignment === Qt.AlignJustify
-    }
+     Action {
+         id: alignLeftAction
+         shortcut: "ctrl+l"
+         onTriggered: document.alignment = Qt.AlignLeft
+         checkable: true
+         checked: document.alignment === Qt.AlignLeft
+     }
+     Action {
+         id: alignCenterAction
+         onTriggered: document.alignment = Qt.AlignHCenter
+         checkable: true
+         checked: document.alignment === Qt.AlignHCenter
+     }
+     Action {
+         id: alignRightAction
+         onTriggered: document.alignment = Qt.AlignRight
+         checkable: true
+         checked: document.alignment === Qt.AlignRight
+     }
+     Action {
+         id: alignJustifyAction
+         onTriggered: document.alignment = Qt.AlignJustify
+         checkable: true
+         checked: document.alignment === Qt.AlignJustify
+     }
 
-    Action {
-        id: boldAction
-        iconName: "format-text-bold"
-        onTriggered: document.bold = !document.bold
-        checkable: true
-        checked: document.bold
-    }
+     Action {
+         id: boldAction
+         icon.name: "format-text-bold"
+         onTriggered: document.bold = !document.bold
+         checkable: true
+         checked: document.bold
+     }
 
-    Action {
-        id: italicAction
-        iconName: "format-text-italic"
-        onTriggered: document.italic = !document.italic
-        checked: document.italic
-    }
-    Action {
-        id: underlineAction
-        iconName: "format-text-underline"
-        onTriggered: document.underline = !document.underline
-        checkable: true
-        checked: document.underline
-    }
+     Action {
+         id: italicAction
+         icon.name: "format-text-italic"
+         onTriggered: document.italic = !document.italic
+         checked: document.italic
+     }
+     Action {
+         id: underlineAction
+         icon.name: "format-text-underline"
+         onTriggered: document.underline = !document.underline
+         checkable: true
+         checked: document.underline
+     }
 
 
-    ColorDialog {
-        id: colorDialog
-        color: Constants.greenThemeColor
+     ColorDialog {
+         id: colorDialog
+          modality: Qt.WindowModal 
+          title: "Choose a color"
+         selectedColor: documentColor.color
+        onAccepted:setTextColor(selectedColor)
+     }
+      Rectangle {
+        id: documentColor
+        color:"black"
     }
 
 
@@ -359,7 +366,8 @@ Rectangle{
                 width: 30
                 height: parent.height - 16
                 anchors.verticalCenter: parent.verticalCenter
-                color: colorDialog.color;
+                border.color:"black"
+                color: colorDialog.selectedColor;
 
 
                 MouseArea{
@@ -453,21 +461,21 @@ Rectangle{
             id: textArea
             Accessible.name: "document"
 
-            frameVisible: false
+            // frameVisible: false
             width: parent.width
             height: parent.height
             anchors.top: parent.top
-            baseUrl: "qrc:/"
+             baseUrl: "qrc:/"
             text: document.text
             textFormat: Qt.RichText
             Component.onCompleted: forceActiveFocus()
-            backgroundVisible: false
+            // backgroundVisible: false
 
         }
 
-        MessageDialog {
-            id: errorDialog
-        }
+         MessageDialog {
+             id: errorDialog
+         }
 
         DocumentHandlerModel {
             id: document
@@ -475,7 +483,7 @@ Rectangle{
             cursorPosition: textArea.cursorPosition
             selectionStart: textArea.selectionStart
             selectionEnd: textArea.selectionEnd
-            textColor: colorDialog.color
+            textColor: colorDialog.selectedColor
             onFontFamilyChanged: {
                 var index = ["Arial", "Arial Black", "Calibri", "Cambria", "Comic Sans MS", "Courier", "Franklin Gothic", "Georgia", "Impact", "Lucida Console", "Luminari", "Tahoma", "Times New Roman", "Trebuchet MS", "Verdana"].indexOf(document.fontFamily)
                 if (index === -1) {
@@ -491,7 +499,7 @@ Rectangle{
                 errorDialog.visible = true
             }
             onTextColorChanged: {
-                colorBox.color = colorDialog.color
+                colorBox.color = colorDialog.selectedColor
             }
 
 
