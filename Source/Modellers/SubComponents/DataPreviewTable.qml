@@ -40,6 +40,8 @@ Rectangle {
 
         function onQueryDataChanged(resultData){
             console.log("QUERY RDATA", resultData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+            ","+JSON.stringify(tableHeaderData)+")");
 
         }
 
@@ -70,6 +72,8 @@ Rectangle {
 
         function onCsvJsonDataChanged(resultData){
             console.log("CSV RDATA", resultData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+            ","+JSON.stringify(tableHeaderData)+")");
         }
 
         // Clear table
@@ -96,12 +100,13 @@ Rectangle {
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
             console.log("TABLE HEADERS", tableHeaders)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(tableData)+
-            ","+JSON.stringify(tableHeaderData)+")");
+            
         }
 
         function onExcelDataChanged(resultData){
             console.log("EXCEL RDATA", resultData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+            ","+JSON.stringify(tableHeaderData)+")");
 
         }
 
@@ -130,6 +135,8 @@ Rectangle {
 
         function onForwardDataChanged(resultData){
             console.log("FORWARD RDATA", resultData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+            ","+JSON.stringify(tableHeaderData)+")");
 
         }
 
@@ -149,6 +156,8 @@ Rectangle {
     }
 
     function setHeaders(tableHeaders){
+        tableHeaderData = tableHeaders
+
         //        if(tableHeaders.length > 0){
         //            roleNames = tableHeaders
         //            newObject = []
