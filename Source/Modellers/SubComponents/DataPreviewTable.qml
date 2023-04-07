@@ -17,8 +17,13 @@ Rectangle {
     property var newObject: []
     property var previousModelData: 0
     property var counter : 0
-    property var tableData : [{ id: 1, name: "Billy Bob", progress: "12", gender: "male", height: 1, col: "red", dob: "45", driver: 1 }]
-    property var tableHeaderData : ["name", "progress", "gender", "rating", "col", "dob", "driver"]
+    // property var tableData : [{ id: 1, name: "Billy Bob", progress: "12", gender: "male", height: 1, col: "red", dob: "45", driver: 1 }]
+    // property var tableHeaderData : ["name", "progress", "gender", "rating", "col", "dob", "driver"]
+    property var tableData : [{
+                "Category": "Technology", "City": "Los Angeles", "Country/Region": "United States", "Customer ID": "BH-11710", "Customer Name": "Brosina Hoffman", "Discount"
+                    : "0.2", "Order Date": "2017-06-09T00:00:00.000", "Order ID": "CA-2017-115812", "Postal Code": "90032", "Product ID": "TEC-PH-10002275", "Product Name": "Mitel 5320 IP Phone VoIP phone", "Profit": "90.71520000000004", "Quantity": "6", "Region": "West", "Row ID": "8", "Sales": "907.152", "Segment": "Consumer", "Ship Date": "2017-06-14T00:00:00.000", "Ship Mode": "Standard Class", "State": "California", "Sub-Category": "Phones"
+            }]
+    property var tableHeaderData : ['Category', 'City', 'Country/Region', 'Customer ID', 'Customer Name', 'Discount', 'Order Date', 'Order ID', 'Postal Code', 'Product ID', 'Product Name', 'Profit', 'Quantity', 'Region', 'Row ID', 'Sales', 'Segment', 'Ship Date', 'Ship Mode', 'State', 'Sub-Category']
     color:"red"
 
     Connections{
@@ -40,8 +45,7 @@ Rectangle {
 
         function onQueryDataChanged(jsonData){
             console.log("QUERY RDATA", jsonData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
-            ","+JSON.stringify(tableHeaderData)+")");
+          
 
         }
 
@@ -100,13 +104,15 @@ Rectangle {
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
             console.log("TABLE HEADERS", tableHeaders)
+            //  webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
+            // ","+JSON.stringify(tableHeaderstableHeaders)+")");
             
         }
 
         function onExcelDataChanged(jsonData){
             console.log("EXCEL RDATA", jsonData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
-            ","+JSON.stringify(tableHeaderData)+")");
+            tableData = jsonData
+           
 
         }
 
@@ -156,7 +162,15 @@ Rectangle {
     }
 
     function setHeaders(tableHeaders){
-        tableHeaderData = tableHeaders
+        // tableHeaderData = tableHeaders
+        // var tableData = [{
+        //         "Category": "Technology", "City": "Los Angeles", "Country/Region": "United States", "Customer ID": "BH-11710", "Customer Name": "Brosina Hoffman", "Discount"
+        //             : "0.2", "Order Date": "2017-06-09T00:00:00.000", "Order ID": "CA-2017-115812", "Postal Code": "90032", "Product ID": "TEC-PH-10002275", "Product Name": "Mitel 5320 IP Phone VoIP phone", "Profit": "90.71520000000004", "Quantity": "6", "Region": "West", "Row ID": "8", "Sales": "907.152", "Segment": "Consumer", "Ship Date": "2017-06-14T00:00:00.000", "Ship Mode": "Standard Class", "State": "California", "Sub-Category": "Phones"
+        //     }]
+        console.log("tableData..",JSON.stringify(tableData))
+
+          webEngineViewTable.runJavaScript("drawTable("+ tableData +
+            ","+JSON.stringify(tableHeaderData)+")");
 
         //        if(tableHeaders.length > 0){
         //            roleNames = tableHeaders
