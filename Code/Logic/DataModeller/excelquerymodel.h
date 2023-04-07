@@ -25,6 +25,7 @@ class ExcelQueryModel : public QAbstractTableModel
 
     int previewRowCount;
     QList<QStringList> resultData;
+    QString jsonData;
     QString query;
     QString finalSql;
     int internalColCount;
@@ -72,7 +73,7 @@ private:
 
 signals:
     void excelHeaderDataChanged(QStringList tableHeaders);
-    void excelDataChanged(QList<QStringList> resultData);
+    void excelDataChanged(QString jsonData);
     void excelHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);

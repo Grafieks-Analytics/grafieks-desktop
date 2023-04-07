@@ -37,6 +37,8 @@ class CSVJsonQueryModel : public QAbstractTableModel
     QStringList headerDataPreview;
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
+    QString jsonData;
+    QString resultDataJson;
     QStringList dataFinalList;
     QStringList hideParams;
 
@@ -79,7 +81,7 @@ private:
 
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);
-    void csvJsonDataChanged(QList<QStringList> resultData);
+    void csvJsonDataChanged(QString jsonData);
     void csvJsonHasData(bool hasData);
     void generateExtractReports();
     void errorSignal(QString errMsg);

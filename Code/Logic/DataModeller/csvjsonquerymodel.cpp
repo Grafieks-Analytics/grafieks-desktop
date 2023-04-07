@@ -126,6 +126,8 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     bool firstLine = true;
     int readLine = 0;
     QVector<bool> truthList;
+    QJsonArray ja;
+
 
     beginResetModel();
 
@@ -135,6 +137,8 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     this->rejectIds.clear();
 
     while(!file.atEnd()){
+
+        QJsonObject jo;
 
         QByteArray line = file.readLine().simplified();
         QString lineAsString = QString(line);
@@ -198,6 +202,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                     foreach(QString a, this->dataFinalList){
                         if(!this->rejectIds.contains(i)){
                             x.append(a);
+                            jo.insert(this->columnNamesMap.value(i), a);
                         }
 
                         i++;
@@ -217,6 +222,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 foreach(QString a, colData){
                     if(!this->rejectIds.contains(i)){
                         x.append(a);
+                        jo.insert(this->columnNamesMap.value(i), a);
                     }
                     i++;
                 }
@@ -224,6 +230,8 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
                 readLine++;
             }
         }
+
+        ja.append(jo);
     }
 
     this->colCount = this->headerDataPreview.count();
@@ -235,8 +243,11 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
     endResetModel();
 
+    QJsonDocument doc;
+    doc.setArray(ja);
+
     emit errorSignal("");
-    emit csvJsonDataChanged(this->resultData);
+    emit csvJsonDataChanged(doc.toJson(QJsonDocument::Compact));
     emit csvJsonHeaderDataChanged(this->headerDataPreview);
 }
 

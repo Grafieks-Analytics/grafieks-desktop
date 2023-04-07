@@ -19,6 +19,8 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     int tmpRowCount = 0;
     int maxRowCount = 0;
     QString finalSqlInterPart;
+    QJsonArray ja;
+
 
     querySplitter.setQueryForClasses(this->query);
     this->selectParams = querySplitter.getSelectParams();
@@ -51,9 +53,12 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
         emit errorSignal(query.lastError().text());
     } else {
         while(query.next()){
+            QJsonObject jo;
             for(int i = 0; i < this->internalColCount; i++){
                 list << query.value(i).toString();
+                jo.insert(query.record().fieldName(i).trimmed(), query.record().value(i).toString().trimmed());
             }
+            ja.append(jo);
             this->resultData.append(list);
             list.clear();
 
@@ -82,7 +87,11 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     }
 
     endResetModel();
-    emit excelDataChanged(this->resultData);
+
+    QJsonDocument doc;
+    doc.setArray(ja);
+
+    emit excelDataChanged(doc.toJson(QJsonDocument::Compact));
     emit excelHeaderDataChanged(this->selectParams);
 }
 

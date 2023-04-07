@@ -113,6 +113,8 @@ bool QueryModel::ifPublish() const
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
+    QJsonArray ja;
+
 
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
@@ -128,13 +130,18 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 
     for (int rowCount = 0; rowCount < this->tmpRowCount; ++rowCount) {
         QStringList tmpResult;
+        QJsonObject jo;
         for (int colCount = 0; colCount < this->tmpColCount; ++colCount) {
             tmpResult.append(QSqlQueryModel::record(rowCount).value(colCount).toString());
+            jo.insert(QSqlQueryModel::record(rowCount).fieldName(colCount).trimmed(), QSqlQueryModel::record(rowCount).value(colCount).toString().trimmed());
         }
         this->resultData.append(tmpResult);
+        ja.append(jo);
     }
 
-    emit queryDataChanged(this->resultData);
+    QJsonDocument doc;
+    doc.setArray(ja);
+    emit queryDataChanged(doc.toJson(QJsonDocument::Compact));
 
 }
 
