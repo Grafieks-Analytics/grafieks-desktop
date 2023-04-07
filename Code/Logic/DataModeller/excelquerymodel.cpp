@@ -88,11 +88,17 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
     endResetModel();
 
+    QStringList qsl;
+    foreach(QString s, this->selectParams){
+        QStringList parts = s.split(".");
+        QString p = parts[1].replace("]", "").replace("[","");
+        qsl.append(p);
+    }
     QJsonDocument doc;
     doc.setArray(ja);
 
     emit excelDataChanged(doc.toJson(QJsonDocument::Compact));
-    emit excelHeaderDataChanged(this->selectParams);
+    emit excelHeaderDataChanged(qsl);
 }
 
 void ExcelQueryModel::saveExtractData()
