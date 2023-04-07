@@ -38,9 +38,9 @@ Rectangle {
                 setHeaders(tableHeaders)
         }
 
-        function onQueryDataChanged(resultData){
-            console.log("QUERY RDATA", resultData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+        function onQueryDataChanged(jsonData){
+            console.log("QUERY RDATA", jsonData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
             ","+JSON.stringify(tableHeaderData)+")");
 
         }
@@ -70,9 +70,9 @@ Rectangle {
                 setHeaders(tableHeaders)
         }
 
-        function onCsvJsonDataChanged(resultData){
-            console.log("CSV RDATA", resultData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+        function onCsvJsonDataChanged(jsonData){
+            console.log("CSV RDATA", jsonData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
             ","+JSON.stringify(tableHeaderData)+")");
         }
 
@@ -103,9 +103,9 @@ Rectangle {
             
         }
 
-        function onExcelDataChanged(resultData){
-            console.log("EXCEL RDATA", resultData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+        function onExcelDataChanged(jsonData){
+            console.log("EXCEL RDATA", jsonData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
             ","+JSON.stringify(tableHeaderData)+")");
 
         }
@@ -133,9 +133,9 @@ Rectangle {
         }
 
 
-        function onForwardDataChanged(resultData){
-            console.log("FORWARD RDATA", resultData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(resultData)+
+        function onForwardDataChanged(jsonData){
+            console.log("FORWARD RDATA", jsonData)
+            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
             ","+JSON.stringify(tableHeaderData)+")");
 
         }
