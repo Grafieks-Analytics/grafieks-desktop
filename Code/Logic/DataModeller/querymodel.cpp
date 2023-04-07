@@ -125,6 +125,17 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
         generateRoleNames();
         emit errorSignal("");
     }
+
+    for (int rowCount = 0; rowCount < this->tmpRowCount; ++rowCount) {
+        QStringList tmpResult;
+        for (int colCount = 0; colCount < this->tmpColCount; ++colCount) {
+            tmpResult.append(QSqlQueryModel::record(rowCount).value(colCount).toString());
+        }
+        this->resultData.append(tmpResult);
+    }
+
+    emit queryDataChanged(this->resultData);
+
 }
 
 void QueryModel::setQuery(const QSqlQuery &query)

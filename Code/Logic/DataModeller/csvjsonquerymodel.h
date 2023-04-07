@@ -79,6 +79,7 @@ private:
 
 signals:
     void csvJsonHeaderDataChanged(QStringList tableHeaders);
+    void csvJsonDataChanged(QList<QStringList> resultData);
     void csvJsonHasData(bool hasData);
     void generateExtractReports();
     void errorSignal(QString errMsg);

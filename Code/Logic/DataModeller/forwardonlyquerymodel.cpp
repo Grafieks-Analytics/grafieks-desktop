@@ -42,6 +42,16 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 //    }
     this->generateRoleNames();
 
+    for (int rowCount = 0; rowCount < this->tmpRowCount; ++rowCount) {
+        QStringList tmpResult;
+        for (int colCount = 0; colCount < this->tmpColCount; ++colCount) {
+            tmpResult.append(QSqlQueryModel::record(rowCount).value(colCount).toString());
+        }
+        this->resultData.append(tmpResult);
+    }
+
+    emit forwardDataChanged(this->resultData);
+
 }
 
 void ForwardOnlyQueryModel::saveExtractData()

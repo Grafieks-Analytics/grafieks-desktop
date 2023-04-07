@@ -236,6 +236,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
     endResetModel();
 
     emit errorSignal("");
+    emit csvJsonDataChanged(this->resultData);
     emit csvJsonHeaderDataChanged(this->headerDataPreview);
 }
 

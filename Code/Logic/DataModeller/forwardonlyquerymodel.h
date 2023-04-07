@@ -73,6 +73,7 @@ private:
     QMap<int, QStringList*> forwardOnlyChartData;
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
+    QList<QStringList> resultData;
     QString tmpSql;
 
     DataType dataType;
@@ -89,6 +90,7 @@ private:
 signals:
 
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
+    void forwardDataChanged(QList<QStringList> resultData);
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);

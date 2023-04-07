@@ -38,6 +38,11 @@ Rectangle {
                 setHeaders(tableHeaders)
         }
 
+        function onQueryDataChanged(resultData){
+            console.log("QUERY RDATA", resultData)
+
+        }
+
         // Clear table
         function onClearTablePreview(){
             clearTable()
@@ -61,6 +66,10 @@ Rectangle {
         function onCsvJsonHeaderDataChanged(tableHeaders){
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
+        }
+
+        function onCsvJsonDataChanged(resultData){
+            console.log("CSV RDATA", resultData)
         }
 
         // Clear table
@@ -91,6 +100,11 @@ Rectangle {
             ","+JSON.stringify(tableHeaderData)+")");
         }
 
+        function onExcelDataChanged(resultData){
+            console.log("EXCEL RDATA", resultData)
+
+        }
+
         // Clear table
         function onClearTablePreview(){
             clearTable()
@@ -111,6 +125,12 @@ Rectangle {
         function onForwardOnlyHeaderDataChanged(tableHeaders){
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
+        }
+
+
+        function onForwardDataChanged(resultData){
+            console.log("FORWARD RDATA", resultData)
+
         }
 
         // Clear table

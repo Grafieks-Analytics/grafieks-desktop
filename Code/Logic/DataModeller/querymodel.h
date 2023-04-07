@@ -59,6 +59,7 @@ public slots:
 
 signals:
     void headerDataChanged(QStringList tableHeaders);
+    void queryDataChanged(QList<QStringList> resultData);
     void sqlHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
@@ -86,6 +87,7 @@ private:
     QMap<int, QStringList*> sqlChartData;
     QMap<int, QStringList> sqlChartHeader;
     QStringList tableHeaders;
+    QList<QStringList> resultData;
     int tmpRowCount;
     int tmpColCount;
     QString tmpSql;

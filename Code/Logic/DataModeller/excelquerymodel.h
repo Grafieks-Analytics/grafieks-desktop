@@ -72,6 +72,7 @@ private:
 
 signals:
     void excelHeaderDataChanged(QStringList tableHeaders);
+    void excelDataChanged(QList<QStringList> resultData);
     void excelHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);

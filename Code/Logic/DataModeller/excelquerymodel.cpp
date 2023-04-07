@@ -82,6 +82,7 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     }
 
     endResetModel();
+    emit excelDataChanged(this->resultData);
     emit excelHeaderDataChanged(this->selectParams);
 }
 
