@@ -59,7 +59,6 @@ private:
 
 
     QHash<int, QByteArray> m_roleNames;
-    QList<QStringList> resultData;
     int internalRowCount;
     int internalColCount;
     int previewRowCount;
