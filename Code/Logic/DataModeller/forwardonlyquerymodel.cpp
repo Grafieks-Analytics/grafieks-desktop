@@ -207,6 +207,7 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
 {
 
     QStringList list;
+    QJsonArray ja;
 
     this->tableHeaders = tableHeaders;
     this->forwardOnlyChartHeader = forwardOnlyChartHeader;
@@ -227,17 +228,24 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
 
         int totalRowCount = 0;
         while(q.next()){
+            QJsonObject jo;
 
             try{
+
                 for(int i = 0; i < this->internalColCount; i++){
                     list << q.value(i).toString();
-                    qDebug() << Q_FUNC_INFO << q.value(i);
+                    QString outTableName = q.record().field(i).tableName().toStdString().c_str();
+                    outTableName.append(".");
+                    outTableName.append(q.record().fieldName(i).trimmed());
+
+                    jo.insert(outTableName, q.record().value(i).toString().trimmed());
                 }
                 this->resultData.append(list);
             } catch(std::exception &e){
                 qWarning() << Q_FUNC_INFO << e.what();
             }
 
+            ja.append(jo);
             list.clear();
             totalRowCount++;
         }
@@ -283,6 +291,10 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
         emit forwardOnlyHasData(false);
     }
 
+    QJsonDocument doc;
+    doc.setArray(ja);
+
+    emit forwardDataChanged(doc.toJson(QJsonDocument::Compact));
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
     emit errorSignal("");
 }

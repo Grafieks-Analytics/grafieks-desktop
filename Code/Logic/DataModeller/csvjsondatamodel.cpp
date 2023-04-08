@@ -77,7 +77,7 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
             if(firstLine){
 
                 firstLine = false;
-                QRegExp rx( delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                QRegularExpression rx( delimiter + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 this->headerDataFinal = lineAsString.split(rx);
 
 //                if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){

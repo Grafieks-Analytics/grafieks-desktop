@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- For Table Chart -->
+
+    <link rel="stylesheet" href="../Charts/build/css/tabulator.min.css" />
+    <link rel="stylesheet" href="../Charts/build/css/tabulator_style.css" />
+    <script type="text/javascript" src="../Charts/build/lib/tabulator.min.js"></script>
+    <title>Table Preview</title>
+</head>
+
+<body>
+    <style>
+        #example-table {
+            margin: 0 !important;
+        }
+
+        .tabulator-col,
+        .tabulator-cell {
+            min-width: 120px !important;
+        }
+
+        body {
+            margin: 0 !important;
+        }
+
+        .tabulator {
+            width: auto !important;
+        }
+
+        .tabulator-header-filter input {
+            height: 20px;
+        }
+
+        .tabulator-row {
+            height: 22px;
+        }
+
+        .tabulator-cell {
+            padding: 0 0.78571em !important;
+        }
+
+        .tabulator-headers {
+            height: 54px;
+        }
+
+        .tabulator-col {
+            height: 54px;
+        }
+
+        .tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+            padding: 0.42857em 0.78571em;
+        }
+    </style>
+    <div id="example-table"></div>
+
+    <script>
+        //custom max min header filter
+        var minMaxFilterEditor = function (cell, onRendered, success, cancel, editorParams) {
+
+            var end;
+
+            var container = document.createElement("span");
+
+            //create and style inputs
+            var start = document.createElement("input");
+            start.setAttribute("type", "number");
+            start.setAttribute("placeholder", "Min");
+            start.setAttribute("min", 0);
+            start.setAttribute("max", 100);
+            start.style.padding = "4px";
+            start.style.width = "50%";
+            start.style.boxSizing = "border-box";
+
+            start.value = cell.getValue();
+
+            function buildValues() {
+                success({
+                    start: start.value,
+                    end: end.value,
+                });
+            }
+
+            function keypress(e) {
+                if (e.keyCode == 13) {
+                    buildValues();
+                }
+
+                if (e.keyCode == 27) {
+                    cancel();
+                }
+            }
+
+            end = start.cloneNode();
+            end.setAttribute("placeholder", "Max");
+
+            start.addEventListener("change", buildValues);
+            start.addEventListener("blur", buildValues);
+            start.addEventListener("keydown", keypress);
+
+            end.addEventListener("change", buildValues);
+            end.addEventListener("blur", buildValues);
+            end.addEventListener("keydown", keypress);
+
+
+            container.appendChild(start);
+            container.appendChild(end);
+
+            return container;
+        }
+
+        //custom max min filter function
+        function minMaxFilterFunction(headerValue, rowValue, rowData, filterParams) {
+            //headerValue - the value of the header filter element
+            //rowValue - the value of the column in this row
+            //rowData - the data for the row being filtered
+            //filterParams - params object passed to the headerFilterFuncParams property
+
+            if (rowValue) {
+                if (headerValue.start != "") {
+                    if (headerValue.end != "") {
+                        return rowValue >= headerValue.start && rowValue <= headerValue.end;
+                    } else {
+                        return rowValue >= headerValue.start;
+                    }
+                } else {
+                    if (headerValue.end != "") {
+                        return rowValue <= headerValue.end;
+                    }
+                }
+            }
+
+            return true; //must return a boolean, true if it passes the filter.
+        }
+        function capitalize(s) {
+            return s && s[0].toUpperCase() + s.slice(1);
+        }
+        function customMutator(value, data, type, params) {
+            return data[params.field];
+        }
+        function clearTable() {
+                 document.getElementById("example-table").innerHTML = ""
+                return;
+            }
+
+        function drawTable(tableData, tableHeaderData) {
+            // tableData = [{
+            //     "Category": "Technology", "City": "Los Angeles", "Country/Region": "United States", "Customer ID": "BH-11710", "Customer Name": "Brosina Hoffman", "Discount"
+            //         : "0.2", "Order Date": "2017-06-09T00:00:00.000", "Order ID": "CA-2017-115812", "Postal Code": "90032", "Product ID": "TEC-PH-10002275", "Product Name": "Mitel 5320 IP Phone VoIP phone", "Profit": "90.71520000000004", "Quantity": "6", "Region": "West", "Row ID": "8", "Sales": "907.152", "Segment": "Consumer", "Ship Date": "2017-06-14T00:00:00.000", "Ship Mode": "Standard Class", "State": "California", "Sub-Category": "Phones"
+            // }]
+            // tableHeaderData = ['Category', 'City', 'Country/Region', 'Customer ID', 'Customer Name', 'Discount', 'Order Date', 'Order ID', 'Postal Code', 'Product ID', 'Product Name', 'Profit', 'Quantity', 'Region', 'Row ID', 'Sales', 'Segment', 'Ship Date', 'Ship Mode', 'State', 'Sub-Category']
+            // tableData = [{ "[People$].[Person]": "Anna Andreadi", "[People$].[Region]": "West" }, { "[People$].[Person]": "Chuck Magee", "[People$].[Region]": "East" }, { "[People$].[Person]": "Kelly Williams", "[People$].[Region]": "Central" }, { "[People$].[Person]": "Cassandra Brandow", "[People$].[Region]": "South" }]
+            // tableData = [{ "[Orders$].[Category]": "Furniture", "[Orders$].[City]": "New York City", "[Orders$].[Country/Region]": "United States", "[Orders$].[Customer ID]": "PN-18775", "[Orders$].[Customer Name]": "Parhena Norris", "[Orders$].[Discount]": "0", "[Orders$].[Order Date]": "2020-11-09T00:00:00.000", "[Orders$].[Order ID]": "CA-2020-161018", "[Orders$].[Postal Code]": "10009", "[Orders$].[Product ID]": "FUR-FU-10000629", "[Orders$].[Product Name]": "9-3/4 Diameter Round Wall Clock", "[Orders$].[Profit]": "40.5426", "[Orders$].[Quantity]": "7", "[Orders$].[Region]": "East", "[Orders$].[Row ID]": "97", "[Orders$].[Sales]": "96.53", "[Orders$].[Segment]": "Home Office", "[Orders$].[Ship Date]": "2020-11-11T00:00:00.000", "[Orders$].[Ship Mode]": "Second Class", "[Orders$].[State]": "New York", "[Orders$].[Sub-Category]": "Furnishings" }, { "[Orders$].[Category]": "Office Supplies", "[Orders$].[City]": "San Francisco", "[Orders$].[Country/Region]": "United States", "[Orders$].[Customer ID]": "KD-16345", "[Orders$].[Customer Name]": "Katherine Ducich", "[Orders$].[Discount]": "0.2", "[Orders$].[Order Date]": "2020-06-17T00:00:00.000", "[Orders$].[Order ID]": "CA-2020-157833", "[Orders$].[Postal Code]": "94122", "[Orders$].[Product ID]": "OFF-BI-10001721", "[Orders$].[Product Name]": "Trimflex Flexible Post Binders", "[Orders$].[Profit]": "17.9592", "[Orders$].[Quantity]": "3", "[Orders$].[Region]": "West", "[Orders$].[Row ID]": "98", "[Orders$].[Sales]": "51.312", "[Orders$].[Segment]": "Consumer", "[Orders$].[Ship Date]": "2020-06-20T00:00:00.000", "[Orders$].[Ship Mode]": "First Class", "[Orders$].[State]": "California", "[Orders$].[Sub-Category]": "Binders" }, { "[Orders$].[Category]": "Office Supplies", "[Orders$].[City]": "Saint Paul", "[Orders$].[Country/Region]": "United States", "[Orders$].[Customer ID]": "ER-13855", "[Orders$].[Customer Name]": "Elpida Rittenbach", "[Orders$].[Discount]": "0", "[Orders$].[Order Date]": "2019-09-06T00:00:00.000", "[Orders$].[Order ID]": "CA-2019-149223", "[Orders$].[Postal Code]": "55106", "[Orders$].[Product ID]": "OFF-AP-10000358", "[Orders$].[Product Name]": "Fellowes Basic Home/Office Series Surge Protectors", "[Orders$].[Profit]": "22.585199999999993", "[Orders$].[Quantity]": "6", "[Orders$].[Region]": "Central", "[Orders$].[Row ID]": "99", "[Orders$].[Sales]": "77.88", "[Orders$].[Segment]": "Corporate", "[Orders$].[Ship Date]": "2019-09-11T00:00:00.000", "[Orders$].[Ship Mode]": "Standard Class", "[Orders$].[State]": "Minnesota", "[Orders$].[Sub-Category]": "Appliances" }, { "[Orders$].[Category]": "Office Supplies", "[Orders$].[City]": "Chicago", "[Orders$].[Country/Region]": "United States", "[Orders$].[Customer ID]": "RB-19465", "[Orders$].[Customer Name]": "Rick Bensley", "[Orders$].[Discount]": "0.2", "[Orders$].[Order Date]": "2019-08-29T00:00:00.000", "[Orders$].[Order ID]": "CA-2019-158568", "[Orders$].[Postal Code]": "60610", "[Orders$].[Product ID]": "OFF-PA-10003256", "[Orders$].[Product Name]": "Avery Personal Creations Heavyweight Cards", "[Orders$].[Profit]": "22.618399999999994", "[Orders$].[Quantity]": "7", "[Orders$].[Region]": "Central", "[Orders$].[Row ID]": "100", "[Orders$].[Sales]": "64.624", "[Orders$].[Segment]": "Home Office", "[Orders$].[Ship Date]": "2019-09-02T00:00:00.000", "[Orders$].[Ship Mode]": "Standard Class", "[Orders$].[State]": "Illinois", "[Orders$].[Sub-Category]": "Paper" }]
+            // tableHeaderData = ['[Orders$].[Row ID]', '[Orders$].[Order ID]', '[Orders$].[Order Date]', '[Orders$].[Ship Date]', '[Orders$].[Ship Mode]', '[Orders$].[Customer ID]', '[Orders$].[Customer Name]', '[Orders$].[Segment]', '[Orders$].[Country / Region]', '[Orders$].[City]', '[Orders$].[State]', '[Orders$].[Postal Code]', '[Orders$].[Region]', '[Orders$].[Product ID]', '[Orders$].[Category]', '[Orders$].[Sub - Category]', '[Orders$].[Product Name]', '[Orders$].[Sales]', '[Orders$].[Quantity]', '[Orders$].[Discount]', '[Orders$].[Profit]']
+            // tableHeaderData = Object.keys(tableData[0])
+            tableHeaderDataProcessed = []
+            tableHeaderData.forEach(element => {
+                let rowData = { headerFilter: "input" }
+                rowData.title = element.trim();
+                rowData.field = element.trim();
+                rowData.mutatorParams = { index: 0, field: element.trim() };
+                rowData.mutator = customMutator;
+                tableHeaderDataProcessed.push(rowData)
+            });
+            console.log({ tableHeaderDataProcessed })
+            console.log({ tableData })
+
+            // tableHeaderData = [
+            //     {
+            //         title: "[People$].[Person]", field: "[People$].[Person]", headerFilter: "input", mutatorParams: { index: 0, field: "[People$].[Person]" },
+            //         mutator: customMutator
+            //     },
+            //     {
+            //         title: "[People$].[Region]", field: "[People$].[Region]", headerFilter: "input", mutatorParams: { index: 1, field: "[People$].[Region]" },
+            //         mutator: customMutator
+            //     },
+            //     // { title: "[Orders$].[Country/Region]", field: "[Orders$].[Country/Region]", headerFilter: "input" },
+            //     // { title: "Rating", field: "rating", headerFilter: "input" },
+            //     // { title: "Favourite Color", field: "col", headerFilter: "input" },
+            //     // { title: "Date Of Birth", field: "dob", headerFilter: "input" },
+            //     // { title: "Driver", field: "driver", headerFilter: "input" },
+            // ]
+            var table = new Tabulator("#example-table", {
+                // height: "311px",
+                layout: "fitColumns",
+                columns: tableHeaderDataProcessed,
+                data: tableData
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -15,7 +15,7 @@ Item {
 
 
     anchors.left: parent.left
-    anchors.leftMargin: 3
+    anchors.leftMargin: 0
 
     Connections{
         target : TableColumnsModel
@@ -60,11 +60,11 @@ Item {
     Rectangle{
         id: add_filter
         height:28
-        width:500
+        width:parent.width
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 4
         Text{
             text: Messages.da_sub_dfa_header
 
@@ -91,9 +91,9 @@ Item {
         anchors.top: add_filter.bottom
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 4
         width: parent.width
-        height:23
+        height:24
 
         TabButton{
             id: filter_cancel_btn
@@ -103,6 +103,7 @@ Item {
 
             background: Rectangle {
                 id: filter_cancel_btn_background
+                height:24
                 color:  filter_cancel_btn.pressed? Constants.darkThemeColor: Constants.redThemeColor
                 //                color:  filter_cancel_btn.pressed? Constants.darkThemeColor: "#F4F4F4"
 
@@ -124,6 +125,7 @@ Item {
 
             background: Rectangle {
                 id: filter_apply_btn_background
+                height:24
                 color:  filter_apply_btn.pressed? Constants.darkThemeColor: Constants.greenThemeColor
                 //                color:  filter_apply_btn.pressed? Constants.darkThemeColor: "#F4F4F4"
 
@@ -142,11 +144,10 @@ Item {
     //search
     Rectangle{
         id: filterSearch
-        //        color: "red"
 
         anchors.top: apply_btn.bottom
-        anchors.topMargin: 10
-        height:50
+        anchors.topMargin: 1
+        height:40
         width:parent.width-5
         anchors.left: parent.left
         anchors.leftMargin: 5
@@ -155,6 +156,7 @@ Item {
 
             id: searchBox
             width: parent.width-20
+            height:parent.height
             anchors.verticalCenter: parent.verticalCenter
 
 
@@ -162,7 +164,7 @@ Item {
                 id:searchTextBox
                 placeholderText: Messages.search
                 selectByMouse: true
-                width: parent.width - search_icon.width
+                width: parent.width
                 height:30
                 cursorVisible: true
                 anchors.top: row_querymodeller_right_col.top
@@ -171,6 +173,9 @@ Item {
 
                 background: Rectangle{
                     border.width: 0
+                    height:parent.height
+                    width:parent.width
+
                 }
 
                 onTextChanged: searchTableColumns(searchTextBox.text)
@@ -184,8 +189,8 @@ Item {
             orientation: Qt.Horizontal
             width: parent.width - 20
             anchors.top: searchBox.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: -5
+            // anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: -20
         }
     }
 

@@ -26,6 +26,7 @@ MysqlCon::MysqlCon(QObject *parent) : QObject(parent)
 
 QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
+    qDebug() << "DRIVES" << QSqlDatabase::isDriverAvailable(DRIVER) << DRIVER;
 
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 

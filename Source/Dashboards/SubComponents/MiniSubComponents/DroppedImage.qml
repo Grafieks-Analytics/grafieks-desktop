@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebView 1.1
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -225,11 +225,13 @@ Item{
     FileDialog{
         id: fileDialog
         title: Messages.da_sub_di_selectImageDialogTxt
-        selectMultiple: false
+        fileMode: FileDialog.OpenFile
 
-        onAccepted: saveImage(fileUrl)
+        onAccepted: saveImage(fileDialog.selectedFile)
         onRejected: webengine.url = ""
     }
+
+
 
 
 

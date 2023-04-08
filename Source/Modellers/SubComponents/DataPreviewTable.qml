@@ -1,7 +1,7 @@
-import QtQuick 2.3
+import QtQuick 
 import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls
+import QtWebEngine
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
@@ -17,6 +17,9 @@ Rectangle {
     property var newObject: []
     property var previousModelData: 0
     property var counter : 0
+    property var tableData : []
+    property var tableHeaderData : []
+    color:"red"
 
     Connections{
         target: QueryModel
@@ -33,6 +36,13 @@ Rectangle {
         function onHeaderDataChanged(tableHeaders){
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
+        }
+
+        function onQueryDataChanged(jsonData){
+            console.log("QUERY RDATA", jsonData)
+            tableData = jsonData
+          
+
         }
 
         // Clear table
@@ -60,6 +70,12 @@ Rectangle {
                 setHeaders(tableHeaders)
         }
 
+        function onCsvJsonDataChanged(jsonData){
+            console.log("CSV RDATA", jsonData)
+            tableData = jsonData
+        }
+
+
         // Clear table
         function onClearTablePreview(){
             clearTable()
@@ -72,8 +88,9 @@ Rectangle {
 
         // This one is for table data
         function onExcelHasData(hasData){
-            view.model = hasData === true? ExcelQueryModel: ""
-            view.visible = hasData === true ? true: false
+            //            view.model = hasData === true? ExcelQueryModel: ""
+            //            view.visible = hasData === true ? true: false
+
 
         }
 
@@ -83,6 +100,15 @@ Rectangle {
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
             console.log("TABLE HEADERS", tableHeaders)
+
+            
+        }
+
+        function onExcelDataChanged(jsonData){
+            console.log("EXCEL RDATA", jsonData)
+            tableData = jsonData
+           
+
         }
 
         // Clear table
@@ -107,6 +133,14 @@ Rectangle {
                 setHeaders(tableHeaders)
         }
 
+
+        function onForwardDataChanged(jsonData){
+            console.log("FORWARD RDATA", jsonData)
+            tableData = jsonData
+
+
+        }
+
         // Clear table
         function onClearTablePreview(){
             clearTable()
@@ -123,157 +157,40 @@ Rectangle {
     }
 
     function setHeaders(tableHeaders){
-        if(tableHeaders.length > 0){
-            roleNames = tableHeaders
-            newObject = []
-
-            for(var i=0; i<roleNames.length; i++){
-                var role  = roleNames[i]
-                var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
-                newObject[i] = Qt.createQmlObject(columnString, view)
-                view.addColumn(newObject[i])
-            }
-        }
+        // console.log("tableData..",JSON.stringify(tableData))
+          webEngineViewTable.runJavaScript("drawTable("+ tableData +
+            ","+JSON.stringify(tableHeaders)+")");
     }
 
     function clearTable(){
+         webEngineViewTable.runJavaScript("clearTable()");
         for(var i=0; i<roleNames.length; i++){
-            view.removeColumn(newObject[i])
+            //            view.removeColumn(newObject[i])
             delete newObject[i]
 
         }
     }
 
 
-    TableView {
-        id:view
+    Rectangle{
+        id: view
+        anchors.left : parent.left
+        anchors.top : calculationName.bottom
         width: parent.width
         height: parent.height
-        //        anchors.top: clearBtn.bottom
-        alternatingRowColors: false
-        visible: false
+        border.color: Constants.borderBlueColor
+        // visible: false
 
+        WebEngineView {
+            id: webEngineViewTable
+            height:parent.height
+            width: parent.width
+            // url:"qrc:/Source/Reports/calculatedFieldEditor.html"
+            url: Constants.webEngineViewTableURL
 
-
-        style: TableViewStyle {
-            headerDelegate: Rectangle {
-                height: textItem.implicitHeight * 1.8
-                width: textItem.implicitWidth
-                color: Constants.themeColor
-
-                Text {
-                    id: textItem
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: styleData.textAlignment
-                    anchors.leftMargin: 12
-                    text: styleData.value
-                    elide: Text.ElideRight
-                    color: textColor
-                    font.bold: true
-                    renderType: Text.NativeRendering
-
-
-                }
-                Rectangle {
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 1
-                    anchors.topMargin: 1
-
-                    width: 1
-                    color: Constants.darkThemeColor
-                    border.color: Constants.darkThemeColor
-                }
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1
-                    color: Constants.darkThemeColor
-                    border.color: Constants.darkThemeColor
-                }
-            }
-
-            itemDelegate: Rectangle {
-                color: "white"
-
-
-                Text {
-                    id: textItem1
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    objectName: styleData.value
-                    horizontalAlignment: styleData.textAlignment
-                    anchors.leftMargin: 12
-                    elide: Text.ElideRight
-                    color: textColor
-                    renderType: Text.NativeRendering
-                    // text: modelData
-                    onObjectNameChanged: {
-                        var colValue;
-                        var newDate;
-                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
-                            colValue = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
-                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-                                newDate = new Date(colValue)
-                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-                            } else {
-                                textItem1.text = colValue
-                            }
-
-                        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                            colValue = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
-                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-                                newDate = new Date(colValue)
-                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-                            } else {
-                                textItem1.text = colValue
-                            }
-                        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
-                            colValue = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
-                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-                                newDate = new Date(colValue)
-                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-                            } else {
-                                textItem1.text = colValue
-                            }
-                        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-                            colValue = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
-                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-                                newDate = new Date(colValue)
-                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-                            } else {
-                                textItem1.text = colValue
-                            }
-                        } else {
-                            colValue = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
-                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-                                newDate = new Date(colValue)
-                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-                            } else {
-                                textItem1.text = colValue
-                            }
-                        }
-                    }
-
-                }
-                Rectangle {
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 1
-                    color: Constants.darkThemeColor
-                    border.color: Constants.darkThemeColor
-                }
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1
-                    color: Constants.darkThemeColor
-                    border.color: Constants.darkThemeColor
-                }
-            }
+            anchors.left: tool_sep_chartFilters.right
+            anchors.top: axis.bottom
         }
     }
+
 }

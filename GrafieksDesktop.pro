@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql networkauth webchannel network axcontainer
+QT += core quick httpserver webenginequick  quickcontrols2 sql networkauth webchannel network axcontainer core5compat widgets
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -91,6 +91,8 @@ SOURCES += \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
+    Code/Logic/General/calculatedfields.cpp \
+    Code/Logic/General/calculatedfieldsyntax.cpp \
     Code/Logic/General/chartsapithread.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
@@ -212,6 +214,8 @@ HEADERS += \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcemodel.h \
+    Code/Logic/General/calculatedfields.h \
+    Code/Logic/General/calculatedfieldsyntax.h \
     Code/Logic/General/chartsapithread.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
@@ -235,6 +239,8 @@ HEADERS += \
     Code/messages.h \
     Code/constants.h \
     Code/paths.h \
+    Code/secrets.h \
+    Code/secrets.h \
     Code/secrets.h \
     Code/secrets.h \
     Code/secrets.h \

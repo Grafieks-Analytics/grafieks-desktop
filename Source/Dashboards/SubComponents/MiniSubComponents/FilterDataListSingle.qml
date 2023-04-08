@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.2
-import QtQuick.Controls 1.4 as Old
+//import QtQuick.Controls 1.4 as Old
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0

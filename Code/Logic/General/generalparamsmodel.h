@@ -110,6 +110,8 @@ public:
 
     Q_INVOKABLE void quitApplication();
 
+    Q_INVOKABLE QString getQueryString(QString body, QList<QPair<QByteArray, QByteArray>> headers);
+
 public slots:
 
     //! Set the current highlighted left menu

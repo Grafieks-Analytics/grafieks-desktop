@@ -10,7 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -28,7 +28,7 @@ Popup {
     x: (parent.width - editorPopup.width)/2
     y: (parent.height - editorPopup.height)/2
 
-    z:1000
+    // z:1000
     padding: 0
 
     property alias widgetReportId: editorPopup.reportId
@@ -203,7 +203,7 @@ Popup {
 
             TextEditor{
                 id: textEditor
-                z:10002
+                // z:10002
             }
 
         }

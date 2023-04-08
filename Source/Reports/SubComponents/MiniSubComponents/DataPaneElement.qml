@@ -85,13 +85,21 @@ Rectangle{
         return "";
     }
 
+    function openMenuCalc(colName, colType){
+        CalculatedFields.setCalculatedFieldName(colName)
+        CalculatedFields.setCalculatedFieldType(colType)
+
+
+        console.log("HERE AGAIN", colName)
+        console.log("HERE AGAIN2", colType)
+
+        popupcalc.open()
+    }
+
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
-    function openMenuCalc(){
-        console.log("openMenuCalc")
-        popupcalc.open()
-    }
 
 
 
@@ -205,7 +213,7 @@ Rectangle{
                                 leftPadding: 15
                                 text: "custom field"
 
-                                onClicked: openMenuCalc()
+                                onClicked: openMenuCalc(key, itemType.toLowerCase())
 
                             }
                         // MouseArea{

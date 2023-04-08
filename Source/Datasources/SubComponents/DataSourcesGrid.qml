@@ -24,6 +24,11 @@ Page {
     id: datasources_grid
     width: parent.width
     height: parent.height
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -137,8 +142,8 @@ Page {
             border.color: Constants.darkThemeColor
             anchors.horizontalCenter: parent.horizontalCenter
 
-            width: 340
-            height: 280
+            width: 320
+            height: 240
             radius: 10
             scale: 1
 
@@ -155,7 +160,7 @@ Page {
                 anchors.top: data_source_main.top
                 anchors.leftMargin: 1
                 anchors.topMargin: 1
-                width: 338
+                width: 320
                 height: 40
                 color: Constants.themeColor
                 radius: 10

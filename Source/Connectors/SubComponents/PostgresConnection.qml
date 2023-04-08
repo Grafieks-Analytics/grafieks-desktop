@@ -10,7 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -154,7 +154,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_postgres_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -570,7 +570,8 @@ Popup {
         title: Messages.cn_sub_postgres_missingDriver
         text: Messages.cn_sub_postgres_driverDownload
 
-        standardButtons: StandardButton.Ok
+//        standardButtons: StandardButton.Ok
+        buttons: MessageDialog.Ok
 
         onAccepted: {Qt.openUrlExternally(Constants.postgresDriverUrl)
         }

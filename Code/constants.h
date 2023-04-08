@@ -46,6 +46,8 @@ namespace Constants
     const QString masterQueryPartExtractTable = "gahc_query_part_extract_table";
     const QString masterCredentialsTable = "gahc_credentials_table";
     const QString masterHeadersTable = "gahc_headers_table";
+    const QString masterCalculatedFieldsTable = "gahc_calculated_fields";
+    const QString masterCalculatedValuesTable = "gahc_calculated_values";
 
     // File extensions
     const QString extractExt = "gadse";
@@ -238,8 +240,8 @@ namespace Constants
     const QString defaultMode = "create";
 
     // DashboardParams
-    const int defaultCanvasWidth = 1280;
-    const int defaultCanvasHeight = 800;
+    const int defaultCanvasWidth = 1080;
+    const int defaultCanvasHeight = 600;
 
     // Current Screen Types
     const int homeScreen = 0;
@@ -255,6 +257,9 @@ namespace Constants
 
     // Menu User
     const QString sessionExpiredText = "Login incorrect";
+
+    // General messages
+    const QString connectionOpenError = "Could not open";
 
 } // namespace Constants
 #endif // CONSTANTS_H

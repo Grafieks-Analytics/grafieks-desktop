@@ -4,6 +4,7 @@
 #include <QRegularExpression>
 #include <QObject>
 #include <QDebug>
+#include <QRegExp>
 
 /*!
  * \brief This class splits an Sql query into components

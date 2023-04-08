@@ -12,7 +12,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
 import com.grafieks.singleton.constants 1.0
@@ -26,6 +26,11 @@ Popup {
     height: 400
     modal: true
     visible: false
+     background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     x: parent.width / 2 - 300
     y: parent.width / 2 - 700
     padding: 0

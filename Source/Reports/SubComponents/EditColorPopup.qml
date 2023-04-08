@@ -1,7 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
+import Qt.labs.platform
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0

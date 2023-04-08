@@ -8,19 +8,21 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+import QtQuick 
+import QtQuick.Layouts 
+import QtQuick.Controls 
+import QtQuick.Dialogs
 
-import com.grafieks.singleton.constants 1.0
-import com.grafieks.singleton.messages 1.0
+import com.grafieks.singleton.constants 
+import com.grafieks.singleton.messages 
+import "../MainSubComponents";
 
 
 Rectangle{
     id: leftMenuBar
     height: parent.height
     width: Constants.leftMenubarWidth
+    // color:"red"
 
     // selectedMenu indicates
     // 0 : Data Designer is selected
@@ -223,13 +225,80 @@ Rectangle{
         anchors.top: parent.top
         padding: 0
         anchors.topMargin: -4
+        contentItem: Rectangle {
+            implicitWidth: parent.vertical ? 1 : 24
+            implicitHeight: parent.vertical ? 25 : 1
+            color: Constants.darkThemeColor
+
+        }
     }
 
-    MessageDialog{
+    // Dialog{
+    //     id: errorDialog
+    //     title: "Dashboard Disabled"
+    //     x:parent.parent.width/2-200
+    //     y:parent.height/2-75
+    //     contentItem: Rectangle {
+    //       color: "white"
+    //       implicitWidth: 400
+    //       implicitHeight: 150
+    //       Text {
+    //           text: "Create or Select a Datasource before creating a dashboard!"
+    //           color: "black"
+    //           anchors.centerIn: parent
+    //       }
+    //   }
+    // }
+    // CustomMessageDialog{
+    //         id: errorDialog
+    // }
+    Dialog{
         id: errorDialog
         title: "Dashboard Disabled"
-        text: "Create or Select a Datasource before creating a dashboard"
+        x:parent.parent.width/2-200
+        y:parent.height/2-70
+        standardButtons: Dialog.Ok
+        // background:Rectangle {
+        //   color: "white"
+        //   height:parent.height-100
+        //   width:parent.width-150
+        //   }
+        Rectangle {
+          color: "white"
+          implicitWidth: 400
+          width: 410
+          implicitHeight: 140
+          height: 140
+          anchors.left:parent.left
+          anchors.leftMargin:-5
+          Text {
+              text: "Create or Select a Datasource before creating a dashboard!"
+              color: "black"
+              anchors.centerIn: parent
+          }
+      }
     }
+
+    // Dialog{
+    //     id: errorDialog
+    //     title: "Dashboard Disabled"
+    //     text: "Create or Select a Datasource before creating a dashboard"
+    // }
+//     Dialog {
+//       visible: true
+//       title: "Blue sky dialog"
+
+//       contentItem: Rectangle {
+//           color: "lightskyblue"
+//           implicitWidth: 400
+//           implicitHeight: 100
+//           Text {
+//               text: "Hello blue sky!"
+//               color: "navy"
+//               anchors.centerIn: parent
+//           }
+//       }
+//   }
 }
 
 

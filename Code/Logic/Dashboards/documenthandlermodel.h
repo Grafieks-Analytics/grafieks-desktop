@@ -4,7 +4,7 @@
 #include <QQuickTextDocument>
 
 #include <QtGui/QTextCharFormat>
-#include <QtCore/QTextCodec>
+#include <QTextCodec>
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextCursor>
 #include <QtGui/QFontDatabase>

@@ -11,7 +11,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -26,6 +26,12 @@ Page {
 
     id: queryModellerPage
     height: parent.height
+        background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
+
 
 
     property int menu_width: 60
@@ -34,7 +40,7 @@ Page {
     property bool collapsed: false
     property bool open: true
     property int dataPreviewNo: 6
-    property var tableShowToggle: true
+    property bool tableShowToggle: true
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
@@ -151,6 +157,7 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                
                 radio_live.visible = false
                 radio_memory.checked = true
             }
@@ -161,6 +168,7 @@ Page {
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
                 queryModellerTab.visible = false
+                tabbutton_querymodeller.width=100
                 radio_live.visible = false
                 radio_memory.checked = true
             }
@@ -496,6 +504,8 @@ Page {
     }
 
     function onCreateDashboardClicked(){
+
+        console.log("QQQ", DSParamsModel.tmpSql);
 
         QueryModel.setIfPublish(false)
         ForwardOnlyQueryModel.setIfPublish(false)
@@ -894,7 +904,7 @@ Page {
         id: dataRemovalWarningDataModel
         title: Messages.warningTitle
         text: Messages.mo_dqm_warningQueryLoss
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
 
         onAccepted: {
 
@@ -908,14 +918,14 @@ Page {
         id: datasourceNameWarningModal
         title: Messages.warningTitle
         text: Messages.mo_dqm_mandatoryDSName
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     MessageDialog{
         id: dataRemovalWarningQueryModel
         title: Messages.warningTitle
         text: Messages.mo_dqm_warningModelLoss
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
 
         onAccepted: {
 
@@ -930,14 +940,14 @@ Page {
         id: freeLimitExtractWarning
         title: Messages.warningTitle
         text: Messages.mo_dqm_freeExtractSizeLimit
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
 
     }
 
     MessageDialog{
         id: extractCreationError
         title: Messages.mo_dqm_extractCreateErr
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -1019,14 +1029,17 @@ Page {
 
     Rectangle{
         id: submenu
-        height: 22.5
+        height: 25
         width: parent.width - menu_width - column_querymodeller.width
         x: menu_width - 11
+        // color:"red"
 
 
         TabBar{
 
             id: tabbutton_querymodeller
+            contentHeight :parent.height+1
+            width:202
 
 
             // Data Modeller Button starts
@@ -1035,6 +1048,8 @@ Page {
                 id: datamodeller_querymodeller
                 text: Messages.mo_dqm_dataTabName
                 width:100
+                height: parent.height
+                
 
                 onClicked: onDataModellerClicked()
                 onHoveredChanged: onDataModellerHovered()
@@ -1076,6 +1091,8 @@ Page {
                 id: queryModellerTab
                 text: Messages.mo_dqm_queryTabName
                 width:100
+                height: parent.height
+
 
                 onClicked: onQueryModellerClicked()
                 onHoveredChanged: onQueryModellerHovered()
@@ -1100,6 +1117,14 @@ Page {
                 ToolTip.text: Messages.mo_dqm_queryTabDesc
 
             }
+
+            //    TabButton {
+            //         id: tabPublishDashboarda
+            //        text: qsTr("Home")
+            //    }
+            //    TabButton {
+            //        text: qsTr("Discover")
+            //    }
 
             // Query Modeller button ends
 
@@ -1283,9 +1308,10 @@ Page {
     ToolSeparator{
         id: toolsep1
         orientation: Qt.Horizontal
-        width: parent.width - menu_width - 100
+        width: parent.width - menu_width - 80
         anchors.top: submenu.bottom
         leftPadding: left_menubar.width
+        anchors.topMargin:-5
         anchors.horizontalCenter: submenu.horizontalCenter
 
         contentItem: Rectangle {
@@ -1395,7 +1421,7 @@ Page {
         id: column_querymodeller
 
         height:parent.height
-        width: 200
+        width: 205
         anchors.right:parent.right
         spacing: 50
 
@@ -1416,7 +1442,7 @@ Page {
                 height:parent.height
                 anchors.left:parent.left
                 anchors.top: parent.top
-                anchors.leftMargin:  -8
+                anchors.leftMargin:  -7
                 anchors.topMargin: -5
 
 
@@ -1445,6 +1471,7 @@ Page {
                 id: tabbar_querymodeller
 
                 width:rectangle_querymodeller_right_col.width
+                contentHeight :25
                 z: 20
 
                 background: Rectangle {
@@ -1469,6 +1496,7 @@ Page {
                     onClicked: onPublishDataSourceClicked()
 
                     background: Rectangle{
+                        width: parent.width-2
                         color: Constants.grafieksLightGreenColor
                         opacity: tabPublishDashboard.hovered ? 0.42 : 1
                     }
@@ -1483,7 +1511,7 @@ Page {
 
                 TabButton{
                     id: tabCreateDashboard
-                    width:rectangle_querymodeller_right_col.width / 2
+                    width:rectangle_querymodeller_right_col.width / 2+1
                     height: parent.height
                     z: 20
 
@@ -1499,6 +1527,7 @@ Page {
                         id:tabCreateDashboard_text
                     }
                     background: Rectangle {
+                        width: parent.width
                         color: Constants.grafieksLightGreenColor
                         opacity: tabCreateDashboard.hovered ? 0.42 : 1
                     }
@@ -1527,7 +1556,7 @@ Page {
                 anchors.top: tabbar_querymodeller.bottom
                 anchors.topMargin: 2
 
-                height:50
+                height:30
                 width: rectangle_querymodeller_right_col.width
                 z: 20
 
@@ -1539,10 +1568,11 @@ Page {
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
+                    anchors.topMargin: 10
                     readOnly: false
                     selectByMouse: true
                     width:250
-                    height: 40
+                    height: 30
                     anchors.horizontalCenter:parent.horizontalCenter
                     font.pixelSize: 14
                     verticalAlignment:TextEdit.AlignVCente
@@ -1594,7 +1624,7 @@ Page {
 
                 anchors.top: rectangle_querymodeller_right_col1.bottom
                 anchors.topMargin: 2
-                height:50
+                height:30
                 width: rectangle_querymodeller_right_col.width
                 color:Constants.themeColor
                 z: 20
@@ -1618,7 +1648,7 @@ Page {
 
                 anchors.top: rectangle_querymodeller_right_col2.bottom
                 anchors.topMargin: 2
-                height:50
+                height:40
                 width: rectangle_querymodeller_right_col.width
                 z: 20
 
@@ -1637,6 +1667,8 @@ Page {
                         cursorVisible: true
                         anchors.top: row_querymodeller_right_col.top
                         anchors.topMargin: 5
+                        anchors.leftMargin: 5
+                        anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
 
                         background: Rectangle{
                             border.width: 0
@@ -1653,7 +1685,7 @@ Page {
                     width: rectangle_querymodeller_right_col3.width - 20
                     anchors.top: row_querymodeller_right_col.bottom
                     anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
-                    anchors.topMargin: 5
+                    // anchors.topMargin: 1
                 }
             }
 

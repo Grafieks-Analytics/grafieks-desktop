@@ -10,7 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -24,8 +24,13 @@ Popup {
     height: 500
     modal: true
     visible: false
-    x: parent.width/2 - 300
-    y: parent.height/2 - 300
+     background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
+    x: parent.width/2 - 400
+    y: parent.height/2 - 250
     padding: 0
     property int label_col : 135
     closePolicy: Popup.NoAutoClose
@@ -95,11 +100,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             id : text1

@@ -2813,7 +2813,7 @@ void ChartsThread::getPivotChartValues()
         } else{
 
             QString colName;
-            foreach(QVariant column, columns){
+            for(auto column: columns){
                 QStringList xPieces = column.toString().split( "." );
                 colName = xPieces.at(1);
                 colName.remove(QRegularExpression("[\"\'`]+"));
@@ -2824,7 +2824,7 @@ void ChartsThread::getPivotChartValues()
             QString row3ColName;
             foreach(QVariant column, row3ColumnOut){
                 QStringList tmpInnerCol;
-                foreach(QVariant innerColumn, column.toJsonArray()){
+                for(auto innerColumn: column.toJsonArray()){
                     QStringList xPieces = innerColumn.toString().split( "." );
                     row3ColName = xPieces.at(1);
                     row3ColName.remove(QRegularExpression("[\"\'`]+"));
@@ -3934,7 +3934,7 @@ QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);
@@ -4091,7 +4091,7 @@ QMap<int, QHash<int, QString> > ChartsThread::queryLiveValues(QString mainQuery,
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);

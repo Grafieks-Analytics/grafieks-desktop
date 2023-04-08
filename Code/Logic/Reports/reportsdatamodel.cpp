@@ -312,18 +312,18 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
                 tmpValues = actualDateValues;
 
                 if(subCategory == Constants::dateSubYear){
-                    this->whereConditions += joiner + columnName + joiner + " LIKE '%" + tmpValues.at(0) + "%' AND ";
+                    this->whereConditions.append( joiner).append( columnName).append( joiner).append(" LIKE '%").append(tmpValues.at(0)).append( "%' AND ");
                 } else if(subCategory == Constants::dateSubDay){
                     QDate dt1 = QDate::fromString(tmpValues.at(0), "yyyy-MM-dd");
-                    this->whereConditions += "strftime(DATE, " +joiner + columnName + joiner +", %Y-%m-%d) = " + dt1.toString() + " AND ";
+                    this->whereConditions.append("strftime(DATE, ").append(joiner).append(columnName).append(joiner).append(", %Y-%m-%d) = ").append(dt1.toString()).append( " AND ");
                 } else {
-                    this->whereConditions += " AND ";
+                    this->whereConditions.append(" AND ");
                 }
 
             } else{
 
                 if(filterValueList.at(0) == "%"){
-                    this->whereConditions += " AND ";
+                    this->whereConditions.append(" AND ");
                 }
             }
         }
@@ -332,7 +332,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // Categorical & Date only
         else if(filterSlug == Constants::slugNotLikeRelation){
 
-            this->whereConditions += joiner + columnName + joiner + " NOT LIKE % AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" NOT LIKE % AND ");
         }
 
         // 3. In array relation
@@ -366,7 +366,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
             qDebug() << "IN VALUES" << values;
 
             QString notRelationString = includeExclude == true ? " NOT " : "";
-            whereConditions += joiner + columnName + joiner + notRelationString + " IN (" + values + ") AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(notRelationString).append(" IN (").append(values).append(") AND ");
         }
 
         // 4. Equal to comparison
@@ -374,10 +374,10 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugEqualRelation){
 
             if(section == Constants::dateType){
-                whereConditions += joiner + columnName + joiner + " = '" + actualDateValues.at(0) + "' AND ";
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" = '").append(actualDateValues.at(0)).append("' AND ");
             } else{
                 QString param = filterValueList.at(0);
-                whereConditions += joiner + columnName + joiner + " = '" + param.replace("'", "''") + "' AND ";
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" = '").append(param.replace("'", "''")).append("' AND ");
             }
 
         }
@@ -387,7 +387,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugNotEqualRelation){
 
             QString param = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " != '" + param.replace("'", "''") + "' AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" != '" + param.replace("'", "''")).append("' AND ");
 
         }
 
@@ -413,12 +413,12 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
                     dt2 = QDateTime::fromString(tmpValues.at(1), "yyyy-MM-dd");
                 }
 
-                whereConditions += joiner + columnName + joiner + " BETWEEN '" + dt1.toString() + "' AND '" + dt1.toString() + "' AND ";
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" BETWEEN '").append(dt1.toString()).append("' AND '").append(dt1.toString()).append("' AND ");
 
             } else{
 
                 tmpValues = filterValueList.at(0).split(" And ");
-                whereConditions += joiner + columnName + joiner + " BETWEEN " + tmpValues.at(0).toDouble() + " AND " + tmpValues.at(1).toDouble() + " AND ";
+                this->whereConditions.append(joiner).append(columnName).append(joiner).append(" BETWEEN ").append(QString::number(tmpValues.at(0).toDouble())).append(" AND ").append(QString::number(tmpValues.at(1).toDouble())).append(" AND ");
             }
 
         }
@@ -426,27 +426,27 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         // 7. For smaller than relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanRelation){
-            whereConditions += joiner + columnName + joiner + " < " + filterValueList.at(0).toStdString().c_str() + " AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" < ").append(QString::fromStdString(filterValueList.at(0).toStdString()) + " AND ");
         }
 
         // 8. For greater than relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanRelation){
-            whereConditions += joiner + columnName + joiner + " > " + filterValueList.at(0).toStdString().c_str() + " AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" > ").append(QString::fromStdString(filterValueList.at(0).toStdString().c_str()) + " AND ");
         }
 
         // 9. For smaller than and equal to relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanEqualRelation){
 
-            whereConditions += joiner + columnName + joiner + " <= " + filterValueList.at(0).toStdString().c_str() + " AND ";
+            this->whereConditions.append(joiner).append( columnName).append(joiner).append(" <= ").append(QString::fromStdString(filterValueList.at(0).toStdString().c_str()) + " AND ");
         }
 
         // 10. For greater than and equal to relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanEqualRelation){
 
-            whereConditions += joiner + columnName + joiner + " >= " + filterValueList.at(0).toStdString().c_str() + " AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" >= ").append(QString::fromStdString(filterValueList.at(0).toStdString().c_str()) + " AND ");
 
         }
 
@@ -456,7 +456,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
 
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal.replace("'", "''") + "' AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 12. For Ends With relation
@@ -464,7 +464,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugEndsWithRelation){
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " LIKE '" + tmpVal.replace("'", "''") + "' AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 13. For Doesnt Start With relation
@@ -472,7 +472,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugDoesntStartWithRelation){
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal.replace("'", "''")  + "' AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" NOT LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 14. For Doesnt End With relation
@@ -480,7 +480,7 @@ void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilte
         else if(filterSlug == Constants::slugDoesntEndWithRelation){
 
             QString tmpVal = filterValueList.at(0);
-            whereConditions += joiner + columnName + joiner + " NOT LIKE '" + tmpVal.replace("'", "''")  + "' AND ";
+            this->whereConditions.append(joiner).append(columnName).append(joiner).append(" NOT LIKE '").append(tmpVal.replace("'", "''")).append("' AND ");
         }
 
         // 15. Filter

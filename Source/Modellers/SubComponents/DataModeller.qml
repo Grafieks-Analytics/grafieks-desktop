@@ -11,7 +11,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 
 import com.grafieks.singleton.constants 1.0
@@ -1392,7 +1392,8 @@ Item {
 
         modality: Qt.ApplicationModal
         title: Messages.mo_sub_dmr_queryErr
-        standardButtons: StandardButton.Close
+//        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
     }
 
     MessageDialog{
@@ -1400,6 +1401,7 @@ Item {
 
         modality: Qt.ApplicationModal
         title: Messages.mo_sub_dmr_selPrimaryTable
-        standardButtons: StandardButton.Close
+//        standardButtons: StandardButton.Close
+        buttons: MessageDialog.Close
     }
 }

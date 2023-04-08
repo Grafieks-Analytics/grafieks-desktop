@@ -10,7 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -24,8 +24,13 @@ Popup {
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 130
+    y: parent.height/2 - 125
     padding: 0
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     property int label_col : 135
 
     property var selectedFile: ""
@@ -72,11 +77,10 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
+
 
         Text{
             id : text1
@@ -199,7 +203,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_sqlite_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
     // Select SQLITE file

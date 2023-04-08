@@ -2,25 +2,27 @@
 
 // Crashpad include starts
 #if defined(Q_OS_WIN)
-    #define NOMINMAX
-    #include <windows.h>
+#define NOMINMAX
+#include <windows.h>
 #endif
 
 #if defined(Q_OS_MAC)
-    #include <mach-o/dyld.h>
+#include <mach-o/dyld.h>
 #endif
 
 #if defined(Q_OS_LINUX)
-    #include <unistd.h>
-    #define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#include <unistd.h>
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 // Crashpad include ends
 
+#include <QtHttpServer>
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
-#include <QtWebEngine>
+#include <QtWebEngineCore>
+#include <QtWebEngineQuick/qtwebenginequickglobal.h>
 #include <QSettings>
 #include <QDebug>
 #include <QFile>
@@ -28,6 +30,7 @@
 #include <QtQml>
 #include <QFileInfo>
 #include <QStandardPaths>
+
 
 #include <QtQml/QQmlApplicationEngine>
 
@@ -98,6 +101,7 @@
 #include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/updateapplicationmodel.h"
+#include "Code/Logic/General/calculatedfields.h"
 
 #include "Code/OS/odbcdriversmodel.h"
 #include "Code/OS/osentries.h"
@@ -213,6 +217,7 @@ using namespace crashpad;
 bool initializeCrashpad(QString dbName, QString appName, QString appVersion);
 QString getExecutableDir(void);
 
+
 /*! \mainpage Code Documentation
  *
  * \subsection tools Development tools
@@ -293,7 +298,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    QtWebEngine::initialize();
+
+    QtWebEngineQuick::initialize();
     QQuickStyle::setStyle("Default");
 
     // Static initializations Ends
@@ -325,10 +331,10 @@ int main(int argc, char *argv[])
 
     // Registry entries
 #ifdef Q_OS_WIN
-  OsEntries osEntries;
-  osEntries.witeToWindowsRegistry();
+    OsEntries osEntries;
+    osEntries.witeToWindowsRegistry();
 #elif Q_OS_MACX
-  qDebug() <<Q_FUNC_INFO << "Mac & Linux versions not supported yet";
+    qDebug() <<Q_FUNC_INFO << "Mac & Linux versions not supported yet";
 #else
 #error "We don't support that version yet..."
 #endif
@@ -359,11 +365,12 @@ int main(int argc, char *argv[])
 
 
     GeneralParamsModel generalParamsModel;
+    CalculatedFields calculatedFields;
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
     ReportsDataModel reportsDataModel;
-    ForwardOnlyDataModel forwardOnlyDataModel;  
+    ForwardOnlyDataModel forwardOnlyDataModel;
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel(&dashboardParamsModel);
     ExcelDataModel excelDataModel;
@@ -415,7 +422,32 @@ int main(int argc, char *argv[])
     ExcelQueryModel excelQueryModel(&generalParamsModel);
     CSVJsonQueryModel csvJsonQueryModel(&generalParamsModel);
 
-//    qDebug() << "HOME" << QStandardPaths::standardLocations(QStandardPaths::HomeLocation)+"/AppData/Local/CrashDumps" << QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation);
+
+    //    qDebug() << "HOME" << QStandardPaths::standardLocations(QStandardPaths::HomeLocation)+"/AppData/Local/CrashDumps" << QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation);
+
+    /***********************************************************************************************************************/
+    // WEBSERVER STARTS
+
+    QHttpServer httpServer;
+    httpServer.route("/post_calculated_field_query", [&generalParamsModel](const QHttpServerRequest &request)  {
+        QString output;
+        QList<QPair<QByteArray, QByteArray>> headers = request.headers();
+        QString body = request.body();
+
+        output = generalParamsModel.getQueryString(body, headers);
+        return output;
+    });
+
+    const auto port = httpServer.listen(QHostAddress::Any, 5470);
+    if (!port) {
+        qDebug() << QCoreApplication::translate("QHttpServer",
+                                                "Server failed to listen on a port.");
+        return 0;
+    }
+
+    /***********************************************************************************************************************/
+    // WEBSERVER ENDS
+
 
 
     // OBJECT INITIALIZATION ENDS
@@ -448,6 +480,7 @@ int main(int argc, char *argv[])
     QObject::connect(&excelQueryModel, &ExcelQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForExtract);
     QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &reportsDataModel, &ReportsDataModel::generateColumnsForReader);
+    QObject::connect(&extractProcessor, &ExtractProcessor::generateExtractReports, &calculatedFields, &CalculatedFields::dispatchCalculatedField);
 
     QObject::connect(&queryModel, &QueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
     QObject::connect(&csvJsonQueryModel, &CSVJsonQueryModel::generateExtractReports, &tableSchemaModel, &TableSchemaModel::generateSchemaForExtract);
@@ -579,6 +612,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("PublishWorkbookModel", &publishWorkbookModel);
     engine.rootContext()->setContextProperty("ProjectsListModel", &projectsListModel);
     engine.rootContext()->setContextProperty("UpdateApplicationModel", &updateApplicationModel);
+    engine.rootContext()->setContextProperty("CalculatedFields", &calculatedFields);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
@@ -613,7 +647,7 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/Source/Splash.qml")));
     engine.load(QUrl(QStringLiteral("qrc:/Source/Main.qml")));
 
-//    *(volatile int *)0 = 0;
+    //    *(volatile int *)0 = 0;
 
     // Check for updates
     updateApplicationModel.checkLatestApplication();
@@ -645,7 +679,7 @@ bool initializeCrashpad(QString dbName, QString appName, QString appVersion)
 
     // Configure url with your BugSplat database
     QString url = "http://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
-//    QString url = "http://mailer.grafieks.com/crashpad.php";
+    //    QString url = "http://mailer.grafieks.com/crashpad.php";
 
     // Metadata that will be posted to BugSplat
     QMap<std::string, std::string> annotations;
@@ -725,6 +759,6 @@ QString getExecutableDir() {
 
     return QString::fromStdString(pBuf);
 #else
-    #error getExecutableDir not implemented on this platform
+#error getExecutableDir not implemented on this platform
 #endif
 }

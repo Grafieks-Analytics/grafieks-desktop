@@ -10,7 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -88,7 +88,7 @@ Popup {
         id: msg_dialog
         title: "Mysql Connection"
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 

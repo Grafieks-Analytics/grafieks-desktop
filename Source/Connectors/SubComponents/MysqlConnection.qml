@@ -10,7 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -26,6 +26,11 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 200
     padding: 0
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     property int label_col : 135
 
 
@@ -156,7 +161,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_mysql_subHeader
         text: ""
-        icon: StandardIcon.Critical
+        //        icon: StandardIcon.Critical
     }
 
 
@@ -178,11 +183,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             id : text1
@@ -555,8 +558,8 @@ Popup {
             id: btn_signin
             textValue: Messages.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            //                        onClicked: connectToOdbcMySQL()
-            onClicked: connectToMySQL()
+            onClicked: connectToOdbcMySQL()
+            //            onClicked: connectToMySQL()
 
         }
 
@@ -574,7 +577,7 @@ Popup {
         title: Messages.cn_sub_mysql_missingDriver
         text: Messages.cn_sub_mysql_driverDownload
 
-        standardButtons: StandardButton.Ok
+        buttons: MessageDialog.Ok
 
         onAccepted: {Qt.openUrlExternally(Constants.mysqlDriverUrl)
         }

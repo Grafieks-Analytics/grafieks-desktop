@@ -22,7 +22,7 @@ import "./MiniSubComponents"
 Item {
 
     id: dashboard_filter
-    width:200
+    width:204
     height:parent.height
     anchors.left: parent.left
     anchors.leftMargin: 3
@@ -43,18 +43,20 @@ Item {
 
  Rectangle{
      height:parent.height
-     width:200
+     width:204
      color: "white"
-     y:5
+    //  color:"red"
+     y:4
 
     Rectangle{
         id: show_filter
         height:28
-        width:parent.width-5
+        width:parent.width
         anchors.top: parent.top
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.leftMargin: 2
+        
         Text{
             text: Messages.da_sub_df_header
 
@@ -76,9 +78,9 @@ Item {
         anchors.top: show_filter.bottom
         anchors.topMargin: 4
         anchors.left: parent.left
-        anchors.leftMargin: 5
-        width: parent.width-10
-        height:23
+        anchors.leftMargin: 1
+        width: parent.width-4
+        height:24
 
         TabButton{
             id: filter_cancel_btn
@@ -88,6 +90,7 @@ Item {
             background: Rectangle {
                 id: filter_cancel_btn_background
                 color:  filter_cancel_btn.pressed? Constants.darkThemeColor: Constants.redThemeColor
+                height:24
 
 
 
@@ -113,6 +116,7 @@ Item {
 
             background: Rectangle {
                 id: filter_apply_btn_background
+                height:24
                 color:  filter_apply_btn.pressed? Constants.darkThemeColor: Constants.greenThemeColor
 
             }

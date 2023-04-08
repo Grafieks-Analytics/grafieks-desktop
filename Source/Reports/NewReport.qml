@@ -12,6 +12,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtWebEngine 1.7
+import QtQml.Models 2.15
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -44,12 +45,20 @@ Page {
 
     id: report_desiner_page
     width: parent.width
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     
     // property int menu_width: 60
 
     property int dataPanesSpacing: 5    // spacing between data panes dropped on x axis, y axis, values and other droppable areas
     // property int colorBoxHeight: 20
     // property int colorListTopMargin: 5
+
+    property var errMsg: ""
+    property var mode: ""
 
     property int editImageSize: 16      // Edit icon size
 
@@ -225,6 +234,41 @@ Page {
         id: allCharts
     }
 
+    ListModel {
+        id: functionModel
+        ListElement {
+            name: "IF"
+            syntax:"if(5> 10,100,3) = 3"
+            mode: "map"
+        }
+        ListElement {
+            name: "If Case"
+            syntax:"Returns the 'returnValue' if the given column satisfied with 'matchExpr'."
+            mode: "map"
+        }
+        ListElement {
+            name: "Ifnull"
+            syntax:"ifnull(null,10) = 10"
+            mode: "map"
+        }
+        ListElement {
+            name: "Is Empty"
+            syntax:"isempty(null) = 1"
+            mode: "map"
+        }
+        ListElement {
+            name: "isnul"
+            syntax:"isnull(null)- 1"
+            mode: "map"
+        }
+        ListElement {
+            name: "SUM (single value)"
+            syntax:"Some dummy syntax"
+            mode: "reduce"
+        }
+
+
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -380,6 +424,7 @@ Page {
                 DrawChartUtils.drawChartAfterReceivingSignal(output);
         }
     }
+
 
 
     // Connections Ends
@@ -683,12 +728,52 @@ Page {
         reportTitleName = title;
     }
 
+
+
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS popup
 
+    function dataTypeChange(dataType) {
+        console.log(dataType)
+    }
 
     function onCancelClickedCalc(){
         popupcalc.visible = false
+    }
+
+    function insertSyntax(i){
+        //    syntaxEditorText.text = functionListElemText.text
+        syntaxEditorText.text = functionModel.get(i).syntax
+        report_desiner_page.mode = functionModel.get(i).mode
+    }
+
+
+    function onApplyClicked() {
+        console.log("Apply clicked")
+        if(nameTextField.text.length <= 0){
+            report_desiner_page.errMsg = "Name column cannot be blank"
+            popupError.text = report_desiner_page.errMsg
+        } else {
+
+            var name = nameTextField.text
+//            var query = queryTextEdit.text
+//            var query = `SELECT CASE WHEN "Row ID" < 10 THEN 'yes' ELSE 'no' END FROM orders1500 LIMIT 10`
+//            var query = `SELECT CASE WHEN "id" < 10 THEN 'yes' ELSE 'no' END FROM users LIMIT 10`
+            var query = `if [FIELD] < 6000 THEN "A" elseif [FIELD]  >= 6000 and [FIELD] < 9000 THEN "B" else "C" endif`
+            var source = Constants.reportScreen
+
+
+            // name, query, souce, mode
+            console.log("name:", name, "q:", query, "source:", source, "mode:", mode)
+            var status = CalculatedFields.addCalculatedField(name, query, source, report_desiner_page.mode)
+
+            if (!status) {
+                popupError.text = "Could not create calculated field"
+            } else {
+                onCancelClickedCalc()
+            }
+        }
+
     }
 
 
@@ -735,8 +820,17 @@ Page {
             anchors.topMargin: 1
             anchors.leftMargin: 1
 
+//            Text{
+//                id: popupError
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.left : parent.left
+//                font.pixelSize: Constants.fontCategoryHeader
+//                anchors.leftMargin: 10
+//                color: Constants.redColor
+//            }
+
             Text{
-                text: "Create Custom Field"
+                text: Constants.createCustomField
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left : parent.left
                 font.pixelSize: Constants.fontCategoryHeader
@@ -768,7 +862,7 @@ Page {
 
             Text{
                 id:nameText
-                text: "Name"
+                text: Constants.name
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left : parent.left
                 font.pixelSize: Constants.fontCategoryHeader
@@ -789,6 +883,7 @@ Page {
                 TextEdit {
                     // Green Input
                     // id: input1Field
+                    id: nameTextField
                     leftPadding: 10
                     rightPadding: 10
                     width: parent.width
@@ -819,7 +914,7 @@ Page {
 
                 Text{
                     id:calculationText
-                    text: "Calculation"
+                    text: Constants.calculation
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
@@ -840,16 +935,25 @@ Page {
 
                 // anchors.centerIn: parent
 
-                TextEdit {
-                    // Green Input
-                    // id: input1Field
-                    leftPadding: 10
-                    rightPadding: 10
+                // TextEdit {
+                //     // Green Input
+                //     // id: input1Field
+                //     leftPadding: 10
+                //     rightPadding: 10
+                //     width: parent.width
+                //     height:  parent.height
+                //     anchors.centerIn: parent
+                //     // onTextChanged: updateChart()
+                //     //    verticalAlignment: Text.AlignVCenter
+                // }
+                // TODO: editor
+                WebEngineView {
+                    id: webEngineViewEditor
+                    height:parent.height
                     width: parent.width
-                    height:  parent.height
-                    anchors.centerIn: parent
-                    // onTextChanged: updateChart()
-                    //    verticalAlignment: Text.AlignVCenter
+                    url: Constants.calculatedFieldEditorUrl
+                    anchors.left: tool_sep_chartFilters.right
+                    anchors.top: axis.bottom
                 }
             }
             Rectangle{
@@ -869,6 +973,7 @@ Page {
                 TextEdit {
                     // Green Input
                     // id: input1Field
+                    id: popupError
                     leftPadding: 10
                     rightPadding: 10
                     width: parent.width
@@ -898,24 +1003,80 @@ Page {
 
                 Text{
                     id:functionText
-                    text: "Function"
+                    text: Constants.functionName
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
                     anchors.leftMargin: 20
                 }
             }
+            ComboBox {
+                id:dropDownFunction
+                currentIndex: 2
+                anchors.top: functionName.bottom
+                anchors.topMargin:27
+                anchors.left : parent.left
+                anchors.leftMargin:20
+                model: [ "Logical Functions", "Aggregate Functions", "Numeric Functions" ]
+                width: parent.width-40
+                onCurrentIndexChanged: dataTypeChange(modelData)
+            }
             Rectangle{
                 id: functionEditor
                 anchors.left : parent.left
-                anchors.top : functionName.bottom
+                anchors.top : dropDownFunction.bottom
                 width: parent.width-40
                 height: 280
                 // radius: 15
                 anchors.leftMargin:20
-                anchors.topMargin:30
+                anchors.topMargin:5
                 border.color: Constants.borderBlueColor
-                //    color:"blue"
+                clip: true
+                Component {
+                    id: contactDelegate
+                    Rectangle {
+                        // Rectangle{
+                        id:functionListElem
+                        width: parent.width-10;
+                        height: 30;
+                        anchors.left:parent.left
+                        anchors.leftMargin:5
+                        //  color:"red"
+                        Column {
+                            id:functionListElemText
+                            Text { text: model.name }
+                            // Text { text: 'Number: ' + model.number }
+                        }
+                        // }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: insertSyntax(index)
+                            hoverEnabled: true
+                            onEntered: {
+                                functionListElem.color = "#F3F3F4"
+                                overlay
+                            }
+                            onExited: {
+                                //                                console.log("Exiting: ")
+                                functionListElem.color = "white"
+                            }
+
+                        }
+
+                    }
+                }
+                ListView {
+                    anchors.fill: parent
+                    clip: true
+                    anchors.topMargin:10
+
+                    ScrollBar.vertical: ScrollBar {}
+
+
+                    model: functionModel
+
+                    delegate: contactDelegate
+                }
 
                 // anchors.centerIn: parent
 
@@ -925,13 +1086,13 @@ Page {
                 id: syntaxName
                 //                color: "pink"
                 anchors.top: functionEditor.bottom
-                anchors.topMargin:30
+                anchors.topMargin:20
                 height: 40
                 width: parent.width - 2
 
                 Text{
                     id:syntaxText
-                    text: "Syntax"
+                    text: Constants.syntax
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
@@ -944,21 +1105,32 @@ Page {
                 anchors.left : parent.left
                 anchors.top : syntaxName.bottom
                 width: parent.width-50
-                height: 125
+                height: 105
                 // radius: 15
                 anchors.leftMargin:20
                 anchors.topMargin:20
                 //               anchors.leftMargin:20
                 border.color: Constants.borderBlueColor
-                //    color:"blue"
+                color:"lightgrey"
 
                 // anchors.centerIn: parent
+                Text{
+                    id:syntaxEditorText
+                    text: "Syntax"
+                    wrapMode: "WordWrap"
+                    width:parent.width-20
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left : parent.left
+                    font.pixelSize: Constants.fontCategoryHeader
+                    anchors.leftMargin: 20
+                    anchors.topMargin:30
+                }
 
             }
             Row{
                 anchors.top:syntaxEditor.bottom
                 anchors.left: parent.left
-                anchors.topMargin: 20
+                anchors.topMargin: 40
                 anchors.leftMargin: 20
                 spacing: 20
 
@@ -966,7 +1138,7 @@ Page {
                     id: cancel_btn1
                     text: "Cancel"
                     //                    textValue: Messages.cancelBtnTxt
-                    onClicked: onCancelClicked()
+                    onClicked: onCancelClickedCalc()
                 }
 
 
@@ -1796,7 +1968,7 @@ Page {
         height:parent.height + 6
         anchors.right:parent.right
         anchors.top: parent.top
-        anchors.rightMargin: 194
+        anchors.rightMargin: 193
         anchors.topMargin: -5
     }
 
@@ -1874,7 +2046,7 @@ Page {
                 anchors.top: tabbarQuerymodeller.bottom
                 anchors.topMargin: 2
 
-                height:50
+                height:40
                 width: parent.width
 
                 Text{
@@ -1902,7 +2074,7 @@ Page {
                     id: searchBarRow
                     TextField{
                         id: searchText
-                        width: parent.parent.width - search_icon.width - 5
+                        width: parent.parent.width
                         selectByMouse: true
                         height:30
                         cursorVisible: true
@@ -1911,6 +2083,7 @@ Page {
                         placeholderText: "Search"
                         background: Rectangle{
                             border.width: 0
+                            height:parent.height
                         }
                         onTextChanged: searchColumnNames(searchText.text)
                     }
@@ -1923,7 +2096,7 @@ Page {
                     width: parent.width - 10
                     anchors.top: searchBarRow.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.topMargin: 5
+                    anchors.topMargin: 2
                 }
 
             }

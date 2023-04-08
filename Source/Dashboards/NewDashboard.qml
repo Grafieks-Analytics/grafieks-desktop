@@ -13,7 +13,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebEngine 1.7
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -24,6 +24,11 @@ import "./SubComponents"
 Page {
 
     id: new_dashboard_page
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
     property int menu_width: 60
 
     property int is_dashboard_blank: 0
@@ -58,7 +63,7 @@ Page {
     Connections {
         target: DashboardParamsModel
 
-        function onDashboardNameChanged(dashboardId, dashboardName){      
+        function onDashboardNameChanged(dashboardId, dashboardName){
             for(var i = 0; i < dashboardModel.rowCount(); i++){
                 if(dashboardModel.get(i).dashboardId === dashboardId){
                     dashboardModel.get(i).dashboardName = dashboardName
@@ -355,7 +360,7 @@ Page {
 
     Rectangle{
         id: submenu
-        height: 22.5
+        height: 25
         width: parent.width - menu_width + 11
         x: menu_width - 11
 
@@ -368,6 +373,7 @@ Page {
             id: new_dashboard_btn
             anchors.left: parent.left
             width: 50
+            height:30
             z:1000
 
             Image{
@@ -381,6 +387,7 @@ Page {
 
             background: Rectangle {
                 id: new_dashboard_btn_background
+                height:parent.height
                 color:  new_dashboard_btn.pressed? Constants.darkThemeColor: Constants.themeColor
 
             }
@@ -426,6 +433,7 @@ Page {
                 delegate: CustomDashboardNameButton{
                     id: dashboardNameButton
                     textValue: dashboardName
+                    height:30
                     bgColor: (backgroundColorTest?backgroundColorTest:"white")
                     Component.onCompleted: {
                         if(dashboardNameButton.width > 100){
@@ -630,10 +638,11 @@ Page {
             //                onClicked: openDashboardFilters()
             //            }
 
-            Button{
+            Rectangle{
 
                 width: 100
                 height: 28
+                color:  Constants.whiteColor
 
 
 
@@ -702,10 +711,10 @@ Page {
 
 
                 }
-                background: Rectangle {
-                    //                        id: report_btn_background
-                    color:  Constants.whiteColor
-                }
+                // background: Rectangle {
+                //     //                        id: report_btn_background
+                //     color:  Constants.whiteColor
+                // }
 
 
             }
@@ -728,10 +737,11 @@ Page {
 
 
 
-            Button{
+            Rectangle{
 
                 width: 110
-                height: 28
+                height: 30
+                color:  Constants.whiteColor
                 //                anchors.right: parent.right
                 anchors.rightMargin: 20
 
@@ -774,10 +784,10 @@ Page {
 
 
                 }
-                background: Rectangle {
-                    //                        id: report_btn_background
-                    color:  Constants.whiteColor
-                }
+                // background: Rectangle {
+                //     //                        id: report_btn_background
+                //     color:  Constants.whiteColor
+                // }
 
 
             }
@@ -787,19 +797,30 @@ Page {
             TabBar{
                 id: tabbar_dashboard
 
-                width:200
+                width:202
                 z: 20
+                contentHeight :parent.height
+                contentWidth:202
 
-                background: Rectangle {
-                    color: "transparent"
-                }
+                //                background: Rectangle {
+                //                    color: "transparent"
+                //                }
                 // Next button starts
+                //                TabButton {
+                //                     id: tabPublishDashboard
+                //                     width:rectangle_querymodeller_right_col.width / 2
+                //                    text: qsTr("Home")
+                //                }
+                //                TabButton {
+                //                    text: qsTr("Discover")
+                //                }
 
                 TabButton{
                     id: tabPublishDashboard
-                    width:rectangle_querymodeller_right_col.width / 2
+                    //                                    width:rectangle_querymodeller_right_col.width / 2
                     height: parent.height
                     z: 20
+                    anchors.verticalCenter: parent.verticalCenter
 
                     Image {
                         id: publishIcon
@@ -807,11 +828,13 @@ Page {
                         height: 20
                         width: 20
                         anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     onClicked: onPublishWorkbookClicked()
 
                     background: Rectangle{
+                        width: parent.width-2
                         color: Constants.grafieksLightGreenColor
                         opacity: tabPublishDashboard.hovered ? 0.42 : 1
                     }
@@ -826,9 +849,10 @@ Page {
 
                 TabButton{
                     id: tabCreateDashboard
-                    width:rectangle_querymodeller_right_col.width / 2
+                    //                                    width:rectangle_querymodeller_right_col.width / 2
                     height: parent.height
                     z: 20
+                    anchors.verticalCenter: parent.verticalCenter
 
                     Image {
                         id: dashboardIcon
@@ -836,12 +860,14 @@ Page {
                         height: 20
                         width: 20
                         anchors.centerIn: parent
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     contentItem: Text{
                         id:tabCreateDashboard_text
                     }
                     background: Rectangle {
+                        width: parent.width
                         color: Constants.grafieksLightGreenColor
                         opacity: tabCreateDashboard.hovered ? 0.42 : 1
                     }
@@ -873,6 +899,7 @@ Page {
         orientation: Qt.Horizontal
         width: parent.width - left_menubar.width
         anchors.top: submenu.bottom
+        anchors.topMargin:-1
         anchors.left: left_menubar.right
         anchors.leftMargin: -2
         anchors.horizontalCenter: submenu.horizontalCenter
@@ -1045,7 +1072,7 @@ Page {
         id: column_filter_newdashboard
 
         height:parent.height - submenu.height
-        width: 200
+        width: 204
         anchors.right:parent.right
         anchors.top: submenu.bottom
         anchors.topMargin: 4
@@ -1057,7 +1084,8 @@ Page {
 
         ToolSeparator{
             anchors.top: parent.top
-            anchors.left: column_newdashboard.left
+            anchors.left: column_filter_newdashboard.left
+            anchors.leftMargin: -4
 
             height:parent.height
 
@@ -1079,7 +1107,7 @@ Page {
         id: column_filter_newdashboard_add
 
         height:parent.height - submenu.height
-        width: 200
+        width: 204
         anchors.right:parent.right
         anchors.top: submenu.bottom
         anchors.topMargin: 4
@@ -1091,7 +1119,8 @@ Page {
 
         ToolSeparator{
             anchors.top: parent.top
-            anchors.left: column_newdashboard.left
+            anchors.left: column_filter_newdashboard_add.left
+            anchors.leftMargin: -3
 
             height:parent.height
 

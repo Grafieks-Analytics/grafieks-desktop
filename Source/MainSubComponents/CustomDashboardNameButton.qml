@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
+import QtQuick 
+import QtQuick.Controls 
+import QtQuick.Layouts
 
 import com.grafieks.singleton.constants 1.0
 
@@ -20,7 +20,7 @@ Button{
 
     contentItem: Text {
         id: contentItem
-        color: customButton.hovered ? Constants.whiteColor : Constants.blackColor
+        color: customButton.hovered ? Constants.blackColor : Constants.blackColor
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
@@ -36,3 +36,21 @@ Button{
     }
 
 }
+// Button {
+//     id: control
+//     text: "First"
+//     Layout.fillWidth: true
+//     hoverEnabled: true
+//     highlighted :true
+//     flat:true
+
+//     background: Rectangle {
+//         implicitWidth: 100
+//         implicitHeight: 40
+//         opacity: enabled ? 1 : 1
+//         color: control.down ? "#ff0000" : (control.hovered ? "#0000ff" : "#00ff00")
+//         border.width: 1
+//         radius: 2
+        
+//      }
+// }

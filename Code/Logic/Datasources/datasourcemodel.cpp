@@ -139,7 +139,7 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
         break;
 
     case DSProfileIDRole:
-        if ( datasource->profileId() != value.toString()){
+        if ( datasource->profileId() != value.toInt()){
             datasource->setProfileId(value.toInt());
             somethingChanged = true;
         }

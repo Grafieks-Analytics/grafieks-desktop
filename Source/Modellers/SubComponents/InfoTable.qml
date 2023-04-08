@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -83,7 +83,7 @@ Item{
                 queryUpdate.icon = StandardIcon.Critical
             } else{
                 errorMsg = defaultMsg
-                queryUpdate.icon = StandardIcon.NoIcon
+//                queryUpdate.icon = StandardIcon.NoIcon
             }
         }
     }
@@ -203,8 +203,6 @@ Item{
 
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
 
-                dataPreviewResult.visible = true
-                queryUpdate.visible = true
 
                 // Set profiling on when clicking the play button
                 // Reset profiling and turn off when clicked on Publish button
@@ -215,6 +213,8 @@ Item{
                 // }
 
                 QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+                dataPreviewResult.visible = true
+                queryUpdate.visible = true
                 // QueryStatsModel.showStats()
                 // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
@@ -307,7 +307,7 @@ Item{
         visible: false
         title: Messages.mo_sub_inft_messageHead
         text: errorMsg
-        icon: StandardIcon.NoIcon
+//        icon: StandardIcon.NoIcon
 
     }
 

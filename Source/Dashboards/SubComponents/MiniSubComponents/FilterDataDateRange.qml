@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.2
-import QtQuick.Controls 1.4 as Old
+//import QtQuick.Controls 1.4 as Old
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -575,20 +575,22 @@ Item {
                     width:580
                     // color:"red"
                     anchors.right:parent.right
-                    Old.Calendar {
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        id: fromDateId
-                        selectedDate: new Date()
-                        onSelectedDateChanged:fromDate(selectedDate)
-                    }
-                    Old.Calendar {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        id: toDateId
-                        selectedDate: new Date()
-                        onSelectedDateChanged:toDate(selectedDate)
-                    }
+//                    Old.Calendar {
+//                    Calendar {
+//                        anchors.left: parent.left
+//                        anchors.verticalCenter: parent.verticalCenter
+//                        id: fromDateId
+//                        selectedDate: new Date()
+//                        onSelectedDateChanged:fromDate(selectedDate)
+//                    }
+//                    Old.Calendar {
+//                    Calendar {
+//                        anchors.right: parent.right
+//                        anchors.verticalCenter: parent.verticalCenter
+//                        id: toDateId
+//                        selectedDate: new Date()
+//                        onSelectedDateChanged:toDate(selectedDate)
+//                    }
                 }
             }
             Item {
@@ -598,12 +600,13 @@ Item {
                     width:580
                     // color:"yellow"
                     anchors.right:parent.right
-                    Old.Calendar {
-                        anchors.centerIn: parent
-                        id: beforeDateId
-                        selectedDate: new Date()
-                        onSelectedDateChanged:beforeDate(selectedDate)
-                    }
+//                    Old.Calendar {
+//                    Calendar {
+//                        anchors.centerIn: parent
+//                        id: beforeDateId
+//                        selectedDate: new Date()
+//                        onSelectedDateChanged:beforeDate(selectedDate)
+//                    }
                 }
             }
             Item {
@@ -613,12 +616,13 @@ Item {
                     width:580
                     anchors.right:parent.right
                     // color:"blue"
-                    Old.Calendar {
-                        anchors.centerIn: parent
-                        id: afterDateId
-                        selectedDate: new Date()
-                        onSelectedDateChanged:afterDate(selectedDate)
-                    }
+//                    Old.Calendar {
+//                    Calendar {
+//                        anchors.centerIn: parent
+//                        id: afterDateId
+//                        selectedDate: new Date()
+//                        onSelectedDateChanged:afterDate(selectedDate)
+//                    }
                 }
             }
             Item {

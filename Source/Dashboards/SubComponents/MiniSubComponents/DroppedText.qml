@@ -93,7 +93,8 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
-                webengine.url = GeneralParamsModel.getTmpPath() + url
+                console.log("urrl",GeneralParamsModel.getTmpPath() + url)
+                webengine.url = GeneralParamsModel.getTmpPath() + url+".html"
 
                 textEditor.widgetReportId = refReportId
                 textEditor.widgetDashboardId = refDashboardId

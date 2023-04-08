@@ -77,6 +77,7 @@ QtObject {
     property color greenThemeColor : "#A1D99B"
     property color redThemeColor : "#FB8072"
     property color borderBlueColor : "#BCE0FD"
+    property color borderLightBlueColor : "#4D98FE"
     //    property color lightThemeColor : "#F5F5F5"
     property color leftDarkColor: "#E2E2E4"
     property color lightThemeColor: "#E2E2E4"
@@ -275,6 +276,7 @@ QtObject {
     
     property string categoricalItemType: "categorical"
     property string numericalItemType: "numerical"
+    property string dateItemType: "dateformat"
 
     // Report Ends
 
@@ -365,6 +367,7 @@ QtObject {
     property int joinBoxHeight: 30
     property int joinBoxRadius: 25
     property int droppedRectBufferWidth: 250
+    property string webEngineViewTableURL:"qrc:/Source/Modellers/DataPreviewTable.html"
 
     // Current Screen Types
     property var homeScreen : 0;
@@ -385,8 +388,8 @@ QtObject {
     property var defaultSubMenuCustomizationsAvailable: "color by,tool tip,size,data label,grid line";
     
     // Dashboard Constasts
-    property var defaultDashboardHeight: 800;
-    property var defaultDashboardWidth: 1280;
+    property var defaultDashboardHeight: 600;
+    property var defaultDashboardWidth: 1080;
 
     property var tempGrafieksValue: "grafieks_false_temp";
 
@@ -396,4 +399,12 @@ QtObject {
 
     property var dashboardScreenName: "Dashboard"
     property var reportScreenName: "Report"
+    // Calculated Fileld Editor
+    property string calculatedFieldEditorUrl: "qrc:/Source/Reports/calculatedFieldEditor.html"
+    property string createCustomField: "Create Custom Field"
+    property string name: "Name"
+    property string calculation: "Calculation"
+    property string functionName: "Function"
+    property string syntax: "Syntax"
+    
 }

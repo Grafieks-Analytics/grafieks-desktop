@@ -8,9 +8,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.2
+import QtQuick 
+import QtQuick.Controls 
+import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
@@ -154,7 +154,7 @@ Popup {
         id: msg_dialog
         title: Messages.cn_sub_redshift_subHeader
         text: ""
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
     }
 
 
@@ -561,18 +561,47 @@ Popup {
 
     // Page Design Ends
     /***********************************************************************************************************************/
-    MessageDialog {
+//     MessageDialog {
+//         id: redshiftOdbcModalError
+//         visible: false
+//         title: Messages.cn_sub_redshift_missingDriver
+//         text: Messages.cn_sub_redshift_driverDownload
+
+// //        standardButtons: StandardButton.Ok
+//         buttons: MessageDialog.Ok
+
+//         onAccepted: {Qt.openUrlExternally(Constants.redshiftDriverUrl)
+//         }
+
+
+//     }
+    Dialog{
         id: redshiftOdbcModalError
-        visible: false
         title: Messages.cn_sub_redshift_missingDriver
-        text: Messages.cn_sub_redshift_driverDownload
-
-        standardButtons: StandardButton.Ok
-
-        onAccepted: {Qt.openUrlExternally(Constants.redshiftDriverUrl)
-        }
-
-
+        x:parent.parent.width/2-200
+        y:parent.height/2-70
+        standardButtons: Dialog.Ok
+        visible:false
+        // background:Rectangle {
+        //   color: "white"
+        //   height:parent.height-100
+        //   width:parent.width-150
+        //   }
+        onAccepted: {Qt.openUrlExternally(Constants.redshiftDriverUrl)}
+        Rectangle {
+          color: "white"
+          implicitWidth: 400
+          width: 410
+          implicitHeight: 140
+          height: 140
+          anchors.left:parent.left
+          anchors.leftMargin:-5
+          Text {
+              text: Messages.cn_sub_redshift_driverDownload
+              color: "black"
+              anchors.centerIn: parent
+          }
+      }
     }
 
 

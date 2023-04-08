@@ -59,7 +59,6 @@ private:
 
 
     QHash<int, QByteArray> m_roleNames;
-    QList<QStringList> resultData;
     int internalRowCount;
     int internalColCount;
     int previewRowCount;
@@ -73,6 +72,8 @@ private:
     QMap<int, QStringList*> forwardOnlyChartData;
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
+    QList<QStringList> resultData;
+    QString jsonData;
     QString tmpSql;
 
     DataType dataType;
@@ -89,6 +90,7 @@ private:
 signals:
 
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
+    void forwardDataChanged(QString jsonData);
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
