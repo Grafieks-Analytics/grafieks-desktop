@@ -203,8 +203,6 @@ Item{
 
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
 
-                dataPreviewResult.visible = true
-                queryUpdate.visible = true
 
                 // Set profiling on when clicking the play button
                 // Reset profiling and turn off when clicked on Publish button
@@ -215,6 +213,8 @@ Item{
                 // }
 
                 QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+                dataPreviewResult.visible = true
+                queryUpdate.visible = true
                 // QueryStatsModel.showStats()
                 // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 

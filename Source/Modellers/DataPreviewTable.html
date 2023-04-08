@@ -142,6 +142,10 @@
         function customMutator(value, data, type, params) {
             return data[params.field];
         }
+        function clearTable() {
+                 document.getElementById("example-table").innerHTML = ""
+                return;
+            }
 
         function drawTable(tableData, tableHeaderData) {
             // tableData = [{
