@@ -17,13 +17,8 @@ Rectangle {
     property var newObject: []
     property var previousModelData: 0
     property var counter : 0
-    // property var tableData : [{ id: 1, name: "Billy Bob", progress: "12", gender: "male", height: 1, col: "red", dob: "45", driver: 1 }]
-    // property var tableHeaderData : ["name", "progress", "gender", "rating", "col", "dob", "driver"]
-    property var tableData : [{
-                "Category": "Technology", "City": "Los Angeles", "Country/Region": "United States", "Customer ID": "BH-11710", "Customer Name": "Brosina Hoffman", "Discount"
-                    : "0.2", "Order Date": "2017-06-09T00:00:00.000", "Order ID": "CA-2017-115812", "Postal Code": "90032", "Product ID": "TEC-PH-10002275", "Product Name": "Mitel 5320 IP Phone VoIP phone", "Profit": "90.71520000000004", "Quantity": "6", "Region": "West", "Row ID": "8", "Sales": "907.152", "Segment": "Consumer", "Ship Date": "2017-06-14T00:00:00.000", "Ship Mode": "Standard Class", "State": "California", "Sub-Category": "Phones"
-            }]
-    property var tableHeaderData : ['Category', 'City', 'Country/Region', 'Customer ID', 'Customer Name', 'Discount', 'Order Date', 'Order ID', 'Postal Code', 'Product ID', 'Product Name', 'Profit', 'Quantity', 'Region', 'Row ID', 'Sales', 'Segment', 'Ship Date', 'Ship Mode', 'State', 'Sub-Category']
+    property var tableData : []
+    property var tableHeaderData : []
     color:"red"
 
     Connections{
@@ -45,6 +40,7 @@ Rectangle {
 
         function onQueryDataChanged(jsonData){
             console.log("QUERY RDATA", jsonData)
+            tableData = jsonData
           
 
         }
@@ -76,9 +72,9 @@ Rectangle {
 
         function onCsvJsonDataChanged(jsonData){
             console.log("CSV RDATA", jsonData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
-            ","+JSON.stringify(tableHeaderData)+")");
+            tableData = jsonData
         }
+
 
         // Clear table
         function onClearTablePreview(){
@@ -104,8 +100,7 @@ Rectangle {
             if(DSParamsModel.runCalled === true)
                 setHeaders(tableHeaders)
             console.log("TABLE HEADERS", tableHeaders)
-            //  webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
-            // ","+JSON.stringify(tableHeaderstableHeaders)+")");
+
             
         }
 
@@ -141,8 +136,8 @@ Rectangle {
 
         function onForwardDataChanged(jsonData){
             console.log("FORWARD RDATA", jsonData)
-            webEngineViewTable.runJavaScript("drawTable("+ JSON.stringify(jsonData)+
-            ","+JSON.stringify(tableHeaderData)+")");
+            tableData = jsonData
+
 
         }
 
@@ -162,27 +157,9 @@ Rectangle {
     }
 
     function setHeaders(tableHeaders){
-        // tableHeaderData = tableHeaders
-        // var tableData = [{
-        //         "Category": "Technology", "City": "Los Angeles", "Country/Region": "United States", "Customer ID": "BH-11710", "Customer Name": "Brosina Hoffman", "Discount"
-        //             : "0.2", "Order Date": "2017-06-09T00:00:00.000", "Order ID": "CA-2017-115812", "Postal Code": "90032", "Product ID": "TEC-PH-10002275", "Product Name": "Mitel 5320 IP Phone VoIP phone", "Profit": "90.71520000000004", "Quantity": "6", "Region": "West", "Row ID": "8", "Sales": "907.152", "Segment": "Consumer", "Ship Date": "2017-06-14T00:00:00.000", "Ship Mode": "Standard Class", "State": "California", "Sub-Category": "Phones"
-        //     }]
-        console.log("tableData..",JSON.stringify(tableData))
-
+        // console.log("tableData..",JSON.stringify(tableData))
           webEngineViewTable.runJavaScript("drawTable("+ tableData +
-            ","+JSON.stringify(tableHeaderData)+")");
-
-        //        if(tableHeaders.length > 0){
-        //            roleNames = tableHeaders
-        //            newObject = []
-
-        //            for(var i=0; i<roleNames.length; i++){
-        //                var role  = role Names[i]
-        //                var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
-        //                newObject[i] = Qt.createQmlObject(columnString, view)
-        ////                view.addColumn(newObject[i])
-        //            }
-        //        }
+            ","+JSON.stringify(tableHeaders)+")");
     }
 
     function clearTable(){
@@ -215,136 +192,4 @@ Rectangle {
         }
     }
 
-
-    //    TableView {
-    //        id:view
-    //        width: parent.width
-    //        height: parent.height
-    //        //        anchors.top: clearBtn.bottom
-    //        alternatingRowColors: false
-    //        visible: false
-
-
-
-    //        style: TableViewStyle {
-    //            headerDelegate: Rectangle {
-    //                height: textItem.implicitHeight * 1.8
-    //                width: textItem.implicitWidth
-    //                color: Constants.themeColor
-
-    //                Text {
-    //                    id: textItem
-    //                    anchors.fill: parent
-    //                    verticalAlignment: Text.AlignVCenter
-    //                    horizontalAlignment: styleData.textAlignment
-    //                    anchors.leftMargin: 12
-    //                    text: styleData.value
-    //                    elide: Text.ElideRight
-    //                    color: textColor
-    //                    font.bold: true
-    //                    renderType: Text.NativeRendering
-
-
-    //                }
-    //                Rectangle {
-    //                    anchors.right: parent.right
-    //                    anchors.top: parent.top
-    //                    anchors.bottom: parent.bottom
-    //                    anchors.bottomMargin: 1
-    //                    anchors.topMargin: 1
-
-    //                    width: 1
-    //                    color: Constants.darkThemeColor
-    //                    border.color: Constants.darkThemeColor
-    //                }
-    //                Rectangle {
-    //                    anchors.bottom: parent.bottom
-    //                    width: parent.width
-    //                    height: 1
-    //                    color: Constants.darkThemeColor
-    //                    border.color: Constants.darkThemeColor
-    //                }
-    //            }
-
-    //            itemDelegate: Rectangle {
-    //                color: "white"
-
-
-    //                Text {
-    //                    id: textItem1
-    //                    anchors.fill: parent
-    //                    verticalAlignment: Text.AlignVCenter
-    //                    objectName: styleData.value
-    //                    horizontalAlignment: styleData.textAlignment
-    //                    anchors.leftMargin: 12
-    //                    elide: Text.ElideRight
-    //                    color: textColor
-    //                    renderType: Text.NativeRendering
-    //                    // text: modelData
-    //                    onObjectNameChanged: {
-    //                        var colValue;
-    //                        var newDate;
-    //                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType || GeneralParamsModel.getDbClassification() === Constants.accessType){
-    //                            colValue = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
-    //                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-    //                                newDate = new Date(colValue)
-    //                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-    //                            } else {
-    //                                textItem1.text = colValue
-    //                            }
-
-    //                        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-    //                            colValue = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
-    //                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-    //                                newDate = new Date(colValue)
-    //                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-    //                            } else {
-    //                                textItem1.text = colValue
-    //                            }
-    //                        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
-    //                            colValue = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
-    //                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-    //                                newDate = new Date(colValue)
-    //                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-    //                            } else {
-    //                                textItem1.text = colValue
-    //                            }
-    //                        } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
-    //                            colValue = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
-    //                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-    //                                newDate = new Date(colValue)
-    //                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-    //                            } else {
-    //                                textItem1.text = colValue
-    //                            }
-    //                        } else {
-    //                            colValue = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
-    //                            if((new Date(colValue)).getTime() > 0 && typeof colValue === "object"){
-    //                                newDate = new Date(colValue)
-    //                                textItem1.text = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate() + " " + newDate.getHours() + ":" + newDate.getMinutes() + ":" + newDate.getSeconds()
-    //                            } else {
-    //                                textItem1.text = colValue
-    //                            }
-    //                        }
-    //                    }
-
-    //                }
-    //                Rectangle {
-    //                    anchors.right: parent.right
-    //                    anchors.top: parent.top
-    //                    anchors.bottom: parent.bottom
-    //                    width: 1
-    //                    color: Constants.darkThemeColor
-    //                    border.color: Constants.darkThemeColor
-    //                }
-    //                Rectangle {
-    //                    anchors.bottom: parent.bottom
-    //                    width: parent.width
-    //                    height: 1
-    //                    color: Constants.darkThemeColor
-    //                    border.color: Constants.darkThemeColor
-    //                }
-    //            }
-    //        }
-    //    }
 }
