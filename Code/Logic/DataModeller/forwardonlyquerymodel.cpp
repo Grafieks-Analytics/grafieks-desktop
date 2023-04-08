@@ -234,7 +234,11 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
 
                 for(int i = 0; i < this->internalColCount; i++){
                     list << q.value(i).toString();
-                    jo.insert(q.record().fieldName(i).trimmed(), q.record().value(i).toString().trimmed());
+                    QString outTableName = q.record().field(i).tableName().toStdString().c_str();
+                    outTableName.append(".");
+                    outTableName.append(q.record().fieldName(i).trimmed());
+
+                    jo.insert(outTableName, q.record().value(i).toString().trimmed());
                 }
                 this->resultData.append(list);
             } catch(std::exception &e){

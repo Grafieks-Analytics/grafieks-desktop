@@ -56,7 +56,13 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
             QJsonObject jo;
             for(int i = 0; i < this->internalColCount; i++){
                 list << query.value(i).toString();
-                jo.insert(query.record().fieldName(i).trimmed(), query.record().value(i).toString().trimmed());
+                QString tableName = query.record().field(i).tableName();
+                QString outTableName = "[";
+                outTableName.append(tableName.toStdString().c_str());
+                outTableName.append("].[");
+                outTableName.append(query.record().fieldName(i).trimmed());
+                outTableName.append("]");
+                jo.insert(outTableName, query.record().value(i).toString().trimmed());
             }
             ja.append(jo);
             this->resultData.append(list);
@@ -88,17 +94,11 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
     endResetModel();
 
-    QStringList qsl;
-    foreach(QString s, this->selectParams){
-        QStringList parts = s.split(".");
-        QString p = parts[1].replace("]", "").replace("[","");
-        qsl.append(p);
-    }
     QJsonDocument doc;
     doc.setArray(ja);
 
     emit excelDataChanged(doc.toJson(QJsonDocument::Compact));
-    emit excelHeaderDataChanged(qsl);
+    emit excelHeaderDataChanged(this->selectParams);
 }
 
 void ExcelQueryModel::saveExtractData()

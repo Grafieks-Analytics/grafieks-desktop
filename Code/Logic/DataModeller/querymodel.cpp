@@ -133,12 +133,16 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
         QJsonObject jo;
         for (int colCount = 0; colCount < this->tmpColCount; ++colCount) {
             tmpResult.append(QSqlQueryModel::record(rowCount).value(colCount).toString());
-            jo.insert(QSqlQueryModel::record(rowCount).fieldName(colCount).trimmed(), QSqlQueryModel::record(rowCount).value(colCount).toString().trimmed());
+            QString outTableName = QSqlQueryModel::record(rowCount).field(colCount).tableName().toStdString().c_str();
+            outTableName.append(".");
+            outTableName.append(QSqlQueryModel::record(rowCount).fieldName(colCount).trimmed());
+            jo.insert(outTableName, QSqlQueryModel::record(rowCount).value(colCount).toString().trimmed());
         }
         this->resultData.append(tmpResult);
         ja.append(jo);
     }
 
+    qDebug() << ja;
     QJsonDocument doc;
     doc.setArray(ja);
     emit queryDataChanged(doc.toJson(QJsonDocument::Compact));
