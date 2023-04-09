@@ -144,7 +144,7 @@ Popup {
         id:settingFilterLeft
         anchors.top: settingHead.bottom
         height: parent.height-settingHead.height
-        width:150
+        width:200
         border.color: Constants.themeColor
         
         Column{
@@ -152,13 +152,17 @@ Popup {
             padding: 0
             anchors.left: parent.left
             anchors.leftMargin: 20
+            anchors.top:parent.top
+            anchors.topMargin:50
             TabBar {
                 id: bar
-                width: firstBtn.width
-                height: 100
+                width: parent.width
+                height: parent.height
+                // width:50
                 anchors.left: parent.left
-                anchors.leftMargin: -20
+                // anchors.leftMargin: -20
                 anchors.top: settingFilterLeft.bottom
+                anchors.topMargin:100
                 
                 TabButton {
                     id: firstBtn
@@ -281,20 +285,21 @@ Popup {
                 Rectangle{
                     height: settingFilterRight.height
                     width: settingFilterRight.width
-                    color: "white"
                     border.color: Constants.themeColor
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    // anchors.horizontalCenter: parent.horizontalCenter
                     
                     Row{
                         id: renameEdit
                         y:40
                         spacing:1
                         height: 50
-                        width: parent.width/1.5
+                        width: parent.width
                         anchors.horizontalCenter:  parent.horizontalCenter
                         
                         Text {
                             id: rename
+                            anchors.left:parent.left
+                            anchors.leftMargin:10
                             text: Messages.da_sub_fc_renameText
                             font.pixelSize: 17
                         }
@@ -335,13 +340,7 @@ Popup {
 
                 }
             }
-            
-            
-            
-            
-            
-            
-            
+             
             Item {
                 id: valueTab
                 Rectangle{
@@ -440,21 +439,27 @@ Popup {
         border.color: Constants.themeColor
         
         
-        TabBar{
+        // TabBar{
             
-            id: apply_btn1
-            anchors.top: bottomButtons.top
-            anchors.topMargin: 3
+        //     id: apply_btn1
+        //     anchors.top: bottomButtons.top
+        //     anchors.topMargin: 5
             
-            anchors.right: parent.right
-            anchors.rightMargin: 5
-            width: parent.width/3-60
-            height:24
+        //     anchors.right: parent.right
+        //     anchors.rightMargin: 5
+        //     width: parent.width/3-60
+        //     height:26
             
             
-            TabButton{
+            Button{
                 id: filter_cancel_btn1
                 text: Messages.closeBtnTxt
+                height:parent.height-8
+                width:60
+                anchors.right:parent.right
+                anchors.top:parent.top
+                anchors.rightMargin:5
+                anchors.topMargin:5
                 
                 background: Rectangle {
                     id: filter_cancel_btn_background1
@@ -471,7 +476,7 @@ Popup {
                 
             }
             
-        }
+        // }
         
     }
 }

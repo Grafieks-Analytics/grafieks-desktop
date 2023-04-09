@@ -143,9 +143,9 @@
             return data[params.field];
         }
         function clearTable() {
-                 document.getElementById("example-table").innerHTML = ""
-                return;
-            }
+            document.getElementById("example-table").innerHTML = ""
+            return;
+        }
 
         function drawTable(tableData, tableHeaderData) {
             // tableData = [{
@@ -190,6 +190,11 @@
                 columns: tableHeaderDataProcessed,
                 data: tableData
             });
+            for (var i = 0; i < document.getElementsByClassName("tabulator-header-filter").length; ++i) {
+                document.getElementsByClassName("tabulator-header-filter")[i].children[0].placeholder = "Search"
+            }
+          
+            
         }
     </script>
 </body>
