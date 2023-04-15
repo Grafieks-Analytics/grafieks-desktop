@@ -1,3 +1,6 @@
 [submodule "Libraries/qt-breakpad"]
 	path = Libraries/qt-breakpad
 	url = https://github.com/chilarai/qt-breakpad.git
+[submodule "Source/Charts"]
+	path = Source/Charts
+	url = https://github.com/Grafieks-Analytics/charts
