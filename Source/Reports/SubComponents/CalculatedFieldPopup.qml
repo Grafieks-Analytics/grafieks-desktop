@@ -133,6 +133,11 @@ Popup {
     function onCancelClicked(){
         calculatedFieldPopup.visible = false
     }
+    function onApplyClicked(){
+        webEngineViewTable.runJavaScript("drawTable("+ tableData +
+            ","+JSON.stringify(tableHeaders)+")");
+
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -421,6 +426,7 @@ Popup {
                     CustomButton{
                         height: Constants.defaultElementHeight
                         textValue: Messages.applyBtnTxt
+                        onClicked: onApplyClicked()
                     }
                 }
 
