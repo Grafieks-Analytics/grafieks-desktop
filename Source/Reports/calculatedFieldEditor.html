@@ -189,7 +189,7 @@
             const SEARCH_TRIGGER_CHAR = "#";
             const SEARCH_TRIGGER_MIN_CHARS = 0;
             const SEARCH_MATCH_REGEX = new RegExp(
-                `(^|\\s)${SEARCH_TRIGGER_CHAR}(\\w${SEARCH_TRIGGER_MIN_CHARS >= 0
+                `()${SEARCH_TRIGGER_CHAR}(\\w${SEARCH_TRIGGER_MIN_CHARS >= 0
                     ? `{${SEARCH_TRIGGER_MIN_CHARS},}`
                     : "*"
                 }(?:\\s*\\w*)*)$`
