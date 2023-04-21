@@ -541,7 +541,7 @@ Item{
     function onChartLoaded(loadRequest){
 
         console.log("XE Log", loadRequest)
-        if(loadRequest.status === WebEngineLoadRequest.LoadFailedStatus){
+        if(loadRequest.status === WebEngineView.LoadFailedStatus){
             console.log('Page Loading Failed')
             console.log('Error',JSON.stringify(loadRequest))
             return;
@@ -1205,7 +1205,7 @@ Item{
             anchors.topMargin: 10
             anchors.horizontalCenter: parent.horizontalCenter
             url: Constants.chartsBaseUrl
-            onLoadingChanged: onChartLoaded(loadRequest)
+            onLoadingChanged: onChartLoaded(loadingInfo)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
         }
