@@ -61,7 +61,6 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
         obj.insert("limit", 1000);
         obj.insert("path","");
         obj.insert("recursive",true);
-        obj.insert("include_media_info",false);
         obj.insert("include_deleted",false);
         obj.insert("include_has_explicit_shared_members",false);
         obj.insert("include_mounted_folders",true);

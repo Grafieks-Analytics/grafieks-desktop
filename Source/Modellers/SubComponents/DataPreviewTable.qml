@@ -22,6 +22,14 @@ Rectangle {
     color:"red"
 
     Connections{
+        target: DSParamsModel
+
+        function onDisconnectAll() {
+
+        }
+    }
+
+    Connections{
         target: QueryModel
 
         // This one is for table data
