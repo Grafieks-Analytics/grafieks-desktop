@@ -765,6 +765,7 @@ Page {
 
             // name, query, souce, mode
             console.log("name:", name, "q:", query, "source:", source, "mode:", mode)
+            webEngineViewEditor.runJavaScript("sendData()");
             var status = CalculatedFields.addCalculatedField(name, query, source, report_desiner_page.mode)
 
             if (!status) {
@@ -793,16 +794,17 @@ Page {
     Popup {
         id: popupcalc
         width: parent.width * 0.8
-        height: 800
+        height: 650
         anchors.centerIn: parent
 
         visible: false
         modal: true
         padding: 0
         closePolicy: Popup.NoAutoClose
+        
 
         background: Rectangle{
-            color: Constants.whiteColor
+            color: Constants.whiteColor 
         }
 
         // Popup Header Starts
@@ -812,22 +814,11 @@ Page {
             id: header
             color: Constants.themeColor
             height: 40
-            width: parent.width - 2
+            width: parent.width
 
             anchors.top: parent.top
             anchors.left: parent.left
 
-            anchors.topMargin: 1
-            anchors.leftMargin: 1
-
-//            Text{
-//                id: popupError
-//                anchors.verticalCenter: parent.verticalCenter
-//                anchors.left : parent.left
-//                font.pixelSize: Constants.fontCategoryHeader
-//                anchors.leftMargin: 10
-//                color: Constants.redColor
-//            }
 
             Text{
                 text: Constants.createCustomField
@@ -900,16 +891,16 @@ Page {
         Rectangle{
 
             id: calculation
-            //            color: "yellow"
+            // color: "yellow"
             anchors.top: name.bottom
             height: parent.height-100
             width: parent.width - 300
             Rectangle{
 
                 id: calculationName
-                //                color: "pink"
+                // color: "pink"
                 anchors.top: parent.top
-                height: 40
+                height: 20
                 width: parent.width - 2
 
                 Text{
@@ -926,10 +917,10 @@ Page {
                 anchors.left : parent.left
                 anchors.top : calculationName.bottom
                 width: parent.width-50
-                height: parent.height-200
+                height: parent.height-150
                 // radius: 15
                 anchors.leftMargin:30
-                anchors.topMargin:30
+                anchors.topMargin:17
                 border.color: Constants.borderBlueColor
                 //    color:"blue"
 
@@ -937,7 +928,7 @@ Page {
 
                 // TextEdit {
                 //     // Green Input
-                //     // id: input1Field
+                //     // id: input1Field 
                 //     leftPadding: 10
                 //     rightPadding: 10
                 //     width: parent.width
@@ -970,12 +961,14 @@ Page {
 
                 //               anchors.centerIn: parent
 
-                TextEdit {
+                Text{
                     // Green Input
                     // id: input1Field
                     id: popupError
                     leftPadding: 10
                     rightPadding: 10
+                    topPadding: 10
+                    bottomPadding: 10
                     width: parent.width
                     height:  parent.height
                     anchors.centerIn: parent
@@ -988,7 +981,7 @@ Page {
         Rectangle{
 
             id: functionid
-            //            color: "green"
+            // color: "green"
             anchors.top: name.bottom
             anchors.right: parent.right
             height: parent.height-100
@@ -996,9 +989,9 @@ Page {
             Rectangle{
 
                 id: functionName
-                //                color: "pink"
+                // color: "pink"
                 anchors.top: parent.top
-                height: 40
+                height: 20
                 width: parent.width - 2
 
                 Text{
@@ -1007,29 +1000,30 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 10
                 }
             }
             ComboBox {
                 id:dropDownFunction
                 currentIndex: 2
                 anchors.top: functionName.bottom
-                anchors.topMargin:27
+                anchors.topMargin:17
                 anchors.left : parent.left
-                anchors.leftMargin:20
+                anchors.leftMargin:10
                 model: [ "Logical Functions", "Aggregate Functions", "Numeric Functions" ]
-                width: parent.width-40
+                width: parent.width-30
+                height:30
                 onCurrentIndexChanged: dataTypeChange(modelData)
             }
             Rectangle{
                 id: functionEditor
                 anchors.left : parent.left
                 anchors.top : dropDownFunction.bottom
-                width: parent.width-40
-                height: 280
+                width: parent.width-30
+                height: 228
                 // radius: 15
-                anchors.leftMargin:20
-                anchors.topMargin:5
+                anchors.leftMargin:10
+                // anchors.topMargin:1
                 border.color: Constants.borderBlueColor
                 clip: true
                 Component {
@@ -1037,14 +1031,21 @@ Page {
                     Rectangle {
                         // Rectangle{
                         id:functionListElem
-                        width: parent.width-10;
+                        width: parent.width-5;
                         height: 30;
                         anchors.left:parent.left
-                        anchors.leftMargin:5
-                        //  color:"red"
+                        anchors.leftMargin:2.5
+
+                        // color:"red"
+                        
                         Column {
                             id:functionListElemText
                             Text { text: model.name }
+                            leftPadding:3
+                            rightPadding:3
+                            anchors.verticalCenter:parent.verticalCenter
+
+                            
                             // Text { text: 'Number: ' + model.number }
                         }
                         // }
@@ -1054,10 +1055,10 @@ Page {
                             hoverEnabled: true
                             onEntered: {
                                 functionListElem.color = "#F3F3F4"
-                                overlay
+                                // overlay
                             }
                             onExited: {
-                                //                                console.log("Exiting: ")
+                                //console.log("Exiting: ")
                                 functionListElem.color = "white"
                             }
 
@@ -1084,10 +1085,10 @@ Page {
             Rectangle{
 
                 id: syntaxName
-                //                color: "pink"
+                // color: "pink"
                 anchors.top: functionEditor.bottom
-                anchors.topMargin:20
-                height: 40
+                anchors.topMargin:10
+                height: 20
                 width: parent.width - 2
 
                 Text{
@@ -1096,7 +1097,7 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 10
                     anchors.topMargin:30
                 }
             }
@@ -1104,12 +1105,12 @@ Page {
                 id: syntaxEditor
                 anchors.left : parent.left
                 anchors.top : syntaxName.bottom
-                width: parent.width-50
-                height: 105
+                width: parent.width-30
+                height: 100
                 // radius: 15
-                anchors.leftMargin:20
-                anchors.topMargin:20
-                //               anchors.leftMargin:20
+                anchors.leftMargin:10
+                anchors.topMargin:10
+                // anchors.leftMargin:20
                 border.color: Constants.borderBlueColor
                 color:"lightgrey"
 
@@ -1122,7 +1123,7 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left : parent.left
                     font.pixelSize: Constants.fontCategoryHeader
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 10
                     anchors.topMargin:30
                 }
 
@@ -1130,22 +1131,24 @@ Page {
             Row{
                 anchors.top:syntaxEditor.bottom
                 anchors.left: parent.left
-                anchors.topMargin: 40
-                anchors.leftMargin: 20
-                spacing: 20
+                anchors.topMargin: 64
+                anchors.leftMargin: 10
+                spacing: 15
 
                 Button{
                     id: cancel_btn1
-                    text: "Cancel"
-                    //                    textValue: Messages.cancelBtnTxt
+                    text: Messages.cancelBtnTxt
+                    width:125
+                    //textValue: Messages.cancelBtnTxt
                     onClicked: onCancelClickedCalc()
                 }
 
 
                 Button{
                     id: apply_btn1
-                    text: "Apply"
-                    //                    textValue: Messages.applyBtnTxt
+                    text:  Messages.applyBtnTxt
+                    width:125
+                    //textValue: Messages.applyBtnTxt
                     onClicked: onApplyClicked()
                 }
             }
