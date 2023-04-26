@@ -157,6 +157,15 @@ git submodule update --init
 
 These commands will add a folder "Charts" at `Sources/` folder
 
+
+Below command will install all required packages and build.
+```sh
+cd Source/Charts
+npm install
+npm run build
+```
+
+
 ### Prerequisites
 
 Please choose whichever is applicable. You do not need to install all. e.g, if you need to process Mysql database, please download Mysql driver only.
