@@ -23,6 +23,8 @@ QtObject {
     property string applyBtnTxt : qsTr("Apply")
     property string resetBtnTxt : qsTr("Reset")
     property string cancelBtnTxt : qsTr("Cancel")
+    property string cancelOkTxt : qsTr("Ok")
+    property string cancelRemoveFilterTxt : qsTr("Remove Filter")
     property string closeBtnTxt : qsTr("Close")
 
     property string da_sub_dc_edit : qsTr("Edit")

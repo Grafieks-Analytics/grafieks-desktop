@@ -24,9 +24,14 @@ Popup {
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 200
     padding: 0
     property int label_col : 135
+     background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
 
     /***********************************************************************************************************************/
@@ -175,11 +180,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             id : text1

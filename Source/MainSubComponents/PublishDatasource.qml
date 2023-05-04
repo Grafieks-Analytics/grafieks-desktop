@@ -24,8 +24,8 @@ Popup {
     height: 520
     modal: true
     visible: false
-    x: (parent.width - popup.width) / 2
-    y: 100
+    x: parent.width / 2 - 300
+    y: parent.height / 2 - 260
     padding: 0
 
     closePolicy: Popup.NoAutoClose
@@ -38,6 +38,12 @@ Popup {
     property string password_final : ""
     property string mode_final : ""
     property string datasource_name_final : ""
+
+    background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
 
     /***********************************************************************************************************************/
@@ -291,11 +297,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             text: Messages.msc_pds_header

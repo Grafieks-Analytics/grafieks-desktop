@@ -248,19 +248,19 @@ Item {
     }
 
 
-    function fromDate(d){
-        fromDateVar = d.toISOString().split('T')[0]
-    }
+    // function fromDate(d){
+    //     fromDateVar = d.toISOString().split('T')[0]
+    // }
 
-    function toDate(d){
-        toDateVar = d.toISOString().split('T')[0]
-    }
-    function beforeDate(d){
-        referenceDateVar = d.toISOString().split('T')[0]
-    }
-    function afterDate(d){
-        referenceDateVar = d.toISOString().split('T')[0]
-    }
+    // function toDate(d){
+    //     toDateVar = d.toISOString().split('T')[0]
+    // }
+    // function beforeDate(d){
+    //     referenceDateVar = d.toISOString().split('T')[0]
+    // }
+    // function afterDate(d){
+    //     referenceDateVar = d.toISOString().split('T')[0]
+    // }
 
     function setCustomDateComparator(p){
         customDateComparator = p
@@ -296,10 +296,10 @@ Item {
 
     Popup {
         id: popupq
-        x: -630
+        x: -430
         y: 72
-        width: 800
-        height: 400
+        width: 600
+        height: 320
         modal: false
         focus: true
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -312,10 +312,11 @@ Item {
 
         Rectangle{
             id:container
-            height: parent.height-60
+            height: 265
             width: 200
-            // border.color: Constants.darkThemeColor
+            // border.color: "lightgrey"
             anchors.left:parent.left
+            color:red
 
 
 
@@ -323,12 +324,12 @@ Item {
 
             TabBar {
                 id: bar
-                width: parent.width-20
+                width: parent.width
                 height:parent.height
                 anchors.right:parent.right
                 anchors.top:parent.top
-                anchors.topMargin:-9
-                anchors.rightMargin:30
+                anchors.topMargin:5
+                // anchors.rightMargin:30
                 currentIndex:{
                     let currentSelectedColumn = DashboardParamsModel.currentSelectedColumn
                     if(GeneralParamsModel.isWorkbookInEditMode()){
@@ -437,129 +438,171 @@ Item {
 
             ToolSeparator{
                 orientation: Qt.vertical
-                height: parent.height + 10
+                height: parent.height
                 anchors.top:parent.top
-                anchors.topMargin:-15
+                anchors.topMargin:-5
                 anchors.verticalCenter:parent.centerIn
                 anchors.right:bar.right
-                anchors.leftMargin:-10
+                anchors.rightMargin:-2
                 anchors.bottom: allButtons.top
             }
         }
         ToolSeparator{
             orientation: Qt.Horizontal
-            width: parent.width + 30
-            anchors.rightMargin:-15
+            width: parent.width + 16
+            anchors.rightMargin:-8
             anchors.horizontalCenter:parent.centerIn
             anchors.right:parent.right
             anchors.bottom: allButtons.top
         }
         Rectangle{
             id:allButtons
-            height:60
+            height:40
             width:parent.width
             anchors.bottom:parent.bottom
-
-
-            TabBar{
-
-                id: apply_btn1q
-                anchors.top: bottomButtons.top
-                anchors.topMargin: 3
-
-
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                width: parent.width/2-60
-                height:60
-
-
-                TabButton{
-                    id:okBtn
-                    height:40
-                    width:100
-                    anchors.bottom:parent.bottom
-
-
-                    background: Rectangle {
-                        id: filter_cancel_btn_background1q
-                        // color:  "#2E87C5"
-                        border.color:"#007bff"
-                        radius: 5
-                    }
-                    contentItem: Text{
-                        id: filter_cancel_btn_text1q
-                        text: "ok"
-                        color:  "#007bff"
-                        horizontalAlignment: Text.AlignHCenter
-                        anchors.bottom:parent.bottom
-                        // verticalAlignment: Text.AlignVCenter
-                    }
-                    onClicked: updateValue()
-
-                }
-                TabButton{
-                    height:40
-                    anchors.bottom:parent.bottom
-                    anchors.left:okBtn.right
-                    anchors.leftMargin:15
-
-                    background: Rectangle {
-                        id: filter_cancel_btn_background1qa
-                        // color:  "#2E87C5"
-                        border.color:"#007bff"
-                        radius: 5
-                    }
-                    contentItem: Text{
-                        id: filter_cancel_btn_text1qa
-                        text: "Remove Filter"
-
-                        color:  "#007bff"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    onClicked: removeFilter()
-
-                }
-
+            Button {
+                id: ok
+                anchors.top:parent.top
+                anchors.topMargin:3
+                anchors.left:parent.left
+                anchors.leftMargin:15
+                width:100
+                height:35
+                // anchors.verticalCenter: parent.verticalCenter
+                text: Messages.cancelOkTxt
+                onClicked: updateValue()
             }
-            TabBar{
 
-                id: apply_btn1
-                anchors.top: bottomButtons.top
-                anchors.topMargin: 3
-
-                anchors.right: parent.right
-                anchors.rightMargin: 5
-                width: parent.width/3-60
-                height:60
-
-
-
-                TabButton{
-                    id: filter_cancel_btn1
-                    height:40
-                    anchors.bottom:parent.bottom
-
-                    background: Rectangle {
-                        id: filter_cancel_btn_background1
-                        // color:  "#2E87C5"
-                        border.color:"#007bff"
-                        radius: 5
-                    }
-                    contentItem: Text{
-                        id: filter_cancel_btn_text1
-                        text: "cancel"
-
-                        color:  "#007bff"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    onClicked: closePopup()
-
-                }
-
+            Button {
+                id: removeFilter
+                anchors.top:parent.top
+                anchors.topMargin:3
+                anchors.left:ok.right
+                anchors.leftMargin:15
+                width:100
+                height:35
+                // anchors.verticalCenter: parent.verticalCenter
+                text: Messages.cancelRemoveFilterTxt
+                onClicked: removeFilter()
             }
+
+
+            Button {
+                id: cancelBtn
+                anchors.top:parent.top
+                anchors.topMargin:3
+                anchors.right:parent.right
+                anchors.rightMargin:15
+                width:100
+                height:35
+                // anchors.verticalCenter: parent.verticalCenter
+                text: Messages.cancelBtnTxt
+                onClicked: closePopup()
+            }
+
+
+
+            // TabBar{
+
+            //     id: apply_btn1q
+            //     anchors.top: bottomButtons.top
+            //     // anchors.topMargin: 3
+            //     anchors.left: parent.left
+            //     anchors.leftMargin: 5
+            //     width: parent.width/2-60
+            //     height:60
+            //     // anchors.verticalCenter: parent.verticalCenter
+
+
+            //     TabButton{
+            //         id:okBtn
+            //         height:35
+            //         width:100
+            //         anchors.bottom:parent.bottom
+            //         anchors.bottomMargin: 8
+            //         // anchors.verticalCenter: parent.verticalCenter
+
+
+            //         background: Rectangle {
+            //             id: filter_cancel_btn_background1q
+            //             // color:  "#2E87C5"
+            //             border.color:"#007bff"
+            //             radius: 5
+            //         }
+            //         contentItem: Text{
+            //             id: filter_cancel_btn_text1q
+            //             text: "ok"
+            //             color:  "#007bff"
+            //             horizontalAlignment: Text.AlignHCenter
+            //             anchors.bottom:parent.bottom
+            //             verticalAlignment: Text.AlignVCenter
+            //         }
+            //         onClicked: updateValue()
+
+            //     }
+            //     TabButton{
+            //         height:40
+            //         anchors.bottom:parent.bottom
+            //         anchors.left:okBtn.right
+            //         anchors.leftMargin:15
+
+            //         background: Rectangle {
+            //             id: filter_cancel_btn_background1qa
+            //             // color:  "#2E87C5"
+            //             border.color:"#007bff"
+            //             radius: 5
+            //         }
+            //         contentItem: Text{
+            //             id: filter_cancel_btn_text1qa
+            //             text: "Remove Filter"
+
+            //             color:  "#007bff"
+            //             horizontalAlignment: Text.AlignHCenter
+            //             verticalAlignment: Text.AlignVCenter
+            //         }
+            //         onClicked: removeFilter()
+
+            //     }
+
+            // }
+            // TabBar{
+
+            //     id: apply_btn1
+            //     anchors.top: bottomButtons.top
+            //     anchors.topMargin: 3
+
+            //     anchors.right: parent.right
+            //     anchors.rightMargin: 5
+            //     width: parent.width/3-60
+            //     height:60
+
+
+
+            //     TabButton{
+            //         id: filter_cancel_btn1
+            //         height:40
+            //         anchors.bottom:parent.bottom
+
+            //         background: Rectangle {
+            //             id: filter_cancel_btn_background1
+            //             // color:  "#2E87C5"
+            //             border.color:"#007bff"
+            //             radius: 5
+            //         }
+            //         contentItem: Text{
+            //             id: filter_cancel_btn_text1
+            //             text: "cancel"
+
+            //             color:  "#007bff"
+            //             horizontalAlignment: Text.AlignHCenter
+            //             verticalAlignment: Text.AlignVCenter
+            //         }
+            //         onClicked: closePopup()
+
+            //     }
+
+            // }
+
         }
 
 
@@ -571,65 +614,128 @@ Item {
                 id: rangeDateTab
                 anchors.right:parent.right
                 Rectangle{
-                    height:300
-                    width:580
+                    height:250
+                    width:380
                     // color:"red"
                     anchors.right:parent.right
-//                    Old.Calendar {
-//                    Calendar {
-//                        anchors.left: parent.left
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        id: fromDateId
-//                        selectedDate: new Date()
-//                        onSelectedDateChanged:fromDate(selectedDate)
-//                    }
-//                    Old.Calendar {
-//                    Calendar {
-//                        anchors.right: parent.right
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        id: toDateId
-//                        selectedDate: new Date()
-//                        onSelectedDateChanged:toDate(selectedDate)
-//                    }
+                    //                    Old.Calendar {
+                    //    MonthGrid {
+                    //        anchors.left: parent.left
+                    //        anchors.verticalCenter: parent.verticalCenter
+                    //        id: fromDateId
+                    //        selectedDate: new Date()
+                    //        onSelectedDateChanged:fromDate(selectedDate)
+                    //    }
+                    Rectangle{
+                        border.color:"lightgrey"
+                        width: 167
+                        height: 230
+                        anchors.left:parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        DatePicker {
+                            anchors.centerIn: parent
+                            Component.onCompleted: set(new Date()) // today
+                            function updateDate(d){
+                                console.log("fromDate",d,d.toISOString().split('T'))
+                                fromDateVar = d.toISOString().split('T')[0]
+                            }
+                            // onClicked:print('onClicked', Qt.formatDate(date, 'M/d/yyyy'))
+                        }
+                    }
+                    Rectangle{
+                        border.color:"lightgrey"
+                        width: 167
+                        height: 230
+                        anchors.right:parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        DatePicker {
+                            anchors.centerIn: parent
+                            Component.onCompleted: set(new Date()) // today
+                            function updateDate(d){
+                                console.log("toDate",d,d.toISOString().split('T'))
+                                toDateVar = d.toISOString().split('T')[0]
+                            }
+                            // onClicked:print('onClicked', Qt.formatDate(date, 'M/d/yyyy'))
+                        }
+                    }
+                    //                    Old.Calendar {
+                    //                    Calendar {
+                    //                        anchors.right: parent.right
+                    //                        anchors.verticalCenter: parent.verticalCenter
+                    //                        id: toDateId
+                    //                        selectedDate: new Date()
+                    //                        onSelectedDateChanged:toDate(selectedDate)
+                    //                    }
                 }
             }
             Item {
                 id: beforeDateTab
                 Rectangle{
-                    height:300
-                    width:580
+                    height:250
+                    width:380
                     // color:"yellow"
                     anchors.right:parent.right
-//                    Old.Calendar {
-//                    Calendar {
-//                        anchors.centerIn: parent
-//                        id: beforeDateId
-//                        selectedDate: new Date()
-//                        onSelectedDateChanged:beforeDate(selectedDate)
-//                    }
+
+                    Rectangle{
+                        border.color:"lightgrey"
+                        width: 167
+                        height: 230
+                        anchors.centerIn: parent
+                        DatePicker {
+                            anchors.centerIn: parent
+                            Component.onCompleted: set(new Date()) // today
+                            // onClicked:print('onClicked', Qt.formatDate(date, 'M/d/yyyy'))
+                            function updateDate(d){
+                                console.log("afterDate",d,d.toISOString().split('T'))
+                                referenceDateVar = d.toISOString().split('T')[0]
+                            }
+                        }
+                    }
+                    //                    Old.Calendar {
+                    //                    Calendar {
+                    //                        anchors.centerIn: parent
+                    //                        id: beforeDateId
+                    //                        selectedDate: new Date()
+                    //                        onSelectedDateChanged:beforeDate(selectedDate)
+                    //                    }
                 }
             }
             Item {
                 id: afterDateTab
                 Rectangle{
-                    height:300
-                    width:580
+                    height:250
+                    width:380
                     anchors.right:parent.right
+                    Rectangle{
+                        border.color:"lightgrey"
+                        width: 167
+                        height: 230
+                        anchors.centerIn: parent
+                        DatePicker {
+                            anchors.centerIn: parent
+                            Component.onCompleted: set(new Date()) // today
+                            // onClicked:print('onClicked', Qt.formatDate(date, 'M/d/yyyy'))
+                            function updateDate(d){
+                                console.log("beforeDate",d,d.toISOString().split('T'))
+                                referenceDateVar = d.toISOString().split('T')[0]
+                            }
+                        }
+                    }
                     // color:"blue"
-//                    Old.Calendar {
-//                    Calendar {
-//                        anchors.centerIn: parent
-//                        id: afterDateId
-//                        selectedDate: new Date()
-//                        onSelectedDateChanged:afterDate(selectedDate)
-//                    }
+                    //                    Old.Calendar {
+                    //                    Calendar {
+                    //                        anchors.centerIn: parent
+                    //                        id: afterDateId
+                    //                        selectedDate: new Date()
+                    //                        onSelectedDateChanged:afterDate(selectedDate)
+                    //                    }
                 }
             }
             Item {
                 id: customDateTab
                 Rectangle{
-                    height:300
-                    width:580
+                    height:250
+                    width:380
                     anchors.right:parent.right
                     // color:"pink"
                     Rectangle{
@@ -639,7 +745,7 @@ Item {
                         color:"transparent"
 
                         width: parent.width
-                        height: 200
+                        height: 250
                         anchors.rightMargin: 20
 
                         Rectangle{
@@ -650,8 +756,8 @@ Item {
                             ComboBox {
                                 id: selectOption2
                                 model: listModel2
-                                width: 200
-                                height: 50
+                                width: 100
+                                height: 30
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 anchors.leftMargin:25
@@ -675,10 +781,12 @@ Item {
                                 anchors.leftMargin:15
                                 // anchors.right: selectOptio3.right
                                 anchors.left: selectOption2.right
+                                verticalAlignment: Qt.AlignVCenter
+                                horizontalAlignment: Qt.AlignHCenter
                                 text:{GeneralParamsModel.isWorkbookInEditMode()? DashboardParamsModel.fetchDateRelative(DashboardParamsModel.currentDashboard, "DashboardParamsModel.currentSelectedColumn")[1]:""}
 
-                                width: 100
-                                height: 50
+                                width: 50
+                                height: 30
 
                                 placeholderText: qsTr(" ")
 
@@ -696,8 +804,8 @@ Item {
                                 model: listModel3
                                 anchors.leftMargin:15
                                 anchors.verticalCenter: parent.verticalCenter
-                                width: 150
-                                height: 50
+                                width: 100
+                                height: 30
                                 anchors.left: customNumberField.right
                                 background: Rectangle {
                                     color:"white"
@@ -797,7 +905,9 @@ Item {
         Button {
             id: buttonDisplay
             anchors.top:columnName.bottom
+            anchors.topMargin:5
             width:parent.width
+            height:30
             onClicked: toggleDateFilter()
 
         }
