@@ -355,6 +355,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             height: 40
             width: 200
 
@@ -384,6 +385,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             //width: 130
             height: 40
             background: Rectangle {
@@ -429,6 +431,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -475,6 +478,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -521,6 +525,7 @@ Popup {
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 

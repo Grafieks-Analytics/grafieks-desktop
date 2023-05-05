@@ -211,6 +211,7 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
             width: 200
             height: 40
+            verticalAlignment:TextField.AlignVCenter
 
             onTextChanged: separator = idSeparatorText.text
 
