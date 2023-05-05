@@ -14,7 +14,7 @@ import QtQuick.Dialogs
 
 import com.grafieks.singleton.constants 1.0
 import com.grafieks.singleton.messages 1.0
-
+import "../../MainSubComponents"
 
 
 Popup {
@@ -141,17 +141,23 @@ Popup {
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
+        Rectangle{
 
-        Button{
-            id : file_btn
-            text: Messages.cn_sub_sqlite_selFile
-            onClicked: promptSqlite.open();
-        }
+            id: label4
+            width:400
+            height: 40
+            Button{
+                id : file_btn
+                anchors.verticalCenter: parent.verticalCenter
+                text: Messages.cn_sub_sqlite_selFile
+                onClicked: promptSqlite.open();
+            }
 
-        Text{
-            id: sqliteFileName
-            anchors.bottom: file_btn.bottom
-            text:""
+            Text{
+                id: sqliteFileName
+                anchors.bottom: file_btn.bottom
+                text:""
+            }
         }
 
     }
@@ -169,32 +175,24 @@ Popup {
         // anchors.top: row3.bottom
         // anchors.topMargin: 15
         anchors.bottom:parent.bottom
-        anchors.bottomMargin:15
+        // anchors.bottomMargin:15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 100
         spacing: 10
 
-        Button{
+  
+        CustomButton{
+
             id: btn_cancel
-            height: back_rec_3.height
-            width: back_rec_3.width
-
-            background: Rectangle{
-                id: back_rec_3
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
-                width: 100
-                height: 40
-
-                Text{
-                    text: Messages.openFileText
-                    anchors.centerIn: parent
-                    font.pixelSize: Constants.fontCategoryHeader
-                    color: btn_cancel.hovered ? "white" : "black"
-                }
-            }
+            anchors.bottom:parent.bottom
+            anchors.bottomMargin:30
+            width: 100
+            anchors.right:parent.right
+            textValue: Messages.openFileText
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: connectToSqlite(selectedFile)
-
         }
+        
     }
     // Row 6: Action Button ends
 

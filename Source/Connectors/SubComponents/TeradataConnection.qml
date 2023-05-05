@@ -24,9 +24,15 @@ Popup {
     modal: true
     visible: false
     x: parent.width/2 - 300
-    y: parent.height/2 - 300
+    y: parent.height/2 - 200
     padding: 0
     property int label_col : 135
+     background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
+
 
 
     /***********************************************************************************************************************/
@@ -174,11 +180,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             id : text1
@@ -350,6 +354,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             height: 40
             width: 200
 
@@ -379,6 +384,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             //width: 130
             height: 40
             background: Rectangle {
@@ -424,6 +430,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -470,6 +477,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -516,6 +524,7 @@ Popup {
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 

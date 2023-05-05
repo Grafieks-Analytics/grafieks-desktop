@@ -244,5 +244,6 @@
         <file>Source/Reports/calculatedFieldEditor.html</file>
         <file>Source/MainSubComponents/CustomMessageDialog.qml</file>
         <file>Source/Modellers/DataPreviewTable.html</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/DatePicker.qml</file>
     </qresource>
 </RCC>

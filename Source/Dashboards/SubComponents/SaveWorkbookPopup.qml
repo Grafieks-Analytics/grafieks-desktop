@@ -21,14 +21,19 @@ import "../../MainSubComponents"
 Popup {
     id: popupSave
     width: 600
-    height: 400
+    height: 300
     modal: true
     visible: false
     x: parent.width / 2 - 300
-    y: parent.width / 2 - 700
+    y: parent.height / 2 - 150
     padding: 0
 
     property int label_col : 150
+         background:Rectangle{
+        height:parent.height
+        width:parent.width
+        color:"white"
+    }
 
     // JAVASCRIPT FUNCTION STARTS
     /***********************************************************************************************************************/
@@ -79,11 +84,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             text: Messages.da_sub_swp_header
@@ -162,10 +165,10 @@ Popup {
     Row{
 
         id: row3
-        anchors.top: row2.bottom
-        anchors.topMargin: 30
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 30
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: 30
         spacing: 10
 
         Button{

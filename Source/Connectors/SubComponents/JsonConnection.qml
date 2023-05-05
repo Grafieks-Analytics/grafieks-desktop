@@ -238,26 +238,14 @@ Popup {
             anchors.rightMargin: 10
         }
 
-        Button{
+        CustomButton{
+
             id: btn_cancel
-            height: back_rec_3.height
-            width: back_rec_3.width
-
-            background: Rectangle{
-                id: back_rec_3
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
-                width: 100
-                height: 40
-
-                Text{
-                    text: Messages.openFileText
-                    anchors.centerIn: parent
-                    font.pixelSize: Constants.fontCategoryHeader
-                    color: btn_cancel.hovered ? "white" : "black"
-                }
-            }
+            width: 100
+            anchors.right:parent.right
+            textValue: Messages.openFileText
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: handleJson(selectedFile)
-
         }
     }
     // Row 6: Action Button ends

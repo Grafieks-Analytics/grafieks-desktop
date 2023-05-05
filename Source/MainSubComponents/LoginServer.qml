@@ -122,6 +122,7 @@ Popup {
             maximumLength: 250
             font.pixelSize: Constants.fontCategoryHeader
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
             background: Rectangle {
@@ -146,65 +147,84 @@ Popup {
         anchors.rightMargin: label_col - 70
         spacing: 10
 
-        Button{
+        // Button{
+        //     id: btn_con
+        //     height: back_rec_1.height
+        //     width: back_rec_1.width
+
+        //     background: Rectangle{
+        //         id: back_rec_1
+        //         //radius: 10
+        //         color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+        //         width: 100
+        //         height: 40
+        //         Rectangle{
+        //             anchors.fill: parent
+        //             anchors.margins: 1
+        //             //radius: 10
+        //             color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+
+        //         }
+        //         Text{
+        //             text: Messages.msc_lsr_connectBtn
+        //             anchors.centerIn: parent
+        //             color: btn_con.hovered ? "white" : "black"
+        //             font.pixelSize: Constants.fontCategoryHeader
+        //         }
+        //     }
+        //     onClicked: User.siteLookup(server_address.text)
+        // }
+        CustomButton{
             id: btn_con
-            height: back_rec_1.height
-            width: back_rec_1.width
-
-            background: Rectangle{
-                id: back_rec_1
-                //radius: 10
-                color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    //radius: 10
-                    color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-
-                }
-                Text{
-                    text: Messages.msc_lsr_connectBtn
-                    anchors.centerIn: parent
-                    color: btn_con.hovered ? "white" : "black"
-                    font.pixelSize: Constants.fontCategoryHeader
-                }
-            }
+            width: 100
+            anchors.right:btn_cancel.left
+            anchors.rightMargin:30
+            textValue: Messages.msc_lsr_connectBtn
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: User.siteLookup(server_address.text)
         }
-
-        Button{
+        CustomButton{
             id: btn_cancel
-            height: back_rec_2.height
-            width: back_rec_2.width
-
-            background: Rectangle{
-                id: back_rec_2
-                //radius: 10
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    //radius: 10
-                    color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-
-                }
-
-                Text{
-                    text: Messages.cancelBtnTxt
-                    anchors.centerIn: parent
-                    color: btn_cancel.hovered ? "white" : "black"
-                    font.pixelSize: Constants.fontCategoryHeader
-                }
-            }
-
-            onClicked: {
+            width: 100
+            anchors.right:parent.right
+            textValue: Messages.cancelBtnTxt
+            fontPixelSize: Constants.fontCategoryHeader
+            onClicked:{
                 popupLoginServer.visible = false
             }
         }
+
+        // Button{
+        //     id: btn_cancel
+        //     height: back_rec_2.height
+        //     width: back_rec_2.width
+
+        //     background: Rectangle{
+        //         id: back_rec_2
+        //         //radius: 10
+        //         color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+        //         width: 100
+        //         height: 40
+        //         Rectangle{
+        //             anchors.fill: parent
+        //             anchors.margins: 1
+        //             //radius: 10
+        //             color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+
+        //         }
+
+        //         Text{
+        //             text: Messages.cancelBtnTxt
+        //             anchors.centerIn: parent
+        //             color: btn_cancel.hovered ? "white" : "black"
+        //             font.pixelSize: Constants.fontCategoryHeader
+        //         }
+        //     }
+
+        //     onClicked: {
+        //         popupLoginServer.visible = false
+        //     }
+        // }
     }
     // Row 2: Action Button ends
 

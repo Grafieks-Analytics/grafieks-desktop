@@ -363,6 +363,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -409,6 +410,7 @@ Popup {
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 

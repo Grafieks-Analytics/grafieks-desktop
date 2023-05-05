@@ -211,6 +211,7 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
             width: 200
             height: 40
+            verticalAlignment:TextField.AlignVCenter
 
             onTextChanged: separator = idSeparatorText.text
 
@@ -235,7 +236,7 @@ Popup {
         anchors.bottomMargin: 65
 
         anchors.right: parent.right
-        anchors.rightMargin: label_col+30
+        anchors.rightMargin: 70
         spacing: 10
 
         Text{
@@ -259,28 +260,38 @@ Popup {
             anchors.rightMargin: 10
         }
 
-        Button{
+        // CustomButton{
+        //     id: btn_cancel
+        //     height: back_rec_3.height
+        //     width: back_rec_3.width
+
+        //     background: Rectangle{
+        //         id: back_rec_3
+        //         color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
+        //         width: 100
+        //         height: 40
+
+        //         Text{
+        //             text: Messages.openFileText
+        //             anchors.centerIn: parent
+        //             font.pixelSize: Constants.fontCategoryHeader
+        //             color: btn_cancel.hovered ? "red" : "red"
+        //         }
+        //     }
+        //     onClicked: handleCsv(selectedFile, separator)
+
+        // }
+         CustomButton{
+
             id: btn_cancel
-            height: back_rec_3.height
-            width: back_rec_3.width
-
-            background: Rectangle{
-                id: back_rec_3
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
-                width: 100
-                height: 40
-
-                Text{
-                    text: Messages.openFileText
-                    anchors.centerIn: parent
-                    font.pixelSize: Constants.fontCategoryHeader
-                    color: btn_cancel.hovered ? "white" : "black"
-                }
-            }
+            width: 100
+            anchors.right:parent.right
+            textValue: Messages.openFileText
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: handleCsv(selectedFile, separator)
-
         }
     }
+    
     // Row 6: Action Button ends
 
 
