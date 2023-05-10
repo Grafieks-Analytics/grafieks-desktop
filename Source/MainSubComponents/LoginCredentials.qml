@@ -32,7 +32,7 @@ Popup {
         color:"white"
     }
     x: parent.width / 2 - 300
-    y: parent.width / 2 - 700
+    y: parent.height / 2 - 200
     padding: 0
 
     property int label_col : 150
@@ -79,11 +79,9 @@ Popup {
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
-        width: parent.width - 2
+        width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
-        anchors.leftMargin: 1
 
         Text{
             text: Messages.msc_lcr_header
@@ -142,6 +140,7 @@ Popup {
             maximumLength: 250
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -187,6 +186,7 @@ Popup {
             selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment:TextField.AlignVCenter
             width: 370
             height: 40
 
@@ -212,32 +212,49 @@ Popup {
         anchors.rightMargin: label_col - 70
         spacing: 10
 
-        Button{
+        // Button{
 
+        //     id: btn_signin
+        //     height: back_rec_1.height
+        //     width: back_rec_1.width
+
+        //     background: Rectangle{
+        //         id: back_rec_1
+        //         color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+        //         width: 100
+        //         height: 40
+
+        //         Rectangle{
+        //             anchors.fill: parent
+        //             anchors.margins: 1
+        //             color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+
+        //         }
+
+        //         Text{
+        //             text:Messages.signInText
+        //             font.pixelSize: Constants.fontCategoryHeader
+        //             color: btn_signin.hovered ? "white" : "black"
+        //             anchors.centerIn: parent
+        //         }
+        //     }
+        //     onClicked: {
+
+        //         error_connection_text.text = Messages.msc_lcr_pleaseWait
+        //         User.setUsername(username_field.text);
+        //         User.setPassword(password_field.text);
+
+        //         User.login()
+
+        //     }
+        // }
+        CustomButton{
             id: btn_signin
-            height: back_rec_1.height
-            width: back_rec_1.width
-
-            background: Rectangle{
-                id: back_rec_1
-                color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-                width: 100
-                height: 40
-
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-
-                }
-
-                Text{
-                    text:Messages.signInText
-                    font.pixelSize: Constants.fontCategoryHeader
-                    color: btn_signin.hovered ? "white" : "black"
-                    anchors.centerIn: parent
-                }
-            }
+            width: 100
+            anchors.right:btn_cancel.left
+            anchors.rightMargin:30
+            textValue: Messages.signInText
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: {
 
                 error_connection_text.text = Messages.msc_lcr_pleaseWait
@@ -248,36 +265,46 @@ Popup {
 
             }
         }
-
-        Button{
+        CustomButton{
             id: btn_cancel
-            height: back_rec_2.height
-            width: back_rec_2.width
-
-            background: Rectangle{
-                id: back_rec_2
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-
-                }
-
-                Text{
-                    text:"Cancel"
-                    font.pixelSize: Constants.fontCategoryHeader
-                    color: btn_cancel.hovered ? "white" : "black"
-                    anchors.centerIn: parent
-                }
-            }
-
+            width: 100
+            anchors.right:parent.right
+            textValue: "Cancel"
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: {
                 popupLoginCredentials.visible = false
             }
         }
+
+        // Button{
+        //     id: btn_cancel
+        //     height: back_rec_2.height
+        //     width: back_rec_2.width
+
+        //     background: Rectangle{
+        //         id: back_rec_2
+        //         color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+        //         width: 100
+        //         height: 40
+        //         Rectangle{
+        //             anchors.fill: parent
+        //             anchors.margins: 1
+        //             color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+
+        //         }
+
+        //         Text{
+        //             text:"Cancel"
+        //             font.pixelSize: Constants.fontCategoryHeader
+        //             color: btn_cancel.hovered ? "white" : "black"
+        //             anchors.centerIn: parent
+        //         }
+        //     }
+
+        //     onClicked: {
+        //         popupLoginCredentials.visible = false
+        //     }
+        // }
 
 
     }
