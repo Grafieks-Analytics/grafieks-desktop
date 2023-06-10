@@ -3019,7 +3019,7 @@ void ChartsThread::getMultiLineChartValues()
 }
 
 QString ChartsThread::getAggregateType(){
-    return "SUM";
+    return "sum";
 }
 
 void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn, QJsonArray &xAxisObject, QString identifier)
@@ -3665,13 +3665,15 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     QJsonArray colData;
 
-    //    QJsonObject stackBarJsonObject;
+//    QJsonObject stackBarJsonObject;
 
-    //    QJsonArray xAxisTextValues;
-    //    QJsonArray splitDataArrayValues;
+//    QJsonArray xAxisTextValues;
+//    QJsonArray splitDataArrayValues;
     QHash<QString, QString> xAxisTextValues;
     QHash<QString, QString> splitDataArrayValues;
-    QHash<QString, QVariant> stackBarJsonObject;
+//    QHash<QString, QHash<QString, double>> stackBarJsonObject;
+
+    QVariantMap stackBarJsonObject;
 
     // Fetch data here
 
@@ -3703,7 +3705,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         QString xAxisColumnValue = "\"" + xAxisColumn + "\"";
 
         QString xAxisColumnSubString =  "\"" + xSplitKey + "\"";
-        QString groupByCondition = " GROUP BY " + xAxisColumnValue + ", " + xAxisColumnSubString;
+        QString groupByCondition = " GROUP BY " +  xAxisColumnValue + ", " +xAxisColumnSubString;
 
         QString dateFormatType = xAxisData.value("dateFormat").toString();
 
@@ -3729,7 +3731,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
             }
 
 
-            queryString = "SELECT " + xAxisColumnValue + ", " + aggregateType + "(\"" + yAxisColumn + "\") , " + xAxisColumnSubString  +  " FROM "+tableName + groupByCondition + " ORDER BY " + orderByCondition;
+            queryString = "SELECT " + xAxisColumnValue + ", " + aggregateType + "(cast(\"" + yAxisColumn + "\" AS DOUBLE)) , " + xAxisColumnSubString  +  " FROM "+tableName + groupByCondition + " ORDER BY " + orderByCondition;
         }
 
         qDebug() << "Query String" << queryString;
@@ -3742,6 +3744,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
             QString value = dataListExtract->GetValue(1, i).ToString().c_str();
             QString splitData = dataListExtract->GetValue(0, i).ToString().c_str();
 
+//            qDebug() << xAxisData << splitData << value;
             QVariantMap existingData = stackBarJsonObject.value(xAxisData).toMap();
             /*
                 xAxisData1: {
@@ -3755,23 +3758,17 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
                     split2: 200,
                     split3: 300
                 },
-
-
-
             */
-            if(!xAxisTextValues.contains(xAxisData)){
-                xAxisTextValues.insert(xAxisData,xAxisData);
-            }
-            if(!splitDataArrayValues.contains(splitData)){
-                splitDataArrayValues.insert(splitData, splitData);
-            }
             if(existingData.isEmpty()){
                 QVariantMap initialData;
                 initialData.insert(splitData, value.toDouble());
                 stackBarJsonObject.insert(xAxisData, initialData);
             } else {
-                //                existingData.insert(splitData, value.toDouble());
-                existingData.insert(splitData, value.toDouble());
+//                existingData.insert(splitData, value.toDouble());
+//                existingData.insert(splitData, value.toDouble());
+                double valueMetric = existingData.value(splitData).toDouble();
+                existingData.insert(splitData, valueMetric + value.toDouble());
+
                 stackBarJsonObject.insert(xAxisData, existingData);
             }
         }
@@ -3827,7 +3824,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     }
 
     int xAxisCounts = xAxisTextValues.keys().count();
-    int splitCounts = splitDataArrayValues.keys().count();
+//    int splitCounts = splitDataArrayValues.keys().count();
 
     QVariantList dataValues;
 
@@ -3837,40 +3834,43 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     QVariantList legends;
     QVariantList axisTextValues;
 
+
+    /*
     for (int i=0; i < xAxisCounts ; i++) {
 
-        QString xAxisValue = xAxisKeys.at(i);
-        axisTextValues.append(xAxisValue);
+           QString xAxisValue = xAxisKeys.at(i);
+           axisTextValues.append(xAxisValue);
 
-        QVariantMap tempObject = stackBarJsonObject.value(xAxisValue).toMap();
+           QVariantMap tempObject = stackBarJsonObject.value(xAxisValue).toMap();
 
-        QVariantMap objectValue;
-        QVariantMap componentObj;
-        QVariantList componentsArray;
+           QVariantMap objectValue;
+           QVariantMap componentObj;
+           QVariantList componentsArray;
 
-        double lastValue = 0;
-        for(int j=0;j<splitCounts;j++){
-            QString splitValue = splitDataKeys.at(j);
-            legends.append(splitValue);
+           double lastValue = 0;
+           for(int j=0;j<splitCounts;j++){
+               QString splitValue = splitDataKeys.at(j);
+               legends.append(splitValue);
 
-            double tempValue = tempObject.value(splitValue).toDouble();
-            objectValue.insert(splitValue, tempValue);
+               double tempValue = tempObject.value(splitValue).toDouble();
+               objectValue.insert(splitValue, tempValue);
 
-            double y0 = lastValue + tempValue;
-            componentObj.insert("y1", lastValue);
-            componentObj.insert("y0", y0);
-            componentObj.insert("key", splitValue);
-            componentObj.insert("mainKey", xAxisValue);
+               double y0 = lastValue + tempValue;
+               componentObj.insert("y1", lastValue);
+               componentObj.insert("y0", y0);
+               componentObj.insert("key", splitValue);
+               componentObj.insert("mainKey", xAxisValue);
 
-            lastValue = y0;
-            componentsArray.append(componentObj);
-        }
+               lastValue = y0;
+               componentsArray.append(componentObj);
+           }
 
-        objectValue.insert("key", xAxisValue);
-        objectValue.insert("components", componentsArray);
+           objectValue.insert("key", xAxisValue);
+           objectValue.insert("components", componentsArray);
 
-        dataValues.append(objectValue);
+           dataValues.append(objectValue);
     }
+    */
 
     /*
     // Fetch unique xAxisData & splitter
@@ -3982,7 +3982,11 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     columns.insert(Constants::yAxisLabelKey,yParam);
     columns.insert(Constants::colorByLabelKey,xParam);
 
-    data.insert(Constants::dataValuesKey,  QJsonArray::fromVariantList(dataValues));
+    QVariantHash obj;
+
+
+
+    data.insert(Constants::dataValuesKey,  QJsonObject::fromVariantMap(stackBarJsonObject));
     data.insert(Constants::dataLabelsKey, columns);
     data.insert(Constants::legendsKey , QJsonArray::fromVariantList(legends));
     data.insert(Constants::axisTextValuesKey , QJsonArray::fromVariantList(axisTextValues));
@@ -3991,6 +3995,7 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
     doc.setObject(data);
 
     QString strData = doc.toJson(QJsonDocument::Compact);
+    qDebug() << "Total Data Length" << strData.length();
 
     // Cache report results
     this->dashboardReportDataCached.insert(this->currentReportId, strData);

@@ -1690,7 +1690,7 @@ Popup {
             Rectangle{
                 id: row4DropAreaRectangle
                 height: parent.height
-                width: 204
+                width: 174
                 anchors.left: row4Text.right
                 anchors.leftMargin: 1
 
@@ -1735,7 +1735,7 @@ Popup {
 
             Rectangle{
                 id: row4TextInput1Label
-                width: 130
+                width: 100
                 height: parent.height
                 anchors.left: row4Valueseparator.right
                 
@@ -1765,13 +1765,13 @@ Popup {
 
             Rectangle{
                 id: row4TextInput1
-                width: 200
+                width: 150
                 height: parent.height
                 anchors.left: row4TextInput1Label.right
                 // border.color: Constants.borderBlueColor
 
                 Rectangle{
-                    width: 160
+                    width: 130
                     height: 30
                     radius: 15
                     border.color: Constants.borderBlueColor
@@ -1809,7 +1809,7 @@ Popup {
 
             Rectangle{
                 id: row4TextInput2Label
-                width: 200
+                width: 100
                 height: parent.height
                 anchors.left: row4Valueseparator3.right
                 Text{
@@ -1834,12 +1834,12 @@ Popup {
 
             Rectangle{
                 id: row4TextInput2
-                width: 200
+                width: 160
                 height: parent.height
                 anchors.left: row4TextInput2Label.right
 
                 Rectangle{
-                    width: 160
+                    width: 130
                     height: 30
                     radius: 15
                     border.color: Constants.borderBlueColor
@@ -1876,7 +1876,7 @@ Popup {
 
             Rectangle{
                 id: row4TextInput3Label
-                width: 100
+                width: 90
                 height: parent.height
                 anchors.left: row4Valueseparator5.right
 
@@ -1903,12 +1903,12 @@ Popup {
 
             Rectangle{
                 id: row4TextInput3
-                width: 200
+                width: 140
                 height: parent.height
                 anchors.left: row4TextInput3Label.right
                 // border.color: Constants.borderBlueColor
                 Rectangle{
-                    width: 160
+                    width: 130
                     height: 30
                     radius: 15
                     border.color: Constants.borderBlueColor
