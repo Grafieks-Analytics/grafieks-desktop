@@ -240,8 +240,8 @@ namespace Constants
     const QString defaultMode = "create";
 
     // DashboardParams
-    const int defaultCanvasWidth = 1080;
-    const int defaultCanvasHeight = 600;
+    const int defaultCanvasWidth = 1280;
+    const int defaultCanvasHeight = 800;
 
     // Current Screen Types
     const int homeScreen = 0;
@@ -260,6 +260,54 @@ namespace Constants
 
     // General messages
     const QString connectionOpenError = "Could not open";
+
+    // Charts Constants
+    const QString dataValuesKey = "dataValues";
+    const QString dataLabelsKey = "dataLabels";
+    const QString legendsKey = "legendsData";
+    const QString axisTextValuesKey = "axisTextValues";
+    const QString fieldsKey = "fields";
+    const QString rowColumnsValuesKey = "rowColumnsValues";
+
+    const QString xAxisLabelKey = "xAxisLabel";
+    const QString yAxisLabelKey = "yAxisLabel";
+    const QString colorByLabelKey = "colorByLabel";
+
+    const QString barChartTitle = "Bar Chart";
+    const QString pieChartTitle = "Pie Chart";
+    const QString donutChartTitle ="Donut Chart";
+    const QString funnelChartTitle ="Funnel Chart";
+    const QString gaugeChartTitle = "Gauge Chart";
+    const QString scatterChartTitle = "Scatter Plot";
+    const QString stackedBarChartTitle = "Stacked Bar Chart";
+    const QString groupBarChartTitle = "Grouped Bar Chart";
+    const QString geoChartTitle = "Map";
+    const QString treeChartTitle = "Tree Chart";
+    const QString treeMapChartTitle = "Tree Map";
+    const QString combinationChartTitle = "Combination";
+    const QString radarChartTitle = "Radar";
+    const QString heatMapChartTitle = "Heat Map";
+    const QString sunburstChartTitle = "Sunburst";
+    const QString waterfallChartTitle = "Waterfall";
+    const QString kpiTitle = "KPI";
+    const QString tableTitle = "Table";
+    const QString pivotTitle = "Pivot";
+    const QString lineBarTitle = "Line Bar";
+    const QString sankeyChartTitle = "Sankey";
+    const QString stackedAreaChartTitle = "Stacked Area Chart";
+    const QString horizontalStackedAreaChartTitle = "Horizontal Stacked Area Chart";
+    const QString horizontalBarChartTitle = "Horizontal Bar Chart";
+    const QString horizontalStackedBarChartTitle = "Horizontal Stack Bar Chart";
+    const QString horizontalBarGroupedChartTitle = "Horizontal Bar Grouped Chart";
+    const QString lineChartTitle = "Line Chart";
+    const QString horizontalLineChartTitle = "Horizontal Line Chart";
+    const QString multiLineChartTitle = "Multi Line";
+    const QString horizontalMultiLineChartTitle = "Horizontal Multi Line";
+    const QString areaChartTitle ="Area Chart";
+    const QString horizontalAreaChartTitle = "Horizontal Area Chart";
+    const QString multipleAreaChartTitle = "Multiple Area Chart";
+    const QString multipleHorizontalAreaChartTitle = "Multiple Horizontal Area Chart";
+
 
 } // namespace Constants
 #endif // CONSTANTS_H

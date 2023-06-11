@@ -312,11 +312,11 @@ Item{
             console.log(chartTitle,"CLICKED")
             // datavalues is a global property and set using connections
             // due to multi threading
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+            colorData = (dataValues && [JSON.parse(dataValues).dataLabels.xAxisLabel]) || [];
             break;
         case Constants.barChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+            colorData = (dataValues && [JSON.parse(dataValues).dataLabels.xAxisLabel]) || [];
             break;
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -327,7 +327,7 @@ Item{
         case Constants.stackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
             dataValues = dataValues && JSON.parse(dataValues);
-            colorData = dataValues[1] || [];
+            colorData = dataValues.dataLabels || [];
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.horizontalBarGroupedChartTitle:
@@ -354,7 +354,7 @@ Item{
             console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
             break;
         case Constants.areaChartTitle:
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+            colorData = (dataValues && [JSON.parse(dataValues).dataLabels.xAxisLabel]) || [];
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.stackedAreaChartTitle:
@@ -362,7 +362,7 @@ Item{
             break;
         case Constants.lineChartTitle:
             console.log(chartTitle,"CLICKED");
-            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+            colorData = (dataValues && [JSON.parse(dataValues).dataLabels.xAxisLabel]) || [];
             break;
         case Constants.horizontalLineChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -379,49 +379,6 @@ Item{
         case Constants.horizontalMultiLineChartTitle:
             dataValues = JSON.parse(dataValues);
             colorData = (dataValues && dataValues[1]) || [];
-            break;
-        case Constants.pieChartTitle:
-        case Constants.donutChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.funnelChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.radarChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.scatterChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.treeChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.treeMapChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.heatMapChartTitle:
-            console.log(chartTitle,"CLICKED");
-            break;
-        case Constants.sunburstChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.waterfallChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.gaugeChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.sankeyChartTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.kpiTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.tableTitle:
-            console.log(chartTitle,"CLICKED")
-            break;
-        case Constants.pivotTitle:
-            console.log(chartTitle,"CLICKED")
             break;
         default:
             console.log(chartTitle,"Clicked, but is a missed case")
@@ -730,6 +687,38 @@ Item{
             var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
             var colorData = [];
+
+            const chartsObject = {
+                xAxisObject: xAxisColumnDetails,
+                yAxisObject: yAxisColumnDetails,
+                row3AxisObject: row3ColumnDetails,
+                colorByObject: colorByData,
+            };
+
+            if (chartTitle == Constants.gaugeChartTitle) {
+                var greenValue = input1Field.text;
+                var yellowValue = input2Field.text;
+                var redValue = input3Field.text;
+                optionalParams[chartTitle] = {
+                    greenValue,
+                    yellowValue,
+                    redValue,
+                };
+                chartsObject.optionalParams = optionalParams;
+            } else {
+                delete chartsObject.optionalParams;
+            }
+
+            ChartsModel.getChartWiseData(
+                chartId,
+                DashboardParamsModel.currentDashboard,
+                Constants.dashboardScreen,
+                chartTitle,
+                chartsObject
+            );
+
+            return;
+
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
