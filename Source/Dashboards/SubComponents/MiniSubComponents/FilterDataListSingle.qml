@@ -69,7 +69,7 @@ Item {
     }
 
     function processDataList(modelContent){
-        modelContent.unshift("Select All")
+//        modelContent.unshift("Select All")
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
         listModel.clear()

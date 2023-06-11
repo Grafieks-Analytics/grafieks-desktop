@@ -168,7 +168,7 @@ Popup {
         var projectId = projectNameCombo.currentValue
         var wbName = wbNamefield.text
         var description = description_field.text
-        var uploadImage = fileDialog1.fileUrl
+        var uploadImage = fileDialog1.selectedFile
         var dashboardCount = DashboardParamsModel.dashboardCount
 
         var readerFile = GeneralParamsModel.urlToFilePath(uploadImage)

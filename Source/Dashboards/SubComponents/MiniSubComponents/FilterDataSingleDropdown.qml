@@ -60,7 +60,7 @@ Item{
 
 
     function processDataList(modelContent){
-        modelContent.unshift("Select All")
+//        modelContent.unshift("Select All")
         control.model = modelContent
 
         var previousCheckValues = DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)
