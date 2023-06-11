@@ -80,8 +80,14 @@ void ChartsModel::getChartWiseData(int reportId, int dashboardId, int chartSourc
     QJsonObject xAxisColumn0Object = xAxisObject.at(0).toObject();
     QString xAxisColumn0Name = xAxisColumn0Object.value("tableValue").toString();
 
+    QJsonObject xAxisColumn1Object = xAxisObject.at(1).toObject();
+    QString xAxisColumn1Name = xAxisColumn1Object.value("tableValue").toString();
+
     QJsonObject yAxisColumn0Object = yAxisObject.at(0).toObject();
     QString yAxisColumn0Name = yAxisColumn0Object.value("tableValue").toString();
+
+    QJsonObject yAxisColumn1Object = yAxisObject.at(1).toObject();
+    QString yAxisColumn1Name = yAxisColumn1Object.value("tableValue").toString();
 
     QJsonObject splitByColumn0Object = colorByObject.at(0).toObject();
     QString splitByColumn0Name = splitByColumn0Object.value("tableValue").toString();
@@ -109,6 +115,10 @@ void ChartsModel::getChartWiseData(int reportId, int dashboardId, int chartSourc
         this->getMultiLineChartValues(reportId, dashboardId, chartSource, xAxisColumn0Name, yAxisColumn0Name, splitByColumn0Name, xAxisObject);
     } else if (chartName == Constants::multipleHorizontalAreaChartTitle || chartName == Constants::horizontalMultiLineChartTitle) {
         this->getMultiLineChartValues(reportId, dashboardId, chartSource, yAxisColumn0Name, xAxisColumn0Name, splitByColumn0Name, xAxisObject);
+    } else if(chartName == Constants::groupBarChartTitle){
+        this->getNewGroupedBarChartValues(reportId, dashboardId, chartSource, xAxisColumn0Name, yAxisColumn0Name, xAxisColumn1Name);
+    } else if(chartName == Constants::horizontalBarGroupedChartTitle){
+        this->getNewGroupedBarChartValues(reportId, dashboardId, chartSource, yAxisColumn0Name, xAxisColumn0Name, yAxisColumn1Name);
     } else if (chartName == Constants::pieChartTitle || chartName == Constants::donutChartTitle) {
         this->getPieChartValues(reportId, dashboardId, chartSource, xAxisColumn0Name, yAxisColumn0Name, xAxisObject);
     } else if (chartName == Constants::heatMapChartTitle) {
