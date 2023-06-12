@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QFileInfo>
+#include <QProcess>
 #include <QObject>
 #include <QDebug>
 
@@ -46,6 +47,7 @@ private:
     QNetworkReply * m_networkReply;
     QByteArray * m_tempStorage;
     QFile *dataFile;
+    QString inFilePath;
 
     QString outputFileName;
 
