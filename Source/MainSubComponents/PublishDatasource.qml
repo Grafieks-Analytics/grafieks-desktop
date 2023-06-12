@@ -198,7 +198,7 @@ Popup {
     function publishData(){
         var dsName = datasource_name_field.text
         var description = description_field.text
-        var uploadImage = fileDialog1.fileUrl
+        var uploadImage = fileDialog1.selectedFile
         var sourceType = DSParamsModel.dsType === "" ? GeneralParamsModel.getFromLiveFile() === true ? Constants.liveDS : Constants.extractDS : DSParamsModel.dsType
         var schedulerId = DSParamsModel.schedulerId
         var isFullExtract = DSParamsModel.isFullExtract

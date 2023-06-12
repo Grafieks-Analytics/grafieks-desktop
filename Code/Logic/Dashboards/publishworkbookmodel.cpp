@@ -155,35 +155,18 @@ void PublishWorkbookModel::uploadFinished()
 
 void PublishWorkbookModel::uploadFile()
 {
-    //    QFile dataFile(Statics::extractPath);
-    QFile *dataFile = new QFile(this->workbookFilePath, this);
-
     QSettings settings;
 
-    //        QString ftpAddress = settings.value("general/ftpAddress").toString();
     QString ftpAddress = Constants::defaultFTPEndpoint;
     QString siteName = settings.value("user/sitename").toString();
     QString ftpUser = settings.value("user/ftpUser").toString();
     QString ftpPass = settings.value("user/ftpPass").toString();
     QString ftpPort = settings.value("user/ftpPort").toString();
 
-    QUrl url("ftp://" + ftpAddress + ":" + ftpPort + "/" + siteName + "/workbooks/" + this->outputFileName);
-    url.setUserName(ftpUser);
-    url.setPassword(ftpPass);
-    url.setScheme("ftp");
-
-    if (dataFile->open(QIODevice::ReadOnly))
-    {
-        // Start upload
-        QNetworkReply *reply = m_networkAccessManager->put(QNetworkRequest(url), dataFile);
-
-        if(reply->error()){
-            qDebug() << Q_FUNC_INFO << reply->errorString();
-        }
-        // And connect to the progress upload signal
-        connect(reply, &QNetworkReply::uploadProgress, this, &PublishWorkbookModel::uploadProgress);
-        connect(reply, &QNetworkReply::finished, this, &PublishWorkbookModel::uploadFinished);
-    } else {
-        qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
+    QProcess curlProcess;
+    curlProcess.start("curl", {"-p", "--insecure",  "ftp://" + ftpAddress + ":" + ftpPort + "/" + siteName + "/workbooks/" + this->outputFileName, "--user", ftpUser + ":" + ftpPass, "-T", this->workbookFilePath, "--ftp-create-dirs"});
+    if (curlProcess.waitForFinished()){
+         qDebug() << "FTP DONE" << curlProcess.exitStatus();
+         this->uploadFinished();
     }
 }

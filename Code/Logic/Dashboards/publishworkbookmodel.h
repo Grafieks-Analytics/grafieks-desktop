@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QFileInfo>
+#include <QProcess>
 #include <QObject>
 #include <QDebug>
 

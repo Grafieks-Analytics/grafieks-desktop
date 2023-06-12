@@ -212,51 +212,26 @@ void PublishDatasourceModel::uploadFinished()
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
-
-    if(this->dataFile->isOpen()){
-        this->dataFile->close();
-    }
-
     emit dsUploadFinished();
 }
 
 void PublishDatasourceModel::uploadFile()
 {
-    this->dataFile = Statics::extractPath != "" ? new QFile(Statics::extractPath, this) : new QFile(Statics::livePath, this);
-
+    this->inFilePath = Statics::extractPath != "" ? Statics::extractPath : Statics::livePath;
 
     QSettings settings;
 
-    //    QString ftpAddress = settings.value("general/ftpAddress").toString();
     QString ftpAddress = Constants::defaultFTPEndpoint;
     QString siteName = settings.value("user/sitename").toString();
     QString ftpUser = settings.value("user/ftpUser").toString();
     QString ftpPass = settings.value("user/ftpPass").toString();
     QString ftpPort = settings.value("user/ftpPort").toString();
 
-    QUrl url("ftp://" + ftpAddress + ":" + ftpPort + "/" + siteName + "/datasources/" + this->outputFileName);
-    url.setUserName(ftpUser);
-    url.setPassword(ftpPass);
-    url.setScheme("ftp");
-
-    if (dataFile->open(QIODevice::ReadOnly))
-    {
-        // Start upload
-        QNetworkReply *reply = m_networkAccessManager->put(QNetworkRequest(url), dataFile);
-
-        if(reply->error()){
-            qDebug() << Q_FUNC_INFO << reply->errorString();
-        }
-        // And connect to the progress upload signal
-        connect(reply, &QNetworkReply::uploadProgress, this, &PublishDatasourceModel::uploadProgress);
-        connect(reply, &QNetworkReply::finished, this, &PublishDatasourceModel::uploadFinished);
-        connect(reply, &QNetworkReply::errorOccurred, this,
-                [reply](QNetworkReply::NetworkError) {
-            qDebug() << Q_FUNC_INFO << "Error " << reply->errorString();
-        });
-
-    } else {
-        qDebug() << Q_FUNC_INFO << dataFile->isOpen() << dataFile->errorString();
+    QProcess curlProcess;
+    curlProcess.start("curl", {"-p", "--insecure",  "ftp://" + ftpAddress + ":" + ftpPort + "/" + siteName + "/datasources/" + this->outputFileName, "--user", ftpUser + ":" + ftpPass, "-T", this->inFilePath, "--ftp-create-dirs"});
+    if (curlProcess.waitForFinished()){
+        qDebug() << "FTP DONE" << curlProcess.exitStatus();
+        this->uploadFinished();
     }
 
 }
