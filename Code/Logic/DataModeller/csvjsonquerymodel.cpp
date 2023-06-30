@@ -155,7 +155,7 @@ void CSVJsonQueryModel::updateModelValues(int previewRowCount)
 
             for(int i = 0; i < this->dataFinalList.length(); i++){
                 if(!this->hideParams.contains(this->dataFinalList.at(i))){
-                    this->headerDataPreview.append(db + "." + this->dataFinalList.at(i));
+                    this->headerDataPreview.append(this->dataFinalList.at(i));
                 } else {
                     this->rejectIds.append(i);
                 }
