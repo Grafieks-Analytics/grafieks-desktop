@@ -67,7 +67,6 @@ QVariantMap JsonNewCon::JsonInstance(const QString &filepath)
 {
     QVariantMap outputStatus;
     QFile file(filepath);
-    qDebug() << "Come2" << filepath;
 
     if (!file.open(QIODevice::ReadOnly)) {
 
