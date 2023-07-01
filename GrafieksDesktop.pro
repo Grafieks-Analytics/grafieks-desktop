@@ -240,10 +240,6 @@ HEADERS += \
     Code/constants.h \
     Code/paths.h \
     Code/secrets.h \
-    Code/secrets.h \
-    Code/secrets.h \
-    Code/secrets.h \
-    Code/secrets.h \
     Code/secrets.sample.h \
     Code/simplecrypt.h \
     Code/statics.h
@@ -251,6 +247,7 @@ HEADERS += \
 
 INCLUDEPATH += $$PWD/Libraries
 INCLUDEPATH += $$PWD/Libraries/jsoncons
+
 INCLUDEPATH += $$PWD/Libraries/jsoncons_ext
 
 DEPENDPATH += $$PWD/Libraries
