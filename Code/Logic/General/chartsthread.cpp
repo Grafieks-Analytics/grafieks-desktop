@@ -247,9 +247,9 @@ void ChartsThread::getGroupedBarChartValues()
 
         // Fetch data from live
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         if(Statics::currentDbIntType != Constants::postgresIntType){
@@ -404,9 +404,9 @@ void ChartsThread::getNewGroupedBarChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -573,9 +573,9 @@ void ChartsThread::getLineBarChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -770,8 +770,8 @@ void ChartsThread::getPieChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -945,8 +945,8 @@ void ChartsThread::getFunnelChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1127,8 +1127,8 @@ void ChartsThread::getRadarChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1288,9 +1288,9 @@ void ChartsThread::getScatterChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1454,8 +1454,8 @@ void ChartsThread::getScatterChartNumericalValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1594,9 +1594,9 @@ void ChartsThread::getHeatMapChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1780,7 +1780,7 @@ void ChartsThread::getGaugeChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            calculateColumn.replace(R"('\"')", R"(`)");
+            calculateColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1909,9 +1909,9 @@ void ChartsThread::getSankeyChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            sourceColumn.replace(R"('\"')", R"(`)");
-            destinationColumn.replace(R"('\"')", R"(`)");
-            measureColumn.replace(R"('\"')", R"(`)");
+            sourceColumn.replace(QString("\""), QString("`"));
+            destinationColumn.replace(QString("\""), QString("`"));
+            measureColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -2065,7 +2065,7 @@ void ChartsThread::getKPIChartValues()
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            calculateColumn.replace(R"('\"')", R"(`)");
+            calculateColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -2319,7 +2319,7 @@ void ChartsThread::getTableChartValues()
 
         xQueryString.chop(2);
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xQueryString.replace(R"('\"')", R"(`)");
+            xQueryString.replace(QString("\""), QString("`"));
         }
 
         xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
@@ -2332,7 +2332,7 @@ void ChartsThread::getTableChartValues()
         yQueryString.chop(2);
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            yQueryString.replace(R"('\"')", R"(`)");
+            yQueryString.replace(QString("\""), QString("`"));
         }
 
         yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
@@ -2683,7 +2683,7 @@ void ChartsThread::getPivotChartValues()
 
         xQueryString.chop(2);
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xQueryString.replace(R"('\"')", R"(`)");
+            xQueryString.replace(QString("\""), QString("`"));
         }
 
         xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
@@ -2695,7 +2695,7 @@ void ChartsThread::getPivotChartValues()
 
         yQueryString.chop(2);
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            yQueryString.replace(R"('\"')", R"(`)");
+            yQueryString.replace(QString("\""), QString("`"));
         }
 
         yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
@@ -2979,9 +2979,9 @@ void ChartsThread::getMultiLineChartValues()
 
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -3219,8 +3219,8 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -3541,8 +3541,8 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
 
         xQueryString.chop(2);
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xQueryString.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
+            xQueryString.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
 
         }
 
@@ -3894,9 +3894,9 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
         }
 
         if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
-            xAxisColumn.replace(R"('\"')", R"(`)");
-            yAxisColumn.replace(R"('\"')", R"(`)");
-            xSplitKey.replace(R"('\"')", R"(`)");
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
