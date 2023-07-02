@@ -246,8 +246,15 @@ void ChartsThread::getGroupedBarChartValues()
         }
 
         // Fetch data from live
-        if(Statics::currentDbIntType != Constants::postgresIntType)
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
+        }
+
+        if(Statics::currentDbIntType != Constants::postgresIntType){
             this->masterWhereParams.replace(R"('')", R"(')");
+        }
 
         QString whereString = this->masterWhereParams.trimmed().length() > 0 ? " WHERE " : "";
 
@@ -394,6 +401,12 @@ void ChartsThread::getNewGroupedBarChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -557,6 +570,12 @@ void ChartsThread::getLineBarChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -750,6 +769,11 @@ void ChartsThread::getPieChartValues()
             }
         }
 
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+        }
+
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
             this->masterWhereParams.replace(R"('')", R"(')");
@@ -918,6 +942,11 @@ void ChartsThread::getFunnelChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1097,6 +1126,11 @@ void ChartsThread::getRadarChartValues()
             }
         }
 
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+        }
+
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
             this->masterWhereParams.replace(R"('')", R"(')");
@@ -1251,6 +1285,12 @@ void ChartsThread::getScatterChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1413,6 +1453,11 @@ void ChartsThread::getScatterChartNumericalValues()
             }
         }
 
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+        }
+
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
             this->masterWhereParams.replace(R"('')", R"(')");
@@ -1546,6 +1591,12 @@ void ChartsThread::getHeatMapChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1707,6 +1758,7 @@ void ChartsThread::getGaugeChartValues()
         QString tableName = this->getTableName();
         QString queryString = "SELECT \"" + calculateColumn + "\" FROM "+tableName;
 
+
         dataListExtract = this->queryExtractFunction(queryString);
         totalRows = dataListExtract->collection.Count();
 
@@ -1725,6 +1777,10 @@ void ChartsThread::getGaugeChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            calculateColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -1850,6 +1906,12 @@ void ChartsThread::getSankeyChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            sourceColumn.replace(QString("\""), QString("`"));
+            destinationColumn.replace(QString("\""), QString("`"));
+            measureColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -2000,6 +2062,10 @@ void ChartsThread::getKPIChartValues()
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            calculateColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -2252,6 +2318,9 @@ void ChartsThread::getTableChartValues()
         }
 
         xQueryString.chop(2);
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xQueryString.replace(QString("\""), QString("`"));
+        }
 
         xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
@@ -2261,6 +2330,10 @@ void ChartsThread::getTableChartValues()
         }
 
         yQueryString.chop(2);
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            yQueryString.replace(QString("\""), QString("`"));
+        }
 
         yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
@@ -2609,6 +2682,10 @@ void ChartsThread::getPivotChartValues()
         }
 
         xQueryString.chop(2);
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xQueryString.replace(QString("\""), QString("`"));
+        }
+
         xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         QString yQueryString =  "SELECT ";
@@ -2617,6 +2694,10 @@ void ChartsThread::getPivotChartValues()
         }
 
         yQueryString.chop(2);
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            yQueryString.replace(QString("\""), QString("`"));
+        }
+
         yQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
         xDataListLive = this->queryLiveFunction(xQueryString);
@@ -2896,6 +2977,13 @@ void ChartsThread::getMultiLineChartValues()
             }
         }
 
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
+        }
+
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
             this->masterWhereParams.replace(R"('')", R"(')");
@@ -3128,6 +3216,11 @@ void ChartsThread::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAx
                 this->cachedDashboardConditions[this->currentReportId] = false;
                 return;
             }
+        }
+
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
         }
 
         // Fetch data from live
@@ -3447,7 +3540,14 @@ void ChartsThread::getTreeSunburstValues(QVariantList & xAxisColumn, QString & y
         }
 
         xQueryString.chop(2);
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xQueryString.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+
+        }
+
         xQueryString += " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
+
 
         QString yQueryString =  "SELECT " + yAxisColumn + " FROM " + this->masterTable + " " + this->masterJoinParams + whereString + this->masterWhereParams;
 
@@ -3793,6 +3893,12 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
             }
         }
 
+        if(Statics::currentDbIntType == Constants::mysqlIntType || Statics::currentDbIntType == Constants::mysqlOdbcIntType){
+            xAxisColumn.replace(QString("\""), QString("`"));
+            yAxisColumn.replace(QString("\""), QString("`"));
+            xSplitKey.replace(QString("\""), QString("`"));
+        }
+
         // Fetch data from live
         if(Statics::currentDbIntType != Constants::postgresIntType)
             this->masterWhereParams.replace(R"('')", R"(')");
@@ -4105,7 +4211,7 @@ QSqlQuery ChartsThread::queryLiveFunction(QString mainQuery)
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);
@@ -4262,7 +4368,7 @@ QMap<int, QHash<int, QString> > ChartsThread::queryLiveValues(QString mainQuery,
     }
 
     case Constants::mysqlOdbcIntType:{
-        connection = QSqlDatabase::addDatabase("ODBC", "mysqlOQ");
+        connection = QSqlDatabase::addDatabase("QODBC", "mysqlOQ");
         connection.setHostName(Statics::myHost);
         connection.setPort(Statics::myPort);
         connection.setDatabaseName(Statics::myDb);

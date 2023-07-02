@@ -77,10 +77,10 @@ QVariantMap JsonNewCon::JsonInstance(const QString &filepath)
     }
     else{
 
+        this->convertJsonToCsv(filepath);
+
         outputStatus.insert("status", true);
         outputStatus.insert("msg", Messages::GeneralSuccessMsg);
-
-        this->convertJsonToCsv(filepath);
     }
 
     return outputStatus;
@@ -92,15 +92,16 @@ void JsonNewCon::convertJsonToCsv(QString filepath)
     QFile jsonFile;
     jsonFile.setFileName(jsonPath);
     jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString jsonString = jsonFile.readAll();
 
 
-    QJsonDocument jsonResponse = QJsonDocument::fromJson(jsonFile.readAll());
+    QJsonParseError jsonError;
+    QJsonDocument jsonResponse = QJsonDocument::fromJson(jsonString.toUtf8(), &jsonError);
 
     if(!jsonResponse.isEmpty()){
         njson j = njson::parse(jsonResponse.toJson());
         QHash<QString, QStringList> finalInput =  flatten_json_to_map(j);
 
-        //        qDebug() << finalInput;
 
         QString csvValues;
         int i = 0;
