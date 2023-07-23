@@ -175,8 +175,6 @@ function drawChart() {
                     };
                 });
 
-            console.log("dateConversionOptions", dateConversionOptions);
-
             optionalParams[chartTitle] = {
                 dateConversionOptions: JSON.stringify(dateConversionOptions),
                 categoricalValues,
@@ -188,6 +186,9 @@ function drawChart() {
                 ],
             };
             chartsObject.optionalParams = optionalParams;
+            chartsObject.xAxisObject = tempDataValues;
+
+            console.log("Charts Object - pivot", JSON.stringify(chartsObject));
         }
 
         if (chartTitle == Constants.tableTitle) {

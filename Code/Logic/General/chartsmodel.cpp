@@ -174,7 +174,7 @@ void ChartsModel::getChartWiseData(int reportId, int dashboardId, int chartSourc
         QVariantList measuresArray = optionalChartObject.value("measuresArray").toArray().toVariantList();
         QVariantList row3Columns = optionalChartObject.value("row3Columns").toArray().toVariantList();
 
-       this->getPivotChartValues(reportId, dashboardId, chartSource, categoricalValues, measuresArray, dateConversionOptions, row3Columns);
+       this->getPivotChartValues(reportId, dashboardId, chartSource, categoricalValues, measuresArray, dateConversionOptions, row3Columns, xAxisObject);
     } else if(chartName == Constants::tableTitle){
 
         QJsonObject optionalParamsObject = chartsDataObject.value("optionalParams").toObject();
@@ -187,7 +187,9 @@ void ChartsModel::getChartWiseData(int reportId, int dashboardId, int chartSourc
         this->getTableChartValues(reportId, dashboardId, chartSource,
                     nonMeasures,
                     measures,
-                    dateConversionOptions
+                    dateConversionOptions,
+                    xAxisObject,
+                    yAxisObject
                 );
     }
 }
@@ -638,7 +640,7 @@ void ChartsModel::getKPIChartValues(int reportId, int dashboardId, int chartSour
 
 }
 
-void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters)
+void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QJsonArray xAxisObject, QJsonArray yAxisObject)
 {
     this->callThread();
 
@@ -657,12 +659,12 @@ void ChartsModel::getTableChartValues(int reportId, int dashboardId, int chartSo
         chartsThread->setLists(xAxisColumn, yAxisColumn, nullList);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
-        chartsThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
+        chartsThread->methodSelector("getTableChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType, xAxisObject, yAxisObject);
     }
 
 }
 
-void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QVariantList row3Columns)
+void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSource,  QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QVariantList row3Columns, QJsonArray xAxisObject)
 {
     this->callThread();
 
@@ -681,7 +683,7 @@ void ChartsModel::getPivotChartValues(int reportId, int dashboardId, int chartSo
         chartsThread->setLists(xAxisColumn, yAxisColumn, row3Columns);
         chartsThread->setTablePivotDateConversionOptions(dateConversionParameters);
         chartsThread->queryParams(this->originalMasterTable, this->originalWhereConditions, this->originalJoinConditions);
-        chartsThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType);
+        chartsThread->methodSelector("getPivotChartValues", this->reportWhereConditions.value(reportId), this->dashboardWhereConditions.value(dashboardId), chartSource, this->currentReportId, this->currentDashboardId, datasourceType, xAxisObject);
     }
 
 }
