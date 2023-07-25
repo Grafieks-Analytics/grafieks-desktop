@@ -69,8 +69,8 @@ public:
     Q_INVOKABLE void getTreeChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getTreeMapChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getKPIChartValues(int reportId, int dashboardId, int chartSource,   QString calculateColumn);
-    Q_INVOKABLE void getTableChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters);
-    Q_INVOKABLE void getPivotChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QVariantList row3Columns);
+    Q_INVOKABLE void getTableChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QJsonArray xAxisObject, QJsonArray yAxisObject);
+    Q_INVOKABLE void getPivotChartValues(int reportId, int dashboardId, int chartSource,   QVariantList xAxisColumn, QVariantList yAxisColumn, QString dateConversionParameters, QVariantList row3Columns, QJsonArray xAxisObject);
     Q_INVOKABLE void getStackedAreaChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey, QJsonArray xAxisObject);
     Q_INVOKABLE void getMultiLineChartValues(int reportId, int dashboardId, int chartSource,  QString xAxisColumn, QString yAxisColumn, QString xSplitKey, QJsonArray xAxisObject);
 

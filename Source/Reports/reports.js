@@ -18,6 +18,9 @@ function setValuesOnEditReport(reportId) {
     dataItemList.clear();
 
     var reportProperties = ReportParamsModel.getReport(reportIdMain);
+    if (!reportProperties) {
+        return;
+    }
 
     var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
     var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
