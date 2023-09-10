@@ -2183,6 +2183,9 @@ void ChartsThread::getTableChartValues()
         foreach(QJsonValue xAxisObjectValue, xAxisObject){
             QJsonObject categoricalObject = xAxisObjectValue.toObject();
             QString itemType = categoricalObject.value("itemType").toString();
+            if(itemType==""){
+                itemType = categoricalObject.value("droppedItemType").toString();
+            }
             QString dateFormat = categoricalObject.value("dateFormat").toString();
             QString columnName = categoricalObject.value("tableValue").toString();
 
@@ -2586,6 +2589,9 @@ void ChartsThread::getPivotChartValues()
         foreach(QJsonValue xAxisObjectValue, xAxisObject){
                 QJsonObject categoricalObject = xAxisObjectValue.toObject();
                 QString itemType = categoricalObject.value("itemType").toString();
+                if(itemType==""){
+                    itemType = categoricalObject.value("droppedItemType").toString();
+                }
                 QString dateFormat = categoricalObject.value("dateFormat").toString();
                 QString columnName = categoricalObject.value("tableValue").toString();
                 qDebug() << "Pivot Columns" << itemType << columnName ;

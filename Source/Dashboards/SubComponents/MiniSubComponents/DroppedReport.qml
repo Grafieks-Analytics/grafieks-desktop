@@ -277,7 +277,7 @@ Item{
     function drawChartAfterReceivingSignal(dataValues){
         console.log("datavaluestest",dataValues)
         if(webEngineView.loading){
-            return; 
+            return;
         }
 
         const reportProperties = ReportParamsModel.getReport(reportId);
@@ -298,7 +298,7 @@ Item{
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
         var row3Columns = getAxisColumnNames(Constants.row3Name);
-        
+
         var xAxisColumnDetails = getAxisColumnDetails(Constants.xAxisName);
         var yAxisColumnDetails = getAxisColumnDetails(Constants.yAxisName);
         var row3ColumnDetails = getAxisColumnDetails(Constants.row3Name);
@@ -602,7 +602,7 @@ Item{
         return model;
     }
 
-    
+
     function isPivotChart(){
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
@@ -613,7 +613,7 @@ Item{
         }
         return false;
     }
-    
+
     // This function is copied from NewReport.qml
     // Make sure to make the changes properly
     // Add a comment whenever a different change is made
@@ -673,8 +673,8 @@ Item{
 
 
         if(
-            (xAxisColumns.length && yAxisColumns.length) || 
-            (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) || 
+            (xAxisColumns.length && yAxisColumns.length) ||
+            (xAxisColumns.length && (chartTitle == Constants.tableTitle || chartTitle == Constants.kpiTitle)) ||
             (chartTitle == Constants.gaugeChartTitle && isGaugeChart()) ||
             (chartTitle == Constants.pivotTitle && isPivotChart())
         ) {
@@ -695,6 +695,8 @@ Item{
                 colorByObject: colorByData,
             };
 
+            var optionalParams = {};
+
             if (chartTitle == Constants.gaugeChartTitle) {
                 var greenValue = input1Field.text;
                 var yellowValue = input2Field.text;
@@ -709,158 +711,8 @@ Item{
                 delete chartsObject.optionalParams;
             }
 
-            ChartsModel.getChartWiseData(
-                chartId,
-                DashboardParamsModel.currentDashboard,
-                Constants.dashboardScreen,
-                chartTitle,
-                chartsObject
-            );
+            if(chartTitle == Constants.tableTitle){
 
-            return;
-
-            switch(chartTitle){
-            case Constants.horizontalBarChartTitle:
-                console.log("Horizontal BAR");
-                ChartsModel.getBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0]);
-
-                // datavalues is a global property and set using connections
-                // due to multi threading
-                colorData = [JSON.parse(dataValues)[1][0]] || [];
-                break;
-            case Constants.barChartTitle:
-                console.log("BAR CLICKED", xAxisColumns[0])
-                ChartsModel.getBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
-
-                break;
-            case Constants.horizontalStackedBarChartTitle:
-                ChartsModel.getStackedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
-                break;
-            case Constants.stackedBarChartTitle:
-                console.log('Stacked bar chart!');
-                ChartsModel.getStackedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
-                break;
-            case Constants.horizontalBarGroupedChartTitle:
-                console.log('horizontalBarGroupedChart chart!', yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
-                var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
-                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
-                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
-                }else{
-                    delete d3PropertyConfig['options'];
-                    // colorListModel.clear();
-                    colorByData = [];
-                }
-                ChartsModel.getNewGroupedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
-                break;
-            case Constants.groupBarChartTitle:
-                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
-                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
-                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
-                }else{
-                    delete d3PropertyConfig['options'];
-                    // colorListModel.clear();
-                    colorByData = [];
-
-                    ReportParamsModel.setItemType(null);
-                    ReportParamsModel.setLastDropped(null);
-                }
-                console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-                ChartsModel.getNewGroupedBarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-
-                ReportParamsModel.setItemType(null);
-                ReportParamsModel.setLastDropped(null);
-                break;
-            case Constants.areaChartTitle:
-                console.log("AREA CLICKED")
-                // Area - xAxis(String), yAxis(String)
-                ChartsModel.getAreaChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
-                break;
-            case Constants.stackedAreaChartTitle:
-            case Constants.multipleAreaChartTitle:
-                console.log('Stacked Area Chart')
-                console.log('Colour By columnName',colorByColumnName)
-                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.lineChartTitle:
-                console.log("LINE CLICKED")
-                // Line - xAxis(String), yAxis(String)
-                ChartsModel.getLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
-                // Line Bar - xAxis(String), yAxis(String)
-                //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
-                break;
-            case Constants.horizontalAreaChartTitle:
-            case Constants.horizontalLineChartTitle:
-                console.log(Constants.horizontalLineChartTitle,"CLICKED")
-                ChartsModel.getLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0],xAxisColumns[0],'Sum');
-                break;
-            case Constants.multiLineChartTitle:
-                console.log(Constants.multiLineChartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.multipleHorizontalAreaChartTitle:
-            case Constants.horizontalMultiLineChartTitle:
-                console.log(chartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, yAxisColumns[0], xAxisColumns[0],colorByColumnName);
-                break;
-            case Constants.pieChartTitle:
-            case Constants.donutChartTitle:
-                console.log("DONUT/PIE CLICKED")
-                ChartsModel.getPieChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
-                break;
-            case Constants.funnelChartTitle:
-                console.log("FUNNEL CLICKED")
-                ChartsModel.getFunnelChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
-                break;
-            case Constants.radarChartTitle:
-                ChartsModel.getRadarChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0]);
-                break;
-            case Constants.scatterChartTitle:
-                console.log("SCATTER CLICKED");
-                if(!colorByColumnName){
-                    ChartsModel.getScatterChartNumericalValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen,  xAxisColumns[0], yAxisColumns[0]);
-                    break;
-                }
-                ChartsModel.getScatterChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0], yAxisColumns[0], colorByColumnName);
-                break;
-            case Constants.treeChartTitle:
-                console.log("TREECHART CLICKED")
-                ChartsModel.getTreeChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                break;
-            case Constants.treeMapChartTitle:
-                ChartsModel.getTreeMapChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                break;
-            case Constants.heatMapChartTitle:
-                console.log("HEATMAP CLICKED")
-                ChartsModel.getHeatMapChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0], colorByColumnName, yAxisColumns[0]);
-                break;
-            case Constants.sunburstChartTitle:
-                console.log("SUNBURST CLICKED");
-                ChartsModel.getSunburstChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                break;
-            case Constants.waterfallChartTitle:
-                console.log("WATERFALL CLICKED")
-                ChartsModel.getWaterfallChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],yAxisColumns[0],'Sum');
-                console.log('Waterfall Data values',dataValues);
-                break;
-            case Constants.gaugeChartTitle:
-                console.log("GAUGE CLICKED")
-                var row3ColumnsArray = Array.from(row3Columns);
-                const optionalConfig = JSON.parse(reportProperties.optionalConfig);
-                const gaugeChartOptions = optionalConfig[Constants.gaugeChartTitle];
-                var { greenValue, redValue, yellowValue } = gaugeChartOptions;
-                
-                ChartsModel.getGaugeChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, row3ColumnsArray[0] , greenValue, yellowValue, redValue);
-                break;
-            case Constants.sankeyChartTitle:
-                console.log("SANKEY CLICKED")
-                ChartsModel.getSankeyChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
-                break;
-            case Constants.kpiTitle:
-                console.log("KPI CLICKED")
-                ChartsModel.getKPIChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, xAxisColumns[0]);
-                break;
-            case Constants.tableTitle:
-                console.log("TABLE CLICKED");
                 var nonMeasures = xAxisColumnDetails.filter(d=>{
                     if((d.itemType || d.droppedItemType).toLowerCase() != "numerical"){
                         return true;
@@ -875,7 +727,7 @@ Item{
                 }).map(d=> d.itemName)
                 console.log('Non Measues',JSON.stringify(nonMeasures))
                 console.log('Measures',JSON.stringify(measures))
-                
+
                 var dateConversionOptions = xAxisColumnDetails.filter(d=>{
                     if((d.itemType || d.droppedItemType).toLowerCase() == "date"){
                         return true;
@@ -886,19 +738,19 @@ Item{
                     switch(format){
                         case "%Y":
                             format = "Year";
-                            break; 
+                            break;
                         case "%d":
                             format = "Day";
-                            break; 
+                            break;
                         case "%b":
                             format = "month";
-                            break; 
+                            break;
                         case "%d %b %Y":
                             format = "day,month,year";
-                            break; 
+                            break;
                         case "%b %Y":
                             format = "month,year";
-                            break; 
+                            break;
                         default:
                             format = "Year";
                             break;
@@ -906,51 +758,97 @@ Item{
                     return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
                 })
                 console.log('Date Values',JSON.stringify(dateConversionOptions));
-                
+
                 dateConversionOptions = JSON.stringify(dateConversionOptions);
-                
-                console.log(measures, "MEASURES")
-                ChartsModel.getTableChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, nonMeasures , measures, dateConversionOptions);
-                break;
-            case Constants.pivotTitle:
-                console.log("PIVOT CLICKED")
-                 var row3ColumnsArray = Array.from(row3Columns);
-                  
-                var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
-                var dateConversionOptions = tempDataValues.filter(d=>{
-                    if((d.itemType || d.droppedItemType).toLowerCase() == "date"){
+
+                optionalParams[chartTitle] = {
+                    measures,
+                    nonMeasures,
+                    dateConversionOptions: JSON.stringify(dateConversionOptions),
+                };
+
+                chartsObject.optionalParams = optionalParams;
+
+            }
+
+            if(chartTitle == Constants.pivotTitle){
+            var tempDataValues = [...xAxisColumnDetails, ...yAxisColumnDetails];
+
+            var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+            var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+            var row3Columns = getAxisColumnNames(Constants.row3Name);
+
+            var xAxisColumnNamesArray = Array.from(xAxisColumns);
+            var yAxisColumnNamesArray = Array.from(yAxisColumns);
+            var row3ColumnsArray = Array.from(row3Columns);
+
+            var categoricalValues = [
+                ...xAxisColumnNamesArray,
+                ...yAxisColumnNamesArray,
+            ];
+
+            var measuresArray = Array.from(row3Columns);
+
+            var dateConversionOptions = tempDataValues
+                .filter((d) => {
+                    if ((d.itemType||d.droppedItemType).toLowerCase() == "date") {
                         return true;
                     }
                     return false;
-                }).map(d => {
+                })
+                .map((d) => {
                     var format = d.dateFormat;
-                    switch(format){
+                    switch (format) {
                         case "%Y":
                             format = "Year";
-                            break; 
+                            break;
                         case "%d":
                             format = "Day";
-                            break; 
+                            break;
                         case "%b":
                             format = "month";
-                            break; 
+                            break;
                         case "%d %b %Y":
                             format = "day,month,year";
-                            break; 
+                            break;
                         case "%b %Y":
                             format = "month,year";
-                            break; 
+                            break;
                         default:
                             format = "Year";
                             break;
                     }
-                    return { itemName: d.itemName, itemType: d.itemType, dateFormat: format, separator: " "  }
-                })
-                
-                dateConversionOptions = JSON.stringify(dateConversionOptions);
-                ChartsModel.getPivotChartValues(chartId, DashboardParamsModel.currentDashboard, Constants.dashboardScreen, [...xAxisColumnNamesArray, ...yAxisColumnNamesArray], row3ColumnsArray,dateConversionOptions, [xAxisColumnNamesArray, yAxisColumnNamesArray, row3ColumnsArray]);
-                break;
+                    return {
+                        itemName: d.itemName,
+                        itemType: d.itemType,
+                        dateFormat: format,
+                        separator: " ",
+                    };
+                });
+
+            optionalParams[chartTitle] = {
+                dateConversionOptions: JSON.stringify(dateConversionOptions),
+                categoricalValues,
+                measuresArray,
+                row3Columns: [
+                    xAxisColumnNamesArray,
+                    yAxisColumnNamesArray,
+                    row3ColumnsArray,
+                ],
+            };
+            chartsObject.optionalParams = optionalParams;
+            chartsObject.xAxisObject = tempDataValues;
+
             }
+
+            ChartsModel.getChartWiseData(
+                chartId,
+                DashboardParamsModel.currentDashboard,
+                Constants.dashboardScreen,
+                chartTitle,
+                chartsObject
+            );
+
             return;
         }
 
