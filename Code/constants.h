@@ -22,9 +22,9 @@ namespace Constants
 
     // Application level constants
     // Server level APIs
-   const QString defaultAPIEndpoint = "https://apit.grafieks.net";
-   const QString defaultFTPEndpoint = "95.217.117.126";
-   const QString defaultChartEndpoint = "http://95.217.117.126:5473";
+   const QString defaultAPIEndpoint = "https://abc.net";
+   const QString defaultFTPEndpoint = "IP address";
+   const QString defaultChartEndpoint = "http://IP address";
 
     // For local testing
 //     const QString defaultAPIEndpoint = "http://localhost:5476";
