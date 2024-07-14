@@ -19,7 +19,9 @@
     An open-source Business Intelligence platform built with Qt5, C++ and D3.js
     <br />
     <br /> 
-
+    As of 14/07/2024, we have decided to discontinue the open-source version of this project. This decision was made after careful consideration of our resources and long-term goals. We are incredibly grateful for the support and contributions from the community over   
+    the years. While the repository will remain available for historical reference, no further updates or support will be provided. We encourage users to fork the repository if they wish to continue development independently. Thank you for your understanding and 
+    continued interest.
   </p>
 </div>
 
